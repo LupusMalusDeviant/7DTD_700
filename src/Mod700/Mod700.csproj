@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      net48: abgeleitet aus den AssemblyRefs der Spiel-Assembly (mscorlib 4.0.0.0,
+      netstandard 2.1.0.0) - Assembly-CSharp.dll trägt kein TargetFrameworkAttribute.
+      Siehe docs/rea/findings/00-build-baseline.md.
+    -->
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>Mod700</AssemblyName>
+    <RootNamespace>Mod700</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Version>0.1.0</Version>
+    <!-- Keine Spiel-DLL landet im Ausgabeordner. -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <Target Name="CheckSdtdPath" BeforeTargets="BeforeBuild">
+    <Error Condition="'$(SdtdPath)' == ''"
+           Text="SDTD_PATH ist nicht gesetzt. Pfad zur 7DTD-Installation angeben, z. B. $env:SDTD_PATH = 'C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die'" />
+    <Error Condition="!Exists('$(SdtdManagedPath)\Assembly-CSharp.dll')"
+           Text="Assembly-CSharp.dll nicht gefunden unter '$(SdtdManagedPath)'. Stimmt SDTD_PATH?" />
+    <Error Condition="!Exists('$(SdtdHarmonyPath)\0Harmony.dll')"
+           Text="0Harmony.dll nicht gefunden unter '$(SdtdHarmonyPath)'. Das Spiel liefert HarmonyX als vorgeladenen Mod mit; ohne ihn baut die Mod nicht." />
+  </Target>
+
+  <!--
+    Spiel-Referenzen. Private=false: nichts davon wird kopiert oder ausgeliefert.
+    0Harmony kommt aus dem vorgeladenen TFP-Mod, wir bringen kein eigenes mit
+    (docs/rea/findings/F-00-modinfo-und-harmony.md).
+  -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SdtdManagedPath)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="LogLibrary">
+      <HintPath>$(SdtdManagedPath)\LogLibrary.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SdtdManagedPath)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(SdtdHarmonyPath)\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

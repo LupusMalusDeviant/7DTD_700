@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Format V2. Belegt gegen den Lader (Mod::parseModInfoV2) und gegen die vom Spiel
+  mitgelieferte Originaldatei Mods/0_TFP_Harmony/ModInfo.xml:
+    - Wurzelelement ist <xml>, die Felder sind direkte Kinder mit value="…"
+    - gelesen werden genau: Name, DisplayName, Version, Description, Author, Website,
+      SkipWithAntiCheat. Weitere Felder ignoriert der Lader.
+    - Name und DisplayName sind Pflicht; Name wird zusätzlich gegen eine Regex geprüft
+    - das Altformat (<ModInfo>-Hülle) lädt nicht mehr: "V2 required to load mod"
+  Siehe docs/rea/findings/F-00-modloader-events-version.md, Abschnitt 2.
+
+  SkipWithAntiCheat=true: Diese Mod bringt eigenen Code mit. Mit aktivem EAC lädt der
+  Lader sie ohnehin nicht (Mod::LoadAssemblies). Mit dem Flag steht im Protokoll der
+  klare Grund statt einer Fehlermeldung.
+-->
+<xml>
+	<Name value="7DTD_700" />
+	<DisplayName value="700 — Frühmittelalter-Overhaul" />
+	<Description value="Verlegt 7 Days to Die in ein fiktives Frühmittelalter um 700 n. Chr.: Nahkampf, Handwerk, Volksmagie und Folk-Horror statt Postapokalypse und Technik." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="0.1.0" />
+	<Website value="" />
+	<SkipWithAntiCheat value="true" />
+</xml>

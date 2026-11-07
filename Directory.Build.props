@@ -1,0 +1,19 @@
+<Project>
+
+  <!--
+    Pfad zur Spielinstallation. NIE hart codieren (CLAUDE.md, Abschnitt "Build & Test").
+    Setzen über die Umgebungsvariable SDTD_PATH, z. B.
+
+      PowerShell:  $env:SDTD_PATH = "C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die"
+      Bash:        export SDTD_PATH="/c/Program Files (x86)/Steam/steamapps/common/7 Days To Die"
+
+    Die Spiel-DLLs werden nur referenziert, nie kopiert und nie committet
+    (Private=false, .gitignore).
+  -->
+  <PropertyGroup>
+    <SdtdPath Condition="'$(SdtdPath)' == ''">$(SDTD_PATH)</SdtdPath>
+    <SdtdManagedPath Condition="'$(SdtdPath)' != ''">$(SdtdPath)\7DaysToDie_Data\Managed</SdtdManagedPath>
+    <SdtdHarmonyPath Condition="'$(SdtdPath)' != ''">$(SdtdPath)\Mods\0_TFP_Harmony</SdtdHarmonyPath>
+  </PropertyGroup>
+
+</Project>
