@@ -129,3 +129,19 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 
 ## Offene Fragen
 - Q17: Welche härteren Todesfolgen konkret? (vertagt; Rahmen D15)
+
+## Stand 2026-11-07 — Kurz-Check
+
+**Dunklere, nebligere Nächte sind XML.** `worldglobal.xml` führt die Himmelswerte als
+Tag-/Nacht-Paare (`ambientEquatorScale .7,.45`, `ambientGroundScale .3,.05`, `ambientSkyScale
+1,.7`, `ambientMoon .8,.4`, `fogPower`). D16 ist damit eine Zahl, kein Patch. Nebel pro Biom
+(`<Fog range prob>`) ebenfalls XML.
+
+**Das Grauen-System ist nicht so billig wie gehofft.** Als Buff-Bedingung vorhanden sind
+`TimeOfDay`, `IsSheltered`, `RandomRoll`, `CVarCompare`, `SandboxOptionBool`. **Nicht** gefunden:
+eine Abfrage der Lichtstärke am Spielerort und eine Abfrage „Mitspieler in der Nähe“.
+„Im Dunkeln, allein, draußen“ lässt sich damit nicht vollständig in XML schreiben.
+
+*Notiz für Phase 2 (Regel 6):* Entweder gröbere Definition (Nacht + kein Dach + Zufall, rein XML)
+oder C# für die Lichtabfrage. Gehört zu D18 und ist hier nicht entschieden.
+Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-4--f-17-grauen-und-atmosphäre)

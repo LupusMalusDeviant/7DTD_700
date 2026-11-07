@@ -43,3 +43,16 @@ Römerruinen. Keine Städte, Asphaltstraßen oder Hochhäuser.
 
 ## Offene Fragen
 - keine (Q12 entschieden: D43)
+
+## Stand 2026-11-07 — Kurz-Check, **D43 betroffen**
+
+Die Biom-**Verteilung** ist XML (`biomes.xml`, `biomemap`). Die Biom-**Namen** sind es nicht: sie
+stehen an sieben Stellen im Code, von `WorldBuilder::.ctor` bis zum Speicherformat
+(`serializeDynamicProperties`). Umbenennen bricht die Weltgenerierung.
+
+Empfohlener Weg: Vanilla-Kennungen (`pine_forest`, `burnt_forest`, …) als **technische** Namen
+behalten und nur Anzeigenamen, Blöcke, Bepflanzung und Spawning umdeuten. Der Spieler sieht die
+Mark, die Engine sieht `pine_forest`.
+
+Das weicht vom Wortlaut von D43 ab und ist **noch nicht entschieden**.
+Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-7--f-07-welt-und-kulturzonen--berührt-d43)

@@ -85,6 +85,20 @@ gegen die neue DLL laufen lassen, rot heißt Release blockiert.
 Die Signaturen in der Soll-Datei sind wörtlich die Zeilen, die `members` ausgibt — kopieren,
 nicht abschreiben.
 
+### find-string — wo wird ein Konfigurationsschlüssel verarbeitet?
+
+```bash
+"$EXE" find-string "$DLL" --text "currency_item" --max 20
+```
+
+Sucht Zeichenketten, die irgendeine Methode per `ldstr` lädt, und nennt die Methode dazu. Das ist
+der Befehl, der die Frage „ist das per XML änderbar oder im Code verdrahtet?" beantwortet: taucht
+ein XML-Attributname nur im Parser auf, ist er Daten; taucht ein Wert (`casinoCoin`,
+`pine_forest`) in der Spiellogik auf, ist er verdrahtet. Mehrere `--text` pro Lauf sind erlaubt.
+
+So sind die Befunde zu Prio 2–10 entstanden
+([02-10-schnittstellen-kurzcheck.md](../../docs/rea/findings/02-10-schnittstellen-kurzcheck.md)).
+
 ## Nachweis, dass die Prüfung greift
 
 CLAUDE.md Regel 5 verlangt, dass ein Check einmal nachweislich an einem falschen Eingabewert
@@ -94,6 +108,15 @@ scheitert. Erbracht am 2026-11-07 gegen Build Steam 26309840:
 |---|---|---|
 | grün | `tools/meta/expect/f00.tsv`, 12 Zeilen | `verdict: green`, `failed: 0`, **Exit 0** |
 | rot | drei gefälschte Zeilen | `verdict: red`, `failed: 3`, **Exit 1** |
+
+Für `find-string` dasselbe, damit ein „0 Treffer" als Aussage zählt und nicht als Panne:
+
+| Lauf | Eingabe | Ergebnis |
+|---|---|---|
+| Treffer | `"No ModAPI found in mod DLLs"` (wörtlich aus dem Modlader) | 1 Treffer, `Mod::InitModCode` |
+| kein Treffer | `"zzz_dieseZeichenketteGibtEsNicht_700"` | 0 Treffer |
+
+Erst damit ist belegt, dass Sätze wie „`casinoCoin` steht an keiner Stelle im Code" etwas heißen.
 
 Die drei Fehlerarten wurden dabei einzeln getroffen:
 

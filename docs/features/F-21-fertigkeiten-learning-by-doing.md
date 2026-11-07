@@ -46,3 +46,19 @@ REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 - [ ] Ohne Grundfähigkeit ist ein Rezept gesperrt; mit Grundfähigkeit steigt die Qualität durch wiederholtes Herstellen
 - [ ] Learning-by-Doing-Fortschritt bleibt nach Server-Neustart erhalten
 - [ ] Jeder Baum bietet einen tragfähigen Build bis T4
+
+## Stand 2026-11-07 — Kurz-Check, **Entscheidung offen**
+
+**Die sechs eigenen Bäume sind XML-Arbeit.** `progression.xml` führt Attribute, Perks, Skills,
+Handwerks-Stufen und Bücher als Daten. Von den fünf Vanilla-Attributnamen steht **einer** im Code
+(`attFortitude`, einmal, in `EntityPlayerLocal::Update`), dazu `attcrafting` in der
+Werkbank-UI. Der Code hängt also fast nicht an den Vanilla-Attributen (D45 ist tragfähig).
+
+**Learning by Doing kostet C#.** Es gibt keinen XML-Auslöser „Gegenstand fertig hergestellt“.
+`buffs.xml` hat viele `triggered_effect trigger="…"`, aber keinen dafür; Handwerks-Stufen steigen
+in Vanilla ausschließlich über Magazine. Damit ist F-21 das **erste echte Patch-Ziel** des
+Projekts — Phase 2, nicht Phase 1, und vorher braucht es ein Finding plus Soll-Signatur
+(Projektregel 2).
+
+Wie weit Learning by Doing gehen soll, wenn es C# kostet, ist **noch nicht entschieden**.
+Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-2--f-21-lernen-und-fortschritt)

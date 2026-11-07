@@ -65,3 +65,22 @@ Runenross, Wegsteine, Steinkreise.
 
 ## Offene Fragen
 - Q18: Reitpferd ohne eigene Reit-Animationen machbar?
+
+## Stand 2026-11-07 — Kurz-Check
+
+**Wegsteine: reines XML.** `gameevents.xml` kennt `<action class="Teleport">`, `blocks.xml` kennt
+Blöcke mit `Class="GameEvent"` und `ActivateEvent`/`TriggeredEvent`. Vanilla liefert dafür einen
+Testblock mit (`TriggeredEvent="test_action_teleport_up"`). Lastprüfung und Kosten über die
+Bedingungen der Abfolge (`CVar`, `HasHeld`, `HasBuff`, …). Kein Harmony-Patch.
+Noch nicht belegt: eine Bedingung „Seuchennacht läuft“ für die Sperre — Umweg wäre ein CVar,
+das die Nacht setzt.
+
+**Q18 ist beantwortet: nein, nicht per XML.** Tiere (`EntityAnimal`) und Fahrzeuge
+(`EntityVehicle` → `EntityDriveable`) sind getrennte Zweige unter `EntityAlive`. Ein Fahrzeug
+braucht ein Prefab mit Chassis, Rädern und Sitzen; ein Reitpferd wäre ein Fahrzeug mit
+Pferdemodell und Radphysik.
+
+*Notiz für Phase 4 (Regel 6):* Falls Reittiere später gewollt sind, ist der Weg ein eigener
+`EntityDriveable`-Abkömmling mit eigenem Prefab und eigenen Animationen — eine Asset-Aufgabe,
+keine XML-Aufgabe.
+Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-10--f-20-und-f-13)

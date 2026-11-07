@@ -52,6 +52,7 @@ internal static class Program
                 "types" => CmdTypes(path, rest),
                 "members" => CmdMembers(path, rest),
                 "verify" => CmdVerify(path, rest),
+                "find-string" => CmdFindString(path, rest),
                 _ => Fail($"unbekannter Befehl: {command}")
             };
         }
@@ -78,6 +79,7 @@ internal static class Program
               types   <dll> [--contains <text>] [--max <n>]
               members <dll> --type <FullName> [--type <FullName> ...] [--callers] [--il]
               verify  <dll> --expect <datei.tsv>
+              find-string <dll> --text <text> [--text <text> ...] [--max <n>]
 
             verify erwartet Zeilen "Typ<TAB>Member<TAB>Signatur" und endet mit Exit 1,
             sobald eine Soll-Signatur im Build fehlt oder abweicht.
@@ -310,6 +312,97 @@ internal static class Program
                 "Aufrufer über Reflection, Unity-Messages (Update, Awake) und Delegaten tauchen hier nicht auf.",
                 "Server/Client-Zuordnung ist daraus nur ein Indiz und braucht den Dedicated-Test.",
                 "Metadaten-Tokens gelten nur für genau diesen SHA-256 und diese MVID."
+            }
+        });
+        return 0;
+    }
+
+    // ------------------------------------------------------------- find-string
+
+    /// <summary>
+    /// Sucht Zeichenketten, die irgendeine Methode der Assembly per <c>ldstr</c> lädt, und
+    /// nennt die Methode dazu. Damit lässt sich beantworten, wo ein Konfigurationsschlüssel
+    /// oder ein XML-Attributname im Code verarbeitet wird.
+    /// </summary>
+    private static int CmdFindString(string path, string[] args)
+    {
+        var needles = new List<string>();
+        int max = 200;
+        for (int i = 0; i < args.Length; i++)
+        {
+            switch (args[i])
+            {
+                case "--text" when i + 1 < args.Length: needles.Add(args[++i]); break;
+                case "--max" when i + 1 < args.Length: max = int.Parse(args[++i]); break;
+                default: return Fail($"unbekannte Option für find-string: {args[i]}");
+            }
+        }
+
+        if (needles.Count == 0) return Fail("find-string braucht mindestens ein --text");
+
+        using var pe = new PEReader(File.OpenRead(path));
+        var reader = pe.GetMetadataReader();
+        var identity = ReadIdentity(path, reader);
+
+        var hits = new List<object>();
+        int scanned = 0, total = 0;
+
+        foreach (var mh in reader.MethodDefinitions)
+        {
+            var md = reader.GetMethodDefinition(mh);
+            if (md.RelativeVirtualAddress == 0) continue;
+
+            byte[] il;
+            try { il = pe.GetMethodBody(md.RelativeVirtualAddress).GetILBytes() ?? []; }
+            catch (BadImageFormatException) { continue; }
+            if (il.Length == 0) continue;
+
+            scanned++;
+            List<string>? found = null;
+
+            foreach (var (name, token, _) in Il.Walk(il))
+            {
+                if (name != "ldstr" || token == 0) continue;
+
+                string literal;
+                try { literal = reader.GetUserString(MetadataTokens.UserStringHandle(token & 0x00FFFFFF)); }
+                catch (ArgumentException) { continue; }
+                catch (BadImageFormatException) { continue; }
+
+                foreach (string needle in needles)
+                {
+                    if (literal.IndexOf(needle, StringComparison.OrdinalIgnoreCase) < 0) continue;
+                    (found ??= []).Add(literal);
+                    break;
+                }
+            }
+
+            if (found is null) continue;
+
+            total++;
+            if (hits.Count >= max) continue;
+
+            hits.Add(new
+            {
+                method = $"{Naming.TypeDefFullName(reader, md.GetDeclaringType())}::{reader.GetString(md.Name)}",
+                literals = found.Distinct(StringComparer.Ordinal)
+                    .Select(s => s.Length <= 200 ? s : s.Substring(0, 200) + "…")
+                    .ToArray()
+            });
+        }
+
+        Emit(new
+        {
+            tool = "mod700meta",
+            command = "find-string",
+            artifact = identity,
+            selection = new { needles, max },
+            counts = new { scanned_method_bodies = scanned, matching_methods = total, returned = hits.Count },
+            hits,
+            limitations = new[]
+            {
+                "Gefunden werden nur Zeichenketten, die per ldstr geladen werden. Zusammengesetzte, aus XML gelesene oder über Reflection erzeugte Namen erscheinen nicht.",
+                "Kein Treffer beweist nicht, dass der Name im Code keine Rolle spielt."
             }
         });
         return 0;
