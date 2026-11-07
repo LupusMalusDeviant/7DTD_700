@@ -58,7 +58,7 @@ Attribut **`value`** liest:
 
 | Feld | Pflicht | Prüfung im Lader |
 |---|---|---|
-| `Name` | **ja** | nicht leer **und** gegen `Mod.nameValidationRegex`; sonst Fehler „does not define a valid non-empty Name ({1}), ignoring“ und der Mod lädt nicht |
+| `Name` | **ja** | nicht leer **und** gegen `Mod.nameValidationRegex`, Muster **`^[0-9a-zA-Z_\-]+$`** (aus `Mod::.cctor`: `ldc.i4.8` → `RegexOptions.Compiled`, dann `newobj Regex::.ctor`, `stsfld Mod::nameValidationRegex`). Also **keine Leerzeichen, Punkte oder Sonderzeichen** außer `_` und `-`. Sonst Fehler „does not define a valid non-empty Name ({1}), ignoring“ und der Mod lädt nicht. `7DTD_700` besteht die Prüfung. |
 | `DisplayName` | **ja** | nicht leer; sonst „does not define a non-empty DisplayName, ignoring“ |
 | `Version` | empfohlen | `System.Version::TryParse`; schlägt es fehl: Warnung „does not define a valid Version. Please consider updating it for future compatibility.“ — lädt aber |
 | `Description` | nein | — |

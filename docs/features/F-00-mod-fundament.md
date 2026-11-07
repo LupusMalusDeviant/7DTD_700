@@ -35,6 +35,7 @@ prüft seine eigene Version und bildet die Basis für alle weiteren Features.
 | [`src/Mod700/Log700.cs`](../../src/Mod700/Log700.cs) | Präfix `[700]` über `Log` aus `LogLibrary.dll` |
 | [`mod/ModInfo.xml`](../../mod/ModInfo.xml) | V2-Format, `SkipWithAntiCheat="true"` |
 | [`tools/build/build.ps1`](../../tools/build/build.ps1) | bauen → packen → signieren → optional installieren |
+| [`tools/build/smoke.ps1`](../../tools/build/smoke.ps1) | prüft das installierte Paket und das Spielprotokoll, Exit 1 bei rot |
 | [`Directory.Build.props`](../../Directory.Build.props) | Spielpfad über `SDTD_PATH`, nie hart codiert |
 
 **Kein einziger Harmony-Patch.** Handshake und Build-Guard laufen über die öffentliche
@@ -58,8 +59,13 @@ Prio-1-Fragen beantwortet. Soll-Signaturen: `tools/meta/expect/f00.tsv` (12 Zeil
 - [x] Paket enthält genau `ModInfo.xml` + `Mod700.dll`; das Build-Skript bricht ab, wenn eine
       fremde DLL hineingerät
 - [x] `Mod700.dll` signiert (`CN=Lupus Malus Deviant`, Status `Valid`)
+- [x] In die Spielinstallation kopiert (`build.ps1 -Install`) und gegen die belegten
+      Laderegeln geprüft: `smoke.ps1 -SkipLog` → **14 geprüft, 0 rot**. Darunter: Wurzel
+      `<xml>`, keine `<ModInfo>`-Hülle, `Name` gegen `^[0-9a-zA-Z_\-]+$`, `Version` per
+      `Version.TryParse`, keine Felder, die der Lader ignoriert.
 - [ ] **SP-Start:** `[700] loaded vX.Y.Z (game build …)` im Log, keine Fehler
-      → braucht einen Spielstart mit **abgeschaltetem EAC**; steht aus
+      → `smoke.ps1` (ohne `-SkipLog`) prüft das selbst, findet aber noch kein Protokoll.
+      Braucht einen Spielstart mit **abgeschaltetem EAC**; steht aus.
 - [ ] **Dedicated Server** unter Windows und Linux lädt die Mod
       → auf diesem Rechner **kein Dedicated Server installiert**; nicht prüfbar
 - [ ] **Client verbindet sich mit dem Server**, beide loggen die Version
@@ -78,6 +84,8 @@ Wörtliche Zeichenketten aus `Mod::InitModCode` und `Mod::LoadAssemblies`, als A
 [700] Login-Handler registriert (nur Protokoll, keine Abweisung).
 [700] Harmony 2.13.0.0 angebunden, 0 Patch-Ziele (Phase 0: erwartet 0).
 ```
+
+`smoke.ps1` sucht genau diese Zeilen; es muss niemand das Protokoll von Hand durchlesen.
 
 Fehlerfälle, an denen man es erkennt:
 
