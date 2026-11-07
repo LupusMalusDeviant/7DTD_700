@@ -236,6 +236,9 @@ Punkte:
 | D10 | 2026-11-07 | Sichtbarkeit der Magie | **Dezent**: Glimmen, Funken, Rauch, kleine Glutpfeile; keine Feuerbälle oder Blitze | F-15, F-16 |
 | D11 | 2026-11-07 | Fantasy-Kreaturen | **Wenige, folkloristisch** (Irrlicht, Nachzehrer, Moorgeist …), selten | F-06 |
 | D12 | 2026-11-07 | Bedrohung & Grusel | **Deutlich stärker als Vanilla**: Folk-Horror-Ton, Säule P4 geschärft, neues Feature F-17 (Dunkelheit, Klang, Furcht-System, Trugbilder, Bedrohungs-Direktor) | GDD 1.1/2.2/3, F-06, F-07, F-08, F-09, F-17 |
+| D13 | 2026-11-07 | Grusel-Intensitätsregler (Q15) | **Ja**: Server- bzw. Mod-Option aus / mild / voll | F-17 |
+| D14 | 2026-11-07 | Furcht schwächt Mechanik (Q16) | **Ja**: Zittern beim Zielen, Panik usw. sind erlaubt; Nahkampf bleibt nutzbar (P3) | F-17 |
+| D15 | 2026-11-07 | Härtere Todesfolgen (Q17) | **Optional** (Server-Option, standardmäßig aus); **kein Wiederaufstehen als Seuchentoter**. Konkrete Folgen werden später entworfen | F-17 |
 
 ## 7. Offene Fragen
 
@@ -249,9 +252,7 @@ Punkte:
 | Q12 | Kulturzonen: sollen die Biome kulturell geprägt sein (z. B. Klosterland, Burgwall-Land, Küste)? | F-07, F-06 |
 | Q13 | Runenkraft: Vanilla-Stromnetz umdeuten (Kraftsteine + Kraftlinien, reines XML) oder selbstversorgende Runensteine (C#)? Entscheidung erst nach REA-Check, siehe F-15 | F-08, F-15 |
 | Q14 | Magie-Ressource: nur Verbrauchsmaterial (Runenkreide, Bernstein, Kräuter) oder zusätzlich ein eigener Kraftwert („Odem“)? | F-15 |
-| Q15 | Grusel-Intensitätsregler (aus/mild/voll) anbieten? | F-17 |
-| Q16 | Darf Furcht auch Mechanik schwächen (Zittern beim Zielen, Panik), oder nur Atmosphäre? | F-17 |
-| Q17 | Härtere Todesfolgen (z. B. man steht als Seuchentoter mit dem eigenen Inventar wieder auf)? | F-06, F-17 |
+| Q17 | Härtere Todesfolgen: welche konkret? (vertagt, Rahmen siehe D15) | F-17 |
 
 ---
 

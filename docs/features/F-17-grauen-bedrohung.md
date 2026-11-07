@@ -52,7 +52,7 @@ Wirkung in Stufen (alle dezent):
 | Verängstigt (60+) | Zittrige Fernkampf-Zielführung, Trugbilder (B4) beginnen |
 | Grauen (85+) | Sichtrand dunkel, stärkere Trugbilder, kurze Panik (Sprint-Zwang beim Treffer) |
 
-- Säule P3 bleibt: Nahkampf wird **nicht** unbrauchbar, nur Bogen und Zauber leiden
+- Mechanische Effekte sind gewollt (D14). Säule P3 bleibt aber: Nahkampf wird **nicht** unbrauchbar, vor allem Bogen und Zauber leiden
 - Umsetzung: Buffs und CVars per XML; Messung von Licht, Nähe zu Mitspielern und Sichtkontakt braucht wahrscheinlich C# → REA
 
 ### B4 — Trugbilder (P2, H, nur Client)
@@ -89,7 +89,20 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 - Keine absolute Sicherheit: Schutzzeichen schwächen Bedrohung, verhindern sie aber nicht
 
 ## Einstellbarkeit
-- Servereinstellung bzw. Mod-Option **Grauen-Intensität** (aus / mild / voll), wenn technisch machbar, mindestens für Trugbilder und Furcht-Effekte (Q15)
+- Servereinstellung bzw. Mod-Option **Grauen-Intensität** (D13):
+
+  | Stufe | Wirkung |
+  |---|---|
+  | aus | keine Trugbilder, keine Furcht-Effekte; Dunkelheit, Klang und Direktor bleiben (gehören zum Setting) |
+  | mild | Furcht nur atmosphärisch (Herzschlag, Sichtrand), keine Mechanik-Mali, Trugbilder selten |
+  | voll (Standard) | alle Effekte inkl. Mechanik-Mali (D14) |
+
+  Umsetzung bevorzugt über eine CVar bzw. Game-Option, die Buffs per Requirement prüfen (XML); [verifizieren], ob eigene Server-Optionen ohne C# möglich sind.
+
+### Härtere Todesfolgen (D15)
+- **Optional**, eigene Server-Option, standardmäßig **aus**
+- **Ausgeschlossen:** Wiederaufstehen des Spielers bzw. seiner Leiche als Seuchentoter
+- Welche Folgen es konkret gibt, wird später entworfen (Q17)
 - Aus Barrierefreiheitsgründen: keine Bildschirmblitze, keine starken Kamera-Wackler
 
 ## Umsetzung (Zusammenfassung)
@@ -111,10 +124,8 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 - [ ] Playtest-Frage „Hattest du nachts im Wald allein Angst?“: Mehrheit sagt Ja (5+ Tester)
 - [ ] Keine Nacht fühlt sich wie die andere an (Direktor-Log zeigt Phasenwechsel)
 - [ ] Trugbilder sind nur beim betroffenen Spieler sichtbar (Dedicated + 2 Clients)
-- [ ] Grauen-Intensität „aus“ entfernt Trugbilder und Furcht-Effekte vollständig
+- [ ] Grauen-Intensität „aus“ entfernt Trugbilder und Furcht-Effekte vollständig; „mild“ entfernt alle Mechanik-Mali
 - [ ] Performance: Klang- und Nebel-Effekte senken die Client-FPS nicht spürbar
 
 ## Offene Fragen
-- Q15: Intensitätsregler gewünscht (aus/mild/voll)?
-- Q16: Darf Grauen auch Mechanik schwächen (Panik, Zittern) oder nur Atmosphäre?
-- Q17: Härtere Todesfolgen für mehr Bedrohung (z. B. Seuchentoter steht aus deiner Leiche auf und trägt dein Inventar)?
+- Q17: Welche härteren Todesfolgen konkret? (vertagt; Rahmen D15)
