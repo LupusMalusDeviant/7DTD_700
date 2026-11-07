@@ -5,8 +5,9 @@ namespace Mod700.Check;
 /// kann. Die bloesse Existenz in items.xml ist kein Befund — gesperrte Gegenstaende bleiben
 /// absichtlich stehen, weil Prefabs und Quests auf sie zeigen (Vertrag 03, Abschnitt 4).
 ///
-/// Erreichbar heisst: ueber ein Rezept, eine Loot-Gruppe, eine Haendlergruppe, eine
-/// Quest-Belohnung oder die Startausruestung.
+/// Erreichbar heisst: ueber einen Block-Abwurf, ein Rezept, eine Loot-Gruppe, eine
+/// Haendlergruppe, eine Quest-Belohnung oder die Startausruestung. Der Block-Abwurf kam am
+/// 7. November 2026 dazu (siehe Reachability) - bis dahin war er ein Loch.
 ///
 /// <para><b>Urteil nach Eigenschaften (Vertrag 04 §3a).</b> Zuerst entscheidet eine
 /// Eigenschaft, die Vanilla selbst fuehrt (Tags, Block-Klasse, eigene Group), dann erst der
@@ -225,6 +226,19 @@ internal static class AnachronismCheck
             report.Hint("unaufloesbare-kennung", v.Name,
                 "erreichbar, aber in items.xml, blocks.xml und item_modifiers.xml nicht "
                 + "definiert - ueber diese Kennung kann nicht nach Eigenschaft geurteilt werden.");
+        }
+
+        // 'ungeprueft' ist die eine Zahl in diesem Bericht, die nicht stehen bleiben darf
+        // (Vertrag 04 §3b: jede erreichbare Kennung bekommt ein Urteil). Eine Zahl ohne
+        // Namen laesst sich aber nicht abarbeiten: als der sechste Weg - die Block-Abwuerfe -
+        // am 7. November 2026 dazukam, sprang sie von 0 auf 11, und der Bericht sagte nicht,
+        // auf welche elf. Jetzt sagt er es.
+        foreach (Verdict v in judgement.Open())
+        {
+            report.Hint("ungeprueft", v.Name,
+                "erreichbar, aber von keiner Eigenschaft, keiner Regel und keiner Ableitung "
+                + "beurteilt. Es fehlt eine Eigenschaftsregel, eine Zeile in denylist.txt "
+                + "(Verbot oder Freigabe) oder ein Aufschub mit Arbeitspaket.");
         }
 
         return report.Write(asJson);

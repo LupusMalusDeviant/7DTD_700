@@ -150,6 +150,19 @@ internal static class PurgePatch
                 "Dieselbe Regel wie bei den Gegenstaenden. D9 bleibt gewahrt: die Klassen "
                 + "bleiben vollstaendig stehen, damit F-15 sie in Phase 2 umdeutet."),
 
+            Removals(source, blockedNames, "blocks.xml", "drop", "name",
+                "DER SECHSTE WEG, nachgetragen am 7. November 2026. Ein <drop> gibt dem "
+                + "Spieler einen Gegenstand in die Hand, wenn er einen Block abbaut oder "
+                + "zerschlaegt - und das zaehlte in Reachability bis dahin nicht als Weg. "
+                + "Der Purge aus WP3 meldete darum 'gesperrt_und_noch_erreichbar 0', "
+                + "waehrend 26 gesperrte Kennungen weiter aus Bloecken fielen: Kunststoff "
+                + "aus dem Sofa, Mechanikteile aus der Waschmaschine, Elektrikteile aus der "
+                + "Lampe. Die Zeilen tragen bewusst kein Block-Praedikat: der Gegenstand "
+                + "soll aus JEDEM Block verschwinden, nicht aus einem. Der Block selbst "
+                + "bleibt stehen (D9) und faellt weiter - er gibt nur das Gesperrte nicht "
+                + "mehr her. Was an seine Stelle tritt, entscheidet F-05 in WP4.",
+                skipRemovals),
+
             Removals(source, blockedNames, "recipes.xml", "recipe", "name",
                 "Das Rezept ist ein WEG zu einem Gegenstand, und Wege darf 'remove' treffen "
                 + "(Vertrag 03 §4). Mehrere Treffer sind hier Absicht: ein Gegenstand kann "
@@ -189,9 +202,24 @@ internal static class PurgePatch
         int lines = 0;
         int withoutHit = 0;
 
+        // Geht eine Ausgabedatei aus mehreren Teilen hervor, bekommt jeder Teil seine eigene
+        // Zahl. Sonst traegt der zweite Teil denselben Namen wie der erste, der Bericht zeigt
+        // nur einen Wert, und 'patchzeilen' stimmt waehrend die Einzelzahlen sich nicht mehr
+        // dazu addieren - eine Zahl, die man nachrechnen kann und die dann nicht aufgeht,
+        // ist schlimmer als keine.
+        var sharedNames = files
+            .GroupBy(f => f.FileName, StringComparer.Ordinal)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToHashSet(StringComparer.Ordinal);
+
         foreach (PatchFile file in files)
         {
-            report.Count($"patchzeilen_{file.FileName}", file.Operations.Count);
+            string label = sharedNames.Contains(file.FileName)
+                ? $"{file.FileName} [{file.ElementName ?? "creativemode"}]"
+                : file.FileName;
+
+            report.Count($"patchzeilen_{label}", file.Operations.Count);
             lines += file.Operations.Count;
 
             foreach (PatchOperation op in file.Operations.Where(o => o.Matches == 0))
@@ -251,20 +279,29 @@ internal static class PurgePatch
         // Gruppe stillschweigend hinnimmt oder eine Protokollzeile schreibt, weiss hier
         // niemand, und behaupten soll es auch niemand.
         // Die Gesamtprobe. Jede Datei fuer sich zu pruefen sagt nicht, ob der Satz ZUSAMMEN
-        // alle fuenf Wegarten schliesst: eine Kennung, die nur noch in der Startausruestung
+        // alle sechs Wegarten schliesst: eine Kennung, die nur noch in der Startausruestung
         // steht, waere in jeder Einzelprobe gruen. Also werden alle erzeugten Zeilen auf
         // Kopien angewandt und die Erreichbarkeit auf dem Ergebnis neu gerechnet - mit
         // demselben Reachability, das die Pruefung benutzt, nicht mit einer zweiten Fassung.
+        //
+        // Je AUSGABEDATEI eine Kopie, nicht je Teil. blocks.xml hat zwei Teile; wer die
+        // Kopie pro Teil anlegt und unter dem Dateinamen ablegt, wirft die erste weg und
+        // prueft am Ende nur den zweiten Teil - stillschweigend und gruen.
         var patchedDocs = new Dictionary<string, XDocument>(StringComparer.OrdinalIgnoreCase);
         foreach (PatchFile file in files.Where(f => f.Operations.Count > 0))
         {
-            XDocument? original = source.Load(file.FileName);
-            if (original is null)
+            if (!patchedDocs.TryGetValue(file.FileName, out XDocument? copy))
             {
-                continue;
+                XDocument? original = source.Load(file.FileName);
+                if (original is null)
+                {
+                    continue;
+                }
+
+                copy = new XDocument(original);
+                patchedDocs[file.FileName] = copy;
             }
 
-            var copy = new XDocument(original);
             foreach (PatchOperation op in file.Operations)
             {
                 foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
@@ -280,7 +317,6 @@ internal static class PurgePatch
                 }
             }
 
-            patchedDocs[file.FileName] = copy;
         }
 
         ConfigSource patchedSource = ConfigSource.Patched(source, patchedDocs);
@@ -295,6 +331,26 @@ internal static class PurgePatch
             report.Error("gesperrt-trotz-patch", name,
                 "diese Kennung ist auch nach allen erzeugten Patchzeilen noch erreichbar. "
                 + "Der Patch-Satz deckt nicht, was die Pruefung findet.");
+        }
+
+        // Dieselbe Frage wie bei den Loot-Gruppen, nur fuer Bloecke: wie viele geben nach dem
+        // Patch nichts mehr her? Ein Block ohne Abwurf ist kein Fehler - Stein gibt Stein -,
+        // aber eine Waschmaschine, die beim Zerschlagen nichts hinterlaesst, ist eine Luecke
+        // im Spiel und gehoert gezaehlt, nicht entdeckt.
+        PatchFile dropFile = files.First(
+            f => f.FileName == "blocks.xml" && f.ElementName == "drop");
+        (int mute, int withDrops) = MutedBlocks(source, dropFile);
+        report.Count("bloecke_mit_abwurf_gesamt", withDrops);
+        report.Count("bloecke_ohne_abwurf_danach", mute);
+
+        if (mute > 0)
+        {
+            report.Hint("block-ohne-abwurf", $"{mute} von {withDrops} Bloecken",
+                "diese Bloecke hatten einen Abwurf und haben nach dem Patch keinen mehr. "
+                + "Sie bleiben stehen und bleiben abbaubar, geben aber nichts her, bis F-05 "
+                + "in WP4 einen Ersatz einsetzt. Das ist eine bekannte Folge, keine "
+                + "Entdeckung - und wie bei den leeren Loot-Gruppen ist hier nicht "
+                + "geprueft, was das Spiel daraus macht.");
         }
 
         PatchFile lootFile = files.First(f => f.FileName == "loot.xml");
@@ -350,26 +406,33 @@ internal static class PurgePatch
                 + "geschrieben.");
         }
 
+        // Eine Ausgabedatei kann aus mehreren Teilen bestehen (siehe Render): gruppiert wird
+        // ueber den Dateinamen, denn der ist es, worueber das Spiel zuordnet.
+        var groups = files
+            .GroupBy(f => f.FileName, StringComparer.Ordinal)
+            .Select(g => (FileName: g.Key, Parts: (IReadOnlyList<PatchFile>)g.ToList()))
+            .ToList();
+
         if (compareOnly && outDir is not null)
         {
             int different = 0;
-            foreach (PatchFile file in files)
+            foreach ((string name, IReadOnlyList<PatchFile> parts) in groups)
             {
-                string target = Path.Combine(outDir, file.FileName);
-                string wanted = Render(file);
+                string target = Path.Combine(outDir, name);
+                string wanted = Render(parts);
                 string? have = File.Exists(target) ? File.ReadAllText(target) : null;
 
                 if (have is null)
                 {
                     different++;
-                    report.Error("patchdatei-fehlt", file.FileName,
+                    report.Error("patchdatei-fehlt", name,
                         $"{Path.GetFullPath(target)} gibt es nicht. 'purge-patch --out "
                         + "<ordner>' erzeugt sie.");
                 }
                 else if (have.Replace("\r\n", "\n") != wanted.Replace("\r\n", "\n"))
                 {
                     different++;
-                    report.Error("patchdatei-veraltet", file.FileName,
+                    report.Error("patchdatei-veraltet", name,
                         "die Datei im Modlet entspricht nicht dem, was aus der heutigen "
                         + "denylist.txt und aufschub.txt entstehen wuerde. Entweder ist eine "
                         + "Regel nie im Modlet angekommen, oder jemand hat die erzeugte "
@@ -382,10 +445,10 @@ internal static class PurgePatch
         else if (withoutHit == 0 && left == 0 && !skipRemovals && !dryRun && outDir is not null)
         {
             Directory.CreateDirectory(outDir);
-            foreach (PatchFile file in files)
+            foreach ((string name, IReadOnlyList<PatchFile> parts) in groups)
             {
                 File.WriteAllText(
-                    Path.Combine(outDir, file.FileName), Render(file), new UTF8Encoding(false));
+                    Path.Combine(outDir, name), Render(parts), new UTF8Encoding(false));
             }
 
             report.Count("geschrieben_nach", Path.GetFullPath(outDir));
@@ -409,15 +472,17 @@ internal static class PurgePatch
         report.Limitation(
             "CreativeMode='None' ist KEINE Sperre fuer den Spieler. Es nimmt den Gegenstand "
             + "aus dem Kreativmenue und aus der Entwicklerliste - mehr nicht. Dass ein "
-            + "Gegenstand unerreichbar wird, leisten allein die entfernten Wege (Rezept, "
-            + "Loot, Haendler, Quest-Belohnung, Startausruestung). Der Plan nennt "
+            + "Gegenstand unerreichbar wird, leisten allein die entfernten Wege "
+            + "(Block-Abwurf, Rezept, Loot, Haendler, Quest-Belohnung, Startausruestung). "
+            + "Der Plan nennt "
             + "CreativeMode in WP3.2 als 'sperren statt loeschen'; das ist richtig als "
             + "Absichtserklaerung in den Daten, nicht als Wirkung.");
 
         report.Limitation(
-            $"{Stufe} schreibt alle fuenf Dateien: items.xml und blocks.xml (CreativeMode), "
-            + "recipes.xml, loot.xml, traders.xml (Wege entfernt), quests.xml und "
-            + "entityclasses.xml (Listen gekuerzt). Was dem Spieler dafuer gegeben wird, "
+            $"{Stufe} schreibt sieben Dateien: items.xml und blocks.xml (CreativeMode), "
+            + "blocks.xml zusaetzlich die Abwuerfe, recipes.xml, loot.xml, traders.xml "
+            + "(Wege entfernt), quests.xml und entityclasses.xml (Listen gekuerzt). Was dem "
+            + "Spieler dafuer gegeben wird, "
             + "steht nicht hier - dieses Modlet nimmt nur weg (D53: 700_10_Purge laeuft vor "
             + "allen anderen).");
 
@@ -690,6 +755,54 @@ internal static class PurgePatch
     /// Zaehlt die Loot-Gruppen, die nach den Entfernungen keinen Eintrag mehr haben. Gezaehlt
     /// wird an einer Kopie, auf die die erzeugten Zeilen angewandt sind - nicht geschaetzt.
     /// </summary>
+    /// <summary>
+    /// Wie viele Bloecke hatten vor dem Patch einen benannten Abwurf und haben danach keinen
+    /// mehr. Gezaehlt wird nur ueber &lt;drop name="…"/&gt;: ein
+    /// <c>&lt;drop event="Destroy" count="0"/&gt;</c> ohne Namen ist Vanillas Art zu sagen
+    /// "hier faellt nichts", und wer den mitzaehlt, meldet jeden Terrainblock als Luecke.
+    /// </summary>
+    private static (int Mute, int WithDrops) MutedBlocks(ConfigSource source, PatchFile drops)
+    {
+        XDocument? original = source.Load(drops.FileName);
+        if (original is null)
+        {
+            return (0, 0);
+        }
+
+        static int Named(XElement block) =>
+            block.Elements("drop").Count(d => d.Attribute("name") is not null);
+
+        // Verglichen wird ueber die Blocknamen, nicht ueber Anzahlen: eine Differenz zweier
+        // Zaehlungen waere auch dann plausibel, wenn sie zwei verschiedene Mengen zaehlt.
+        var namesBefore = new HashSet<string>(
+            original.Descendants("block")
+                .Where(b => Named(b) > 0)
+                .Select(b => b.Attribute("name")?.Value)
+                .Where(n => n is not null)
+                .Select(n => n!),
+            StringComparer.Ordinal);
+        int withDrops = namesBefore.Count;
+
+        if (drops.Operations.Count == 0)
+        {
+            return (0, withDrops);
+        }
+
+        var copy = new XDocument(original);
+        foreach (PatchOperation op in drops.Operations)
+        {
+            foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
+            {
+                hit.Remove();
+            }
+        }
+
+        int mute = copy.Descendants("block").Count(
+            b => b.Attribute("name") is { } a && namesBefore.Contains(a.Value) && Named(b) == 0);
+
+        return (mute, withDrops);
+    }
+
     private static (int Emptied, int Total) EmptiedLootGroups(ConfigSource source, PatchFile loot)
     {
         XDocument? original = source.Load(loot.FileName);
@@ -770,15 +883,32 @@ internal static class PurgePatch
         }
     }
 
-    private static string Render(PatchFile file)
+    /// <summary>
+    /// Schreibt eine Patchdatei. Mehrere Teile koennen in dieselbe Datei gehen, und sie
+    /// MUESSEN es: der XML-Patcher des Spiels ordnet eine Modlet-Datei ihrer Vanilla-Datei
+    /// ueber den DATEINAMEN zu. Eine 'blocks-abwuerfe.xml' wuerde nie angewandt. blocks.xml
+    /// traegt darum zwei Teile - die CreativeMode-Zeilen und die Abwurf-Entfernungen -, und
+    /// sie bleiben im Werkzeug getrennte PatchFile-Objekte, weil jede Nachprobe nur ein
+    /// Element und ein Attribut kennt. Zusammengelegt koennte 'wege_uebrig' nur noch eines
+    /// von beiden pruefen und waere beim anderen stillschweigend gruen.
+    /// </summary>
+    private static string Render(IReadOnlyList<PatchFile> parts)
     {
+        string fileName = parts[0].FileName;
+        int lineCount = parts.Sum(p => p.Operations.Count);
+
         var text = new StringBuilder();
         text.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         text.Append("<config>\n");
-        text.Append($"\t<!-- 700_10_Purge / {file.FileName}\n");
+        text.Append($"\t<!-- 700_10_Purge / {fileName}\n");
         text.Append($"\t     F-01 Anachronismen-Purge, Plan-0001 {Stufe}\n");
-        text.Append("\n");
-        text.Append($"\t     {Wrap(file.Why, "\t     ")}\n");
+
+        foreach (PatchFile part in parts)
+        {
+            text.Append("\n");
+            text.Append($"\t     {Wrap(part.Why, "\t     ")}\n");
+        }
+
         text.Append("\n");
         text.Append("\t     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und\n");
         text.Append("\t     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung\n");
@@ -786,15 +916,19 @@ internal static class PurgePatch
         text.Append("\t     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas\n");
         text.Append("\t     anderes haben will, aendert die Denylist und laesst neu erzeugen.\n");
         text.Append($"\t     Quelle der Erzeugung: {Rendered}.\n");
-        text.Append($"\t     {file.Operations.Count} Zeilen. -->\n");
+        text.Append($"\t     {lineCount} Zeilen");
+        text.Append(parts.Count > 1 ? $" aus {parts.Count} Teilen. -->\n" : ". -->\n");
         text.Append("\n");
 
-        foreach (PatchOperation op in file.Operations)
+        foreach (PatchFile part in parts)
         {
-            text.Append($"\t{op.Xml}  <!-- {op.Reason} -->\n");
+            foreach (PatchOperation op in part.Operations)
+            {
+                text.Append($"\t{op.Xml}  <!-- {op.Reason} -->\n");
+            }
         }
 
-        if (file.Operations.Count == 0)
+        if (lineCount == 0)
         {
             text.Append("\t<!-- keine Zeilen: in dieser Quelle gibt es nichts zu patchen. -->\n");
         }

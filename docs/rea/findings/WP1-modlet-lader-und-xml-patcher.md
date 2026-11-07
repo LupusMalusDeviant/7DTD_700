@@ -206,6 +206,15 @@ schreibt `Key`, die Prüfung ist demnach nicht auf Großschreibung festgelegt.
 verliert den zweiten stillschweigend bis auf diese Protokollzeile. Das Prüfwerkzeug aus WP2.3
 sollte darauf achten.
 
+> **Berichtigt am 7. November 2026, siehe
+> [WP4-localization-ueberschreibt-vanilla.md](WP4-localization-ueberschreibt-vanilla.md).**
+> Dieser Absatz gilt für *zwei gleiche Zeilen in einer Datei*. Er liest sich aber leicht als
+> „ein Modlet, das einen **Vanilla**-Schlüssel setzt, verliert" — und das ist falsch.
+> `addCsv` hat zwei Zweige: Vanilla lädt mit `false` und nimmt `Dictionary::Add` (Doppel →
+> Warnung, Eintrag fällt), Modlets laden mit `true` und nehmen `Dictionary::set_Item`
+> (Doppel → **überschreiben**, zellenweise in `patchedCells` vermerkt). Eine Modlet-Zeile
+> gewinnt also gegen Vanilla. Darauf steht die ganze Umdeutung in WP4.
+
 Eine Beispielzeile zur Form:
 
 ```

@@ -1,0 +1,7 @@
+# Pruefdaten: ein erlaubter Vanilla-Schluessel MIT nachgestelltem Grund.
+#
+# Vor WP4.1 schnitt LocalizationCheck den Kommentar nicht ab - aus der Zeile unten wurde
+# der Schluessel "pruefVanillaSchluessel   # Raseneisenerz", der nie passte, und die
+# Pruefung blieb rot, obwohl der Schluessel sichtbar in der Liste stand. Diese Datei
+# wuerde das wieder finden.
+pruefVanillaSchluessel   # Raseneisenerz: der Grund gehoert neben die Zeile

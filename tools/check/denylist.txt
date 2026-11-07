@@ -273,12 +273,10 @@ resourceMetalPipe               # gezogenes Rohr
 resourcePaint                   # Lackfarbe
 resourcePaper                   # Papier kommt erst um 1100 nach Europa
 resourceCropChrysanthemumPlant  # Chrysantheme, Ostasien
-resourceCropCottonPlant         # Baumwolle wuchs nicht in Nordeuropa
-resourceYuccaFibers             # Yucca, Neue Welt
-resourceScrapBrass*             # Schrottwirtschaft; F-05 ersetzt sie in WP4
-resourceScrapIron*
-resourceScrapLead*
-resourceLeadBundle
+# resourceCropCottonPlant, resourceYuccaFibers, resourceScrapBrass*, resourceScrapIron*,
+# resourceScrapLead*, resourceLeadBundle -- gestrichen mit WP4.1: sie sind jetzt umgedeutet
+# und stehen unten unter "Umgedeutete Vanilla-Kennungen (WP4)". Ein Verbot und eine
+# Freigabe fuer dieselbe Kennung waere eine verdeckte Regel, keine Entscheidung.
 smallEngine                     # Kleinmotor
 
 # --- Behaelter und Werkstaetten -------------------------------------------------
@@ -292,9 +290,9 @@ cntDewCollector                 # Tauwassersammler aus Plane und Filter
 toolDew*                        # dessen drei Bauteile
 toolBeaker                      # Becherglas; Chemie gehoert nicht in Phase 1
 toolChickenCoopLamp             # Waermelampe; Stall und Nest bleiben
-cementMixer                     # Betonmischer
-chemistryStation                # Chemiestation
-combineStation                  # "Combine Station"
+# cementMixer, chemistryStation -- gestrichen mit WP4.3: beide werden umgedeutet
+# (Kalkofen, Kraeuterkueche) und stehen unten bei den Umdeutungen.
+combineStation                  # "Combine Station": Vanillas Werkzeug-und-Form-Bank, kein Gegenstueck im Fruehmittelalter
 
 # --- Pflanzungen: dieselben Pflanzen wie oben, als Block ------------------------
 plantedCoffee*
@@ -306,6 +304,8 @@ plantedBlueberry*
 plantedYucca*
 plantedCotton*
 plantedChrysanthemum*
+plantedSnowberry*               # Schneebeere ist Nordamerika, dieselbe Reihe wie Yucca
+scrapMetalPile                  # Truemmerteil aus gebrochenem Stahltraeger; faellt als Schutt neben einstuerzenden Bloecken
 
 # --- Bloecke und Einrichtung ----------------------------------------------------
 # Mobiliar und Bauteile, die eine Fabrik voraussetzen. Vanillas 'challenge_*'-Marken
@@ -334,8 +334,8 @@ ironGarageDoor*                 # Garagentor
 
 # --- Vanillas Geld und Vanillas Lore --------------------------------------------
 # Beides faellt, beides steht in aufschub.txt: ohne Ersatz gibt es keinen Handel.
-oldCash                         # Papiergeld
-casinoCoin                      # Casino-Marke, Vanillas Waehrung
+oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt die Marke, nicht den Geldschein
+# casinoCoin -- gestrichen mit WP4.2: wird zum Silberpfennig umgedeutet (D30), siehe unten
 noteDuke01                      # Dukes Brief, liegt in der Startausruestung
 
 # ================================================================================
@@ -510,8 +510,47 @@ noteDuke01                      # Dukes Brief, liegt in der Startausruestung
 !resourceRockSmall*
 !resourceSewingKit         # Nadel und Faden
 !resourceSilverNugget
+!resourceSnowBall          # Schnee
 !resourceWood
 !resourceWoodBundle
+
+# --- Gelaende und Setzlinge: erst mit dem sechsten Weg sichtbar geworden -------
+# Diese neun kamen am 7. November 2026 dazu, als Block-Abwuerfe als Erreichbarkeitsweg
+# nachgetragen wurden (siehe Reachability). Vorher war keine von ihnen erreichbar, also
+# urteilte auch niemand ueber sie. Sie sind Waldboden, Schnee, Schutt und drei Setzlinge -
+# alles unauffaellig, und genau darum stehen sie hier mit Namen: eine Kennung ohne Urteil
+# bleibt eine Kennung ohne Urteil, auch wenn sie harmlos aussieht (Vertrag 04 §3b).
+!terrBurntForestGround
+!terrDestroyedWoodDebris
+!terrDirtTwitch
+!terrForestGround
+!terrSnow
+!treePlantedMountainPine1m   # Bergkiefer
+!treePlantedOak1m            # Eiche
+!treePlantedWinterPine1m     # Winterkiefer
+
+# --- Umgedeutete Vanilla-Kennungen (WP4) ----------------------------------------
+# Diese Kennungen bleiben so heissen, wie Vanilla sie nennt - der Spieler sieht einen
+# anderen Namen. Die Umdeutung steckt in mod/700_90_Sprache/Config/Localization.csv,
+# nicht in items.xml: ein Name ist kein Verhalten, und eine Zeile Sprache ist billiger
+# und rueckbaubarer als ein neuer Gegenstand mit eigenem Rezeptbaum, eigenem Loot und
+# eigener Haendlerware (Saeule P5: XML vor C# vor Assets, und Umdeutung vor Neubau).
+#
+# DAS IST KEIN FREIBRIEF. Was hier steht, ist jeweils eine Sache, die es um 700 gab,
+# mit einem Vanilla-Namen davor. Wo es keine solche Sache gibt - Papiergeld, Beton,
+# Schusswaffen -, bleibt das Verbot stehen. Der Preis der Umdeutung ist das Modell und
+# das Bild: ein Raseneisenerz, das wie Schrott aussieht, ist bis Phase 2 falsch (F-05
+# nennt das, F-17/F-18 raeumen es auf). Zaehlt in der Pruefung unter
+# 'erlaubt_durch_freigabe', nicht unter 'erlaubt' - die Zahl bleibt sichtbar.
+!resourceScrapIron*        # WP4.1: Raseneisenerz und sein Buendel - Sumpf- und Wiesenerz, der Rohstoff der Rennfeuer
+!resourceScrapBrass*       # WP4.1: Buntmetall - Altmessing und Bronze aus roemischen Ruinen (F-05: "selten, Ruinen")
+!resourceScrapLead*        # WP4.1: Blei - roemischer Bergbau ist belegt, das Metall ist nicht neu
+!resourceLeadBundle        # WP4.1: dasselbe als Buendel
+!resourceYuccaFibers       # WP4.1: Nesselfaser - die Faser, nicht die Pflanze; der Yucca-Busch selbst bleibt gesperrt
+!resourceCropCottonPlant   # WP4.1: Flachs - dieselbe Trennung zwischen Faser und Pflanze
+!casinoCoin                # WP4.2: Silberpfennig (Sceatta), D30 nennt die 1:1-Umdeutung der Dukes ausdruecklich
+!chemistryStation          # WP4.3: Kraeuterkueche - Kessel, Moerser, Siebe; das Vanilla-Gestell hat die Rezeptflaeche
+!cementMixer               # WP4.3: Kalkofen - Kalk brennen ist belegt, Zement ist es nicht
 
 # --- Werkstaetten, Pflanzungen, Behaelter ---------------------------------------
 !toolAnvil                 # Amboss

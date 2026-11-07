@@ -1,0 +1,8 @@
+# Pruefdaten: eine Liste mit einem Eintrag, zu dem es keine Zeile gibt.
+#
+# 'pruefNieGesetzt' schaltet die Praefix-Pruefung fuer einen Schluessel ab, den niemand
+# setzt. Genau so sieht es aus, wenn eine Uebersetzung geloescht oder umbenannt wird und
+# die Freigabe stehen bleibt. Der Lauf bleibt gruen - es ist ein Hinweis, kein Fehler -,
+# muss den Namen aber nennen.
+pruefVanillaSchluessel
+pruefNieGesetzt

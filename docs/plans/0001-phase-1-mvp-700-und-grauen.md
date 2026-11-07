@@ -391,6 +391,21 @@ WP3.6 und WP3.7 brauchen den Nutzer: Spielstart mit abgeschaltetem EAC, Protokol
 Referenzfehler und leere Loot-Gruppen durchsehen, dann drei Spieltage. Erst dieser Lauf macht
 aus 1780 gerechneten Zeilen einen Nachweis.
 
+> **BERICHTIGUNG, 7. November 2026 (gefunden in WP4.1).** Der Absatz über die Gesamtprobe sagt
+> „alle fünf Wegarten". Es sind **sechs**: `blocks.xml` trägt
+> `<drop event="Harvest|Destroy|Fall" name="…"/>`, und das war in `Reachability` kein Weg. Der
+> Purge war damit **nicht vollständig**, auch wenn jede Zahl oben stimmt — sie beantworteten
+> eine zu kleine Frage. Gemessen: **26 gesperrte Kennungen in 869 Abwurfzeilen** blieben zu
+> haben, darunter `resourceScrapPolymers` aus 163 Zeilen, `resourceMechanicalParts` aus 127
+> und `resourceElectricParts` aus 115 — ein zerschlagenes Sofa gab Kunststoff.
+>
+> Geschlossen in WP4.1: der sechste Weg steht in `Reachability`, `purge-patch` schreibt 41
+> Abwurf-Entfernungen, und `gesperrt_und_noch_erreichbar` ist wieder 0 — jetzt für die
+> richtige Frage. Aufgefallen ist es nicht durch eine Prüfung, sondern weil eine Zahl in WP4
+> (585 Abwurfzeilen für Schrotteisen) nicht zu „vollständig" passte. Was daraus für die
+> Prüfwerkzeuge folgt, steht in Vertrag 04 §3d; dass es keinen siebten Weg gibt, ist damit
+> **nicht** gezeigt.
+
 ---
 
 ### WP4: F-05 + F-04 — Ressourcen, Ketten, Werkstätten
@@ -402,11 +417,12 @@ aus 1780 gerechneten Zeilen einen Nachweis.
 
 **Schritte:**
 
-1. **WP4.1** `[Claude-prüfbar]` Ressourcen umdeuten (F-05-Tabelle): Raseneisenerz → Luppe →
-   Schmiedeeisen, Holzkohle, Kalk, Lehm, Bernstein, Salz. Erz-Häufigkeit so, dass **Eisen der
-   Engpass** ist (D31), Altmetall aus Ruinen als Ventil.
-2. **WP4.2** `[Claude-prüfbar]` **Währung auf Silber** (D30). Das ist belegt eine Zeile:
-   `currency_item` in `traders.xml`; `casinoCoin` kommt im Code an keiner Stelle vor.
+1. ~~**WP4.1** `[Claude-prüfbar]` Ressourcen umdeuten (F-05-Tabelle): Raseneisenerz → Luppe →
+   Schmiedeeisen, Holzkohle, Kalk, Lehm, Bernstein, Salz.~~ **Namen und Urteile erledigt
+   2026-11-07**; Erz-Häufigkeit (D31) offen, siehe Stand.
+2. ~~**WP4.2** `[Claude-prüfbar]` **Währung auf Silber** (D30). Das ist belegt eine Zeile:
+   `currency_item` in `traders.xml`; `casinoCoin` kommt im Code an keiner Stelle vor.~~
+   **Erledigt 2026-11-07 — und zwar in null Zeilen `traders.xml`**, siehe Stand.
 3. **WP4.3** `[Claude-prüfbar]` Die fünf Vanilla-Werkstätten umdeuten: Feuerstelle,
    Zimmermannsbank, Rennofen, Esse + Amboss, Kräuterküche, Kalkofen.
 4. **WP4.4** `[Claude-prüfbar]` Die vier geklonten Werkstätten: Runenritzer-Bank, Webstuhl,
@@ -420,6 +436,41 @@ aus 1780 gerechneten Zeilen einen Nachweis.
 7. **WP4.7** `[Claude-prüfbar]` `mod700check recipes` grün: kein T0→T4-Pfad mit Sackgasse.
 
 **Ergebnis:** Eine vollständige, geprüfte Rohstoff- und Werkstattkette von T0 bis T4.
+
+**Stand WP4.1 und WP4.2 (7. November 2026): umgedeutet, nicht ersetzt.**
+
+Der Plan dachte sich WP4.1 als „Ressourcen umdeuten" und WP4.2 als „eine Zeile `currency_item`".
+Gebaut ist etwas Billigeres und Reversibleres: **keine Zeile `traders.xml`, keine Zeile
+`items.xml`, 26 Zeilen Sprache.** `casinoCoin` *ist* der Silberpfennig, `resourceScrapIron`
+*ist* das Raseneisenerz. D30 nennt das ausdrücklich so — „**Silber** (Sceattas bzw. Denare) als
+1:1-Umdeutung der Vanilla-Dukes" —, und der Weg trägt alle 166 Verweise auf `casinoCoin` und
+alle 585 Abwurfzeilen auf `resourceScrapIron` mit, ohne eine davon anzufassen.
+
+Das steht und fällt mit einer Frage, die vorher niemand geprüft hatte: **überschreibt eine
+Modlet-Zeile einen Vanilla-Sprachschlüssel?** Der WP1-Befund klang nach *nein* („verliert den
+zweiten stillschweigend"). Gelesen im ausgelieferten Code (`mod700meta`, weil REA an dieser
+Assembly abbricht) ist die Antwort **ja**: `addCsv` lädt für Vanilla mit `false` und nimmt
+`Dictionary::Add`, für Modlets mit `true` und nimmt `Dictionary::set_Item`. Befund:
+[WP4-localization-ueberschreibt-vanilla.md](../rea/findings/WP4-localization-ueberschreibt-vanilla.md);
+WP1 §6 ist berichtigt.
+
+| | |
+|---|---|
+| umgedeutet | 13 Kennungen, je Name + Beschreibung = 26 Schlüssel |
+| Verbot → Freigabe | `resourceScrapIron*`, `resourceScrapBrass*`, `resourceScrapLead*`, `resourceLeadBundle`, `resourceYuccaFibers`, `resourceCropCottonPlant`, `casinoCoin` |
+| Aufschübe eingelöst | 8 von 8 mit Adresse WP4 (170 → 160 aufgeschoben) |
+| bleibt verboten | `oldCash` — Silber ersetzt die Marke, nicht den Geldschein |
+| neue Dateien | `mod/700_90_Sprache/Config/Localization.csv`, `tools/check/vanilla-keys.txt` |
+| Gegenproben | 35 → **38**, 0 fehlgeschlagen |
+
+**Was in WP4.1 offen bleibt, und warum:** die Erz-Häufigkeit (D31, „Eisen ist der Engpass")
+ist **nicht** gesetzt. Beim Nachsehen stellte sich heraus, dass `terrOreIron` mit 105 pro
+Abbau nicht die Hauptquelle ist: Vanilla verteilt `resourceScrapIron` über **585 Zeilen** in
+`blocks.xml`, Autowracks und Schrotthaufen geben 70–180 pro Ernte. Die Erzader herunterzusetzen
+wäre eine Zahl, die nichts bewirkt, und „Setzung für WP9" dazuzuschreiben wäre eine Ausrede.
+Der Engpass hängt an der Bergeökonomie der Welt (F-17/F-18) und an WP9 — und an derselben
+585-Zahl, die den sechsten Weg aufgedeckt hat. Kalk, Bernstein und Salz fehlen ebenfalls: sie
+sind neue Gegenstände und gehören zu den Werkstätten, die sie verarbeiten (WP4.3 bis WP4.6).
 
 ---
 

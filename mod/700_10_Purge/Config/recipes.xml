@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     369 Zeilen. -->
+	     367 Zeilen. -->
 
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletAP']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletBall']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -121,8 +121,6 @@
 	<remove xpath="/recipes/recipe[@name='ceilingLight01_player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='ceilingLight07_player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='cellarDoorDoubleSteel']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='cementMixer']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='chemistryStation']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='cntCoolerVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='cntDeskSafe_Player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='cntDewCollector']" />  <!-- Weg zu einer gesperrten Kennung -->

@@ -138,6 +138,12 @@ Test-Case 'recipes findet Zyklus und unbekannte Zutat' 1 @(
     '--world-roots', (Join-Path $data 'world-roots.txt'))
 Test-Case 'localization findet Dubletten, Luecken, fehlendes Praefix' 1 @(
     'localization', (Join-Path $data 'Localization-rot.csv'), '--prefix', '700_')
+# WP4.1 haengt daran, dass eine Modlet-Zeile einen Vanilla-Schluessel ueberschreiben darf
+# (Befund WP4-localization-ueberschreibt-vanilla.md). Die Praefix-Pruefung muss trotzdem
+# greifen, solange der Schluessel nicht ausdruecklich freigegeben ist - sonst ist sie keine
+# Pruefung, sondern eine Formalie.
+Test-Case 'localization: Vanilla-Schluessel ohne Freigabeliste ist rot' 1 @(
+    'localization', (Join-Path $data 'Localization-vanilla.csv'), '--prefix', '700_')
 
 Write-Output ""
 Write-Output "== Gegenproben: eine fehlende Annahme macht den sauberen Satz rot =="
@@ -145,6 +151,23 @@ Write-Output "== Gegenproben: eine fehlende Annahme macht den sauberen Satz rot 
 # Datei wirklich etwas beitraegt und nicht nur dekorativ dabeiliegt.
 Test-Case 'recipes ohne world-roots wird rot' 1 @(
     'recipes', (Join-Path $data 'sauber'), '--no-world-roots')
+
+Write-Output ""
+Write-Output "== Gegenproben: die Liste der bewussten Vanilla-Ueberschreibungen =="
+# Diese drei haengen zusammen. Die Freigabeliste ist eine ABSCHALTUNG der
+# Praefix-Pruefung, also muss sie (1) wirken, (2) einen nachgestellten Grund vertragen -
+# wie denylist.txt, aufschub.txt und die Rezeptliste es tun - und (3) sagen, wenn ein
+# Eintrag ins Leere zeigt. Fall (2) ist kein erfundener Fall: der Leser schnitt den
+# Kommentar bis WP4.1 nicht ab, und die Pruefung blieb rot mit dem Hinweis auf eine Datei,
+# in der der Schluessel sichtbar dastand.
+Test-Case 'localization: freigegebener Vanilla-Schluessel ist gruen' 0 @(
+    'localization', (Join-Path $data 'Localization-vanilla.csv'), '--prefix', '700_',
+    '--vanilla-keys', (Join-Path $data 'vanilla-keys-mit-kommentar.txt'))
+Test-Output 'localization nennt den uebrigen Freigabe-Eintrag' 0 @(
+    'localization', (Join-Path $data 'Localization-vanilla.csv'), '--prefix', '700_',
+    '--vanilla-keys', (Join-Path $data 'vanilla-keys-uebrig.txt')) `
+    -MustContain @('vanilla-schluessel-ohne-zeile', 'pruefNieGesetzt') `
+    -MustNotContain @('pruefVanillaSchluessel'' steht als bewusste')
 
 Write-Output ""
 Write-Output "== Gegenproben: der Vergleich beachtet Gross- und Kleinschreibung =="

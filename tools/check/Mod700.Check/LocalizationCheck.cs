@@ -65,10 +65,16 @@ internal static class LocalizationCheck
                 throw new UsageException($"Keine Datei: {allowFile}");
             }
 
+            // Nachgestellte Kommentare abschneiden - genau wie Denylist, Deferrals und
+            // RecipeCheck es tun. Ohne das wurde aus "casinoCoin  # Silberpfennig" ein
+            // Schluessel samt Grund, der nie passt; die Pruefung blieb rot und wies auf eine
+            // Datei, in der der Schluessel sichtbar dastand. Der Grund gehoert neben die
+            // Zeile, also muss der Leser ihn vertragen.
             foreach (string raw in File.ReadAllLines(allowFile))
             {
-                string key = raw.Trim();
-                if (key.Length > 0 && !key.StartsWith('#'))
+                int comment = raw.IndexOf('#');
+                string key = (comment >= 0 ? raw[..comment] : raw).Trim();
+                if (key.Length > 0)
                 {
                     allowed.Add(key);
                 }
@@ -231,6 +237,28 @@ internal static class LocalizationCheck
 
         report.Count("schluessel", seen.Count);
         report.Count("gefuellte_fremdsprachen_zellen", filledForeign);
+
+        // Eine Liste bewusster Vanilla-Ueberschreibungen ist eine Abschaltung der
+        // Praefix-Pruefung. Ein Eintrag, zu dem es keine Zeile gibt, schaltet sie fuer einen
+        // Schluessel ab, den niemand setzt - und bleibt stehen, wenn eine Uebersetzung
+        // spaeter geloescht oder umbenannt wird. Darum wird er genannt.
+        if (allowFile is not null)
+        {
+            report.Count("vanilla_schluessel_erlaubt", allowed.Count);
+            var unusedAllowed = allowed
+                .Where(k => !seen.ContainsKey(k))
+                .OrderBy(k => k, StringComparer.Ordinal)
+                .ToList();
+            report.Count("vanilla_schluessel_ohne_zeile", unusedAllowed.Count);
+
+            foreach (string key in unusedAllowed)
+            {
+                report.Hint("vanilla-schluessel-ohne-zeile", allowFile,
+                    $"'{key}' steht als bewusste Vanilla-Ueberschreibung in der Liste, aber " +
+                    "diese CSV setzt ihn nicht. Entweder fehlt die Zeile oder der Eintrag ist " +
+                    "uebrig.");
+            }
+        }
 
         return report.Write(asJson);
     }

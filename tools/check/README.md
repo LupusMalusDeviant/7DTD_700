@@ -82,7 +82,13 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **35 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **38 Gegenproben, 0 fehlgeschlagen.**
+
+Die drei jüngsten gehören zu `vanilla-keys.txt`, der Liste bewusster
+Vanilla-Überschreibungen in `Localization.csv` (Vertrag 04 §5, Nachtrag WP4.1). Sie ist eine
+**Abschaltung** der Präfix-Prüfung, also wird geprüft, dass sie wirkt, dass sie einen
+nachgestellten Grund verträgt — **das war ein echter Fehler, der Leser schnitt den Kommentar
+nicht ab** — und dass ein Eintrag ohne zugehörige Zeile genannt wird.
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -130,22 +136,36 @@ Die siebte Zeile ist die wichtigste: sie prüft nicht das Werkzeug, sondern **di
 |---|---|
 | `recipes` gegen Vanilla V 3.40 `Data/Config` | 633 Rezepte, **0 Sackgassen, 0 Zyklen**, 8 Wurzeln aus `world-roots.txt` |
 | `localization` gegen Vanilla `Localization.csv` | 20 Spalten, 25.930 Zeilen, **25.930 eindeutige Schlüssel** (keine Dublette) |
-| `anachronisms` gegen Vanilla | **592 verbotene Kennungen** erreichbar: 123 nach Eigenschaft, 441 nach Name, 27 über die `Unlocks`-Ableitung, 1 über die Mod-Ableitung (Stände davor: 138, 254, 298, 335, 356) |
+| `anachronisms` gegen Vanilla | **593 verbotene Kennungen** erreichbar: 123 nach Eigenschaft, 442 nach Name, 27 über die `Unlocks`-Ableitung, 1 über die Mod-Ableitung (Stände davor: 138, 254, 298, 335, 356, 592) |
 
 Die Stände sind kein neuer Inhalt im Spiel, sondern das Bild davon, wie weit die Liste
-hingesehen hat. 1129 Kennungen sind überhaupt erreichbar; sie teilen sich restlos auf:
+hingesehen hat. 1140 Kennungen sind überhaupt erreichbar; sie teilen sich restlos auf:
 
 | | Zahl |
 |---|---|
-| verboten | 592 |
-| aufgeschoben (mit Arbeitspaket) | 170 — WP7 157, WP4 10, WP5 2, WP8 1 |
-| durch Freigabe erlaubt | 270 |
+| verboten | 593 |
+| aufgeschoben (mit Arbeitspaket) | 160 — WP7 157, WP5 2, WP8 1 |
+| durch Freigabe erlaubt | 290 |
 | Bauplan folgt Erlaubtem (`Unlocks`) | 24 |
 | Loot-Gruppen (keine Gegenstände) | 73 |
 | **ungeprüft** | **0** |
 
+**Der sechste Weg (7. November 2026).** Von den 8.535 Erreichbarkeitswegen dieses Laufs sind
+**3.108 Block-Abwürfe** in 90 verschiedenen Namen, und die hat vorher niemand gezählt — nicht
+weil eine Regel fehlte, sondern weil `Reachability` die Datei nicht ansah: `blocks.xml` trägt
+`<drop event="Harvest|Destroy|Fall" name="…"/>`, und das war in `Reachability` kein
+Erreichbarkeitsweg. `RecipeCheck` zählte es seit dem ersten Tag als Wurzel — zwei Stellen,
+dieselbe Frage, verschiedene Antworten. Gemessen am sechsten Weg blieben **26 gesperrte
+Kennungen in 869 Abwurfzeilen** zu haben (`resourceScrapPolymers` 163, `resourceMechanicalParts`
+127, `resourceElectricParts` 115): ein zerschlagenes Sofa gab Kunststoff, während der Purge
+`gesperrt_und_noch_erreichbar 0` meldete. Beide Stellen lesen jetzt dieselbe Zeile Code, und
+`purge-patch` schreibt 41 Abwurf-Entfernungen. Vertrag 04 §3d hat die Einzelheiten — auch die,
+dass damit kein **siebter** Weg ausgeschlossen ist.
+
 `ungeprueft` war der ehrlichste Wert im Bericht: nicht „harmlos", sondern „niemand hat
-hingesehen". Er stand auf 844, dann 800, 763, 557, 537, 512 — und ist seit WP3.1c **0**.
+hingesehen". Er stand auf 844, dann 800, 763, 557, 537, 512 — seit WP3.1c **0**, und als der
+sechste Weg dazukam, sprang er auf 11 und ist seit zwei neuen Urteilen wieder 0. Der Bericht
+nennt diese Kennungen seither **mit Namen**: eine Zahl ohne Namen lässt sich nicht abarbeiten.
 Vier Eigenschaftsregeln (`sprengkoerper`, `robotik`, `moderner_werkstoff` und
 `CreativeMode=Dev` in `entwicklergegenstand`) haben 69 davon beantwortet, die beidseitige
 `Unlocks`-Ableitung 34 Baupläne, der Rest ist in `denylist.txt` und `aufschub.txt` einzeln
@@ -165,10 +185,19 @@ nichts. Grün wird er erst gegen einen `ConfigsDump` **mit** unseren Modlets, un
 und zwei Listen laufen auseinander. Die Prüfung würde den Unterschied nicht sehen, weil sie die
 gemergte Config liest und nicht unsere Patch-Dateien.
 
-Stand WP3.2 bis WP3.4 (gegen Vanilla V 3.40): **1780 Patchzeilen** — `items.xml` 437,
-`blocks.xml` 106, `recipes.xml` 369, `loot.xml` 467, `traders.xml` 348, `quests.xml` 50,
-`entityclasses.xml` 3. Alle Wächterzähler 0: `patches_ohne_treffer`, `wege_uebrig`,
-`gesperrt_und_noch_erreichbar`, `remove_auf_definition`, `patchdateien_abweichend`.
+Stand nach WP4.1 (gegen Vanilla V 3.40): **1818 Patchzeilen** — `items.xml` 438, `blocks.xml`
+106 (`CreativeMode`) **+ 41 (Abwürfe)**, `recipes.xml` 367, `loot.xml` 467, `traders.xml` 346,
+`quests.xml` 50, `entityclasses.xml` 3. Alle Wächterzähler 0: `patches_ohne_treffer`,
+`wege_uebrig`, `gesperrt_und_noch_erreichbar`, `remove_auf_definition`,
+`patchdateien_abweichend`. (Stand WP3.4 davor: 1780 Zeilen, **ohne** die Abwürfe.)
+
+`blocks.xml` entsteht seither aus **zwei Teilen** in einer Datei. Das ist keine Kosmetik: der
+Patcher ordnet eine Modlet-Datei ihrer Vanilla-Datei über den **Dateinamen** zu, eine
+`blocks-abwuerfe.xml` würde nie angewandt. Im Werkzeug bleiben die Teile getrennt, weil jede
+Einzelprobe nur ein Element kennt — zusammengelegt könnte `wege_uebrig` nur eines von beiden
+prüfen. Beim Bau fiel dabei zweimal genau diese Falle auf: die Gesamtprobe legte ihre Kopien
+unter dem Dateinamen ab und warf die erste weg, und `patchzeilen_blocks.xml` stand zweimal im
+Bericht, sodass die Summe nicht mehr aufging. Beides behoben, beides in Vertrag 04 §3d.
 
 Drei Eigenschaften, die nicht selbstverständlich sind:
 
@@ -190,11 +219,16 @@ Drei Eigenschaften, die nicht selbstverständlich sind:
   `patchdatei-veraltet`; nachgewiesen am 2026-11-07, indem eine Änderung am Kopftext die drei
   Dateien rot machte und die Neuerzeugung sie wieder grün.
 
-**Die Gesamtprobe.** Jede Datei einzeln zu prüfen sagt nicht, ob der Satz *zusammen* alle fünf
-Wegarten schließt: eine Kennung, die nur noch in der Startausrüstung steht, wäre in jeder
-Einzelprobe grün. `gesperrt_und_noch_erreichbar` wendet darum alle 1780 Zeilen auf Kopien an und
-rechnet die Erreichbarkeit auf dem Ergebnis neu — mit demselben `Reachability`, das die Prüfung
-benutzt, nicht mit einer zweiten Fassung. Gemessen: **0**, mit `--ohne-entfernen` **592**.
+**Die Gesamtprobe.** Jede Datei einzeln zu prüfen sagt nicht, ob der Satz *zusammen* alle
+**sechs** Wegarten schließt: eine Kennung, die nur noch in der Startausrüstung steht, wäre in
+jeder Einzelprobe grün. `gesperrt_und_noch_erreichbar` wendet darum alle 1818 Zeilen auf Kopien
+an und rechnet die Erreichbarkeit auf dem Ergebnis neu — mit demselben `Reachability`, das die
+Prüfung benutzt, nicht mit einer zweiten Fassung. Gemessen: **0**, mit `--ohne-entfernen`
+**591**.
+
+Dass die Gesamtprobe mit `Reachability` rechnet statt mit einer eigenen Fassung, ist am
+7. November zum ersten Mal etwas wert gewesen: der sechste Weg wurde an **einer** Stelle
+nachgetragen, und Prüfung, Gesamtprobe und Rezeptgraph wussten es im selben Build.
 
 **Ein Nebeneffekt, der benannt gehört:** 217 von 1016 Loot-Gruppen enthalten nach dem Patch
 keinen Eintrag mehr. Sie bleiben absichtlich stehen — Behälter und Quest-Belohnungen zeigen auf

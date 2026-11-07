@@ -563,6 +563,126 @@ eine Entscheidung und folgt aus keiner Liste. Sie steht von Hand in
 damit auch die Grenze zwischen erzeugt und geschrieben: `700_10_Purge` nimmt weg, was aus der
 Denylist folgt; alles, was dazukommt, gehört in die späteren Modlets (D53).
 
+## 3d. Der sechste Weg: Block-Abwürfe (Nachtrag WP4.1) — **Abnahme offen**
+
+**Stand:** 7. November 2026, gebaut und grün. Dieser Nachtrag **berichtigt** §3a, §3b und §3c.
+
+### Was falsch war
+
+§3a und §3b definierten *erreichbar* als fünf Wege: Rezept, Loot, Händler, Quest-Belohnung,
+Startausrüstung. `blocks.xml` war keiner davon — und `blocks.xml` trägt
+`<drop event="Harvest|Destroy|Fall" name="…"/>`, also genau den Weg, auf dem in diesem Spiel
+die meisten Rohstoffe in die Hand des Spielers kommen.
+
+Die Folge war kein Schönheitsfehler. WP3 meldete für den fertigen Purge
+`gesperrt_und_noch_erreichbar 0` und der Commit nannte ihn **vollständig**. Gemessen am
+6. Weg waren es **26 gesperrte Kennungen in 869 Abwurfzeilen**, die weiter zu haben waren:
+
+| Kennung | Abwurfzeilen |
+|---|---|
+| `resourceScrapPolymers` | 163 |
+| `resourceMechanicalParts` | 127 |
+| `resourceElectricParts` | 115 |
+| `resourceMetalPipe` | 72 |
+| `resourceSpring` | 57 |
+| 21 weitere | 335 |
+
+Ein Spieler, der ein Sofa zerschlägt, hatte Kunststoff; eine Waschmaschine gab Mechanikteile.
+Die Prüfung sagte dazu nichts, weil sie nicht hinsah.
+
+**`RecipeCheck` wusste es die ganze Zeit.** Dort sind Block-Abwürfe seit dem ersten Tag eine
+Wurzel — „Der Rezeptgraph kennt vier Wege … `<drop event="Harvest">` in blocks.xml". Zwei
+Stellen beantworteten dieselbe Frage verschieden, und der Warnabsatz davor stand schon im
+Kopf von `Reachability.cs`, als es passierte. Die Lehre ist nicht „sorgfältiger lesen",
+sondern: **beide Stellen lesen jetzt dieselbe Zeile Code.**
+
+### Die neue Grundregel
+
+> Erreichbar heißt: über einen **Block-Abwurf**, ein Rezept, eine Loot-Gruppe, eine
+> Händlergruppe, eine Quest-Belohnung oder die Startausrüstung. Gezählt werden **alle**
+> Abwurf-Ereignisse, nicht nur `Harvest`: `Destroy` und `Fall` geben dem Spieler den
+> Gegenstand genauso.
+
+`purge-patch` schreibt dafür einen siebten Teil: `remove` auf `/blocks/block/drop[@name='…']`.
+Diese Zeilen tragen **bewusst kein Block-Prädikat** — der Gegenstand soll aus *jedem* Block
+verschwinden, nicht aus einem. Der Block selbst bleibt vollständig stehen (D9); er gibt nur
+das Gesperrte nicht mehr her.
+
+### Eine Ausgabedatei, zwei Teile
+
+`blocks.xml` bekommt jetzt zwei Teile: die `CreativeMode`-Zeilen und die Abwurf-Entfernungen.
+Sie **müssen** in dieselbe Datei, weil der XML-Patcher des Spiels eine Modlet-Datei ihrer
+Vanilla-Datei über den **Dateinamen** zuordnet; eine `blocks-abwuerfe.xml` würde nie
+angewandt. Im Werkzeug bleiben sie getrennte Objekte, weil jede Einzelprobe nur ein Element
+und ein Attribut kennt — zusammengelegt könnte `wege_uebrig` nur noch eines von beiden prüfen
+und wäre beim anderen stillschweigend grün.
+
+Daraus folgen zwei Pflichten, die beim Bau beide als echte Fehler gefunden wurden:
+
+1. **Je Ausgabedatei eine Kopie, nicht je Teil.** Die Gesamtprobe legte ihre Kopien unter dem
+   Dateinamen ab und warf damit die erste weg — sie hätte am Ende nur den zweiten Teil
+   geprüft, grün und schweigend.
+2. **Je Teil eine eigene Zahl.** `patchzeilen_blocks.xml` stand zweimal im Bericht; angezeigt
+   wurde einer der beiden Werte, und die Summe `patchzeilen` ging nicht mehr auf. Jetzt heißen
+   sie `patchzeilen_blocks.xml [creativemode]` und `patchzeilen_blocks.xml [drop]`.
+
+### Zusätzliche Zähler
+
+| Zähler | Soll | heißt |
+|---|---|---|
+| `bloecke_mit_abwurf_gesamt` | — | Blöcke, die vor dem Patch einen benannten Abwurf hatten |
+| `bloecke_ohne_abwurf_danach` | Hinweis | davon welche, die danach keinen mehr haben |
+
+Gezählt wird nur über `<drop name="…"/>`: ein `<drop event="Destroy" count="0"/>` ohne Namen
+ist Vanillas Art zu sagen „hier fällt nichts", und wer den mitzählt, meldet jeden
+Terrainblock als Lücke. Verglichen wird über **Blocknamen**, nicht über zwei Zählungen —
+eine Differenz zweier Zahlen ist auch dann plausibel, wenn sie zwei verschiedene Mengen zählt.
+
+### `ungeprueft` muss Namen nennen
+
+§3b verlangt `ungeprueft = 0`. Als der sechste Weg dazukam, sprang die Zahl von 0 auf **11**,
+und der Bericht sagte nicht, auf welche elf — eine Zahl ohne Namen lässt sich nicht
+abarbeiten. `anachronisms` gibt jetzt je ungeprüfte Kennung einen Hinweis aus.
+
+Die elf waren Waldboden, Schnee, Schutt, drei Setzlinge, ein Schneebeerenstrauch und ein
+Trümmerteil. Neun stehen seither als Freigabe in `denylist.txt`, zwei als Verbot
+(`plantedSnowberry*` wie Yucca, `scrapMetalPile` als modernes Trümmerteil). Dass sie harmlos
+aussahen, ist kein Urteil.
+
+### Gemessen, 7. November 2026
+
+Jede Zahl hier kommt aus dem Werkzeug oder aus einem Einzeiler über die Quelldatei; keine ist
+von Hand geschätzt.
+
+| gemessen an | Wert |
+|---|---|
+| Erreichbarkeitswege gesamt (ConfigsDump) | 8.511 |
+| davon Block-Abwürfe | 3.106 in 90 verschiedenen Namen |
+| geprüfte Kennungen | 1.136 |
+| `ungeprueft` | 0 — über 11 Namen und zwei neue Urteile |
+| `gesperrt_und_noch_erreichbar` | 0 bei sechs Wegen (591 ohne die Entfernungen) |
+| Patchzeilen gesamt | 1.818, davon 41 Abwurf-Entfernungen |
+| `bloecke_ohne_abwurf_danach` | 130 von 1.149 |
+| das Loch selbst | 26 gesperrte Kennungen in 869 Abwurfzeilen |
+
+Ein „vorher/nachher" der Gesamtzahlen steht hier **nicht**: dafür müsste der Lauf mit
+ausgebautem sechsten Weg wiederholt werden, und eine Zahl, die ich nicht gemessen habe,
+gehört in keine Tabelle. Die 1.780 Patchzeilen aus dem WP3.4-Commit und die 1.818 von heute
+sind beide gemessen und stehen oben; was dazwischen auf die Denylist-Änderungen aus WP4.1
+und was auf die Abwürfe entfällt, trennen die Einzelzähler im Bericht.
+
+### Was dieser Nachtrag nicht behauptet
+
+Dass es keinen **siebten** Weg gibt. Gefunden wurde der sechste, weil eine Zahl in WP4
+(585 Abwurfzeilen für Schrotteisen) nicht zur Behauptung „der Purge ist vollständig" passte.
+Kandidaten, über die hier nichts geprüft ist: `entityclasses.xml` jenseits der
+Startausrüstung (Beute von Tieren und Zombies), die Prefabs der Welt, `progression.xml`.
+Jede dieser Dateien kann einen Weg tragen, den diese Liste nicht kennt — und dann steht hier
+wieder „0" für eine Frage, die nicht gestellt wurde.
+
+Was die 130 stummen Blöcke im Spiel bedeuten, ist ebenfalls ungeprüft. Wie bei den leeren
+Loot-Gruppen gehört das in WP3.6.
+
 ## 4. `recipes` — Z3
 
 **Prüft:** Ist jedes herstellbare Ergebnis aus Rohstoffen erreichbar, die es im Spiel gibt?
@@ -619,6 +739,35 @@ wenn später jemand wirklich übersetzt, darf das Werkzeug nicht im Weg stehen.
 
 **Gegenprobe:** In einer Kopie der Datei wird eine `german`-Zelle geleert → **rot**; ein
 Schlüssel verdoppelt → **rot**.
+
+### Nachtrag WP4.1 (2026-11-07): die Liste der bewussten Vanilla-Überschreibungen
+
+Die „kommentierte Gruppe" aus der Befundtabelle ist jetzt eine eigene Datei,
+`tools/check/vanilla-keys.txt`, die `check-all.ps1` übergibt, wenn sie existiert. Sie ist
+nötig, weil WP4 Vanilla-Dinge **umdeutet** statt ersetzt: `resourceScrapIron` heißt in der XML
+weiter so — 585 Abwurfzeilen und jedes Rezept zeigen auf diesen Namen — und der Spieler liest
+„Raseneisenerz". Dass eine Modlet-Zeile den Vanilla-Schlüssel überschreibt, ist belegt in
+[WP4-localization-ueberschreibt-vanilla.md](../rea/findings/WP4-localization-ueberschreibt-vanilla.md):
+`addCsv` nimmt im Modlet-Zweig `Dictionary::set_Item`, nicht `Add`.
+
+Drei Regeln für diese Datei, alle drei mit einer Gegenprobe:
+
+1. **Sie wirkt.** Ohne sie ist ein Schlüssel ohne Präfix rot. Eine Freigabeliste, die man
+   weglassen kann, ist keine.
+2. **Sie verträgt einen nachgestellten Grund** (`casinoCoin  # Silberpfennig`) — wie
+   `denylist.txt`, `aufschub.txt` und die Rezeptliste. **Das war ein echter Fehler:** der
+   Leser schnitt den Kommentar nicht ab, machte aus der Zeile den Schlüssel
+   `"casinoCoin  # Silberpfennig"` und meldete zehn Schlüssel ohne Präfix — mit Verweis auf
+   eine Datei, in der jeder davon sichtbar stand. Vier Leser im selben Werkzeug, drei mit
+   derselben Regel und einer ohne, ist eine Falle, kein Stil.
+3. **Ein Eintrag ohne Zeile wird genannt.** Neue Zähler `vanilla_schluessel_erlaubt` und
+   `vanilla_schluessel_ohne_zeile`, dazu ein Hinweis je Name. Die Liste ist eine
+   **Abschaltung** der Präfix-Prüfung; ein Eintrag, zu dem es keine Übersetzung gibt, schaltet
+   sie für einen Schlüssel ab, den niemand setzt — und bleibt stehen, wenn eine Zeile später
+   gelöscht oder umbenannt wird.
+
+**Jede Zeile dort ist eine Entscheidung.** Wer einen Schlüssel einträgt, nur damit die Prüfung
+schweigt, hat die Prüfung abgeschaltet und nicht bestanden. Der Grund gehört daneben.
 
 ## 6. Ein Befehl für alles
 

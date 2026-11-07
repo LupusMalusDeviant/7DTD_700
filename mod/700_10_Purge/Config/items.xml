@@ -12,7 +12,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     437 Zeilen. -->
+	     438 Zeilen. -->
 
 	<set xpath="/items/item[@name='TEST_ITEM_00']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
 	<set xpath="/items/item[@name='TEST_ITEM_01']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
@@ -293,8 +293,9 @@
 	<set xpath="/items/item[@name='modVehicleReserveFuelTankSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:28 -->
 	<set xpath="/items/item[@name='modVehicleStorageSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:28 -->
 	<set xpath="/items/item[@name='modVehicleSuperChargerSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:28 -->
+	<append xpath="/items/item[@name='oldCash']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:337 -->
 	<set xpath="/items/item[@name='pimpMiningHelmetAdmin']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
-	<set xpath="/items/item[@name='plantedGraceCorn1Schematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:302 -->
+	<set xpath="/items/item[@name='plantedGraceCorn1Schematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:300 -->
 	<set xpath="/items/item[@name='questReward4x4PartsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:149 -->
 	<set xpath="/items/item[@name='questRewardAmmoCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:149 -->
 	<set xpath="/items/item[@name='questRewardAutoTurretBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:149 -->
@@ -414,7 +415,7 @@
 	<append xpath="/items/item[@name='resourceScrapPolymers']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:55 -->
 	<append xpath="/items/item[@name='resourceSpring']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:66 -->
 	<append xpath="/items/item[@name='resourceTestosteroneExtract']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:67 -->
-	<append xpath="/items/item[@name='smallEngine']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:282 -->
+	<append xpath="/items/item[@name='smallEngine']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:280 -->
 	<append xpath="/items/item[@name='solarCell']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:134 -->
 	<append xpath="/items/item[@name='thrownAmmoMolotovCocktail']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: sprengkoerper -->
 	<append xpath="/items/item[@name='thrownAmmoPipeBomb']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: sprengkoerper -->
@@ -428,11 +429,11 @@
 	<set xpath="/items/item[@name='tier04Loadout']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
 	<set xpath="/items/item[@name='tier05Loadout']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
 	<set xpath="/items/item[@name='tier06Loadout']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
-	<append xpath="/items/item[@name='toolBeaker']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:293 -->
-	<append xpath="/items/item[@name='toolChickenCoopLamp']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:294 -->
-	<append xpath="/items/item[@name='toolDewFilter']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:292 -->
-	<append xpath="/items/item[@name='toolDewGatherer']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:292 -->
-	<append xpath="/items/item[@name='toolDewTarp']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:292 -->
+	<append xpath="/items/item[@name='toolBeaker']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:291 -->
+	<append xpath="/items/item[@name='toolChickenCoopLamp']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:292 -->
+	<append xpath="/items/item[@name='toolDewFilter']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:290 -->
+	<append xpath="/items/item[@name='toolDewGatherer']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:290 -->
+	<append xpath="/items/item[@name='toolDewTarp']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:290 -->
 	<set xpath="/items/item[@name='toughGuyShirtAdmin']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
 	<set xpath="/items/item[@name='upgradeResourcesPackAdmin']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: entwicklergegenstand -->
 	<append xpath="/items/item[@name='vehicleBicycleChassis']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:27 -->

@@ -1,0 +1,46 @@
+# Bewusste Vanilla-Ueberschreibungen in mod/700_90_Sprache/Config/Localization.csv
+#
+# mod700check localization verlangt fuer jeden Schluessel das Praefix '700_' und meldet
+# sonst 'schluessel-ohne-praefix'. Das ist richtig fuer alles, was wir neu erfinden: ein
+# eigener Gegenstand mit einem Vanilla-Namen waere ein Namenskonflikt mit Ansage.
+#
+# Hier stehen die Ausnahmen, und sie sind eine Bauart, kein Loch: wir deuten Vanilla-Dinge
+# um, statt sie zu ersetzen. resourceScrapIron bleibt resourceScrapIron - 585 Abwurfzeilen,
+# 51 Loot-Eintraege und jedes Rezept zeigen auf diesen Namen -, und der Spieler liest
+# "Raseneisenerz". Das geht, weil eine Modlet-Zeile den Vanilla-Schluessel ueberschreibt;
+# belegt in docs/rea/findings/WP4-localization-ueberschreibt-vanilla.md (addCsv nimmt im
+# Modlet-Zweig Dictionary::set_Item, nicht Add).
+#
+# JEDE ZEILE HIER IST EINE ENTSCHEIDUNG. Wer einen Schluessel eintraegt, nur damit die
+# Pruefung schweigt, hat die Pruefung abgeschaltet und nicht bestanden. Der Grund gehoert
+# daneben, und die Liste bleibt kurz genug, dass man sie liest.
+
+# --- WP4.1: Rohstoffe (F-05) ----------------------------------------------------
+resourceScrapIron                 # Raseneisenerz
+resourceScrapIronDesc
+resourceScrapIronBundle           # Raseneisenerz-Buendel
+resourceScrapIronBundleDesc
+resourceForgedIron                # Schmiedeeisen
+resourceForgedIronDesc
+resourceForgedSteel               # Tiegelstahl (D55: Stahl ist eine Materialstufe)
+resourceForgedSteelDesc
+resourceScrapBrass                # Buntmetall aus Ruinen
+resourceScrapBrassDesc
+resourceScrapBrassBundle
+resourceScrapBrassBundleDesc
+resourceScrapLead                 # Blei
+resourceScrapLeadDesc
+resourceLeadBundle
+resourceLeadBundleDesc
+resourceCoal                      # Holzkohle, nicht Steinkohle
+resourceCoalDesc
+resourceCoalBundle
+resourceCoalBundleDesc
+resourceYuccaFibers               # Nesselfaser
+resourceYuccaFibersDesc
+resourceCropCottonPlant           # Flachs
+resourceCropCottonPlantDesc
+
+# --- WP4.2: Waehrung (D30) ------------------------------------------------------
+casinoCoin                        # Silberpfennig; D30 nennt die 1:1-Umdeutung der Dukes
+casinoCoinDesc

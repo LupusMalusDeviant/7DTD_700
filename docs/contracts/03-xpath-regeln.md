@@ -121,6 +121,25 @@ Sprengstoff werden nur in ihrer modernen Erscheinung gesperrt. Ihre Klassen und 
 bleiben vollständig erhalten, weil F-15 sie in Phase 2 als Runensteine und Kraftsteine
 weiterverwendet. Wer hier `remove` benutzt, zerstört ein ganzes Feature der nächsten Phase.
 
+### Nachtrag WP4.1 (2026-11-07): Abwürfe, und eine Datei aus zwei Teilen
+
+**Ein `<drop>` ist ein Weg, keine Definition.** `remove` auf
+`/blocks/block/drop[@name='resourceScrapPolymers']` ist damit erlaubt (§4): der Block bleibt
+vollständig stehen, er gibt nur das Gesperrte nicht mehr her. Diese Zeilen tragen **bewusst
+kein Block-Prädikat** — der Gegenstand soll aus *jedem* Block verschwinden. Das ist derselbe
+Fall wie bei den Rezepten: mehrfacher Treffer ist Absicht, `//` ohne Verankerung bleibt
+verboten, und die Nachprobe zählt nach.
+
+Warum das nachgetragen wurde, steht in Vertrag 04 §3d: bis dahin war der Block-Abwurf kein
+Erreichbarkeitsweg, und 26 gesperrte Kennungen fielen weiter aus 869 Abwurfzeilen.
+
+**Zwei Teile, eine Datei.** `blocks.xml` bekommt die `CreativeMode`-Zeilen *und* die
+Abwurf-Entfernungen. Sie müssen in **eine** Datei, weil `Mod::DetectContents` und der Patcher
+eine Modlet-Datei über den **Dateinamen** ihrer Vanilla-Datei zuordnen — eine
+`blocks-abwuerfe.xml` würde geladen und nie angewandt. Dasselbe gilt für jede künftige
+Aufteilung: **der Dateiname ist die Zuordnung, nicht der Inhalt.** Im Kopf der erzeugten Datei
+steht darum je Teil eine eigene Begründung und die Zahl „n Zeilen aus 2 Teilen".
+
 ## 5. Bedingte Blöcke — der Weg zur Verträglichkeit
 
 `XmlPatchConditionEvaluator` wertet Bedingungen über NCalc aus und bietet diese Funktionen:

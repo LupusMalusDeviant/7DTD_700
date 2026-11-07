@@ -8,6 +8,15 @@
 - **Art:** **Vorlauf, kein Nachweis.** Unsere Modlets sind hier nicht angewandt; ein Nachweis
   braucht einen `ConfigsDump` nach einem Spielstart (WP3.6).
 
+> **BERICHTIGUNG, 7. November 2026.** Jede Zahl in diesem Befund wurde über **fünf**
+> Erreichbarkeitswege gerechnet (Rezept, Loot, Händler, Quest-Belohnung, Startausrüstung). Es
+> sind **sechs**: der Block-Abwurf aus `blocks.xml` fehlte. Die Bestandsaufnahme war damit zu
+> klein — 26 gesperrte Kennungen waren über 869 Abwurfzeilen weiter zu haben, und
+> `ungeprueft 0` galt für eine zu kleine Menge. Nachgetragen in WP4.1; die berichtigten
+> Zahlen stehen in Vertrag 04 §3d und in `tools/check/README.md`, die Wirkung auf den Purge
+> im Plan unter WP3. **Die Methode dieses Befundes bleibt gültig, die Reichweite war es
+> nicht.**
+
 > Dieser Befund hat drei Defekte in meiner eigenen Denylist aus WP2 gefunden und eine Lücke,
 > die größer ist als alles, was die Liste bisher kannte. Das ist das Ergebnis des Schrittes,
 > nicht ein Unfall auf dem Weg dorthin: WP3.1 heißt „Bestandsaufnahme", und sie hat

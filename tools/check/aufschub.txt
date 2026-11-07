@@ -28,28 +28,17 @@ book*                 # WP7: F-21 ersetzt das Vanilla-Buchsystem durch sechs Bae
 *SkillMagazine        # WP7: dieselbe Reihe - die Fertigkeitshefte gehoeren zum Buchsystem
 resourcePaper         # WP7: Papier traegt Vanillas Buecher und Bauplaene; ohne das Buchsystem hat es keinen Zweck mehr
 
-# --- Vanillas Waehrung ----------------------------------------------------------
-# Papiergeld und Casino-Marke sind Anachronismen, aber sie sind auch das einzige
-# Zahlungsmittel, das Vanilla kennt. Fallen sie vor dem Ersatz, hoert der Handel auf -
-# und F-10 (Haendler) steht erst in Phase 2. F-05 setzt in WP4 etwas an die Stelle.
-oldCash               # WP4: F-05 ersetzt das Zahlungsmittel
-casinoCoin            # WP4: dieselbe Reihe
-
-# --- Die Faserkette -------------------------------------------------------------
-# Yuccafaser und Baumwolle sind beides Pflanzen, die es hier nicht gab, und beides
-# der Anfang jeder Stoffkette in Vanilla. Fallen sie vor Flachs und Nessel, laesst
-# sich am ersten Tag kein Verband und kein Beutel binden.
-resourceYuccaFibers   # WP4: F-05 stellt die Faserkette auf Flachs und Nessel um
-resourceCropCottonPlant  # WP4: dieselbe Reihe
-
-# --- Die Schrottwirtschaft ------------------------------------------------------
-# Schrotteisen, Schrottmessing und Schrottblei sind das Rueckgrat von Vanillas
-# Rohstoffkreislauf. F-05 ersetzt den Kreislauf in WP4 durch Erz, Rennfeuer und
-# Altmetall aus Gehoeften.
-resourceScrapIron*    # WP4: F-05 baut den Rohstoffkreislauf um
-resourceScrapBrass*   # WP4: dieselbe Reihe
-resourceScrapLead*    # WP4: dieselbe Reihe
-resourceLeadBundle    # WP4: dieselbe Reihe
+# --- Erledigt in WP4.1 und WP4.2: Waehrung, Faser, Schrottwirtschaft -----------
+# Hier standen acht Aufschuebe mit der Adresse WP4. Sie sind eingeloest, aber nicht so,
+# wie der Plan es sich dachte: nicht ersetzt, sondern umgedeutet. casinoCoin ist der
+# Silberpfennig, resourceScrapIron das Raseneisenerz, resourceYuccaFibers die
+# Nesselfaser - gleicher Name in der XML, anderer Name auf dem Schirm. Die Zeilen
+# stehen jetzt als Freigaben in denylist.txt, wo sie unter 'erlaubt_durch_freigabe'
+# gezaehlt werden und der Grund neben jeder steht.
+#
+# Nur eine der acht hat kein Gegenstueck gefunden: oldCash, das Papiergeld. Silber
+# ersetzt die Casino-Marke, nicht den Geldschein - also bleibt oldCash verboten und
+# ist aus diesem Verzeichnis heraus, nicht erledigt.
 
 # --- Qualitaet und Verschleiss --------------------------------------------------
 # Die beiden "Kits" sind keine Gegenstaende, sondern Vanillas Reparatur- und

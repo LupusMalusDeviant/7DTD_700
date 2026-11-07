@@ -237,7 +237,8 @@ internal static class RecipeCheck
             deadEnds++;
             report.Error("sackgasse", recipe.Name,
                 $"{where}: Zutat {string.Join(", ", missing)} ist definiert, aber auf keinem " +
-                "Weg zu bekommen (kein Drop, kein Loot, keine Haendlerware, kein Rezept).");
+                "Weg zu bekommen (kein Block-Abwurf, kein Loot, keine Haendlerware, keine "
+                + "Quest-Belohnung, keine Startausruestung, kein Rezept).");
         }
 
         report.Count("zutat_unbekannt", unknownIngredients);

@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     348 Zeilen. -->
+	     346 Zeilen. -->
 
 	<remove xpath="/traders/trader_info/trader_items/item[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_info/trader_items/item[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -112,8 +112,6 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='batterybank']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bladeTrap']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='ceilingLight01_player']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cementMixer']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='chemistryStation']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cntCashRegister_Player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cntCoolerVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cntFileCabinetBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->

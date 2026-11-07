@@ -4,8 +4,8 @@ namespace Mod700.Check;
 internal sealed record Way(string Name, string Via, string Where);
 
 /// <summary>
-/// Sammelt die Erreichbarkeitswege. Erreichbar heisst: ueber ein Rezept, eine Loot-Gruppe,
-/// eine Haendlergruppe, eine Quest-Belohnung oder die Startausruestung.
+/// Sammelt die Erreichbarkeitswege. Erreichbar heisst: ueber einen Block-Abwurf, ein Rezept,
+/// eine Loot-Gruppe, eine Haendlergruppe, eine Quest-Belohnung oder die Startausruestung.
 ///
 /// <para>Das steht absichtlich an einer Stelle und nicht in jedem Befehl einzeln: die
 /// Liste der ungepruefen Kennungen muss genau die Kennungen zeigen, die die Pruefung auch
@@ -18,6 +18,27 @@ internal static class Reachability
     public static List<Way> Ways(ConfigSource source)
     {
         var ways = new List<Way>();
+
+        // Block-Abwuerfe. NACHGETRAGEN AM 2026-11-07, UND DAS WAR EIN LOCH, KEIN DETAIL.
+        //
+        // Bis WP4.1 kannte diese Stelle fuenf Wege und blocks.xml war keiner davon. Die
+        // Pruefung meldete darum fuer den Purge aus WP3 'gesperrt_und_noch_erreichbar 0',
+        // obwohl 26 gesperrte Kennungen weiter aus Bloecken fielen - resourceScrapPolymers
+        // aus 163 Abwurfzeilen, resourceMechanicalParts aus 127, resourceElectricParts aus
+        // 115. Wer ein Sofa zerschlug, hatte Kunststoff; der Purge sah fertig aus.
+        //
+        // RecipeCheck wusste es die ganze Zeit: dort sind Block-Abwuerfe seit dem ersten Tag
+        // eine Wurzel ("Der Rezeptgraph kennt vier Wege ... <drop event=Harvest> in
+        // blocks.xml"). Zwei Stellen beantworteten dieselbe Frage verschieden - genau das,
+        // wovor der Absatz oben warnt, und er stand schon da, als es passierte. Beide lesen
+        // jetzt dieselbe Zeile.
+        //
+        // Alle Ereignisse, nicht nur Harvest: Destroy und Fall geben dem Spieler den
+        // Gegenstand genauso in die Hand.
+        foreach ((string name, int line) in source.Attributes("blocks.xml", "drop", "name"))
+        {
+            ways.Add(new Way(name, "Block-Abwurf", $"blocks.xml:{line}"));
+        }
 
         foreach ((string name, int line) in source.Attributes("recipes.xml", "recipe", "name"))
         {

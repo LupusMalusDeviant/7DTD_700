@@ -6,13 +6,24 @@
 	     Dieselbe Regel wie bei den Gegenstaenden. D9 bleibt gewahrt: die Klassen
 	     bleiben vollstaendig stehen, damit F-15 sie in Phase 2 umdeutet.
 
+	     DER SECHSTE WEG, nachgetragen am 7. November 2026. Ein <drop> gibt dem
+	     Spieler einen Gegenstand in die Hand, wenn er einen Block abbaut oder
+	     zerschlaegt - und das zaehlte in Reachability bis dahin nicht als Weg.
+	     Der Purge aus WP3 meldete darum 'gesperrt_und_noch_erreichbar 0',
+	     waehrend 26 gesperrte Kennungen weiter aus Bloecken fielen: Kunststoff
+	     aus dem Sofa, Mechanikteile aus der Waschmaschine, Elektrikteile aus der
+	     Lampe. Die Zeilen tragen bewusst kein Block-Praedikat: der Gegenstand
+	     soll aus JEDEM Block verschwinden, nicht aus einem. Der Block selbst
+	     bleibt stehen (D9) und faellt weiter - er gibt nur das Gesperrte nicht
+	     mehr her. Was an seine Stelle tritt, entscheidet F-05 in WP4.
+
 	     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und
 	     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung
 	     ueberschreibt die Aenderung lautlos, und check-all.ps1 meldet
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     106 Zeilen. -->
+	     147 Zeilen aus 2 Teilen. -->
 
 	<append xpath="/blocks/block[@name='airConditioner']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
 	<set xpath="/blocks/block[@name='appliancesVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:318 -->
@@ -27,23 +38,21 @@
 	<set xpath="/blocks/block[@name='ceilingLight01_player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<set xpath="/blocks/block[@name='ceilingLight07_player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<append xpath="/blocks/block[@name='cellarDoorDoubleSteel']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
-	<set xpath="/blocks/block[@name='cementMixer']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:295 -->
-	<set xpath="/blocks/block[@name='chemistryStation']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:296 -->
 	<set xpath="/blocks/block[@name='cntCashRegister_Player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
 	<set xpath="/blocks/block[@name='cntCoolerVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
-	<set xpath="/blocks/block[@name='cntDeskSafe_Player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:285 -->
-	<set xpath="/blocks/block[@name='cntDewCollector']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:291 -->
-	<set xpath="/blocks/block[@name='cntFileCabinetBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:289 -->
-	<set xpath="/blocks/block[@name='cntGunSafeVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:285 -->
-	<set xpath="/blocks/block[@name='cntMailBox01VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:288 -->
-	<set xpath="/blocks/block[@name='cntMailBox02VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:288 -->
-	<set xpath="/blocks/block[@name='cntMailBox03VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:288 -->
-	<set xpath="/blocks/block[@name='cntSteelWallCabinetSecure']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:286 -->
-	<set xpath="/blocks/block[@name='cntSteelWritableCrate']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:287 -->
+	<set xpath="/blocks/block[@name='cntDeskSafe_Player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:283 -->
+	<set xpath="/blocks/block[@name='cntDewCollector']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:289 -->
+	<set xpath="/blocks/block[@name='cntFileCabinetBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:287 -->
+	<set xpath="/blocks/block[@name='cntGunSafeVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:283 -->
+	<set xpath="/blocks/block[@name='cntMailBox01VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:286 -->
+	<set xpath="/blocks/block[@name='cntMailBox02VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:286 -->
+	<set xpath="/blocks/block[@name='cntMailBox03VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:286 -->
+	<set xpath="/blocks/block[@name='cntSteelWallCabinetSecure']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:284 -->
+	<set xpath="/blocks/block[@name='cntSteelWritableCrate']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:285 -->
 	<set xpath="/blocks/block[@name='cntVendingMachine']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
-	<set xpath="/blocks/block[@name='cntWallSafe_Player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:285 -->
-	<append xpath="/blocks/block[@name='cntWaterCoolerFull']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:290 -->
-	<set xpath="/blocks/block[@name='combineStation']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:297 -->
+	<set xpath="/blocks/block[@name='cntWallSafe_Player']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:283 -->
+	<append xpath="/blocks/block[@name='cntWaterCoolerFull']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:288 -->
+	<set xpath="/blocks/block[@name='combineStation']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:295 -->
 	<set xpath="/blocks/block[@name='couchModernBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:315 -->
 	<set xpath="/blocks/block[@name='couchUglyLargeBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:315 -->
 	<set xpath="/blocks/block[@name='couchUglySingleBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:315 -->
@@ -76,21 +85,23 @@
 	<set xpath="/blocks/block[@name='officeChair01VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
 	<set xpath="/blocks/block[@name='pipeLargeBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
 	<set xpath="/blocks/block[@name='pipeSmallBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
-	<set xpath="/blocks/block[@name='plantedBlueberry1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:305 -->
-	<set xpath="/blocks/block[@name='plantedChrysanthemum1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:308 -->
-	<set xpath="/blocks/block[@name='plantedCoffee1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:300 -->
-	<set xpath="/blocks/block[@name='plantedCorn1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:301 -->
-	<set xpath="/blocks/block[@name='plantedCotton1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:307 -->
-	<set xpath="/blocks/block[@name='plantedGraceCorn1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:302 -->
-	<set xpath="/blocks/block[@name='plantedPotato1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:303 -->
-	<set xpath="/blocks/block[@name='plantedPumpkin1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:304 -->
-	<set xpath="/blocks/block[@name='plantedYucca1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:306 -->
+	<set xpath="/blocks/block[@name='plantedBlueberry1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:303 -->
+	<set xpath="/blocks/block[@name='plantedChrysanthemum1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:306 -->
+	<set xpath="/blocks/block[@name='plantedCoffee1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:298 -->
+	<set xpath="/blocks/block[@name='plantedCorn1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:299 -->
+	<set xpath="/blocks/block[@name='plantedCotton1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:305 -->
+	<set xpath="/blocks/block[@name='plantedGraceCorn1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:300 -->
+	<set xpath="/blocks/block[@name='plantedPotato1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:301 -->
+	<set xpath="/blocks/block[@name='plantedPumpkin1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:302 -->
+	<set xpath="/blocks/block[@name='plantedSnowberry1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:307 -->
+	<set xpath="/blocks/block[@name='plantedYucca1']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:304 -->
 	<set xpath="/blocks/block[@name='pressureplate']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<set xpath="/blocks/block[@name='pressureplateLong']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<set xpath="/blocks/block[@name='rollUpDoor3x3VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:329 -->
 	<set xpath="/blocks/block[@name='rollUpDoor5x4VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:329 -->
 	<set xpath="/blocks/block[@name='rollUpDoor7x4VariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:329 -->
 	<set xpath="/blocks/block[@name='sandbagBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:321 -->
+	<append xpath="/blocks/block[@name='scrapMetalPile']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:308 -->
 	<set xpath="/blocks/block[@name='sectionalLeatherCouchSofaBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:316 -->
 	<set xpath="/blocks/block[@name='sectionalPlaidCouchSofaBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:316 -->
 	<set xpath="/blocks/block[@name='shotgunTurret']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:126 -->
@@ -120,4 +131,45 @@
 	<set xpath="/blocks/block[@name='woodenGarageDoor3x3_PoweredBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<set xpath="/blocks/block[@name='woodenGarageDoor4x3_PoweredBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
 	<set xpath="/blocks/block[@name='woodenGarageDoor5x3_PoweredBlockVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach eigenschaft: strom -->
+	<remove xpath="/blocks/block/drop[@name='ammoGasCan']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='carBattery']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='cntCoolerVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='cntFileCabinetBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='decoPumpkinJackOLantern']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCornMeal']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropBlueberries']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropMushroomsRadiated']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropPotato']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropPumpkin']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='foodCropYuccaFruit']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='medicalBloodBag']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='oldCash']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedBlueberry1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedChrysanthemum1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedCoffee1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedCotton1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedPotato1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedPumpkin1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedSnowberry1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='plantedYucca1']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceAcid']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceCement']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceCropChrysanthemumPlant']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceCropCoffeeBeans']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceElectricParts']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceHeadlight']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceMechanicalParts']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceMetalPipe']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceOil']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceOilShale']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourcePotassiumNitratePowder']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceRadiator']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceScrapPolymers']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='resourceSpring']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='scrapMetalPile']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/blocks/block/drop[@name='smallEngine']" />  <!-- Weg zu einer gesperrten Kennung -->
 </config>
