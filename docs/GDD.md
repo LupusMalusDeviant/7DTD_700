@@ -25,11 +25,15 @@ Fahrzeuge, kein Konservenvorrat.** Dafür gibt es Holz, Lehm und Eisen, Muskelkr
 Nahkampf und Gemeinschaft. Der Fortschritt kommt nicht mehr aus Industrie-Loot, sondern aus
 Handwerk und wiederentdecktem Wissen.
 
+Wo Vanilla auf Technik setzt, die nicht in die Zeit passt (Geschütztürme, Strom, Drohnen,
+Sprengstoff), übernimmt **Volksmagie** die Rolle: Runensteine, Segen, Flüche, Tränke und
+einfache Zauber. Diese Magie ist erlernt, an Material gebunden und dezent (Entscheidung D9).
+
 ### 1.1 Design-Säulen
 
 | # | Säule | Bedeutung für Entscheidungen |
 |---|---|---|
-| P1 | **Glaubwürdig um 700, nicht Museum** | Nichts klar Anachronistisches (Schießpulver, Plattenrüstung, Strom). Bei Spielspaß-Konflikt gilt „plausibel“ vor „belegt“. |
+| P1 | **Glaubwürdig um 700, wie es sich die Menschen damals erzählten** | Nichts technisch Anachronistisches (Schießpulver, Plattenrüstung, Strom). Magie ist erlaubt, aber nur in der Form, die Volksglaube und Sagen der Zeit kennen: Runen, Segen, Flüche, Kräuter, Sagengestalten. Bei Spielspaß-Konflikt gilt „plausibel“ vor „belegt“. |
 | P2 | **Handwerk ist Fortschritt** | Tech-Progression läuft über Werkstätten, Rohstoffketten und Wissen, nicht über Loot-Glück mit Hightech. |
 | P3 | **Nahkampf mit Gewicht** | Kampf ist nah, riskant und positionsabhängig: Schild, Reichweite, Ausdauer. Fernkampf ist knapp und handgemacht. |
 | P4 | **Die Nacht gehört der Seuche** | Licht ist eine Ressource. Dunkelheit, Feuer und Befestigung tragen den Horror. |
@@ -64,14 +68,24 @@ P5 ist die wichtigste **technische** Säule. Jedes Feature muss begründen, waru
   - Kulturelle Zonen lassen sich auf Biome abbilden (siehe F-07).
 - **Ursache der Untoten:** bewusst offen gelassen. Für die einen ist es Gottes Strafe, für
   andere ein Fluch der alten Götter oder einfach eine Seuche.
-- **Aberglaube mit Wirkung** (Entscheidung D2): Amulette, Reliquien, Weihwasser, Schutzzeichen
-  und Rituale haben **kleine, messbare Spieleffekte** (Buffs). Es gibt **keine Zauber**,
-  keine sichtbaren Magie-Effekte und keine Fantasy-Kreaturen. Der Spieler soll nie sicher
-  sein, ob die Wirkung „echt“ ist oder nur Glaube (siehe F-15).
+- **Volksmagie** (Entscheidung D9, ersetzt D2): Magie ist real, aber bodenständig. Es gibt
+  vier Formen (Details in F-15):
+  1. **Runen & Zeichen:** passive Effekte, eingeritzt in Waffen, Rüstung, Häuser und Steine
+  2. **Segen & Flüche:** kurze Rituale bzw. Sprüche mit Zeitwirkung auf sich, Verbündete oder Gegner
+  3. **Tränke & Salben:** Kräuterkunde mit magischer Wirkung
+  4. **Einfache Zauber:** ausgelöste Fähigkeiten. Sie **ersetzen vor allem die Vanilla-Technik,
+     die nicht in die Zeit passt**. Beispiel: Geschütztürme werden zu Runensteinen, die
+     kleine Feuerpfeile schießen.
+- **Sichtbarkeit dezent** (D10): Glimmen, Funken, Rauch, Glutpfeile, Geräusche. Keine
+  Feuerbälle, Blitze oder Explosionen im Fantasy-Stil.
+- **Sagengestalten** (D11): einige wenige folkloristische Gegner aus der Volksüberlieferung
+  (z. B. Irrlicht, Nachzehrer, Moorgeist) als seltene Erscheinungen. Keine Dämonen-Heere,
+  keine Drachen, keine High-Fantasy-Völker.
 
 ### 2.2 Ton
 
-Dreckig, kalt, abergläubisch. Kein Ritterromantik-Hochglanz. Humor sparsam und trocken,
+Dreckig, kalt, abergläubisch, und manchmal hat der Aberglaube recht. Kein
+Ritterromantik-Hochglanz, keine Zauberschule. Humor sparsam und trocken,
 zum Beispiel in Notizen und Händlerdialogen.
 
 ### 2.3 Übersetzungstabelle Vanilla → 700
@@ -88,8 +102,13 @@ entfernt.
 | Dukes (Währung) | Silber (Sceattas / Denare), Hacksilber | F-05 |
 | Workbench / Forge / Chem Station / Cement Mixer | Zimmermannsbank, Rennofen + Esse, Kräuterküche, Kalkofen | F-04 |
 | Schusswaffen | Bögen, Schleuder, Wurfspeere, Armbrust (T4, selten, D8) | F-02 |
-| Buffs/Boosts aus Pillen und Magazinen | Amulette, Reliquien, Schutzzeichen | F-15 |
-| Elektrizität, Fallen mit Strom | Mechanische Fallen: Spieße, Fallgruben, Schwingbalken | F-08 |
+| Buffs/Boosts aus Pillen | Tränke, Salben, Amulette, Reliquien | F-11, F-15 |
+| Geschütztürme (Auto-/Shotgun-Turret) | **Runensteine**, die Glut- bzw. Feuerpfeile schießen | F-15 |
+| Junk Turret / Drohne (Begleiter) | Tragbarer Runenstein bzw. Schutzgeist-Zeichen (Stretch) | F-15 |
+| Elektrizität (Generator, Kabel, Solar) | **Kraftsteine und Kraftlinien**: Runenkraft statt Strom (Variante A in F-15) | F-08, F-15 |
+| Elektrische Fallen (Blade Trap, Elektrozaun) | Runenfallen (Glutzeichen, Bannkreis) + mechanische Fallen | F-08, F-15 |
+| Sprengstoff, Granaten, Molotow | Pechtopf (mechanisch), Fluchtopf bzw. Feuerzauber (magisch) | F-02, F-15 |
+| Intellekt-Perkbaum (Technik, Strom) | **Runenkunde** (Magie-Perkbaum) | F-04, F-15 |
 | Fahrzeuge | entfallen; Stretch: Packpferd/Karren | F-13 |
 | Bücher/Magazine | Abschriften, Schriftrollen, Lehrmeister | F-04 |
 | Städte, Straßen, Wolkenkratzer | Weiler, Höfe, Klöster, Ringwälle, Römerruinen | F-07 |
@@ -148,7 +167,7 @@ die Zuordnung zu den Säulen:
 | F-12 Lokalisierung & UI-Theming | P1 | MVP |
 | F-13 Packtiere & Transport | P1 | Stretch |
 | F-14 Siedlung & Gefolge | P2 | Stretch |
-| F-15 Aberglaube & Reliquien | P1, P4 | Phase 2 |
+| F-15 Volksmagie (Runen, Segen, Tränke, Zauber) | P1, P3, P4 | MVP-Kern (Runensteine) + Phase 2 |
 | F-16 Asset-Pipeline | P1 | Phase 2 |
 
 **MVP-Definition:** Eine RWG-Welt ist von Tag 1 bis zur ersten Seuchennacht ohne
@@ -187,13 +206,16 @@ Punkte:
 | ID | Datum | Frage | Entscheidung | Wirkt auf |
 |---|---|---|---|---|
 | D1 | 2026-11-07 | Region (Q1) | **Fiktives Mischland** mit Leitplanke „gemischt wird die Herkunft, nicht die Epoche“ | GDD 2.1, F-07, F-12 |
-| D2 | 2026-11-07 | Übernatürliches (Q2) | **Aberglaube mit Wirkung**: kleine Buff-Effekte, keine Zauber | F-11, F-15 |
+| ~~D2~~ | 2026-11-07 | Übernatürliches (Q2) | ~~Aberglaube mit Wirkung, keine Zauber~~ → **ersetzt durch D9** | – |
 | D3 | 2026-11-07 | Assets (Q3) | **Mix aus neuen Assets und Retexturen** ab Phase 2; MVP mit Vanilla-Modellen | F-02, F-03, F-06, F-07, F-16 |
 | D4 | 2026-11-07 | Karte (Q4) | **RWG zuerst**, eigene handgebaute Karte als späteres Ziel | F-07 |
 | D5 | 2026-11-07 | Kompatibilität (Q5) | **Kompatibel mit UI-Mods**: XUi-Änderungen nur additiv und zielgenau | Spec 01, F-12 |
 | D6 | 2026-11-07 | Name (Q6) | **Später**: bis zum Release Arbeitstitel `7DTD_700` | F-12 |
 | D7 | 2026-11-07 | Sprachen (Q7) | **DE + EN Pflicht**, weitere über die Community | F-12 |
 | D8 | 2026-11-07 | Armbrust | **Ja**, selten, T4/Endgame | F-02 |
+| D9 | 2026-11-07 | Magie | **Einfache Volksmagie**: Runen & Zeichen, Segen & Flüche, Tränke & Salben, aktive Zauber. Zauber ersetzen vor allem anachronistische Technik (z. B. Geschütztürme → Runensteine mit Feuerpfeilen) | F-01, F-04, F-08, F-15 |
+| D10 | 2026-11-07 | Sichtbarkeit der Magie | **Dezent**: Glimmen, Funken, Rauch, kleine Glutpfeile; keine Feuerbälle oder Blitze | F-15, F-16 |
+| D11 | 2026-11-07 | Fantasy-Kreaturen | **Wenige, folkloristisch** (Irrlicht, Nachzehrer, Moorgeist …), selten | F-06 |
 
 ## 7. Offene Fragen
 
@@ -205,12 +227,18 @@ Punkte:
 | Q10 | Ansteckung (Seuchenbrand) zwischen Spielern ja/nein? | F-11 |
 | Q11 | Bücher/Magazine: Rezeptfreischaltung wie Vanilla beibehalten oder auf Perks umstellen? | F-04 |
 | Q12 | Kulturzonen: sollen die Biome kulturell geprägt sein (z. B. Klosterland, Burgwall-Land, Küste)? | F-07, F-06 |
+| Q13 | Runenkraft: Vanilla-Stromnetz umdeuten (Kraftsteine + Kraftlinien, reines XML) oder selbstversorgende Runensteine (C#)? Entscheidung erst nach REA-Check, siehe F-15 | F-08, F-15 |
+| Q14 | Magie-Ressource: nur Verbrauchsmaterial (Runenkreide, Bernstein, Kräuter) oder zusätzlich ein eigener Kraftwert („Odem“)? | F-15 |
 
 ---
 
 ## 8. Nicht-Ziele (v1)
 
-- Keine Zauber, keine sichtbare Magie und keine Fantasy-Kreaturen. Aberglaube wirkt nur über kleine Buffs (D2).
+- Keine High-Fantasy: keine Feuerbälle, Blitze, Teleportation, Zauberschulen,
+  Fantasy-Völker oder Dämonen-Heere. Magie bleibt Volksmagie (D9/D10), Kreaturen bleiben
+  wenige Sagengestalten (D11).
+- Magie ersetzt **nicht** den Nahkampf als Kern (Säule P3). Sie ergänzt ihn und füllt die
+  Lücken, die die gestrichene Technik hinterlässt.
 - Keine historisch-akademische Simulation (kein Lehnswesen-Management, keine Fruchtfolge-Sim).
 - Kein Eingriff in Netcode-Grundlagen (keine eigenen NetPackages, solange es sich vermeiden lässt).
 - Keine EAC-Kompatibilität für den C#-Teil; das ist bei DLL-Mods technisch nicht möglich.

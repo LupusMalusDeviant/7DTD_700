@@ -24,9 +24,15 @@ Dedicated Server mit einem zweiten Client sichtbar. Erst danach wird in die Brei
 ## Asset-Liste (Priorität)
 | Prio | Retextur | Neu |
 |---|---|---|
-| 1 | Seuchentote (häufigste 6 Zombies), Fackel, Lederrüstung | Rundschild, Spatha, Sax |
-| 2 | Blöcke Flechtwerk/Lehm/Reet/Bruchstein, Truhen | Rennofen, Kettenhemd, Spangenhelm |
-| 3 | Wildtiere, Möbel | Langbogen, Armbrust, Schrein, Webstuhl |
+| 1 | Seuchentote (häufigste 6 Zombies), Fackel, Lederrüstung | Rundschild, Spatha, Sax, **Runenstein der Glut + Glutpfeil-Effekt** |
+| 2 | Blöcke Flechtwerk/Lehm/Reet/Bruchstein, Truhen, Kraftsteine (aus Generator/Solar/Batterie) | Rennofen, Kettenhemd, Spangenhelm, Runen-Icons, Trank-Icons |
+| 3 | Wildtiere, Möbel, Sagengestalten (aus Vanilla-Sondergegnern) | Langbogen, Armbrust, Schrein, Webstuhl, Irrlicht-Partikel |
+
+## Magie-Effekte (D10: dezent)
+- Erlaubt: Glimmen von Runen, Funken, Glutpfeil mit Rauchspur, Nebelhauch, Geräusche (Raunen, Knistern)
+- Nicht erlaubt: Explosionen, Blitze, Leuchtstrahlen, große Lichtkugeln, Bildschirm-Flashes
+- Partikel-Budget: kleine Partikelzahlen, damit 20 Runensteine in der Seuchennacht die Client-FPS nicht drücken
+- Effekte laufen auf dem **Client**; die Auslösung muss serverseitig synchron sein (Test in F-15)
 
 ## Akzeptanzkriterien
 - [ ] Durchstich funktioniert in SP und auf dem Dedicated Server mit 2 Clients

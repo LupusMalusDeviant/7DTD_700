@@ -24,7 +24,12 @@ durch Hightech-Loot.
 Bogenbau, Heilkunde, Baukunst). Gefunden werden sie in Klöstern und Ruinen; Lehrmeister bei
 Händlern verkaufen sie (F-10).
 
-**Perks:** Vanilla-Attribute umbenennen bzw. umdeuten (z. B. Stärke → „Kraft“, Intellekt → „Gelehrsamkeit“).
+**Perks:** Vanilla-Attribute umbenennen bzw. umdeuten (z. B. Stärke → „Kraft“). Der
+**Intellekt-Baum wird zu „Runenkunde“** (D9): Seine Technik-Perks (Türme, Strom, Roboter)
+werden zu Runensteinen, Kraftsteinen, Zaubern und Tränken (F-15).
+
+**Runenritzer-Bank:** zusätzliche Werkstatt für Runen, Runensteine und Glutladungen
+(Klon einer Vanilla-Station per XML, siehe F-15).
 
 ## Umsetzung
 ### XML

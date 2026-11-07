@@ -9,9 +9,12 @@ Nichts, was es um 700 nicht gab, taucht im Spiel auf, sei es als Loot, Rezept, H
 Quest-Belohnung oder Startausrüstung.
 
 ## Umfang
-- Entfernen bzw. Sperren: Schusswaffen und Munition, Fahrzeuge, Elektrik (Generatoren,
-  Solar, Batterien, elektrische Fallen, Lampen), Elektronik, Konserven, Medikamente,
-  Treibstoff, Beton, Stahlprodukte industrieller Art
+- Entfernen bzw. Sperren: Schusswaffen und Munition, Fahrzeuge, Elektronik, elektrische
+  Lampen, Konserven, Medikamente, Treibstoff, Beton, Stahlprodukte industrieller Art
+- **Nicht entfernen, sondern an F-15 übergeben** (D9): Geschütztürme, Generator, Solar,
+  Batterien, Kabel, Schalter, Sensoren, elektrische Fallen, Junk Turret und Drohne, Sprengstoff.
+  Diese Systeme werden zu Runensteinen, Kraftsteinen und Runenfallen umgedeutet. F-01 sperrt
+  nur ihre modernen Varianten (Namen, Rezepte, Loot), die Logik bleibt erhalten.
 - Loot-Tabellen (`loot.xml`): Gruppen leeren bzw. umbiegen
 - Rezepte (`recipes.xml`): entfernen
 - Händler (`traders.xml`): Warengruppen entfernen

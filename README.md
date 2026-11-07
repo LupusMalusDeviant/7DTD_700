@@ -19,7 +19,7 @@
 
 - **Zielversion:** 7 Days to Die V2.x (Stable). Die exakte Build-Nummer wird per REA festgehalten.
 - **Mod-Tiefe:** XML-Modlets (XPath) + C#-DLL mit Harmony-Patches; ab Phase 2 eigene Assets + Retexturen.
-- **Setting:** fiktives Mischland um 700, Aberglaube mit kleinen Spieleffekten, keine Zauber.
+- **Setting:** fiktives Mischland um 700 mit dezenter Volksmagie (Runen, Segen, Tränke, einfache Zauber als Ersatz für anachronistische Technik) und wenigen Sagengestalten.
 - **Welt:** zufällige Welten (RWG) zuerst, eigene Karte später.
 - **Multiplayer:** Singleplayer + Dedicated Server.
 - **Kompatibilität:** eigenständige Total Conversion, aber verträglich mit UI-Mods.

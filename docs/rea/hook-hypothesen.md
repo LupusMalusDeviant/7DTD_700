@@ -42,6 +42,16 @@
 | ? | `AIDirector` + Horde-Night-Komponente | Wo wird die Horde-Nacht geplant (Vortags-Hook für Vorboten)? |
 | ? | `GameUtils.IsBloodMoonTime(...)` o. ä. | Zentrale Abfrage für Seuchennacht-Logik |
 
+## F-15
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | Turret-Blöcke / `TileEntityPoweredRangedTrap` o. ä. | Wie hängt der Turm am Strom? Lässt er sich ohne Netz betreiben (Variante B), oder reicht das Umdeuten des Netzes (Variante A)? |
+| ? | `PowerManager`, `PowerItem`/`PowerSource`/`PowerGenerator` o. ä. | Was verbraucht ein Generator (Item-Name per XML konfigurierbar?), damit Kraftsteine Bernstein bzw. Glutsteine verbrauchen |
+| ? | Turret-Munition / Projektil-Definition | Kann ein Turm ein eigenes Projektil (Glutpfeil mit Partikel) statt Vanilla-Munition verschießen, rein per XML? |
+| ? | `ItemActionLauncher` / `ItemActionProjectile` | Basis für Zauber-Items (Glutpfeil): Projektil, Partikel, Schaden per XML |
+| ? | KI-Zielwahl / Pfadfindung (`EAI*`) | Gibt es eine Möglichkeit, eine „Meide-Zone“ für Bannkreis zu setzen? Sonst Fallback-Aura |
+| ? | Item-Modifier-Slots (`ItemClassModifier`) | Grenzen für Runen als Waffen- bzw. Rüstungs-Mods; Accessoire-Slot vorhanden? |
+
 ## F-13
 | Status | Kandidat | Frage |
 |---|---|---|

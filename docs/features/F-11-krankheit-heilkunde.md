@@ -18,8 +18,9 @@ Krankheit ist im Jahr 700 der eigentliche Feind. Die Vanilla-Infektion wird zur
 Weitgehend XML (`buffs.xml`, `items.xml`, `blocks.xml`). C# nur, falls Ansteckung
 zwischen Spielern gewünscht ist (Q10).
 
-Aberglaube (D2, F-15): Volksmittel wie Amulette und Segenssprüche können den Verlauf des
-Seuchenbrands **leicht** verlangsamen, aber nie heilen. Heilung bleibt Heilkunde.
+Volksmagie (D9, F-15): Magische Tränke und Segen können Symptome lindern und den Verlauf
+des Seuchenbrands verlangsamen, aber **nie heilen**. Heilung bleibt Heilkunde (Theriak,
+T2-Wissen). So bleibt die Seuche die eigentliche Bedrohung.
 
 ## Akzeptanzkriterien
 - [ ] Seuchenbrand ist heilbar, aber nur mit T2-Wissen (Abschrift Heilkunde)

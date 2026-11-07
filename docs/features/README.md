@@ -23,7 +23,7 @@ Legende:
 | [F-12](F-12-lokalisierung-ui.md) | Lokalisierung & UI-Theming | MVP | X | C | nein | – |
 | [F-13](F-13-packtiere-transport.md) | Packtiere & Transport | Stretch | H+A | S+C | ja | F-06 |
 | [F-14](F-14-siedlung-gefolge.md) | Siedlung & Gefolge | Stretch | H (+A) | S+C | ja | F-10 |
-| [F-15](F-15-aberglaube-reliquien.md) | Aberglaube & Reliquien | P2 | X (+A) | S | nein | F-04, F-11 |
+| [F-15](F-15-volksmagie.md) | Volksmagie (Runen, Segen, Tränke, Zauber) | MVP: Runensteine · P2: Rest | X+H (+A) | S+C | ja | F-01, F-04 |
 | [F-16](F-16-asset-pipeline.md) | Asset-Pipeline | P2 | A | C | nein | F-00 |
 
 ## Umsetzungsreihenfolge (Vorschlag)
@@ -31,7 +31,7 @@ Legende:
 1. **F-00** Fundament. Danach REA-Baseline erstellen (`docs/rea/interface-discovery.md`, Schritte 1–3).
 2. **F-01 + F-05 + F-12** (reines XML, schnelle sichtbare Wirkung)
 3. **F-04 → F-03 → F-02** (Progression trägt Ausrüstung)
-4. **F-08** (erster echter Harmony-Patch, durch REA abgesichert)
+4. **F-08** (erster echter Harmony-Patch, durch REA abgesichert) + **F-15-Kern**: Runenstein der Glut über Variante A (Stromnetz umgedeutet, nur XML)
 5. → **MVP-Playtest** → Phase 2
 6. Phase 2: **F-16** zuerst (Pipeline steht, bevor Assets entstehen), danach F-06/F-07 parallel zu F-15, F-11, F-09, F-10
 
