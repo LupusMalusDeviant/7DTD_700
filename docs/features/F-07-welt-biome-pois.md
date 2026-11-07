@@ -18,6 +18,9 @@ Römerruinen. Keine Städte, Asphaltstraßen oder Hochhäuser.
   Klosterland mit Römerruinen (Wald), Burgwall-Land (Gebirge/Heide), Küste mit nordisch
   geprägten Höfen, Moorland. Die Prefab-Stile werden je Zone gewählt (Q12).
 
+- **Erzählende Umgebung (D12, F-17 B7):** Pestgruben, Leichenkarren, Grabkreuze mit Bannzeichen, von außen verriegelte Türen, Notizen und Inschriften. Jeder eigene POI erzählt mindestens eine kleine Geschichte davon, wie die Bewohner untergingen.
+- **Nebel-Biome:** Moor und Flusstäler mit dauerhaftem Bodennebel (F-17 B1)
+
 ## Umsetzung
 - Phase 2a: RWG-Filter. Nur Vanilla-POIs ohne Anachronismen zulassen (Höhlen, Hütten, Ruinen). Damit wird die Welt schnell „leer und alt“.
 - Phase 2b: eigene Prefabs, schrittweise. Block-Optik über **Retexturen** (F-16).

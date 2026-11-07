@@ -12,7 +12,8 @@ Gräben und Mechanik.
 **Licht:**
 - Fackel (Hand, Wand), Kienspan, Öllampe (Talg/Öl), Feuerkorb
 - **Brenndauer (C#):** Lichtquellen verbrauchen Brennstoff und erlöschen
-- Dunklere Nächte (Licht- bzw. Gamma-Parameter, falls per XML oder Weather möglich)
+- Dunklere Nächte, Mondphasen und Nebel: siehe **F-17 B1** (Echte Dunkelheit). F-08 liefert die Lichtquellen, F-17 die Dunkelheit.
+- Licht senkt Grauen (F-17 B3): Eine brennende Feuerstelle ist der wichtigste sichere Ort (B8).
 
 **Verteidigung (XML):**
 - Palisade, Spitzpfähle (Spikes-Umdeutung), Graben bzw. Fallgrube, Schwingbalken-Falle (mechanisch statt elektrisch), Pechtopf

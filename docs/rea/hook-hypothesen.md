@@ -62,3 +62,13 @@
 | Status | Kandidat | Frage |
 |---|---|---|
 | ? | `EntityNPC`, `EntityTrader` | NPC-Basis, Persistenz, Netz |
+
+## F-17
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | `SkyManager`, `WeatherManager`, Biome-Weather-Definitionen | Wie dunkel lässt sich die Nacht per XML machen (Ambient, Mondlicht, Nebeldichte)? Was braucht Hooks? |
+| ? | Licht-Abfrage am Spielerort (z. B. `LightManager`, Block-Lichtwerte) | Gibt es eine billige Abfrage „Wie hell ist es hier?“ für das Grauen-System? |
+| ? | Buff-Requirements (`Requirements`-Klassen) | Gibt es fertige Bedingungen (dunkel, Nacht, Spieler in der Nähe), sodass Grauen fast ohne C# geht? |
+| ? | `AIDirector` + Wandering-Horde-Komponente | Hook für Bedrohungs-Direktor (Pirscher, Wanderzug) ohne den Vanilla-Director zu ersetzen |
+| ? | Client-seitiges Sound-Abspielen (`Manager.Play…`/Audio-Manager) | Trugbild-Sounds nur auf dem lokalen Client abspielen |
+| ? | Zombie-Sleeper-/Schlafverhalten in POIs | Basis für „Totsteller“ (liegende Leichen, die aufstehen) |

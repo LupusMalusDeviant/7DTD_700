@@ -36,7 +36,7 @@ einfache Zauber. Diese Magie ist erlernt, an Material gebunden und dezent (Entsc
 | P1 | **Glaubwürdig um 700, wie es sich die Menschen damals erzählten** | Nichts technisch Anachronistisches (Schießpulver, Plattenrüstung, Strom). Magie ist erlaubt, aber nur in der Form, die Volksglaube und Sagen der Zeit kennen: Runen, Segen, Flüche, Kräuter, Sagengestalten. Bei Spielspaß-Konflikt gilt „plausibel“ vor „belegt“. |
 | P2 | **Handwerk ist Fortschritt** | Tech-Progression läuft über Werkstätten, Rohstoffketten und Wissen, nicht über Loot-Glück mit Hightech. |
 | P3 | **Nahkampf mit Gewicht** | Kampf ist nah, riskant und positionsabhängig: Schild, Reichweite, Ausdauer. Fernkampf ist knapp und handgemacht. |
-| P4 | **Die Nacht gehört der Seuche** | Licht ist eine Ressource. Dunkelheit, Feuer und Befestigung tragen den Horror. |
+| P4 | **Grauen vor dem Dunkel** (D12) | Das Spiel ist bedrohlicher und unheimlicher als Vanilla. Dunkelheit, Nebel, Klang und Ungewissheit tragen den Horror; Licht, Feuer, Gemeinschaft und Befestigung sind Zuflucht auf Zeit. Andeuten statt zeigen, keine billigen Jumpscares. Jedes Feature fragt: „Macht das die Welt unheimlicher oder sicherer, und ist das gewollt?“ |
 | P5 | **Vanilla-Systeme umdeuten statt neu bauen** | Wo ein Vanilla-System die Fantasie schon trägt, wird es per XML umgedeutet. C# nur, wo XML nicht reicht. Das hält die Mod updatefest. |
 
 P5 ist die wichtigste **technische** Säule. Jedes Feature muss begründen, warum es C# braucht.
@@ -84,9 +84,18 @@ P5 ist die wichtigste **technische** Säule. Jedes Feature muss begründen, waru
 
 ### 2.2 Ton
 
-Dreckig, kalt, abergläubisch, und manchmal hat der Aberglaube recht. Kein
-Ritterromantik-Hochglanz, keine Zauberschule. Humor sparsam und trocken,
-zum Beispiel in Notizen und Händlerdialogen.
+**Folk-Horror.** Dreckig, kalt, abergläubisch, und manchmal hat der Aberglaube recht.
+Kein Ritterromantik-Hochglanz, keine Zauberschule.
+
+- **Bedrohlich:** Die Welt ist nicht leer, sie wartet. Stille ist verdächtig. Wer allein und
+  ohne Licht unterwegs ist, begeht einen Fehler.
+- **Unheimlich:** Das Grauen kommt aus dem, was man *fast* sieht und *fast* hört: eine Gestalt
+  im Nebel, eine Glocke, wo kein Kloster mehr steht, Kratzen an der Tür.
+- **Menschlich:** Notizen und Orte erzählen von Menschen, die Angst hatten. Das macht das
+  Grauen persönlich.
+- Humor nur noch sehr sparsam und trocken (Händler), nie in Grusel-Situationen.
+
+Details zu den Grusel-Mechaniken: [F-17 Grauen & Bedrohung](features/F-17-grauen-bedrohung.md).
 
 ### 2.3 Übersetzungstabelle Vanilla → 700
 
@@ -126,6 +135,15 @@ Der Vanilla-Loop bleibt strukturell erhalten (P5), wird aber thematisch neu bele
      │                                                          ▼
   Wiederaufbau ◄── Seuchennacht (alle 7 Tage) ◄── Befestigen (Palisade, Graben, Fallen)
 ```
+
+**Spannungsbogen über einen 7-Tage-Zyklus** (F-17, Bedrohungs-Direktor):
+
+| Tage | Phase | Gefühl |
+|---|---|---|
+| 1–2 nach Seuchennacht | Erlösung | Aufräumen, Durchatmen, Tageslicht wirkt sicher |
+| 3–4 | Ruhe mit Rissen | Erste Pirscher, Nebelabende, verstummende Tiere |
+| 5–6 | Vorzeichen | Glocken, Krähen, Trugbilder häufen sich, Sagengestalten |
+| 7 | Seuchennacht | offene Bedrohung, Höhepunkt |
 
 **Mittlere Schleife:** Aufträge von Händlern und Klöstern annehmen, Ruinen und Höfe plündern,
 Wissen (Abschriften) sammeln, neue Werkstätten freischalten.
@@ -169,6 +187,7 @@ die Zuordnung zu den Säulen:
 | F-14 Siedlung & Gefolge | P2 | Stretch |
 | F-15 Volksmagie (Runen, Segen, Tränke, Zauber) | P1, P3, P4 | MVP-Kern (Runensteine) + Phase 2 |
 | F-16 Asset-Pipeline | P1 | Phase 2 |
+| F-17 Grauen & Bedrohung | P4 | MVP: Dunkelheit + Klang · Phase 2: Furcht, Direktor, Trugbilder |
 
 **MVP-Definition:** Eine RWG-Welt ist von Tag 1 bis zur ersten Seuchennacht ohne
 Anachronismus in Items, Rezepten, Loot und Texten spielbar: mittelalterliche Waffen,
@@ -216,6 +235,7 @@ Punkte:
 | D9 | 2026-11-07 | Magie | **Einfache Volksmagie**: Runen & Zeichen, Segen & Flüche, Tränke & Salben, aktive Zauber. Zauber ersetzen vor allem anachronistische Technik (z. B. Geschütztürme → Runensteine mit Feuerpfeilen) | F-01, F-04, F-08, F-15 |
 | D10 | 2026-11-07 | Sichtbarkeit der Magie | **Dezent**: Glimmen, Funken, Rauch, kleine Glutpfeile; keine Feuerbälle oder Blitze | F-15, F-16 |
 | D11 | 2026-11-07 | Fantasy-Kreaturen | **Wenige, folkloristisch** (Irrlicht, Nachzehrer, Moorgeist …), selten | F-06 |
+| D12 | 2026-11-07 | Bedrohung & Grusel | **Deutlich stärker als Vanilla**: Folk-Horror-Ton, Säule P4 geschärft, neues Feature F-17 (Dunkelheit, Klang, Furcht-System, Trugbilder, Bedrohungs-Direktor) | GDD 1.1/2.2/3, F-06, F-07, F-08, F-09, F-17 |
 
 ## 7. Offene Fragen
 
@@ -229,6 +249,9 @@ Punkte:
 | Q12 | Kulturzonen: sollen die Biome kulturell geprägt sein (z. B. Klosterland, Burgwall-Land, Küste)? | F-07, F-06 |
 | Q13 | Runenkraft: Vanilla-Stromnetz umdeuten (Kraftsteine + Kraftlinien, reines XML) oder selbstversorgende Runensteine (C#)? Entscheidung erst nach REA-Check, siehe F-15 | F-08, F-15 |
 | Q14 | Magie-Ressource: nur Verbrauchsmaterial (Runenkreide, Bernstein, Kräuter) oder zusätzlich ein eigener Kraftwert („Odem“)? | F-15 |
+| Q15 | Grusel-Intensitätsregler (aus/mild/voll) anbieten? | F-17 |
+| Q16 | Darf Furcht auch Mechanik schwächen (Zittern beim Zielen, Panik), oder nur Atmosphäre? | F-17 |
+| Q17 | Härtere Todesfolgen (z. B. man steht als Seuchentoter mit dem eigenen Inventar wieder auf)? | F-06, F-17 |
 
 ---
 
@@ -239,6 +262,8 @@ Punkte:
   wenige Sagengestalten (D11).
 - Magie ersetzt **nicht** den Nahkampf als Kern (Säule P3). Sie ergänzt ihn und füllt die
   Lücken, die die gestrichene Technik hinterlässt.
+- Kein Splatter- oder Schock-Horror um seiner selbst willen: keine Dauer-Jumpscares,
+  keine Bildschirmblitze, keine Gore-Eskalation über Vanilla hinaus.
 - Keine historisch-akademische Simulation (kein Lehnswesen-Management, keine Fruchtfolge-Sim).
 - Kein Eingriff in Netcode-Grundlagen (keine eigenen NetPackages, solange es sich vermeiden lässt).
 - Keine EAC-Kompatibilität für den C#-Teil; das ist bei DLL-Mods technisch nicht möglich.

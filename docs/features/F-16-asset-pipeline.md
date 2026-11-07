@@ -28,6 +28,12 @@ Dedicated Server mit einem zweiten Client sichtbar. Erst danach wird in die Brei
 | 2 | Blöcke Flechtwerk/Lehm/Reet/Bruchstein, Truhen, Kraftsteine (aus Generator/Solar/Batterie) | Rennofen, Kettenhemd, Spangenhelm, Runen-Icons, Trank-Icons |
 | 3 | Wildtiere, Möbel, Sagengestalten (aus Vanilla-Sondergegnern) | Langbogen, Armbrust, Schrein, Webstuhl, Irrlicht-Partikel |
 
+## Klang & Grusel-Assets (D12, F-17)
+Sound ist für den Grusel wichtiger als jedes Modell. Deshalb bekommt Klang eine eigene Spur:
+- **Prio 1:** Ambient-Loops (Wald nachts, Moor, Wind), ferne Glocke, Raunen und Flüstern, Herzschlag und Atem (Furcht), leisere Seuchentote-Laute
+- **Prio 2:** Sagengestalten-Laute, Trugbild-Sounds (Schritte, Klopfen, Name flüstern), Schattengestalt (Trugbild-Modell)
+- Audio-Format und Lautstärke-Normalisierung festlegen; 3D-Positionierung testen
+
 ## Magie-Effekte (D10: dezent)
 - Erlaubt: Glimmen von Runen, Funken, Glutpfeil mit Rauchspur, Nebelhauch, Geräusche (Raunen, Knistern)
 - Nicht erlaubt: Explosionen, Blitze, Leuchtstrahlen, große Lichtkugeln, Bildschirm-Flashes

@@ -26,6 +26,8 @@ dazu Wildtiere des frühmittelalterlichen Waldes.
 
   Gegenmittel liefert F-15 (Bannrune, Lichtfunke, Totensegen).
 
+- **Grusel-Verhalten (D12, Details in F-17 B6):** Totsteller (liegende Leichen in POIs, die aufstehen), Pirscher (folgt auf Abstand im Nebel), Lauscher (reagiert stark auf Geräusche). Seuchentote sind leiser als Vanilla-Zombies.
+
 ## Umsetzung
 - MVP: Namen, Werte und Sounds per XML; die Optik ist noch modern (temporärer Kompromiss).
 - Phase 2 (D3, F-16): **Retexturen** der Vanilla-Zombies sind der Hauptweg (Kittel, Kutte,
