@@ -14,6 +14,7 @@
 | [docs/features/README.md](docs/features/README.md) | Feature-Katalog (F-00 … F-21) mit Priorität, Tiefe, Abhängigkeiten |
 | [docs/rea/interface-discovery.md](docs/rea/interface-discovery.md) | Schnittstellen-Analyse mit REA (Reverse Engineer Anything) |
 | [docs/rea/hook-hypothesen.md](docs/rea/hook-hypothesen.md) | Ungeprüfte Hook-Kandidaten je Feature, per REA zu verifizieren |
+| [docs/handoff/01-lokale-rea-session.md](docs/handoff/01-lokale-rea-session.md) | **Übergabeprompt** für die lokale Session (REA einrichten, Analyse, Phase 0) |
 
 ## Eckdaten
 
