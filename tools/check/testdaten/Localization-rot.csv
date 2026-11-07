@@ -1,0 +1,7 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+700_itm_spatha,items,Item,,,,Spatha,,Spatha,,,,,,,,,,,
+700_itm_ohneDeutsch,items,Item,,,,Sax,,,,,,,,,,,,,
+700_itm_spatha,items,Item,,,,Spatha again,,Spatha noch einmal,,,,,,,,,,,
+itemOhnePraefix,items,Item,,,,Shield,,Schild,,,,,,,,,,,
+700_itm_zuWenigSpalten,items,Item,,,,Helm,,Helm,,,
+700_itm_fremdsprache,items,Item,,,,Mail shirt,,Kettenhemd,Camisa de malla,,,,,,,,,,

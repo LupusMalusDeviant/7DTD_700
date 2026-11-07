@@ -1,0 +1,4 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+700_itm_spatha,items,Item,,,,Spatha,Early medieval long sword,Spatha,,,,,,,,,,,
+700_itm_spathaDesc,items,Item,,,,"A long, straight blade.",Keep the comma: it tests the CSV reader,"Eine lange, gerade Klinge.",,,,,,,,,,,
+700_blk_fachwerk,blocks,Block,,,,Timber frame,,Fachwerk,,,,,,,,,,,

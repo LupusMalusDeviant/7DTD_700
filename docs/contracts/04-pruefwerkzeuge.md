@@ -186,11 +186,35 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
 
 ## 8. Offene Punkte dieses Vertrags
 
-- **Der Inhalt der Denylist** ist noch nicht geschrieben; er entsteht in WP3.1 und wird dort
-  gegen die echten Dateien aufgebaut.
-- **Die Wurzeln des Rezeptgraphen** (was gilt als „von Anfang an erreichbar"?) brauchen eine
-  Festlegung, sobald `20_Material` steht. Vorschlag: alles mit einem Abbau-, Ernte- oder
-  Loot-Weg, plus Händlerware.
+### Beim Bau geklärt (2026-11-07, WP2)
+
+- **Die Wurzeln des Rezeptgraphen** sind beantwortet: `blocks.xml` trägt
+  `<drop event="Harvest" name="…"/>`, und das ist der Weg, auf dem Rohstoffe aus der Welt
+  kommen. Wurzeln sind damit Block-Drops, Loot, Händlerware und Startausrüstung. Dazu acht
+  Kennungen, die über Sondermechaniken kommen (Schmelz-Einheiten der Esse, Eimer an der
+  Wasserquelle, lebendes Tier) — sie stehen nachlesbar in `tools/check/world-roots.txt`, nicht
+  im Code. Ohne diese Datei meldet der Lauf gegen unverändertes Vanilla 38 Sackgassen, mit ihr
+  ist Vanilla grün.
+- **`Localization.csv` liegt NICHT im `ConfigsDump`.** Die Tabelle in Abschnitt 1 unterstellt für
+  alle drei Befehle den Dump — für `localization` trifft das nicht zu. Geprüft wird dort immer
+  die Quelldatei des Sprach-Modlets. Folge: ein Schlüssel, den zwei Modlets doppelt setzen,
+  fällt nur auf, wenn beide Dateien zusammen geprüft werden.
+- **Vanilla-Schlüssel ohne `700_`-Präfix** lassen sich in einer CSV nicht „kommentiert
+  gruppieren", wie Abschnitt 5 es vorsah — CSV kennt keine Kommentare. Stattdessen:
+  `--vanilla-keys <datei>`, eine Freigabeliste neben der Datei.
+- **13 Sprachen**, nicht 14 (Abschnitt 5 nannte die falsche Zahl): 20 Spalten, davon fünf
+  Metadaten, eine Kommentarspalte und 13 Sprachen.
+
+### Weiter offen
+
+- **Der Inhalt der Denylist** ist ein Anfang, kein Ende. `tools/check/denylist.txt` deckt
+  Schusswaffen, Munition, Fahrzeuge, Elektronik, moderne Nahrung und Medizin, Treibstoff und
+  industrielle Baustoffe ab, dazu 19 Freigaben nach D9. Die vollständige Liste entsteht in WP3.1
+  gegen die echten Dateien.
 - Die vorhandenen `ConfigsDump`-Ordner auf diesem Rechner sind von **V 3.1.0**, nicht von
-  V 3.40 — brauchbar, um die Werkzeuge zu bauen, **nicht** als Nachweis. Der erste echte Dump
-  entsteht beim Spielstart des Nutzers.
+  V 3.40 — brauchbar, um die Werkzeuge zu bauen und zu kalibrieren, **nicht** als Nachweis. Der
+  erste echte Dump entsteht beim Spielstart des Nutzers.
+- **Ein Dump verrät seine Herkunft nicht:** weder Spielfassung noch geladene Modlets stehen
+  darin. Die Werkzeuge geben darum den Zeitstempel aus und nennen diese Grenze in jeder Ausgabe.
+  Eine härtere Prüfung (etwa auf Spuren unserer Modlets im Dump) ist denkbar, aber noch nicht
+  gebaut.

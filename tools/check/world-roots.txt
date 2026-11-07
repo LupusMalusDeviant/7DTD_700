@@ -1,0 +1,27 @@
+# Wurzeln, die das XML nicht ausdrueckt — fuer mod700check recipes
+#
+# Der Rezeptgraph kennt vier Wege, auf denen etwas ohne Herstellen zu bekommen ist:
+#   <drop event="Harvest"> in blocks.xml, Loot, Haendlerware, Startausruestung.
+# Es gibt aber Dinge, die ueber eine Handlung in der Welt oder ueber eine Sondermechanik
+# kommen, und dafuer steht in keiner XML-Datei ein Attribut, das man lesen koennte.
+#
+# Statt das im Code zu erraten, stehen sie hier — nachlesbar, mit Begruendung, und
+# aenderbar ohne Neubau. Jede Zeile ist ein Muster ('*' fuer beliebig viele Zeichen),
+# '#' beginnt einen Kommentar.
+#
+# Nachgewiesen am 2026-11-07: ohne diese Datei meldet der Lauf gegen das unveraenderte
+# Vanilla-V-3.40-Config 38 Sackgassen, die alle auf genau diese acht Kennungen
+# zurueckgehen. Mit ihr ist Vanilla gruen. Das ist die Kalibrierung des Werkzeugs: ein
+# Pruefer, der schon am unveraenderten Spiel rot meldet, taugt nicht als Signal.
+
+# --- Schmelz-Einheiten der Esse -------------------------------------------------
+# Diese Kennungen sind Items (items.xml), aber niemand "stellt sie her": sie entstehen,
+# wenn man Material in die Esse einschmilzt. Der Weg steht in den Rezepten mit
+# <wildcard_forge_category/>, nicht als Zutat-Ergebnis-Paar, und ist damit fuer einen
+# Graphen aus <ingredient>-Elementen unsichtbar.
+# Fuer 700 bleibt die Mechanik: Rennofen und Esse schmelzen Raseneisenerz (F-04).
+unit_*
+
+# --- Handlungen in der Welt -----------------------------------------------------
+bucketRiverWater      # Eimer an einer Wasserquelle fuellen - eine Handlung, kein Rezept
+domesticatedChicken   # lebendes Tier, kommt aus Falle bzw. Zucht (F-19), nicht aus einem Rezept

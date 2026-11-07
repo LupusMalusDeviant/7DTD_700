@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Eine vollstaendige Kette von den Wurzeln bis zum Ergebnis:
+    pruefRohstein + pruefHolz -> pruefEisenLuppe -> pruefEisenBarren -> pruefKlinge -> pruefSchwert
+  pruefSchmelzEinheit hat absichtlich KEIN Rezept und kommt auch nicht aus der Welt - es
+  steht in world-roots.txt. Damit prueft dieser Satz auch, dass die Datei greift.
+-->
+<recipes>
+	<recipe name="pruefEisenLuppe" count="1">
+		<ingredient name="pruefRohstein" count="4" />
+		<ingredient name="pruefHolz" count="2" />
+	</recipe>
+
+	<recipe name="pruefEisenBarren" count="1">
+		<ingredient name="pruefEisenLuppe" count="2" />
+		<ingredient name="pruefSchmelzEinheit" count="1" />
+	</recipe>
+
+	<recipe name="pruefKlinge" count="1">
+		<ingredient name="pruefEisenBarren" count="2" />
+	</recipe>
+
+	<recipe name="pruefSchwert" count="1">
+		<ingredient name="pruefKlinge" count="1" />
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+</recipes>

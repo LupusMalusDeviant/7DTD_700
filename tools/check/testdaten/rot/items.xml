@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Pruefdaten, die ROT sein MUESSEN. Erfundene Kennungen, kein Spielinhalt.
+
+  Hier steckt der Fehler, den die Pruefung finden soll:
+    - gunPruefPistole ist erreichbar (Loot und Haendler) und passt auf die Denylist-Regel 'gun*'
+    - pruefZyklusA und pruefZyklusB brauchen sich gegenseitig
+    - pruefKaputt braucht eine Zutat, die nirgends definiert ist
+
+  Dass gunPruefPistole hier in items.xml STEHT, ist kein Fehler: gesperrte Gegenstaende
+  bleiben absichtlich stehen (Vertrag 03, Abschnitt 4). Rot wird sie erst dadurch, dass ein
+  Spieler sie erreichen kann.
+-->
+<items>
+	<item name="pruefRohstein" />
+	<item name="pruefHolz" />
+	<item name="gunPruefPistole" />
+	<item name="pruefZyklusA" />
+	<item name="pruefZyklusB" />
+	<item name="pruefKaputt" />
+</items>

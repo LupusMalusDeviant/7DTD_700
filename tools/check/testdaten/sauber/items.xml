@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Pruefdaten fuer mod700check. Erfundene Kennungen, kein Spielinhalt (Projektregel 1 und 7).
+  Dieser Satz muss gruen sein; der Satz unter ../rot/ muss rot sein. Beides prueft
+  gegenproben.ps1.
+-->
+<items>
+	<item name="pruefRohstein" />
+	<item name="pruefLehm" />
+	<item name="pruefHolz" />
+	<item name="pruefEisenLuppe" />
+	<item name="pruefEisenBarren" />
+	<item name="pruefKlinge" />
+	<item name="pruefSchwert" />
+	<item name="pruefSchmelzEinheit" />
+	<item name="pruefHaendlerware" />
+</items>

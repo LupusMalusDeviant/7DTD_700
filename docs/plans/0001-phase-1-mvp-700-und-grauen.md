@@ -144,6 +144,27 @@ erst, wenn er **einmal nachweislich an einem falschen Eingabewert gescheitert** 
 **Ergebnis:** Drei Werkzeuge, jedes einmal nachweislich rot und dann grün, plus ein
 Projekt-Prüfbefehl.
 
+#### Stand 2026-11-07: WP2 erledigt
+
+Ein Werkzeug `mod700check` mit drei Befehlen (`tools/check/`), signiert, 0 Warnungen.
+`tools/check/gegenproben.ps1`: **11 Gegenproben, 0 fehlgeschlagen.**
+`tools/check/check-all.ps1` ist der Prüfbefehl, in `.claude/verify.json` eingetragen.
+
+Zwei Annahmen liegen bewusst außerhalb des Codes, in nachlesbaren Dateien:
+`denylist.txt` (27 Verbote, 19 Freigaben nach D9) und `world-roots.txt`.
+
+**Die Kalibrierung war der Ertrag.** Der erste `recipes`-Lauf gegen unverändertes Vanilla
+meldete 38 Sackgassen — nicht Vanilla war kaputt, sondern meine Wurzelmenge unvollständig.
+Alle 38 gingen auf acht Kennungen zurück (sechs Schmelz-Einheiten der Esse,
+`bucketRiverWater`, `domesticatedChicken`), die über Mechaniken kommen, für die kein
+XML-Attribut existiert. Mit `world-roots.txt` ist Vanilla grün: **633 Rezepte, 0 Sackgassen,
+0 Zyklen.** Eine Gegenprobe prüft darum nicht das Werkzeug, sondern diese Annahme: ohne die
+Datei muss auch der saubere Prüfsatz rot werden.
+
+**`check-all.ps1` ist jetzt rot, und das ist richtig:** `anachronisms` findet 138 erreichbare
+Anachronismen in Vanilla. Das ist das Bild **vor** WP3. Ein Prüfbefehl, der vor der Arbeit
+grün ist, prüft nichts.
+
 ---
 
 ### WP3: F-01 Anachronismen-Purge

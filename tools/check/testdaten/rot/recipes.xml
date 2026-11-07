@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Drei Fehler, drei verschiedene Befundarten:
+    pruefZyklusA / pruefZyklusB  -> zyklus-oder-gruppe
+    pruefKaputt                  -> zutat-unbekannt (Zutat gibt es weder in items noch in blocks)
+    gunPruefPistole              -> hier herstellbar, also ein Erreichbarkeitsweg fuer anachronisms
+-->
+<recipes>
+	<recipe name="pruefZyklusA" count="1">
+		<ingredient name="pruefZyklusB" count="1" />
+	</recipe>
+
+	<recipe name="pruefZyklusB" count="1">
+		<ingredient name="pruefZyklusA" count="1" />
+	</recipe>
+
+	<recipe name="pruefKaputt" count="1">
+		<ingredient name="pruefGibtEsNicht" count="1" />
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+
+	<recipe name="gunPruefPistole" count="1">
+		<ingredient name="pruefRohstein" count="1" />
+	</recipe>
+</recipes>

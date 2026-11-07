@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: die Startausruestung ist ein Erreichbarkeitsweg. -->
+<entity_classes>
+	<entity_class name="pruefSpieler">
+		<property class="ItemsOnEnterGame">
+			<property name="GameModeSurvival" value="pruefHolz=2,pruefLehm" />
+		</property>
+	</entity_class>
+</entity_classes>

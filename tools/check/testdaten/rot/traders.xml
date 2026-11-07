@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Derselbe Anachronismus auch beim Haendler: der Befund muss beide Wege nennen. -->
+<traders>
+	<trader_item_group name="pruefGruppeHandel">
+		<item name="gunPruefPistole" />
+	</trader_item_group>
+</traders>

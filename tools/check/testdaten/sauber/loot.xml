@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: Loot ist ein Erreichbarkeitsweg. Nichts hiervon steht auf der Denylist. -->
+<lootcontainers>
+	<lootgroup name="pruefGruppeTruhe">
+		<item name="pruefLehm" count="2" />
+		<item name="pruefHolz" count="3" />
+	</lootgroup>
+</lootcontainers>

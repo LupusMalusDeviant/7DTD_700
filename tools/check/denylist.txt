@@ -1,0 +1,83 @@
+# Denylist fuer mod700check anachronisms (Vertrag 04, Abschnitt 3)
+#
+# Eine Regel pro Zeile, '*' steht fuer beliebig viele Zeichen, '#' beginnt einen Kommentar.
+# Eine Zeile mit '!' am Anfang ist eine Freigabe und schlaegt jedes Verbot.
+#
+# Geprueft wird NICHT, ob ein Gegenstand existiert, sondern ob ein Spieler ihn ERREICHEN
+# kann: ueber ein Rezept, eine Loot-Gruppe, eine Haendlergruppe, eine Quest-Belohnung oder
+# die Startausruestung. Gesperrte Gegenstaende bleiben absichtlich in items.xml stehen,
+# weil Prefabs und Quests auf sie zeigen (Vertrag 03, Abschnitt 4).
+#
+# Dieser Stand ist der Anfang, nicht das Ende: die vollstaendige Liste entsteht in WP3.1
+# gegen die echten Dateien. Was hier fehlt, faellt dort auf.
+
+# --- Schusswaffen und Munition ---------------------------------------------------
+gun*
+ammo*
+magazine*Ammo*
+
+# --- Fahrzeuge -------------------------------------------------------------------
+vehicle*
+# Fahrzeugteile
+resourceVehicle*
+
+# --- Elektronik, Strom, moderne Beleuchtung --------------------------------------
+electric*
+resourceElectricParts
+light*Electric*
+# Generator, Batterie, Solar, Schalter, Sensoren: siehe die Freigaben unten (D9)
+
+# --- Moderne Nahrung und Medizin -------------------------------------------------
+foodCan*
+drinkCan*
+drinkJarCoffee
+medical*
+drugs*
+
+# --- Treibstoff, Chemie, Sprengstoff ---------------------------------------------
+resourceGasCan
+resourceOil*
+# Sprengstoff: Freigabe unten (D9)
+
+# --- Industrielle Baustoffe ------------------------------------------------------
+resourceConcreteMix
+resourceCement
+resourceSteel*
+resourceForgedSteel
+blockSteel*
+blockConcrete*
+blockRebar*
+
+# --- Moderne Werkzeuge und Geraete -----------------------------------------------
+tool*Auger
+tool*Chainsaw
+toolNailgun
+toolImpactDriver
+toolSalvage*
+
+# ================================================================================
+# Freigaben (D9): Diese Systeme werden NICHT entfernt. F-15 deutet sie in Phase 2
+# zu Runensteinen, Kraftsteinen und Runenfallen um. F-01 sperrt nur ihre modernen
+# Namen, Rezepte und Loot-Wege - die Klassen und die Logik bleiben vollstaendig.
+# Wer hier ein Verbot ohne Freigabe stehen laesst, zerstoert ein Feature der
+# naechsten Phase.
+# ================================================================================
+!*Turret*             # D9 -> Runenstein der Glut (F-15)
+!electricWire*        # D9 -> Odem-Leitung (Kraftlinien, D37)
+!electricTimer*       # D9 -> Runenschaltung
+!electricRelay*       # D9 -> Runenschaltung
+!electricSwitch*      # D9 -> Runenschaltung
+!electricTripWire*    # D9 -> Bannkreis
+!electricPressure*    # D9 -> Bannkreis
+!electricMotionSensor # D9 -> Bannzeichen
+!generator*           # D9 -> Kraftstein
+!solarCell*           # D9 -> Kraftstein
+!solarBank*           # D9 -> Kraftstein
+!carBattery*          # D9 -> Kraftstein
+!battery*             # D9 -> Kraftstein
+!bladeTrap*           # D9 -> Runenfalle (Glutzeichen)
+!*Dart*Trap*          # D9 -> Runenfalle
+!drone*               # D9 -> soll laut D9 erhalten bleiben
+!junkTurret*          # D9 -> Runenstein
+!explosive*           # D9 -> Glutladung (F-15)
+!resourceGunPowder    # D9 -> Zutat der Glutladung

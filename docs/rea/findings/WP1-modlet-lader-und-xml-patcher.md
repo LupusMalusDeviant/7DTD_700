@@ -193,8 +193,10 @@ Daran sind drei Dinge für F-12 und für das Prüfwerkzeug wichtig:
 2. **Zwischen `english` und `german` steht `Context / Alternate Text`** — eine Spalte, die
    *keine* Sprache ist. Ein Prüfwerkzeug, das „die Spalte nach english ist deutsch" annimmt,
    prüft die Kommentarspalte. Genau dieser Fehler wäre ohne diesen Blick passiert.
-3. **14 Sprachen**, `english` und `german` darunter. D7 („DE + EN Pflicht, weitere Sprachen leer
-   lassen") heißt also: zwei von 14 Spalten füllen.
+3. **13 Sprachen** von 20 Spalten, `english` und `german` darunter. D7 („DE + EN Pflicht,
+   weitere Sprachen leer lassen") heißt also: zwei füllen, **elf** leer lassen.
+   *(Hier stand zuerst „14". Das Prüfwerkzeug zählte beim ersten Lauf 11 weitere
+   Sprachspalten — die Zählung von Hand war falsch, und das Werkzeug hat sie berichtigt.)*
 
 `Localization::loadCsv` verlangt in der ersten Zelle `KEY` und danach Spaltendefinitionen, die
 *„non-empty string consisting of latin characters only"* sein müssen — die ausgelieferte Datei

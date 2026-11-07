@@ -1,0 +1,16 @@
+{
+  "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/check-all.ps1",
+  "evidence": [
+    "tools/check/check-all.ps1",
+    "tools/check/gegenproben.ps1",
+    "tools/build/smoke.ps1",
+    "dotnet build"
+  ],
+  "ignore": [
+    "*.md",
+    "docs/*",
+    ".claude/*",
+    ".relay/*",
+    "dist/*"
+  ]
+}

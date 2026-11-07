@@ -1,0 +1,3 @@
+# world-roots fuer die Pruefdaten. Entspricht in der Form der echten
+# tools/check/world-roots.txt, enthaelt aber nur die erfundene Kennung der Pruefdaten.
+pruefSchmelzEinheit   # steht fuer eine Schmelz-Einheit: kommt aus der Esse, nicht aus einem Rezept

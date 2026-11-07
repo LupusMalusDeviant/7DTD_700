@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: Haendlerware ist ein Erreichbarkeitsweg. -->
+<traders>
+	<trader_item_group name="pruefGruppeHandel">
+		<item name="pruefHaendlerware" />
+	</trader_item_group>
+</traders>

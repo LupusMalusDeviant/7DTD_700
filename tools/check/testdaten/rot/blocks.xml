@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blocks>
+	<block name="pruefFelsblock">
+		<drop event="Harvest" name="pruefRohstein" count="10" />
+	</block>
+	<block name="pruefBaum">
+		<drop event="Harvest" name="pruefHolz" count="12" />
+	</block>
+</blocks>

@@ -28,7 +28,9 @@ Jeder Text und jedes UI-Element spricht die Sprache des Settings.
   3. **Doppelte Schlüssel werden stillschweigend verworfen**, nur `Localization::addCsv` meldet
      es im Protokoll (*„Duplicate key … Skipping entry"*). Das Prüfwerkzeug muss darauf achten.
 
-  14 Sprachen insgesamt; D7 heißt also: zwei von 14 Spalten füllen.
+  **13 Sprachen** insgesamt, von 20 Spalten; D7 heißt also: zwei füllen, elf leer lassen.
+  *(Beim ersten Lauf des Prüfwerkzeugs stand hier „14" — es zählte 11 weitere Sprachspalten
+  neben `english` und `german`, und die Zählung von Hand war falsch.)*
 - **Glossar** (`docs/glossar.md`) als verbindliche Begriffsquelle (Sceatta, Sax, Spatha, Gambeson …)
 - **Namensregeln für das fiktive Mischland (D1):** Ortsnamen erfunden, aber
   frühmittelalterlich klingend (-heim, -feld, -wik, -grad, -dun, -ing); keine realen Orte

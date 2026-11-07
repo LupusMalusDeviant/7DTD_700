@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- gunPruefPistole im Loot: genau der Fall, den anachronisms finden muss. -->
+<lootcontainers>
+	<lootgroup name="pruefGruppeTruhe">
+		<item name="pruefHolz" count="3" />
+		<item name="gunPruefPistole" />
+	</lootgroup>
+</lootcontainers>

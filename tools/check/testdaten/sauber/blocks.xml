@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: die Wurzeln des Rezeptgraphen kommen aus <drop event="Harvest">. -->
+<blocks>
+	<block name="pruefFelsblock">
+		<drop event="Harvest" name="pruefRohstein" count="10" />
+	</block>
+	<block name="pruefLehmgrube">
+		<drop event="Harvest" name="pruefLehm" count="8" />
+	</block>
+	<block name="pruefBaum">
+		<drop event="Harvest" name="pruefHolz" count="12" />
+	</block>
+</blocks>
