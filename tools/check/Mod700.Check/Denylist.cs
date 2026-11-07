@@ -23,8 +23,8 @@ namespace Mod700.Check;
 /// </summary>
 internal sealed class Denylist
 {
-    private readonly List<(Regex Pattern, string Source)> _deny = new();
-    private readonly List<(Regex Pattern, string Reason)> _allow = new();
+    private readonly List<(Regex Pattern, string Source, string Text)> _deny = new();
+    private readonly List<(Regex Pattern, string Reason, string Text, string Source)> _allow = new();
 
     public int DenyRules => _deny.Count;
 
@@ -60,11 +60,15 @@ internal sealed class Denylist
                     throw new UsageException($"{path}:{i + 1}: Freigabe ohne Muster.");
                 }
 
-                list._allow.Add((Compile(pattern), reason.Length > 0 ? reason : "ohne Begruendung"));
+                list._allow.Add((
+                    Compile(pattern),
+                    reason.Length > 0 ? reason : "ohne Begruendung",
+                    pattern,
+                    $"{Path.GetFileName(path)}:{i + 1}"));
             }
             else
             {
-                list._deny.Add((Compile(rule), $"{Path.GetFileName(path)}:{i + 1}"));
+                list._deny.Add((Compile(rule), $"{Path.GetFileName(path)}:{i + 1}", rule));
             }
         }
 
@@ -84,25 +88,95 @@ internal sealed class Denylist
     {
         allowReason = null;
 
-        foreach ((Regex pattern, string reason) in _allow)
+        foreach ((Regex pattern, string reason, _, string source) in _allow)
         {
             if (pattern.IsMatch(name))
             {
+                _allowUsed.Add(source);
                 allowReason = reason;
                 return null;
             }
         }
 
-        foreach ((Regex pattern, string source) in _deny)
+        foreach ((Regex pattern, string source, _) in _deny)
         {
             if (pattern.IsMatch(name))
             {
+                _denyUsed.Add(source);
                 return source;
             }
         }
 
         return null;
     }
+
+    private readonly HashSet<string> _denyUsed = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _allowUsed = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Verbotsregeln, die in diesem Lauf auf keine einzige Kennung gepasst haben.
+    ///
+    /// <para>Das ist der Waechter gegen den Fehler, der in WP3.1 zweimal passiert ist. Erst
+    /// hiess eine Regel 'drugs*' statt 'drug*' und traf drei Drogen nur deshalb, weil der
+    /// Vergleich die Schreibung ignorierte. Dann hiess eine 'magazine*' statt
+    /// '*SkillMagazine' und traf gar nichts - und niemand haette es bemerkt, weil eine Regel
+    /// ohne Treffer sich genauso anfuehlt wie eine, die nichts zu tun hatte.</para>
+    ///
+    /// <para>Eine Regel ohne Treffer ist nicht zwingend falsch: sie kann auf etwas zeigen,
+    /// das es in dieser Spielfassung nicht gibt. Darum ist das ein Hinweis und kein Fehler -
+    /// aber ein sichtbarer.</para>
+    /// </summary>
+    /// <summary>
+    /// Trennt zwei Faelle, die beide "kein Treffer" heissen und nichts miteinander zu tun
+    /// haben.
+    ///
+    /// <para><b>leer</b>: kein einziger erreichbarer Name passt auf die Regel. Das ist der
+    /// verdaechtige Fall - so sah 'magazine*' aus, das '*SkillMagazine' heissen musste.</para>
+    ///
+    /// <para><b>verdeckt</b>: Namen passen schon, aber eine breitere Regel steht vorher in
+    /// der Datei und bekommt sie zugeschrieben. 'gunBot*' ist von 'gun*' verdeckt,
+    /// 'electricfencepost*' von 'electric*'. Das ist harmlos und oft Absicht (die engere
+    /// Regel dokumentiert, WARUM etwas fallen soll), nur eben wirkungslos.</para>
+    ///
+    /// <para>Der erste Entwurf dieses Zaehlers hat beide zusammengeworfen und 20 Regeln
+    /// gemeldet, von denen 7 nur verdeckt waren. Eine Warnung, die zu Schatten fuehrt,
+    /// verliert ihre Glaubwuerdigkeit schneller als eine, die fehlt.</para>
+    /// </summary>
+    public (List<string> Empty, List<string> Shadowed) ClassifyUnused(IEnumerable<string> names)
+    {
+        var all = names.ToList();
+        var empty = new List<string>();
+        var shadowed = new List<string>();
+
+        // Der Hinweis nennt Datei, Zeile UND das Muster. Nur Datei und Zeile zu melden
+        // verlangt, dass man die Datei aufschlaegt, um zu sehen, worum es geht - und genau
+        // das Muster ist die Information: 'magazine*' statt '*SkillMagazine' erkennt man
+        // beim Lesen, 'denylist.txt:41' nicht.
+        foreach ((Regex pattern, string source, string text) in _deny)
+        {
+            if (_denyUsed.Contains(source))
+            {
+                continue;
+            }
+
+            bool anyMatch = all.Any(n => pattern.IsMatch(n));
+            (anyMatch ? shadowed : empty).Add($"{text}  ({source})");
+        }
+
+        return (empty, shadowed);
+    }
+
+    /// <summary>
+    /// Freigaben, die in diesem Lauf auf keine einzige erreichbare Kennung gepasst haben.
+    ///
+    /// <para>Das ist der gefaehrlichere der beiden Tippfehler. Eine Verbotsregel ohne
+    /// Treffer laesst etwas durch, und das wird als Befund gemeldet. Eine Freigabe ohne
+    /// Treffer laesst etwas FALLEN - und ein Befund mehr sieht aus wie Arbeit, die getan
+    /// wurde, nicht wie ein Fehler. Darum nennt der Hinweis das Muster.</para>
+    /// </summary>
+    public IEnumerable<string> UnusedAllowRules => _allow
+        .Where(a => !_allowUsed.Contains(a.Source))
+        .Select(a => $"{a.Text}  ({a.Source})");
 
     /// <summary>
     /// Baut aus einem Wildcard-Muster einen verankerten, <b>gross-/kleinschreibungsgenauen</b>

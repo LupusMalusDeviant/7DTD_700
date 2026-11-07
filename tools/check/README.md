@@ -82,7 +82,7 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **19 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **28 Gegenproben, 0 fehlgeschlagen.**
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -100,6 +100,15 @@ Lauf vom 2026-11-07: **19 Gegenproben, 0 fehlgeschlagen.**
 | `--no-extends` | `pruefKraftsteinVariante` **fehlt** | sie erbt ihre Klasse — der Nachweis, dass die Vererbung etwas beiträgt |
 | `anachronisms` gegen `testdaten/eigenschaften` | `unaufloesbare-kennung: pruefGeisterding` | eine Kennung ohne Definition ist kein Grün |
 | `anachronisms` gegen `testdaten/eigenschaften` | `pruefModRohrAufsatz` rot, `pruefModBogenauflage` **nicht** | Mods fallen mit ihrem Träger, abgeleitet aus `installable_tags` |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefWurfglut` rot über `[sprengkoerper]` | der Prüfling trägt `explosivesSkill` **nicht** — die Klasse `ItemClassTimeBomb` allein muss reichen |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefDevKiste` rot über `[entwicklergegenstand]` | nur `CreativeMode=Dev`, kein Tag `admin`, keine Group `Special Items` — der Fall der `tier0xLoadout` |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefLadenkasse` rot über `[moderner_werkstoff]` | Klasse bewusst **nicht** in der Stromliste, damit sichtbar ist, welche Regel geurteilt hat |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefBauplanRohr` rot, `pruefBauplanBogen` **nicht** | die `Unlocks`-Ableitung gilt in beide Richtungen |
+| `anachronisms` mit `denylist-tote-regel.txt` | `verbotsregel-trifft-nichts` nennt das Muster | so sah `magazine*` statt `*SkillMagazine` aus |
+| `anachronisms` mit `denylist-tote-freigabe.txt` | `freigaberegel-trifft-nichts` nennt das Muster | der gefährlichere Tippfehler: eine Freigabe, die nicht greift, lässt etwas **fallen** |
+| `anachronisms` mit `aufschub-pruef.txt` | Exit 1, Kennung als Hinweis statt als Fehler | ein Aufschub bucht um, er verschweigt nicht |
+| derselbe Lauf mit `--ohne-aufschub` | Exit 1, Kennung wieder als Fehler | sonst wäre nicht zu sehen, dass der Aufschub nur umbucht |
+| `anachronisms` mit `aufschub-ohne-wp.txt` | Exit 2 | ein Aufschub ohne Arbeitspaket ist ein Loch mit guter Presse |
 | `--ohne-regel gibtesnicht` | Exit 2 | Benutzungsfehler, kein Befund |
 | unbekannter Befehl | Exit 2 | Benutzungsfehler |
 | fehlender Pfad | Exit 2 | Benutzungsfehler |
@@ -114,23 +123,42 @@ Die siebte Zeile ist die wichtigste: sie prüft nicht das Werkzeug, sondern **di
 |---|---|
 | `recipes` gegen Vanilla V 3.40 `Data/Config` | 633 Rezepte, **0 Sackgassen, 0 Zyklen**, 8 Wurzeln aus `world-roots.txt` |
 | `localization` gegen Vanilla `Localization.csv` | 20 Spalten, 25.930 Zeilen, **25.930 eindeutige Schlüssel** (keine Dublette) |
-| `anachronisms` gegen Vanilla | **298 verbotene Kennungen** erreichbar: 61 nach Eigenschaft, 22 über Mod-Ableitung, 215 nach Name (Stände davor: 138, dann 254) |
+| `anachronisms` gegen Vanilla | **592 verbotene Kennungen** erreichbar: 123 nach Eigenschaft, 441 nach Name, 27 über die `Unlocks`-Ableitung, 1 über die Mod-Ableitung (Stände davor: 138, 254, 298, 335, 356) |
 
-Der Sprung von 138 auf 254 ist kein neuer Inhalt im Spiel, sondern das Ergebnis von WP3.1:
-die Denylist hatte drei Defekte — zu weite Präfixe, die Bögen und Pfeile mitnahmen; die
-D9-Freigaben, die moderne Geschütztürme und Generatoren für erlaubt erklärten; und ein
-gross-/kleinschreibungsblinder Vergleich, der `drugs*` arbeitsfähig aussehen liess. Alle drei
-sind behoben. **1139 Kennungen sind überhaupt erreichbar, 852 davon hat die Liste noch nie
-angesehen.** Nachzulesen in
+Die Stände sind kein neuer Inhalt im Spiel, sondern das Bild davon, wie weit die Liste
+hingesehen hat. 1129 Kennungen sind überhaupt erreichbar; sie teilen sich restlos auf:
+
+| | Zahl |
+|---|---|
+| verboten | 592 |
+| aufgeschoben (mit Arbeitspaket) | 170 — WP7 157, WP4 10, WP5 2, WP8 1 |
+| durch Freigabe erlaubt | 270 |
+| Bauplan folgt Erlaubtem (`Unlocks`) | 24 |
+| Loot-Gruppen (keine Gegenstände) | 73 |
+| **ungeprüft** | **0** |
+
+`ungeprueft` war der ehrlichste Wert im Bericht: nicht „harmlos", sondern „niemand hat
+hingesehen". Er stand auf 844, dann 800, 763, 557, 537, 512 — und ist seit WP3.1c **0**.
+Vier Eigenschaftsregeln (`sprengkoerper`, `robotik`, `moderner_werkstoff` und
+`CreativeMode=Dev` in `entwicklergegenstand`) haben 69 davon beantwortet, die beidseitige
+`Unlocks`-Ableitung 34 Baupläne, der Rest ist in `denylist.txt` und `aufschub.txt` einzeln
+begründet. Nachzulesen in
 [WP3-bestandsaufnahme-anachronismen.md](../../docs/rea/findings/WP3-bestandsaufnahme-anachronismen.md).
 
-Die letzte Zeile ist kein Mangel, sondern das Bild **vor** der Arbeit: Vanilla *ist* voller
-Anachronismen, und WP3 hat noch nicht stattgefunden. `check-all.ps1` bleibt bis dahin rot, und
-das ist richtig — ein Prüfbefehl, der vor der Arbeit grün ist, prüft nichts.
+Dass der Lauf rot ist, ist richtig: Vanilla *ist* voller Anachronismen, und die XPath-Patches
+von WP3.2 bis WP3.5 sind noch nicht geschrieben. `check-all.ps1` bleibt bis dahin rot — ein
+Prüfbefehl, der vor der Arbeit grün ist, prüft nichts. Grün wird er erst gegen einen
+`ConfigsDump` **mit** unseren Modlets, und auch dann mit 170 Aufschüben daneben.
 
 ## Grenzen
 
 Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtigsten:
+
+- **`freigaberegeln_ohne_treffer` kann an der Quelle liegen, nicht an der Regel.** Gegen
+  Vanilla `Data/Config` (V 3.40) steht der Zähler auf 0, gegen den vorhandenen `ConfigsDump`
+  vom 2026-07-07 auf 1: dort ist `backpack*` nicht erreichbar. Eine Freigabe ohne Treffer ist
+  darum erst dann ein Tippfehler, wenn sie **in der aktuellen Quelle** keinen hat. Der
+  Hinweis nennt das Muster, damit sich das in einem Blick entscheiden lässt.
 
 - **Prefabs sieht niemand.** Gegenstände, die nur in einem POI liegen (platzierte Blöcke,
   Kisteninhalte), stehen in keiner Config-Datei. Das ist die bekannte MVP-Lücke von F-01 und
@@ -156,8 +184,12 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `Mod700.Check/Csv.cs` | CSV-Leser (Felder in Anführungszeichen, Kommas darin) |
 | `Mod700.Check/LocalizationCheck.cs` | Spalten **nach Namen**, nie nach Position |
 | `Mod700.Check/AnachronismCheck.cs` | Erreichbarkeitswege: erst Eigenschaft, dann Name |
-| `Mod700.Check/Definitions.cs` | items/blocks/item_modifiers laden, `Extends` auflösen |
-| `Mod700.Check/PropertyRules.cs` | die fünf Eigenschaftsregeln, jede mit Begründung |
+| `Mod700.Check/Definitions.cs` | items/blocks/item_modifiers laden, `Extends` auflösen (`Tags`, `Class`, `CreativeMode`) |
+| `Mod700.Check/PropertyRules.cs` | die neun Eigenschaftsregeln, jede mit Begründung und gemessener Trefferzahl |
+| `Mod700.Check/Judgement.cs` | das Urteil an einer Stelle: Freigabe, Eigenschaft, Name, Mod- und `Unlocks`-Ableitung, Aufschub |
+| `Mod700.Check/Deferrals.cs` | `aufschub.txt` lesen; jede Zeile muss ein Arbeitspaket nennen |
+| `Mod700.Check/UncheckedList.cs` | Befehl `ungeprueft`: die Sichtungsliste, aus demselben Urteil |
+| `aufschub.txt` | Kennungen, die verboten sind, aber erst in einem späteren Paket fallen |
 | `Mod700.Check/RecipeCheck.cs` | Rezeptgraph, Sackgassen, Zyklen |
 | `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |
 | `world-roots.txt` | Wurzeln, die das XML nicht ausdrückt |

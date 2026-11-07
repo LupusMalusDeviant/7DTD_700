@@ -1,0 +1,12 @@
+# Gegenprobe zum Zaehler 'freigaberegeln_ohne_treffer'.
+#
+# Die Verbotsregel trifft, die Freigabe nicht. Der Lauf muss die Freigabe als
+# 'freigaberegel-trifft-nichts' nennen und das Muster dazu.
+#
+# Warum das der gefaehrlichere der beiden Tippfehler ist: eine Verbotsregel ohne
+# Treffer laesst etwas DURCH, und das erscheint beim naechsten Lauf als Befund. Eine
+# Freigabe ohne Treffer laesst etwas FALLEN - und ein Befund mehr sieht aus wie
+# Arbeit, die getan wurde, nicht wie ein Fehler. Niemand sucht nach einer Sperre, die
+# zu viel sperrt.
+pruefLumpen                    # trifft: steht im Pruefsatz und ist erreichbar
+!pruefGibtEsGarantiertNicht    # trifft nichts - muss als Hinweis erscheinen

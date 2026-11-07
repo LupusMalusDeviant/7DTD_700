@@ -1,0 +1,62 @@
+# Aufgeschobene Anachronismen fuer mod700check anachronisms
+#
+# Hier stehen Kennungen, die verboten SIND, aber erst in einem spaeteren Arbeitspaket
+# fallen - weil dort das System gebaut wird, das sie ersetzt.
+#
+# Ein Aufschub ist kein Bestanden. Das Werkzeug bucht diese Kennungen aus den Fehlern in
+# die Hinweise um und zaehlt sie unter 'aufgeschoben'. Ein Lauf kann damit "0 rot,
+# 133 aufgeschoben" melden: erreichbar fuer das laufende Paket, und niemand kann es fuer
+# fertig halten, weil die Zahl daneben steht.
+#
+# JEDE ZEILE MUSS EIN ARBEITSPAKET NENNEN. Ohne WP-Verweis bricht das Werkzeug mit Exit 2
+# ab. Ein Aufschub ohne Adresse ist kein Aufschub, sondern ein Loch mit guter Presse:
+# niemand weiss, wer es schliesst, und beim naechsten Lauf sieht es aus wie eine
+# getroffene Entscheidung.
+
+# --- Das Vanilla-Fertigkeitsbuch-System -----------------------------------------
+# Entscheidung des Nutzers vom 2026-11-07: F-01 laesst die Buecher unberuehrt, F-21
+# raeumt sie in WP7 zusammen mit dem Aufbau der sechs Baeume (D47) auf. Gewaehlt war
+# damit ausdruecklich der Weg, bei dem anachronisms vor WP7 nicht gruen werden kann -
+# darum dieser Eintrag, der das sichtbar haelt statt es zu verstecken.
+#
+# 19 Serien a 7 Buecher. Acht davon tragen Perks fuer Schusswaffen und Robotik
+# (bookPistolPete, bookShotgunMessiah, bookSniper, bookAutoWeapons, bookEnforcer,
+# bookTechJunkie, bookRangers, bookUrbanCombat), die uebrigen Bergbau, Jagd, Nahkampf
+# und Pluendern. Sie fallen gemeinsam, weil sie ein System sind und nicht 133 einzelne
+# Gegenstaende.
+book*                 # WP7: F-21 ersetzt das Vanilla-Buchsystem durch sechs Baeume (D47)
+*SkillMagazine        # WP7: dieselbe Reihe - die Fertigkeitshefte gehoeren zum Buchsystem
+resourcePaper         # WP7: Papier traegt Vanillas Buecher und Bauplaene; ohne das Buchsystem hat es keinen Zweck mehr
+
+# --- Vanillas Waehrung ----------------------------------------------------------
+# Papiergeld und Casino-Marke sind Anachronismen, aber sie sind auch das einzige
+# Zahlungsmittel, das Vanilla kennt. Fallen sie vor dem Ersatz, hoert der Handel auf -
+# und F-10 (Haendler) steht erst in Phase 2. F-05 setzt in WP4 etwas an die Stelle.
+oldCash               # WP4: F-05 ersetzt das Zahlungsmittel
+casinoCoin            # WP4: dieselbe Reihe
+
+# --- Die Faserkette -------------------------------------------------------------
+# Yuccafaser und Baumwolle sind beides Pflanzen, die es hier nicht gab, und beides
+# der Anfang jeder Stoffkette in Vanilla. Fallen sie vor Flachs und Nessel, laesst
+# sich am ersten Tag kein Verband und kein Beutel binden.
+resourceYuccaFibers   # WP4: F-05 stellt die Faserkette auf Flachs und Nessel um
+resourceCropCottonPlant  # WP4: dieselbe Reihe
+
+# --- Die Schrottwirtschaft ------------------------------------------------------
+# Schrotteisen, Schrottmessing und Schrottblei sind das Rueckgrat von Vanillas
+# Rohstoffkreislauf. F-05 ersetzt den Kreislauf in WP4 durch Erz, Rennfeuer und
+# Altmetall aus Gehoeften.
+resourceScrapIron*    # WP4: F-05 baut den Rohstoffkreislauf um
+resourceScrapBrass*   # WP4: dieselbe Reihe
+resourceScrapLead*    # WP4: dieselbe Reihe
+resourceLeadBundle    # WP4: dieselbe Reihe
+
+# --- Qualitaet und Verschleiss --------------------------------------------------
+# Die beiden "Kits" sind keine Gegenstaende, sondern Vanillas Reparatur- und
+# Ruestbau-Mechanik in Gegenstandsform. WP5 baut Qualitaet und Verschleiss neu; bis
+# dahin waere ein Spiel ohne Reparatur die haertere Abweichung.
+resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu
+resourceArmorCraftingKit  # WP5: dieselbe Reihe
+
+# --- Vanillas Lore --------------------------------------------------------------
+noteDuke01            # WP8: F-12 ersetzt den Starttext; er liegt in der Startausruestung und ist das Erste, was ein Spieler liest

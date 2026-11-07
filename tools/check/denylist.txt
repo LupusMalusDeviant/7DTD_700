@@ -21,17 +21,22 @@
 # --- Schusswaffen und Munition ---------------------------------------------------
 gun*
 ammo*
-magazine*Ammo*
+# 'magazine*Ammo*' stand hier und traf nichts - es gibt keine so benannte Kennung.
 
 # --- Fahrzeuge -------------------------------------------------------------------
 vehicle*
-# Fahrzeugteile
-resourceVehicle*
+modVehicle*           # Fahrzeug-Aufsaetze (Scheinwerfer, Tanks, Reifen)
+# 'resourceVehicle*' stand hier und traf nichts; die Fahrzeugteile heissen
+# vehicleWheels, resourceHeadlight und resourceRadiator.
+resourceHeadlight
+resourceRadiator
 
 # --- Elektronik, Strom, moderne Beleuchtung --------------------------------------
 electric*
 resourceElectricParts
-light*Electric*
+# 'light*Electric*' stand hier und traf nichts; die elektrischen Lampen heissen
+# ceilingLight01_player und industrialLight01_player und fallen ueber die
+# Eigenschaftsregel 'strom' (Block-Klasse PoweredLight).
 # Generator, Batterie, Solar, Schalter, Sensoren: siehe die Freigaben unten (D9)
 
 # --- Moderne Nahrung und Medizin -------------------------------------------------
@@ -44,29 +49,67 @@ drug*                 # war 'drugs*' und sah aus, als arbeite es: case-insensiti
                       # grosses S an fuenfter Stelle haben. Zwoelf weitere Drogen entkamen.
 
 # --- Treibstoff, Chemie, Sprengstoff ---------------------------------------------
-resourceGasCan
+# 'resourceGasCan' stand hier und traf nichts: der Benzinkanister heisst ammoGasCan
+# (er ist die Munition des Flammenwerfers) und faellt ueber 'ammo*'.
 resourceOil*
+resourceScrapPolymers   # Kunststoff
+resourceDuctTape        # Klebeband
+resourceAcid            # Saeure als Industriechemikalie
+resourcePotassiumNitratePowder*  # Salpeter, Schwarzpulver-Zutat (D9: Klasse bleibt)
+resourceBuckshot        # Schrot
+resourceBulletCasing
+resourceBulletTip
+resourceRocketCasing
+resourceRocketTip
+resourceScopeLens       # geschliffene Linse
+resourceMechanicalParts # Maschinenteile
+resourceSpring          # Stahlfeder industrieller Art
+resourceTestosteroneExtract
+resourceCropCoffeeBeans # Kaffee kam erst viel spaeter nach Europa
+resourceLegendaryParts  # Endgame-Bauteil von Vanilla, ersetzt F-02
 # Sprengstoff: Freigabe unten (D9)
 
 # --- Industrielle Baustoffe ------------------------------------------------------
 resourceConcreteMix
 resourceCement
-resourceSteel*
+# 'resourceSteel*' stand hier und traf nichts - Schmiedestahl heisst resourceForgedSteel
+# und bleibt nach D55. Industriestahl als Rohstoff gibt es in Vanilla nicht.
+concreteShapes*       # die Betonform-Sammelbloecke
+steelShapes*          # dito fuer Stahl
 # resourceForgedSteel  -- gestrichen mit D55: Stahl ist laut D23 eine Materialstufe
 #                         (Knochen < Bronze < Schmiedeeisen < Stahl < Damast) und laut
 #                         GDD die T3-Stufe "Stahl (Damaszierung)". Schmiedestahl ist
 #                         kein industrielles Stahlprodukt. 'resourceSteel*' trifft ihn
 #                         nicht, die Regel hier war ein zweites, zu weites Verbot.
-blockSteel*
-blockConcrete*
-blockRebar*
+# 'blockSteel*', 'blockConcrete*' und 'blockRebar*' standen hier und trafen nichts:
+# Vanilla benennt die Bloecke nicht so. Die echten stehen zwei Zeilen hoeher als
+# concreteShapes* und steelShapes*; Bewehrungsstahl ist unter den erreichbaren
+# Kennungen ueberhaupt nicht vertreten.
+
+# --- Das Vanilla-Fertigkeitsbuch-System ------------------------------------------
+# 133 Buecher in 19 Serien. Acht Serien tragen Perks fuer Schusswaffen und Robotik,
+# die uebrigen Bergbau, Jagd, Nahkampf und Pluendern - und das ganze System wird von
+# F-21 (sechs Baeume, D47) ersetzt.
+#
+# Dieses Verbot steht hier, damit die Buecher nicht stillschweigend als "in Ordnung"
+# durchlaufen. Sie fallen aber NICHT in WP3: aufschub.txt bucht sie nach WP7 um, so
+# wie der Nutzer am 2026-11-07 entschieden hat. Die Zahl bleibt dadurch im Bericht
+# sichtbar, statt zu verschwinden.
+book*
+*SkillMagazine       # die Fertigkeitshefte derselben Reihe. Stand hier zuerst als
+                     # 'magazine*' und traf damit NICHTS - Vanilla nennt sie
+                     # electricianSkillMagazine, bowsSkillMagazine und so weiter.
+                     # Aufgefallen ist es durch den neuen Zaehler fuer Verbotsregeln
+                     # ohne Treffer, nicht durch Nachdenken.
 
 # --- Moderne Werkzeuge und Geraete -----------------------------------------------
-tool*Auger
-tool*Chainsaw
-toolNailgun
-toolImpactDriver
-toolSalvage*
+# Alle fuenf Regeln hiessen zuerst 'tool*Auger', 'toolNailgun' und so weiter und trafen
+# damit NICHTS: Vanilla stellt die Werkzeuge unter 'meleeTool...' und haengt die Stufe
+# in die Mitte. Aufgefallen durch den Zaehler 'verbotsregeln_ohne_treffer'.
+meleeTool*Auger*
+meleeTool*Chainsaw*
+meleeTool*Nailgun*
+meleeTool*ImpactDriver*
 
 # --- Strom, Geschuetztuerme, Fallen, Drohne (D9) ---------------------------------
 # WICHTIG, und in WP3.1 berichtigt: diese Kennungen standen hier zuerst als
@@ -112,6 +155,190 @@ explosive*
 resourceGunPowder*
 
 # ================================================================================
+# WP3.1c (2026-11-07): die Sichtung der 512 ungepruefen Kennungen
+# ================================================================================
+# Bis hierher stand in dieser Datei, was ins Auge faellt: Schusswaffen, Strom,
+# Fahrzeuge, Beton. Danach blieben 512 erreichbare Kennungen uebrig, zu denen weder
+# eine Eigenschaft noch ein Name etwas sagte. 'ungeprueft' war die ehrlichste Zahl im
+# Bericht und die unangenehmste: nicht "harmlos", sondern "niemand hat hingesehen".
+#
+# Vier Eigenschaftsregeln haben davon 69 beantwortet (sprengkoerper, robotik,
+# moderner_werkstoff, und CreativeMode=Dev in entwicklergegenstand), die beidseitige
+# Unlocks-Ableitung weitere 34 Bauplaene. Der Rest steht hier und unten bei den
+# Freigaben - jede Kennung mit einem Urteil, jedes Urteil mit einem Grund.
+#
+# Wo F-01 sperrt und ein spaeteres Paket etwas an die Stelle setzt, steht die Kennung
+# ZUSAETZLICH in aufschub.txt: dann meldet der Lauf sie als Hinweis mit Arbeitspaket
+# statt als Fehler. Wo sie nur hier steht, faellt sie in Phase 1 und kommt nicht
+# zurueck.
+
+# --- Entwickler-Testgegenstaende ------------------------------------------------
+# Die zehn TEST_ITEM_* tragen Group 'Decor/Miscellaneous' und Tags 'ammo' - weder den
+# Tag 'admin' noch CreativeMode 'Dev'. Sie brauchen eine Namensregel; genau das haelt
+# Vertrag 04 §3a als Grenze der Eigenschaftsregel fest.
+TEST_ITEM_*
+
+# --- Vanillas 16 Ruestungsgarnituren --------------------------------------------
+# Biker, Commando, Nerd, Athletic, Santa: moderne Kostueme. Die uebrigen Namen klingen
+# zeitlos (Farmer, Nomad, Raider, Ranger, Rogue, Scavenger, Preacher, Assassin, Miner,
+# Lumberjack), tragen in Vanilla aber Warnweste, Schutzhelm und Kevlar.
+#
+# Sie fallen ALLE, und das ist Absicht und nicht Haerte: F-01 sagt ausdruecklich
+# "Nicht im Umfang: Ersatzinhalte (die kommen mit F-02 bis F-05)". Bis WP5 (F-03) hat
+# der Spieler darum nur die Primitiv-Garnitur - das ist die Luecke, die Phase 1
+# einplant. Vanillas Tag 'biomeChallenge' haette alle 62 Teile in einer Regel
+# getroffen und keines der vier Primitiv-Teile; er bedeutet aber "zaehlt fuer den
+# Biom-Fortschritt", nicht "modern". Eine Regel, die nur zufaellig richtig liegt,
+# gehoert nicht zu den Eigenschaftsregeln, darum stehen hier 16 Namen.
+armorAssassin*
+armorAthletic*
+armorBiker*
+armorCommando*
+armorEnforcer*
+armorFarmer*
+armorLumberjack*
+armorMiner*
+armorNerd*
+armorNomad*
+armorPreacher*
+armorRaider*
+armorRanger*
+armorRogue*
+armorSantaHat*
+armorScavenger*
+
+# --- Nahkampf und Werkzeug: die modernen Geraete --------------------------------
+# Stein-, Knochen- und Eisenstufe bleiben (Freigaben unten), ebenso die Stahlstufe
+# nach D55. Hier fallen die Gegenstaende, die es ohne Industrie nicht gibt.
+meleeToolFlashlight*            # Taschenlampe
+meleeToolPaintTool              # Sprühpistole
+meleeToolSalvage*               # Schraubenschluessel und Ratsche
+meleeToolAxeT1IronFireaxe       # Feuerwehraxt; die Eisenaxt baut F-02 in WP5 neu
+meleeWpnClubT1BaseballBat       # Baseballschlaeger
+meleeWpnBladeT1CandyKnife       # Zuckerstangen-Messer, Vanilla-Eventgegenstand
+meleeWpnClubT1CandyClub         # dasselbe als Knueppel
+meleeWpnBladeT3Machete*         # Machete und ihre Teile
+
+# --- Aufsaetze, die kein 'modifier_tags' verraet --------------------------------
+# Die Regel 'moderner_aufsatz' urteilt ueber modifier_tags. Diese neun tragen keines,
+# das etwas Modernes benennt, sind es aber. Ihre Bauplaene fallen von selbst mit:
+# die Unlocks-Ableitung folgt dem Aufsatz, kein Name noetig.
+modArmorHelmetLight             # elektrische Helmlampe
+modArmorCigar                   # Zigarre; Tabak kommt aus der Neuen Welt
+modGunBipod                     # Zweibein fuers Gewehr
+modGunForegrip                  # Vordergriff fuers Gewehr
+modGunBowPolymerString          # Polymersehne
+modGunMeleeRadRemover           # "Rad Remover" - Strahlung
+modMeleeBunkerBuster            # Bunkerbrecher
+modMeleeClubBarbedWire          # Stacheldraht, patentiert 1874
+modMeleeFiremansAxeMod          # Feuerwehraxt-Aufsatz
+
+# --- Nahrung: die Neue Welt und die Imbissbude ----------------------------------
+# Zwei Gruende, getrennt gehalten. Erstens Pflanzen, die es in Europa um 700 nicht
+# gab: Mais, Kartoffel, Kuerbis, Blaubeere, Yucca (alle aus Amerika). Zweitens
+# Gerichte, die eine Kueche von heute voraussetzen. Fleisch, Ei, Eintopf, Pilze und
+# Honig bleiben - siehe Freigaben.
+food*Smoothie*
+food*Corn*                      # Mais: Mehl, Brot, Kolben, Kolbenpflanze
+food*Potato*                    # Kartoffel
+food*Pumpkin*                   # Kuerbis
+food*Blueberr*                  # Blaubeere
+food*Sham*                      # "Sham" - Vanillas Dosenfleisch
+foodCropYuccaFruit              # Yucca
+foodCropMushroomsRadiated       # verstrahlt
+foodChickenNuggets
+foodChickenWings
+foodRoadrunnerChickenJerky
+foodChiliDog
+foodFishTacos
+foodSpaghetti
+foodTunaFishGravyToast
+foodShepardsPie
+foodGumboStew
+foodHoboStew
+foodBaconAndEggs
+foodHoneyBrisket
+
+# --- Getraenke ------------------------------------------------------------------
+drinkJarBlackStrapCoffee        # Kaffee kommt erst im 15. Jahrhundert nach Arabien
+drinkJarGrandpas*               # Vanillas Schnapsreihe; Destillation ist spaeter
+drinkJarPureMineralWater        # Mineralwasser aus der Flasche
+drinkJarYuccaJuice              # Yucca
+drinkYuccaJuiceSmoothie
+
+# --- Rohstoffe ------------------------------------------------------------------
+resourceArmorCraftingKit        # "Kit"; Qualitaet und Verschleiss baut WP5 neu
+resourceRepairKit               # dito
+resourceMetalPipe               # gezogenes Rohr
+resourcePaint                   # Lackfarbe
+resourcePaper                   # Papier kommt erst um 1100 nach Europa
+resourceCropChrysanthemumPlant  # Chrysantheme, Ostasien
+resourceCropCottonPlant         # Baumwolle wuchs nicht in Nordeuropa
+resourceYuccaFibers             # Yucca, Neue Welt
+resourceScrapBrass*             # Schrottwirtschaft; F-05 ersetzt sie in WP4
+resourceScrapIron*
+resourceScrapLead*
+resourceLeadBundle
+smallEngine                     # Kleinmotor
+
+# --- Behaelter und Werkstaetten -------------------------------------------------
+cnt*Safe*                       # Tresor, Wandsafe, Waffenschrank
+cntSteelWallCabinetSecure       # Stahlschrank
+cntSteelWritableCrate           # Stahlkiste; Eisen und Holz bleiben
+cntMailBox*                     # Briefkasten
+cntFileCabinet*                 # Aktenschrank
+cntWaterCooler*                 # Wasserspender
+cntDewCollector                 # Tauwassersammler aus Plane und Filter
+toolDew*                        # dessen drei Bauteile
+toolBeaker                      # Becherglas; Chemie gehoert nicht in Phase 1
+toolChickenCoopLamp             # Waermelampe; Stall und Nest bleiben
+cementMixer                     # Betonmischer
+chemistryStation                # Chemiestation
+combineStation                  # "Combine Station"
+
+# --- Pflanzungen: dieselben Pflanzen wie oben, als Block ------------------------
+plantedCoffee*
+plantedCorn*
+plantedGraceCorn*
+plantedPotato*
+plantedPumpkin*
+plantedBlueberry*
+plantedYucca*
+plantedCotton*
+plantedChrysanthemum*
+
+# --- Bloecke und Einrichtung ----------------------------------------------------
+# Mobiliar und Bauteile, die eine Fabrik voraussetzen. Vanillas 'challenge_*'-Marken
+# haben die Elektrik, die Kunststoffe und die Sanitaerkeramik schon gefunden (Regel
+# 'moderner_werkstoff'); hier steht, was keine solche Marke traegt.
+terrAsphalt
+couch*                          # Sofa, modern und "ugly"
+sectional*                      # Sofalandschaft
+barStoolVariantHelper           # Barhocker
+appliancesVariantHelper         # Haushaltsgeraete
+calendarVariantHelper           # Wandkalender
+decoPumpkinJackOLantern         # Kuerbislaterne
+sandbagBlockVariantHelper       # Sandsack
+barbedFence                     # Stacheldrahtzaun
+burningBarrelPlayer             # brennendes Oelfass
+metalFenceRailingTrellisSheet*  # Maschendraht und Gitterblech
+metalFurniture*                 # Metallmoebel
+metalTrussingIBeam*             # Doppel-T-Traeger
+trapGlassBusiness*              # Schaufensterglas
+glassBulletproof*               # Panzerglas
+rollUpDoor*                     # Rolltor
+shuttersSteel*                  # Stahlrollladen; Eisen und Holz bleiben
+vaultDoor*                      # Tresortuer
+vaultHatch*
+ironGarageDoor*                 # Garagentor
+
+# --- Vanillas Geld und Vanillas Lore --------------------------------------------
+# Beides faellt, beides steht in aufschub.txt: ohne Ersatz gibt es keinen Handel.
+oldCash                         # Papiergeld
+casinoCoin                      # Casino-Marke, Vanillas Waehrung
+noteDuke01                      # Dukes Brief, liegt in der Startausruestung
+
+# ================================================================================
 # Freigaben (D54, D56): Diese Gegenstaende sind kein Anachronismus. Sie tragen
 # Inhalt, den das GDD ausdruecklich vorsieht, und heissen in Vanilla nur
 # unglueklich. Sie bleiben erreichbar und werden spaeter umgedeutet - ueber Namen,
@@ -141,3 +368,214 @@ resourceGunPowder*
 # medicalBloodBag (Blutkonserve), medicalPlasterCast (Gipsverband - Gipsschienen sind
 # erst ab dem 10. Jahrhundert belegt, die Schiene oben deckt dieselbe Funktion ab),
 # medicalSkillMagazine (Fertigkeitsheft, faellt mit F-21 in WP7) und die drei Drogen.
+
+# ================================================================================
+# Freigaben aus WP3.1c: was die Sichtung durchgewinkt hat
+# ================================================================================
+# Eine Freigabe hier heisst nicht "spaeter mal pruefen". Sie heisst: angesehen, und es
+# ist kein Anachronismus. Was bei der Sichtung als Anachronismus erkannt wurde, steht
+# oben bei den Verboten - nicht hier.
+#
+# Eine Freigabe ohne Treffer ist der gefaehrlichere Tippfehler: eine Verbotsregel, die
+# nicht greift, laesst etwas durch und wird als Befund gemeldet; eine Freigabe, die
+# nicht greift, laesst etwas FALLEN, und ein Befund mehr sieht aus wie Arbeit. Darum
+# zaehlt der Bericht 'freigaberegeln_ohne_treffer' und nennt jedes Muster.
+
+# --- Ruestung und Kleidung ------------------------------------------------------
+!armorPrimitive*           # Primitiv-Garnitur: genau das, was 700 traegt
+!armorParts                # Ruestungsteile, abstrakter Werkstoff
+!clothing*                 # Kleidungsstufen T1-T3, ohne eigenen Inhalt
+!backpack*                 # Tragebuendel; Rucksaecke sind aelter als 700
+!biomeWeatherItem*         # unsichtbare Fortschrittsmarke, kein Gegenstand
+
+# --- Quest-Marken und Schatzkarten ----------------------------------------------
+!quest_tier*complete       # keine Gegenstandskennung, sondern eine Quest-Marke
+!qt_*                      # Schatzkarte; der moderne Vorname ist Sache von F-12 (WP8)
+
+# --- Aufsaetze, die nur abstrakt wirken -----------------------------------------
+# Griff, Gewicht, Schneide, Polsterung, Tasche: alles, was ein Handwerker um 700 an
+# ein Werkzeug baut. WP5 (F-02/F-03) gibt ihnen neue Namen und Werte; gesperrt werden
+# muss keiner. Ihre Bauplaene folgen ueber die Unlocks-Ableitung, ohne eigene Zeile.
+!modDye*                   # Faerben mit Waid, Krapp, Reseda
+!modArmorAgility
+!modArmorFortitude
+!modArmorIntellect
+!modArmorPerception
+!modArmorStrength
+!modArmorTreasureHunter
+!modArmorBandolier         # Gurt; fuer Pfeile statt Patronen (D54)
+!modArmorCustomizedFittings
+!modArmorImprovedFittings
+!modArmorMuffledConnectors
+!modArmorAdvancedMuffledConnectors
+!modArmorStoragePocket
+!modArmorDoubleStoragePocket
+!modArmorTripleStoragePocket
+!modArmorQuadStoragePocket
+!modArmorImpactBracing
+!modArmorInsulatedLiner*   # Futter aus Wolle und Pelz
+!modArmorPlating*          # Plattenbesatz - naeher an 700 als an heute
+!modArmorStealthBoots
+!modGunBowArrowRest        # Pfeilauflage (D54)
+!modGunCrippleEm
+!modGunMeleeTheHunter
+!modMeleeClubBurningShaft
+!modMeleeClubMetalChain
+!modMeleeClubMetalSpikes
+!modMeleeDiamondTip
+!modMeleeErgonomicGrip
+!modMeleeFortifyingGrip
+!modMeleeGraveDigger
+!modMeleeIronBreaker
+!modMeleeSerratedBlade
+!modMeleeStructuralBrace
+!modMeleeTemperedBlade
+!modMeleeWeightedHead
+!modMeleeWoodSplitter
+
+# --- Nahkampf und Werkzeug: Stein, Knochen, Eisen, Stahl ------------------------
+# Die Stahlstufe bleibt nach D55: geschmiedeter Stahl gehoert ins Fruehmittelalter,
+# nur das industrielle Stahlerzeugnis nicht. Welche Stufe wie heisst und was sie
+# kostet, ordnet F-02 in WP5.
+!meleeToolTorch
+!meleeToolAllSteelParts
+!meleeToolRepairT0*        # Steinaxt und Tazas Steinaxt
+!meleeToolRepairT1ClawHammer
+!meleeToolShovelT0*
+!meleeToolShovelT1*
+!meleeToolShovelT2*
+!meleeToolPickT1*
+!meleeToolPickT2*
+!meleeToolAxeT2*
+!meleeWpnBladeT0BoneKnife
+!meleeWpnBladeT1HuntingKnife
+!meleeWpnClubT0WoodenClub
+!meleeWpnClubT3SteelClub*
+!meleeWpnKnucklesT0LeatherKnuckles
+!meleeWpnKnucklesT1IronKnuckles
+!meleeWpnKnucklesT3SteelKnuckles*
+!meleeWpnSledgeT0*
+!meleeWpnSledgeT1*
+!meleeWpnSledgeT3*
+!meleeWpnSpearT0*
+!meleeWpnSpearT1*
+!meleeWpnSpearT3*
+
+# --- Nahrung und Getraenke ------------------------------------------------------
+!foodRawMeat
+!foodRawMeatBundle
+!foodBoiledMeat
+!foodCharredMeat
+!foodGrilledMeat
+!foodMeatStew
+!foodVegetableStew
+!foodAshChickenStew        # Eintopf aus der Asche
+!foodEgg
+!foodEggBoiled
+!foodCropMushrooms         # die verstrahlten fallen oben
+!foodHoney
+!foodRottingFlesh          # Aas; unangenehm, aber nicht modern
+!drinkJarBeer              # Bier ist aelter als 700
+!drinkJarBoiledWater
+!drinkJarEmpty             # Gefaess; dass es Glas ist, raeumt F-05 in WP4
+!drinkJarGoldenRodTea
+!drinkJarHoneyTea
+!drinkJarRedTea
+!drinkJarRiverWater
+
+# --- Rohstoffe ------------------------------------------------------------------
+!resourceAnimalFat
+!resourceArrowHead*        # Eisen- und Stahlspitze; Pfeile bleiben nach D54
+!resourceBeeswax
+!resourceBone
+!resourceBrokenGlass       # merowingisches Glas ist belegt
+!resourceChickenFeed
+!resourceClayLump
+!resourceCloth
+!resourceCoal*
+!resourceCobblestones
+!resourceCropAloeLeaf      # Aloe ist eine Pflanze der Alten Welt
+!resourceCropGoldenrodPlant
+!resourceCropHopsFlower    # Hopfen ist ab dem 8. Jahrhundert belegt
+!resourceCrushedSand
+!resourceFeather
+!resourceForgedIron
+!resourceForgedSteel       # D55
+!resourceGlue              # Leim aus Haut und Knochen
+!resourceGoldNugget
+!resourceLeather
+!resourceLockPick*         # Dietriche sind roemisch
+!resourceNail
+!resourceRawDiamond
+!resourceRockSmall*
+!resourceSewingKit         # Nadel und Faden
+!resourceSilverNugget
+!resourceWood
+!resourceWoodBundle
+
+# --- Werkstaetten, Pflanzungen, Behaelter ---------------------------------------
+!toolAnvil                 # Amboss
+!toolBellows               # Blasebalg
+!toolForgeCrucible         # Schmelztiegel
+!toolCookingPot
+!toolCookingGrill
+!toolApiary*               # Bienenstock und sein Zubehoer
+!toolChickenCoopNestingBox
+!toolChickenCoopRun
+!cntApiary
+!cntChickenCoop
+!cntIronWritableCrate
+!cntWoodWritableCrate
+!cntWoodFurniture*
+!plantedAloe*
+!plantedGoldenrod*
+!plantedHop*
+!plantedMushroom*
+!plantedtree*
+!farmPlotBlockVariantHelper
+!forge
+!campfire
+!workbench                 # Werkbank; WP4 gibt ihr ein anderes Gesicht
+
+# --- Bloecke, Tueren, Einrichtung -----------------------------------------------
+!terrDirt
+!terrStone
+!terrGravel
+!terrTopSoil
+!terrDestroyedStone
+!woodHatch
+!woodLogPillar100
+!woodShapes:VariantHelper
+!woodSignBlockVariantHelper
+!frameShapes:VariantHelper
+!cobblestoneShapes:VariantHelper
+!oldWoodDoor
+!oldWoodDoorDouble
+!oldChair1*
+!cellarDoorDoubleIron
+!cellarDoorDoubleWood
+!ironBars*
+!ironDoor*                 # deckt auch ironDoorDouble*
+!ironHatch*
+!shuttersIron*
+!shuttersWood*
+!ladderWood
+!ladderMetal
+!ladderSteel
+!looseBoards*              # lose Bretter als Falle
+!trapSpikes*               # Holz- und Eisenspiesse
+!metalReinforcedWoodDrawBridge  # Zugbruecke
+!glassBlockVariantHelper
+!candle
+!candleTableLightPlayer
+!lanternOldBlockVariantHelper
+!bedrollBlockVariantHelper
+!bucketEmpty
+!cobweb
+!curtainVariantHelper
+!pictureVariantHelper
+!plantPottedVariantHelper
+!flagThick44BlockVariantHelper
+!hayBaleSquare
+!treeAzalea
+!keystoneBlock             # Landclaim; Spielmechanik, kein Gegenstand

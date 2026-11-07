@@ -262,6 +262,45 @@ Zahl war ein Fehler in meinem Messskript — 533 statt 28 — und wäre beinahe 
 gewandert. Seitdem gilt: Zahlen in Dokumenten kommen aus dem Werkzeug, nicht aus einem
 Hilfsskript ohne Gegenproben.
 
+- **WP3.1c** `[Claude-prüfbar]` ~~Die 512 ungeprüften Kennungen sichten: jede bekommt ein
+  Urteil (verboten, aufgeschoben mit Arbeitspaket, oder durch Freigabe erlaubt), jedes Urteil
+  einen nachlesbaren Grund. Schätzung: M (3 Tage).~~ **Erledigt 2026-11-07.**
+
+#### Stand 2026-11-07: WP3.1c erledigt — `ungeprueft` ist 0
+
+| | vorher | nachher |
+|---|---|---|
+| ungeprüft | 512 | **0** |
+| verbotene Kennungen | 356 | **592** |
+| davon nach Eigenschaft | 85 | 123 |
+| davon nach Name | 251 | 441 |
+| davon über `Unlocks`-Ableitung | 20 | 27 |
+| aufgeschoben (mit WP) | 157 | **170** |
+| durch Freigabe erlaubt | 31 | **270** |
+| Eigenschaftsregeln | 6 | **9** |
+| Gegenproben | 19 | **28** |
+
+Die 1129 erreichbaren Kennungen teilen sich jetzt restlos auf (592 + 170 + 270 + 24 Baupläne
++ 73 Loot-Gruppen = 1129). Vier neue Mittel haben rund 68 davon ohne Namensregel beantwortet:
+`sprengkoerper` (`Class = ItemClassTimeBomb`), `robotik`, `moderner_werkstoff`
+(`Tags` enthält `challenge_*`), `CreativeMode = Dev` — und die `Unlocks`-Ableitung gilt jetzt
+in beide Richtungen, was 34 Baupläne ohne eigene Zeile erledigt. Der Rest sind über
+vierhundert inhaltliche Urteile in `denylist.txt` und `aufschub.txt`.
+
+**Zwei Dinge brauchen den Nutzer, bevor WP3.2 XPath schreibt:**
+
+1. **Vertrag 04 §3b** ist geschrieben, gemessen und **nicht abgenommen**. Er geht über das
+   am 2026-11-07 abgenommene §3a hinaus (vier Regeln, beidseitige Ableitung, Aufschub als
+   verbindliche Betriebsart, `freigaberegeln_ohne_treffer`).
+2. **Drei Sichtungsgruppen** sind inhaltliche Entscheidungen und keine Messungen: die 16
+   Rüstungsgarnituren fallen alle (nur `armorPrimitive*` bleibt, bis WP5 F-03 liefert); die
+   Pflanzen der Neuen Welt fallen (Mais, Kartoffel, Kürbis, Blaubeere, Yucca, Kaffee,
+   Chrysantheme, Baumwolle — Yuccafaser und Baumwolle nach WP4 aufgeschoben, weil sie die
+   Faserkette tragen); Vanillas Währung ist nach WP4 aufgeschoben statt gesperrt, sonst endet
+   der Handel vor dem Ersatz. Nachzulesen in
+   [WP3-bestandsaufnahme-anachronismen.md](../rea/findings/WP3-bestandsaufnahme-anachronismen.md)
+   Abschnitt 5a.
+
 ---
 
 ### WP4: F-05 + F-04 — Ressourcen, Ketten, Werkstätten

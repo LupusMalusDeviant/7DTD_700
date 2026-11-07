@@ -1,0 +1,6 @@
+# Gegenprobe: ein Aufschub OHNE Arbeitspaket muss abgelehnt werden (Exit 2).
+#
+# Ohne Adresse ist ein Aufschub kein Aufschub, sondern ein Loch mit guter Presse:
+# niemand weiss, wer es schliesst, und beim naechsten Lauf sieht es aus wie eine
+# getroffene Entscheidung. Das Werkzeug darf das nicht annehmen.
+pruefFeuerrohr        # spaeter mal, irgendwann

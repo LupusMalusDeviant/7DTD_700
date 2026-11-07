@@ -30,4 +30,13 @@
 	<lootgroup name="pruefGruppeRaetsel">
 		<item name="pruefGeisterding" />
 	</lootgroup>
+
+	<lootgroup name="pruefGruppeWP3c">
+		<item name="pruefWurfglut" />
+		<item name="pruefSchlagstock" />
+		<item name="pruefDevKiste" />
+		<item name="pruefLadenkasse" />
+		<item name="pruefBauplanRohr" />
+		<item name="pruefBauplanBogen" />
+	</lootgroup>
 </lootcontainers>

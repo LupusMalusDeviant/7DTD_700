@@ -31,4 +31,12 @@
 		<property name="Group" value="Pruef/Technik" />
 	</block>
 
+	<!-- Faellt: Tags nennt einen modernen Werkstoff (Regel moderner_werkstoff). Die
+	     Klasse steht absichtlich NICHT in der Stromliste - sonst waere nicht zu sehen,
+	     welche der beiden Regeln geurteilt hat. -->
+	<block name="pruefLadenkasse">
+		<property name="Class" value="CompositeTileEntity" />
+		<property name="Tags" value="challenge_elec_parts" />
+	</block>
+
 </blocks>

@@ -187,6 +187,86 @@ Dazu zwei große Blöcke, die nicht einzeln, sondern als System fallen:
   (`modGunScopeLarge`, `modGunSoundSuppressorSilencer`, `modGunLaserSight`, `modGunDrumMagazineExtender`),
   andere sind neutral (`modDyeRed`) oder passen (`modGunBowArrowRest`).
 
+## 5a. Die Lücke ist geschlossen (WP3.1c, 2026-11-07)
+
+Die 844 sind durchgesehen. Der Weg dahin in Zahlen, jede aus `mod700check`:
+
+| Stand | `ungeprueft` | verboten | aufgeschoben | durch Freigabe erlaubt |
+|---|---|---|---|---|
+| WP3.1 (erster Lauf) | 844 | 254 | — | 31 |
+| nach `--no-extends`-Korrektur und Mod-Ableitung | 800 → 537 | 298 → 335 | — | 31 |
+| WP3.1b (Aufschub, tote Regeln) | 512 | 356 | 157 | 31 |
+| **WP3.1c (Sichtung)** | **0** | **592** | **170** | **270** |
+
+Die 1129 erreichbaren Kennungen teilen sich jetzt restlos auf: 592 verboten, 170
+aufgeschoben, 270 durch Freigabe erlaubt, 24 Baupläne folgen Erlaubtem, 73 sind Loot-Gruppen
+und keine Gegenstände. 592 + 170 + 270 + 24 + 73 = 1129.
+
+### Was die Daten beantwortet haben, ohne eine Namensregel
+
+| Mittel | Kennungen |
+|---|---|
+| `sprengkoerper` (`Class = ItemClassTimeBomb`) | 6 |
+| `robotik` (`Tags` enthält `roboticsSkill`) | 7 |
+| `moderner_werkstoff` (`Tags` enthält `challenge_*`) | 15 |
+| `CreativeMode = Dev` in `entwicklergegenstand` | 10 (3 → 13) |
+| `Unlocks`-Ableitung, zweite Hälfte | 34 Baupläne |
+| **Summe** | **72** |
+
+Die 72 sind die Trefferzahlen der neuen Mittel, nicht alle aus den 512: vier davon hatte
+vorher schon eine Namensregel erfasst, die die Eigenschaftsregel nun ablöst (`ungeprueft`
+fiel von 512 auf 477, `verboten_nach_name` gleichzeitig von 251 auf 247). Aus den 512 hat
+die Technik also rund 68 beantwortet.
+
+Zwei Stellen, an denen das naheliegende Signal falsch war:
+
+- **`explosivesSkill` ist unbrauchbar.** Vanilla hängt `resourceLockPick` daran, weil der
+  Perk „Demolitions Expert" auch das Aufbrechen trägt. Ein Dietrich ist kein Sprengkörper.
+  Die Klasse `ItemClassTimeBomb` trifft genau die sechs Wurfkörper und nichts sonst.
+- **`biomeChallenge` hätte funktioniert und ist trotzdem nicht benutzt.** Der Tag trifft
+  alle 62 Teile der 16 modernen Rüstungsgarnituren und keines der vier Primitiv-Teile —
+  eine Zeile statt sechzehn. Er bedeutet aber „zählt für den Biom-Fortschritt", nicht
+  „modern". Eine Regel, die nur zufällig richtig liegt, gehört nicht zu den
+  Eigenschaftsregeln; sie würde beim nächsten Spiel-Update lautlos falsch werden. Die 16
+  Garnituren stehen darum als 16 Namen in der Denylist.
+
+### Was dabei an Vanilla-Inhalt entschieden wurde
+
+Die Sichtung ist kein Messergebnis, sondern über vierhundert inhaltliche Urteile — jedes als
+Zeile in `denylist.txt` oder `aufschub.txt`, jedes mit einem Grund daneben. Drei Gruppen
+davon sind gross genug, dass sie der Nutzer sehen muss, bevor WP3.2 XPath schreibt:
+
+1. **Rüstung.** Vanillas 16 Garnituren fallen alle (Biker, Commando, Nerd, Athletic, Santa
+   sind offensichtlich; Farmer, Nomad, Raider, Ranger, Rogue, Scavenger, Preacher, Assassin,
+   Miner, Lumberjack klingen zeitlos, tragen in Vanilla aber Warnweste, Schutzhelm und
+   Kevlar). Bis WP5 (F-03) bleibt nur `armorPrimitive*`. F-01 sagt „Nicht im Umfang:
+   Ersatzinhalte" — die Lücke ist eingeplant, aber sie ist spürbar.
+2. **Ackerbau.** Mais, Kartoffel, Kürbis, Blaubeere und Yucca kommen aus Amerika, Kaffee aus
+   Arabien, Chrysantheme aus Ostasien, Baumwolle wuchs nicht in Nordeuropa. Das nimmt
+   Vanilla den halben Ackerbau. Yuccafaser und Baumwolle sind darum **nach WP4 aufgeschoben**
+   statt gesperrt: sie sind der Anfang jeder Stoffkette, und ohne Faser gibt es am ersten Tag
+   keinen Verband. Die Nahrung selbst ist gesperrt — Pilze, Fleisch, Ei, Eintopf und Honig
+   bleiben.
+3. **Währung.** `oldCash` und `casinoCoin` sind Anachronismen und gleichzeitig das einzige
+   Zahlungsmittel, das Vanilla kennt. Aufgeschoben nach WP4 (F-05), sonst hört der Handel
+   vor dem Ersatz auf.
+
+### Was jetzt ehrlicher dasteht als vorher
+
+`verboten_nach_name` ist von 251 auf **441** gestiegen. Das ist kein Rückschritt: vorher
+ruhten 512 Kennungen auf **nichts**. Die Zahl sagt, wie viel Sperre auf meinem Urteil über
+Vanilla-Inhalt ruht und nicht auf Daten — und das sind jetzt 441 von 592 statt 251 von 356
+bei gleichzeitig 512 ungesehenen. Sie soll weiter fallen, aber nur dort, wo Vanilla
+tatsächlich eine Eigenschaft führt.
+
+Zwei Zähler sind dafür neu und müssen beide **0** sein: `verbotsregeln_ohne_treffer` (eine
+Regel, die nichts trifft, ist meist ein Tippfehler) und `freigaberegeln_ohne_treffer`. Der
+zweite ist der wichtigere. Eine Verbotsregel, die nicht greift, lässt etwas **durch**, und
+das erscheint beim nächsten Lauf als Befund. Eine Freigabe, die nicht greift, lässt etwas
+**fallen** — und ein Befund mehr sieht aus wie Arbeit, die getan wurde. Niemand sucht nach
+einer Sperre, die zu viel sperrt. Beim ersten Lauf mit den neuen Freigaben stand der Zähler
+auf 1: `!ironDoorDouble*` war von `!ironDoor*` verdeckt und damit überflüssig.
+
 ## 6. Was das für den Plan heißt
 
 Der Plan schätzt WP3 auf 12 Tage und ging von einer im Wesentlichen fertigen Denylist aus.

@@ -1,0 +1,8 @@
+# Gegenprobe zum Aufschub (Vertrag 04 §3a).
+#
+# Schiebt die Pruef-Feuerwaffe auf. Erwartung: sie erscheint danach als
+# 'aufgeschobener-anachronismus' und NICHT mehr als 'erreichbarer-anachronismus' -
+# aber sie verschwindet nicht, und der Zaehler 'aufgeschoben' steht im Bericht.
+#
+# Ein Aufschub ist kein Bestanden, sondern eine Umbuchung mit Adresse.
+pruefFeuerrohr        # WP9: nur zur Gegenprobe, kein echter Aufschub

@@ -193,7 +193,7 @@ Kette, die anstößt, ist ein Befund, keine stille Null.
 |---|---|---|
 | `schusswaffe` | Item-`Tags` enthält `gun` | **19** Feuerwaffen, **kein** Bogen. Bögen tragen `bow`/`archery`/`crossbow` |
 | `patronenmunition` | Item-`Tags` enthält `ammo9mm` oder `ammo762mm` | **6** von 28 Munitionssorten |
-| `entwicklergegenstand` | Item-`Tags` enthält `admin` **oder** eigene `Group` ist `Special Items` | **13** + **28** |
+| `entwicklergegenstand` | Item-`Tags` enthält `admin` **oder** eigene `Group` ist `Special Items` — in §3b um `CreativeMode = Dev` erweitert | **13** + **28** |
 | `strom` | Block-`Class` ∈ `Powered`, `PoweredLight`, `PoweredDoor`, `Generator`, `SolarPanel`, `Switch`, `TimerRelay`, `MotionSensor`, `PressurePlate`, `TripWire`, `Spotlight`, `Speaker`, `SpeakerTrader`, `VendingMachine`, `Mine` | **108** Blöcke |
 | `elektrikerhandwerk` | Block- oder Item-`Tags` enthält `electricianSkill` | **97**, Zweitsignal zur Zeile darüber |
 
@@ -276,6 +276,170 @@ Eigenschaften sind kein Verständnis, nur ein besseres Signal als Namen. `cement
 (`Workstation` gegen `Forge`), und das ist Zufall, nicht Absicht der Spielentwickler. Die
 Werkstätten bleiben darum eine kurze Liste von Hand. **Der Nachweis bleibt in jedem Fall der
 `ConfigsDump`-Lauf nach einem Spielstart mit den Modlets, nicht der Vorlauf gegen Vanilla.**
+
+## 3b. Jede Kennung bekommt ein Urteil (Nachtrag WP3.1c) — **Abnahme offen**
+
+> **Status:** gebaut und gemessen, aber **nicht abgenommen.** §3a hat der Nutzer am
+> 2026-11-07 abgenommen; dieser Abschnitt geht darüber hinaus. Was hier steht, ist im
+> Werkzeug und in `denylist.txt`/`aufschub.txt` schon umgesetzt — das war nötig, um die
+> Zahlen überhaupt messen zu können. Bevor die XPath-Patches von WP3.2 geschrieben werden,
+> gehört dieser Abschnitt abgenommen oder geändert.
+
+### Das Problem, das §3a offengelassen hat
+
+§3a hat das Urteil besser gemacht, aber nicht vollständig. Nach WP3.1b standen **512** von
+1129 erreichbaren Kennungen auf `ungeprueft`: keine Eigenschaft, kein Name, kein Urteil.
+Diese Zahl war die ehrlichste im Bericht und die unangenehmste — sie heisst nicht „harmlos",
+sondern „niemand hat hingesehen". Ein Werkzeug, das 512 Kennungen stillschweigend durchlässt
+und daneben „356 verboten" meldet, lädt dazu ein, die zweite Zahl für die Arbeit zu halten.
+
+### Die Grundregel dieses Nachtrags
+
+**Jede erreichbare Kennung bekommt genau ein Urteil, und `ungeprueft` ist kein Urteil.**
+Die fünf möglichen Ausgänge:
+
+| Ausgang | Bedeutung | Zähler |
+|---|---|---|
+| verboten | Anachronismus, fällt in Phase 1 | `verbotene_kennungen` |
+| aufgeschoben | Anachronismus, fällt in einem **genannten** Arbeitspaket | `aufgeschoben` |
+| durch Freigabe erlaubt | angesehen, **kein** Anachronismus | `durch_freigabe_erlaubt` |
+| abgeleitet | folgt aus den Daten (Mod-Träger, `Unlocks`) | `*_ableitung` |
+| Loot-Gruppe | kein Gegenstand, die Mitglieder werden einzeln beurteilt | `loot_gruppen_erreichbar` |
+
+`ungeprueft` muss **0** sein. Steigt die Zahl nach einem Spiel-Update, ist das kein Mangel
+des Werkzeugs, sondern neuer Inhalt, der ein Urteil braucht.
+
+### Vier zusätzliche Eigenschaftsregeln
+
+Die Zahlen hier zählen **erreichbare** Kennungen, nicht Definitionen — darum sind sie
+kleiner als die in §3a. Gemessen gegen Vanilla V 3.40 `Data/Config`.
+
+| Regel | Woran | Trifft (gemessen) |
+|---|---|---|
+| `sprengkoerper` | Item-`Class` ist `ItemClassTimeBomb` | **6**: Molotow, Rohrbombe, Dynamit, zwei Granaten, Zeitladung |
+| `robotik` | `Tags` enthält `roboticsSkill` | **7** |
+| `moderner_werkstoff` | `Tags` enthält `challenge_elec_parts`, `challenge_polymers`, `challenge_mech_parts`, `challenge_cars` oder `challenge_sinks` | **15** |
+| `entwicklergegenstand` (erweitert) | zusätzlich: `CreativeMode = Dev` | 3 → **13** |
+
+Drei Begründungen, die zum Vertrag gehören:
+
+- **Warum `ItemClassTimeBomb` und nicht `explosivesSkill`.** Der Tag wäre das naheliegende
+  Signal und ist unbrauchbar: Vanilla hängt auch `resourceLockPick` daran, weil derselbe
+  Perk beides trägt. Ein Dietrich ist kein Sprengkörper. Der Prüfling `pruefWurfglut` trägt
+  den Tag darum **nicht** und muss trotzdem fallen — sonst wäre die Gegenprobe keine.
+- **Warum `CreativeMode = Dev`.** Das ist Vanillas eigene Aussage „nur für die
+  Spielentwickler". Weder `Tags = admin` noch `Group = Special Items` trifft die sechs
+  `tier0xLoadout`, und die teilen über `Create_item` Schmerzmittel, Metallrohre und
+  Yuccafasern aus. Sie erben ihr `Dev` von `noteTestersDelightAdmin`, also muss die
+  Eigenschaft über `Extends` vererbt werden (wie `Tags` und `Class`).
+- **Warum `moderner_werkstoff` als letzte Regel steht.** Die Marke sagt „besteht aus", nicht
+  „ist modern". Das ist ein mittelbares Signal, und jede andere Regel soll zuerst urteilen
+  dürfen, damit der Befund den aussagekräftigeren Grund nennt. `challenge_leather` steht
+  bewusst **nicht** in der Liste: Leder gab es um 700.
+
+**Nicht verwendet, obwohl es gepasst hätte:** der Tag `biomeChallenge` trifft alle 62 Teile
+von Vanillas 16 modernen Rüstungsgarnituren und keines der vier Primitiv-Teile — eine Regel,
+eine Zeile, 62 Treffer. Er bedeutet aber „zählt für den Biom-Fortschritt", nicht „modern".
+Eine Regel, die nur zufällig richtig liegt, ist keine Eigenschaftsregel; die 16 Garnituren
+stehen darum als 16 Namen in `denylist.txt` und zählen unter `verboten_nach_name`. Das ist
+die Zeile, an der dieser Nachtrag am ehesten widersprochen werden kann.
+
+### Die `Unlocks`-Ableitung gilt in beide Richtungen
+
+§3a hatte nur die eine Hälfte: fällt das Freigeschaltete, fällt der Bauplan. Die andere
+Hälfte fehlte, und darum standen **37** Baupläne auf `ungeprueft` — für eine Frage, die in
+den Daten beantwortet ist.
+
+```
+pruefBauplanRohr   Unlocks="pruefFeuerrohr"    -> fällt mit ihm   (schaltet-gesperrtes-frei)
+pruefBauplanBogen  Unlocks="pruefSelbstbogen"  -> bleibt mit ihm  (schaltet-erlaubtes-frei)
+```
+
+Gemessen: **27** fallen, **24** bleiben. Welche Baupläne es am Ende überhaupt noch gibt,
+entscheidet F-21 in WP7 (D47); hier geht es nur darum, ob F-01 etwas gegen diesen einzuwenden
+hat.
+
+### Aufschub: eine Umbuchung, kein Bestanden
+
+Eine Kennung in `aufschub.txt` ist **als verboten erkannt** und wird aus den Fehlern in die
+Hinweise umgebucht. Sie zählt unter `aufgeschoben`, nie unter „bestanden". **Jede Zeile muss
+ein Arbeitspaket nennen** (`WP<n>`); ohne WP-Verweis bricht das Werkzeug mit Exit 2 ab. Ein
+Aufschub ohne Adresse ist kein Aufschub, sondern ein Loch mit guter Presse: niemand weiss,
+wer es schliesst, und beim nächsten Lauf sieht es aus wie eine getroffene Entscheidung.
+
+Gemessen: **170** aufgeschoben — 157 nach WP7 (Vanillas Buchsystem, D47, Entscheidung des
+Nutzers vom 2026-11-07), 10 nach WP4 (Währung, Faserkette, Schrottwirtschaft), 2 nach WP5
+(Reparatur- und Rüstbau-„Kits"), 1 nach WP8 (Dukes Brief in der Startausrüstung).
+
+Der Aufschub läuft als **letzter** Durchgang, damit auch das aufgeschoben wird, was erst eine
+Ableitung gefunden hat.
+
+### Was eine Freigabe heisst — und was nicht
+
+Eine Freigabe (`!muster`) heisst: **angesehen, und es ist kein Anachronismus.** Sie heisst
+nicht „später prüfen" und nicht „diese Klasse bleibt im Spiel". Sie schlägt jedes Verbot und
+jede Eigenschaftsregel, auch die Ableitungen.
+
+Daraus folgt der neue Zähler **`freigaberegeln_ohne_treffer`**. Er ist wichtiger als sein
+Gegenstück bei den Verboten: eine Verbotsregel, die nicht greift, lässt etwas **durch**, und
+das erscheint beim nächsten Lauf als Befund. Eine Freigabe, die nicht greift, lässt etwas
+**fallen** — und ein Befund mehr sieht aus wie Arbeit, die getan wurde, nicht wie ein Fehler.
+Niemand sucht nach einer Sperre, die zu viel sperrt. Beide Zähler müssen **0** sein; beide
+Hinweise nennen das **Muster**, nicht nur Datei und Zeile.
+
+### Zusätzliche Zähler dieses Nachtrags
+
+| Zähler | Warum |
+|---|---|
+| `ungeprueft` | muss 0 sein; jede Kennung braucht ein Urteil |
+| `aufgeschoben` / `aufschubregeln` | wie viel erkannt, aber verschoben ist |
+| `erlaubt_durch_unlocks_ableitung` | Baupläne, die Erlaubtem folgen |
+| `verbotsregeln_ohne_treffer` / `verbotsregeln_verdeckt` | Tippfehler gegen Redundanz getrennt |
+| `freigaberegeln_ohne_treffer` | der gefährlichere Tippfehler |
+
+### Der Befehl `ungeprueft`
+
+`mod700check ungeprueft <ordner> [--denylist <datei>] [--praefix <anfang>] [--nur-zahlen]`
+listet, was noch kein Urteil hat, gruppiert nach Namensanfang, mit den Eigenschaften daneben.
+Er ist die Arbeitsliste der Sichtung und endet **immer** mit Exit 0 — er ist keine Prüfung.
+Er benutzt dasselbe `Judgement` wie `anachronisms`; als die Liste eine eigene Fassung hatte,
+meldete sie 822 und die Prüfung 800.
+
+### Gegenproben dieses Nachtrags — alle fünf gebaut und grün
+
+| | Gegenprobe | Erwartung |
+|---|---|---|
+| 6 | `anachronisms eigenschaften` | `pruefWurfglut` fällt über `[sprengkoerper]` — ohne den Tag `explosivesSkill` |
+| 7 | `anachronisms eigenschaften` | `pruefDevKiste` fällt über `[entwicklergegenstand]` — nur `CreativeMode=Dev` |
+| 8 | `anachronisms eigenschaften` | `pruefLadenkasse` fällt über `[moderner_werkstoff]` — Klasse bewusst nicht in der Stromliste |
+| 9 | `anachronisms eigenschaften` | `pruefBauplanRohr` fällt, `pruefBauplanBogen` **nicht** |
+| 10 | `--denylist denylist-tote-freigabe.txt` | `freigaberegel-trifft-nichts` nennt das Muster |
+
+Dazu die drei Aufschub-Gegenproben aus WP3.1b (umbuchen, `--ohne-aufschub`, Exit 2 ohne
+WP-Verweis) und die Regelprüfung (`verbotsregel-trifft-nichts`).
+
+**Lauf vom 2026-11-07: 28 Gegenproben, 0 fehlgeschlagen.**
+
+### Was dieser Nachtrag nicht behauptet
+
+Jede Kennung hat ein Urteil — nicht jedes Urteil ist richtig. **441 von 592** Sperren ruhen
+weiter auf einem Namensmuster und damit auf meinem Urteil über Vanilla-Inhalt, nicht auf
+Daten. Die Zahl ist gestiegen, nicht gefallen, und das ist kein Rückschritt: vorher ruhten
+512 Kennungen auf **nichts**. Wo die Sichtung inhaltlich entschieden hat, steht die
+Begründung in der Zeile, und drei Gruppen gehören ausdrücklich dem Nutzer vorgelegt:
+
+1. **16 Rüstungsgarnituren fallen, nur `armorPrimitive*` bleibt.** Bis WP5 (F-03) hat der
+   Spieler keine andere Rüstung. F-01 sagt „Nicht im Umfang: Ersatzinhalte" — die Lücke ist
+   eingeplant, aber sie ist spürbar.
+2. **Pflanzen der Neuen Welt fallen:** Mais, Kartoffel, Kürbis, Blaubeere, Yucca — dazu
+   Kaffee, Chrysantheme und Baumwolle. Das nimmt Vanilla den halben Ackerbau; Yuccafaser und
+   Baumwolle sind darum nach WP4 aufgeschoben, die Nahrung nicht.
+3. **Werkstätten:** `forge`, `campfire`, `workbench`, Amboss, Blasebalg, Schmelztiegel,
+   Kochtopf, Bienenstock und Hühnerstall bleiben; Betonmischer, Chemiestation,
+   „Combine Station", Becherglas, Tauwassersammler und Wärmelampe fallen.
+
+**Der Nachweis bleibt der `ConfigsDump`-Lauf nach einem Spielstart mit den Modlets.** Dieser
+Nachtrag ist gegen Vanilla gemessen, und das ist ein Vorlauf.
 
 ## 4. `recipes` — Z3
 

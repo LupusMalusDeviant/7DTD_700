@@ -28,10 +28,21 @@ internal sealed record Definition(
     IReadOnlySet<string> Tags,
     string? Class,
     IReadOnlySet<string> InstallableTags,
-    bool DepthExceeded)
+    bool DepthExceeded,
+    IReadOnlySet<string> ModifierTags = null!,
+    string? Unlocks = null,
+
+    // Vanillas eigene Aussage, wer einen Gegenstand im Kreativmenue sehen darf: None,
+    // Player, Dev, All. 'Dev' heisst "nur fuer die Spielentwickler" und ist damit das
+    // ehrlichste Signal fuer einen Entwicklergegenstand - ehrlicher als der Tag 'admin',
+    // der die tier0xLoadouts und die TEST_ITEM_* nicht traegt.
+    string? CreativeMode = null)
 {
+    public IReadOnlySet<string> ModifierTags { get; init; } = ModifierTags ?? EmptySet;
+
     public bool HasProperties =>
-        Group is not null || Tags.Count > 0 || Class is not null || InstallableTags.Count > 0;
+        Group is not null || Tags.Count > 0 || Class is not null || InstallableTags.Count > 0
+        || ModifierTags.Count > 0 || Unlocks is not null || CreativeMode is not null;
 
     public static Definition None(string name, DefKind kind) => new(
         name, kind, null, EmptySet, null, EmptySet, false);
@@ -193,11 +204,13 @@ internal sealed class Definitions
 
         string? tags = Own(element, "Tags");
         string? klass = Own(element, "Class");
+        string? creative = Own(element, "CreativeMode");
 
         if (_resolveExtends)
         {
             tags ??= Inherited(element, universe, "Tags", ref exceeded);
             klass ??= Inherited(element, universe, "Class", ref exceeded);
+            creative ??= Inherited(element, universe, "CreativeMode", ref exceeded);
         }
 
         if (exceeded)
@@ -206,7 +219,9 @@ internal sealed class Definitions
         }
 
         return new Definition(
-            name, kind, group, Tokens(tags), klass, Definition.EmptySet, exceeded);
+            name, kind, group, Tokens(tags), klass, Definition.EmptySet, exceeded,
+            Unlocks: Own(element, "Unlocks"),
+            CreativeMode: creative);
     }
 
     private static Definition FromModifier(string name, XElement element) => new(
@@ -216,7 +231,9 @@ internal sealed class Definitions
         Tokens(Own(element, "Tags")),
         null,
         Tokens(element.Attribute("installable_tags")?.Value),
-        false);
+        false,
+        Tokens(element.Attribute("modifier_tags")?.Value),
+        Own(element, "Unlocks"));
 
     private static string? Own(XElement element, string property)
     {

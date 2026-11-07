@@ -38,4 +38,34 @@
 	<!-- Bleibt, zaehlt aber in 'ohne_eigenschaft': aufgeloest, ohne jede Eigenschaft. -->
 	<item name="pruefLumpen" />
 
+	<!-- Faellt: Class ist ItemClassTimeBomb (Regel sprengkoerper). Traegt absichtlich
+	     KEINEN Tag 'explosivesSkill' - die Klasse allein muss reichen. -->
+	<item name="pruefWurfglut">
+		<property name="Class" value="ItemClassTimeBomb" />
+		<property name="Group" value="Pruef/Waffen" />
+	</item>
+
+	<!-- Faellt: Tags enthaelt 'roboticsSkill' (Regel robotik). -->
+	<item name="pruefSchlagstock">
+		<property name="Tags" value="weapon,melee,roboticsSkill" />
+	</item>
+
+	<!-- Faellt: CreativeMode 'Dev' (Regel entwicklergegenstand). Weder Tag 'admin' noch
+	     Group 'Special Items' - genau der Fall der tier0xLoadouts. -->
+	<item name="pruefDevKiste">
+		<property name="CreativeMode" value="Dev" />
+		<property name="Group" value="Pruef/Technik" />
+	</item>
+
+	<!-- Das Bauplan-Paar. Beide tragen sonst NICHTS, worueber zu urteilen waere; allein
+	     ihr Unlocks entscheidet, und es entscheidet in beide Richtungen.
+	     Ohne die zweite Haelfte der Ableitung waere pruefBauplanBogen 'ungeprueft'. -->
+	<item name="pruefBauplanRohr">
+		<property name="Unlocks" value="pruefFeuerrohr" />
+	</item>
+
+	<item name="pruefBauplanBogen">
+		<property name="Unlocks" value="pruefSelbstbogen" />
+	</item>
+
 </items>

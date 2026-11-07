@@ -33,6 +33,7 @@ internal static class Program
                 "anachronisms" => AnachronismCheck.Run(path, rest),
                 "recipes" => RecipeCheck.Run(path, rest),
                 "localization" => LocalizationCheck.Run(path, rest),
+                "ungeprueft" => UncheckedList.Run(path, rest),
                 _ => throw new UsageException($"Unbekannter Befehl: {command}")
             };
         }
@@ -61,6 +62,13 @@ internal static class Program
               mod700check recipes      <ordner> [--from <kennung>] [--json]
               mod700check localization <datei>  [--sprachen english,german]
                                                [--prefix 700_] [--vanilla-keys <datei>] [--json]
+              mod700check ungeprueft   <ordner> [--denylist <datei>] [--praefix <anfang>]
+                                               [--nur-zahlen]
+
+            'ungeprueft' ist KEIN Pruefbefehl: es listet die erreichbaren Kennungen, ueber
+            die keine Regel geurteilt hat, samt ihren Eigenschaften, und endet immer mit 0.
+            Gedacht fuer die Sichtung - es liest mit demselben Code wie die Pruefung, damit
+            die Liste genau das zeigt, was die Pruefung auch sieht.
 
             anachronisms urteilt zuerst nach Eigenschaften, die Vanilla selbst fuehrt (Tags,
             Block-Klasse, eigene Group), und erst dann nach Namensmustern aus der Denylist.

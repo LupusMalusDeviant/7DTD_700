@@ -192,9 +192,67 @@ Test-Output 'Mod faellt mit dem Traeger, nicht mit dem Namen' 1 @('anachronisms'
     -MustContain @('erreichbarer-anachronismus: pruefModRohrAufsatz', 'mod-ohne-ueberlebenden-traeger') `
     -MustNotContain @('erreichbarer-anachronismus: pruefModBogenauflage')
 
+# 6. Der Zuender entscheidet, nicht der Tag. 'explosivesSkill' waere das naheliegende
+#    Signal und ist unbrauchbar: Vanilla haengt auch den Dietrich daran. Der Pruefling
+#    traegt den Tag darum NICHT und muss trotzdem fallen.
+Test-Output 'Sprengkoerper faellt ueber die Klasse' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefWurfglut', '[sprengkoerper]')
+
+# 7. CreativeMode 'Dev' ist Vanillas eigene Aussage "nur fuer Entwickler". Weder Tag
+#    'admin' noch Group 'Special Items' trifft die tier0xLoadouts, die ueber Create_item
+#    Schmerzmittel austeilen - dieser Pruefling ist genau dieser Fall.
+Test-Output 'Entwicklerstand faellt ueber CreativeMode' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefDevKiste', '[entwicklergegenstand]')
+
+# 8. Die 'challenge_*'-Marke sagt, woraus ein Block besteht. Der Pruefling traegt
+#    bewusst eine Klasse, die NICHT in der Stromliste steht - faellt er, hat die
+#    Werkstoffregel geurteilt und nicht die Stromregel.
+Test-Output 'moderner Werkstoff faellt ueber die challenge-Marke' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefLadenkasse', '[moderner_werkstoff]')
+
+# 9. Die Unlocks-Ableitung gilt in BEIDE Richtungen. Zwei Bauplaene, die sonst nichts
+#    tragen: der auf die Waffe faellt, der auf den Bogen bleibt. Ohne die zweite
+#    Haelfte waere der zweite 'ungeprueft' - und 37 Vanilla-Bauplaene mit ihm.
+Test-Output 'Bauplan folgt dem, was er freischaltet' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefBauplanRohr', 'schaltet-gesperrtes-frei') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefBauplanBogen')
+
 # Benutzungsfehler bleibt Benutzungsfehler, auch bei den neuen Optionen.
 Test-Case 'unbekannte Eigenschaftsregel' 2 @(
     'anachronisms', $eig, '--ohne-regel', 'gibtesnicht')
+
+Write-Output ""
+Write-Output "== Gegenproben: ein Aufschub ist eine Umbuchung, kein Bestanden =="
+
+# Aufgeschobenes muss als Hinweis erscheinen und NICHT als Fehler - aber es muss
+# erscheinen. Ein Aufschub, der die Kennung verschwinden laesst, waere ein Verstecken.
+Test-Output 'Aufschub bucht um, statt zu verschweigen' 1 `
+    @('anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-pruef.txt')) `
+    -MustContain @('aufgeschobener-anachronismus: pruefFeuerrohr', 'WP9') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefFeuerrohr')
+
+# Und ohne Aufschub muss sie wieder als Fehler dastehen - sonst waere nicht zu sehen,
+# dass der Aufschub etwas umbucht und nicht etwas entfernt.
+Test-Output 'ohne Aufschub ist sie wieder ein Fehler' 1 `
+    @('anachronisms', $eig, '--ohne-aufschub') `
+    -MustContain @('erreichbarer-anachronismus: pruefFeuerrohr')
+
+# Ein Aufschub ohne Arbeitspaket ist ein Loch mit guter Presse und wird abgelehnt.
+Test-Case 'Aufschub ohne Arbeitspaket wird abgelehnt' 2 @(
+    'anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-ohne-wp.txt'))
+
+Write-Output ""
+Write-Output "== Gegenprobe: eine Verbotsregel ohne Treffer faellt auf =="
+Test-Output 'Regel ohne Treffer wird genannt' 1 `
+    @('anachronisms', $eig, '--denylist', (Join-Path $data 'denylist-tote-regel.txt')) `
+    -MustContain @('verbotsregel-trifft-nichts', 'pruefGibtEsGarantiertNicht*')
+
+# Und dasselbe fuer die Freigabe - der gefaehrlichere Tippfehler von beiden. Eine
+# Verbotsregel ohne Treffer laesst etwas durch und wird gemeldet; eine Freigabe ohne
+# Treffer laesst etwas fallen, und ein Befund mehr sieht aus wie Arbeit.
+Test-Output 'Freigabe ohne Treffer wird genannt' 1 `
+    @('anachronisms', $eig, '--denylist', (Join-Path $data 'denylist-tote-freigabe.txt')) `
+    -MustContain @('freigaberegel-trifft-nichts', 'pruefGibtEsGarantiertNicht')
 
 Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="

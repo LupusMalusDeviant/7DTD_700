@@ -1,0 +1,11 @@
+# Gegenprobe zum Zaehler 'verbotsregeln_ohne_treffer'.
+#
+# Die erste Regel trifft etwas, die zweite nichts. Der Lauf muss die zweite als
+# 'verbotsregel-trifft-nichts' nennen.
+#
+# Warum das ein eigener Zaehler ist: in WP3.1 hiess eine Regel 'drugs*' statt 'drug*'
+# und traf drei Drogen nur deshalb, weil der Vergleich die Schreibung ignorierte. In
+# WP3.1c hiess eine 'magazine*' statt '*SkillMagazine' und traf gar nichts. Eine Regel
+# ohne Treffer fuehlt sich genauso an wie eine, die nichts zu tun hatte.
+pruefLumpen                   # trifft: steht im Pruefsatz und ist erreichbar
+pruefGibtEsGarantiertNicht*   # trifft nichts - muss als Hinweis erscheinen
