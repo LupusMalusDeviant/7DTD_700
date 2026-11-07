@@ -97,19 +97,136 @@ vehicle*
 # ... Elektronik, Konserven, Medikamente, Treibstoff, Beton, Industriestahl
 ```
 
-**Ausnahmen sind Pflicht, nicht Kür.** D9 verlangt, dass Geschütztürme, Generator, Kabel,
+~~**Ausnahmen sind Pflicht, nicht Kür.** D9 verlangt, dass Geschütztürme, Generator, Kabel,
 Schalter, Sensoren und Sprengstoff als *Klassen* erhalten bleiben, weil F-15 sie in Phase 2
 umdeutet. Die Denylist bekommt darum eine Freigabeliste, und jeder Eintrag darin trägt eine
-Begründung:
+Begründung:~~
 
 ```
-!autoTurret        # D9: wird in Phase 2 der Runenstein der Glut (F-15)
-!electricWire      # D9: wird die Odem-Leitung
+!autoTurret        # D9: wird in Phase 2 der Runenstein der Glut (F-15)   ← GESTRICHEN
+!electricWire      # D9: wird die Odem-Leitung                            ← GESTRICHEN
 ```
+
+**Gestrichen in WP3.1, und zwar als Kategorienfehler.** Eine Freigabe sagt „dieser Gegenstand
+darf erreichbar sein" — nicht „diese Klasse bleibt im Spiel". F-01 sagt wörtlich, es sperre
+*„nur ihre modernen Varianten (Namen, Rezepte, Loot)"* und erhalte die Logik; Rezepte und Loot
+sind genau das, was dieses Werkzeug messen kann, die Klasse sieht es nie. Mit diesen Freigaben
+wären `autoTurret`, `generatorbank`, `solarbank`, `batterybank` und ein Dutzend mehr in Phase 1
+herstellbar geblieben — und das Werkzeug hätte dazu „0 rot" gemeldet. **D9 wird in
+[Vertrag 03](03-xpath-regeln.md) §4 gewahrt** (kein `remove` auf die Definition), nicht hier.
+Freigaben gelten nur noch für Vanilla-Namen, die gar kein Anachronismus sind (D54, D55, D56).
+Beleg: [WP3-bestandsaufnahme-anachronismen.md](../rea/findings/WP3-bestandsaufnahme-anachronismen.md).
 
 **Gegenprobe (Projektregel 5):** Ein `gunPistol`-Eintrag wird in eine Loot-Gruppe des Prüfordners
 eingeschmuggelt, das Werkzeug muss **rot** werden und genau diesen Eintrag nennen. Erst dann
 zählt ein späteres Grün. Das Ergebnis gehört in `tools/check/README.md`.
+
+## 3a. Urteil nach Eigenschaften (Nachtrag WP3.1)
+
+- **Status:** Entwurf, wartet auf Abnahme
+- **Anlass:** Die Namensmuster haben in WP3.1 dreimal auf drei Wegen versagt, und 844 der
+  1129 erreichbaren Kennungen hat die Liste nie angesehen. Ein viertes Namensmuster-Versagen
+  ist wahrscheinlicher als keines.
+
+### Die Grundregel
+
+**Wo Vanilla eine Eigenschaft führt, die etwas bedeutet, entscheidet die Eigenschaft. Wo
+Vanilla keine führt, entscheidet der Name — und das Werkzeug sagt, welche Regel entschied.**
+
+Der zweite Halbsatz ist kein Rückzug, sondern gemessen. Nicht alles, was wir trennen müssen,
+trennt Vanilla auch:
+
+| Gegenüberstellung | Group | Tags | trennbar? |
+|---|---|---|---|
+| `gunHandgunT1Pistol` / `gunBowT1WoodenBow` | gleich | `gun` ↔ `bow,archery` | **ja, über Tags** |
+| `switch`, `motionsensor`, `generatorbank` | `Science,TCScience` | gleich | **ja, über Block-`Class`** |
+| `gunHandgunPistolAdmin` | `Special Items` | enthält `admin` | **ja** |
+| `foodCanTuna` / `foodRawMeat` | **gleich** | **gleich** | **nein** |
+| `medicalFirstAidKit` / `medicalBandage` | fast gleich | **gleich** | **nein** |
+| `airConditioner` | **fehlt** | nur `challenge_*` | **nein** |
+
+Für Konserven, Medikamente und Einzelgänger wie das Klimagerät bleibt der Name das einzige
+Signal, das Vanilla hergibt. Das steht hier, damit niemand später eine Eigenschaft sucht, die
+es nicht gibt.
+
+### Drei Definitionsquellen, nicht eine
+
+| Quelle | Element | erreichbare Kennungen daraus |
+|---|---|---|
+| `items.xml` | `item` | 788 |
+| `blocks.xml` | `block` | 163 |
+| `item_modifiers.xml` | `item_modifier` | 95 |
+
+Dazu 73 Loot-Gruppennamen und rund zehn Sonderfälle (`quest_tier1complete`,
+`*Shapes:VariantHelper`, `Influence`), die keine Gegenstände sind. **Eine erreichbare Kennung,
+die sich auf keine der drei Quellen auflöst, wird als `unaufloesbar` berichtet — nie
+stillschweigend als grün.**
+
+### `Extends` muss aufgelöst werden
+
+Ohne Vererbung haben **328** der 1129 erreichbaren Kennungen eine `Group`, mit Vererbung
+**932**. Wer `Extends` nicht verfolgt, hält zwei Drittel für eigenschaftslos und fällt auf den
+Namen zurück, ohne es zu merken. Die Tiefe ist begrenzt und die Grenze wird berichtet; eine
+Kette, die anstößt, ist ein Befund, keine stille Null.
+
+### Die Eigenschaftsregeln
+
+| Regel | Woran | Trifft |
+|---|---|---|
+| Schusswaffe | Item-`Tags` enthält `gun` | Pistolen bis M60; Bögen tragen `bow`/`archery`/`crossbow` und bleiben |
+| Patronenmunition | Item-`Tags` enthält `ammo9mm`, `ammo762mm`, `ammo44Magnum`, `ammoShotgun` | Patronen; Pfeile tragen `perkArchery` und bleiben |
+| Entwickler-Gegenstand | Item-`Tags` enthält `admin` **oder** `Group` ist `Special Items` | die vier Admin-Items und die zehn `TEST_ITEM_*` |
+| Strom und Elektronik | Block-`Class` ∈ `Powered`, `PoweredLight`, `PoweredDoor`, `Generator`, `SolarPanel`, `Switch`, `TimerRelay`, `MotionSensor`, `PressurePlate`, `TripWire`, `Spotlight`, `Speaker`, `SpeakerTrader`, `VendingMachine`, `Mine` | Schalter, Melder, Scheinwerfer, Generator, Relais, Platten |
+| Elektrikerhandwerk | Block- oder Item-`Tags` enthält `electricianSkill` | Zweitsignal zur Zeile darüber |
+
+Jede Regel trägt im Werkzeug eine **Begründung in einem Satz**, und der Befund nennt sie. Ein
+Befund ohne nachlesbare Regel ist kein Befund.
+
+### Mods werden abgeleitet, nicht aufgezählt
+
+Ein `item_modifier` trägt `installable_tags`. Daraus folgt sein Urteil **ohne eine eigene
+Regel**: *ein Mod fällt, wenn jeder Gegenstand, auf den er passt, selbst gesperrt ist.*
+
+```
+modGunSoundSuppressorSilencer  installable_tags="gun"            -> fällt mit den Schusswaffen
+modGunScopeLarge               installable_tags="largeTopAttachments" -> fällt, der Schlitz gibt es nur an Gewehren
+modGunBowArrowRest             installable_tags="bow"            -> bleibt, der Bogen bleibt (D54)
+modMeleeSerratedBlade          installable_tags="knife,machete,…" -> bleibt
+```
+
+Das trifft die 95 erreichbaren Mods, ohne 95 Zeilen zu schreiben, und es bleibt richtig, wenn
+sich eine Entscheidung über die Waffen ändert. Läuft als **zweiter Durchgang**, nachdem die
+Gegenstände beurteilt sind.
+
+### Was der Bericht zusätzlich ausweisen muss
+
+| Zähler | Warum |
+|---|---|
+| `verboten_nach_eigenschaft` | wie viel auf Daten ruht |
+| `verboten_nach_name` | wie viel auf meinem Gedächtnis ruht — diese Zahl soll fallen |
+| `unaufloesbar` | Kennungen ohne Definition in den drei Quellen |
+| `ohne_eigenschaft` | aufgelöst, aber keine Eigenschaft vorhanden |
+| `extends_tiefe_erreicht` | abgebrochene Vererbungsketten |
+
+### Gegenproben (Projektregel 5), verbindlich
+
+1. **Das Paar, das ein Name verwechselt:** `gunHandgunT1Pistol` muss fallen,
+   `gunBowT1WoodenBow` bleiben — im selben Lauf, aus derselben `Group`.
+2. **Eine entfernte Eigenschaftsregel macht rot:** wird die Strom-Regel herausgenommen, muss
+   der Prüfsatz einen bisher gefundenen Block durchlassen und damit auffallen.
+3. **Eine Kennung ohne Definition** muss als `unaufloesbar` erscheinen und nicht als grün.
+4. **`Extends` abgeschaltet** muss die `ohne_eigenschaft`-Zahl sprunghaft steigen lassen — der
+   Nachweis, dass die Auflösung wirklich etwas beiträgt (dasselbe Muster wie
+   `--no-world-roots` bei `recipes`).
+5. **Ein Mod ohne überlebenden Träger** muss fallen, ein Mod mit einem überlebenden bleiben.
+
+### Was dieser Nachtrag nicht behauptet
+
+Eigenschaften sind kein Verständnis, nur ein besseres Signal als Namen. `cementMixer` und
+`forge` tragen dieselbe `Group` und dieselben `Tags`; nur die `Class` trennt sie
+(`Workstation` gegen `Forge`), und das ist Zufall, nicht Absicht der Spielentwickler. Die
+Werkstätten bleiben darum eine kurze Liste von Hand. **Der Nachweis bleibt in jedem Fall der
+`ConfigsDump`-Lauf nach einem Spielstart mit den Modlets, nicht der Vorlauf gegen Vanilla.**
 
 ## 4. `recipes` — Z3
 

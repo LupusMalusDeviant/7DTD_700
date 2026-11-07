@@ -207,10 +207,10 @@ Befund: [WP3-bestandsaufnahme-anachronismen.md](../rea/findings/WP3-bestandsaufn
 
 | | |
 |---|---|
-| erreichbare Kennungen in Vanilla | **1139** |
+| erreichbare Kennungen in Vanilla | **1129** |
 | von der Denylist verboten | 254 (erster Lauf: 138) |
 | durch Freigabe erlaubt | 31 |
-| **von keiner Regel berührt** | **852** |
+| **von keiner Regel berührt** | **844** |
 
 Drei Defekte in der Denylist aus WP2, alle behoben:
 
@@ -228,11 +228,21 @@ Drei Defekte in der Denylist aus WP2, alle behoben:
 
 **Folge für die Schätzung:** WP3 stand auf 12 Tagen und auf der Annahme einer im Wesentlichen
 fertigen Denylist. Die Zahl der XPath-Zeilen wächst etwa auf das Doppelte bis Dreifache, und
-die Sichtung der 852 kommt als eigener Posten dazu. Siehe auch das neue Risiko **R13**.
+die Sichtung der 844 kommt als eigener Posten dazu. Siehe auch das neue Risiko **R13**.
 
-**Offen:** mit welcher Methode die 852 geschlossen werden — weitere Namensmuster oder ein
-Urteil nach Eigenschaften (`items.xml` `Group`, Block-`Class`). Der Befund legt die zweite
-nahe, weil die Namensmuster in diesem Schritt dreimal auf drei Wegen versagt haben.
+**Entschieden (Nutzer, 2026-11-07): Urteil nach Eigenschaften**, festgelegt in
+[Vertrag 04 §3a](../contracts/04-pruefwerkzeuge.md) (Entwurf, wartet auf Abnahme). Gemessen
+vor der Entscheidung: 945 der 1129 erreichbaren Kennungen tragen eine auswertbare Eigenschaft,
+nur 6 gar keine. Eigenschaften trennen Pistole von Bogen, Strom von Nicht-Strom und
+Entwickler- von Spielinhalt — bei Konserven, Medikamenten und Einzelgängern wie dem Klimagerät
+sind `Group` und `Tags` dagegen **identisch**, dort bleibt der Name das einzige Signal. Die 95
+Waffen- und Rüstungs-Mods werden über `installable_tags` abgeleitet statt aufgezählt.
+
+**Neuer Schritt, vor WP3.2:**
+
+- **WP3.1b** `[Claude-prüfbar]` `anachronisms` auf das Urteil nach Eigenschaften umbauen,
+  mit den fünf Gegenproben aus Vertrag 04 §3a. Schätzung: M (2 Tage). Danach erst die 844
+  sichten und die XPath-Zeilen schreiben.
 
 ---
 

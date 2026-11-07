@@ -31,13 +31,21 @@ die Zeile, der Inhalt ist `drinkJarBoiledWater=2,foodCanChili,medicalFirstAidBan
 `meleeToolTorch,noteDuke01`. Wer `@name` liest, findet die Startausrüstung nie und meldet
 dafür Grün.
 
-**Ergebnis: 1139 erreichbare Kennungen.** Davon
+**Ergebnis: 1129 erreichbare Kennungen.** Davon
 
 | | Zahl |
 |---|---|
 | von der Denylist verboten | **254** |
 | durch eine Freigabe ausdrücklich erlaubt | 31 |
-| **von keiner Regel berührt** | **852** |
+| **von keiner Regel berührt** | **844** |
+
+> **Berichtigt am selben Tag.** Hier stand zuerst 1139 und 852. Die Zahl kam aus meinem
+> eigenen Erkundungsskript, und das las die XML mit Mustervergleich, **ohne Kommentare zu
+> entfernen** — zehn auskommentierte Einträge wie `<!-- <item name="modArmorCoolingMesh"/> -->`
+> zählte es als erreichbar. `mod700check` liest mit `System.Xml.Linq` und sieht Kommentare
+> nie; seine Zahl (1129) war die richtige, meine die falsche. Dasselbe Muster wie in §3.3:
+> ein selbstgebautes Signal, das lockerer liest, als es aussieht. Die Lehre ist, die Zahl des
+> Werkzeugs zu nehmen und nicht die eigene Nebenrechnung.
 
 ## 2. Der erste Lauf: 138 Treffer, davon 32 falsche
 
@@ -150,9 +158,9 @@ die diese Zutaten brauchen, sind selbst Anachronismen und fallen im selben Zug. 
 Reihenfolge muss stimmen, und der Nachweis dafür ist ein `recipes`-Lauf gegen den gemergten
 Stand — nicht gegen Vanilla.
 
-## 5. Die offene Lücke: 852 Kennungen
+## 5. Die offene Lücke: 844 Kennungen
 
-Die Denylist hat 852 der 1139 erreichbaren Kennungen **nie angesehen**. Darin steckt viel
+Die Denylist hat 844 der 1129 erreichbaren Kennungen **nie angesehen**. Darin steckt viel
 harmloser Inhalt (Rüstung, Nahkampfwaffen, Nahrung, Rohstoffe), aber auch Anachronismen, die
 kein Präfix der Liste kennt. Ein Auszug dessen, was beim Durchsehen von neun der rund
 sechzig Gruppen auffiel:
@@ -182,16 +190,59 @@ Dazu zwei große Blöcke, die nicht einzeln, sondern als System fallen:
 ## 6. Was das für den Plan heißt
 
 Der Plan schätzt WP3 auf 12 Tage und ging von einer im Wesentlichen fertigen Denylist aus.
-Die Schätzung stand auf 138 Kennungen; sie steht jetzt auf 254 plus 852 zu sichtenden. Die
+Die Schätzung stand auf 138 Kennungen; sie steht jetzt auf 254 plus 844 zu sichtenden. Die
 Zahl der zu schreibenden XPath-Zeilen wächst damit etwa um das Doppelte bis Dreifache, die
-Sichtung der 852 kommt als eigener Posten dazu.
+Sichtung der 844 kommt als eigener Posten dazu.
 
-**Offen und zu entscheiden:** mit welcher Methode die 852 geschlossen werden. Eine Denylist
-nach Namen hat in diesem Befund dreimal auf drei Wegen versagt. Die Alternative ist, nach
-**Eigenschaften** statt nach Namen zu urteilen — `items.xml` führt zu jedem Gegenstand eine
-`Group` (Werkzeugleisten-Gruppe) und Blöcke eine `Class` (etwa `Powered`, `PoweredLight`).
-Das urteilt über das, was ein Gegenstand *ist*, nicht über seinen Namen, und hätte
-`motionsensor`, `switch` und `spotlightPlayer` ohne eine einzige Regel gefunden.
+**Entschieden (Nutzer, 2026-11-07): Urteil nach Eigenschaften.** Festgelegt in
+[Vertrag 04 §3a](../../contracts/04-pruefwerkzeuge.md) — Entwurf, wartet auf Abnahme.
+
+Gemessen wurde vorher, ob Eigenschaften das überhaupt leisten:
+
+| | |
+|---|---|
+| erreichbare Kennungen mit auswertbarer Eigenschaft | **945 von 1129** |
+| davon mit `Group` (nach `Extends`-Auflösung) | 932 — **ohne** Auflösung nur 328 |
+| mit `Tags` | 772 |
+| mit Block-`Class` | 216 |
+| aufgelöst, aber ganz ohne Eigenschaft | **6** (`cobweb`, `terrStone`, `treeAzalea`, drei Variant-Helper) |
+| weder Gegenstand noch Block | 178 (73 Loot-Gruppen, 95 `item_modifier`, ~10 Sonderfälle) |
+
+Und ob sie **trennen**, woran Namen scheitern:
+
+| Gegenüberstellung | Ergebnis |
+|---|---|
+| Pistole gegen Bogen | `Tags` trennt sauber: `gun` gegen `bow,archery` |
+| Schalter, Melder, Scheinwerfer, Generator | Block-`Class` trennt, eine Regel statt vier Namen |
+| Admin- und Testgegenstände | `Tags` enthält `admin`, `Group` ist `Special Items` |
+| Konserve gegen Rohfleisch | **`Group` und `Tags` identisch — nicht trennbar** |
+| Verbandskasten gegen Wundauflage | **`Tags` identisch — nicht trennbar** |
+| `airConditioner` | **keine `Group`, keine `Class`** |
+
+Darum ist die Entscheidung nicht „Eigenschaften **statt** Namen", sondern *wo Vanilla eine
+Eigenschaft führt, die etwas bedeutet, entscheidet die Eigenschaft; wo nicht, der Name — und
+das Werkzeug sagt, welche Regel entschied.* Der Bericht weist `verboten_nach_name` getrennt
+aus, damit sichtbar bleibt, wie viel noch auf meinem Gedächtnis ruht.
+
+Die 95 Mods werden **abgeleitet**, nicht aufgezählt: ein `item_modifier` trägt
+`installable_tags`, und er fällt, wenn jeder Gegenstand, auf den er passt, gesperrt ist.
+`modGunSoundSuppressorSilencer` (`installable_tags="gun"`) fällt mit den Schusswaffen,
+`modGunBowArrowRest` (`installable_tags="bow"`) bleibt mit dem Bogen.
+
+## 6a. Zwei Nebenfunde
+
+**`oilBarrel` hat ein Rezept, aber nirgends eine Definition.** Weder `items.xml` noch
+`blocks.xml` noch `item_modifiers.xml` führen die Kennung; sie steht nur in `recipes.xml`,
+einmal als Rezeptname und einmal als Zutat. Das ist eine Ungereimtheit in Vanilla, nicht in
+unserer Mod. Bemerkenswert ist aber, dass `mod700check recipes` dazu `zutat_unbekannt: 0`
+meldet: die bekannte Kennungsmenge enthält offenbar auch Rezept-**Ausgaben**, und damit deckt
+ein Rezept seine eigene undefinierte Zutat. Das gehört beim Bau von §3a mitgeprüft — eine
+Zutat, die es nicht gibt, soll auffallen.
+
+**Die Startausrüstung ist T0 bis auf einen Eintrag.** Sie lautet `drinkJarBoiledWater=2`,
+`foodCanChili`, `medicalFirstAidBandage`, `meleeToolTorch`, `noteDuke01`. Nach D56 bleibt die
+Wundauflage; die Konserve muss weg (WP3.4), und `noteDuke01` ist ein Vanilla-Erzählstück, das
+mit F-12 ersetzt oder entfernt wird.
 
 ## 7. Grenzen dieses Befundes
 
