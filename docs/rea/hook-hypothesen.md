@@ -3,15 +3,30 @@
 > ⚠️ Alle Typ- und Methodennamen hier sind **Hypothesen** aus allgemeinem 7DTD-Modding-Wissen.
 > Sie können in V2.x umbenannt, verschoben oder anders aufgebaut sein. **Nichts davon darf
 > ungeprüft in einen Harmony-Patch.** Status wird nach dem REA-Lauf gepflegt:
-> `?` ungeprüft · `✓` bestätigt (Finding-Link) · `✗` existiert nicht/anders
+> `?` ungeprüft · `◐` Typ existiert, Signatur offen · `✓` bestätigt (Finding-Link) · `✗` existiert nicht/anders
 
-## F-00
-| Status | Kandidat | Frage |
+> **Stand 2026-11-07:** REA liefert an dieser `Assembly-CSharp.dll` **keine Member und keine
+> Signaturen** — die Metadaten sprengen das Darstellungsbudget
+> ([findings/00-rea-grenzen.md](findings/00-rea-grenzen.md)). Signaturen kommen seit D51 aus
+> `mod700meta` ([tools/meta](../../tools/meta/README.md)); `✓` setzt voraus, dass die Signatur
+> in einer Soll-Datei unter `tools/meta/expect/` steht und der `verify`-Lauf grün ist.
+
+## F-00 — abgeschlossen
+
+Alle Prio-1-Fragen beantwortet. Befunde:
+[F-00-modloader-events-version.md](findings/F-00-modloader-events-version.md) ·
+[F-00-modinfo-und-harmony.md](findings/F-00-modinfo-und-harmony.md).
+Soll-Datei: `tools/meta/expect/f00.tsv` (12 Zeilen, grün).
+
+| Status | Kandidat | Ergebnis |
 |---|---|---|
-| ? | `IModApi` / `InitMod(Mod)` | Einstiegspunkt-Signatur in V2.x |
-| ? | `ModEvents` | Welche Events gibt es (GameStartDone, PlayerSpawned, …) und lassen sich Patches dadurch vermeiden? |
-| ? | `ConnectionManager`, `NetPackage*` (Auth/Login) | Gibt es einen Hook für einen Mod-Versions-Handshake? |
-| ? | `Constants` / Versionsinfo-Klasse | Wo steht die Spielversion zur Laufzeit (Build-Guard)? |
+| ✓ | `IModApi` / `InitMod(Mod)` | **Bestätigt**: `void IModApi::InitMod(Mod)`, einziger Aufrufer `Mod::InitModCode`. Einstiegsklasse braucht `public` + öffentlichen parameterlosen Konstruktor (`Activator.CreateInstance`). |
+| ✓ | `ModEvents` | **Anders als vermutet**: 22 generische Event-Objekte mit Nutzdaten-Strukturen. Registrierung über `ModEvents/ModEventAbs`1::RegisterHandler(!0)`. Vier Events sind interruptible: `MainMenuOpening`, `PlayerLogin`, `GameMessage`, `ChatMessage`. |
+| ✗ | `ConnectionManager`, `NetPackage*` (Auth/Login) | **Nicht nötig.** `ModEvents.PlayerLogin` ist interruptible (`EModEventResult.StopHandlersAndVanilla`) und trägt den Versions-Handshake ohne Patch. |
+| ✓ | `Constants` / Versionsinfo-Klasse | `Constants.cVersionInformation` (Typ `VersionInformation`), dazu `cVersionMajor/Minor/Build`. Build-Guard über `VersionInformation::CompareToRunningBuild()` → `SameBuild`/`SameMinor`/`NewerMinor`/`OlderMinor`/`DifferentMajor`. **Kein Patch nötig.** Der Zahlenwert der Version ist noch nicht gelesen. |
+| ✓ | `ModInfo.xml`-Format V2 | Wurzel `<xml>`, Felder als direkte Kinder mit `value="…"`. Gelesen werden genau: `Name` (Pflicht, Regex), `DisplayName` (Pflicht), `Version`, `Description`, `Author`, `Website`, `SkipWithAntiCheat`. **Das Altformat lädt nicht mehr** („V2 required to load mod“). |
+| ✓ | Harmony-Bereitstellung | HarmonyX **2.13.0.0** vorgeladen in `Mods\0_TFP_Harmony\`, nicht in `Managed\`. Wir liefern kein eigenes `0Harmony.dll`. |
+| ✓ | EAC-Verhalten | `Mod::LoadAssemblies` fragt `IAntiCheatClient::ClientAntiCheatEnabled`; mit aktivem EAC wird ein Mod mit eigenem Code nicht geladen. Spec 01 damit belegt. |
 
 ## F-02
 | Status | Kandidat | Frage |
