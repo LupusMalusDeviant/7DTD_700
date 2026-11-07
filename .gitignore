@@ -1,0 +1,21 @@
+# --- Spieldateien: NIE committen (Urheberrecht The Fun Pimps) ---
+GameRefs/
+**/7DaysToDie_Data/
+Assembly-CSharp*.dll
+0Harmony.dll
+UnityEngine*.dll
+LogLibrary.dll
+
+# --- Lokale REA-Rohdaten (enthalten dekodierte Spiel-Metadaten/CIL) ---
+# Ins Repo kommen nur die kuratierten Notizen unter docs/rea/findings/*.md
+.rea/
+rea-out/
+*.evidence.json
+
+# --- Build ---
+bin/
+obj/
+*.user
+.vs/
+.idea/
+dist/
