@@ -47,8 +47,24 @@ Kleinschreibung. Das ist der Ersatz für das Raten aus `hook-hypothesen.md`.
 ```
 
 Je Methode: kanonische Signatur, Token, Attribute, Rückgabe, Parameter, ausgehende Aufrufe,
-Feldzugriffe und geladene Zeichenketten. `--callers` durchläuft **jeden** Methodenkörper der
-Assembly und meldet, wer die ausgewählten Methoden aufruft.
+Feldzugriffe und geladene Zeichenketten. Je Feld zusätzlich `constant_value` aus der
+Constant-Tabelle — damit kommen auch die **Zahlenwerte von Enum-Mitgliedern** mit.
+
+`--callers` durchläuft **jeden** Methodenkörper der Assembly und meldet, wer die ausgewählten
+Methoden aufruft.
+
+`--il` gibt je Methode eine knappe Spur aus: nur Zahlenkonstanten, Aufrufe und
+Feldschreibzugriffe, in Befehlsreihenfolge. Damit lassen sich Konstanten ablesen, die einem
+Aufruf als Argumente vorausgehen:
+
+```
+5: ldc.i4.1   1
+6: ldc.i4.3   3
+7: ldc.i4.s  40
+8: ldc.i4.s  10
+9: newobj VersionInformation::.ctor
+10: stsfld Constants::cVersionInformation
+```
 
 Verschachtelte Typen werden mit `/` adressiert: `ModEvents/ModEvent`1`. Der Name muss exakt
 passen; was nicht passt, steht in `selection.unmatched_type_names`.
@@ -95,8 +111,10 @@ type-missing:      void GibtEsNichtKlasse::Foo()
 - Aufrufer über **Reflection**, **Unity-Messages** (`Update`, `Awake`) und **Delegaten** erscheinen
   nicht in der Aufrufer-Suche. Solche Pfade weiter per Ingame-Protokoll gegenprüfen
   (`interface-discovery.md`, Abschnitt 4).
-- **Zahlenoperanden** (`ldc.i4` und Verwandte) werden nicht erfasst. Konstanten wie die
-  Spielversion in `Constants::.cctor` sind damit nicht lesbar.
+- Die Spur aus `--il` ist **keine Datenflussanalyse**. Sie zeigt die Reihenfolge der Befehle;
+  dass die Konstanten direkt davor die Argumente des Aufrufs sind, muss man selbst prüfen
+  (Anzahl der Parameter gegen Anzahl der Konstanten, keine Verzweigung dazwischen).
+  Gleitkommakonstanten (`ldc.r4`/`ldc.r8`) werden noch nicht erfasst.
 - Die **Server-/Client-Zuordnung** bleibt ein Indiz und braucht den Dedicated-Test.
 - Metadaten-Tokens gelten nur für genau den gemeldeten SHA-256 und die gemeldete MVID.
 

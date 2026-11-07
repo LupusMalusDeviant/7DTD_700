@@ -46,10 +46,10 @@ internal static class Il
     };
 
     /// <summary>
-    /// Läuft die IL-Bytes ab und gibt je Befehl den Opcode-Namen und, wo vorhanden,
-    /// das 4-Byte-Metadaten-Token zurück (sonst 0).
+    /// Läuft die IL-Bytes ab und gibt je Befehl den Opcode-Namen, das 4-Byte-Metadaten-Token
+    /// (sonst 0) und den Zahlenoperanden zurück, wo es einen gibt.
     /// </summary>
-    public static IEnumerable<(string Name, int Token)> Walk(byte[] il)
+    public static IEnumerable<(string Name, int Token, long? Value)> Walk(byte[] il)
     {
         int i = 0;
         while (i < il.Length)
@@ -83,7 +83,15 @@ internal static class Il
                 token = BinaryPrimitives.ReadInt32LittleEndian(tail);
             }
 
-            yield return (opcode.Name ?? value.ToString("x4"), token);
+            long? numeric = opcode.OperandType switch
+            {
+                OperandType.ShortInlineI => (sbyte)tail[0],
+                OperandType.InlineI => BinaryPrimitives.ReadInt32LittleEndian(tail),
+                OperandType.InlineI8 => BinaryPrimitives.ReadInt64LittleEndian(tail),
+                _ => null
+            };
+
+            yield return (opcode.Name ?? value.ToString("x4"), token, numeric);
             i = operandStart + operandSize;
         }
     }
@@ -104,7 +112,7 @@ internal static class Il
         var fields = new List<string>();
         var strings = new List<string>();
 
-        foreach (var (name, token) in Walk(il))
+        foreach (var (name, token, _) in Walk(il))
         {
             if (token == 0) continue;
 
@@ -145,4 +153,57 @@ internal static class Il
 
         return new Edges([.. calls], [.. fields], [.. strings]);
     }
+
+    /// <summary>
+    /// Kompakte Spur eines Methodenkörpers: nur Zahlenkonstanten und Aufrufe, in
+    /// Befehlsreihenfolge. Damit lassen sich Konstanten ablesen, die einem Aufruf
+    /// als Argumente vorausgehen — etwa die Versionszahlen vor
+    /// <c>newobj VersionInformation::.ctor</c>.
+    /// </summary>
+    public static string[] Trace(PEReader pe, MetadataReader reader, MethodDefinition md)
+    {
+        if (md.RelativeVirtualAddress == 0) return [];
+
+        byte[] il;
+        try { il = pe.GetMethodBody(md.RelativeVirtualAddress).GetILBytes() ?? []; }
+        catch (BadImageFormatException) { return []; }
+
+        var steps = new List<string>();
+        foreach (var (name, token, value) in Walk(il))
+        {
+            long? constant = value ?? MacroConstant(name);
+            if (constant is not null)
+            {
+                steps.Add($"{name} {constant}");
+                continue;
+            }
+
+            if (name is "call" or "callvirt" or "newobj" or "stsfld" or "stfld" && token != 0)
+            {
+                EntityHandle handle;
+                try { handle = MetadataTokens.EntityHandle(token); }
+                catch (ArgumentException) { continue; }
+                if (handle.IsNil) continue;
+                steps.Add($"{name} {Naming.MemberTarget(reader, handle)}");
+            }
+        }
+
+        return [.. steps];
+    }
+
+    /// <summary>Wert der Kurzform-Ladebefehle (<c>ldc.i4.0</c> … <c>ldc.i4.8</c>, <c>ldc.i4.m1</c>).</summary>
+    private static long? MacroConstant(string name) => name switch
+    {
+        "ldc.i4.m1" => -1,
+        "ldc.i4.0" => 0,
+        "ldc.i4.1" => 1,
+        "ldc.i4.2" => 2,
+        "ldc.i4.3" => 3,
+        "ldc.i4.4" => 4,
+        "ldc.i4.5" => 5,
+        "ldc.i4.6" => 6,
+        "ldc.i4.7" => 7,
+        "ldc.i4.8" => 8,
+        _ => null
+    };
 }

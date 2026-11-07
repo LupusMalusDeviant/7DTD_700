@@ -76,7 +76,7 @@ internal static class Program
             mod700meta — statischer Metadaten-Leser (liest nur Metadaten, lädt nichts)
 
               types   <dll> [--contains <text>] [--max <n>]
-              members <dll> --type <FullName> [--type <FullName> ...] [--callers]
+              members <dll> --type <FullName> [--type <FullName> ...] [--callers] [--il]
               verify  <dll> --expect <datei.tsv>
 
             verify erwartet Zeilen "Typ<TAB>Member<TAB>Signatur" und endet mit Exit 1,
@@ -192,12 +192,14 @@ internal static class Program
     {
         var wanted = new List<string>();
         bool withCallers = false;
+        bool withIl = false;
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
                 case "--type" when i + 1 < args.Length: wanted.Add(args[++i]); break;
                 case "--callers": withCallers = true; break;
+                case "--il": withIl = true; break;
                 default: return Fail($"unbekannte Option für members: {args[i]}");
             }
         }
@@ -254,7 +256,8 @@ internal static class Program
                     generic_parameter_count = sig.GenericParameterCount,
                     calls = edges.Calls,
                     field_accesses = edges.FieldAccesses,
-                    string_literals = edges.Strings
+                    string_literals = edges.Strings,
+                    il_trace = withIl ? Il.Trace(pe, reader, md) : null
                 });
             }
 
@@ -268,7 +271,8 @@ internal static class Program
                     type = fd.DecodeSignature(provider, null),
                     token = $"0x{MetadataTokens.GetToken(fh):x8}",
                     attributes = fd.Attributes.ToString(),
-                    is_static = (fd.Attributes & FieldAttributes.Static) != 0
+                    is_static = (fd.Attributes & FieldAttributes.Static) != 0,
+                    constant_value = ReadConstant(reader, fd)
                 });
             }
 
@@ -311,6 +315,43 @@ internal static class Program
         return 0;
     }
 
+    /// <summary>
+    /// Festwert eines Feldes aus der Constant-Tabelle, sofern es einen hat. Das liefert
+    /// unter anderem die Zahlenwerte von Enum-Mitgliedern.
+    /// </summary>
+    private static string? ReadConstant(MetadataReader reader, FieldDefinition fd)
+    {
+        var handle = fd.GetDefaultValue();
+        if (handle.IsNil) return null;
+
+        var constant = reader.GetConstant(handle);
+        if (constant.Value.IsNil) return null;
+
+        var blob = reader.GetBlobReader(constant.Value);
+        try
+        {
+            return constant.TypeCode switch
+            {
+                ConstantTypeCode.Boolean => blob.ReadBoolean().ToString(),
+                ConstantTypeCode.Char => ((int)blob.ReadChar()).ToString(),
+                ConstantTypeCode.SByte => blob.ReadSByte().ToString(),
+                ConstantTypeCode.Byte => blob.ReadByte().ToString(),
+                ConstantTypeCode.Int16 => blob.ReadInt16().ToString(),
+                ConstantTypeCode.UInt16 => blob.ReadUInt16().ToString(),
+                ConstantTypeCode.Int32 => blob.ReadInt32().ToString(),
+                ConstantTypeCode.UInt32 => blob.ReadUInt32().ToString(),
+                ConstantTypeCode.Int64 => blob.ReadInt64().ToString(),
+                ConstantTypeCode.UInt64 => blob.ReadUInt64().ToString(),
+                ConstantTypeCode.Single => blob.ReadSingle().ToString("R"),
+                ConstantTypeCode.Double => blob.ReadDouble().ToString("R"),
+                ConstantTypeCode.String => blob.ReadUTF16(blob.RemainingBytes / 2),
+                ConstantTypeCode.NullReference => "null",
+                _ => null
+            };
+        }
+        catch (BadImageFormatException) { return null; }
+    }
+
     /// <summary>Durchläuft jeden Methodenkörper der Assembly und sammelt Aufrufe auf die Zielmethoden.</summary>
     private static object FindCallers(PEReader pe, MetadataReader reader, Dictionary<int, string> targets)
     {
@@ -330,7 +371,7 @@ internal static class Program
             scanned++;
             string? callerName = null;
 
-            foreach (var (opcode, operandToken) in Il.Walk(il))
+            foreach (var (opcode, operandToken, _) in Il.Walk(il))
             {
                 if (operandToken == 0) continue;
                 if (opcode is not ("call" or "callvirt" or "newobj" or "ldftn" or "ldvirtftn" or "jmp")) continue;

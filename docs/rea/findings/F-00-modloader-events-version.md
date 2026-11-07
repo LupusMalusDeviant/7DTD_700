@@ -165,11 +165,11 @@ Das Patch-Manifest bleibt für F-00 leer. Der erste echte Eintrag kommt mit F-08
 
 ## Offene Punkte / Limitierungen
 
-- **Die genaue Spielversion ist nicht gelesen.** `Constants::.cctor` setzt
-  `cVersionInformation` aus `ldc.i4`-Konstanten; `mod700meta` erfasst Aufruf-Tokens und
-  Zeichenketten, keine Zahlenoperanden. Die Version lässt sich beim ersten Spielstart aus
-  `Constants.cVersionInformation.LongString` protokollieren — oder das Werkzeug wird um das
-  Auslesen von `ldc`-Operanden erweitert.
+- **Die Spielversion ist inzwischen gelesen** (`mod700meta --il`, Werkzeug am selben Tag um
+  Zahlenoperanden und die Constant-Tabelle erweitert): Release-Typ `V`, Major 3, Minor 40,
+  Build 10. ⚠️ Das **widerspricht** „V2.x Stable“ in GDD und Spec 01 — dem Nutzer vorgelegt,
+  siehe [00-build-baseline.md](00-build-baseline.md), Punkt 4. Bis das entschieden ist, wird
+  die getestete Fassung im Build-Guard **nicht** fest eingetragen.
 - **Die Nutzdaten-Strukturen `ModEvents/S…Data` sind nicht aufgeschlüsselt.** Für F-00 reicht
   `SPlayerLoginData`; dessen Felder sind noch zu lesen, bevor der Handshake gebaut wird.
 - **`ModEventHandlerDelegate`1` und `ModEventInterruptibleHandlerDelegate`1`** sind in ihrer
