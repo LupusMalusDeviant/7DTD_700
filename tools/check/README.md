@@ -82,7 +82,7 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **33 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **35 Gegenproben, 0 fehlgeschlagen.**
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -110,8 +110,10 @@ Lauf vom 2026-11-07: **33 Gegenproben, 0 fehlgeschlagen.**
 | derselbe Lauf mit `--ohne-aufschub` | Exit 1, Kennung wieder als Fehler | sonst wäre nicht zu sehen, dass der Aufschub nur umbucht |
 | `anachronisms` mit `aufschub-ohne-wp.txt` | Exit 2 | ein Aufschub ohne Arbeitspaket ist ein Loch mit guter Presse |
 | `purge-patch testdaten/purge --zeigen` | `set` für `pruefFeuerrohrEigen`, `append` für `pruefFeuerrohrGeerbt`, `pruefSelbstbogen` in **keiner** Zeile | die Form entscheiden die Daten; ein `set` auf eine fehlende Eigenschaft trifft nichts und schweigt |
-| `purge-patch testdaten/purge` | `wege_uebrig 0` | `pruefFeuerrohrEigen` hat **zwei** Rezepte — eine Zeile, die nur eines trifft, wäre hier rot |
-| derselbe Lauf mit `--ohne-entfernen` | Exit 1, `weg-bleibt-offen: recipes.xml` | der Nachweis, dass die Nachprobe überhaupt etwas prüft |
+| `purge-patch testdaten/purge` | `wege_uebrig 0` und `gesperrt_und_noch_erreichbar 0` | `pruefFeuerrohrEigen` hat **zwei** Rezepte — eine Zeile, die nur eines trifft, wäre hier rot |
+| derselbe Lauf mit `--ohne-entfernen` | Exit 1, `weg-bleibt-offen` **und** `gesperrt-trotz-patch` | der Nachweis, dass beide Nachproben überhaupt etwas prüfen |
+| `purge-patch testdaten/purge --zeigen` | gemischte Belohnungsliste wird **gekürzt**, nicht entfernt | wer hier `remove` nimmt, nimmt dem Spieler zwei erlaubte Belohnungen mit — Vanilla hat 256 solche Listen |
+| `purge-patch testdaten/purge --zeigen` | Startausrüstung gekürzt, `pruefSelbstbogen=2` behält die Stückzahl | ohne die Eigenschaft startet der Spieler mit leeren Händen, ohne die Stückzahl mit einem Stück statt zwei |
 | `purge-patch --vergleiche` gegen einen Ordner ohne die Dateien | Exit 1, `patchdatei-fehlt` | erzeugte Dateien und Denylist können auseinanderlaufen |
 | `purge-patch` ohne `--out` und ohne `--trocken` | Exit 2 | Benutzungsfehler |
 | `--ohne-regel gibtesnicht` | Exit 2 | Benutzungsfehler, kein Befund |
@@ -163,9 +165,10 @@ nichts. Grün wird er erst gegen einen `ConfigsDump` **mit** unseren Modlets, un
 und zwei Listen laufen auseinander. Die Prüfung würde den Unterschied nicht sehen, weil sie die
 gemergte Config liest und nicht unsere Patch-Dateien.
 
-Stand WP3.2 (gegen Vanilla V 3.40): **912 Patchzeilen** — 437 in `items.xml`, 106 in
-`blocks.xml`, 369 in `recipes.xml`. `patches_ohne_treffer 0`, `wege_uebrig 0`,
-`remove_auf_definition 0`.
+Stand WP3.2 bis WP3.4 (gegen Vanilla V 3.40): **1780 Patchzeilen** — `items.xml` 437,
+`blocks.xml` 106, `recipes.xml` 369, `loot.xml` 467, `traders.xml` 348, `quests.xml` 50,
+`entityclasses.xml` 3. Alle Wächterzähler 0: `patches_ohne_treffer`, `wege_uebrig`,
+`gesperrt_und_noch_erreichbar`, `remove_auf_definition`, `patchdateien_abweichend`.
 
 Drei Eigenschaften, die nicht selbstverständlich sind:
 
@@ -176,17 +179,40 @@ Drei Eigenschaften, die nicht selbstverständlich sind:
   wird der Wert ersetzt; erbt er es, wird die Eigenschaft angehängt. Ein `set` auf eine
   Eigenschaft, die es nicht gibt, trifft nichts und schweigt — genau die Fehlerart, die in WP3.1
   dreimal zugeschlagen hat.
+- **Listen werden gekürzt, nicht entfernt.** Vanilla hat 256 Quest-Belohnungen, deren `id` eine
+  Liste ist (`groupQuestFood,groupQuestAmmo,groupQuestSchematics`), und die Startausrüstung ist
+  ebenfalls eine. Steht nur Gesperrtes darin, fällt der Eintrag; steht auch Erlaubtes darin, wird
+  die Liste gekürzt — mit Stückzahlen, aus `drinkJarBoiledWater=2,foodCanChili` wird
+  `drinkJarBoiledWater=2`. Wer hier blind `remove` nimmt, nimmt dem Spieler die erlaubten
+  Einträge derselben Liste mit.
 - **`check-all.ps1` vergleicht.** Erzeugte und mitgelieferte Dateien laufen auseinander, sobald
   jemand die Denylist ändert und das Erzeugen vergisst. `purge-patch --vergleiche` meldet das als
   `patchdatei-veraltet`; nachgewiesen am 2026-11-07, indem eine Änderung am Kopftext die drei
   Dateien rot machte und die Neuerzeugung sie wieder grün.
 
-**Was das nicht beweist:** Patches und Prüfung stammen aus demselben Urteil, also sagt ihre
-Übereinstimmung nur, dass sie zueinander passen. Der Nachweis ist der Weg über das Spiel —
-Patch, Spielstart, `ConfigsDump`, `anachronisms`. Erst dort entscheidet der XML-Patcher des
-Spiels, ob ein XPath wirklich getroffen hat. Und `CreativeMode="None"` ist **keine** Sperre für
-den Spieler: es nimmt den Gegenstand aus dem Kreativmenü, nicht aus dem Spiel. Unerreichbar wird
-er allein durch die entfernten Wege.
+**Die Gesamtprobe.** Jede Datei einzeln zu prüfen sagt nicht, ob der Satz *zusammen* alle fünf
+Wegarten schließt: eine Kennung, die nur noch in der Startausrüstung steht, wäre in jeder
+Einzelprobe grün. `gesperrt_und_noch_erreichbar` wendet darum alle 1780 Zeilen auf Kopien an und
+rechnet die Erreichbarkeit auf dem Ergebnis neu — mit demselben `Reachability`, das die Prüfung
+benutzt, nicht mit einer zweiten Fassung. Gemessen: **0**, mit `--ohne-entfernen` **592**.
+
+**Ein Nebeneffekt, der benannt gehört:** 217 von 1016 Loot-Gruppen enthalten nach dem Patch
+keinen Eintrag mehr. Sie bleiben absichtlich stehen — Behälter und Quest-Belohnungen zeigen auf
+ihre Namen, und ein fehlender Name bricht hart. Umgebogen werden sie mit F-05 in WP4. Ob das
+Spiel eine leere Gruppe stillschweigend hinnimmt, eine Protokollzeile schreibt oder beim Würfeln
+abbricht, **weiß hier niemand** — das ist der erste Punkt, den der Protokolllauf in WP3.6
+beantworten muss.
+
+**Was das nicht beweist:** Patches und Prüfung stammen aus demselben Urteil, und die Gesamtprobe
+rechnet mit meinem XPath, nicht mit dem XML-Patcher des Spiels. Ihre Übereinstimmung sagt nur,
+dass sie zueinander passen. Der Nachweis ist der Weg über das Spiel — Patch, Spielstart,
+`ConfigsDump`, `anachronisms` (WP3.6, braucht den Nutzer). Und `CreativeMode="None"` ist **keine**
+Sperre für den Spieler: es nimmt den Gegenstand aus dem Kreativmenü, nicht aus dem Spiel.
+Unerreichbar wird er allein durch die entfernten Wege.
+
+Was dem Spieler *statt* der gesperrten Startausrüstung gegeben wird, steht nicht im Purge-Modlet,
+sondern von Hand in `mod/700_30_Ausruestung/Config/entityclasses.xml` (WP3.4). Das ist die
+Grenze: was aus der Denylist folgt, wird erzeugt; was eine Entscheidung ist, wird geschrieben.
 
 ## Grenzen
 

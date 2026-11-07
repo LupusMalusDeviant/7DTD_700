@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_10_Purge / entityclasses.xml
+	     F-01 Anachronismen-Purge, Plan-0001 WP3.2 bis WP3.4
+
+	     Die Startausruestung steht als kommagetrennte Liste im 'value' einer
+	     Eigenschaft unter 'ItemsOnEnterGame' - mit Stueckzahlen wie
+	     'drinkJarBoiledWater=2'. Gekuerzt wird, nicht entfernt: ohne die
+	     Eigenschaft startet der Spieler mit leeren Haenden. Was dazukommt, steht
+	     in 700_30_Ausruestung - dieses Modlet nimmt nur weg.
+
+	     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und
+	     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung
+	     ueberschreibt die Aenderung lautlos, und check-all.ps1 meldet
+	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
+	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
+	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
+	     3 Zeilen. -->
+
+	<setattribute xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival'][@value='drinkJarBoiledWater=2,foodCanChili,medicalFirstAidBandage,meleeToolTorch,noteDuke01']" name="value">drinkJarBoiledWater=2,medicalFirstAidBandage,meleeToolTorch,noteDuke01</setattribute>  <!-- Liste gekuerzt, 1 von 5 gesperrt -->
+	<setattribute xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalMP'][@value='drinkJarBoiledWater,foodCanChili,medicalFirstAidBandage,meleeToolTorch']" name="value">drinkJarBoiledWater,medicalFirstAidBandage,meleeToolTorch</setattribute>  <!-- Liste gekuerzt, 1 von 4 gesperrt -->
+	<setattribute xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalSP'][@value='drinkJarBoiledWater,foodCanChili,medicalFirstAidBandage,meleeToolTorch']" name="value">drinkJarBoiledWater,medicalFirstAidBandage,meleeToolTorch</setattribute>  <!-- Liste gekuerzt, 1 von 4 gesperrt -->
+</config>

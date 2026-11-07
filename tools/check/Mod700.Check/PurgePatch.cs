@@ -33,11 +33,9 @@ namespace Mod700.Check;
 internal static class PurgePatch
 {
     /// <summary>
-    /// Was WP3.2 schreibt. Loot, Haendler, Quest-Belohnungen und Startausruestung sind
-    /// bewusst NICHT dabei - die sind WP3.3 und WP3.4, und der Plan staffelt sie, damit
-    /// jede Stufe fuer sich nachlesbar bleibt.
+    /// Der Planschritt, der im Kopf jeder erzeugten Datei steht.
     /// </summary>
-    private const string Stufe = "WP3.2";
+    private const string Stufe = "WP3.2 bis WP3.4";
 
     /// <summary>
     /// Woraus erzeugt wurde, fuer den Kopf jeder Datei. Steht dort, weil eine erzeugte
@@ -156,7 +154,36 @@ internal static class PurgePatch
                 "Das Rezept ist ein WEG zu einem Gegenstand, und Wege darf 'remove' treffen "
                 + "(Vertrag 03 §4). Mehrere Treffer sind hier Absicht: ein Gegenstand kann "
                 + "mehrere Rezepte haben, und alle sollen fallen.",
-                skipRemovals)
+                skipRemovals),
+
+            Removals(source, blockedNames, "loot.xml", "item", "name",
+                "F-01 sagt 'Loot-Tabellen leeren bzw. umbiegen'. Geleert wird hier: der "
+                + "Eintrag faellt, die Gruppe bleibt stehen. Eine Gruppe zu entfernen waere "
+                + "schlimmer als sie zu leeren - Behaelter und Quest-Belohnungen zeigen auf "
+                + "ihren Namen, und ein fehlender Name bricht hart. Wie viele Gruppen dadurch "
+                + "leer dastehen, sagt der Bericht; umgebogen werden sie erst mit F-05.",
+                skipRemovals),
+
+            Removals(source, blockedNames, "traders.xml", "item", "name",
+                "Haendlerware ist ein Weg wie jeder andere. Eintraege mit 'group' statt "
+                + "'name' bleiben unberuehrt - was in der Gruppe liegt, entscheidet loot.xml.",
+                skipRemovals),
+
+            ListAttribute(source, blockedNames, "quests.xml", "reward", "id",
+                "Eine Quest-Belohnung nennt in 'id' eine Kennung ODER eine Liste davon. "
+                + "Steht nur Gesperrtes darin, faellt die Belohnung; stehen auch erlaubte "
+                + "Namen darin, wird die Liste gekuerzt statt die Belohnung entfernt. Wer "
+                + "hier blind 'remove' nimmt, nimmt dem Spieler drei erlaubte Belohnungen "
+                + "mit, weil eine gesperrte in derselben Liste stand.",
+                skipRemovals),
+
+            ListAttribute(source, blockedNames, "entityclasses.xml", "property", "value",
+                "Die Startausruestung steht als kommagetrennte Liste im 'value' einer "
+                + "Eigenschaft unter 'ItemsOnEnterGame' - mit Stueckzahlen wie "
+                + "'drinkJarBoiledWater=2'. Gekuerzt wird, nicht entfernt: ohne die "
+                + "Eigenschaft startet der Spieler mit leeren Haenden. Was dazukommt, steht "
+                + "in 700_30_Ausruestung - dieses Modlet nimmt nur weg.",
+                skipRemovals, parentClass: "ItemsOnEnterGame")
         };
 
         int lines = 0;
@@ -216,6 +243,76 @@ internal static class PurgePatch
                             || o.VerifyXPath.StartsWith("/item_modifiers/item_modifier[", StringComparison.Ordinal)));
 
         report.Count("remove_auf_definition", onDefinition);
+
+        // Eine geleerte Loot-Gruppe ist der bekannte Nebeneffekt von "leeren statt
+        // entfernen". Sie bleibt stehen, weil Behaelter und Quest-Belohnungen auf ihren
+        // Namen zeigen - aber sie gibt nichts mehr her. Das ist keine Fehlermeldung, es ist
+        // eine Zahl, die beim Spielstart in WP3.6 nachzusehen ist: ob das Spiel eine leere
+        // Gruppe stillschweigend hinnimmt oder eine Protokollzeile schreibt, weiss hier
+        // niemand, und behaupten soll es auch niemand.
+        // Die Gesamtprobe. Jede Datei fuer sich zu pruefen sagt nicht, ob der Satz ZUSAMMEN
+        // alle fuenf Wegarten schliesst: eine Kennung, die nur noch in der Startausruestung
+        // steht, waere in jeder Einzelprobe gruen. Also werden alle erzeugten Zeilen auf
+        // Kopien angewandt und die Erreichbarkeit auf dem Ergebnis neu gerechnet - mit
+        // demselben Reachability, das die Pruefung benutzt, nicht mit einer zweiten Fassung.
+        var patchedDocs = new Dictionary<string, XDocument>(StringComparer.OrdinalIgnoreCase);
+        foreach (PatchFile file in files.Where(f => f.Operations.Count > 0))
+        {
+            XDocument? original = source.Load(file.FileName);
+            if (original is null)
+            {
+                continue;
+            }
+
+            var copy = new XDocument(original);
+            foreach (PatchOperation op in file.Operations)
+            {
+                foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
+                {
+                    if (op.SetAttribute is null && op.Xml.StartsWith("<remove", StringComparison.Ordinal))
+                    {
+                        hit.Remove();
+                    }
+                    else if (op.SetAttribute is not null)
+                    {
+                        hit.SetAttributeValue(op.SetAttribute, op.NewValue);
+                    }
+                }
+            }
+
+            patchedDocs[file.FileName] = copy;
+        }
+
+        ConfigSource patchedSource = ConfigSource.Patched(source, patchedDocs);
+        var stillReachable = Reachability.Names(patchedSource)
+            .Where(blockedNames.Contains)
+            .ToList();
+
+        report.Count("gesperrt_und_noch_erreichbar", stillReachable.Count);
+
+        foreach (string name in stillReachable.Take(20))
+        {
+            report.Error("gesperrt-trotz-patch", name,
+                "diese Kennung ist auch nach allen erzeugten Patchzeilen noch erreichbar. "
+                + "Der Patch-Satz deckt nicht, was die Pruefung findet.");
+        }
+
+        PatchFile lootFile = files.First(f => f.FileName == "loot.xml");
+        (int emptied, int total) = EmptiedLootGroups(source, lootFile);
+        report.Count("loot_gruppen_gesamt", total);
+        report.Count("loot_gruppen_leer_danach", emptied);
+
+        if (emptied > 0)
+        {
+            report.Hint("loot-gruppe-leer", $"{emptied} von {total} Gruppen",
+                "diese Loot-Gruppen enthalten nach dem Patch keinen Eintrag mehr. Sie "
+                + "bleiben absichtlich stehen, weil Behaelter und Quest-Belohnungen auf "
+                + "ihre Namen zeigen und ein fehlender Name hart bricht. Umgebogen werden "
+                + "sie mit F-05 in WP4. ACHTUNG, ungeprueft: ob das Spiel eine leere Gruppe "
+                + "stillschweigend hinnimmt oder eine Protokollzeile schreibt oder beim "
+                + "Wuerfeln abbricht, weiss hier niemand. Das ist der erste Punkt, den der "
+                + "Protokolllauf in WP3.6 beantworten muss.");
+        }
 
         if (onDefinition > 0)
         {
@@ -318,9 +415,11 @@ internal static class PurgePatch
             + "Absichtserklaerung in den Daten, nicht als Wirkung.");
 
         report.Limitation(
-            $"{Stufe} schreibt items.xml, blocks.xml und recipes.xml. Loot, Haendler, "
-            + "Quest-Belohnungen und Startausruestung fehlen noch - das sind WP3.3 und WP3.4. "
-            + "Bis dahin bleibt 'anachronisms' rot, und zwar zu Recht.");
+            $"{Stufe} schreibt alle fuenf Dateien: items.xml und blocks.xml (CreativeMode), "
+            + "recipes.xml, loot.xml, traders.xml (Wege entfernt), quests.xml und "
+            + "entityclasses.xml (Listen gekuerzt). Was dem Spieler dafuer gegeben wird, "
+            + "steht nicht hier - dieses Modlet nimmt nur weg (D53: 700_10_Purge laeuft vor "
+            + "allen anderen).");
 
         if (unresolved > 0)
         {
@@ -473,14 +572,148 @@ internal static class PurgePatch
         {
             foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
             {
+                if (op.SetAttribute is null)
+                {
+                    hit.Remove();
+                }
+                else
+                {
+                    hit.SetAttributeValue(op.SetAttribute, op.NewValue);
+                }
+            }
+        }
+
+        IEnumerable<XElement> candidates = copy.Descendants(file.ElementName);
+        if (file.ParentClass is not null)
+        {
+            candidates = candidates.Where(
+                e => e.Parent?.Attribute("class")?.Value == file.ParentClass);
+        }
+
+        return candidates
+            .Select(e => e.Attribute(file.Attribute)?.Value)
+            .Where(v => v is not null)
+            .Sum(v => file.ValuesAreLists
+                ? v!.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Count(entry => blocked.Contains(Bare(entry)))
+                : blocked.Contains(v!) ? 1 : 0);
+    }
+
+    /// <summary>
+    /// Kuerzt ein Attribut, das eine kommagetrennte Liste von Kennungen traegt, um die
+    /// gesperrten Eintraege - und entfernt das Element nur dann, wenn nichts uebrig bleibt.
+    ///
+    /// <para>Das ist der Fall, in dem ein blindes 'remove' Schaden anrichtet. Vanilla hat
+    /// 256 Quest-Belohnungen, deren 'id' eine Liste ist
+    /// (<c>groupQuestFood,groupQuestAmmo,groupQuestSchematics</c>). Wer die Belohnung
+    /// entfernt, weil ein Name darin gesperrt ist, nimmt dem Spieler die anderen mit. Und
+    /// die Startausruestung ist genau eine solche Liste: ohne sie startet der Spieler mit
+    /// leeren Haenden.</para>
+    ///
+    /// <para>Stueckzahlen bleiben erhalten: aus <c>drinkJarBoiledWater=2,foodCanChili</c>
+    /// wird <c>drinkJarBoiledWater=2</c>, nicht <c>drinkJarBoiledWater</c>.</para>
+    /// </summary>
+    private static PatchFile ListAttribute(
+        ConfigSource source, HashSet<string> blocked, string fileName, string elementName,
+        string attribute, string why, bool skip = false, string? parentClass = null)
+    {
+        XDocument? document = source.Load(fileName);
+        var operations = new List<PatchOperation>();
+
+        if (document is null || skip)
+        {
+            return new PatchFile(fileName, why, operations);
+        }
+
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (XElement element in document.Descendants(elementName))
+        {
+            if (parentClass is not null
+                && element.Parent?.Attribute("class")?.Value != parentClass)
+            {
+                continue;
+            }
+
+            string? value = element.Attribute(attribute)?.Value;
+            if (value is null)
+            {
+                continue;
+            }
+
+            List<string> entries = value
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .ToList();
+
+            List<string> survivors = entries.Where(e => !blocked.Contains(Bare(e))).ToList();
+            if (survivors.Count == entries.Count)
+            {
+                continue;
+            }
+
+            string target = $"{PreciseChain(element)}[@{attribute}='{value}']";
+            if (!seen.Add(target))
+            {
+                continue;
+            }
+
+            string xml;
+            string reason;
+            if (survivors.Count == 0)
+            {
+                xml = $"<remove xpath=\"{target}\" />";
+                reason = "nur gesperrte Kennungen in der Liste";
+            }
+            else
+            {
+                xml = $"<setattribute xpath=\"{target}\" name=\"{attribute}\">"
+                      + $"{string.Join(",", survivors)}</setattribute>";
+                reason = $"Liste gekuerzt, {entries.Count - survivors.Count} von "
+                         + $"{entries.Count} gesperrt";
+            }
+
+            operations.Add(new PatchOperation(
+                value, xml, target, Count(document, target), reason,
+                survivors.Count == 0 ? null : attribute,
+                survivors.Count == 0 ? null : string.Join(",", survivors)));
+        }
+
+        operations.Sort((a, b) => string.CompareOrdinal(a.VerifyXPath, b.VerifyXPath));
+        return new PatchFile(fileName, why, operations, elementName, attribute,
+            ValuesAreLists: true, ParentClass: parentClass);
+    }
+
+    /// <summary>Der Name ohne Stueckzahl: aus <c>drinkJarBoiledWater=2</c> wird die Kennung.</summary>
+    private static string Bare(string entry) => entry.Split('=', 2)[0].Trim();
+
+    /// <summary>
+    /// Zaehlt die Loot-Gruppen, die nach den Entfernungen keinen Eintrag mehr haben. Gezaehlt
+    /// wird an einer Kopie, auf die die erzeugten Zeilen angewandt sind - nicht geschaetzt.
+    /// </summary>
+    private static (int Emptied, int Total) EmptiedLootGroups(ConfigSource source, PatchFile loot)
+    {
+        XDocument? original = source.Load(loot.FileName);
+        if (original is null)
+        {
+            return (0, 0);
+        }
+
+        int total = original.Descendants("lootgroup").Count();
+        if (loot.Operations.Count == 0)
+        {
+            return (original.Descendants("lootgroup").Count(g => !g.Elements().Any()), total);
+        }
+
+        var copy = new XDocument(original);
+        foreach (PatchOperation op in loot.Operations)
+        {
+            foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
+            {
                 hit.Remove();
             }
         }
 
-        return copy
-            .Descendants(file.ElementName)
-            .Select(e => e.Attribute(file.Attribute)?.Value)
-            .Count(v => v is not null && blocked.Contains(v));
+        return (copy.Descendants("lootgroup").Count(g => !g.Elements().Any()), total);
     }
 
     /// <summary>Der absolute Pfad der Elementnamen von der Wurzel bis zu diesem Element.</summary>
@@ -490,6 +723,35 @@ internal static class PurgePatch
         for (XElement? e = element; e is not null; e = e.Parent)
         {
             parts.Add(e.Name.LocalName);
+        }
+
+        parts.Reverse();
+        return "/" + string.Join("/", parts);
+    }
+
+    /// <summary>
+    /// Wie <see cref="Chain"/>, aber mit einem Praedikat an jedem Vorfahren, der sich
+    /// unterscheiden laesst (<c>@name</c>, sonst <c>@class</c>).
+    ///
+    /// <para>Noetig, wo der blosse Elementpfad nichts aussagt. Die Startausruestung liegt
+    /// unter <c>/entity_classes/entity_class/property/property</c> - ein Pfad, auf den in
+    /// entityclasses.xml tausende Eigenschaften passen. Mit Praedikaten wird daraus
+    /// <c>/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival']</c>,
+    /// und das trifft genau eine.</para>
+    /// </summary>
+    private static string PreciseChain(XElement element)
+    {
+        var parts = new List<string>();
+        for (XElement? e = element; e is not null; e = e.Parent)
+        {
+            string? name = e.Attribute("name")?.Value;
+            string? klass = e.Attribute("class")?.Value;
+
+            parts.Add(name is not null
+                ? $"{e.Name.LocalName}[@name='{name}']"
+                : klass is not null
+                    ? $"{e.Name.LocalName}[@class='{klass}']"
+                    : e.Name.LocalName);
         }
 
         parts.Reverse();
@@ -573,8 +835,10 @@ internal static class PurgePatch
 
     private sealed record PatchFile(
         string FileName, string Why, List<PatchOperation> Operations,
-        string? ElementName = null, string? Attribute = null);
+        string? ElementName = null, string? Attribute = null,
+        bool ValuesAreLists = false, string? ParentClass = null);
 
     private sealed record PatchOperation(
-        string Target, string Xml, string VerifyXPath, int Matches, string Reason);
+        string Target, string Xml, string VerifyXPath, int Matches, string Reason,
+        string? SetAttribute = null, string? NewValue = null);
 }

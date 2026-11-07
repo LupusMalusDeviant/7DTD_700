@@ -184,9 +184,10 @@ umgedeutet werden, **erhalten**.
    kein Loot). Begründung steht in F-01: gelöschte Items, die in POIs oder Quests referenziert
    werden, brechen hart. Welche Referenzen genau brechen, zeigt der Protokolllauf in WP3.6.~~
    **Erledigt 2026-11-07** — `items.xml`, `blocks.xml`, `recipes.xml`. Loot ist WP3.3.
-3. **WP3.3** `[Claude-prüfbar]` Loot-Tabellen leeren bzw. umbiegen (`loot.xml`).
-4. **WP3.4** `[Claude-prüfbar]` Händlerware und Quest-Belohnungen bereinigen, Startausrüstung
-   auf T0 (Lumpen, Steinwerkzeug) setzen.
+3. **WP3.3** `[Claude-prüfbar]` ~~Loot-Tabellen leeren bzw. umbiegen (`loot.xml`).~~
+   **Erledigt 2026-11-07** — geleert, nicht umgebogen; 217 von 1016 Gruppen stehen leer da.
+4. **WP3.4** `[Claude-prüfbar]` ~~Händlerware und Quest-Belohnungen bereinigen, Startausrüstung
+   auf T0 (Lumpen, Steinwerkzeug) setzen.~~ **Erledigt 2026-11-07.**
 5. **WP3.5** `[Claude-prüfbar]` **D9 wahren:** Geschütztürme, Generator, Solar, Batterien, Kabel,
    Schalter, Sensoren, elektrische Fallen, Drohne und Sprengstoff werden **nur in ihrer modernen
    Erscheinung** gesperrt — Klassen und Logik bleiben, weil F-15 (Phase 2) sie als Runensteine,
@@ -334,7 +335,61 @@ für den Spieler.** Es nimmt den Gegenstand aus dem Kreativmenü und aus der Ent
 nicht aus dem Spiel. Als Absichtserklärung in den Daten ist es richtig, als Wirkung nicht.
 Unerreichbar wird ein Gegenstand allein durch die entfernten Wege — und davon fehlen noch
 Loot (493 Kennungen), Händler (348), Quest-Belohnungen (50) und Startausrüstung (1). Das sind
-WP3.3 und WP3.4. `anachronisms` bleibt bis dahin mit 592 Befunden rot, und das ist richtig.
+WP3.3 und WP3.4.
+
+#### Stand 2026-11-07: WP3.3 und WP3.4 erledigt — der Purge ist vollständig
+
+`mod/700_10_Purge/Config/` hat jetzt **1780 Patchzeilen** in sieben Dateien, alle erzeugt:
+
+| Datei | Zeilen | was |
+|---|---|---|
+| `items.xml` | 437 | `CreativeMode=None` |
+| `blocks.xml` | 106 | `CreativeMode=None` |
+| `recipes.xml` | 369 | Rezepte entfernt |
+| `loot.xml` | 467 | Loot-Einträge entfernt |
+| `traders.xml` | 348 | Händlerware entfernt |
+| `quests.xml` | 50 | Belohnungslisten gekürzt bzw. entfernt |
+| `entityclasses.xml` | 3 | Startausrüstung gekürzt |
+
+Dazu **von Hand** `mod/700_30_Ausruestung/Config/entityclasses.xml`: die T0-Startausrüstung
+(Wasser, Lumpen, Steinaxt, Fackel, Wundauflage, Dukes Brief bis WP8). Das ist die Grenze
+zwischen den Modlets und zugleich zwischen erzeugt und geschrieben — was aus der Denylist
+folgt, wird erzeugt; was eine Entscheidung ist, wird geschrieben. Nahrung ist bewusst **nicht**
+dabei: Vanilla gab eine Dose Chili, F-01 nimmt sie weg, und ein Ersatz wäre Inhalt (F-19,
+Phase 2). Der Spieler startet hungrig.
+
+**Zwei neue Wächter:**
+
+- **Listen werden gekürzt, nicht entfernt.** Vanilla hat 256 Quest-Belohnungen, deren `id`
+  eine Liste ist, und die Startausrüstung ist auch eine. Nur Gesperrtes darin → der Eintrag
+  fällt; gemischt → die Liste wird gekürzt, mit Stückzahlen (`drinkJarBoiledWater=2` bleibt
+  `=2`). Wer hier blind `remove` nimmt, nimmt dem Spieler die erlaubten Einträge mit.
+- **Die Gesamtprobe.** Jede Datei einzeln zu prüfen sagt nicht, ob der Satz *zusammen* alle
+  fünf Wegarten schließt — eine Kennung, die nur noch in der Startausrüstung steht, wäre in
+  jeder Einzelprobe grün. `gesperrt_und_noch_erreichbar` wendet alle 1780 Zeilen auf Kopien an
+  und rechnet die Erreichbarkeit neu: **0**, mit `--ohne-entfernen` **592**.
+
+| | Zahl |
+|---|---|
+| Patchzeilen | 1780 |
+| `gesperrt_und_noch_erreichbar` | 0 |
+| `wege_uebrig` (alle fünf Dateien) | 0 |
+| `patches_ohne_treffer` | 0 |
+| `remove_auf_definition` (D9) | 0 |
+| `patchdateien_abweichend` | 0 |
+| Gegenproben | 33 → **35**, 0 fehlgeschlagen |
+
+**Ein Nebeneffekt, der benannt gehört:** 217 von 1016 Loot-Gruppen enthalten nach dem Patch
+keinen Eintrag mehr. Sie bleiben absichtlich stehen — Behälter und Quest-Belohnungen zeigen
+auf ihre Namen, und ein fehlender Name bricht hart. Umgebogen werden sie mit F-05 in WP4. Ob
+das Spiel eine leere Gruppe stillschweigend hinnimmt, eine Protokollzeile schreibt oder beim
+Würfeln abbricht, **weiß hier niemand** — das ist der erste Punkt für WP3.6.
+
+**Was offen bleibt:** WP3.5 (D9 wahren) ist durch den Wächter `remove_auf_definition 0` und
+durch die Bauart gedeckt — Entfernungen treffen nur Wege, Klassen bleiben vollständig stehen.
+WP3.6 und WP3.7 brauchen den Nutzer: Spielstart mit abgeschaltetem EAC, Protokoll auf
+Referenzfehler und leere Loot-Gruppen durchsehen, dann drei Spieltage. Erst dieser Lauf macht
+aus 1780 gerechneten Zeilen einen Nachweis.
 
 ---
 

@@ -483,9 +483,46 @@ Patches leer, weil die Wege schon weg sind.
 | `wege_uebrig` | 0 | nach den Entfernungen darf auf diesem Weg keine gesperrte Kennung mehr stehen |
 | `remove_auf_definition` | 0 | Vertrag 03 §4 und D9: `remove` trifft Wege, nie eine Definition |
 | `patchdateien_abweichend` | 0 | bei `--vergleiche`: das Modlet entspricht der heutigen Denylist |
+| `gesperrt_und_noch_erreichbar` | 0 | die Gesamtprobe: alle Zeilen zusammen auf Kopien angewandt, Erreichbarkeit neu gerechnet |
 
-Stand WP3.2 gegen Vanilla V 3.40: **912 Patchzeilen** (items.xml 437, blocks.xml 106,
-recipes.xml 369), alle vier Zähler 0.
+Stand WP3.2 bis WP3.4 gegen Vanilla V 3.40: **1780 Patchzeilen** (items.xml 437, blocks.xml 106,
+recipes.xml 369, loot.xml 467, traders.xml 348, quests.xml 50, entityclasses.xml 3), alle fünf
+Zähler 0.
+
+### Listen werden gekürzt, nicht entfernt
+
+Vanilla hat 256 Quest-Belohnungen, deren `id` eine kommagetrennte Liste ist
+(`groupQuestFood,groupQuestAmmo,groupQuestSchematics`), und die Startausrüstung ist ebenfalls
+eine. Verbindlich:
+
+- nur gesperrte Einträge in der Liste → der Eintrag fällt (`remove`),
+- gemischt → die Liste wird gekürzt (`setattribute`), der Eintrag bleibt,
+- Stückzahlen bleiben erhalten: aus `drinkJarBoiledWater=2,foodCanChili` wird
+  `drinkJarBoiledWater=2`, nicht `drinkJarBoiledWater`.
+
+Wer hier blind `remove` nimmt, nimmt dem Spieler die erlaubten Einträge derselben Liste mit —
+und bei der Startausrüstung startet er mit leeren Händen.
+
+### Die Gesamtprobe
+
+Jede Datei einzeln zu prüfen sagt **nicht**, ob der Satz zusammen alle fünf Wegarten schließt:
+eine Kennung, die nur noch in der Startausrüstung steht, wäre in jeder Einzelprobe grün. Darum
+werden alle erzeugten Zeilen auf Kopien angewandt und die Erreichbarkeit auf dem Ergebnis neu
+gerechnet — mit demselben `Reachability`, das `anachronisms` benutzt, über eine Quelle, deren
+Dateien im Speicher ersetzt sind. Keine zweite Fassung derselben Frage.
+
+Gemessen: **0**. Mit `--ohne-entfernen`: **592**.
+
+### Leere Loot-Gruppen — ein benannter Nebeneffekt
+
+F-01 sagt „Loot-Tabellen leeren bzw. umbiegen". Geleert wird: der Eintrag fällt, die Gruppe
+bleibt stehen, weil Behälter und Quest-Belohnungen auf ihren Namen zeigen und ein fehlender Name
+hart bricht. Ergebnis: **217 von 1016** Gruppen enthalten nach dem Patch keinen Eintrag mehr. Der
+Bericht weist das als `loot_gruppen_leer_danach` aus.
+
+Ob das Spiel eine leere Gruppe stillschweigend hinnimmt, eine Protokollzeile schreibt oder beim
+Würfeln abbricht, ist **ungeprüft** und wird hier nicht behauptet. Es ist der erste Punkt, den der
+Protokolllauf in WP3.6 beantworten muss.
 
 ### Gegenproben (Projektregel 5) — fünf gebaut und grün
 
@@ -493,11 +530,13 @@ Der Prüfsatz liegt unter `tools/check/testdaten/purge/`.
 
 | | Gegenprobe | Erwartung |
 |---|---|---|
-| 11 | `purge-patch purge --zeigen` | `set` für `pruefFeuerrohrEigen`, `append` für `pruefFeuerrohrGeerbt`, `pruefSelbstbogen` in **keiner** Zeile |
-| 12 | `purge-patch purge` | `wege_uebrig 0` — `pruefFeuerrohrEigen` hat **zwei** Rezepte |
-| 13 | `--ohne-entfernen` | Exit 1, `weg-bleibt-offen: recipes.xml` — der Nachweis, dass die Nachprobe etwas prüft |
+| 11 | `purge-patch purge --zeigen` | `set` für `pruefFeuerrohrEigen`, `append` für `pruefFeuerrohrGeerbt`, `pruefSelbstbogen` in **keiner** Zeile Ziel |
+| 12 | `purge-patch purge` | `wege_uebrig 0` **und** `gesperrt_und_noch_erreichbar 0` — `pruefFeuerrohrEigen` hat **zwei** Rezepte |
+| 13 | `--ohne-entfernen` | Exit 1, `weg-bleibt-offen` **und** `gesperrt-trotz-patch` — der Nachweis, dass beide Nachproben etwas prüfen |
 | 14 | `--vergleiche` gegen einen leeren Ordner | Exit 1, `patchdatei-fehlt` |
 | 15 | ohne `--out` und ohne `--trocken` | Exit 2 |
+| 16 | `purge-patch purge --zeigen` | gemischte Belohnungsliste wird **gekürzt**, die rein gesperrte entfernt; kein `remove` auf die gemischte |
+| 17 | `purge-patch purge --zeigen` | Startausrüstung gekürzt, `pruefSelbstbogen=2` behält die Stückzahl, XPath mit Prädikaten bis zur Entity-Klasse |
 
 Dazu ein Nachweis an der echten Quelle, am 2026-11-07: eine Änderung am Kopftext machte die drei
 Dateien im Modlet `patchdatei-veraltet` (Exit 1), die Neuerzeugung machte sie wieder grün. Ein
@@ -511,11 +550,18 @@ das Spiel: Patch → Spielstart → `ConfigsDump` → `anachronisms`. Erst dort 
 XML-Patcher des Spiels, ob ein XPath wirklich getroffen hat; ist eine Zeile formal falsch, steht
 die Kennung im Dump noch und die Prüfung wird rot. Das ist WP3.6 und braucht den Nutzer.
 
+Die Gesamtprobe rechnet ebenfalls mit meinem XPath, nicht mit dem Patcher des Spiels. Sie ist das
+Beste, was ohne Spielstart zu haben ist, und sie ist kein Nachweis.
+
 Und: `CreativeMode="None"` ist **keine Sperre für den Spieler.** Es nimmt den Gegenstand aus dem
 Kreativmenü und aus der Entwicklerliste, nicht aus dem Spiel. Unerreichbar wird er allein durch
-die entfernten Wege — und von denen fehlen nach WP3.2 noch Loot, Händler, Quest-Belohnungen und
-Startausrüstung (WP3.3, WP3.4). `anachronisms` bleibt bis dahin mit 592 Befunden rot, und das ist
-richtig.
+die entfernten Wege.
+
+Was dem Spieler *statt* der gesperrten Startausrüstung gegeben wird, steht nicht hier: das ist
+eine Entscheidung und folgt aus keiner Liste. Sie steht von Hand in
+`mod/700_30_Ausruestung/Config/entityclasses.xml`. Die Grenze zwischen den beiden Modlets ist
+damit auch die Grenze zwischen erzeugt und geschrieben: `700_10_Purge` nimmt weg, was aus der
+Denylist folgt; alles, was dazukommt, gehört in die späteren Modlets (D53).
 
 ## 4. `recipes` — Z3
 

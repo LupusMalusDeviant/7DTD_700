@@ -261,32 +261,59 @@ $purge = Join-Path $data 'purge'
 # 1. Die Form entscheidet sich an den Daten, nicht an einer Annahme: wer CreativeMode selbst
 #    traegt, bekommt 'set'; wer es erbt, bekommt 'append'. Ein 'set' auf eine Eigenschaft,
 #    die es nicht gibt, trifft nichts und schweigt - das ist der Fehler, den diese Probe
-#    ausschliesst. Und der Bogen darf in KEINER Zeile stehen (D54).
+#    ausschliesst. Und der Bogen darf in keiner Zeile ZIEL sein (D54); in einer gekuerzten
+#    Belohnungsliste steht er dagegen zu Recht, als Ueberlebender.
 Test-Output 'set fuer eigene Eigenschaft, append fuer geerbte' 0 `
     @('purge-patch', $purge, '--trocken', '--zeigen') `
     -MustContain @(
         "<set xpath=""/items/item[@name='pruefFeuerrohrEigen']/property[@name='CreativeMode']/@value"">None</set>",
         "<append xpath=""/items/item[@name='pruefFeuerrohrGeerbt']""><property name=""CreativeMode"" value=""None"" /></append>") `
-    -MustNotContain @('pruefSelbstbogen')
+    -MustNotContain @(
+        "/items/item[@name='pruefSelbstbogen']",
+        "/recipes/recipe[@name='pruefSelbstbogen']",
+        "/lootcontainers/lootgroup/item[@name='pruefSelbstbogen']")
 
 # 2. Die Nachprobe: nach den Entfernungen darf kein Weg zu einer gesperrten Kennung uebrig
 #    sein. pruefFeuerrohrEigen hat ZWEI Rezepte - eine Zeile, die nur eines trifft, waere
 #    nach der Treffer-Pruefung gruen und hier rot.
 Test-Output 'nach den Entfernungen ist kein Weg mehr offen' 0 `
     @('purge-patch', $purge, '--trocken') `
-    -MustContain @('wege_uebrig                        0')
+    -MustContain @('wege_uebrig                        0',
+                   'gesperrt_und_noch_erreichbar       0')
 
 # 3. Und der Nachweis, dass diese Nachprobe ueberhaupt etwas prueft. Ohne die Entfernungen
 #    MUSS sie rot werden; waere sie auch dann gruen, wuerde sie nur sich selbst bestaetigen.
 Test-Output 'ohne die Entfernungen bleibt der Weg offen' 1 `
     @('purge-patch', $purge, '--trocken', '--ohne-entfernen') `
-    -MustContain @('weg-bleibt-offen: recipes.xml')
+    -MustContain @('weg-bleibt-offen: recipes.xml',
+                   'gesperrt-trotz-patch: pruefFeuerrohrEigen')
 
 # 4. Erzeugte Dateien und die Denylist koennen auseinanderlaufen. --vergleiche findet das;
 #    gegen einen Ordner ohne die Dateien muss es rot werden.
 Test-Output 'fehlende Patchdatei faellt auf' 1 `
     @('purge-patch', $purge, '--vergleiche', '--out', (Join-Path $data 'gibtesnicht')) `
     -MustContain @('patchdatei-fehlt')
+
+# 5. Der Fehler, der weh tut: eine Belohnung, deren 'id' eine Liste ist. Steht nur
+#    Gesperrtes darin, faellt sie. Steht auch Erlaubtes darin, wird die Liste GEKUERZT -
+#    wer hier 'remove' nimmt, nimmt dem Spieler zwei erlaubte Belohnungen mit. Vanilla hat
+#    256 solche Listen.
+Test-Output 'gemischte Belohnungsliste wird gekuerzt, nicht entfernt' 0 `
+    @('purge-patch', $purge, '--trocken', '--zeigen') `
+    -MustContain @(
+        "<remove xpath=""/quests/quest/reward[@id='pruefFeuerrohrEigen,pruefFeuerrohrGeerbt']"" />",
+        "name=""id"">pruefSelbstbogen,pruefRohstoff</setattribute>") `
+    -MustNotContain @("<remove xpath=""/quests/quest/reward[@id='pruefFeuerrohrEigen,pruefSelbstbogen,pruefRohstoff']"" />")
+
+# 6. Die Startausruestung wird gekuerzt und behaelt ihre Stueckzahl. Ohne die Eigenschaft
+#    startet der Spieler mit leeren Haenden; ohne die Stueckzahl mit einem Stueck statt
+#    zwei. Und der Elementpfad allein sagt hier nichts - der XPath braucht Praedikate bis
+#    hinauf zur Entity-Klasse.
+Test-Output 'Startausruestung gekuerzt, Stueckzahl bleibt' 0 `
+    @('purge-patch', $purge, '--trocken', '--zeigen') `
+    -MustContain @(
+        "/entity_classes/entity_class[@name='pruefSpieler']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival']",
+        "name=""value"">pruefSelbstbogen=2</setattribute>")
 
 # Ohne --out und ohne --trocken weiss der Befehl nicht, wohin: Benutzungsfehler.
 Test-Case 'purge-patch ohne Ziel' 2 @('purge-patch', $purge)

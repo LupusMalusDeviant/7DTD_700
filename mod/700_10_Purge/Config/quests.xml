@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_10_Purge / quests.xml
+	     F-01 Anachronismen-Purge, Plan-0001 WP3.2 bis WP3.4
+
+	     Eine Quest-Belohnung nennt in 'id' eine Kennung ODER eine Liste davon.
+	     Steht nur Gesperrtes darin, faellt die Belohnung; stehen auch erlaubte
+	     Namen darin, wird die Liste gekuerzt statt die Belohnung entfernt. Wer
+	     hier blind 'remove' nimmt, nimmt dem Spieler drei erlaubte Belohnungen
+	     mit, weil eine gesperrte in derselben Liste stand.
+
+	     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und
+	     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung
+	     ueberschreibt die Aenderung lautlos, und check-all.ps1 meldet
+	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
+	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
+	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
+	     50 Zeilen. -->
+
+	<remove xpath="/quests/quest/reward[@id='ammo762mmBulletAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammo762mmBulletBall']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammo9mmBulletAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammo9mmBulletBall']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundle762mmBulletAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundle762mmBulletBall']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundle9mmBulletAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundle9mmBulletBall']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundleJunkTurretAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundleJunkTurretRegular']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundleShotgunShell']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoBundleShotgunSlug']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoJunkTurretAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoJunkTurretRegular']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoShotgunShell']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='ammoShotgunSlug']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='mineAirFilter']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modArmorCigar']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modArmorHelmetLight']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modArmorNightVision']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modArmorWaterPurifier']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modGunDrumMagazineExtender']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modGunMeleeRadRemover']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modGunShotgunTubeExtenderMagazine']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='modGunSoundSuppressorSilencer']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='plantedGraceCorn1Schematic']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryBatonCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryHandgunCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryMacheteCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryMachineGunCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryRifleCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryRoboticsCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendaryShotgunCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendarySteelClubCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendarySteelKnuckleCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardLegendarySteelSpearCraftingBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardPipeBatonBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardPipeMachineGunBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardPipePistolBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardPipeRifleBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='questRewardPipeShotgunBundle']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='resourceLegendaryParts']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='solarCell']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='thrownAmmoMolotovCocktail']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='thrownGrenade']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='thrownGrenadeContact']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='thrownTimedCharge']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='toolBeaker']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='toolDewFilter']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest/reward[@id='toolDewGatherer']" />  <!-- nur gesperrte Kennungen in der Liste -->
+</config>

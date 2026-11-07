@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_30_Ausruestung / entityclasses.xml
+	     F-01 Anachronismen-Purge, Plan-0001 WP3.4 — Startausruestung auf T0
+
+	     VON HAND geschrieben, nicht erzeugt. Das ist die Grenze zwischen den beiden
+	     Modlets: 700_10_Purge nimmt weg, was aus der Denylist folgt, und das laesst sich
+	     aus Daten ableiten. WAS der Spieler dafuer bekommt, folgt aus keiner Liste — das
+	     ist eine Entscheidung, und Entscheidungen gehoeren nicht in eine erzeugte Datei
+	     (D53: acht Modlets, Purge laeuft vor allen anderen).
+
+	     Der Purge kuerzt dieselbe Eigenschaft und entfernt dabei foodCanChili. Diese Zeile
+	     laeuft danach und schreibt die Liste vollstaendig. Ihr XPath traegt darum KEIN
+	     value-Praedikat: der Wert ist zu diesem Zeitpunkt schon der gekuerzte.
+
+	     Was drin steht und warum:
+	       drinkJarBoiledWater=2        Wasser. Dass das Gefaess in Vanilla ein Glas ist,
+	                                    raeumt F-05 in WP4 auf.
+	       resourceCloth=5              die „Lumpen" aus dem Planschritt. Die 5 ist eine
+	                                    Setzung fuer das Balancing in WP9, kein Messwert.
+	       meleeToolRepairT0StoneAxe    das „Steinwerkzeug" aus dem Planschritt. T0,
+	                                    reparierbar, erntet Holz und Stein.
+	       meleeToolTorch               Licht am ersten Abend. Gehoert zu F-08.
+	       medicalFirstAidBandage       Wundauflage, bleibt nach D56.
+	       noteDuke01                   Dukes Brief. Ein Anachronismus, aber nach WP8
+	                                    aufgeschoben (F-12 ersetzt den Starttext). Er steht
+	                                    hier, damit der Aufschub die Wahrheit sagt: solange
+	                                    er aufgeschoben ist, ist er auch noch da.
+
+	     Nicht drin: Nahrung. Vanilla gab eine Dose Chili, und F-01 nimmt sie weg; ein
+	     Ersatz waere Inhalt und gehoert zu F-19 (Phase 2). Der Spieler startet hungrig.
+
+	     Gewacht wird das nicht hier, sondern von 'mod700check anachronisms' gegen den
+	     ConfigsDump: stuende in dieser Liste etwas Gesperrtes, waere der Lauf rot. -->
+
+	<setattribute name="value"
+	              xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival']">drinkJarBoiledWater=2,resourceCloth=5,meleeToolRepairT0StoneAxe,meleeToolTorch,medicalFirstAidBandage,noteDuke01</setattribute>
+
+	<setattribute name="value"
+	              xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalSP']">drinkJarBoiledWater=2,resourceCloth=5,meleeToolRepairT0StoneAxe,meleeToolTorch,medicalFirstAidBandage,noteDuke01</setattribute>
+
+	<setattribute name="value"
+	              xpath="/entity_classes/entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalMP']">drinkJarBoiledWater=2,resourceCloth=5,meleeToolRepairT0StoneAxe,meleeToolTorch,medicalFirstAidBandage,noteDuke01</setattribute>
+
+</config>

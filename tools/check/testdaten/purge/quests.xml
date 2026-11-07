@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Quest-Belohnungen des Purge-Pruefsatzes. Hier steckt der Fehler, der weh tut.
+
+  Vanilla hat 256 Belohnungen, deren 'id' eine LISTE ist. Wer die Belohnung entfernt, weil
+  ein Name darin gesperrt ist, nimmt dem Spieler die erlaubten Namen derselben Liste mit.
+  Also:
+
+    pruefBelohnungNurGesperrt   id = nur Gesperrtes          -> die Belohnung faellt
+    pruefBelohnungGemischt      id = Gesperrtes + Erlaubtes  -> die LISTE wird gekuerzt,
+                                                                die Belohnung bleibt
+
+  Die zweite Zeile ist die Gegenprobe gegen ein blindes 'remove'.
+-->
+<quests>
+
+	<quest id="pruefBelohnungNurGesperrt">
+		<reward type="Item" id="pruefFeuerrohrEigen,pruefFeuerrohrGeerbt" value="1" />
+	</quest>
+
+	<quest id="pruefBelohnungGemischt">
+		<reward type="Item" id="pruefFeuerrohrEigen,pruefSelbstbogen,pruefRohstoff" value="1" />
+	</quest>
+
+</quests>

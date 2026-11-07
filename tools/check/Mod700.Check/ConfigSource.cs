@@ -19,6 +19,32 @@ internal sealed class ConfigSource
         Info = new SourceInfo(path, kind, timestamp, note);
     }
 
+    /// <summary>
+    /// Eine Quelle, in der einzelne Dateien durch gepatchte Fassungen im Speicher ersetzt
+    /// sind. Dafuer, dass <see cref="Reachability"/> und <see cref="Definitions"/>
+    /// unveraendert auf dem Ergebnis eines Patch-Satzes rechnen koennen - ohne eine zweite
+    /// Fassung derselben Fragen. Zwei Implementierungen derselben Frage sind zwei
+    /// Gelegenheiten, verschiedene Antworten zu geben; das ist in dieser Arbeit dreimal
+    /// passiert.
+    ///
+    /// <para>Die Art bleibt die der Ursprungsquelle, der Vermerk sagt aber ausdruecklich,
+    /// dass hier gerechnet und nicht gemessen wurde. Ein Patch-Satz, den ich selbst
+    /// angewandt habe, ist kein Spielstart.</para>
+    /// </summary>
+    public static ConfigSource Patched(
+        ConfigSource original, IReadOnlyDictionary<string, XDocument> replacements)
+    {
+        var patched = new ConfigSource(original.Path, original.Info.Kind, original.Info.Timestamp,
+            original.Info.Note + " | gepatcht im Speicher - gerechnet, nicht gemessen");
+
+        foreach ((string name, XDocument document) in replacements)
+        {
+            patched._cache[name] = document;
+        }
+
+        return patched;
+    }
+
     public string Path { get; }
 
     public SourceInfo Info { get; }

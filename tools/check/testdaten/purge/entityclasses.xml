@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Startausruestung des Purge-Pruefsatzes.
+
+  Zwei Dinge auf einmal:
+
+  1. Die Liste wird GEKUERZT, nicht entfernt. Ohne die Eigenschaft startet der Spieler mit
+     leeren Haenden - das waere eine schlimmere Abweichung als ein Anachronismus im Beutel.
+
+  2. Die Stueckzahl bleibt erhalten. Aus
+       pruefSelbstbogen=2,pruefFeuerrohrEigen
+     muss
+       pruefSelbstbogen=2
+     werden, nicht 'pruefSelbstbogen'. Vanilla schreibt die Startausruestung genau so:
+     'drinkJarBoiledWater=2,foodCanChili,...'.
+
+  Der Elementpfad allein sagt hier nichts: auf /entity_classes/entity_class/property/property
+  passen in Vanilla tausende Eigenschaften. Der XPath braucht Praedikate bis hinauf zur
+  Entity-Klasse.
+-->
+<entity_classes>
+
+	<entity_class name="pruefSpieler">
+		<property name="Mesh" value="pruefMesh" />
+		<property class="ItemsOnEnterGame">
+			<property name="GameModeSurvival" value="pruefSelbstbogen=2,pruefFeuerrohrEigen" />
+		</property>
+	</entity_class>
+
+</entity_classes>
