@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Macht die drei Kennungen erreichbar. Ohne Erreichbarkeit wird nicht geurteilt, und ohne
+  Urteil entsteht keine Patch-Zeile (Vertrag 03, Abschnitt 4).
+
+  Loot selbst patcht WP3.2 noch nicht - das ist WP3.3. Diese Datei ist hier nur der Weg,
+  der die Kennungen ueberhaupt in die Pruefung bringt.
+-->
+<lootcontainers>
+	<lootgroup name="pruefGruppePurge">
+		<item name="pruefFeuerrohrEigen" />
+		<item name="pruefFeuerrohrGeerbt" />
+		<item name="pruefSelbstbogen" />
+	</lootgroup>
+</lootcontainers>

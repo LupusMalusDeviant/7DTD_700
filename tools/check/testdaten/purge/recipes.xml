@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Rezepte des Purge-Pruefsatzes.
+
+  pruefFeuerrohrEigen hat ZWEI Rezepte. Das ist der Fall, den ein XPath mit nur einem
+  Treffer verfehlen wuerde: eine Patch-Zeile, die ein Element trifft, waehrend dieselbe
+  Kennung noch ein zweites Mal dasteht, waere nach der Treffer-Pruefung gruen und nach der
+  Nachprobe rot. Deshalb gibt es die Nachprobe.
+-->
+<recipes>
+
+	<recipe name="pruefFeuerrohrEigen" count="1">
+		<ingredient name="pruefRohstoff" count="2" />
+	</recipe>
+
+	<recipe name="pruefFeuerrohrEigen" count="1" tags="learnable">
+		<ingredient name="pruefRohstoff" count="4" />
+	</recipe>
+
+	<recipe name="pruefFeuerrohrGeerbt" count="1">
+		<ingredient name="pruefRohstoff" count="2" />
+	</recipe>
+
+	<recipe name="pruefSelbstbogen" count="1">
+		<ingredient name="pruefRohstoff" count="2" />
+	</recipe>
+
+</recipes>

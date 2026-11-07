@@ -119,6 +119,31 @@ Write-Output "Quelle: $Source"
 Invoke-Check 'anachronisms' @('anachronisms', $Source, '--denylist', (Join-Path $here 'denylist.txt'))
 Invoke-Check 'recipes' @('recipes', $Source)
 
+# ---------------------------------------------------- Purge-Patches aktuell?
+# Die Patch-Dateien in 700_10_Purge sind ERZEUGT. Erzeugte und mitgelieferte Dateien
+# laufen auseinander, sobald jemand die Denylist aendert und das Erzeugen vergisst -
+# und niemand merkt es, weil die Pruefung die gemergte Config liest und nicht unsere
+# Patches. Darum vergleicht dieser Lauf, was im Modlet liegt, mit dem, was aus der
+# heutigen Denylist entstehen wuerde.
+#
+# Erzeugt wird immer gegen VANILLA, nicht gegen $Source: gegen einen Dump, in dem
+# unsere Modlets schon geladen waren, waeren die Patches leer.
+$vanilla = if ($env:SDTD_PATH) { Join-Path $env:SDTD_PATH 'Data\Config' } else { $null }
+$purgeConfig = Join-Path $repoRoot 'mod\700_10_Purge\Config'
+if ($vanilla -and (Test-Path (Join-Path $vanilla 'items.xml'))) {
+    Invoke-Check 'purge-patch (sind die Patches aktuell?)' @(
+        'purge-patch', $vanilla, '--vergleiche', '--out', $purgeConfig,
+        '--denylist', (Join-Path $here 'denylist.txt'))
+}
+else {
+    Write-Output ""
+    Write-Output "---- purge-patch ----"
+    Write-Output "  uebersprungen: SDTD_PATH ist nicht gesetzt oder zeigt nicht auf eine"
+    Write-Output "  Installation mit Data\Config. Ohne Vanilla laesst sich nicht vergleichen,"
+    Write-Output "  ob die erzeugten Patches noch zur Denylist passen."
+    Write-Output "  Das ist kein Gruen, sondern eine fehlende Pruefung."
+}
+
 # ---------------------------------------------------- Unsere Localization
 # Localization.csv liegt NICHT im ConfigsDump - geprueft wird darum immer die Quelldatei
 # des Sprach-Modlets.

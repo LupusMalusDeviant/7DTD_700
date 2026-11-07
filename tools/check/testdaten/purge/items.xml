@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Pruefsatz fuer 'purge-patch'. Erfundene Kennungen, kein Spielinhalt (Projektregeln 1 und 7).
+
+  Das Paar, auf das es ankommt:
+    pruefFeuerrohrEigen   traegt CreativeMode SELBST -> der Patch muss 'set' benutzen
+    pruefFeuerrohrGeerbt  traegt es NICHT             -> der Patch muss 'append' benutzen
+
+  Ein 'set' auf eine Eigenschaft, die es nicht gibt, trifft nichts und schweigt. Genau diese
+  Art Fehler ist in WP3.1 dreimal passiert, darum entscheiden hier die Daten und nicht eine
+  Annahme - und darum stehen beide Faelle im Pruefsatz.
+
+  pruefSelbstbogen bleibt (Tag 'bow', D54) und darf in KEINER Patch-Zeile vorkommen.
+-->
+<items>
+
+	<item name="pruefFeuerrohrEigen">
+		<property name="CreativeMode" value="Player" />
+		<property name="Tags" value="weapon,ranged,gun" />
+	</item>
+
+	<item name="pruefFeuerrohrGeerbt">
+		<property name="Tags" value="weapon,ranged,gun" />
+	</item>
+
+	<item name="pruefSelbstbogen">
+		<property name="CreativeMode" value="Player" />
+		<property name="Tags" value="weapon,ranged,bow,archery" />
+	</item>
+
+</items>

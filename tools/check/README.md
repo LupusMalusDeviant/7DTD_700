@@ -82,7 +82,7 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **28 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **33 Gegenproben, 0 fehlgeschlagen.**
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -109,6 +109,11 @@ Lauf vom 2026-11-07: **28 Gegenproben, 0 fehlgeschlagen.**
 | `anachronisms` mit `aufschub-pruef.txt` | Exit 1, Kennung als Hinweis statt als Fehler | ein Aufschub bucht um, er verschweigt nicht |
 | derselbe Lauf mit `--ohne-aufschub` | Exit 1, Kennung wieder als Fehler | sonst wäre nicht zu sehen, dass der Aufschub nur umbucht |
 | `anachronisms` mit `aufschub-ohne-wp.txt` | Exit 2 | ein Aufschub ohne Arbeitspaket ist ein Loch mit guter Presse |
+| `purge-patch testdaten/purge --zeigen` | `set` für `pruefFeuerrohrEigen`, `append` für `pruefFeuerrohrGeerbt`, `pruefSelbstbogen` in **keiner** Zeile | die Form entscheiden die Daten; ein `set` auf eine fehlende Eigenschaft trifft nichts und schweigt |
+| `purge-patch testdaten/purge` | `wege_uebrig 0` | `pruefFeuerrohrEigen` hat **zwei** Rezepte — eine Zeile, die nur eines trifft, wäre hier rot |
+| derselbe Lauf mit `--ohne-entfernen` | Exit 1, `weg-bleibt-offen: recipes.xml` | der Nachweis, dass die Nachprobe überhaupt etwas prüft |
+| `purge-patch --vergleiche` gegen einen Ordner ohne die Dateien | Exit 1, `patchdatei-fehlt` | erzeugte Dateien und Denylist können auseinanderlaufen |
+| `purge-patch` ohne `--out` und ohne `--trocken` | Exit 2 | Benutzungsfehler |
 | `--ohne-regel gibtesnicht` | Exit 2 | Benutzungsfehler, kein Befund |
 | unbekannter Befehl | Exit 2 | Benutzungsfehler |
 | fehlender Pfad | Exit 2 | Benutzungsfehler |
@@ -145,10 +150,43 @@ Vier Eigenschaftsregeln (`sprengkoerper`, `robotik`, `moderner_werkstoff` und
 begründet. Nachzulesen in
 [WP3-bestandsaufnahme-anachronismen.md](../../docs/rea/findings/WP3-bestandsaufnahme-anachronismen.md).
 
-Dass der Lauf rot ist, ist richtig: Vanilla *ist* voller Anachronismen, und die XPath-Patches
-von WP3.2 bis WP3.5 sind noch nicht geschrieben. `check-all.ps1` bleibt bis dahin rot — ein
-Prüfbefehl, der vor der Arbeit grün ist, prüft nichts. Grün wird er erst gegen einen
-`ConfigsDump` **mit** unseren Modlets, und auch dann mit 170 Aufschüben daneben.
+Dass der Lauf rot ist, ist richtig: Vanilla *ist* voller Anachronismen. `check-all.ps1` bleibt
+rot, solange nicht alle Wege weg sind — ein Prüfbefehl, der vor der Arbeit grün ist, prüft
+nichts. Grün wird er erst gegen einen `ConfigsDump` **mit** unseren Modlets, und auch dann mit
+170 Aufschüben daneben.
+
+### `purge-patch` — die Patches kommen aus derselben Liste
+
+`mod700check purge-patch <quelle> --out <ordner>` erzeugt die XPath-Dateien des Modlets
+`700_10_Purge` aus demselben Urteil, das `anachronisms` fällt. Der Grund ist nicht Bequemlichkeit:
+592 Kennungen von Hand auf sieben Dateien zu verteilen heißt, dieselbe Liste zweimal zu führen,
+und zwei Listen laufen auseinander. Die Prüfung würde den Unterschied nicht sehen, weil sie die
+gemergte Config liest und nicht unsere Patch-Dateien.
+
+Stand WP3.2 (gegen Vanilla V 3.40): **912 Patchzeilen** — 437 in `items.xml`, 106 in
+`blocks.xml`, 369 in `recipes.xml`. `patches_ohne_treffer 0`, `wege_uebrig 0`,
+`remove_auf_definition 0`.
+
+Drei Eigenschaften, die nicht selbstverständlich sind:
+
+- **Der XPath kommt aus den Daten.** Für jedes zu entfernende Element baut das Werkzeug den
+  Pfad aus der tatsächlichen Elternkette im Quell-XML (`/recipes/recipe[@name='X']`). Ein Schema,
+  das ich falsch erinnere, kann so nicht in die Patches geraten.
+- **`set` oder `append` entscheidet die Quelle.** Trägt ein Gegenstand `CreativeMode` selbst,
+  wird der Wert ersetzt; erbt er es, wird die Eigenschaft angehängt. Ein `set` auf eine
+  Eigenschaft, die es nicht gibt, trifft nichts und schweigt — genau die Fehlerart, die in WP3.1
+  dreimal zugeschlagen hat.
+- **`check-all.ps1` vergleicht.** Erzeugte und mitgelieferte Dateien laufen auseinander, sobald
+  jemand die Denylist ändert und das Erzeugen vergisst. `purge-patch --vergleiche` meldet das als
+  `patchdatei-veraltet`; nachgewiesen am 2026-11-07, indem eine Änderung am Kopftext die drei
+  Dateien rot machte und die Neuerzeugung sie wieder grün.
+
+**Was das nicht beweist:** Patches und Prüfung stammen aus demselben Urteil, also sagt ihre
+Übereinstimmung nur, dass sie zueinander passen. Der Nachweis ist der Weg über das Spiel —
+Patch, Spielstart, `ConfigsDump`, `anachronisms`. Erst dort entscheidet der XML-Patcher des
+Spiels, ob ein XPath wirklich getroffen hat. Und `CreativeMode="None"` ist **keine** Sperre für
+den Spieler: es nimmt den Gegenstand aus dem Kreativmenü, nicht aus dem Spiel. Unerreichbar wird
+er allein durch die entfernten Wege.
 
 ## Grenzen
 
@@ -189,6 +227,7 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `Mod700.Check/Judgement.cs` | das Urteil an einer Stelle: Freigabe, Eigenschaft, Name, Mod- und `Unlocks`-Ableitung, Aufschub |
 | `Mod700.Check/Deferrals.cs` | `aufschub.txt` lesen; jede Zeile muss ein Arbeitspaket nennen |
 | `Mod700.Check/UncheckedList.cs` | Befehl `ungeprueft`: die Sichtungsliste, aus demselben Urteil |
+| `Mod700.Check/PurgePatch.cs` | Befehl `purge-patch`: erzeugt die XPath-Patches von `700_10_Purge` aus demselben Urteil |
 | `aufschub.txt` | Kennungen, die verboten sind, aber erst in einem späteren Paket fallen |
 | `Mod700.Check/RecipeCheck.cs` | Rezeptgraph, Sackgassen, Zyklen |
 | `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |

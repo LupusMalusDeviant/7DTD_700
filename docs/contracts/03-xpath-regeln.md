@@ -76,6 +76,46 @@ ist aber nicht erreichbar.
 `remove` ist erlaubt für: Loot-Einträge, Rezepte, Händler-Warengruppen, Perk-Einträge — also für
 **Wege zu einem Gegenstand**, nicht für den Gegenstand selbst.
 
+### Nachtrag WP3.2 (2026-11-07): die Purge-Patches sind erzeugt, nicht geschrieben
+
+Die Dateien in `mod/700_10_Purge/Config/` entstehen aus `mod700check purge-patch` und damit aus
+`tools/check/denylist.txt` und `tools/check/aufschub.txt`. Sie sagen das im Kopfkommentar und
+dürfen nicht von Hand geändert werden; `check-all.ps1` meldet jede Handänderung als
+`patchdatei-veraltet`.
+
+Der Grund ist der Vertragsgedanke selbst: 592 gesperrte Kennungen von Hand auf sieben Dateien zu
+verteilen heißt, dieselbe Liste zweimal zu führen — einmal in der Denylist, einmal im Modlet. Die
+Prüfung sieht den Unterschied nicht, weil sie die gemergte Config liest und nicht unsere Patches.
+In dieser Arbeit sind schon dreimal Zahlen auseinandergelaufen, weil dieselbe Frage an zwei
+Stellen beantwortet wurde.
+
+**Zwei Dinge, die das für diesen Vertrag heißt:**
+
+1. **Der XPath wird aus den Daten gebaut, nicht aus dem Gedächtnis.** Das Werkzeug nimmt die
+   tatsächliche Elternkette des gefundenen Elements im Quell-XML (`/recipes/recipe[@name='X']`).
+   Alle erzeugten Pfade sind damit absolut und ohne `//`: §8.2 ist nicht nur eingehalten, er kann
+   nicht verletzt werden. Dass ein Prädikat mehrere Elemente trifft, ist dabei Absicht — ein
+   Gegenstand kann mehrere Rezepte haben, und alle sollen fallen. §8.2 verbietet den
+   **unverankerten** `//`-Pfad, nicht den mehrfachen Treffer; eine Nachprobe zählt darum, wie
+   viele Wege nach den Entfernungen noch offen sind, und die Zahl muss 0 sein.
+2. **`CreativeMode` wird mit `set` oder `append` gesetzt, je nach Quelle.** Trägt der Gegenstand
+   die Eigenschaft selbst, wird ihr Wert ersetzt. Erbt er sie über `Extends` oder hat er sie
+   nicht, wird sie angehängt und überschreibt die geerbte. Ein `set` auf eine Eigenschaft, die es
+   nicht gibt, trifft nichts und schweigt — dieselbe Fehlerart, die §3 über den Dateinamen
+   beschreibt.
+
+**Und eine Berichtigung am Plan, nicht an diesem Vertrag:** `CreativeMode="None"` ist **keine
+Sperre für den Spieler.** Es nimmt den Gegenstand aus dem Kreativmenü und aus der
+Entwicklerliste, nicht aus dem Spiel. Unerreichbar wird er allein durch die entfernten Wege.
+Plan-0001 WP3.2 nennt `CreativeMode` als „sperren statt löschen"; das ist richtig als
+Absichtserklärung in den Daten und falsch als Wirkung. Die Tabelle oben bleibt gültig — sie sagt
+„Rezept weg, Loot weg" mit dazu.
+
+**D9-Wächter:** der Bericht weist `remove_auf_definition` aus. Heute ist die Zahl 0, weil nur
+`recipes.xml` Entfernungen bekommt; sie steht dort für WP3.3 und WP3.4, die `loot.xml`,
+`traders.xml` und `quests.xml` dazunehmen. Ein Tippfehler in einem Elementnamen soll dann dort
+auffallen und nicht erst beim Weltladen.
+
 **D9 beachten:** Geschütztürme, Generator, Kabel, Schalter, Sensoren, elektrische Fallen und
 Sprengstoff werden nur in ihrer modernen Erscheinung gesperrt. Ihre Klassen und ihre Logik
 bleiben vollständig erhalten, weil F-15 sie in Phase 2 als Runensteine und Kraftsteine

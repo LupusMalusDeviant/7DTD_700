@@ -180,9 +180,10 @@ umgedeutet werden, **erhalten**.
 1. **WP3.1** `[Claude-prüfbar]` Bestandsaufnahme: alle Items, Rezepte, Loot-Gruppen und
    Händlergruppen gegen die Denylist, als Liste mit Entscheidung je Eintrag
    (sperren / umdeuten / an F-15 übergeben).
-2. **WP3.2** `[Claude-prüfbar]` **Sperren statt löschen** (`CreativeMode="None"`, kein Rezept,
+2. **WP3.2** `[Claude-prüfbar]` ~~**Sperren statt löschen** (`CreativeMode="None"`, kein Rezept,
    kein Loot). Begründung steht in F-01: gelöschte Items, die in POIs oder Quests referenziert
-   werden, brechen hart. Welche Referenzen genau brechen, zeigt der Protokolllauf in WP3.6.
+   werden, brechen hart. Welche Referenzen genau brechen, zeigt der Protokolllauf in WP3.6.~~
+   **Erledigt 2026-11-07** — `items.xml`, `blocks.xml`, `recipes.xml`. Loot ist WP3.3.
 3. **WP3.3** `[Claude-prüfbar]` Loot-Tabellen leeren bzw. umbiegen (`loot.xml`).
 4. **WP3.4** `[Claude-prüfbar]` Händlerware und Quest-Belohnungen bereinigen, Startausrüstung
    auf T0 (Lumpen, Steinwerkzeug) setzen.
@@ -300,6 +301,40 @@ vierhundert inhaltliche Urteile in `denylist.txt` und `aufschub.txt`.
    der Handel vor dem Ersatz. Nachzulesen in
    [WP3-bestandsaufnahme-anachronismen.md](../rea/findings/WP3-bestandsaufnahme-anachronismen.md)
    Abschnitt 5a.
+
+#### Stand 2026-11-07: §3b abgenommen, WP3.2 erledigt
+
+Der Nutzer hat Vertrag 04 §3b und die drei Sichtungsgruppen am 2026-11-07 abgenommen.
+`mod/700_10_Purge/Config/` hat jetzt **912 Patchzeilen**: 437 in `items.xml`, 106 in
+`blocks.xml`, 369 in `recipes.xml`. `build.ps1` packt sie (8 Modlets, 12 Dateien).
+
+**Die Patches sind erzeugt, nicht geschrieben.** `mod700check purge-patch` baut sie aus
+`denylist.txt` und `aufschub.txt` — derselben Liste, aus der auch `anachronisms` urteilt.
+592 Kennungen auf sieben Dateien von Hand zu verteilen hiesse, dieselbe Liste zweimal zu
+führen, und die Prüfung würde den Unterschied nicht sehen: sie liest die gemergte Config,
+nicht unsere Patches. Der XPath kommt aus der tatsächlichen Elternkette im Quell-XML, nicht
+aus einer Annahme über das Schema. Nachtrag dazu in Vertrag 03 §4 und Vertrag 04 §3c.
+
+`check-all.ps1` vergleicht ab jetzt, ob die Dateien im Modlet noch zur Denylist passen
+(`purge-patch --vergleiche`). Nachgewiesen, dass dieser Vergleich rot werden kann: eine
+Änderung am Kopftext machte alle drei Dateien `patchdatei-veraltet`, die Neuerzeugung machte
+sie wieder grün.
+
+| | Zahl |
+|---|---|
+| Patchzeilen | 912 |
+| `patches_ohne_treffer` | 0 |
+| `wege_uebrig` (Nachprobe) | 0 |
+| `remove_auf_definition` (D9) | 0 |
+| `patchdateien_abweichend` | 0 |
+| Gegenproben | 28 → **33**, 0 fehlgeschlagen |
+
+**Eine Berichtigung am Planschritt WP3.2 selbst:** `CreativeMode="None"` ist **keine Sperre
+für den Spieler.** Es nimmt den Gegenstand aus dem Kreativmenü und aus der Entwicklerliste,
+nicht aus dem Spiel. Als Absichtserklärung in den Daten ist es richtig, als Wirkung nicht.
+Unerreichbar wird ein Gegenstand allein durch die entfernten Wege — und davon fehlen noch
+Loot (493 Kennungen), Händler (348), Quest-Belohnungen (50) und Startausrüstung (1). Das sind
+WP3.3 und WP3.4. `anachronisms` bleibt bis dahin mit 592 Befunden rot, und das ist richtig.
 
 ---
 

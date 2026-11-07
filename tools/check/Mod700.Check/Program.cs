@@ -34,6 +34,7 @@ internal static class Program
                 "recipes" => RecipeCheck.Run(path, rest),
                 "localization" => LocalizationCheck.Run(path, rest),
                 "ungeprueft" => UncheckedList.Run(path, rest),
+                "purge-patch" => PurgePatch.Run(path, rest),
                 _ => throw new UsageException($"Unbekannter Befehl: {command}")
             };
         }
@@ -64,6 +65,16 @@ internal static class Program
                                                [--prefix 700_] [--vanilla-keys <datei>] [--json]
               mod700check ungeprueft   <ordner> [--denylist <datei>] [--praefix <anfang>]
                                                [--nur-zahlen]
+              mod700check purge-patch  <ordner> --out <ordner> [--denylist <datei>]
+                                               [--aufschub <datei>] [--trocken] [--json]
+
+            'purge-patch' erzeugt die XPath-Patches des Modlets 700_10_Purge aus demselben
+            Urteil, das 'anachronisms' faellt - damit die Sperrliste nicht zweimal gefuehrt
+            wird. Der XPath kommt aus der tatsaechlichen Elternkette im Quell-XML, nicht aus
+            einer Annahme ueber das Schema. Jede erzeugte Zeile muss im Quell-XML mindestens
+            ein Element treffen; 'patches_ohne_treffer' muss 0 sein, sonst wird nichts
+            geschrieben. Der NACHWEIS bleibt der Weg ueber das Spiel: Patch, Spielstart,
+            ConfigsDump, 'anachronisms'.
 
             'ungeprueft' ist KEIN Pruefbefehl: es listet die erreichbaren Kennungen, ueber
             die keine Regel geurteilt hat, samt ihren Eigenschaften, und endet immer mit 0.

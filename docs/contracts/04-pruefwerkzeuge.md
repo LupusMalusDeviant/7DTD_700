@@ -441,6 +441,82 @@ Begründung in der Zeile, und drei Gruppen gehören ausdrücklich dem Nutzer vor
 **Der Nachweis bleibt der `ConfigsDump`-Lauf nach einem Spielstart mit den Modlets.** Dieser
 Nachtrag ist gegen Vanilla gemessen, und das ist ein Vorlauf.
 
+## 3c. `purge-patch` — das Werkzeug schreibt das Modlet (Nachtrag WP3.2)
+
+> **Status:** gebaut, gemessen, mit fünf Gegenproben. Dass die Patches **erzeugt** statt von Hand
+> geschrieben werden, ist eine Erweiterung dieses Vertrags und steht auch in Vertrag 03 §4.
+
+### Warum ein Werkzeug und keine Handarbeit
+
+592 gesperrte Kennungen verteilen sich auf sieben Vanilla-Dateien. Von Hand geschrieben heißt
+das: dieselbe Liste zweimal führen, einmal in `denylist.txt` und einmal im Modlet. Zwei Listen
+laufen auseinander, und `anachronisms` sieht den Unterschied **nicht** — es liest die gemergte
+Config des Spiels, nicht unsere Patch-Dateien. In dieser Arbeit sind schon dreimal Zahlen
+auseinandergelaufen, weil dieselbe Frage an zwei Stellen beantwortet wurde.
+
+```
+mod700check purge-patch <quelle> --out <ordner> [--denylist <datei>] [--aufschub <datei>]
+                                 [--vergleiche] [--trocken] [--zeigen] [--ohne-entfernen] [--json]
+```
+
+Erzeugt wird **gegen Vanilla**, nie gegen einen Dump mit unseren Modlets — dort wären die
+Patches leer, weil die Wege schon weg sind.
+
+### Drei verbindliche Eigenschaften
+
+1. **Der XPath kommt aus den Daten.** Für jedes zu entfernende Element wird der Pfad aus der
+   tatsächlichen Elternkette im Quell-XML gebaut (`/recipes/recipe[@name='X']`). Ein Schema, das
+   der Autor falsch erinnert, kann nicht in die Patches geraten; eine Verschachtelung, die er
+   nicht kennt, wird trotzdem getroffen.
+2. **`set` oder `append` entscheidet die Quelle, nicht eine Annahme.** Eigene Eigenschaft →
+   `set` auf den Wert. Geerbte oder fehlende → `append`, das die geerbte überschreibt. Ein `set`
+   auf eine Eigenschaft, die es nicht gibt, trifft nichts und schweigt.
+3. **Aufgeschobenes wird nicht gepatcht.** Die 170 Kennungen aus `aufschub.txt` sind als verboten
+   erkannt und bleiben erreichbar, bis ihr Arbeitspaket sie ersetzt. Der Bericht weist sie als
+   `aufgeschoben_nicht_gepatcht` aus.
+
+### Die Zähler
+
+| Zähler | muss | Warum |
+|---|---|---|
+| `patches_ohne_treffer` | 0 | eine Patch-Zeile, die im Quell-XML kein Element trifft, tut nichts und fühlt sich wie Arbeit an |
+| `wege_uebrig` | 0 | nach den Entfernungen darf auf diesem Weg keine gesperrte Kennung mehr stehen |
+| `remove_auf_definition` | 0 | Vertrag 03 §4 und D9: `remove` trifft Wege, nie eine Definition |
+| `patchdateien_abweichend` | 0 | bei `--vergleiche`: das Modlet entspricht der heutigen Denylist |
+
+Stand WP3.2 gegen Vanilla V 3.40: **912 Patchzeilen** (items.xml 437, blocks.xml 106,
+recipes.xml 369), alle vier Zähler 0.
+
+### Gegenproben (Projektregel 5) — fünf gebaut und grün
+
+Der Prüfsatz liegt unter `tools/check/testdaten/purge/`.
+
+| | Gegenprobe | Erwartung |
+|---|---|---|
+| 11 | `purge-patch purge --zeigen` | `set` für `pruefFeuerrohrEigen`, `append` für `pruefFeuerrohrGeerbt`, `pruefSelbstbogen` in **keiner** Zeile |
+| 12 | `purge-patch purge` | `wege_uebrig 0` — `pruefFeuerrohrEigen` hat **zwei** Rezepte |
+| 13 | `--ohne-entfernen` | Exit 1, `weg-bleibt-offen: recipes.xml` — der Nachweis, dass die Nachprobe etwas prüft |
+| 14 | `--vergleiche` gegen einen leeren Ordner | Exit 1, `patchdatei-fehlt` |
+| 15 | ohne `--out` und ohne `--trocken` | Exit 2 |
+
+Dazu ein Nachweis an der echten Quelle, am 2026-11-07: eine Änderung am Kopftext machte die drei
+Dateien im Modlet `patchdatei-veraltet` (Exit 1), die Neuerzeugung machte sie wieder grün. Ein
+Vergleich, der nie rot wird, wäre kein Vergleich.
+
+### Was dieser Nachtrag nicht behauptet
+
+Patches und Prüfung stammen aus **demselben Urteil**. Dass beide zusammenpassen, sagt nur, dass
+sie zueinander passen — es ist Selbstbestätigung, kein Nachweis. Der Nachweis ist der Weg über
+das Spiel: Patch → Spielstart → `ConfigsDump` → `anachronisms`. Erst dort entscheidet der
+XML-Patcher des Spiels, ob ein XPath wirklich getroffen hat; ist eine Zeile formal falsch, steht
+die Kennung im Dump noch und die Prüfung wird rot. Das ist WP3.6 und braucht den Nutzer.
+
+Und: `CreativeMode="None"` ist **keine Sperre für den Spieler.** Es nimmt den Gegenstand aus dem
+Kreativmenü und aus der Entwicklerliste, nicht aus dem Spiel. Unerreichbar wird er allein durch
+die entfernten Wege — und von denen fehlen nach WP3.2 noch Loot, Händler, Quest-Belohnungen und
+Startausrüstung (WP3.3, WP3.4). `anachronisms` bleibt bis dahin mit 592 Befunden rot, und das ist
+richtig.
+
 ## 4. `recipes` — Z3
 
 **Prüft:** Ist jedes herstellbare Ergebnis aus Rohstoffen erreichbar, die es im Spiel gibt?
