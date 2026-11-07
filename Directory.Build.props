@@ -10,6 +10,18 @@
     Die Spiel-DLLs werden nur referenziert, nie kopiert und nie committet
     (Private=false, .gitignore).
   -->
+  <!--
+    Die Fassung der Mod, an EINER Stelle. Von hier holt sie:
+      - Mod700.csproj  (AssemblyVersion der DLL)
+      - tools/build/build.ps1  (setzt sie in alle acht ModInfo.xml ein, die im Quellstand
+        __VERSION__ als Platzhalter tragen)
+    Acht Modlets mit acht Versionsnummern waeren eine Fehlerquelle ohne Gegenwert.
+    Siehe docs/contracts/01-modlet-grenzen.md, Abschnitt 4.
+  -->
+  <PropertyGroup>
+    <Mod700Version>0.1.0</Mod700Version>
+  </PropertyGroup>
+
   <PropertyGroup>
     <SdtdPath Condition="'$(SdtdPath)' == ''">$(SDTD_PATH)</SdtdPath>
     <SdtdManagedPath Condition="'$(SdtdPath)' != ''">$(SdtdPath)\7DaysToDie_Data\Managed</SdtdManagedPath>

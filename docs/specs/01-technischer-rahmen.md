@@ -16,30 +16,68 @@ werden per REA oder Ingame-Test an der echten Zielversion bestätigt, bevor Code
 
 ## 2. Mod-Architektur
 
+> ~~Ursprünglich festgelegt: **ein** Modlet `Mods/7DTD_700/` mit einem `Config/`-Ordner.~~
+> **Geändert am 2026-11-07 durch D53: mehrere Modlets.** Grund: belegt trägt ein Modlet nur
+> **eine** Datei je Vanilla-Config, weil `XmlPatcher::LoadAndPatchConfig` je Dateiname genau
+> `<Modlet>/Config/<gleicher Name>` sucht. In einem Modlet lägen die `items.xml`-Änderungen von
+> F-01 bis F-05 zusammen in einer Datei, und keine Schicht wäre zum Debuggen abschaltbar.
+
 ```
-Mods/7DTD_700/
-├── ModInfo.xml                 # Mod-Metadaten, V2-Format — BELEGT: Wurzel <xml>, Felder als
-│                               # direkte Kinder mit value="…"; gelesen werden Name (Pflicht),
-│                               # DisplayName (Pflicht), Version, Description, Author, Website,
-│                               # SkipWithAntiCheat. Altformat lädt nicht mehr. Siehe F-00-Finding.
-├── Config/                     # XPath-Modlets: set/append/remove/insertAfter …
-│   ├── items.xml
-│   ├── recipes.xml
-│   ├── blocks.xml
-│   ├── loot.xml
-│   ├── progression.xml
-│   ├── entityclasses.xml
-│   ├── traders.xml
-│   ├── buffs.xml
-│   ├── gamestages.xml
-│   ├── rwgmixer.xml / biomes.xml
-│   ├── Localization.txt
-│   └── XUi/ …                  # UI-Layout (Windows/Controls)
-├── 7DTD_700.dll                # C#: IModApi-Einstieg + Harmony-Patches
-├── Resources/*.unity3d         # Phase 2: AssetBundles (neue Modelle, Retexturen, Sounds)
-├── UIAtlases/ItemIconAtlas/    # Phase 2: Item-Icons (PNG) [verifizieren: Pfad in V 3.40]
-└── Prefabs/                    # Phase 2: eigene POIs
+Mods/
+├── 700_00_Core/                # einziges Modlet mit Code — braucht EAC aus
+│   ├── ModInfo.xml
+│   └── Mod700.dll              # C#: IModApi-Einstieg, Build-Guard, Versions-Handshake
+├── 700_10_Purge/               # F-01  Anachronismen sperren
+├── 700_20_Material/            # F-05, F-04  Ressourcen, Ketten, Werkstätten
+├── 700_30_Ausruestung/         # F-02, F-03  Waffen, Rüstung, Qualität, Verschleiß
+├── 700_40_Bauen/               # F-18, F-08  Bauteile, Befestigung, Licht und Feuer
+├── 700_50_Fortschritt/         # F-21  die sechs Fertigkeitsbäume
+├── 700_60_Welt/                # F-17  Nachtwerte, Nebel, sichere Orte
+└── 700_90_Sprache/             # F-12  Localization und XUi-Theming — zuletzt
 ```
+
+Jedes Inhalts-Modlet hat denselben Aufbau:
+
+```
+700_NN_Name/
+├── ModInfo.xml                 # V2-Format — BELEGT: Wurzel <xml>, Felder als direkte Kinder
+│                               # mit value="…"; parseModInfoV2 liest genau sieben Felder:
+│                               # Name (Pflicht, Regex ^[0-9a-zA-Z_\-]+$), DisplayName (Pflicht),
+│                               # Version, Description, Author, Website, SkipWithAntiCheat.
+│                               # Altformat lädt nicht mehr. Siehe F-00-Finding.
+└── Config/                     # XPath-Patches, Dateiname = Name der Vanilla-Datei
+    ├── items.xml               # 52 patchbare Dateien, namentlich belegt in
+    ├── recipes.xml             # StockFileHashes::.cctor
+    ├── blocks.xml
+    ├── loot.xml
+    ├── progression.xml
+    ├── entityclasses.xml
+    ├── traders.xml
+    ├── buffs.xml
+    ├── worldglobal.xml
+    ├── biomes.xml / rwgmixer.xml
+    ├── Localization.csv        # BELEGT: .csv, nicht .txt — Localization.txt gibt es im Spiel
+    │                           # nicht. Kopfzeile mit fünf Metadatenspalten, dann die Sprachen.
+    ├── XUi_Common/             # styles.xml, templates.xml
+    ├── XUi_InGame/             # styles.xml, templates.xml, windows.xml, xui.xml
+    └── XUi_Menu/               # vom Lader erkannt (Mod::DetectContents)
+```
+
+Phase 2 ergänzt im Core-Modlet: `Resources/*.unity3d` (AssetBundles),
+`UIAtlases/ItemIconAtlas/` (Item-Icons, **[verifizieren]**: Pfad in V 3.40), `Prefabs/`
+(eigene POIs).
+
+**Ladereihenfolge:** allein über den Ordnernamen. `ModManager::loadModsFromFolder` ruft
+`SdDirectory::GetDirectories` und danach `System.Array::Sort` — die Reihenfolge ist damit
+zugesichert und plattformunabhängig. `LoadBefore`/`LoadAfter` oder Abhängigkeits-Deklarationen
+gibt es **nicht**.
+
+**EAC:** Die Prüfung sitzt ausschließlich in `Mod::LoadAssemblies` und spricht von *custom code*.
+Nur `700_00_Core` trägt eine DLL und braucht EAC aus; die reinen XML-Modlets sollten mit aktivem
+EAC laden. **Folgerung, kein Nachweis** — beim ersten Spielstart zu bestätigen.
+
+Belege zu diesem Abschnitt:
+[WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md).
 
 ### 2.3 Asset-Pipeline (ab Phase 2, Entscheidung D3)
 

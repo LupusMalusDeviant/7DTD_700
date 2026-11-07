@@ -33,7 +33,7 @@ prüft seine eigene Version und bildet die Basis für alle weiteren Features.
 | [`src/Mod700/BuildGuard.cs`](../../src/Mod700/BuildGuard.cs) | geprüfte Fassung V 3.40 b10 gegen `CompareToRunningBuild()` |
 | [`src/Mod700/VersionHandshake.cs`](../../src/Mod700/VersionHandshake.cs) | `ModEvents.PlayerLogin`-Handler, nur Protokoll |
 | [`src/Mod700/Log700.cs`](../../src/Mod700/Log700.cs) | Präfix `[700]` über `Log` aus `LogLibrary.dll` |
-| [`mod/ModInfo.xml`](../../mod/ModInfo.xml) | V2-Format, `SkipWithAntiCheat="true"` |
+| [`mod/700_00_Core/ModInfo.xml`](../../mod/700_00_Core/ModInfo.xml) | V2-Format, `SkipWithAntiCheat="true"`. Seit **D53** eines von acht Modlets; die sieben übrigen tragen XML und laden ohne DLL. Siehe [Vertrag 01](../contracts/01-modlet-grenzen.md). |
 | [`tools/build/build.ps1`](../../tools/build/build.ps1) | bauen → packen → signieren → optional installieren |
 | [`tools/build/smoke.ps1`](../../tools/build/smoke.ps1) | prüft das installierte Paket und das Spielprotokoll, Exit 1 bei rot |
 | [`Directory.Build.props`](../../Directory.Build.props) | Spielpfad über `SDTD_PATH`, nie hart codiert |
@@ -64,8 +64,11 @@ Prio-1-Fragen beantwortet. Soll-Signaturen: `tools/meta/expect/f00.tsv` (12 Zeil
       `<xml>`, keine `<ModInfo>`-Hülle, `Name` gegen `^[0-9a-zA-Z_\-]+$`, `Version` per
       `Version.TryParse`, keine Felder, die der Lader ignoriert.
 - [ ] **SP-Start:** `[700] loaded vX.Y.Z (game build …)` im Log, keine Fehler
-      → `smoke.ps1` (ohne `-SkipLog`) prüft das selbst, findet aber noch kein Protokoll.
-      Braucht einen Spielstart mit **abgeschaltetem EAC**; steht aus.
+      → `smoke.ps1` (ohne `-SkipLog`) prüft das selbst und **findet jetzt auch Protokolle**:
+      sie liegen unter `%APPDATA%\7DaysToDie\logs\`, nicht unter `LocalLow`. Der Lauf gegen das
+      neueste vorhandene Protokoll (30. Juli 2026, V 3.1.0, ohne diese Mod) ist erwartungsgemäß
+      **rot** — er beweist damit, dass der Protokollteil greift. Braucht einen Spielstart mit
+      **abgeschaltetem EAC**; steht aus.
 - [ ] **Dedicated Server** unter Windows und Linux lädt die Mod
       → auf diesem Rechner **kein Dedicated Server installiert**; nicht prüfbar
 - [ ] **Client verbindet sich mit dem Server**, beide loggen die Version
@@ -75,15 +78,27 @@ Prio-1-Fragen beantwortet. Soll-Signaturen: `tools/meta/expect/f00.tsv` (12 Zeil
 
 Wörtliche Zeichenketten aus `Mod::InitModCode` und `Mod::LoadAssemblies`, als Anker:
 
+Modlet-Namen seit **D53**. Das Protokoll liegt unter
+`%APPDATA%\7DaysToDie\logs\output_log_client__<datum>.txt` — **nicht** unter `LocalLow`, wie
+hier ursprünglich angenommen.
+
 ```
-[MODS]   Initializing mod 7DTD_700
+[MODS] Start loading from: '…/Mods'
+[MODS]   Trying to load from folder: '700_00_Core'
+[MODS]   Trying to load from folder: '700_10_Purge'
+…                                     (alle acht, in dieser Reihenfolge)
+[MODS]   Initializing mod 700_00_Core
 [MODS]     Found ModAPI in assembly …, creating instance
-[MODS]     Initialized code in mod '7DTD_700' in assembly …
+[MODS]     Initialized code in mod '700_00_Core' in assembly …
 [700] loaded v0.1.0 (game build …)
 [700] Spielfassung … entspricht der geprüften Fassung.
 [700] Login-Handler registriert (nur Protokoll, keine Abweisung).
 [700] Harmony 2.13.0.0 angebunden, 0 Patch-Ziele (Phase 0: erwartet 0).
 ```
+
+Die acht `Trying to load from folder`-Zeilen sind der Nachweis, dass der Lader jedes Modlet
+gesehen hat. Ein Tippfehler im Ordnernamen fällt sonst nicht auf: der Patcher schweigt, wenn er
+eine Datei nicht findet.
 
 `smoke.ps1` sucht genau diese Zeilen; es muss niemand das Protokoll von Hand durchlesen.
 

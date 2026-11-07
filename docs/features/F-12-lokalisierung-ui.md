@@ -8,8 +8,27 @@
 Jeder Text und jedes UI-Element spricht die Sprache des Settings.
 
 ## Umfang
-- `Localization.txt`: **DE + EN Pflicht** (D7) für alle neuen und umgedeuteten Einträge;
-  weitere Sprachen später über die Community (Spalten leer lassen, nicht mit EN füllen)
+- ~~`Localization.txt`~~ **`Config/Localization.csv`** (berichtigt 2026-11-07 — eine Datei
+  `Localization.txt` gibt es im Spiel **nicht**): **DE + EN Pflicht** (D7) für alle neuen und
+  umgedeuteten Einträge; weitere Sprachen später über die Community (Spalten leer lassen, nicht
+  mit EN füllen). Die ausgelieferte Datei hat 25.932 Zeilen und diese Kopfzeile:
+
+  ```
+  Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,
+  Context / Alternate Text,german,spanish,french,italian,japanese,koreana,
+  polish,brazilian,russian,turkish,schinese,tchinese
+  ```
+
+  Drei Fallen darin, alle belegt
+  ([Finding](../rea/findings/WP1-modlet-lader-und-xml-patcher.md#6-localization-spec-01-nennt-eine-datei-die-es-nicht-gibt)):
+  1. **Fünf Metadatenspalten vor den Sprachen** (`File`, `Type`, `UsedInMainMenu`,
+     `NoTranslate`, `KeepLoaded`). Wer `Key,english,german` schreibt, trifft die falschen Spalten.
+  2. **Zwischen `english` und `german` steht `Context / Alternate Text`** — keine Sprache. Ein
+     Prüfwerkzeug, das „die Spalte nach english ist Deutsch" annimmt, prüft die Kommentarspalte.
+  3. **Doppelte Schlüssel werden stillschweigend verworfen**, nur `Localization::addCsv` meldet
+     es im Protokoll (*„Duplicate key … Skipping entry"*). Das Prüfwerkzeug muss darauf achten.
+
+  14 Sprachen insgesamt; D7 heißt also: zwei von 14 Spalten füllen.
 - **Glossar** (`docs/glossar.md`) als verbindliche Begriffsquelle (Sceatta, Sax, Spatha, Gambeson …)
 - **Namensregeln für das fiktive Mischland (D1):** Ortsnamen erfunden, aber
   frühmittelalterlich klingend (-heim, -feld, -wik, -grad, -dun, -ing); keine realen Orte

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_20_Material — F-05 Ressourcen und F-04 Handwerk. Das Rückgrat: ohne Rohstoffe und
+  Werkstätten hat kein Rezept der späteren Modlets eine Basis. Darum vor 30, 40 und 50.
+
+  Reines XML, keine DLL. Siehe docs/contracts/01-modlet-grenzen.md.
+-->
+<xml>
+	<Name value="700_20_Material" />
+	<DisplayName value="700 — Material und Werkstätten" />
+	<Description value="Rohstoffe, Rohstoffketten und Werkstätten: Raseneisenerz über Luppe zu Schmiedeeisen, Holzkohle, Kalk, Bernstein, Salz. Rennofen, Esse, Kalkofen, Webstuhl. Silber als Währung." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

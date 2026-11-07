@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_00_Core — das einzige Modlet mit Code.
+
+  Format V2. Belegt gegen den Lader (Mod::parseModInfoV2) und gegen die vom Spiel
+  mitgelieferte Originaldatei Mods/0_TFP_Harmony/ModInfo.xml:
+    - Wurzelelement ist <xml>, die Felder sind direkte Kinder mit value="…"
+    - gelesen werden genau: Name, DisplayName, Version, Description, Author, Website,
+      SkipWithAntiCheat. Weitere Felder ignoriert der Lader.
+    - Name und DisplayName sind Pflicht; Name wird gegen ^[0-9a-zA-Z_\-]+$ geprüft
+    - das Altformat (<ModInfo>-Hülle) lädt nicht mehr: "V2 required to load mod"
+  Siehe docs/rea/findings/F-00-modloader-events-version.md, Abschnitt 2.
+
+  Name = Ordnername (Vertrag 02). Das Zahlenpräfix 00 setzt die Ladereihenfolge:
+  ModManager::loadModsFromFolder sortiert die Ordner mit System.Array::Sort, die
+  Reihenfolge ist damit zugesichert und plattformunabhängig (D53).
+
+  SkipWithAntiCheat=true: Dieses Modlet bringt eigenen Code mit. Mit aktivem EAC lädt der
+  Lader es ohnehin nicht (Mod::LoadAssemblies). Mit dem Flag steht im Protokoll der klare
+  Grund — genau die Zeile, die im Juli-Protokoll dieses Rechners für 0_TFP_Harmony steht:
+  "AntiCheat enabled, mod skipped because it is set not to load".
+
+  Version wird beim Packen aus Directory.Build.props eingesetzt (Vertrag 01, §4).
+-->
+<xml>
+	<Name value="700_00_Core" />
+	<DisplayName value="700 — Kern" />
+	<Description value="Einstieg, Build-Guard und Versions-Handshake des Frühmittelalter-Overhauls. Enthält den Code; braucht abgeschaltetes EAC. Ohne die Inhalts-Modlets ändert es nichts am Spiel." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="true" />
+</xml>

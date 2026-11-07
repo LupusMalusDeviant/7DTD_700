@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_10_Purge — F-01 Anachronismen-Purge. Nimmt weg, bevor die anderen hinzufügen.
+
+  Reines XML, keine DLL. Belegt sitzt die EAC-Prüfung ausschließlich in
+  Mod::LoadAssemblies und spricht von "custom code" — dieses Modlet sollte darum auch mit
+  aktivem EAC laden. Folgerung, kein Nachweis; beim ersten Spielstart zu bestätigen.
+  Darum SkipWithAntiCheat=false.
+
+  Siehe docs/contracts/01-modlet-grenzen.md und
+  docs/rea/findings/WP1-modlet-lader-und-xml-patcher.md, Abschnitt 5.
+-->
+<xml>
+	<Name value="700_10_Purge" />
+	<DisplayName value="700 — Anachronismen sperren" />
+	<Description value="Sperrt, was es um 700 n. Chr. nicht gab: Schusswaffen, Fahrzeuge, Elektronik, Konserven, Treibstoff, Beton. Gesperrt, nicht gelöscht, damit Prefabs und Quests nicht brechen." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

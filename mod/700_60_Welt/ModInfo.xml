@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_60_Welt — F-17, Bausteine B1 (Dunkelheit), B2 (Klang, soweit XML) und B8 (sichere Orte).
+
+  Reines XML, keine DLL. Belegt: worldglobal.xml führt die Himmelswerte als Tag-/Nacht-Paare
+  (ambientEquatorScale, ambientGroundScale, ambientSkyScale, ambientMoon, fogPower) —
+  dunklere Nächte sind eine Zahl, kein Patch.
+
+  Nicht hier: das Furcht-System B3. Es braucht eine Abfrage der Lichtstärke am Spielerort,
+  und die gibt es als Buff-Bedingung nicht. Phase 2.
+-->
+<xml>
+	<Name value="700_60_Welt" />
+	<DisplayName value="700 — Nacht und Nebel" />
+	<Description value="Dunklere Nächte mit Gewicht auf den Mondphasen, Nebel in Wald, Moor und Flusstal, umgedeutete Klanglandschaft und Buff-Auren an brennenden Feuerstellen." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

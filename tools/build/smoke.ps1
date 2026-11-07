@@ -58,64 +58,112 @@ if (-not $env:SDTD_PATH) {
 }
 
 # ---------------------------------------------------------------- Teil 1: Paket
+# Seit D53 acht Modlets statt einem. Geprueft wird jedes einzeln, dazu die Dinge, die
+# nur im Zusammenspiel gelten: eine einzige DLL, und die liegt im Kern-Modlet; alle
+# Modlets tragen dieselbe Fassung. Siehe docs/contracts/01-modlet-grenzen.md.
 Write-Output "== Paket =="
 
-$modDir = Join-Path $env:SDTD_PATH 'Mods\7DTD_700'
-$infoPath = Join-Path $modDir 'ModInfo.xml'
-$dllPath = Join-Path $modDir 'Mod700.dll'
+$coreModlet = '700_00_Core'
+$modsRoot = Join-Path $env:SDTD_PATH 'Mods'
+$expected = @($coreModlet, '700_10_Purge', '700_20_Material', '700_30_Ausruestung',
+              '700_40_Bauen', '700_50_Fortschritt', '700_60_Welt', '700_90_Sprache')
 
-Test-Item 'Mod-Ordner installiert' (Test-Path $modDir) $modDir
-Test-Item 'ModInfo.xml vorhanden' (Test-Path $infoPath)
-Test-Item 'Mod700.dll vorhanden' (Test-Path $dllPath)
+Test-Item 'Mods-Ordner vorhanden' (Test-Path $modsRoot) $modsRoot
 
-if (Test-Path $modDir) {
-    $foreign = Get-ChildItem $modDir -Recurse -File -Filter *.dll |
-        Where-Object { $_.Name -ne 'Mod700.dll' }
-    Test-Item 'keine fremden DLLs im Mod-Ordner' (-not $foreign) ($foreign.Name -join ', ')
+$installed = @()
+if (Test-Path $modsRoot) {
+    $installed = @(Get-ChildItem $modsRoot -Directory | Where-Object { $_.Name -like '700_*' } |
+        ForEach-Object { $_.Name })
 }
 
-if (Test-Path $dllPath) {
-    $sig = Get-AuthenticodeSignature $dllPath
+foreach ($name in $expected) {
+    Test-Item "$name installiert" ($installed -contains $name)
+}
+
+$extra = @($installed | Where-Object { $expected -notcontains $_ })
+Test-Item 'keine unbekannten 700er-Modlets' ($extra.Count -eq 0) ("gefunden: " + ($extra -join ', '))
+
+# Die alte Ein-Modlet-Installation darf nicht daneben liegenbleiben.
+Test-Item 'alte Installation Mods\7DTD_700 ist weg' (-not (Test-Path (Join-Path $modsRoot '7DTD_700')))
+
+# --- genau eine DLL, und die im Kern-Modlet
+$allDlls = @()
+if (Test-Path $modsRoot) {
+    $allDlls = @(Get-ChildItem $modsRoot -Recurse -File -Filter *.dll |
+        Where-Object { $_.FullName -like "*\700_*" })
+}
+Test-Item 'genau eine DLL in den 700er-Modlets' ($allDlls.Count -eq 1) ("gefunden: " + $allDlls.Count)
+if ($allDlls.Count -ge 1) {
+    Test-Item 'die DLL heisst Mod700.dll' ($allDlls[0].Name -eq 'Mod700.dll') $allDlls[0].Name
+    Test-Item "die DLL liegt in $coreModlet" ($allDlls[0].Directory.Name -eq $coreModlet) $allDlls[0].Directory.Name
+    $sig = Get-AuthenticodeSignature $allDlls[0].FullName
     Test-Item 'Mod700.dll ist signiert' ($sig.Status -ne 'NotSigned') ("Status $($sig.Status)")
 }
 
-if (Test-Path $infoPath) {
+# --- jede ModInfo.xml gegen die belegten Laderegeln
+$known = @('Name', 'DisplayName', 'Description', 'Author', 'Version', 'Website', 'SkipWithAntiCheat')
+$versions = @{}
+
+foreach ($name in ($installed | Where-Object { $expected -contains $_ })) {
+    $infoPath = Join-Path (Join-Path $modsRoot $name) 'ModInfo.xml'
+    if (-not (Test-Path $infoPath)) {
+        Test-Item "$name : ModInfo.xml vorhanden" $false
+        continue
+    }
+
     $xml = $null
     try { $xml = [xml](Get-Content $infoPath -Raw) } catch { }
-    Test-Item 'ModInfo.xml ist wohlgeformtes XML' ($null -ne $xml)
+    Test-Item "$name : ModInfo.xml ist wohlgeformtes XML" ($null -ne $xml)
+    if ($null -eq $xml) { continue }
 
-    if ($null -ne $xml) {
-        # Belegte Laderegeln (Mod::parseModInfoV2 / Mod::LoadDefinitionFromFolder):
-        # Wurzel <xml>, Felder als direkte Kinder mit value="...", Name und DisplayName
-        # Pflicht, Name gegen ^[0-9a-zA-Z_\-]+$, Version per Version.TryParse.
-        $root = $xml.DocumentElement
-        # get_Name() statt .Name: der XML-Adapter von PowerShell blendet Kindelemente als
-        # Eigenschaften ein, und die Wurzel <xml> hat ein Kind <Name> - .Name liefert sonst
-        # dieses Kind statt des Elementnamens.
-        $rootName = $root.get_Name()
-        Test-Item 'Wurzelelement ist <xml>' ($rootName -eq 'xml') ("gefunden <$rootName>")
-        Test-Item 'keine <ModInfo>-Huelle (Altformat laedt nicht)' ($null -eq $root.SelectSingleNode('ModInfo'))
+    # Belegte Laderegeln (Mod::parseModInfoV2 / Mod::LoadDefinitionFromFolder):
+    # Wurzel <xml>, Felder als direkte Kinder mit value="...", Name und DisplayName
+    # Pflicht, Name gegen ^[0-9a-zA-Z_\-]+$, Version per Version.TryParse.
+    $root = $xml.DocumentElement
+    # get_Name() statt .Name: der XML-Adapter von PowerShell blendet Kindelemente als
+    # Eigenschaften ein, und die Wurzel <xml> hat ein Kind <Name> - .Name liefert sonst
+    # dieses Kind statt des Elementnamens.
+    $rootName = $root.get_Name()
+    Test-Item "$name : Wurzelelement ist <xml>" ($rootName -eq 'xml') ("gefunden <$rootName>")
+    Test-Item "$name : keine <ModInfo>-Huelle (Altformat laedt nicht)" ($null -eq $root.SelectSingleNode('ModInfo'))
 
-        function Get-Field { param([string]$n) $node = $root.SelectSingleNode($n); if ($node) { $node.GetAttribute('value') } else { $null } }
-
-        $name = Get-Field 'Name'
-        $display = Get-Field 'DisplayName'
-        $version = Get-Field 'Version'
-        $skip = Get-Field 'SkipWithAntiCheat'
-
-        Test-Item 'Name gesetzt' (-not [string]::IsNullOrEmpty($name))
-        Test-Item 'Name passt auf ^[0-9a-zA-Z_\-]+$' ($name -match '^[0-9a-zA-Z_\-]+$') "Name '$name'"
-        Test-Item 'DisplayName gesetzt' (-not [string]::IsNullOrEmpty($display))
-        $parsed = [Version]::new(0, 0)
-        Test-Item 'Version ist per Version.TryParse lesbar' ([Version]::TryParse($version, [ref]$parsed)) "Version '$version'"
-        $skipOk = $false
-        Test-Item 'SkipWithAntiCheat ist ein Boolescher Wert' ([bool]::TryParse($skip, [ref]$skipOk)) "Wert '$skip'"
-
-        $known = @('Name', 'DisplayName', 'Description', 'Author', 'Version', 'Website', 'SkipWithAntiCheat')
-        $unknown = @($root.ChildNodes | Where-Object { $_.NodeType -eq 'Element' -and $known -notcontains $_.Name } | ForEach-Object { $_.Name })
-        Test-Item 'nur Felder, die der Lader liest' ($unknown.Count -eq 0) ("ignoriert: " + ($unknown -join ', '))
+    $field = {
+        param([string]$n)
+        $node = $root.SelectSingleNode($n)
+        if ($node) { $node.GetAttribute('value') } else { $null }
     }
+
+    $modName = & $field 'Name'
+    $display = & $field 'DisplayName'
+    $version = & $field 'Version'
+    $skip = & $field 'SkipWithAntiCheat'
+
+    Test-Item "$name : Name passt auf ^[0-9a-zA-Z_\-]+$" ($modName -match '^[0-9a-zA-Z_\-]+$') "Name '$modName'"
+    # Vertrag 02: Name == Ordnername. Sonst ist nicht nachvollziehbar, welche
+    # Protokollzeile zu welchem Ordner gehoert.
+    Test-Item "$name : Name gleich Ordnername" ($modName -eq $name) "Name '$modName'"
+    Test-Item "$name : DisplayName gesetzt" (-not [string]::IsNullOrEmpty($display))
+
+    $parsed = [Version]::new(0, 0)
+    $versionOk = [Version]::TryParse($version, [ref]$parsed)
+    Test-Item "$name : Version ist per Version.TryParse lesbar" $versionOk "Version '$version'"
+    # Haeufigster Fehler beim Packen: der Platzhalter blieb stehen.
+    Test-Item "$name : kein __VERSION__-Platzhalter mehr" ($version -ne '__VERSION__')
+    if ($versionOk) { $versions[$name] = $version }
+
+    $skipOk = $false
+    Test-Item "$name : SkipWithAntiCheat ist ein Boolescher Wert" ([bool]::TryParse($skip, [ref]$skipOk)) "Wert '$skip'"
+    # Nur das Kern-Modlet bringt Code mit; die XML-Modlets sollen mit aktivem EAC laden.
+    $skipExpected = ($name -eq $coreModlet)
+    Test-Item "$name : SkipWithAntiCheat ist $skipExpected" ($skipOk -eq $skipExpected) "Wert '$skip'"
+
+    $unknown = @($root.ChildNodes | Where-Object { $_.NodeType -eq 'Element' -and $known -notcontains $_.Name } | ForEach-Object { $_.Name })
+    Test-Item "$name : nur Felder, die der Lader liest" ($unknown.Count -eq 0) ("ignoriert: " + ($unknown -join ', '))
 }
+
+# --- eine Fassung fuer alle
+$distinct = @($versions.Values | Sort-Object -Unique)
+Test-Item 'alle Modlets tragen dieselbe Fassung' ($distinct.Count -le 1) ("gefunden: " + ($distinct -join ', '))
 
 # ------------------------------------------------------------ Teil 2: Protokoll
 if (-not $SkipLog) {
@@ -123,13 +171,22 @@ if (-not $SkipLog) {
     Write-Output "== Protokoll =="
 
     if (-not $LogPath) {
+        # Der echte Ort, nachgesehen am 2026-11-07: %APPDATA%\7DaysToDie\logs\ mit Dateien
+        # output_log_client__<datum>.txt. Die beiden fruehen Kandidaten (LocalLow und der
+        # Spielordner) waren geraten und falsch - darum fand der erste Lauf kein Protokoll und
+        # hat daraus geschlossen, das Spiel sei nie gestartet worden. Beide bleiben als
+        # Rueckfalloption stehen, falls eine andere Installation sie doch benutzt.
         $candidates = @(
+            (Join-Path $env:APPDATA '7DaysToDie\logs'),
             (Join-Path $env:LOCALAPPDATA '..\LocalLow\The Fun Pimps\7 Days To Die'),
             (Join-Path $env:SDTD_PATH '7DaysToDie_Data')
         )
         $LogPath = $candidates |
             Where-Object { Test-Path $_ } |
-            ForEach-Object { Get-ChildItem $_ -Filter *.log -File -ErrorAction SilentlyContinue } |
+            ForEach-Object {
+                Get-ChildItem $_ -File -ErrorAction SilentlyContinue |
+                    Where-Object { $_.Extension -in '.log', '.txt' -and $_.Name -notlike 'launcher*' }
+            } |
             Sort-Object LastWriteTime -Descending |
             Select-Object -First 1 -ExpandProperty FullName
     }
@@ -146,13 +203,22 @@ if (-not $SkipLog) {
         Write-Output ("  Stand: " + (Get-Item $LogPath).LastWriteTime)
         $log = Get-Content $LogPath -Raw
 
+        # Woertliche Zeichenketten aus Mod::InitModCode, Mod::LoadMod und
+        # ModManager::loadModsFromFolder, als Anker. Die Modlet-Namen seit D53.
         $required = @(
-            @{ Text = 'Initializing mod 7DTD_700'; Name = 'Lader nimmt die Mod auf' },
-            @{ Text = "Initialized code in mod '7DTD_700'"; Name = 'IModApi-Instanz erzeugt' },
+            @{ Text = "Trying to load from folder: '$coreModlet'"; Name = 'Lader sieht das Kern-Modlet' },
+            @{ Text = "Initializing mod $coreModlet"; Name = 'Lader nimmt das Kern-Modlet auf' },
+            @{ Text = "Initialized code in mod '$coreModlet'"; Name = 'IModApi-Instanz erzeugt' },
             @{ Text = '[700] loaded v'; Name = 'Mod meldet sich mit Fassung und Spielbuild' },
             @{ Text = '[700] Harmony'; Name = 'HarmonyX zur Laufzeit aufgeloest' },
             @{ Text = '[700] Login-Handler registriert'; Name = 'PlayerLogin-Handler haengt' }
         )
+
+        # Jedes XML-Modlet muss im Protokoll auftauchen, sonst hat der Lader es nicht
+        # gesehen - der haeufigste Grund ist ein Tippfehler im Ordnernamen.
+        foreach ($name in ($expected | Where-Object { $_ -ne $coreModlet })) {
+            $required += @{ Text = "Trying to load from folder: '$name'"; Name = "Lader sieht $name" }
+        }
         foreach ($r in $required) {
             Test-Item $r.Name ($log.Contains($r.Text)) ("fehlt: " + $r.Text)
         }

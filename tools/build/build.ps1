@@ -51,7 +51,22 @@ $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $project = Join-Path $repoRoot 'src\Mod700\Mod700.csproj'
 $modSource = Join-Path $repoRoot 'mod'
 $distRoot = Join-Path $repoRoot 'dist'
-$package = Join-Path $distRoot 'Mods\7DTD_700'
+# Seit D53 acht Modlets statt einem: dist\Mods\ enthaelt alle Ordner, die nach
+# <Spielpfad>\Mods\ kopiert werden. Siehe docs/contracts/01-modlet-grenzen.md.
+$package = Join-Path $distRoot 'Mods'
+$coreModlet = '700_00_Core'
+
+# Eine Fassung fuer alle acht ModInfo.xml (Vertrag 01, §4). Quelle ist
+# Directory.Build.props; die Quelldateien tragen __VERSION__ als Platzhalter.
+$propsPath = Join-Path $repoRoot 'Directory.Build.props'
+$modVersion = ([xml](Get-Content $propsPath -Raw)).Project.PropertyGroup.Mod700Version |
+    Where-Object { $_ } | Select-Object -First 1
+if (-not $modVersion) { throw "Mod700Version steht nicht in $propsPath." }
+$parsedVersion = [Version]::new(0, 0)
+if (-not [Version]::TryParse($modVersion, [ref]$parsedVersion)) {
+    throw "Mod700Version '$modVersion' ist keine lesbare Fassung."
+}
+Write-Output "Fassung: $modVersion"
 
 if (-not $env:SDTD_PATH) {
     throw "SDTD_PATH ist nicht gesetzt. Beispiel: `$env:SDTD_PATH = 'C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die'"
@@ -78,21 +93,40 @@ Write-Output "Packe nach $package ..."
 if (Test-Path $package) { Remove-Item $package -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $package | Out-Null
 
-Copy-Item (Join-Path $modSource 'ModInfo.xml') $package
-Copy-Item $builtDll $package
+$modlets = Get-ChildItem $modSource -Directory | Sort-Object Name
+if (-not $modlets) { throw "Unter $modSource liegt kein Modlet-Ordner." }
+if (-not ($modlets.Name -contains $coreModlet)) {
+    throw "Das Kern-Modlet $coreModlet fehlt unter $modSource."
+}
 
-$configSource = Join-Path $modSource 'Config'
-$configTarget = Join-Path $package 'Config'
-New-Item -ItemType Directory -Force -Path $configTarget | Out-Null
-# README.md ist Repo-Doku und gehört nicht ins Paket.
-Get-ChildItem $configSource -Recurse -File |
-    Where-Object { $_.Name -ne 'README.md' } |
-    ForEach-Object {
-        $relative = $_.FullName.Substring($configSource.Length).TrimStart('\')
-        $destination = Join-Path $configTarget $relative
-        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
-        Copy-Item $_.FullName $destination
+foreach ($modlet in $modlets) {
+    $target = Join-Path $package $modlet.Name
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+
+    # README.md ist Repo-Doku, .gitkeep haelt leere Ordner im Git - beides nicht ins Paket.
+    Get-ChildItem $modlet.FullName -Recurse -File |
+        Where-Object { $_.Name -ne 'README.md' -and $_.Name -ne '.gitkeep' } |
+        ForEach-Object {
+            $relative = $_.FullName.Substring($modlet.FullName.Length).TrimStart('\')
+            $destination = Join-Path $target $relative
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
+            Copy-Item $_.FullName $destination
+        }
+
+    # Fassung einsetzen. Der Platzhalter MUSS vorhanden sein, sonst traegt ein Modlet
+    # stillschweigend eine falsche Nummer.
+    $infoPath = Join-Path $target 'ModInfo.xml'
+    if (-not (Test-Path $infoPath)) { throw "$($modlet.Name) hat keine ModInfo.xml." }
+    $info = [IO.File]::ReadAllText($infoPath, [Text.UTF8Encoding]::new($false))
+    if ($info -notmatch '__VERSION__') {
+        throw "$($modlet.Name)\ModInfo.xml hat keinen __VERSION__-Platzhalter."
     }
+    [IO.File]::WriteAllText($infoPath, $info.Replace('__VERSION__', $modVersion),
+        [Text.UTF8Encoding]::new($false))
+
+    # Die DLL gehoert ausschliesslich ins Kern-Modlet (Vertrag 01, §5).
+    if ($modlet.Name -eq $coreModlet) { Copy-Item $builtDll $target }
+}
 
 # Kontrolle: keine Spiel-DLL im Paket (CLAUDE.md, harte Regel 1).
 $strays = Get-ChildItem $package -Recurse -File -Include *.dll |
@@ -101,8 +135,17 @@ if ($strays) {
     throw "Fremde DLLs im Paket, das darf nicht ausgeliefert werden: $($strays.Name -join ', ')"
 }
 
+# Kontrolle: genau eine DLL, und die liegt im Kern-Modlet.
+$dlls = Get-ChildItem $package -Recurse -File -Include *.dll
+if ($dlls.Count -ne 1) {
+    throw "Erwartet wird genau eine DLL im Paket, gefunden: $($dlls.Count)."
+}
+if ($dlls[0].Directory.Name -ne $coreModlet) {
+    throw "Mod700.dll liegt in '$($dlls[0].Directory.Name)' statt in $coreModlet."
+}
+
 $files = Get-ChildItem $package -Recurse -File
-Write-Output "Paket fertig: $($files.Count) Dateien"
+Write-Output "Paket fertig: $($modlets.Count) Modlets, $($files.Count) Dateien"
 $files | ForEach-Object { Write-Output ("  " + $_.FullName.Substring($package.Length).TrimStart('\')) }
 
 # --- 3. Signieren -----------------------------------------------------------
@@ -115,7 +158,7 @@ if (-not $NoSign) {
         Write-Warning "Signier-Skript nicht gefunden ($signScript) — Paket bleibt unsigniert."
     }
     else {
-        $packagedDll = Join-Path $package 'Mod700.dll'
+        $packagedDll = Join-Path $package "$coreModlet\Mod700.dll"
         Write-Output "Signiere Mod700.dll ..."
         & powershell -NoProfile -ExecutionPolicy Bypass -File $signScript -Exe "$packagedDll"
         $status = (Get-AuthenticodeSignature $packagedDll).Status
@@ -126,12 +169,36 @@ if (-not $NoSign) {
 
 # --- 4. Optional installieren ----------------------------------------------
 if ($Install) {
-    $target = Join-Path $env:SDTD_PATH 'Mods\7DTD_700'
-    Write-Output "Installiere nach $target ..."
-    if (Test-Path $target) { Remove-Item $target -Recurse -Force }
-    New-Item -ItemType Directory -Force -Path $target | Out-Null
-    Copy-Item (Join-Path $package '*') $target -Recurse -Force
-    Write-Output "Installiert. EAC muss aus sein, sonst lädt der Lader die DLL nicht."
+    $modsRoot = Join-Path $env:SDTD_PATH 'Mods'
+    Write-Output "Installiere nach $modsRoot ..."
+
+    # Der Ordner der alten Ein-Modlet-Fassung. Bleibt er liegen, laedt das Spiel eine
+    # zweite, veraltete Mod daneben - mit anderem Name-Feld greift auch die
+    # "Mod with same name"-Sperre des Laders nicht.
+    $legacy = Join-Path $modsRoot '7DTD_700'
+    if (Test-Path $legacy) {
+        Write-Output "Entferne die alte Ein-Modlet-Installation: $legacy"
+        Remove-Item $legacy -Recurse -Force
+    }
+
+    foreach ($modlet in $modlets) {
+        $target = Join-Path $modsRoot $modlet.Name
+        if (Test-Path $target) { Remove-Item $target -Recurse -Force }
+        New-Item -ItemType Directory -Force -Path $target | Out-Null
+        Copy-Item (Join-Path (Join-Path $package $modlet.Name) '*') $target -Recurse -Force
+    }
+
+    # Fremde 700er-Modlets, die wir nicht gerade geschrieben haben: Reste einer
+    # frueheren Aufteilung. Nur melden, nicht loeschen.
+    $orphans = Get-ChildItem $modsRoot -Directory |
+        Where-Object { $_.Name -like '700_*' -and $modlets.Name -notcontains $_.Name }
+    foreach ($orphan in $orphans) {
+        Write-Warning "Unbekanntes 700er-Modlet in Mods\: $($orphan.Name) - von Hand pruefen."
+    }
+
+    Write-Output "Installiert: $($modlets.Count) Modlets."
+    Write-Output "EAC muss aus sein, sonst laedt der Lader $coreModlet nicht."
+    Write-Output "Die reinen XML-Modlets sollten auch mit aktivem EAC laden - Folgerung, noch nicht belegt."
 }
 
 Write-Output "Fertig."

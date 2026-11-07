@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_40_Bauen — F-18 Bauen und Befestigung, F-08 Licht und Feuer.
+
+  Reines XML, keine DLL. Die Brenndauer der Lichtquellen läuft über Class="PlantGrowing"
+  mit Next und GrowthRate — belegt, kein Harmony-Patch nötig. Siehe
+  docs/rea/findings/02-10-schnittstellen-kurzcheck.md, Prio 3.
+
+  Hier liegt auch BlockDamage der Gegner (D29), obwohl es in entityclasses.xml steht: es
+  ist eine Bau-Balancing-Zahl (Vertrag 01, §3).
+-->
+<xml>
+	<Name value="700_40_Bauen" />
+	<DisplayName value="700 — Bauen und Feuer" />
+	<Description value="Bauteile von Flechtwerk bis Mörtelstein, Palisade, Graben und Wehrgang, dazu Fackeln und Feuerkörbe, die abbrennen. Licht ist eine Ressource." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

@@ -73,9 +73,13 @@ erst dann beginnt WP3.
 **Schritte:**
 
 1. **WP1.1** `[Claude-prüfbar]` `docs/contracts/01-modlet-grenzen.md`: Welche Modlets es gibt,
-   was in welches gehört, in welcher Reihenfolge sie laden. Vorschlag: ein Modlet pro Feature-
-   Gruppe (`700_core`, `700_items`, `700_blocks`, `700_progression`, `700_localization`,
-   `700_ui`), damit sich ein Feature einzeln abschalten lässt.
+   was in welches gehört, in welcher Reihenfolge sie laden. ~~Vorschlag: ein Modlet pro
+   Feature-Gruppe (`700_core`, `700_items`, `700_blocks`, `700_progression`,
+   `700_localization`, `700_ui`)~~ — **entschieden als D53: acht Modlets, geschnitten nach
+   Feature-Gruppe statt nach Vanilla-Datei** (`700_00_Core`, `700_10_Purge`, `700_20_Material`,
+   `700_30_Ausruestung`, `700_40_Bauen`, `700_50_Fortschritt`, `700_60_Welt`,
+   `700_90_Sprache`). Der Schnitt nach Datei wäre falsch gewesen: `items.xml` gehört zu fünf
+   Features, nicht zu einem.
 2. **WP1.2** `[Claude-prüfbar]` `docs/contracts/02-namensraum.md`: Präfix-Regeln für Item-,
    Block-, Buff-, Perk- und Localization-Kennungen. Ein Name, der im Spiel sichtbar ist, läuft
    immer über Localization, nie über die Kennung. Enthält die **belegte** Laderegel
@@ -86,12 +90,30 @@ erst dann beginnt WP3.
 4. **WP1.4** `[Claude-prüfbar]` `docs/contracts/04-pruefwerkzeuge.md`: Was die drei Werkzeuge aus
    WP2 als Eingabe nehmen, was sie ausgeben, welcher Exit-Code was heißt. C#, kein Python
    (globale Regel), Fortsetzung des Musters von `tools/meta`.
-5. **WP1.5** `[Claude-prüfbar]` Leere Modlet-Ordner samt `ModInfo.xml` anlegen, Spielstart als
-   Rauchtest — lädt das Gerüst, bevor Inhalt drin ist?
-6. **WP1.6** `[braucht Nutzer]` **Abnahme der Verträge.** Ohne sie beginnt WP3 nicht.
+5. **WP1.5** `[Claude-prüfbar]` Leere Modlet-Ordner samt `ModInfo.xml` anlegen, Build-Skript auf
+   acht Modlets umstellen, Paketprüfung grün.
+6. **WP1.5b** `[braucht Nutzer]` **Rauchtest im Spiel:** lädt das Gerüst, bevor Inhalt drin ist?
+   *(Im ersten Entwurf war dieser Schritt fälschlich als `[Claude-prüfbar]` markiert — ein
+   Spielstart ist er nicht.)*
+7. **WP1.6** `[braucht Nutzer]` **Abnahme der Verträge.** Ohne sie beginnt WP3 nicht.
 
 **Ergebnis:** Vier Verträge in `docs/contracts/`, ein ladendes leeres Modlet-Gerüst,
 Nutzer-Abnahme.
+
+#### Stand 2026-11-07: WP1.1 bis WP1.5 erledigt
+
+| Schritt | Ergebnis |
+|---|---|
+| WP1.1–WP1.4 | Vier Verträge in [`docs/contracts/`](../contracts/README.md). **Acht Modlets statt sechs** (D53) — Bauen und Fortschritt bekamen eigene Schichten. |
+| WP1.5 | `mod/` in acht Modlet-Ordner umgebaut, `build.ps1` und `smoke.ps1` darauf umgestellt, eine Fassung für alle acht aus `Directory.Build.props`. **104 geprüft, 0 rot.** |
+| WP1.5b | offen, braucht einen Spielstart |
+| WP1.6 | offen, braucht die Abnahme |
+
+Dabei kamen vier Dinge heraus, die dieser Plan vorher nicht wusste — sie stehen im Finding
+[WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md) und
+haben **R6 entschärft** (bedingte XML-Blöcke mit `mod_loaded` statt C#) und **WP2 verbilligt**
+(das Spiel legt die gemergte Config nach jedem Start selbst als `ConfigsDump` ab, kein Nachbau
+des XML-Patchers nötig).
 
 ---
 
@@ -104,14 +126,14 @@ erst, wenn er **einmal nachweislich an einem falschen Eingabewert gescheitert** 
 
 **Schritte:**
 
-1. **WP2.1** `[Claude-prüfbar]` `tools/check-anachronisms`: durchsucht die **gemergte** Config
+1. **WP2.1** `[Claude-prüfbar]` `mod700check anachronisms`: durchsucht die **gemergte** Config
    nach einer Denylist (Schusswaffen, Munition, Fahrzeuge, Elektronik, Konserven, Medikamente,
    Treibstoff, Beton, Industriestahl) in Loot, Rezepten, Händlerware und Startausrüstung.
    Gegenprobe: ein eingeschmuggelter `gunPistol`-Eintrag muss **rot** werden.
-2. **WP2.2** `[Claude-prüfbar]` `tools/check-recipes`: baut den Rezeptgraphen und meldet
+2. **WP2.2** `[Claude-prüfbar]` `mod700check recipes`: baut den Rezeptgraphen und meldet
    Sackgassen (ein Item ist herstellbar, aber keine seiner Zutaten erreichbar) und Zyklen.
    Gegenprobe: ein Rezept mit erfundener Zutat muss **rot** werden.
-3. **WP2.3** `[Claude-prüfbar]` `tools/check-localization`: meldet leere Pflichtspalten (DE, EN)
+3. **WP2.3** `[Claude-prüfbar]` `mod700check localization`: meldet leere Pflichtspalten (DE, EN)
    und Kennungen, die im Spiel sichtbar sind, aber keinen Eintrag haben. Gegenprobe: eine
    geleerte DE-Spalte muss **rot** werden.
 4. **WP2.4** `[Claude-prüfbar]` Die Gegenproben im README der Werkzeuge als Tabelle festhalten,
@@ -152,7 +174,7 @@ umgedeutet werden, **erhalten**.
    Referenzfehler durchsuchen. `tools/build/smoke.ps1` prüft das Protokoll selbst.
 7. **WP3.7** `[braucht Nutzer]` Drei Spieltage ohne modernes Item im Inventar oder Angebot.
 
-**Ergebnis:** `tools/check-anachronisms` meldet 0 Treffer; die später umzudeutenden Systeme sind
+**Ergebnis:** `mod700check anachronisms` meldet 0 Treffer; die später umzudeutenden Systeme sind
 noch vollständig vorhanden.
 
 **Bekannte MVP-Lücke:** Vanilla-POIs behalten modernes Dekor (Blöcke in Prefabs). Das ist F-07,
@@ -184,7 +206,7 @@ Phase 2, und bleibt in Phase 1 so stehen — ehrlich benannt statt stillschweige
 6. **WP4.6** `[Claude-prüfbar]` Die Beispielkette aus F-04 vollständig durchziehen:
    `Raseneisenerz + Holzkohle → Luppe → Schmiedeeisen → Klinge → Spatha`. Stahl per Aufkohlen,
    Damast erst mit Meister-Abschrift.
-7. **WP4.7** `[Claude-prüfbar]` `tools/check-recipes` grün: kein T0→T4-Pfad mit Sackgasse.
+7. **WP4.7** `[Claude-prüfbar]` `mod700check recipes` grün: kein T0→T4-Pfad mit Sackgasse.
 
 **Ergebnis:** Eine vollständige, geprüfte Rohstoff- und Werkstattkette von T0 bis T4.
 
@@ -302,12 +324,14 @@ Doing ist Phase 2.
    Seuchentote leiser stellen. **Die Stille-Logik (Tiere verstummen, wenn Seuchentote nahe sind)
    braucht C# und rutscht in Phase 2** — ehrlicher Schnitt, siehe R1.
 5. **WP8.5** `[Claude-prüfbar]` `docs/glossar.md` als verbindliche Begriffsquelle, dann
-   `Localization.txt` mit **DE und EN** für alle neuen und umgedeuteten Einträge (D7).
+   `Config/Localization.csv` mit **DE und EN** für alle neuen und umgedeuteten Einträge (D7).
+   Achtung auf die Spaltenlage: fünf Metadatenspalten vorweg, und `Context / Alternate Text`
+   steht **zwischen** `english` und `german`.
 6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
    über **einen** Schlüssel `700_modName` (D6), damit die Umbenennung später eine Zeile ist.
 7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
    Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
-8. **WP8.8** `[Claude-prüfbar]` `tools/check-localization` grün.
+8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 
@@ -381,14 +405,14 @@ und die Rezept-Bindung erst in WP7.5 nach WP4 passiert.
 | # | Risiko | Wahrscheinlichkeit | Impact | Mitigation |
 |---|---|---|---|---|
 | **R1** | **Phase 1 ist zu groß.** Zehn Features, 100 Arbeitstage. Die Phase bläht sich auf, statt zu enden. | hoch | hoch | Zwei Schnitte sind **schon gemacht**: B2-Stille-Logik und F-02-Schadensarten gehen nach Phase 2. Nach M2 den MVP-Schnitt erneut prüfen; was nicht trägt, rutscht ehrlich weiter (GDD §5). Harte Regel: kein Feature aus Phase 2 kommt herein (D50). |
-| **R2** | **Kein Spielstart bisher.** Die Mod liegt installiert, aber EAC verhindert das Laden von Code-Mods — belegt, nicht vermutet. Ohne Start gibt es kein Protokoll und keine Laufzeitbestätigung. | hoch | hoch | Nutzeraufgabe, offen. **Blockiert M1.** Jede Laufzeitaussage bis dahin bleibt ausdrücklich unbelegt. |
+| **R2** | **Kein Spielstart mit dieser Mod.** EAC verhindert das Laden von Code-Mods — belegt, und auf diesem Rechner im Juli-Protokoll schon einmal eingetreten (`AntiCheat enabled, mod skipped…` für TFPs eigenes Harmony-Modlet). Ohne Start gibt es keine Laufzeitbestätigung. | hoch | hoch | Nutzeraufgabe, offen. **Blockiert M1 und WP1.5b.** Teilausweg: nur `700_00_Core` trägt eine DLL, die reinen XML-Modlets sollten mit aktivem EAC laden — Folgerung, beim ersten Start mitzuprüfen. *(Berichtigt: „es gibt kein Protokoll" war falsch. Zwölf Protokolle liegen unter `%APPDATA%\7DaysToDie\logs\`, die neueste vom 30. Juli 2026 mit V 3.1.0. Ich hatte unter `LocalLow` gesucht, wo das Spiel nichts ablegt; `smoke.ps1` hatte denselben Fehler und ist behoben.)* |
 | **R3** | **Kein Dedicated Server auf diesem Rechner.** Die S/C-Zuordnung aller Befunde bleibt Indiz statt Nachweis (Projektregel 5); Z7 ist nicht prüfbar. | hoch | hoch | Nutzeraufgabe, offen. Falls kein Server kommt: Z7 streichen und das im Plan vermerken, statt es unbewiesen als erfüllt zu führen. |
 | **R4** | **TFP liefert ein Spiel-Update.** Signaturen oder Config-Schlüssel ändern sich mitten in Phase 1. | mittel | mittel | Der Build-Guard meldet die Abweichung beim Start; `mod700meta verify` gegen `tools/meta/expect/` zeigt gebrochene Signaturen. Da Phase 1 **keinen** Patch enthält, ist die Angriffsfläche klein — XML-Schlüssel sind stabiler als Methodensignaturen. |
 | **R5** | **Löschen bricht Referenzen.** Ein entferntes Item steckt noch in einem POI oder einer Quest. | hoch | mittel | Grundsatz „sperren statt löschen" (WP3.2). Protokolllauf in WP3.6 deckt auf, was trotzdem bricht. |
-| **R6** | **UI-Mod-Kompatibilität (D5) ungeprüft.** Welche Referenz-UI-Mods gelten, ist offen (Q8). | mittel | mittel | WP8.9 zieht die Entscheidung früh; additive XPath-Regeln aus WP1.3 senken den Schaden unabhängig davon. |
+| **R6** | **UI-Mod-Kompatibilität (D5).** Welche Referenz-UI-Mods gelten, ist offen (Q8). | ~~mittel~~ niedrig | mittel | **Entschärft am 2026-11-07:** `XmlPatchConditionEvaluator` bietet `mod_loaded`, `game_version` und `xpath` als Bedingungen in bedingten XML-Blöcken. Ein XUi-Patch lässt sich damit auf das Vorhandensein einer anderen Mod stützen — ohne C#, was hier befürchtet worden war. WP8.9 zieht die Q8-Entscheidung weiterhin früh; die additiven XPath-Regeln aus WP1.3 bleiben Pflicht. |
 | **R7** | **Balancing D29 nur im Playtest messbar.** Ob Mörtelstein wie Vanilla-Stahl hält, zeigt keine Zahl im Voraus. | hoch | mittel | WP6.3 setzt begründete Startwerte, WP9.4 zieht nach. Der Zielwert steht in `docs/balancing/`, damit die Korrektur nachvollziehbar bleibt. |
 | **R8** | **Vanilla-Perks sperren bricht die UI.** `attcrafting` wird von `XUiC_CategoryList` gelesen; ein leerer Behälter kann die Werkbank-Kategorien zerlegen. | mittel | mittel | WP7.3 behält die Behälter-Attribute und hängt nur ihren Inhalt um. Prüfung: Werkbank öffnen, Kategorien zählen. |
-| **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen, und WP4 ist mit 18 Tagen das größte Paket. | mittel | hoch | `tools/check-recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
+| **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen, und WP4 ist mit 18 Tagen das größte Paket. | mittel | hoch | `mod700check recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
 | **R10** | **Prüfwerkzeuge in Python gebaut.** Verstoß gegen die globale Regel. | niedrig | mittel | In WP1.4 als C# festgeschrieben, Muster von `tools/meta` wird fortgeführt. Der Hook `policy-guard.py` fragt zusätzlich nach. |
 | **R11** | **Zwei Qualitätsachsen in einem Tooltip.** D23 will Material *und* Handwerksqualität getrennt sichtbar machen. Ob der Vanilla-Item-Tooltip beides lesbar darstellen kann, ist **nicht geprüft** — Vanilla kennt nur eine Achse (Qualität 1–6). | mittel | mittel | Vor WP5.3 kurz prüfen, ob sich Material über den Item-Namen und Handwerksqualität über die Vanilla-Stufe abbilden lässt (zwei Items je Material statt eine zweite Achse). Fällt das durch, wird D23 auf eine Achse reduziert — mit dem Nutzer, als neue D-Zeile. |
 | **R12** | **Die Zahl in der Schätzung ist geraten.** 100 Arbeitstage für zehn Features ist eine Analogie, keine Messung — es gibt keinen Vorlauf, an dem sich das kalibrieren ließe. | hoch | mittel | Nach M1 die tatsächlich gebrauchten Tage von WP1 und WP2 gegen die Schätzung halten und den Rest des Plans mit dem gemessenen Faktor neu rechnen. Das ist der einzige ehrliche Weg. |
@@ -418,10 +442,10 @@ Nutzer korrigiert**, sie ist die wackeligste Zahl im Plan (R12).
 Phase 1 ist fertig, wenn **alle** folgenden Punkte mit einem Befehl und seinen Zahlen daneben
 belegt sind — nicht mit einer Statusmeldung:
 
-- `tools/check-anachronisms` meldet **0 Treffer** in Loot, Rezepten, Händlerware und
+- `mod700check anachronisms` meldet **0 Treffer** in Loot, Rezepten, Händlerware und
   Startausrüstung *(Z2)*
-- `tools/check-recipes` meldet **0 Sackgassen** und **0 Zyklen** auf dem Pfad T0 → T4 *(Z3)*
-- `tools/check-localization` meldet **0 leere Pflichtspalten** in DE und EN *(Z4)*
+- `mod700check recipes` meldet **0 Sackgassen** und **0 Zyklen** auf dem Pfad T0 → T4 *(Z3)*
+- `mod700check localization` meldet **0 leere Pflichtspalten** in DE und EN *(Z4)*
 - `tools/build/smoke.ps1` endet mit **Exit 0**, Protokoll ohne `ERR` und ohne XML-Fehler *(Z1)*
 - Ein Durchlauf **Tag 1 bis nach der ersten Seuchennacht** auf einer neuen RWG-Welt, ohne
   Absturz *(Z1)*

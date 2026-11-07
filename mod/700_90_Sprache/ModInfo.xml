@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_90_Sprache — F-12 Lokalisierung und UI-Theming. Zuletzt, weil Texte auf alles zeigen,
+  was die vorherigen Modlets angelegt haben.
+
+  Reines XML, keine DLL.
+
+  Die Localization-Datei heißt Config/Localization.csv — belegt. Eine Localization.txt gibt
+  es im Spiel nicht; Spec 01 und F-12 sagten das falsch und sind berichtigt. Die Kopfzeile
+  hat fünf Metadatenspalten vor den Sprachen, und "Context / Alternate Text" steht zwischen
+  english und german. Siehe docs/contracts/02-namensraum.md, §5.
+
+  XUi-Patches gehören in conditional-Blöcke mit mod_loaded (D5, Vertrag 03 §5).
+-->
+<xml>
+	<Name value="700_90_Sprache" />
+	<DisplayName value="700 — Sprache und Oberfläche" />
+	<Description value="Deutsche und englische Texte für alles Neue und Umgedeutete, Begriffe nach dem Glossar, dazu ein zurückhaltendes Theming der Oberfläche über Farben und vorhandene Sprites." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

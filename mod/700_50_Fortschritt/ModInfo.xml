@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_50_Fortschritt — F-21, die sechs Fertigkeitsbäume. Bindet Rezepte aus 20, 30 und 40
+  an Grundfähigkeiten, darum nach ihnen.
+
+  Reines XML, keine DLL. Belegt tragfähig: von den fünf Vanilla-Attributnamen steht nur
+  attFortitude im Code, einmal, in EntityPlayerLocal::Update.
+
+  Achtung: der Behälter attCrafting bleibt bestehen, auch wenn er leer wirkt —
+  XUiC_CategoryList::SetupCategoriesByWorkstation liest ihn (Risiko R8 im Plan).
+
+  Learning by Doing gehört ebenfalls zu F-21, braucht aber C# und kommt in Phase 2:
+  es gibt keinen XML-Auslöser für den Abschluss eines Craft-Vorgangs.
+-->
+<xml>
+	<Name value="700_50_Fortschritt" />
+	<DisplayName value="700 — Fertigkeiten" />
+	<Description value="Sechs eigene Fertigkeitsbäume statt der fünf Vanilla-Attribute: Krieger, Jäger, Handwerker, Runenkundiger, Heiler, Transport und Logistik." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

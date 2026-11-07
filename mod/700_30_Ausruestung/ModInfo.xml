@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_30_Ausruestung — F-02 Waffen (Basis) und F-03 Rüstung. Braucht die Rohstoffe aus
+  700_20_Material, darum danach.
+
+  Reines XML, keine DLL. Schild-Blocken und Schadensarten gehören zu F-02, kommen aber
+  erst in Phase 2 und brauchen dann C# im Kern-Modlet (D50, strikte Phasen).
+-->
+<xml>
+	<Name value="700_30_Ausruestung" />
+	<DisplayName value="700 — Waffen und Rüstung" />
+	<Description value="Nahkampf- und Fernkampfwaffen des Frühmittelalters, Rüstung von Lumpen bis Kettenhemd, zwei Qualitätsachsen aus Material und Handwerksgüte, Verschleiß und Reparatur." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

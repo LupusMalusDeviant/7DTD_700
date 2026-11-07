@@ -14,7 +14,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <Version>0.1.0</Version>
+    <!-- Eine Quelle fuer die Fassung: Directory.Build.props (Vertrag 01, §4). -->
+    <Version>$(Mod700Version)</Version>
     <!-- Keine Spiel-DLL landet im Ausgabeordner. -->
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultItems>true</EnableDefaultItems>
