@@ -249,9 +249,14 @@ Punkte:
 - Datenänderungen per **XPath-Modlet** (`Config/*.xml`), Logik per **Harmony-Patch** in einer C#-DLL.
 - **Server-autoritativ denken:** Jeder C#-Patch wird als Server-, Client- oder beidseitig
   klassifiziert. Die C#-DLL muss auf Server **und** Clients liegen, und **EAC muss aus** sein.
-- **Schnittstellen nicht raten:** Jeder Harmony-Patch-Zielpunkt wird vorher per **REA**
-  gegen die tatsächliche `Assembly-CSharp.dll` der Zielversion verifiziert und in
-  `docs/rea/findings/` dokumentiert. Siehe [`rea/interface-discovery.md`](rea/interface-discovery.md).
+- **Schnittstellen nicht raten:** Jeder Harmony-Patch-Zielpunkt wird vorher **statisch gegen
+  die tatsächliche `Assembly-CSharp.dll` der Zielversion verifiziert** und in
+  `docs/rea/findings/` dokumentiert. Werkzeuge (D51): **REA** für Artefakt-Identität,
+  Klassifikation und Typ-Bestand, **`mod700meta`** für Member, Signaturen und Aufrufkanten —
+  REA bricht bei dieser Assembly vor den Membern ab
+  ([rea/findings/00-rea-grenzen.md](rea/findings/00-rea-grenzen.md)).
+  Siehe [`rea/interface-discovery.md`](rea/interface-discovery.md) und
+  [`../tools/meta/README.md`](../tools/meta/README.md).
 
 ---
 
@@ -282,6 +287,7 @@ Punkte:
 | D46 | 2026-11-07 | Veröffentlichung | **Erst intern, dann öffentlich** | Roadmap |
 | D49 | 2026-11-07 | MVP-Fokus | **Setting-Umbau + Grusel** | Roadmap |
 | D50 | 2026-11-07 | Umgang mit Umfang | **Strikt phasenweise**, jede Phase endet mit Playtest | Roadmap |
+| D51 | 2026-11-07 | Woher kommen Signaturen, nachdem REA an dieser Assembly keine Member liefert? | **Eigenes Werkzeug `mod700meta`** (`tools/meta/`, C#, nur `System.Reflection.Metadata`): liest Typen, Signaturen, Aufrufkanten und Zeichenketten statisch, ohne zu laden, auszuführen oder zu dekompilieren. REA bleibt für Artefakt-Identität und Klassifikation. `CLAUDE.md` Regel 2 gilt weiter, „REA-Finding“ heißt ab jetzt „Finding unter `docs/rea/findings/` mit nachprüfbarer Signatur“. Anlass: [00-rea-grenzen.md](rea/findings/00-rea-grenzen.md) | CLAUDE.md, Spec 01, alle REA-Features |
 
 ### 7.3 Kampf & Waffen
 | ID | Datum | Frage | Entscheidung | Wirkt auf |

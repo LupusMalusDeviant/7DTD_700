@@ -1,0 +1,16 @@
+# Soll-Signaturen für F-00 (Mod-Fundament), Build Steam 26309840.
+# Format: Typ<TAB>Member<TAB>Signatur  — genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/f00.tsv
+# Exit 0 = alle Soll-Signaturen vorhanden, Exit 1 = mindestens eine fehlt oder weicht ab.
+IModApi	InitMod	void IModApi::InitMod(Mod)
+Mod	InitModCode	bool Mod::InitModCode()
+Mod	parseModInfoV2	static Mod Mod::parseModInfoV2(string, string, System.Xml.Linq.XElement)
+Mod	LoadAssemblies	Mod/EModLoadState Mod::LoadAssemblies()
+Mod	get_SkipLoadingWithAntiCheat	bool Mod::get_SkipLoadingWithAntiCheat()
+ModManager	GetMod	static Mod ModManager::GetMod(string, bool)
+ModManager	ModLoaded	static bool ModManager::ModLoaded(string)
+VersionInformation	CompareToRunningBuild	VersionInformation/EVersionComparisonResult VersionInformation::CompareToRunningBuild()
+VersionInformation	TryParseSerializedString	static bool VersionInformation::TryParseSerializedString(string, VersionInformation&)
+ModEvents/ModEventAbs`1	RegisterHandler	void ModEvents/ModEventAbs`1::RegisterHandler(!0)
+ModEvents/ModEventAbs`1	UnregisterHandler	void ModEvents/ModEventAbs`1::UnregisterHandler(!0)
+ModEvents/ModEventInterruptible`1	Invoke	System.ValueTuple`2<ModEvents/EModEventResult, Mod> ModEvents/ModEventInterruptible`1::Invoke(!0&)
