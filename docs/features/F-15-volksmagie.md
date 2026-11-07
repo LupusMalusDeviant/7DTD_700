@@ -2,7 +2,7 @@
 
 | Phase | Tiefe | Netz | REA |
 |---|---|---|---|
-| MVP: Runensteine · P2: Rest | X+H (+A) | S+C | ja |
+| 2: Runen, Tränke, Segen, Runensteine, Odem · 4: Hochmagie | X+H (+A) | S+C | ja |
 
 ## Ziel
 Magie ist im Jahr 700 real, aber bodenständig (Entscheidungen D9, D10). Sie ist erlernt, an
@@ -12,9 +12,12 @@ in die Zeit passt**: Geschütztürme, Strom, Elektrofallen, Sprengstoff.
 ## Leitplanken
 1. **Magie ersetzt Technik, nicht den Nahkampf** (Säule P3). Der Spieler kämpft weiterhin
    selbst; Magie verteidigt, unterstützt und schwächt.
-2. **Material statt Mana-Spam:** Jeder Effekt kostet etwas Greifbares (Runenkreide,
-   Bernstein, Kräuter, Silber, Blut bzw. Gesundheit). Ob es zusätzlich einen Kraftwert gibt, ist Q14.
-3. **Dezent** (D10): Glimmen, Funken, Rauch, Glutpfeile, Geräusche. Keine Feuerbälle,
+2. **Odem + Material** (D36): Zauber verbrauchen **Odem**, einen eigenen, langsam
+   regenerierenden Kraftvorrat (wie Ausdauer, eigene Leiste). Stärkere Effekte kosten
+   zusätzlich Material (Runenkreide, Bernstein, Kräuter). Die Größe des Odem-Vorrats und der
+   Zugang zu Zaubern hängen am Baum **Runenkundiger** (F-21); sein Stufenwert ist der
+   **Magiewert**.
+3. **Dezent** (D10), Ausnahme Endgame-Hochmagie (D38): Glimmen, Funken, Rauch, Glutpfeile, Geräusche. Keine Feuerbälle,
    Blitze, Teleportation oder Schockwellen.
 4. **Erlernt:** Die Magie hängt am Perkbaum **Runenkunde** (umgedeuteter Intellekt-Baum) und an
    Abschriften (F-04). Sie ist kein Loot-Glück.
@@ -37,10 +40,10 @@ in die Zeit passt**: Geschütztürme, Strom, Elektrofallen, Sprengstoff.
   Ersetzt den Auto-Turret. Munition: **Glutladungen** (Kohle + Harz + Runenkreide).
 - **Runenstein des Sturms** (später): kurze Salve aus mehreren Glutsplittern, geringe
   Reichweite. Ersetzt den Shotgun-Turret.
-- **Tragbarer Runenstein** (Stretch): ersetzt Junk Turret bzw. Drohne.
+- **Tragbarer Runenstein** (Phase 3–4, optional): ersetzt Junk Turret bzw. Drohne.
 - Optik: behauener Stein mit glimmenden Runen; Projektil als Glutpfeil mit Rauchspur (F-16).
 
-### Runenkraft statt Strom (Q13, Entscheidung nach REA)
+### Runenkraft statt Strom (entschieden: D37 = Variante A)
 Vanilla-Türme und Elektrofallen brauchen Strom. Zwei Wege:
 
 | | **Variante A: Kraftlinien** | **Variante B: selbstversorgend** |
@@ -50,11 +53,18 @@ Vanilla-Türme und Elektrofallen brauchen Strom. Zwei Wege:
 | Vorteil | Säule P5, updatefest, Vanilla-Komplexität (Logik-Schaltungen) bleibt erhalten | Intuitiver, keine „Kabel“ im Jahr 700 |
 | Nachteil | „Kraftfäden ziehen“ wirkt technisch; braucht gutes Theming | Eingriff in Power- bzw. TileEntity-System, REA-Pflicht, Netz-Sync |
 
-**Empfehlung:** Mit **Variante A** starten (MVP-tauglich, nur XML). Variante B per REA
-prüfen; umsteigen nur, wenn der Eingriff klein und sauber ist.
+**Entscheidung (D37): Variante A, Kraftlinien.** Variante B bleibt nur als spätere Option,
+falls REA einen kleinen, sauberen Eingriff zeigt.
+
+## Hochmagie (Phase 4, D38)
+Seltene Endgame-Artefakte dürfen sichtbarer sein (kein Neon, keine Blitze):
+- **Hexenbesen** und **Runenross** (Fahrzeuge, F-13)
+- **Wegsteine** (Schnellreise, F-13, D18)
+- **Runenschmiede:** Runen dauerhaft in Waffen schmieden (T4)
+Alle verlangen einen hohen Magiewert (Runenkundiger-Stufe) und viel Odem.
 
 ## Fluch-Gegner & Sagengestalten
-Die Sagengestalten (D11) kommen aus F-06. F-15 liefert die **Gegenmittel**: Bannrune gegen
+Die Sagengestalten (D11) kommen aus F-06, Kultpriester mit Flüchen aus F-20. F-15 liefert die **Gegenmittel**: Bannrune gegen
 Nachzehrer, Lichtfunke gegen Irrlicht-Täuschung usw.
 
 ## Ressourcen & Werkstatt
@@ -67,7 +77,10 @@ Nachzehrer, Lichtfunke gegen Irrlicht-Täuschung usw.
 ### XML (Hauptteil)
 `items.xml` (Zauber-Items, Runen-Mods, Tränke, Ladungen), `item_modifiers.xml` (Runen),
 `buffs.xml`, `blocks.xml` (Runensteine, Kraftsteine, Schutzzeichen), `recipes.xml`,
-`progression.xml` (Runenkunde), `loot.xml`, `traders.xml`, Localization.
+`progression.xml` (Baum Runenkundiger, F-21), `loot.xml`, `traders.xml`, Localization.
+**Odem:** CVar `700_odem` + `700_odemMax` (Regeneration per Buff), eigene HUD-Leiste per
+XUi (additiv, D5). [verifizieren], ob Item-Aktionen per XML einen CVar als Kosten prüfen und
+abziehen können; sonst kleiner Harmony-Hook.
 ### C# / Harmony — Warum nicht XML?
 - Variante B (selbstversorgende Runensteine), falls gewählt
 - **Bannkreis** (Gegner meiden Bereich): Vanilla-KI hat nach unserem Kenntnisstand keine
@@ -92,6 +105,4 @@ Tränke und Zauber.
 - [ ] Runensteine und Zauber funktionieren auf dem Dedicated Server mit 2 Clients (Projektile und Effekte synchron)
 
 ## Offene Fragen
-- Q13: Variante A oder B für Runenkraft?
-- Q14: Nur Material oder zusätzlich eigener Kraftwert („Odem“)?
 - Gibt es in V2.x einen Accessoire-Slot für Amulette, oder laufen sie über Rüstungs-Mods?

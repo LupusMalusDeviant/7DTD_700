@@ -2,55 +2,59 @@
 
 | Phase | Tiefe | Netz | REA |
 |---|---|---|---|
-| MVP | X+H (+A) | S+C | ja |
+| 1: Waffen, Qualität, Verschleiß · 2: Schild, Schadensarten, Werfen | X+H (+A) | S+C | ja |
 
 ## Ziel
-Nahkampf mit Gewicht (Säule P3): Waffenwahl, Reichweite, Ausdauer und Schild entscheiden.
-Fernkampf ist knapp, handgemacht und munitionshungrig.
+**Vanilla+** (D20): Die vertraute Vanilla-Steuerung (Hieb, Power-Attack) bleibt, ergänzt um
+Schild-Blocken, Schadensarten, Verschleiß und Wurfwaffen (D21). Nahkampf ist die Basis;
+**Fernkampf (Jäger) und Kampfmagie (Runenkundiger) sind gleichwertige Spezialisierungen** (D22).
 
-## Umfang
-**Nahkampf** (XML, auf Basis vorhandener Vanilla-Nahkampf-Aktionen):
-| Waffe | Rolle | Vanilla-Basis (Modell/Aktion) |
-|---|---|---|
-| Knüppel / Keule | T0, Wucht, Betäubung | Club |
-| Handbeil / Bartaxt | T0–T2, Werkzeug + Waffe | Axe |
-| Sax (Kurzschwert) | T1–T2, schnell | Machete/Knife |
-| Speer / Ango | T1–T3, Reichweite | Spear |
-| Spatha | T3–T4, Allrounder | Machete (MVP); neues Modell in Phase 2 (D3) |
-| Breitaxt | T3–T4, schwer, Rüstungsbrecher | Fireaxe |
+## Waffen
+**Nahkampf:**
+| Waffe | Schadensart | Rolle | Vanilla-Basis |
+|---|---|---|---|
+| Knüppel / Keule | Wucht | T0, Betäubung | Club |
+| Handbeil / Bartaxt | Schnitt | T0–T2, Werkzeug + Waffe | Axe |
+| Sax (Kurzschwert) | Schnitt/Stich | T1–T2, schnell | Machete/Knife |
+| Speer / Ango | Stich | T1–T3, Reichweite | Spear |
+| Spatha | Schnitt | T3–T4, Allrounder | Machete (Phase 1), neues Modell (Phase 2) |
+| Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher | Fireaxe |
+| Streitkolben / Hammer | Wucht | T3–T4, gegen Rüstung (Kultisten, Plünderer) | Sledgehammer |
 
-**Fernkampf:** Selbstbogen (T1), Langbogen (T3), Schleuder (T0), Wurfspeer (T1).
-**Armbrust** (Entscheidung D8): T4, selten. Nur über eine Meister-Abschrift oder seltenen Loot
-erhältlich, teure Bolzen, langsames Nachladen. Munition: Pfeile (Feuerstein, Knochen,
-Eisen), Bolzen, Schleudersteine.
+**Fernkampf:** Schleuder (T0), Selbstbogen (T1), Langbogen (T3), Armbrust (T4, selten, D8).
+Munition: Pfeile (Feuerstein, Knochen, Eisen), Bolzen, Schleudersteine.
 
-**Schild (C#):** Rundschild als Offhand mit aktivem Blocken (Schaden und Stagger
-reduzieren, Ausdauerkosten). Vanilla kennt kein Blocken, deshalb ist das der zentrale
-Harmony-Teil dieses Features.
+**Wurfwaffen (D21):** Wurfaxt, Wurfspeer, Wurfmesser. Sie werden geworfen und müssen
+**aufgehoben** werden (bleiben im Ziel bzw. am Boden stecken).
 
-**Perks:** Feuerwaffen-Skills umwidmen zu Bogenschießen, Schildkampf und Wurfwaffen.
+## Mechaniken (D21)
 
-## Nicht im Umfang
-- Reittier-Kampf, Formationen, Gegner-KI mit Waffen (→ F-06)
+| Mechanik | Beschreibung | Tiefe | Phase |
+|---|---|---|---|
+| **Qualität** (D23) | **Material** = Grundstufe (Knochen < Bronze < Schmiedeeisen < Stahl < Damast); **Handwerksqualität** = Feinstufe (Vanilla-Qualität 1–6 umbenannt: grob, einfach, solide, gut, meisterlich, legendär), steigt durch Learning by Doing (F-21) | X | 1 |
+| **Verschleiß & Reparatur** | Vanilla-Haltbarkeit stärker gewichtet; Reparatur mit Schleifstein (einfach, verliert Maximal-Haltbarkeit) oder beim Schmied bzw. an der Esse (voll) | X (+H) | 1 |
+| **Schadensarten** | Schnitt (stark gegen ungeschützt, schwach gegen Kette), Stich (gegen Kette und Gambeson), Wucht (gegen schwere Rüstung, Betäubung). Gegner und Rüstungen tragen Schutzwerte je Art | X+H | 2 |
+| **Schild blocken** | Rundschild als Offhand mit aktivem Blocken: Schaden und Stagger von vorn reduziert, Ausdauerkosten; Schild verschleißt | H | 2 |
+| **Werfen** | Wurfwaffen als Projektil, das als aufhebbares Item liegen bleibt | X (+H) | 2 |
+
+Furcht (F-17 B3, D14) wirkt vor allem auf Fernkampf (Zittern) und Zauber, kaum auf den Nahkampf.
 
 ## Umsetzung
 ### XML
-Items, Rezepte, Perks, Buffs (z. B. „Blutung“ für Klingen, „Betäubt“ für Wuchtwaffen).
+Items, Rezepte, Qualitätsnamen, Haltbarkeit, Reparatur-Items, Perks (F-21 Krieger bzw. Jäger), Buffs (Blutung, Betäubt).
 ### C# / Harmony — Warum nicht XML?
-Blocken braucht (a) einen Eingabe-Zustand „Schild erhoben“, (b) einen Eingriff in die
-Schadensberechnung abhängig von diesem Zustand und der Trefferrichtung und (c) die Anzeige
-beim Client. Das lässt sich per Buff und Item-Aktion nach unserem Kenntnisstand nicht
-abbilden. **[verifizieren]** per REA: Gibt es eine Hook-Stelle im Schadenspfad, an der ein
-Buff- oder CVar-Check reicht? Dann ließe sich der C#-Anteil minimieren (Säule P5).
+- **Blocken:** Eingabe-Zustand + Schadensberechnung abhängig von Richtung → REA am Schadenspfad. Erst prüfen, ob ein Buff/CVar-Check im Schadenspfad reicht (P5).
+- **Schadensarten:** Vanilla kennt Schadensklassen bzw. Tags [verifizieren]; falls die nicht frei erweiterbar sind, Postfix am Schadenspfad mit Tag-Tabelle.
+- **Werfen und Aufheben:** prüfen, ob die Vanilla-Speer-Wurfmechanik (falls vorhanden) übertragbar ist.
 ### Assets
-MVP: Spatha und Schild laufen auf Vanilla-Modellen (bekannter, temporärer Bruch mit P1).
-Phase 2 (D3, F-16): **neue Modelle** für Spatha, Sax, Rundschild, Langbogen und Armbrust;
-**Retexturen** für Keule, Beile und Speer.
+Phase 2 (D3, F-16): neue Modelle für Spatha, Sax, Rundschild, Langbogen, Armbrust, Wurfaxt; Retexturen für Keule, Beile, Speer.
 
 ## Schnittstellen (REA)
 → [hook-hypothesen.md#f-02](../rea/hook-hypothesen.md#f-02)
 
 ## Akzeptanzkriterien
-- [ ] Jede Waffe ist craftbar und hat einen klaren Zweck (Balancing-Tabelle in `docs/balancing/`)
-- [ ] Blocken reduziert Schaden von vorn, nicht von hinten; Ausdauer sinkt; das funktioniert auf dem Dedicated Server mit 2 Clients
-- [ ] Bogen ist in T1 relevant, aber durch Pfeilverbrauch begrenzt
+- [ ] Jede Waffe ist herstellbar und hat einen klaren Zweck (Balancing-Tabelle in `docs/balancing/`)
+- [ ] Material- und Handwerksqualität sind im Tooltip verständlich
+- [ ] Blocken reduziert Schaden von vorn, nicht von hinten; auf Dedicated + 2 Clients
+- [ ] Wurfaxt bleibt nach dem Wurf aufhebbar liegen (kein Item-Verlust durch Netz-Desync)
+- [ ] Bogen-Build und Magie-Build schaffen T3-Inhalte gleich gut (Playtest)

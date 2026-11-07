@@ -18,6 +18,9 @@ Rüstung ist teuer, schwer und spürbar. Kleidung schützt vor Kälte und Nässe
 
 - Gewicht → Bewegungs- und Ausdauer-Malus über vorhandene Rüstungs-Mechanik
 - Set-Boni über vorhandene Rüstungsset-Logik: Zuordnung umdeuten
+- **Qualität** (D23): Material = Grundstufe, Handwerksqualität = Feinstufe (wie F-02)
+- **Schutz je Schadensart** (D21): Gambeson gut gegen Wucht, Kette gut gegen Schnitt und schwächer gegen Stich (Phase 2)
+- **Verschleiß & Reparatur** wie bei Waffen (F-02)
 
 ## Nicht im Umfang
 - Plattenrüstung (anachronistisch)

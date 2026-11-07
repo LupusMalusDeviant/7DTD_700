@@ -19,7 +19,7 @@ Gräben und Mechanik.
 - Palisade, Spitzpfähle (Spikes-Umdeutung), Graben bzw. Fallgrube, Schwingbalken-Falle (mechanisch statt elektrisch), Pechtopf
 - **Magische Verteidigung** kommt aus F-15: Runenstein der Glut (statt Geschützturm),
   Runenfallen (Glutzeichen statt Blade Trap, Bannkreis statt Elektrozaun), betrieben über
-  Runenkraft (Q13)
+  Runenkraft (Kraftlinien, D37)
 - Licht-Ergänzung aus F-15: **Lichtfunke** (Zauber) als seltene, teure Alternative zur Fackel. Licht bleibt eine Ressource (P4).
 
 ## Nicht im Umfang

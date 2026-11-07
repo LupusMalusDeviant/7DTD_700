@@ -21,6 +21,9 @@
 | ? | `ItemActionMelee` / `ItemActionDynamicMelee` | Nahkampf-Aktionen; Hook für „Schild erhoben“-Zustand |
 | ? | `ItemActionRanged` / `ItemActionLauncher` | Bogen-Basis; Pfeil-Projektil-Verhalten |
 | ? | Buff/CVar-Check im Schadenspfad | Reicht ein CVar `shieldRaised` und ein Postfix statt eigener Logik? (Säule P5) |
+| ? | Schadens-Tags / `EnumDamageTypes` o. ä. | Lassen sich Schnitt/Stich/Wucht per XML-Tags abbilden, oder braucht es eine eigene Tabelle im Schadenspfad? |
+| ? | Wurfspeer-Mechanik (Projektil, das als Item liegen bleibt) | Übertragbar auf Wurfaxt und Wurfmesser? |
+| ? | Item-Qualität und Haltbarkeit (`ItemValue.Quality`, `UseTimes`) | Grenzen für Material- + Handwerksqualität (D23) |
 
 ## F-05
 | Status | Kandidat | Frage |
@@ -52,11 +55,18 @@
 | ? | KI-Zielwahl / Pfadfindung (`EAI*`) | Gibt es eine Möglichkeit, eine „Meide-Zone“ für Bannkreis zu setzen? Sonst Fallback-Aura |
 | ? | Item-Modifier-Slots (`ItemClassModifier`) | Grenzen für Runen als Waffen- bzw. Rüstungs-Mods; Accessoire-Slot vorhanden? |
 
+## F-07
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | RWG-Biomverteilung (`WorldBuilder`, Biom-Definitionen) | Sind Biom-Anzahl, -Namen und -Verteilung per XML änderbar (Kulturzonen, D43)? |
+
 ## F-13
 | Status | Kandidat | Frage |
 |---|---|---|
-| ? | `EntityVehicle` / `Vehicle` | Lässt sich ein Tiermodell als „Fahrzeug“ betreiben? |
+| ? | `EntityVehicle` / `Vehicle` | Lässt sich ein Tiermodell als „Fahrzeug“ betreiben (Reitpferd, Q18)? Endgültiger Tod statt Fahrzeug-Item? |
 | ? | `EntityAnimal*`, Folge-KI (`EAI*`) | Folgen-Verhalten für Packtier |
+| ? | Gyrocopter-Treibstofflogik | Ersetzbar durch Odem-Verbrauch (Hexenbesen)? |
+| ? | Teleport-Mechanik (z. B. Admin-Teleport, `TeleportPlayer`) | Basis für Wegsteine; Lastprüfung; Sperre während Horde-Nacht |
 
 ## F-14
 | Status | Kandidat | Frage |
@@ -72,3 +82,22 @@
 | ? | `AIDirector` + Wandering-Horde-Komponente | Hook für Bedrohungs-Direktor (Pirscher, Wanderzug) ohne den Vanilla-Director zu ersetzen |
 | ? | Client-seitiges Sound-Abspielen (`Manager.Play…`/Audio-Manager) | Trugbild-Sounds nur auf dem lokalen Client abspielen |
 | ? | Zombie-Sleeper-/Schlafverhalten in POIs | Basis für „Totsteller“ (liegende Leichen, die aufstehen) |
+
+## F-19
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | Item-Verfall / Zeitstempel an `ItemValue` | Gibt es einen Verderb-Mechanismus, oder braucht es eigene Metadaten am Stack? |
+| ? | Tier-KI friedlich + Bindung an Bereich | Grundlage für Pferch-Haltung |
+
+## F-20
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | Banditen / menschliche Gegner in V2.x (Q19) | Gibt es Klassen für bewaffnete menschliche NPCs, auf die man aufbauen kann? |
+| ? | Fraktionen (`FactionManager`) | Kultisten und Seuchentote als verbündete Fraktion |
+
+## F-21
+| Status | Kandidat | Frage |
+|---|---|---|
+| ? | `Progression`, `ProgressionClass`, Attribute/Perks | Wie hart hängt Code an den 5 Vanilla-Attributen? Lassen sich 6 neue Bäume rein per XML definieren? |
+| ? | Crafting-Skills (Magazin-Fortschritt) | Datenmodell wiederverwendbar; wo wird Fortschritt erhöht? |
+| ? | Abschluss eines Craft-Vorgangs (`XUiC_RecipeStack`/Workstation-Abschluss, Trigger-Events wie `onSelfItemCrafted`) | Hook bzw. XML-Trigger für Learning by Doing, serverseitig |

@@ -11,8 +11,11 @@ dazu Wildtiere des frühmittelalterlichen Waldes.
 ## Umfang
 - **Seuchentote:** Umbenennung und Umbalancierung der Vanilla-Zombieklassen (`entityclasses.xml`);
   Stärkestufen „Verderbt“ bzw. „Moorleiche“ statt Feral/Radiated
-- **Spawn-Gruppen** (`entitygroups.xml`) nach Biom und Gamestage
-- **Wildtiere:** Wolf, Bär, Wildschwein, Hirsch (Vanilla vorhanden); Auerochse (Stretch, braucht Assets)
+- **Bestiarium größer als Vanilla** (D40): Jeder Vanilla-Zombie bekommt eine 700-Entsprechung, dazu **Varianten je Kulturzone** (D43), etwa Mönche und Pilger im Klosterland, Krieger im Burgwall-Land, Fischer und Seeleute an der Küste, Moorleichen im Moor
+- **Spawn-Gruppen** (`entitygroups.xml`) nach Kulturzone und Gamestage
+- **Blockschaden reduziert, Spielerschaden erhöht** (D29, siehe F-18); einzelne Brecher-Typen (Rammer) für die Seuchennacht
+- Menschliche Gegner (Plünderer, Seuchenkult): siehe **F-20**
+- **Wildtiere:** Wolf, Bär, Wildschwein, Hirsch (Vanilla vorhanden); Auerochse (optional ab Phase 3, braucht Assets)
 - **Entfernen:** moderne Sondergegner (z. B. Polizist, Soldat, Krankenschwester) → durch umbenannte Varianten ersetzen
 - **Sagengestalten** (D11, wenige und selten), möglichst auf Vanilla-Sondergegner abgebildet:
 
@@ -35,7 +38,7 @@ dazu Wildtiere des frühmittelalterlichen Waldes.
   (z. B. Seuchenmönch, gefallener Krieger mit Kettenhemd).
 - Volksmagie (F-15): Bannrunen, Segenswasser und Totensegen wirken gezielt gegen Seuchentote
   und Sagengestalten. Umgesetzt wird das über Entity-Tags und Buff-Bedingungen (XML).
-- Kulturzonen (Q12): Gegner-Varianten je Biom (Klosterland, Burgwall-Land, Küste) möglich.
+- Kulturzonen (D43): Variantenpflege über Retexturen derselben Rigs (F-16), nicht über neue Modelle
 
 ## Akzeptanzkriterien
 - [ ] Keine Gegnerbezeichnung mit modernem Bezug im Spiel
