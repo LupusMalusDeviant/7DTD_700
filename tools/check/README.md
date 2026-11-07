@@ -82,7 +82,7 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **11 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **13 Gegenproben, 0 fehlgeschlagen.**
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -93,6 +93,8 @@ Lauf vom 2026-11-07: **11 Gegenproben, 0 fehlgeschlagen.**
 | `recipes` gegen `testdaten/rot` (Zyklus + unbekannte Zutat) | Exit 1 | rot, drei Befundarten unterschieden |
 | `localization` gegen `testdaten/rot` (Dublette, leeres Deutsch, fehlendes Präfix, falsche Spaltenzahl) | Exit 1 | rot |
 | `recipes --no-world-roots` gegen den **sauberen** Satz | Exit 1 | rot — beweist, dass `world-roots.txt` wirklich etwas beiträgt |
+| `anachronisms` mit **falsch geschriebener** Regel (`gunpruefpistole*`) gegen `testdaten/rot` | Exit 0 | grün — der Vergleich beachtet die Schreibung |
+| `anachronisms` mit **richtig geschriebener** Regel (`gunPruefPistole*`) gegen `testdaten/rot` | Exit 1 | rot — ohne diesen Fall wäre der vorige auch grün, wenn gar nichts mehr trifft |
 | unbekannter Befehl | Exit 2 | Benutzungsfehler |
 | fehlender Pfad | Exit 2 | Benutzungsfehler |
 | Ordner ohne `items.xml` | Exit 2 | Benutzungsfehler |
@@ -106,7 +108,15 @@ Die siebte Zeile ist die wichtigste: sie prüft nicht das Werkzeug, sondern **di
 |---|---|
 | `recipes` gegen Vanilla V 3.40 `Data/Config` | 633 Rezepte, **0 Sackgassen, 0 Zyklen**, 8 Wurzeln aus `world-roots.txt` |
 | `localization` gegen Vanilla `Localization.csv` | 20 Spalten, 25.930 Zeilen, **25.930 eindeutige Schlüssel** (keine Dublette) |
-| `anachronisms` gegen Vanilla | **138 verbotene Kennungen** erreichbar, 101 Treffer durch Freigaben erlaubt |
+| `anachronisms` gegen Vanilla | **254 verbotene Kennungen** erreichbar (erster Stand: 138, siehe unten) |
+
+Der Sprung von 138 auf 254 ist kein neuer Inhalt im Spiel, sondern das Ergebnis von WP3.1:
+die Denylist hatte drei Defekte — zu weite Präfixe, die Bögen und Pfeile mitnahmen; die
+D9-Freigaben, die moderne Geschütztürme und Generatoren für erlaubt erklärten; und ein
+gross-/kleinschreibungsblinder Vergleich, der `drugs*` arbeitsfähig aussehen liess. Alle drei
+sind behoben. **1139 Kennungen sind überhaupt erreichbar, 852 davon hat die Liste noch nie
+angesehen.** Nachzulesen in
+[WP3-bestandsaufnahme-anachronismen.md](../../docs/rea/findings/WP3-bestandsaufnahme-anachronismen.md).
 
 Die letzte Zeile ist kein Mangel, sondern das Bild **vor** der Arbeit: Vanilla *ist* voller
 Anachronismen, und WP3 hat noch nicht stattgefunden. `check-all.ps1` bleibt bis dahin rot, und
@@ -141,7 +151,7 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `Mod700.Check/LocalizationCheck.cs` | Spalten **nach Namen**, nie nach Position |
 | `Mod700.Check/AnachronismCheck.cs` | Erreichbarkeitswege gegen die Denylist |
 | `Mod700.Check/RecipeCheck.cs` | Rezeptgraph, Sackgassen, Zyklen |
-| `denylist.txt` | verbotene Muster und die D9-Freigaben |
+| `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |
 | `world-roots.txt` | Wurzeln, die das XML nicht ausdrückt |
 | `gegenproben.ps1` | der Nachweis nach Projektregel 5 |
 | `check-all.ps1` | der Prüfbefehl des Projekts |

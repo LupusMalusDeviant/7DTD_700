@@ -101,6 +101,21 @@ Test-Case 'recipes ohne world-roots wird rot' 1 @(
     'recipes', (Join-Path $data 'sauber'), '--no-world-roots')
 
 Write-Output ""
+Write-Output "== Gegenproben: der Vergleich beachtet Gross- und Kleinschreibung =="
+# WP3.1, Befund 3.3: solange RegexOptions.IgnoreCase gesetzt war, traf die Regel
+# 'drugs*' drei Drogen, die sie nie meinte (drugSteroids und zwei weitere haben an
+# fuenfter Stelle ein grosses S) und liess zwoelf andere durch. Die Regel sah aus,
+# als arbeite sie. Diese zwei Faelle halten das fest: falsch geschrieben trifft
+# nicht, richtig geschrieben trifft. Nur beide zusammen sind ein Signal - der erste
+# allein bliebe auch gruen, wenn der Vergleich gar nichts mehr findet.
+Test-Case 'falsch geschriebene Regel trifft nicht' 0 @(
+    'anachronisms', (Join-Path $data 'rot'),
+    '--denylist', (Join-Path $data 'denylist-schreibung-falsch.txt'))
+Test-Case 'richtig geschriebene Regel trifft' 1 @(
+    'anachronisms', (Join-Path $data 'rot'),
+    '--denylist', (Join-Path $data 'denylist-schreibung-richtig.txt'))
+
+Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="
 Test-Case 'unbekannter Befehl' 2 @('gibtesnicht', $data)
 Test-Case 'fehlender Pfad' 2 @('recipes')

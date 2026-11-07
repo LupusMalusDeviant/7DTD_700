@@ -1,0 +1,6 @@
+# Gegenstueck zu denylist-schreibung-falsch.txt (WP3.1, Befund 3.3).
+#
+# Dieselbe Regel, richtig geschrieben. Sie MUSS 'gunPruefPistole' treffen und den
+# roten Pruefsatz rot machen. Ohne dieses Gegenstueck wuerde die andere Gegenprobe
+# auch gruen bleiben, wenn der Vergleich ueberhaupt nicht mehr funktioniert.
+gunPruefPistole*

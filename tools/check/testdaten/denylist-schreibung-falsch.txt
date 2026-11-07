@@ -1,0 +1,11 @@
+# Gegenprobe zum gross-/kleinschreibungsgenauen Vergleich (WP3.1, Befund 3.3).
+#
+# Die Regel unten ist absichtlich falsch geschrieben: der Gegenstand im roten
+# Pruefsatz heisst 'gunPruefPistole', die Regel sagt 'gunpruefpistole'. Ein
+# Vergleich, der die Schreibung beachtet, darf sie NICHT treffen - der Lauf muss
+# gruen sein, obwohl eine Pistole im Loot liegt.
+#
+# Vor der Berichtigung war RegexOptions.IgnoreCase gesetzt. Dann traf diese Regel,
+# und der Lauf wurde rot. Genau so hat die Regel 'drugs*' drei Drogen gemeldet,
+# die sie nie meinte, und zwoelf weitere durchgelassen.
+gunpruefpistole*

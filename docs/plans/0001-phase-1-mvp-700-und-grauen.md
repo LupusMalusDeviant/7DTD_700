@@ -201,6 +201,39 @@ noch vollständig vorhanden.
 **Bekannte MVP-Lücke:** Vanilla-POIs behalten modernes Dekor (Blöcke in Prefabs). Das ist F-07,
 Phase 2, und bleibt in Phase 1 so stehen — ehrlich benannt statt stillschweigend.
 
+#### Stand 2026-11-07: WP3.1 erledigt, und die Schätzung ist zu niedrig
+
+Befund: [WP3-bestandsaufnahme-anachronismen.md](../rea/findings/WP3-bestandsaufnahme-anachronismen.md).
+
+| | |
+|---|---|
+| erreichbare Kennungen in Vanilla | **1139** |
+| von der Denylist verboten | 254 (erster Lauf: 138) |
+| durch Freigabe erlaubt | 31 |
+| **von keiner Regel berührt** | **852** |
+
+Drei Defekte in der Denylist aus WP2, alle behoben:
+
+1. **Zu weite Präfixe.** `gun*` und `ammo*` nahmen 27 Bögen, Armbrüste, Pfeile und Bolzen mit,
+   obwohl P3 und D8 sie als Inhalt nennen → **D54**. Dazu `resourceForgedSteel` (**D55**) und
+   vier plausible Heilmittel (**D56**). 32 der 138 waren Fehltreffer meiner Liste.
+2. **Kategorienfehler bei D9.** Geschütztürme, Generator, Solar, Batterien, Relais und
+   Sprengstoff standen als **Freigaben** — damit wären `autoTurret`, `generatorbank`,
+   `solarbank` und ein Dutzend mehr in Phase 1 herstellbar geblieben, und die Prüfung hätte
+   dazu „0 rot" gemeldet. D9 wird in Vertrag 03 §4 gewahrt (kein `remove` auf die
+   Definition), nicht durch eine Freigabe im Prüfwerkzeug.
+3. **Vergleich ohne Rücksicht auf Gross-/Kleinschreibung.** `drugs*` meldete drei Treffer und
+   liess zwölf Drogen durch; die drei trafen nur, weil `drugs` case-insensitiv auf `drugS`
+   passt. `IgnoreCase` ist entfernt, zwei neue Gegenproben halten es fest (13 insgesamt).
+
+**Folge für die Schätzung:** WP3 stand auf 12 Tagen und auf der Annahme einer im Wesentlichen
+fertigen Denylist. Die Zahl der XPath-Zeilen wächst etwa auf das Doppelte bis Dreifache, und
+die Sichtung der 852 kommt als eigener Posten dazu. Siehe auch das neue Risiko **R13**.
+
+**Offen:** mit welcher Methode die 852 geschlossen werden — weitere Namensmuster oder ein
+Urteil nach Eigenschaften (`items.xml` `Group`, Block-`Class`). Der Befund legt die zweite
+nahe, weil die Namensmuster in diesem Schritt dreimal auf drei Wegen versagt haben.
+
 ---
 
 ### WP4: F-05 + F-04 — Ressourcen, Ketten, Werkstätten
@@ -436,6 +469,7 @@ und die Rezept-Bindung erst in WP7.5 nach WP4 passiert.
 | **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen, und WP4 ist mit 18 Tagen das größte Paket. | mittel | hoch | `mod700check recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
 | **R10** | **Prüfwerkzeuge in Python gebaut.** Verstoß gegen die globale Regel. | niedrig | mittel | In WP1.4 als C# festgeschrieben, Muster von `tools/meta` wird fortgeführt. Der Hook `policy-guard.py` fragt zusätzlich nach. |
 | **R11** | **Zwei Qualitätsachsen in einem Tooltip.** D23 will Material *und* Handwerksqualität getrennt sichtbar machen. Ob der Vanilla-Item-Tooltip beides lesbar darstellen kann, ist **nicht geprüft** — Vanilla kennt nur eine Achse (Qualität 1–6). | mittel | mittel | Vor WP5.3 kurz prüfen, ob sich Material über den Item-Namen und Handwerksqualität über die Vanilla-Stufe abbilden lässt (zwei Items je Material statt eine zweite Achse). Fällt das durch, wird D23 auf eine Achse reduziert — mit dem Nutzer, als neue D-Zeile. |
+| **R13** | **Die Denylist weiss nur, was ich beim Schreiben zu bedenken dachte.** WP3.1 hat drei Defekte gefunden (zu weite Präfixe, D9 als Freigabe statt als Klassenschutz, Vergleich ohne Rücksicht auf die Schreibung) — und 852 der 1139 erreichbaren Kennungen hat die Liste nie angesehen. Ein Prüfwerkzeug, das „0 rot" meldet, während ein Generator herstellbar ist, ist schlimmer als keines. | **eingetreten** | hoch | Alle drei behoben, zwei neue Gegenproben. Für die 852 ist die Methode offen: weitere Namensmuster oder ein Urteil nach Eigenschaften (`items.xml` `Group`, Block-`Class`). Letzteres urteilt über das, was ein Gegenstand *ist*, und hätte `motionsensor`, `switch` und `spotlightPlayer` ohne eine Regel gefunden. Der Nachweis bleibt in jedem Fall der `ConfigsDump`-Lauf aus WP3.6, nicht der Vorlauf. |
 | **R12** | **Die Zahl in der Schätzung ist geraten.** 100 Arbeitstage für zehn Features ist eine Analogie, keine Messung — es gibt keinen Vorlauf, an dem sich das kalibrieren ließe. | hoch | mittel | Nach M1 die tatsächlich gebrauchten Tage von WP1 und WP2 gegen die Schätzung halten und den Rest des Plans mit dem gemessenen Faktor neu rechnen. Das ist der einzige ehrliche Weg. |
 
 ## Meilensteine

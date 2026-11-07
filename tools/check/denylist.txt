@@ -10,6 +10,13 @@
 #
 # Dieser Stand ist der Anfang, nicht das Ende: die vollstaendige Liste entsteht in WP3.1
 # gegen die echten Dateien. Was hier fehlt, faellt dort auf.
+#
+# WP3.1 hat genau das getan. Der Lauf gegen das echte Data/Config meldete 138 Kennungen,
+# und 32 davon waren Fehltreffer dieser Liste, nicht Anachronismen des Spiels:
+# Boegen heissen in Vanilla 'gunBow*', Pfeile 'ammoArrow*' - und 'gun*' bzw. 'ammo*' hat
+# sie mitgenommen, obwohl P3 und D8 sie ausdruecklich als Inhalt nennen. Das stand hier
+# nicht, weil diese Liste vor dem ersten Lauf aus den Feature-Texten geschrieben wurde.
+# Die Freigaben im zweiten Block unten sind das Ergebnis (D54, D55, D56).
 
 # --- Schusswaffen und Munition ---------------------------------------------------
 gun*
@@ -32,7 +39,9 @@ foodCan*
 drinkCan*
 drinkJarCoffee
 medical*
-drugs*
+drug*                 # war 'drugs*' und sah aus, als arbeite es: case-insensitiv traf das
+                      # nur drugSteroids, drugSkullCrushers und drugSugarButts, weil die ein
+                      # grosses S an fuenfter Stelle haben. Zwoelf weitere Drogen entkamen.
 
 # --- Treibstoff, Chemie, Sprengstoff ---------------------------------------------
 resourceGasCan
@@ -43,7 +52,11 @@ resourceOil*
 resourceConcreteMix
 resourceCement
 resourceSteel*
-resourceForgedSteel
+# resourceForgedSteel  -- gestrichen mit D55: Stahl ist laut D23 eine Materialstufe
+#                         (Knochen < Bronze < Schmiedeeisen < Stahl < Damast) und laut
+#                         GDD die T3-Stufe "Stahl (Damaszierung)". Schmiedestahl ist
+#                         kein industrielles Stahlprodukt. 'resourceSteel*' trifft ihn
+#                         nicht, die Regel hier war ein zweites, zu weites Verbot.
 blockSteel*
 blockConcrete*
 blockRebar*
@@ -55,29 +68,76 @@ toolNailgun
 toolImpactDriver
 toolSalvage*
 
+# --- Strom, Geschuetztuerme, Fallen, Drohne (D9) ---------------------------------
+# WICHTIG, und in WP3.1 berichtigt: diese Kennungen standen hier zuerst als
+# FREIGABEN, damit F-15 sie in Phase 2 zu Runensteinen und Kraftsteinen umdeuten
+# kann. Das war ein Kategorienfehler. F-01 sagt woertlich, es sperre "nur ihre
+# modernen Varianten (Namen, Rezepte, Loot)" und erhalte die Logik - und Rezepte
+# und Loot sind genau das, was dieses Werkzeug messen kann. Mit den Freigaben war
+# der Generator in Phase 1 herstellbar und das Werkzeug meldete "0 rot".
+#
+# D9 wird gewahrt, indem kein 'remove' auf die Definition in items.xml bzw.
+# blocks.xml geht (Vertrag 03 Abschnitt 4). Die Klasse bleibt, der Weg zu ihr
+# verschwindet. Wer hier ein 'remove' auf einen Block schreibt, zerstoert F-15.
+autoTurret*
+shotgunTurret*
+m60Turret*
+gunBot*               # Junk-Turret, Junk-Sledge, Drohne und ihre Teile
+ammoJunkTurret*
+ammoBundleJunkTurret*
+modRoboticDrone*
+generatorbank*
+solarbank*
+solarCell*
+batterybank*
+carBattery*
+electricwirerelay*
+electrictimerrelay*
+electricfencepost*
+motionsensor*
+pressureplate*
+tripwirepost*
+switch                # der Stromschalter; exakt, damit nichts anderes mitgeht
+bladeTrap*
+dartTrap*
+speaker*
+spotlightPlayer*
+industrialLight*
+questReward*Bundle    # Belohnungsbuendel fuer Turm, Generator, Batterie, Solar
+
+# --- Sprengstoff (D9) ------------------------------------------------------------
+# Auch hier: Klasse bleibt, Weg verschwindet. F-15 baut die Glutladung in Phase 2
+# mit eigenen Zutaten, nicht mit Schwarzpulver aus dem Chemiebaukasten.
+explosive*
+resourceGunPowder*
+
 # ================================================================================
-# Freigaben (D9): Diese Systeme werden NICHT entfernt. F-15 deutet sie in Phase 2
-# zu Runensteinen, Kraftsteinen und Runenfallen um. F-01 sperrt nur ihre modernen
-# Namen, Rezepte und Loot-Wege - die Klassen und die Logik bleiben vollstaendig.
-# Wer hier ein Verbot ohne Freigabe stehen laesst, zerstoert ein Feature der
-# naechsten Phase.
+# Freigaben (D54, D56): Diese Gegenstaende sind kein Anachronismus. Sie tragen
+# Inhalt, den das GDD ausdruecklich vorsieht, und heissen in Vanilla nur
+# unglueklich. Sie bleiben erreichbar und werden spaeter umgedeutet - ueber Namen,
+# Werte und Rezepte, nicht ueber eine Sperre. Der Unterschied zum Block darueber:
+# dort bleibt die KLASSE und der Gegenstand wird gesperrt, hier bleibt der
+# GEGENSTAND und sein Gesicht aendert sich.
 # ================================================================================
-!*Turret*             # D9 -> Runenstein der Glut (F-15)
-!electricWire*        # D9 -> Odem-Leitung (Kraftlinien, D37)
-!electricTimer*       # D9 -> Runenschaltung
-!electricRelay*       # D9 -> Runenschaltung
-!electricSwitch*      # D9 -> Runenschaltung
-!electricTripWire*    # D9 -> Bannkreis
-!electricPressure*    # D9 -> Bannkreis
-!electricMotionSensor # D9 -> Bannzeichen
-!generator*           # D9 -> Kraftstein
-!solarCell*           # D9 -> Kraftstein
-!solarBank*           # D9 -> Kraftstein
-!carBattery*          # D9 -> Kraftstein
-!battery*             # D9 -> Kraftstein
-!bladeTrap*           # D9 -> Runenfalle (Glutzeichen)
-!*Dart*Trap*          # D9 -> Runenfalle
-!drone*               # D9 -> soll laut D9 erhalten bleiben
-!junkTurret*          # D9 -> Runenstein
-!explosive*           # D9 -> Glutladung (F-15)
-!resourceGunPowder    # D9 -> Zutat der Glutladung
+
+# --- Fernkampf (D54) -> F-02 in WP5: Schleuder, Selbstbogen, Langbogen, Armbrust -
+# P3 nennt Fernkampf als gleichwertige Spezialisierung, D8 die Armbrust als T4.
+# Ohne diese Freigaben haette Phase 1 ueberhaupt keine Fernkampfwaffe.
+!gunBow*                   # D54 -> Selbstbogen, Langbogen, Armbrust (F-02)
+!ammoArrow*                # D54 -> Pfeile aus Feuerstein, Knochen, Eisen (F-02)
+!ammoBundleArrow*          # D54 -> Pfeilbuendel
+!ammoCrossbowBolt*         # D54 -> Bolzen
+!ammoBundleCrossbowBolt*   # D54 -> Bolzenbuendel
+!ammoDartIron              # D54 -> eiserner Wurfpfeil, gehoert zur Dart-Falle (D9)
+
+# --- Heilung in Phase 1 (D56) -> F-11 baut in Phase 2 darauf auf ----------------
+# Wundauflage, Schiene und Salbe sind fuer 700 plausibel. Ohne sie waere Phase 1
+# ohne jede Heilung, und F-11 kommt erst in Phase 2.
+!medicalBandage            # D56 -> Wundauflage
+!medicalFirstAidBandage    # D56 -> gute Wundauflage
+!medicalSplint             # D56 -> Schiene
+!medicalAloeCream          # D56 -> Kraeutersalbe
+# NICHT freigegeben und damit weiter gesperrt: medicalFirstAidKit (Verbandskasten),
+# medicalBloodBag (Blutkonserve), medicalPlasterCast (Gipsverband - Gipsschienen sind
+# erst ab dem 10. Jahrhundert belegt, die Schiene oben deckt dieselbe Funktion ab),
+# medicalSkillMagazine (Fertigkeitsheft, faellt mit F-21 in WP7) und die drei Drogen.
