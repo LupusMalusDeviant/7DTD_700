@@ -1,0 +1,513 @@
+# Plan-0001: Phase 1 — MVP „700 & Grauen"
+
+- **Status:** Entwurf
+- **Datum:** 2026-11-07
+- **Autor:** LupusMalus (Solo-Projekt mit Claude)
+- **Basis-PRD:** Standalone — Grundlage sind [GDD](../GDD.md) §5 (Roadmap Phase 1, D49) und die
+  zehn Feature-Dokumente F-01, F-02, F-03, F-04, F-05, F-08, F-12, F-17, F-18, F-21
+- **Verantwortlich:** LupusMalus
+- **Zielversion:** 7 Days to Die V 3.40, Build 10 (D52)
+
+> **Markierung jedes Schritts** nach globaler Arbeitsanweisung:
+> `[Claude-prüfbar]` erledigt Claude vollständig samt Prüfbefehl ·
+> `[braucht Nutzer]` braucht einen Spielstart, einen Server, ein Urteil oder einen Playtest.
+> Die Nutzer-Punkte stehen am Ende noch einmal gesammelt als Prüfliste.
+
+## Kontext / Motivation
+
+Phase 0 ist fertig: die Mod lädt, prüft ihre Spielfassung und patcht nichts
+([F-00](../features/F-00-mod-fundament.md)). Der Kurz-Check der Schnittstellen Prio 1–10 ist
+durch, und er hat die Lage für Phase 1 entscheidend verbessert:
+**Phase 1 braucht keinen einzigen Harmony-Patch.**
+
+Das ist keine Vermutung, sondern das Ergebnis von elf Leitfragen gegen die echten
+Konfigurationsdateien und die echten Metadaten
+([Kurz-Check Prio 2–10](../rea/findings/02-10-schnittstellen-kurzcheck.md)). Drei Annahmen waren
+zu pessimistisch — die Fackel-Brenndauer ist XML (`PlantGrowing`), die Währung ist XML
+(`currency_item`), der Blockschaden pro Gegner ist XML (`BlockDamage`) — und der Code hängt
+fast nicht an den fünf Vanilla-Attributen, was die sechs eigenen Fertigkeitsbäume zu XML-Arbeit
+macht.
+
+Damit ist Phase 1 ein **reines Daten- und Dokumentationsvorhaben**: XML, Localization,
+Balancing-Tabellen und drei Prüfwerkzeuge. Das ist der Grund, diesen Plan jetzt zu schreiben und
+nicht später — der riskanteste Teil (brauchen wir C#? wo?) ist beantwortet, bevor eine Zeile
+Inhalt entsteht.
+
+Was Phase 1 **nicht** ist: der optische Bruch (Phase 2, F-16), Magie (F-15), das Furcht-System
+B3 (F-17), Schild-Blocken und Schadensarten (F-02 Rest), Learning by Doing (F-21). Gegner,
+Waffen und POIs bleiben Vanilla-Modelle mit neuen Namen.
+
+## Ziele
+
+Messbar, abgeleitet aus der MVP-Definition im GDD §5:
+
+- **Z1** Eine neue RWG-Welt ist von Tag 1 bis **nach der ersten Seuchennacht** durchspielbar,
+  ohne Absturz und ohne XML-Fehler im Protokoll.
+- **Z2** **Null** Anachronismen in Loot, Rezepten, Händlerware, Startausrüstung und Texten —
+  nachgewiesen durch ein Prüfwerkzeug, nicht durch Durchklicken.
+- **Z3** Der Pfad T0 → T4 ist in Waffen, Rüstung, Werkstätten und Bauteilen **sackgassenfrei**
+  herstellbar — nachgewiesen durch eine Rezeptgraph-Prüfung.
+- **Z4** Jeder sichtbare Text liegt auf **Deutsch und Englisch** vor; keine Pflichtspalte ist leer.
+- **Z5** Nächte sind spürbar dunkler und nebliger als Vanilla; Feuer ist der Grund, eines zu
+  machen (Licht als Ressource, Säule P4).
+- **Z6** Sechs eigene Fertigkeitsbäume ersetzen das Vanilla-Attributsystem; kein
+  Vanilla-Attribut- oder Perkname ist sichtbar.
+- **Z7** Die Mod läuft auf **SP, Dedicated Server und einem zweiten Client** identisch.
+
+## Arbeitspakete (Workstreams)
+
+Neun Pakete. Die Zahl liegt über dem üblichen Rahmen von 3–7, weil Phase 1 zehn Features
+umfasst; deshalb sind die Meilensteine unten besonders eng geschnitten. Schätzungen sind
+**Arbeitstage**, nicht Kalendertage.
+
+---
+
+### WP1: Verträge und Modlet-Gerüst
+
+**Zweck:** Festlegen, *wie* gebaut wird, bevor Inhalt entsteht — Modlet-Grenzen, Namensraum,
+XPath-Regeln, Ladereihenfolge. Nach globaler Regel „Verträge zuerst" nimmt der Nutzer sie ab,
+erst dann beginnt WP3.
+**Rolle:** Claude (Entwurf) → Nutzer (Abnahme)
+**Schätzung:** M (5 Tage)
+
+**Schritte:**
+
+1. **WP1.1** `[Claude-prüfbar]` `docs/contracts/01-modlet-grenzen.md`: Welche Modlets es gibt,
+   was in welches gehört, in welcher Reihenfolge sie laden. Vorschlag: ein Modlet pro Feature-
+   Gruppe (`700_core`, `700_items`, `700_blocks`, `700_progression`, `700_localization`,
+   `700_ui`), damit sich ein Feature einzeln abschalten lässt.
+2. **WP1.2** `[Claude-prüfbar]` `docs/contracts/02-namensraum.md`: Präfix-Regeln für Item-,
+   Block-, Buff-, Perk- und Localization-Kennungen. Ein Name, der im Spiel sichtbar ist, läuft
+   immer über Localization, nie über die Kennung. Enthält die **belegte** Laderegel
+   `^[0-9a-zA-Z_\-]+$` für den Mod-Namen.
+3. **WP1.3** `[Claude-prüfbar]` `docs/contracts/03-xpath-regeln.md`: Nur zielgenaue,
+   additive Änderungen (`append`, `set`, `remove`), **kein** Ersetzen ganzer Dateien — sonst
+   bricht jede andere Mod. Dazu die D5-Regeln für XUi aus Spec 01 §4.1.
+4. **WP1.4** `[Claude-prüfbar]` `docs/contracts/04-pruefwerkzeuge.md`: Was die drei Werkzeuge aus
+   WP2 als Eingabe nehmen, was sie ausgeben, welcher Exit-Code was heißt. C#, kein Python
+   (globale Regel), Fortsetzung des Musters von `tools/meta`.
+5. **WP1.5** `[Claude-prüfbar]` Leere Modlet-Ordner samt `ModInfo.xml` anlegen, Spielstart als
+   Rauchtest — lädt das Gerüst, bevor Inhalt drin ist?
+6. **WP1.6** `[braucht Nutzer]` **Abnahme der Verträge.** Ohne sie beginnt WP3 nicht.
+
+**Ergebnis:** Vier Verträge in `docs/contracts/`, ein ladendes leeres Modlet-Gerüst,
+Nutzer-Abnahme.
+
+---
+
+### WP2: Prüfwerkzeuge
+
+**Zweck:** Die drei Signale, an denen Z2, Z3 und Z4 hängen. Nach Projektregel 5 zählt ein Check
+erst, wenn er **einmal nachweislich an einem falschen Eingabewert gescheitert** ist.
+**Rolle:** Claude
+**Schätzung:** M (6 Tage)
+
+**Schritte:**
+
+1. **WP2.1** `[Claude-prüfbar]` `tools/check-anachronisms`: durchsucht die **gemergte** Config
+   nach einer Denylist (Schusswaffen, Munition, Fahrzeuge, Elektronik, Konserven, Medikamente,
+   Treibstoff, Beton, Industriestahl) in Loot, Rezepten, Händlerware und Startausrüstung.
+   Gegenprobe: ein eingeschmuggelter `gunPistol`-Eintrag muss **rot** werden.
+2. **WP2.2** `[Claude-prüfbar]` `tools/check-recipes`: baut den Rezeptgraphen und meldet
+   Sackgassen (ein Item ist herstellbar, aber keine seiner Zutaten erreichbar) und Zyklen.
+   Gegenprobe: ein Rezept mit erfundener Zutat muss **rot** werden.
+3. **WP2.3** `[Claude-prüfbar]` `tools/check-localization`: meldet leere Pflichtspalten (DE, EN)
+   und Kennungen, die im Spiel sichtbar sind, aber keinen Eintrag haben. Gegenprobe: eine
+   geleerte DE-Spalte muss **rot** werden.
+4. **WP2.4** `[Claude-prüfbar]` Die Gegenproben im README der Werkzeuge als Tabelle festhalten,
+   wie bei `tools/meta` bereits geschehen — damit ein späteres „grün" etwas bedeutet.
+5. **WP2.5** `[Claude-prüfbar]` `.claude/verify.json` anlegen, damit der Prüfbefehl des Projekts
+   erzwungen wird und keine Antwort mehr ohne Lauf endet.
+
+**Ergebnis:** Drei Werkzeuge, jedes einmal nachweislich rot und dann grün, plus ein
+Projekt-Prüfbefehl.
+
+---
+
+### WP3: F-01 Anachronismen-Purge
+
+**Zweck:** Alles entfernen oder sperren, was es um 700 nicht gab — und die Systeme, die später
+umgedeutet werden, **erhalten**.
+**Rolle:** Claude
+**Schätzung:** L (12 Tage)
+**Hängt an:** WP1 (Abnahme), WP2.1
+
+**Schritte:**
+
+1. **WP3.1** `[Claude-prüfbar]` Bestandsaufnahme: alle Items, Rezepte, Loot-Gruppen und
+   Händlergruppen gegen die Denylist, als Liste mit Entscheidung je Eintrag
+   (sperren / umdeuten / an F-15 übergeben).
+2. **WP3.2** `[Claude-prüfbar]` **Sperren statt löschen** (`CreativeMode="None"`, kein Rezept,
+   kein Loot). Begründung steht in F-01: gelöschte Items, die in POIs oder Quests referenziert
+   werden, brechen hart. Welche Referenzen genau brechen, zeigt der Protokolllauf in WP3.6.
+3. **WP3.3** `[Claude-prüfbar]` Loot-Tabellen leeren bzw. umbiegen (`loot.xml`).
+4. **WP3.4** `[Claude-prüfbar]` Händlerware und Quest-Belohnungen bereinigen, Startausrüstung
+   auf T0 (Lumpen, Steinwerkzeug) setzen.
+5. **WP3.5** `[Claude-prüfbar]` **D9 wahren:** Geschütztürme, Generator, Solar, Batterien, Kabel,
+   Schalter, Sensoren, elektrische Fallen, Drohne und Sprengstoff werden **nur in ihrer modernen
+   Erscheinung** gesperrt — Klassen und Logik bleiben, weil F-15 (Phase 2) sie als Runensteine,
+   Kraftsteine und Runenfallen weiterverwendet. Das ist belegt tragfähig: die Stromklassen
+   `Powered`, `PoweredLight`, `ElectricWire`, `BladeTrap` sind ein fertiges Leitungssystem.
+6. **WP3.6** `[braucht Nutzer]` Spielstart mit abgeschaltetem EAC, neue RWG-Welt, Protokoll auf
+   Referenzfehler durchsuchen. `tools/build/smoke.ps1` prüft das Protokoll selbst.
+7. **WP3.7** `[braucht Nutzer]` Drei Spieltage ohne modernes Item im Inventar oder Angebot.
+
+**Ergebnis:** `tools/check-anachronisms` meldet 0 Treffer; die später umzudeutenden Systeme sind
+noch vollständig vorhanden.
+
+**Bekannte MVP-Lücke:** Vanilla-POIs behalten modernes Dekor (Blöcke in Prefabs). Das ist F-07,
+Phase 2, und bleibt in Phase 1 so stehen — ehrlich benannt statt stillschweigend.
+
+---
+
+### WP4: F-05 + F-04 — Ressourcen, Ketten, Werkstätten
+
+**Zweck:** Das Rückgrat. Ohne Rohstoffe und Werkstätten hat kein Rezept in WP5 bis WP7 eine Basis.
+**Rolle:** Claude
+**Schätzung:** L (18 Tage)
+**Hängt an:** WP3
+
+**Schritte:**
+
+1. **WP4.1** `[Claude-prüfbar]` Ressourcen umdeuten (F-05-Tabelle): Raseneisenerz → Luppe →
+   Schmiedeeisen, Holzkohle, Kalk, Lehm, Bernstein, Salz. Erz-Häufigkeit so, dass **Eisen der
+   Engpass** ist (D31), Altmetall aus Ruinen als Ventil.
+2. **WP4.2** `[Claude-prüfbar]` **Währung auf Silber** (D30). Das ist belegt eine Zeile:
+   `currency_item` in `traders.xml`; `casinoCoin` kommt im Code an keiner Stelle vor.
+3. **WP4.3** `[Claude-prüfbar]` Die fünf Vanilla-Werkstätten umdeuten: Feuerstelle,
+   Zimmermannsbank, Rennofen, Esse + Amboss, Kräuterküche, Kalkofen.
+4. **WP4.4** `[Claude-prüfbar]` Die vier geklonten Werkstätten: Runenritzer-Bank, Webstuhl,
+   Räucherkammer, Trockengestell. Jede mit Bau-Rezept, Brennstoffregel bzw. Werkzeugslots und
+   **mindestens fünf Rezepten**.
+5. **WP4.5** `[Claude-prüfbar]` Brennstoff- und Werkzeugslot-Regeln nach dem Vanilla-Forge-Prinzip
+   (D26).
+6. **WP4.6** `[Claude-prüfbar]` Die Beispielkette aus F-04 vollständig durchziehen:
+   `Raseneisenerz + Holzkohle → Luppe → Schmiedeeisen → Klinge → Spatha`. Stahl per Aufkohlen,
+   Damast erst mit Meister-Abschrift.
+7. **WP4.7** `[Claude-prüfbar]` `tools/check-recipes` grün: kein T0→T4-Pfad mit Sackgasse.
+
+**Ergebnis:** Eine vollständige, geprüfte Rohstoff- und Werkstattkette von T0 bis T4.
+
+---
+
+### WP5: F-02 (Basis) + F-03 — Waffen, Rüstung, Qualität, Verschleiß
+
+**Zweck:** Der spielbare Kern: mittelalterliche Waffen und Rüstung mit zwei Qualitätsachsen und
+spürbarem Verschleiß.
+**Rolle:** Claude
+**Schätzung:** L (16 Tage)
+**Hängt an:** WP4
+
+**Schritte:**
+
+1. **WP5.1** `[Claude-prüfbar]` Sieben Nahkampfwaffen auf Vanilla-Basis (Keule, Handbeil, Sax,
+   Speer, Spatha, Breitaxt, Streitkolben) samt Rezepten.
+2. **WP5.2** `[Claude-prüfbar]` Fernkampf: Schleuder, Selbstbogen, Langbogen, Armbrust (selten,
+   D8) und die Munition (Feuerstein-, Knochen-, Eisenpfeile, Bolzen, Schleudersteine).
+3. **WP5.3** `[Claude-prüfbar]` **Zwei Qualitätsachsen** (D23): Material als Grundstufe
+   (Knochen < Bronze < Schmiedeeisen < Stahl < Damast), Handwerksqualität als Feinstufe
+   (Vanilla 1–6 umbenannt: grob, einfach, solide, gut, meisterlich, legendär).
+4. **WP5.4** `[Claude-prüfbar]` Verschleiß und Reparatur: Schleifstein (einfach, kostet
+   Maximal-Haltbarkeit) gegen Esse (voll).
+5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
+   Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
+6. **WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro Waffe
+   mit Zweck, Schaden, Reichweite, Ausdauer, Tier.
+7. **WP5.7** `[braucht Nutzer]` Spieltest: Tooltip verständlich? Ist jeder Waffe ihr Zweck
+   anzusehen?
+
+**Ergebnis:** Alle Waffen und Rüstungsteile T0–T4 herstellbar, zwei Qualitätsachsen im Tooltip,
+Verschleiß und zwei Reparaturwege, plus eine Balancing-Tabelle in `docs/balancing/`.
+
+**Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
+`Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in
+Phase 2 nicht erfunden werden. In Phase 1 bleiben sie **aus** (D50, strikte Phasen).
+
+---
+
+### WP6: F-18 + F-08 — Bauen, Befestigung, Licht und Feuer
+
+**Zweck:** Basenbau in Materialien von 700, und Licht als Ressource statt als Selbstverständlichkeit.
+**Rolle:** Claude
+**Schätzung:** M (9 Tage)
+**Hängt an:** WP4
+
+**Schritte:**
+
+1. **WP6.1** `[Claude-prüfbar]` Upgrade-Pfad umdeuten: Rahmen → Flechtwerk → Fachwerk →
+   Bruchstein → Mörtelstein. Vanilla-Blockformen bleiben (P5), nur Material und Rezept neu.
+2. **WP6.2** `[Claude-prüfbar]` Verteidigungsbauten: Palisade, Spitzpfähle, Graben, Wehrgang,
+   Torhaus, Schwingbalken-Falle, Pechtopf.
+3. **WP6.3** `[Claude-prüfbar]` **D29 umsetzen:** Blockschaden der Seuchentoten senken, damit
+   Mörtelstein etwa so hält wie Vanilla-Stahl. Das ist belegt XML — `BlockDamage` ist eine
+   Eigenschaft in `entityclasses.xml`. Ausgleich: mehr Schaden gegen Spieler, plus einzelne
+   Brecher-Typen für die Seuchennacht.
+4. **WP6.4** `[Claude-prüfbar]` Lichtquellen: Fackel (Hand, Wand), Kienspan, Öllampe, Feuerkorb.
+5. **WP6.5** `[Claude-prüfbar]` **Brenndauer per XML** — `Class="PlantGrowing"`, `Next` auf den
+   erloschenen Zustand, `GrowthRate` als Brenndauer in Minuten, `IsRandom` für Streuung. Zustand
+   und Netzsynchronisierung erledigt damit das Spiel. Zu bestimmen bleibt die Zahl.
+6. **WP6.6** `[braucht Nutzer]` Lasttest: 200 Fackeln, keine messbaren Server-Frame-Einbrüche.
+7. **WP6.7** `[braucht Nutzer]` Balancing-Test: hält eine verteidigte T3-Basis eine Seuchennacht
+   der passenden Gamestage — und eine unverteidigte nicht?
+
+**Ergebnis:** Baubarer Pfad T0–T4 ohne Beton und Stahl; Fackeln, die ausgehen.
+
+---
+
+### WP7: F-21 (Bäume) — Sechs Fertigkeitsbäume
+
+**Zweck:** Das Vanilla-Attributsystem vollständig ersetzen. **Nur die Bäume** — Learning by
+Doing ist Phase 2.
+**Rolle:** Claude
+**Schätzung:** L (14 Tage)
+**Hängt an:** WP4 (Rezepte müssen existieren, um sie zuzuordnen)
+
+**Schritte:**
+
+1. **WP7.1** `[Claude-prüfbar]` Sechs Attribute anlegen: Krieger, Jäger, Handwerker,
+   Runenkundiger, Heiler, Transport & Logistik. Das ist belegt tragfähig: von den fünf
+   Vanilla-Attributnamen steht nur `attFortitude` im Code, einmal, in `EntityPlayerLocal::Update`.
+2. **WP7.2** `[Claude-prüfbar]` Perks je Baum, mit Freischaltstufen und Beschreibungstexten.
+3. **WP7.3** `[Claude-prüfbar]` Vanilla-Attribute und -Perks sperren bzw. in die neuen Bäume
+   umhängen. **Achtung:** `attcrafting` wird von `XUiC_CategoryList::SetupCategoriesByWorkstation`
+   gelesen — der Behälter `attCrafting` bleibt bestehen, auch wenn er leer wirkt.
+4. **WP7.4** `[Claude-prüfbar]` Die 152 Magazine (`<book>`) umdeuten: in Phase 1 bleiben sie das
+   Fortschrittsmittel, nur als **Abschriften** benannt. Learning by Doing ersetzt sie erst in
+   Phase 2.
+5. **WP7.5** `[Claude-prüfbar]` Rezepte aus WP4–WP6 an Grundfähigkeiten binden: ohne
+   Grundfähigkeit ist ein Rezept gesperrt.
+6. **WP7.6** `[braucht Nutzer]` Spieltest: trägt jeder Baum einen Build bis T4, ohne Sackgasse?
+
+**Ergebnis:** Sechs Bäume, kein sichtbarer Vanilla-Attribut- oder Perkname.
+
+---
+
+### WP8: F-17 (B1, B8) + F-12 — Nacht, sichere Orte, Sprache und UI
+
+**Zweck:** Die Atmosphäre und die Sprache. Macht aus dem Datenberg ein Spiel, das nach 700 klingt.
+**Rolle:** Claude
+**Schätzung:** M (10 Tage)
+**Hängt an:** WP3 (Texte folgen dem Inhalt)
+
+**Schritte:**
+
+1. **WP8.1** `[Claude-prüfbar]` **B1 Echte Dunkelheit.** Belegt XML: `worldglobal.xml` führt die
+   Himmelswerte als Tag-/Nacht-Paare (`ambientEquatorScale .7,.45`, `ambientGroundScale .3,.05`,
+   `ambientSkyScale 1,.7`, `ambientMoon .8,.4`). Nachtwerte senken, Mondphasen gewichten.
+2. **WP8.2** `[Claude-prüfbar]` Nebel pro Biom (`<Fog range prob>`), in Wald, Moor und Flusstal
+   dichter. Ein **eigenes** Wetterspektrum bleibt Phase 2 (Assets).
+3. **WP8.3** `[Claude-prüfbar]` **B8 Sichere Orte** als Buff-Aura um brennende Feuerstellen.
+   Reines XML, keine offene Frage.
+4. **WP8.4** `[Claude-prüfbar]` **B2, soweit XML:** Vanilla-Sounds umdeuten und zuordnen,
+   Seuchentote leiser stellen. **Die Stille-Logik (Tiere verstummen, wenn Seuchentote nahe sind)
+   braucht C# und rutscht in Phase 2** — ehrlicher Schnitt, siehe R1.
+5. **WP8.5** `[Claude-prüfbar]` `docs/glossar.md` als verbindliche Begriffsquelle, dann
+   `Localization.txt` mit **DE und EN** für alle neuen und umgedeuteten Einträge (D7).
+6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
+   über **einen** Schlüssel `700_modName` (D6), damit die Umbenennung später eine Zeile ist.
+7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
+   Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
+8. **WP8.8** `[Claude-prüfbar]` `tools/check-localization` grün.
+9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
+   Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
+
+**Ergebnis:** Dunklere, nebligere Nächte; vollständige DE/EN-Texte; UI im Setting-Ton.
+
+---
+
+### WP9: Integration, Balancing, Playtest
+
+**Zweck:** Aus acht Paketen ein Spiel machen und beweisen, dass es Z1 und Z7 erfüllt.
+**Rolle:** Claude (Messung) + Nutzer (Urteil)
+**Schätzung:** M (10 Tage)
+**Hängt an:** WP5, WP6, WP7, WP8
+
+**Schritte:**
+
+1. **WP9.1** `[Claude-prüfbar]` Alle Prüfwerkzeuge in einem Lauf, plus `smoke.ps1`: ein Befehl,
+   eine Ausgabe, Exit 0 oder 1.
+2. **WP9.2** `[braucht Nutzer]` **Dedicated Server** aufsetzen, Mod laden, zweiter Client
+   verbindet sich. Damit werden die statischen S/C-Zuordnungen aller Befunde bestätigt
+   (Projektregel 5) — und die drei offenen F-00-Kriterien geschlossen.
+3. **WP9.3** `[braucht Nutzer]` Vollständiger Durchlauf Tag 1 bis nach der ersten Seuchennacht.
+4. **WP9.4** `[Claude-prüfbar]` Balancing nachziehen: Eisen-Ausbeute, Blockschaden,
+   Fackel-Brenndauer, Seuchennacht-Härte — jede Änderung mit Begründung in `docs/balancing/`.
+5. **WP9.5** `[Claude-prüfbar]` Rückschau: was in Phase 1 nicht fertig wurde, ehrlich in Phase 2
+   schreiben statt die Phase aufblähen (GDD §5).
+6. **WP9.6** `[braucht Nutzer]` Entscheidung über den ersten öffentlichen Release (D46).
+
+**Ergebnis:** Ein spielbarer MVP mit Nachweisen statt Statusmeldungen.
+
+## Abhängigkeiten
+
+| Von | Nach | Typ |
+|---|---|---|
+| WP1.6 Vertrags-Abnahme | WP3 Start | **extern, blockierend** (Nutzer) |
+| WP2.1 Denylist-Werkzeug | WP3.1 | intern |
+| WP1 | WP2 | intern |
+| WP3 | WP4 | intern |
+| WP3 | WP8 | intern |
+| WP4 | WP5, WP6, WP7 | intern |
+| WP2.2 Rezeptgraph | WP4.7 | intern |
+| WP5, WP6, WP7, WP8 | WP9 | intern |
+| Spielstart mit EAC aus (Nutzeraufgabe) | WP3.6, jede Laufzeitprüfung | **extern, blockierend** |
+| Dedicated Server (Nutzeraufgabe) | WP9.2 | **extern, blockierend** für Z7 |
+| Referenz-UI-Mods benennen (Q8) | WP8.9 | extern (Nutzer) |
+
+```mermaid
+graph LR
+    WP1[WP1 Verträge] --> WP2[WP2 Prüfwerkzeuge]
+    WP1 --> WP3[WP3 Purge]
+    WP2 --> WP3
+    WP3 --> WP4[WP4 Ressourcen + Werkstätten]
+    WP3 --> WP8[WP8 Nacht + Sprache]
+    WP4 --> WP5[WP5 Waffen + Rüstung]
+    WP4 --> WP6[WP6 Bauen + Licht]
+    WP4 --> WP7[WP7 Fertigkeitsbäume]
+    WP5 --> WP9[WP9 Integration]
+    WP6 --> WP9
+    WP7 --> WP9
+    WP8 --> WP9
+```
+
+**Kritischer Pfad:** WP1 → WP2 → WP3 → WP4 → WP7 → WP9 = 5 + 6 + 12 + 18 + 14 + 10 = **65 Tage**.
+WP5, WP6 und WP8 laufen parallel dazu; eine Verzögerung dort kostet nichts, solange sie vor WP9
+fertig werden. Zyklen: keine — geprüft, insbesondere die Gefahr WP4 ↔ WP7 (Rezepte brauchen
+Fähigkeiten, Fähigkeiten brauchen Rezepte). Aufgelöst, indem WP7 nur Bäume und Perks definiert
+und die Rezept-Bindung erst in WP7.5 nach WP4 passiert.
+
+## Risiken & Mitigationen
+
+| # | Risiko | Wahrscheinlichkeit | Impact | Mitigation |
+|---|---|---|---|---|
+| **R1** | **Phase 1 ist zu groß.** Zehn Features, 100 Arbeitstage. Die Phase bläht sich auf, statt zu enden. | hoch | hoch | Zwei Schnitte sind **schon gemacht**: B2-Stille-Logik und F-02-Schadensarten gehen nach Phase 2. Nach M2 den MVP-Schnitt erneut prüfen; was nicht trägt, rutscht ehrlich weiter (GDD §5). Harte Regel: kein Feature aus Phase 2 kommt herein (D50). |
+| **R2** | **Kein Spielstart bisher.** Die Mod liegt installiert, aber EAC verhindert das Laden von Code-Mods — belegt, nicht vermutet. Ohne Start gibt es kein Protokoll und keine Laufzeitbestätigung. | hoch | hoch | Nutzeraufgabe, offen. **Blockiert M1.** Jede Laufzeitaussage bis dahin bleibt ausdrücklich unbelegt. |
+| **R3** | **Kein Dedicated Server auf diesem Rechner.** Die S/C-Zuordnung aller Befunde bleibt Indiz statt Nachweis (Projektregel 5); Z7 ist nicht prüfbar. | hoch | hoch | Nutzeraufgabe, offen. Falls kein Server kommt: Z7 streichen und das im Plan vermerken, statt es unbewiesen als erfüllt zu führen. |
+| **R4** | **TFP liefert ein Spiel-Update.** Signaturen oder Config-Schlüssel ändern sich mitten in Phase 1. | mittel | mittel | Der Build-Guard meldet die Abweichung beim Start; `mod700meta verify` gegen `tools/meta/expect/` zeigt gebrochene Signaturen. Da Phase 1 **keinen** Patch enthält, ist die Angriffsfläche klein — XML-Schlüssel sind stabiler als Methodensignaturen. |
+| **R5** | **Löschen bricht Referenzen.** Ein entferntes Item steckt noch in einem POI oder einer Quest. | hoch | mittel | Grundsatz „sperren statt löschen" (WP3.2). Protokolllauf in WP3.6 deckt auf, was trotzdem bricht. |
+| **R6** | **UI-Mod-Kompatibilität (D5) ungeprüft.** Welche Referenz-UI-Mods gelten, ist offen (Q8). | mittel | mittel | WP8.9 zieht die Entscheidung früh; additive XPath-Regeln aus WP1.3 senken den Schaden unabhängig davon. |
+| **R7** | **Balancing D29 nur im Playtest messbar.** Ob Mörtelstein wie Vanilla-Stahl hält, zeigt keine Zahl im Voraus. | hoch | mittel | WP6.3 setzt begründete Startwerte, WP9.4 zieht nach. Der Zielwert steht in `docs/balancing/`, damit die Korrektur nachvollziehbar bleibt. |
+| **R8** | **Vanilla-Perks sperren bricht die UI.** `attcrafting` wird von `XUiC_CategoryList` gelesen; ein leerer Behälter kann die Werkbank-Kategorien zerlegen. | mittel | mittel | WP7.3 behält die Behälter-Attribute und hängt nur ihren Inhalt um. Prüfung: Werkbank öffnen, Kategorien zählen. |
+| **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen, und WP4 ist mit 18 Tagen das größte Paket. | mittel | hoch | `tools/check-recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
+| **R10** | **Prüfwerkzeuge in Python gebaut.** Verstoß gegen die globale Regel. | niedrig | mittel | In WP1.4 als C# festgeschrieben, Muster von `tools/meta` wird fortgeführt. Der Hook `policy-guard.py` fragt zusätzlich nach. |
+| **R11** | **Zwei Qualitätsachsen in einem Tooltip.** D23 will Material *und* Handwerksqualität getrennt sichtbar machen. Ob der Vanilla-Item-Tooltip beides lesbar darstellen kann, ist **nicht geprüft** — Vanilla kennt nur eine Achse (Qualität 1–6). | mittel | mittel | Vor WP5.3 kurz prüfen, ob sich Material über den Item-Namen und Handwerksqualität über die Vanilla-Stufe abbilden lässt (zwei Items je Material statt eine zweite Achse). Fällt das durch, wird D23 auf eine Achse reduziert — mit dem Nutzer, als neue D-Zeile. |
+| **R12** | **Die Zahl in der Schätzung ist geraten.** 100 Arbeitstage für zehn Features ist eine Analogie, keine Messung — es gibt keinen Vorlauf, an dem sich das kalibrieren ließe. | hoch | mittel | Nach M1 die tatsächlich gebrauchten Tage von WP1 und WP2 gegen die Schätzung halten und den Rest des Plans mit dem gemessenen Faktor neu rechnen. Das ist der einzige ehrliche Weg. |
+
+## Meilensteine
+
+Die Daten unterstellen **drei Arbeitstage pro Woche** — ein Solo-Projekt neben anderem. Bei fünf
+Tagen pro Woche verschieben sich alle Termine um gut 40 % nach vorn. **Diese Annahme gehört vom
+Nutzer korrigiert**, sie ist die wackeligste Zahl im Plan (R12).
+
+- **M1 (2026-12-05) — Fundament bestätigt.** Verträge abgenommen (WP1.6), Modlet-Gerüst lädt,
+  drei Prüfwerkzeuge je einmal nachweislich rot und dann grün (WP2). **Und:** die Mod ist
+  einmal im Spiel gelaufen, mit Protokoll (löst R2). Messbar: `smoke.ps1` ohne `-SkipLog`
+  endet mit Exit 0.
+- **M2 (2027-02-13) — Die Welt ist von 700.** Purge durch (WP3), Ressourcen, Währung und
+  Werkstätten stehen (WP4). Messbar: `check-anachronisms` 0 Treffer, `check-recipes` grün für
+  T0→T4. **Hier wird der MVP-Schnitt überprüft** (R1) und die Schätzung neu gerechnet (R12).
+- **M3 (2027-05-01) — Spielbar bis T4.** Waffen, Rüstung, Bauen und Licht stehen (WP5, WP6).
+  Messbar: jede Waffe und jedes Rüstungsteil herstellbar, Upgrade-Pfad T0–T4 baubar, eine
+  Fackel geht nach der gesetzten Zeit aus.
+- **M4 (2027-07-10) — MVP-Playtest.** Bäume, Nacht und Sprache stehen (WP7, WP8); ein
+  Durchlauf Tag 1 bis nach der ersten Seuchennacht ist absolviert (WP9). Messbar: Z1 bis Z6
+  erfüllt und belegt; Z7 nur, wenn R3 aufgelöst wurde.
+
+## Erfolgskriterien
+
+Phase 1 ist fertig, wenn **alle** folgenden Punkte mit einem Befehl und seinen Zahlen daneben
+belegt sind — nicht mit einer Statusmeldung:
+
+- `tools/check-anachronisms` meldet **0 Treffer** in Loot, Rezepten, Händlerware und
+  Startausrüstung *(Z2)*
+- `tools/check-recipes` meldet **0 Sackgassen** und **0 Zyklen** auf dem Pfad T0 → T4 *(Z3)*
+- `tools/check-localization` meldet **0 leere Pflichtspalten** in DE und EN *(Z4)*
+- `tools/build/smoke.ps1` endet mit **Exit 0**, Protokoll ohne `ERR` und ohne XML-Fehler *(Z1)*
+- Ein Durchlauf **Tag 1 bis nach der ersten Seuchennacht** auf einer neuen RWG-Welt, ohne
+  Absturz *(Z1)*
+- Nächte sind **messbar dunkler** als Vanilla (Werte in `worldglobal.xml` dokumentiert) und eine
+  Fackel erlischt nach der gesetzten Zeit *(Z5)*
+- **Sechs Bäume** vollständig, kein Vanilla-Attribut- oder Perkname sichtbar *(Z6)*
+- Dedicated Server **und** zweiter Client laden die Mod, beide protokollieren die Version *(Z7,
+  hängt an R3)*
+- Jedes Pflichtdokument ist mitgezogen: Verträge in `docs/contracts/`, Balancing in
+  `docs/balancing/`, Glossar, und dieser Plan ist auf dem Stand der Realität
+
+## Zeitschätzung (Gesamt)
+
+| Paket | Größe | Tage |
+|---|---|---|
+| WP1 Verträge und Gerüst | M | 5 |
+| WP2 Prüfwerkzeuge | M | 6 |
+| WP3 F-01 Purge | L | 12 |
+| WP4 F-05 + F-04 Ressourcen, Werkstätten | L | 18 |
+| WP5 F-02 (Basis) + F-03 Waffen, Rüstung | L | 16 |
+| WP6 F-18 + F-08 Bauen, Licht | M | 9 |
+| WP7 F-21 Fertigkeitsbäume | L | 14 |
+| WP8 F-17 (B1, B8) + F-12 Nacht, Sprache | M | 10 |
+| WP9 Integration, Balancing, Playtest | M | 10 |
+
+- **Summe Arbeitspakete:** 100 Tage
+- **Puffer (25 %):** 25 Tage
+- **Zuschlag für die sechs Risiken mit Wahrscheinlichkeit „hoch"** (R1, R2, R3, R5, R7, R12 —
+  je 1–2 Tage auf das betroffene Paket): 8 Tage
+- **Gesamt:** **133 Arbeitstage**
+- Bei 3 Tagen/Woche: ≈ 44 Kalenderwochen → **Mitte September 2027**
+- Bei 5 Tagen/Woche: ≈ 27 Kalenderwochen → **Mitte Mai 2027**
+
+Kein Paket ist XL. WP4 (18 Tage) liegt am oberen Rand von L und bekommt in M2 einen
+Zwischen-Check.
+
+## Prüfliste für den Nutzer
+
+Die Punkte, die Claude nicht erledigen kann — gesammelt, in der Reihenfolge, in der sie gebraucht
+werden:
+
+1. **Spiel einmal mit abgeschaltetem EAC starten**, Welt laden, beenden. *(Blockiert M1 und jede
+   Laufzeitaussage. Aufgabe liegt offen.)*
+2. **Dedicated Server** installieren — oder entscheiden, dass Z7 gestrichen wird. *(Blockiert
+   WP9.2 und drei F-00-Kriterien. Aufgabe liegt offen.)*
+3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
+4. **Referenz-UI-Mods benennen** (Q8) für die Kompatibilitäts-Testmatrix. *(Braucht es erst
+   für WP8.9.)*
+5. **Durchsatz-Annahme korrigieren:** drei Arbeitstage pro Woche, oder andere Zahl?
+   *(Verschiebt alle Meilensteine.)*
+6. **Spieltests urteilen:** Waffenzweck erkennbar (WP5.7), jeder Baum tragfähig bis T4 (WP7.6),
+   Fackel-Last (WP6.6), T3-Basis gegen Seuchennacht (WP6.7), drei Tage ohne Anachronismus
+   (WP3.7), Durchlauf bis zur ersten Seuchennacht (WP9.3).
+7. **Release-Entscheidung** nach dem Playtest (D46, WP9.6).
+
+## Offene Punkte
+
+- **Die Fackel-Zahl.** `GrowthRate` steht in Minuten, gewünscht ist eine Brenndauer in
+  Ingame-Stunden. Der Umrechnungsfaktor hängt an der Tageslänge der Welt und ist nicht
+  festgelegt. → WP6.5.
+- **B2 Stille-Logik.** „Tierlaute verstummen, wenn Seuchentote nahe sind" braucht C#. In diesem
+  Plan nach Phase 2 verschoben. Falls das den MVP-Grusel zu stark schwächt, wäre es der erste
+  Kandidat, Phase 1 doch um einen Patch zu erweitern — **das wäre eine Entscheidung des Nutzers**,
+  keine stille Planänderung.
+- **Zwei Entscheidungen warten, beide außerhalb Phase 1** und darum hier nicht aufgelöst:
+  die Biomnamen (D43, F-07, Phase 2) und wie weit Learning by Doing gehen soll, wenn es C#
+  kostet (F-21, Phase 2). Siehe
+  [Kurz-Check Prio 2–10](../rea/findings/02-10-schnittstellen-kurzcheck.md).
+- **Das Patch-Manifest bleibt in Phase 1 leer.** Wenn ein Paket doch einen Patch braucht,
+  gilt Projektregel 2: erst Finding und Soll-Signatur, dann Code.
+
+## Referenzen
+
+- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D52
+- [Spec 01 — Technischer Rahmen](../specs/01-technischer-rahmen.md) — Modlet-Architektur,
+  Netz-Klassen, UI-Kompatibilität (D5)
+- [Kurz-Check Prio 2–10](../rea/findings/02-10-schnittstellen-kurzcheck.md) — die Befunde, auf
+  denen dieser Plan steht
+- [Patch-Manifest](../rea/findings/patch-manifest.md) — leer, und das ist für Phase 1 richtig
+- [Hook-Hypothesen](../rea/hook-hypothesen.md) — Status je Feature
+- [F-00 Mod-Fundament](../features/F-00-mod-fundament.md) — Phase 0, drei Kriterien noch offen
+- Feature-Dokumente der Phase 1: [F-01](../features/F-01-anachronismen-purge.md) ·
+  [F-02](../features/F-02-waffen-kampf.md) · [F-03](../features/F-03-ruestung-kleidung.md) ·
+  [F-04](../features/F-04-handwerk-werkstaetten.md) ·
+  [F-05](../features/F-05-ressourcen-waehrung.md) ·
+  [F-08](../features/F-08-licht-feuer-verteidigung.md) ·
+  [F-12](../features/F-12-lokalisierung-ui.md) · [F-17](../features/F-17-grauen-bedrohung.md) ·
+  [F-18](../features/F-18-bauen-befestigung.md) ·
+  [F-21](../features/F-21-fertigkeiten-learning-by-doing.md)
