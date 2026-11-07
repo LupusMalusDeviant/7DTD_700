@@ -105,4 +105,4 @@ Tränke und Zauber.
 - [ ] Runensteine und Zauber funktionieren auf dem Dedicated Server mit 2 Clients (Projektile und Effekte synchron)
 
 ## Offene Fragen
-- Gibt es in V2.x einen Accessoire-Slot für Amulette, oder laufen sie über Rüstungs-Mods?
+- Gibt es in V 3.40 einen Accessoire-Slot für Amulette, oder laufen sie über Rüstungs-Mods?

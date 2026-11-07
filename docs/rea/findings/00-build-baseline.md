@@ -5,7 +5,7 @@ Erhoben am **2026-11-07** auf Windows 11 Pro (26300) gegen die lokale Steam-Inst
 
 | Feld | Wert |
 |---|---|
-| Spielversion | **Release-Typ `V`, Major 3, Minor 40, Build 10.** Aus dem Code gelesen, nicht aus dem Menü: `Constants::.cctor` schiebt genau vier Konstanten `1, 3, 40, 10` auf den Stapel, ruft `newobj VersionInformation::.ctor(EGameReleaseType, int, int, int)` und legt das Ergebnis per `stsfld` in `Constants::cVersionInformation` ab — der einzige solche Aufruf in der Methode. `EGameReleaseType.Alpha = 0`, **`EGameReleaseType.V = 1`** (Constant-Tabelle). Die Anzeigeform ist nach den Formatzeichenketten des Konstruktors (`"{0} {1}.{2} (b{3})"`, `"{0}{1}.{2}"`) **vermutlich** „V 3.40 (b10)“ bzw. kurz „V3.40“ — die Zahlen sind belegt, die Schreibweise ist abgeleitet. ⚠️ **Das widerspricht dem GDD und Spec 01, die „V2.x Stable“ als Zielplattform nennen.** Siehe unten. |
+| Spielversion | **Release-Typ `V`, Major 3, Minor 40, Build 10.** Aus dem Code gelesen, nicht aus dem Menü: `Constants::.cctor` schiebt genau vier Konstanten `1, 3, 40, 10` auf den Stapel, ruft `newobj VersionInformation::.ctor(EGameReleaseType, int, int, int)` und legt das Ergebnis per `stsfld` in `Constants::cVersionInformation` ab — der einzige solche Aufruf in der Methode. `EGameReleaseType.Alpha = 0`, **`EGameReleaseType.V = 1`** (Constant-Tabelle). Die Anzeigeform ist nach den Formatzeichenketten des Konstruktors (`"{0} {1}.{2} (b{3})"`, `"{0}{1}.{2}"`) **vermutlich** „V 3.40 (b10)“ bzw. kurz „V3.40“ — die Zahlen sind belegt, die Schreibweise ist abgeleitet. Dies war der Widerspruch zum damaligen „V2.x Stable“ in GDD und Spec 01; **mit D52 am 2026-11-07 aufgelöst** — dieser Build ist die Zielplattform. |
 | `Player.log` | existiert nicht — das Spiel wurde auf diesem Rechner noch nicht gestartet, `…\AppData\LocalLow\The Fun Pimps\7 Days To Die\` ist leer |
 | Steam-Branch | **public (Stable)** — `appmanifest_251570.acf`: `"BetaKey" "public"` |
 | Steam-Build | **26309840** (`"buildid"`/`"TargetBuildID"`), `LastUpdated 1793777837` (≈ 3. November 2026) |
@@ -48,12 +48,12 @@ Erhoben am **2026-11-07** auf Windows 11 Pro (26300) gegen die lokale Steam-Inst
    (`0_TFP_Harmony` lädt durch die führende Null zuerst) genügt.
 3. **`SkipWithAntiCheat`** ist ein belegtes `ModInfo.xml`-Feld. Das passt zu „EAC muss aus sein“
    aus Spec 01 und ist für F-00 vorzumerken.
-4. ⚠️ **Die Zielplattform im GDD stimmt nicht mit der Installation überein.** GDD-Kopf und
-   Spec 01 Abschnitt 1 nennen „V2.x Stable“; installiert ist nach der Code-Lesung
-   **V 3.40 (Build 10)**, Steam-Branch `public`. Die Planung entstand in einer Cloud-Session
-   ohne Zugriff auf die Spieldateien, „V2.x“ war dort eine Annahme. Das ist eine harte Vorgabe
-   und wird nach `CLAUDE.md` Regel 4 **nicht still geändert** — dem Nutzer am 2026-11-07
-   vorgelegt. Zwei Wege: Dokumente auf V3.x ziehen, oder über einen Steam-Beta-Zweig auf V2.x
-   zurück.
-5. Der **Build-Guard** aus F-00 braucht diese vier Zahlen als „getestete Fassung“. Bis die
-   Frage aus Punkt 4 entschieden ist, wird der Wert nicht fest eingetragen.
+4. **Zielplattform geklärt (D52, 2026-11-07).** GDD-Kopf und Spec 01 nannten „V2.x Stable“ —
+   eine Annahme der Cloud-Session, die keinen Zugriff auf die Spieldateien hatte. Der Nutzer
+   hat entschieden, die Dokumente **auf V 3.40 zu ziehen** statt über einen Steam-Beta-Zweig
+   zurückzubauen. Nachgezogen: GDD-Kopf, `CLAUDE.md`, Spec 01 Abschnitt 1, `README.md`,
+   `hook-hypothesen.md` und die Feature-Dokumente F-15, F-19, F-20, F-21. Alle
+   `[verifizieren]`-Marken gelten damit gegen **V 3.40**.
+5. Der **Build-Guard** aus F-00 nimmt diese vier Zahlen als getestete Fassung:
+   `new VersionInformation(EGameReleaseType.V, 3, 40, 10)`, verglichen über
+   `CompareToRunningBuild()`.

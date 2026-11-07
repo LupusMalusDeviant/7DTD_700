@@ -30,7 +30,7 @@ Danach verbessert **Benutzen** die Fertigkeit: höhere Qualität, neue Varianten
 Materialverbrauch.
 
 **Technischer Vorschlag (D48, nach REA final):**
-1. **Vanilla-Crafting-Skills weiterverwenden.** V1.x/V2.x hat Crafting-Skills (Fortschritt pro
+1. **Vanilla-Crafting-Skills weiterverwenden.** V1.x bis V3.x hat Crafting-Skills (Fortschritt pro
    Kategorie, bisher durch Magazine). Diese Struktur (Stufen, freigeschaltete Rezepte und
    Qualitäten) bleibt als Datenmodell in `progression.xml`.
 2. **Fortschritt umleiten:** Statt Magazin-Lesen erhöht **Herstellen bzw. Benutzen** den

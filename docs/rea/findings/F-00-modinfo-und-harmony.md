@@ -6,7 +6,9 @@
 
 ## Frage
 
-Prio 1 aus der Übergabe: Wie sieht `ModInfo.xml` in V2.x aus, und bringt das Spiel Harmony mit?
+Prio 1 aus der Übergabe: Wie sieht `ModInfo.xml` in der Zielfassung aus, und bringt das Spiel
+Harmony mit? (Die Übergabe sprach von „V2.x“; die Zielplattform ist nach D52 **V 3.40**. Das
+Dateiformat heißt unabhängig davon weiterhin „V2“ — nicht verwechseln.)
 
 ## Ergebnis
 

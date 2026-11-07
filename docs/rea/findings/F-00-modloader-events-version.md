@@ -97,7 +97,7 @@ Mod-Ordner und fragt dann
 Damit ist Spec 01 („EAC muss aus sein, sobald die C#-DLL geladen wird“) **belegt** und nicht
 mehr nur angenommen.
 
-### 4. ModEvents: 22 Events, neue Form in V2.x
+### 4. ModEvents: 22 Events, neue Form in V 3.40
 
 `ModEvents` ist eine `public static class` mit 22 statischen Feldern. Die Hypothese ging von
 `RegisterHandler` mit Delegaten je Event aus; tatsächlich sind es **generische Event-Objekte
@@ -140,7 +140,8 @@ Felder von `VersionInformation`: `ReleaseType`, `Major`, `Minor`, `Build`, `IsVa
 
 `VersionInformation/EVersionComparisonResult`: `SameBuild`, `SameMinor`, `NewerMinor`,
 `OlderMinor`, `DifferentMajor`.
-`VersionInformation/EGameReleaseType`: `Alpha`, `V` — die „V2.x“-Schreibweise ist Release-Typ `V`.
+`VersionInformation/EGameReleaseType`: `Alpha = 0`, `V = 1` (Werte aus der Constant-Tabelle) —
+das „V“ in Versionsangaben wie „V 3.40“ ist dieser Release-Typ.
 
 Die laufende Version steht in `Constants.cVersionInformation` (statisches Feld, in
 `Constants::.cctor` per `newobj VersionInformation::.ctor` gesetzt), daneben
@@ -165,11 +166,11 @@ Das Patch-Manifest bleibt für F-00 leer. Der erste echte Eintrag kommt mit F-08
 
 ## Offene Punkte / Limitierungen
 
-- **Die Spielversion ist inzwischen gelesen** (`mod700meta --il`, Werkzeug am selben Tag um
+- **Die Spielversion ist gelesen und entschieden** (`mod700meta --il`, Werkzeug am selben Tag um
   Zahlenoperanden und die Constant-Tabelle erweitert): Release-Typ `V`, Major 3, Minor 40,
-  Build 10. ⚠️ Das **widerspricht** „V2.x Stable“ in GDD und Spec 01 — dem Nutzer vorgelegt,
-  siehe [00-build-baseline.md](00-build-baseline.md), Punkt 4. Bis das entschieden ist, wird
-  die getestete Fassung im Build-Guard **nicht** fest eingetragen.
+  Build 10. Das widersprach dem damaligen „V2.x Stable“ in GDD und Spec 01; mit **D52** ist
+  dieser Build die Zielplattform. Der Build-Guard nimmt damit
+  `new VersionInformation(EGameReleaseType.V, 3, 40, 10)` als getestete Fassung.
 - **Die Nutzdaten-Strukturen `ModEvents/S…Data` sind nicht aufgeschlüsselt.** Für F-00 reicht
   `SPlayerLoginData`; dessen Felder sind noch zu lesen, bevor der Handshake gebaut wird.
 - **`ModEventHandlerDelegate`1` und `ModEventInterruptibleHandlerDelegate`1`** sind in ihrer

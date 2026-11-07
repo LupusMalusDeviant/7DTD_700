@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | 0.1 (Entwurf) |
 | **Stand** | 2026-11-07 |
-| **Basisspiel** | 7 Days to Die V2.x (Stable) |
+| **Basisspiel** | 7 Days to Die **V 3.40, Build 10** (Steam-Branch `public`, Build 26309840) — aus dem Code gelesen, siehe [Baseline](rea/findings/00-build-baseline.md) und D52 |
 | **Mod-Typ** | Total-Conversion-light: Setting-Wechsel + Overhaul + neue Inhalte |
 | **Tiefe** | XML-Modlets + C#/Harmony; ab Phase 2 zusätzlich eigene Assets + Retexturen |
 | **Spielmodi** | Singleplayer, Dedicated Server |
@@ -123,7 +123,7 @@ entfernt.
 | Bücher/Magazine (Crafting-Skills) | Abschriften als Grundfähigkeit + **Learning by Doing** | F-04, F-21 |
 | Städte, Straßen, Wolkenkratzer | Weiler, Höfe, Klöster, Ringwälle, Römerruinen | F-07 |
 | Medizin (Pillen, Antibiotika) | Kräuter, Wundauflagen, Theriak | F-11 |
-| Bandits (falls in V2.x vorhanden) | Plünderer, Seuchenkult | F-20 |
+| Bandits (falls in V 3.40 vorhanden) | Plünderer, Seuchenkult | F-20 |
 | Beton, Stahlblöcke | Fachwerk, Bruchstein, Mörtelstein | F-18 |
 | Farming | Getreide, Rüben, Kohl, Erbsen, Flachs, Kräuter + Viehhaltung | F-19 |
 
@@ -288,6 +288,7 @@ Punkte:
 | D49 | 2026-11-07 | MVP-Fokus | **Setting-Umbau + Grusel** | Roadmap |
 | D50 | 2026-11-07 | Umgang mit Umfang | **Strikt phasenweise**, jede Phase endet mit Playtest | Roadmap |
 | D51 | 2026-11-07 | Woher kommen Signaturen, nachdem REA an dieser Assembly keine Member liefert? | **Eigenes Werkzeug `mod700meta`** (`tools/meta/`, C#, nur `System.Reflection.Metadata`): liest Typen, Signaturen, Aufrufkanten und Zeichenketten statisch, ohne zu laden, auszuführen oder zu dekompilieren. REA bleibt für Artefakt-Identität und Klassifikation. `CLAUDE.md` Regel 2 gilt weiter, „REA-Finding“ heißt ab jetzt „Finding unter `docs/rea/findings/` mit nachprüfbarer Signatur“. Anlass: [00-rea-grenzen.md](rea/findings/00-rea-grenzen.md) | CLAUDE.md, Spec 01, alle REA-Features |
+| D52 | 2026-11-07 | Die Planung nannte „V2.x Stable“ als Zielplattform, installiert ist **V 3.40 (Build 10)**. Welche Fassung gilt? | **Dokumente auf V 3.40 ziehen.** „V2.x“ war eine Annahme der Cloud-Session, die keinen Zugriff auf die Spieldateien hatte; kein Rückbau über einen Steam-Beta-Zweig. Zielplattform ist damit der installierte Build. Alle Hypothesen und `[verifizieren]`-Marken gelten gegen V 3.40, nicht gegen V2.x | GDD-Kopf, CLAUDE.md, Spec 01, README, hook-hypothesen, F-15/F-19/F-20/F-21 |
 
 ### 7.3 Kampf & Waffen
 | ID | Datum | Frage | Entscheidung | Wirkt auf |
@@ -351,7 +352,7 @@ Punkte:
 | Q10 | Ansteckung (Seuchenbrand) zwischen Spielern ja/nein? | F-11 (Phase 2) |
 | Q17 | Härtere Todesfolgen: welche konkret? (Rahmen D15) | F-17 (Phase 2) |
 | Q18 | Reitpferd: machbar ohne eigene Reit-Animationen? Klären per REA bzw. Prototyp vor Phase 3 | F-13 |
-| Q19 | Plünderer und Kultisten: Gibt es in V2.x bereits menschliche Gegner (Banditen), auf denen wir aufbauen können? (REA) | F-20 |
+| Q19 | Plünderer und Kultisten: Gibt es in V 3.40 bereits menschliche Gegner (Banditen), auf denen wir aufbauen können? (REA) | F-20 |
 
 ---
 

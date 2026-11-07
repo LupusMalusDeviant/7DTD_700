@@ -1,6 +1,6 @@
 # CLAUDE.md — 7DTD_700
 
-Frühmittelalter-Overhaul (~700 n. Chr.) für **7 Days to Die V2.x (Stable)**. Folk-Horror,
+Frühmittelalter-Overhaul (~700 n. Chr.) für **7 Days to Die V 3.40, Build 10 (Stable)** (D52). Folk-Horror,
 dezente Volksmagie, XML-Modlets + C#/Harmony, ab Phase 2 eigene Assets.
 Solo-Projekt mit Claude, Sprache der Doku: **Deutsch**.
 

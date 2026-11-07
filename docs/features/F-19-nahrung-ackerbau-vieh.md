@@ -13,7 +13,7 @@ Lebensmittel **verderben** (D32), und eine Siedlung lebt von Acker und Vieh (D33
 - Frische Lebensmittel (Fleisch, Fisch, Milch, Gemüse) verderben nach Zeit → „verdorben“ (essbar mit Ruhr-Risiko, F-11)
 - **Konservieren:** Räuchern (Räucherkammer), Salzen (Salz knapp, Handelsware), Trocknen (Trockengestell), Einlegen
 - Kühle Lagerung (Erdkeller) verlangsamt den Verderb
-- [verifizieren] per REA: Hat V2.x ein Verfallssystem für Items, auf das man aufbauen kann? Sonst C# (Zeitstempel je Stack, Prüfung beim Öffnen bzw. Laden)
+- [verifizieren] per REA: Hat V 3.40 ein Verfallssystem für Items, auf das man aufbauen kann? Sonst C# (Zeitstempel je Stack, Prüfung beim Öffnen bzw. Laden)
 
 ### Ackerbau
 - Vanilla-Farming umgedeutet: Getreide (Gerste, Roggen, Emmer), Rüben, Kohl, Erbsen, Bohnen, Flachs, Hanf, Kräuter

@@ -1,6 +1,6 @@
 # mod700meta — statischer Metadaten-Leser
 
-Ergänzt REA dort, wo REA an der `Assembly-CSharp.dll` von 7DTD V2.x abbricht. Begründung und
+Ergänzt REA dort, wo REA an der `Assembly-CSharp.dll` von 7DTD V 3.40 abbricht. Begründung und
 Zahlen: [docs/rea/findings/00-rea-grenzen.md](../../docs/rea/findings/00-rea-grenzen.md).
 Entscheidung: **D51** in [docs/GDD.md](../../docs/GDD.md).
 

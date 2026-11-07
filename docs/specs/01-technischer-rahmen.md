@@ -7,9 +7,10 @@ werden per REA oder Ingame-Test an der echten Zielversion bestätigt, bevor Code
 
 | Punkt | Festlegung |
 |---|---|
-| Spiel | 7 Days to Die, **V2.x Stable** (Steam) |
-| Exakter Build | wird beim ersten REA-Lauf festgehalten (`docs/rea/findings/00-build-baseline.md`) |
-| Runtime | Unity / **Mono** (managed .NET). Damit ist die Spiellogik als CIL in `7DaysToDie_Data/Managed/Assembly-CSharp.dll` statisch analysierbar. **[verifizieren]**: nicht IL2CPP. |
+| Spiel | 7 Days to Die, **V 3.40 Stable** (Steam), Release-Typ `V`, Major 3, Minor 40, Build 10 — Entscheidung **D52** |
+| Exakter Build | Steam-Build **26309840**, Branch `public`. `Assembly-CSharp.dll` SHA-256 `cb54022c…56c58`, MVID `0dfd4a8c-e2eb-4a72-8af4-f69f7c5b1480`. Festgehalten in [`../rea/findings/00-build-baseline.md`](../rea/findings/00-build-baseline.md) |
+| Runtime | Unity **2022.3.62f2** / **Mono** (managed .NET). **Belegt**: REA-Klassifikation `runtime_family: unity-mono`, `implementation: cil`, CLI-Flag `il-only` — **kein IL2CPP**. Die Spiellogik ist als CIL in `7DaysToDie_Data/Managed/Assembly-CSharp.dll` statisch analysierbar. |
+| Target-Framework | `net48` — **abgeleitet** aus den AssemblyRefs (`mscorlib 4.0.0.0`, `netstandard 2.1.0.0`), nicht belegt. `Assembly-CSharp.dll` trägt kein `TargetFrameworkAttribute`. Gilt erst mit dem ersten durchlaufenden Build. |
 | Server | Dedicated Server (Windows + Linux), gleiche Mod-Dateien |
 | EAC | Muss für Server und Clients **aus** sein, sobald die C#-DLL geladen wird |
 
@@ -17,7 +18,10 @@ werden per REA oder Ingame-Test an der echten Zielversion bestätigt, bevor Code
 
 ```
 Mods/7DTD_700/
-├── ModInfo.xml                 # Mod-Metadaten (V2-Format) [verifizieren: Schema der Zielversion]
+├── ModInfo.xml                 # Mod-Metadaten, V2-Format — BELEGT: Wurzel <xml>, Felder als
+│                               # direkte Kinder mit value="…"; gelesen werden Name (Pflicht),
+│                               # DisplayName (Pflicht), Version, Description, Author, Website,
+│                               # SkipWithAntiCheat. Altformat lädt nicht mehr. Siehe F-00-Finding.
 ├── Config/                     # XPath-Modlets: set/append/remove/insertAfter …
 │   ├── items.xml
 │   ├── recipes.xml
@@ -33,7 +37,7 @@ Mods/7DTD_700/
 │   └── XUi/ …                  # UI-Layout (Windows/Controls)
 ├── 7DTD_700.dll                # C#: IModApi-Einstieg + Harmony-Patches
 ├── Resources/*.unity3d         # Phase 2: AssetBundles (neue Modelle, Retexturen, Sounds)
-├── UIAtlases/ItemIconAtlas/    # Phase 2: Item-Icons (PNG) [verifizieren: Pfad in V2.x]
+├── UIAtlases/ItemIconAtlas/    # Phase 2: Item-Icons (PNG) [verifizieren: Pfad in V 3.40]
 └── Prefabs/                    # Phase 2: eigene POIs
 ```
 
@@ -42,8 +46,8 @@ Mods/7DTD_700/
 | Punkt | Festlegung |
 |---|---|
 | Arten | **Retexturen** vorhandener Vanilla-Modelle und **neue Modelle** (Waffen, Schild, Werkstätten, Rüstungsteile) |
-| Werkzeug | Unity-Editor in **exakt der Unity-Version des Spiels** [verifizieren: Version aus `Player.log` bzw. REA-Baseline]; Bundles per Editor-Skript bauen |
-| Referenzierung | In XML über `#@modfolder:Resources/<bundle>.unity3d?<asset>` [verifizieren: Syntax in V2.x] |
+| Werkzeug | Unity-Editor in **exakt der Unity-Version des Spiels** Unity **2022.3.62f2**, belegt in der Baseline; Bundles per Editor-Skript bauen |
+| Referenzierung | In XML über `#@modfolder:Resources/<bundle>.unity3d?<asset>` [verifizieren: Syntax in V 3.40] |
 | Shader | Nur Shader, die im Spiel vorhanden sind bzw. mit dem Bundle kompatibel sind; Test im Dedicated-Client |
 | Quellen & Lizenz | Jedes Asset steht in `assets/ASSETS.md` mit Quelle, Autor, Lizenz und Änderungen. **Keine** Assets aus anderen Spielen oder Mods ohne ausdrückliche Lizenz (Q9) |
 | Repo | Quell-Assets (`.blend`, `.psd`, Texturen) über **Git LFS** in `assets/`; gebaute Bundles nur im Release-Paket |
@@ -62,8 +66,16 @@ Details und Arbeitsablauf: [F-16 Asset-Pipeline](../features/F-16-asset-pipeline
    - Ein Patch pro Datei, mit einem Header, der auf den REA-Finding-Eintrag verweist
      (Typ, Methode, Signatur, Build-Hash).
    - Kein `Prefix` mit `return false` ohne dokumentierte Begründung (kollidiert mit anderen Mods).
-4. **Einstiegspunkt:** Klasse, die `IModApi` implementiert (`InitMod(Mod)`), und dort
-   `new Harmony("…").PatchAll()`. **[verifizieren]**: Interface-Name und Signatur in V2.x.
+4. **Einstiegspunkt (belegt):** Klasse, die `IModApi` implementiert — `void IModApi::InitMod(Mod)`.
+   Sie muss `public`, nicht abstrakt und mit **öffentlichem parameterlosem Konstruktor** sein,
+   weil `Mod::InitModCode` sie per `Activator.CreateInstance` erzeugt. Dort dann
+   `new Harmony("…").PatchAll()` — gegen das **vom Spiel vorgeladene** HarmonyX 2.13.0.0 aus
+   `Mods/0_TFP_Harmony/`; die Mod liefert **kein** eigenes `0Harmony.dll` mit.
+   Siehe [`../rea/findings/F-00-modloader-events-version.md`](../rea/findings/F-00-modloader-events-version.md).
+5. **Mod-API vor Patch:** `ModEvents` bietet 22 Events, vier davon unterbrechbar
+   (`MainMenuOpening`, `PlayerLogin`, `GameMessage`, `ChatMessage`). Versions-Handshake und
+   Build-Guard laufen darüber bzw. über `VersionInformation.CompareToRunningBuild()` und
+   brauchen **keinen** Harmony-Patch.
 
 ### 2.2 Projektstruktur (Repo)
 
@@ -91,7 +103,7 @@ Regeln:
 - Jedes Feature-Dokument klassifiziert seine Patches als S, C oder S+C.
 - **XML-Configs:** Nach unserem Kenntnisstand verteilt der Server seine XML-Configs seit A20/A21 an
   die Clients, sodass reine XML-Modlets serverseitig reichen. Ausnahmen sind XUi und Assets.
-  **[verifizieren]** in V2.x per Test: Client ohne Mod verbindet sich mit dem Mod-Server.
+  **[verifizieren]** in V 3.40 per Test: Client ohne Mod verbindet sich mit dem Mod-Server.
 - **C#:** Muss auf Server und Clients liegen. Ein Versions-Handshake (Mod-Version im
   Connect prüfen) ist Teil von F-00.
 - Eigene NetPackages nur, wenn REA zeigt, dass vorhandene Sync-Wege (Buffs, CVars,

@@ -1,7 +1,7 @@
 # Hook-Hypothesen (UNGEPRÜFT)
 
 > ⚠️ Alle Typ- und Methodennamen hier sind **Hypothesen** aus allgemeinem 7DTD-Modding-Wissen.
-> Sie können in V2.x umbenannt, verschoben oder anders aufgebaut sein. **Nichts davon darf
+> Sie können in V 3.40 umbenannt, verschoben oder anders aufgebaut sein. **Nichts davon darf
 > ungeprüft in einen Harmony-Patch.** Status wird nach dem REA-Lauf gepflegt:
 > `?` ungeprüft · `◐` Typ existiert, Signatur offen · `✓` bestätigt (Finding-Link) · `✗` existiert nicht/anders
 
@@ -107,7 +107,7 @@ Soll-Datei: `tools/meta/expect/f00.tsv` (12 Zeilen, grün).
 ## F-20
 | Status | Kandidat | Frage |
 |---|---|---|
-| ? | Banditen / menschliche Gegner in V2.x (Q19) | Gibt es Klassen für bewaffnete menschliche NPCs, auf die man aufbauen kann? |
+| ? | Banditen / menschliche Gegner in V 3.40 (Q19) | Gibt es Klassen für bewaffnete menschliche NPCs, auf die man aufbauen kann? |
 | ? | Fraktionen (`FactionManager`) | Kultisten und Seuchentote als verbündete Fraktion |
 
 ## F-21
