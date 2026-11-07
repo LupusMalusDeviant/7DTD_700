@@ -72,6 +72,52 @@ function Test-Case {
     }
 }
 
+function Test-Output {
+    <#
+        Wie Test-Case, prueft aber zusaetzlich die Ausgabe. Gebraucht fuer die Gegenproben
+        aus Vertrag 04 §3a: dass ein Lauf rot ist, sagt noch nicht, dass er das RICHTIGE
+        gefunden hat. Das entscheidende Paar (Feuerwaffe faellt, Bogen bleibt) laesst sich
+        nur an der Ausgabe pruefen, nicht am Exit-Code.
+    #>
+    param(
+        [string]$Name,
+        [int]$Expected,
+        [string[]]$Arguments,
+        [string[]]$MustContain = @(),
+        [string[]]$MustNotContain = @()
+    )
+
+    $script:checked++
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = & $exe @Arguments
+    }
+    finally {
+        $ErrorActionPreference = $previous
+    }
+    $actual = $LASTEXITCODE
+    $text = ($output | Out-String)
+
+    $problems = @()
+    if ($actual -ne $Expected) { $problems += "Exit $actual erwartet $Expected" }
+    foreach ($m in $MustContain) {
+        if ($text -notmatch [regex]::Escape($m)) { $problems += "fehlt in der Ausgabe: $m" }
+    }
+    foreach ($m in $MustNotContain) {
+        if ($text -match [regex]::Escape($m)) { $problems += "darf nicht in der Ausgabe stehen: $m" }
+    }
+
+    if ($problems.Count -eq 0) {
+        Write-Output ("  [ok]   " + $Name + "  (Exit $actual)")
+    }
+    else {
+        $script:failed++
+        Write-Output ("  [ROT]  " + $Name)
+        $problems | ForEach-Object { Write-Output ("         " + $_) }
+    }
+}
+
 Write-Output "== Gegenproben: der saubere Satz muss gruen sein =="
 Test-Case 'anachronisms, sauberer Satz' 0 @(
     'anachronisms', (Join-Path $data 'sauber'),
@@ -114,6 +160,41 @@ Test-Case 'falsch geschriebene Regel trifft nicht' 0 @(
 Test-Case 'richtig geschriebene Regel trifft' 1 @(
     'anachronisms', (Join-Path $data 'rot'),
     '--denylist', (Join-Path $data 'denylist-schreibung-richtig.txt'))
+
+Write-Output ""
+Write-Output "== Gegenproben: Urteil nach Eigenschaften (Vertrag 04 §3a) =="
+$eig = Join-Path $data 'eigenschaften'
+
+# 1. Das Paar, das ein Namensmuster verwechseln MUSS: beide tragen dieselbe Group, und in
+#    Vanilla heissen beide 'gun...'. Nur die Tags trennen sie.
+Test-Output 'Feuerwaffe faellt, Bogen bleibt' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefFeuerrohr', '[schusswaffe]') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefSelbstbogen')
+
+# 2. Die Regel herausnehmen muss auffallen. Faellt der Block dann noch, hat nicht die Regel
+#    entschieden, sondern irgendetwas anderes - und der Nachweis waere keiner.
+Test-Output 'ohne die Strom-Regel faellt der Kraftstein nicht mehr' 1 `
+    @('anachronisms', $eig, '--ohne-regel', 'strom') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefKraftstein')
+
+# 3. Eine Kennung ohne Definition ist kein Gruen, sondern ein Hinweis.
+Test-Output 'unaufloesbare Kennung wird genannt' 1 @('anachronisms', $eig) `
+    -MustContain @('unaufloesbare-kennung: pruefGeisterding')
+
+# 4. Wie --no-world-roots bei recipes: der Nachweis, dass die Vererbung wirklich etwas
+#    beitraegt. Die Variante erbt ihre Klasse und darf ohne Vererbung nicht gefunden werden.
+Test-Output 'ohne Vererbung faellt die geerbte Variante durch' 1 `
+    @('anachronisms', $eig, '--no-extends') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefKraftsteinVariante')
+
+# 5. Mods werden abgeleitet: der eine faellt mit seinem Traeger, der andere bleibt mit seinem.
+Test-Output 'Mod faellt mit dem Traeger, nicht mit dem Namen' 1 @('anachronisms', $eig) `
+    -MustContain @('erreichbarer-anachronismus: pruefModRohrAufsatz', 'mod-ohne-ueberlebenden-traeger') `
+    -MustNotContain @('erreichbarer-anachronismus: pruefModBogenauflage')
+
+# Benutzungsfehler bleibt Benutzungsfehler, auch bei den neuen Optionen.
+Test-Case 'unbekannte Eigenschaftsregel' 2 @(
+    'anachronisms', $eig, '--ohne-regel', 'gibtesnicht')
 
 Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="

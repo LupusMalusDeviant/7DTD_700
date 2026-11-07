@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Pruefsatz fuer das Urteil nach Eigenschaften (Vertrag 04 §3a). Erfundene Kennungen, kein
+  Spielinhalt (Projektregel 1 und 7).
+
+  Der Satz ist so gebaut, dass KEINE Namensregel der Denylist auf ihn passt: alle Kennungen
+  beginnen mit 'pruef'. Was hier rot wird, wird allein durch eine Eigenschaft rot. Genau das
+  ist der Punkt - in Vanilla waere nicht zu unterscheiden, ob eine Eigenschaft gewirkt hat
+  oder nur zufaellig ein Namensmuster.
+
+  Das entscheidende Paar:
+    pruefFeuerrohr    Tags enthaelt 'gun'       -> MUSS fallen
+    pruefSelbstbogen  Tags enthaelt 'bow'       -> MUSS bleiben
+  Beide tragen dieselbe Group. Ein Namensmuster koennte sie nicht trennen; in Vanilla heissen
+  sie darum beide 'gunBow...' bzw. 'gunHandgun...' und genau daran ist die Denylist in WP3.1
+  gescheitert.
+-->
+<items>
+
+	<!-- Faellt: Tags enthaelt 'gun' (Regel schusswaffe). -->
+	<item name="pruefFeuerrohr">
+		<property name="Group" value="Pruef/Waffen" />
+		<property name="Tags" value="weapon,ranged,gun,pruefSchussSchlitz" />
+	</item>
+
+	<!-- Bleibt: dieselbe Group, aber 'bow' statt 'gun' (D54). -->
+	<item name="pruefSelbstbogen">
+		<property name="Group" value="Pruef/Waffen" />
+		<property name="Tags" value="weapon,ranged,bow,archery,pruefBogenSchlitz" />
+	</item>
+
+	<!-- Bleibt: traegt eine Eigenschaft, auf die keine Regel passt. -->
+	<item name="pruefBeil">
+		<property name="Group" value="Pruef/Waffen" />
+		<property name="Tags" value="weapon,melee,tool" />
+	</item>
+
+	<!-- Bleibt, zaehlt aber in 'ohne_eigenschaft': aufgeloest, ohne jede Eigenschaft. -->
+	<item name="pruefLumpen" />
+
+</items>

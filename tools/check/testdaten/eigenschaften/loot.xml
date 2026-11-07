@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Macht alles erreichbar. Erreichbarkeit ist die Voraussetzung dafuer, dass ueberhaupt
+  geurteilt wird - was nur in items.xml steht, ist kein Befund (Vertrag 03, Abschnitt 4).
+
+  pruefGeisterding ist absichtlich NIRGENDS definiert: weder Gegenstand noch Block noch Mod.
+  Es muss als 'unaufloesbare-kennung' erscheinen und nicht stillschweigend als in Ordnung
+  gelten - eine Kennung, ueber die nichts bekannt ist, ist kein Gruen.
+-->
+<lootcontainers>
+	<lootgroup name="pruefGruppeWaffen">
+		<item name="pruefFeuerrohr" />
+		<item name="pruefSelbstbogen" />
+		<item name="pruefBeil" />
+		<item name="pruefLumpen" />
+	</lootgroup>
+
+	<lootgroup name="pruefGruppeTechnik">
+		<item name="pruefKraftstein" />
+		<item name="pruefKraftsteinVariante" />
+		<item name="pruefFeuerstelle" />
+	</lootgroup>
+
+	<lootgroup name="pruefGruppeMods">
+		<item name="pruefModRohrAufsatz" />
+		<item name="pruefModBogenauflage" />
+		<item name="pruefModOhneSchlitz" />
+	</lootgroup>
+
+	<lootgroup name="pruefGruppeRaetsel">
+		<item name="pruefGeisterding" />
+	</lootgroup>
+</lootcontainers>

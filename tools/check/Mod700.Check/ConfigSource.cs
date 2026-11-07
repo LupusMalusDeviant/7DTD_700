@@ -48,8 +48,13 @@ internal sealed class ConfigSource
         return hasLocalization
             ? new ConfigSource(path, "vanilla-config", timestamp,
                 "Vanilla ohne Modlets - Vorlauf, kein Nachweis")
+            // Frueher stand hier "gilt als Nachweis". Das war zu viel behauptet: ein Dump
+            // sagt nicht, welche Modlets beim Start geladen waren, und ein Dump VOR unseren
+            // Modlets ist ein Vorlauf wie jeder andere. Das Werkzeug kann das nicht wissen,
+            // also soll es es auch nicht behaupten.
             : new ConfigSource(path, "configs-dump", timestamp,
-                "gemergte Config des Spiels - gilt als Nachweis");
+                "gemergte Config des Spiels - Nachweis nur, wenn unsere Modlets dabei "
+                + "geladen waren; sonst Vorlauf");
     }
 
     /// <summary>

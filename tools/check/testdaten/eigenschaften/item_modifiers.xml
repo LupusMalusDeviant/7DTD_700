@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Mods des Eigenschafts-Pruefsatzes. Ihr Urteil wird ABGELEITET, nicht aufgezaehlt: ein Mod
+  faellt, wenn jeder Gegenstand, auf den er passt, selbst gesperrt ist.
+
+    pruefModRohrAufsatz  passt auf pruefSchussSchlitz -> nur pruefFeuerrohr traegt das,
+                         und das faellt -> der Mod faellt mit
+    pruefModBogenauflage passt auf pruefBogenSchlitz  -> pruefSelbstbogen traegt das und
+                         bleibt -> der Mod bleibt
+    pruefModOhneSchlitz  hat kein installable_tags    -> nicht beurteilbar, Hinweis
+
+  Das ist das Muster von modGunSoundSuppressorSilencer (installable_tags="gun") gegen
+  modGunBowArrowRest (installable_tags="bow"): zwei Mods, deren Namen beide mit 'modGun'
+  anfangen und die ein Namensmuster darum verwechseln muss.
+-->
+<item_modifiers>
+
+	<item_modifier name="pruefModRohrAufsatz" installable_tags="pruefSchussSchlitz" type="attachment">
+		<property name="Group" value="Pruef/Mods" />
+	</item_modifier>
+
+	<item_modifier name="pruefModBogenauflage" installable_tags="pruefBogenSchlitz" type="attachment">
+		<property name="Group" value="Pruef/Mods" />
+	</item_modifier>
+
+	<item_modifier name="pruefModOhneSchlitz" type="attachment">
+		<property name="Group" value="Pruef/Mods" />
+	</item_modifier>
+
+</item_modifiers>

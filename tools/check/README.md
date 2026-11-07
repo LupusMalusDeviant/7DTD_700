@@ -82,7 +82,7 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **13 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-07: **19 Gegenproben, 0 fehlgeschlagen.**
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -95,6 +95,12 @@ Lauf vom 2026-11-07: **13 Gegenproben, 0 fehlgeschlagen.**
 | `recipes --no-world-roots` gegen den **sauberen** Satz | Exit 1 | rot — beweist, dass `world-roots.txt` wirklich etwas beiträgt |
 | `anachronisms` mit **falsch geschriebener** Regel (`gunpruefpistole*`) gegen `testdaten/rot` | Exit 0 | grün — der Vergleich beachtet die Schreibung |
 | `anachronisms` mit **richtig geschriebener** Regel (`gunPruefPistole*`) gegen `testdaten/rot` | Exit 1 | rot — ohne diesen Fall wäre der vorige auch grün, wenn gar nichts mehr trifft |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefFeuerrohr` rot, `pruefSelbstbogen` **nicht** | gleiche `Group`, nur `Tags` trennen — das Paar, das ein Namensmuster verwechseln muss |
+| `--ohne-regel strom` | `pruefKraftstein` **fehlt** in der Ausgabe | fiele er weiter, hätte nicht die Regel entschieden |
+| `--no-extends` | `pruefKraftsteinVariante` **fehlt** | sie erbt ihre Klasse — der Nachweis, dass die Vererbung etwas beiträgt |
+| `anachronisms` gegen `testdaten/eigenschaften` | `unaufloesbare-kennung: pruefGeisterding` | eine Kennung ohne Definition ist kein Grün |
+| `anachronisms` gegen `testdaten/eigenschaften` | `pruefModRohrAufsatz` rot, `pruefModBogenauflage` **nicht** | Mods fallen mit ihrem Träger, abgeleitet aus `installable_tags` |
+| `--ohne-regel gibtesnicht` | Exit 2 | Benutzungsfehler, kein Befund |
 | unbekannter Befehl | Exit 2 | Benutzungsfehler |
 | fehlender Pfad | Exit 2 | Benutzungsfehler |
 | Ordner ohne `items.xml` | Exit 2 | Benutzungsfehler |
@@ -108,7 +114,7 @@ Die siebte Zeile ist die wichtigste: sie prüft nicht das Werkzeug, sondern **di
 |---|---|
 | `recipes` gegen Vanilla V 3.40 `Data/Config` | 633 Rezepte, **0 Sackgassen, 0 Zyklen**, 8 Wurzeln aus `world-roots.txt` |
 | `localization` gegen Vanilla `Localization.csv` | 20 Spalten, 25.930 Zeilen, **25.930 eindeutige Schlüssel** (keine Dublette) |
-| `anachronisms` gegen Vanilla | **254 verbotene Kennungen** erreichbar (erster Stand: 138, siehe unten) |
+| `anachronisms` gegen Vanilla | **298 verbotene Kennungen** erreichbar: 61 nach Eigenschaft, 22 über Mod-Ableitung, 215 nach Name (Stände davor: 138, dann 254) |
 
 Der Sprung von 138 auf 254 ist kein neuer Inhalt im Spiel, sondern das Ergebnis von WP3.1:
 die Denylist hatte drei Defekte — zu weite Präfixe, die Bögen und Pfeile mitnahmen; die
@@ -149,7 +155,9 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `Mod700.Check/ConfigSource.cs` | Dump oder Vanilla erkennen, XML laden |
 | `Mod700.Check/Csv.cs` | CSV-Leser (Felder in Anführungszeichen, Kommas darin) |
 | `Mod700.Check/LocalizationCheck.cs` | Spalten **nach Namen**, nie nach Position |
-| `Mod700.Check/AnachronismCheck.cs` | Erreichbarkeitswege gegen die Denylist |
+| `Mod700.Check/AnachronismCheck.cs` | Erreichbarkeitswege: erst Eigenschaft, dann Name |
+| `Mod700.Check/Definitions.cs` | items/blocks/item_modifiers laden, `Extends` auflösen |
+| `Mod700.Check/PropertyRules.cs` | die fünf Eigenschaftsregeln, jede mit Begründung |
 | `Mod700.Check/RecipeCheck.cs` | Rezeptgraph, Sackgassen, Zyklen |
 | `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |
 | `world-roots.txt` | Wurzeln, die das XML nicht ausdrückt |

@@ -7,6 +7,11 @@ namespace Mod700.Check;
 ///
 /// Erreichbar heisst: ueber ein Rezept, eine Loot-Gruppe, eine Haendlergruppe, eine
 /// Quest-Belohnung oder die Startausruestung.
+///
+/// <para><b>Urteil nach Eigenschaften (Vertrag 04 §3a).</b> Zuerst entscheidet eine
+/// Eigenschaft, die Vanilla selbst fuehrt (Tags, Block-Klasse, eigene Group), dann erst der
+/// Name. Der Bericht weist beide Zahlen getrennt aus: <c>verboten_nach_name</c> ist das Mass
+/// dafuer, wie viel noch auf dem Gedaechtnis des Autors ruht, und soll fallen.</para>
 /// </summary>
 internal static class AnachronismCheck
 {
@@ -15,6 +20,8 @@ internal static class AnachronismCheck
         string denylistPath = Path.Combine(
             AppContext.BaseDirectory, "..", "..", "..", "..", "denylist.txt");
         bool asJson = false;
+        bool resolveExtends = true;
+        var disabledRules = new HashSet<string>(StringComparer.Ordinal);
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -26,6 +33,25 @@ internal static class AnachronismCheck
                 case "--json":
                     asJson = true;
                     break;
+
+                // Gegenprobe 4 aus Vertrag 04 §3a: ohne Vererbung muss die Zahl der
+                // eigenschaftslosen Kennungen sprunghaft steigen.
+                case "--no-extends":
+                    resolveExtends = false;
+                    break;
+
+                // Gegenprobe 2: eine herausgenommene Regel muss auffallen.
+                case "--ohne-regel" when i + 1 < args.Length:
+                    string id = args[++i];
+                    if (!PropertyRules.Exists(id))
+                    {
+                        throw new UsageException(
+                            $"Unbekannte Eigenschaftsregel: {id}. Bekannt sind: {PropertyRules.Ids}");
+                    }
+
+                    disabledRules.Add(id);
+                    break;
+
                 default:
                     throw new UsageException($"Unbekannte Option fuer anachronisms: {args[i]}");
             }
@@ -34,34 +60,29 @@ internal static class AnachronismCheck
         denylistPath = Path.GetFullPath(denylistPath);
         Denylist denylist = Denylist.Load(denylistPath);
         ConfigSource source = ConfigSource.Open(path);
+        Definitions definitions = Definitions.Load(source, resolveExtends);
         var report = new Report("anachronisms", source.Info);
 
         report.Count("denylist", Path.GetFileName(denylistPath));
         report.Count("verbotsregeln", denylist.DenyRules);
         report.Count("freigaberegeln", denylist.AllowRules);
-
-        if (!source.IsMerged)
+        report.Count("eigenschaftsregeln", PropertyRules.All.Count - disabledRules.Count);
+        if (disabledRules.Count > 0)
         {
-            report.Limitation(
-                "Dies ist ein Vorlauf gegen Vanilla, kein Nachweis: unsere Patches sind hier " +
-                "nicht angewandt. Ein Nachweis braucht einen ConfigsDump nach einem Spielstart " +
-                "mit den Modlets.");
-        }
-        else
-        {
-            report.Limitation(
-                "Ein ConfigsDump sagt nicht, von welcher Spielfassung er stammt und welche " +
-                "Modlets dabei geladen waren. Ein alter Dump sieht aus wie ein frischer - auf " +
-                "den Zeitstempel oben achten.");
+            report.Count("abgeschaltete_regeln", string.Join(",", disabledRules));
         }
 
-        report.Limitation(
-            "Geprueft werden Erreichbarkeitswege, die in XML stehen. Gegenstaende, die nur in " +
-            "einem Prefab liegen (platzierte Bloecke, Kisteninhalte in POIs), sieht dieses " +
-            "Werkzeug nicht - das ist die bekannte MVP-Luecke von F-01 und gehoert zu F-07.");
-        report.Limitation(
-            "Die Denylist ist eine Liste von Mustern, kein Verstaendnis. Ein Anachronismus mit " +
-            "unerwartetem Namen faellt durch, bis die Liste ihn kennt.");
+        if (!resolveExtends)
+        {
+            report.Count("extends_aufgeloest", "nein");
+        }
+
+        report.Count("definitionen_items", definitions.ItemCount);
+        report.Count("definitionen_bloecke", definitions.BlockCount);
+        report.Count("definitionen_mods", definitions.ModifierCount);
+        report.Count("loot_gruppen", definitions.LootGroupCount);
+
+        Limitations(report, source, resolveExtends, disabledRules);
 
         // --- Erreichbarkeitswege sammeln
         var reachable = new List<(string Name, string Via, string Where)>();
@@ -81,7 +102,6 @@ internal static class AnachronismCheck
             reachable.Add((name, "Haendler", $"traders.xml:{line}"));
         }
 
-        // Quest-Belohnungen: id kann eine Liste sein und auf Gruppen oder Items zeigen.
         foreach ((string value, int line) in source.Attributes("quests.xml", "reward", "id"))
         {
             foreach (string name in Split(value))
@@ -90,8 +110,6 @@ internal static class AnachronismCheck
             }
         }
 
-        // Startausruestung: <property class="ItemsOnEnterGame"> mit Werten wie
-        // "drinkJarBoiledWater=2,foodCanChili,medicalFirstAidBandage".
         foreach ((string value, int line) in StartingItems(source))
         {
             foreach (string name in Split(value))
@@ -104,51 +122,222 @@ internal static class AnachronismCheck
             }
         }
 
+        // Kennungen sind gross-/kleinschreibungsgenau (siehe Denylist.Compile): hier darf
+        // nicht ordinal-ignorierend zusammengefasst werden, sonst verschmelzen zwei
+        // verschiedene Kennungen zu einer.
+        var names = reachable
+            .Select(r => r.Name)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(n => n, StringComparer.Ordinal)
+            .ToList();
+
         report.Count("erreichbarkeitswege", reachable.Count);
-        report.Count("gepruefte_kennungen", reachable.Select(r => r.Name)
-            .Distinct(StringComparer.OrdinalIgnoreCase).Count());
+        report.Count("gepruefte_kennungen", names.Count);
 
-        // --- gegen die Denylist halten
-        var hitsByName = new SortedDictionary<string, List<(string Via, string Where, string Rule)>>(
-            StringComparer.OrdinalIgnoreCase);
-        int allowedHits = 0;
+        // --- Erster Durchgang: Gegenstaende, Bloecke, Unaufloesbares
+        var verdicts = new Dictionary<string, Verdict>(StringComparer.Ordinal);
+        int unresolved = 0, lootGroups = 0, withoutProperties = 0;
 
-        foreach ((string name, string via, string where) in reachable)
+        foreach (string name in names)
         {
-            string? rule = denylist.Match(name, out string? allowReason);
+            Definition def = definitions.Lookup(name);
+
+            if (def.Kind == DefKind.LootGroup)
+            {
+                lootGroups++;
+            }
+            else if (def.Kind == DefKind.Unresolved)
+            {
+                unresolved++;
+            }
+            else if (!def.HasProperties)
+            {
+                withoutProperties++;
+            }
+
+            string? nameRule = denylist.Match(name, out string? allowReason);
+
+            // Reihenfolge ist der Kern von Vertrag 04 §3a: die Freigabe schlaegt alles, dann
+            // entscheidet die EIGENSCHAFT, und erst wenn keine zutrifft, der Name. Umgekehrt
+            // waere 'verboten_nach_name' sinnlos - es wuerde nur sagen, was zufaellig auch
+            // ein Namensmuster trifft, nicht was ohne den Namen durchfiele.
             if (allowReason is not null)
             {
-                allowedHits++;
+                verdicts[name] = new Verdict(name, def, Blocked: false, "freigabe", null, allowReason);
                 continue;
             }
 
-            if (rule is null)
+            if (def.Kind != DefKind.Modifier &&
+                PropertyRules.Match(def, disabledRules) is PropertyRule rule)
             {
+                verdicts[name] = new Verdict(name, def, Blocked: true, "eigenschaft", rule.Id, rule.Reason);
                 continue;
             }
 
-            if (!hitsByName.TryGetValue(name, out var list))
+            if (nameRule is not null)
             {
-                list = new List<(string, string, string)>();
-                hitsByName[name] = list;
+                verdicts[name] = new Verdict(name, def, Blocked: true, "name", nameRule,
+                    "keine Eigenschaft hat entschieden, nur das Namensmuster");
+                continue;
             }
 
-            list.Add((via, where, rule));
+            verdicts[name] = new Verdict(name, def, Blocked: false, "ungeprueft", null, null);
         }
 
-        report.Count("durch_freigabe_erlaubt", allowedHits);
-        report.Count("verbotene_kennungen", hitsByName.Count);
+        // --- Zweiter Durchgang: Mods aus installable_tags ableiten
+        //
+        // Ein Mod faellt, wenn JEDER Gegenstand, auf den er passt, selbst gesperrt ist. Das
+        // trifft alle Mods ohne eine einzige eigene Regel und bleibt richtig, wenn sich eine
+        // Entscheidung ueber die Waffen aendert. Ob der Traeger selbst erreichbar ist, geht
+        // hier nicht ein - gefragt ist, ob es ihn im Spiel noch gibt.
+        int modsFallen = 0, modsUnjudged = 0;
 
-        foreach ((string name, var hits) in hitsByName)
+        foreach (string name in names)
         {
-            string ways = string.Join(", ", hits
+            Verdict verdict = verdicts[name];
+            if (verdict.Definition.Kind != DefKind.Modifier || verdict.Blocked ||
+                verdict.By == "freigabe")
+            {
+                continue;
+            }
+
+            IReadOnlySet<string> slots = verdict.Definition.InstallableTags;
+            if (slots.Count == 0)
+            {
+                modsUnjudged++;
+                report.Hint("mod-ohne-traegerangabe", name,
+                    "kein installable_tags - ueber diesen Mod kann nicht nach Eigenschaft "
+                    + "geurteilt werden; er braucht eine Namensregel oder eine Ausnahme.");
+                continue;
+            }
+
+            List<string> carriers = definitions.CarriersFor(slots).ToList();
+            if (carriers.Count == 0)
+            {
+                modsUnjudged++;
+                report.Hint("mod-ohne-traeger", name,
+                    $"kein Gegenstand traegt {string.Join("/", slots)} - nicht beurteilbar, "
+                    + "also auch nicht gesperrt.");
+                continue;
+            }
+
+            List<string> surviving = carriers.Where(c => !IsBlocked(c)).ToList();
+            if (surviving.Count == 0)
+            {
+                modsFallen++;
+                verdicts[name] = verdict with
+                {
+                    Blocked = true,
+                    By = "mod-ableitung",
+                    Rule = "mod-ohne-ueberlebenden-traeger",
+                    Reason = $"passt nur auf {string.Join("/", slots)}; alle {carriers.Count} "
+                             + "Traeger sind gesperrt, also faellt der Mod mit ihnen."
+                };
+            }
+        }
+
+        bool IsBlocked(string carrier)
+        {
+            if (verdicts.TryGetValue(carrier, out Verdict? known))
+            {
+                return known.Blocked;
+            }
+
+            // Traeger, der selbst nicht erreichbar ist: nach denselben Regeln beurteilen.
+            Definition def = definitions.Lookup(carrier);
+            if (denylist.Match(carrier, out string? allow) is not null && allow is null)
+            {
+                return true;
+            }
+
+            return allow is null && PropertyRules.Match(def, disabledRules) is not null;
+        }
+
+        // --- Zaehlen und berichten
+        var blocked = verdicts.Values.Where(v => v.Blocked).ToList();
+
+        report.Count("durch_freigabe_erlaubt", verdicts.Values.Count(v => v.By == "freigabe"));
+        report.Count("verboten_nach_eigenschaft", blocked.Count(v => v.By == "eigenschaft"));
+        report.Count("verboten_nach_name", blocked.Count(v => v.By == "name"));
+        report.Count("verboten_durch_mod_ableitung", modsFallen);
+        report.Count("mods_nicht_beurteilbar", modsUnjudged);
+        report.Count("unaufloesbar", unresolved);
+        report.Count("loot_gruppen_erreichbar", lootGroups);
+        report.Count("ohne_eigenschaft", withoutProperties);
+        report.Count("extends_tiefe_erreicht", definitions.DepthExceededCount);
+        report.Count("ungeprueft", verdicts.Values.Count(v => v.By == "ungeprueft"));
+        report.Count("verbotene_kennungen", blocked.Count);
+
+        var waysByName = reachable
+            .GroupBy(r => r.Name, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.Ordinal);
+
+        foreach (Verdict v in blocked.OrderBy(v => v.Name, StringComparer.Ordinal))
+        {
+            string ways = string.Join(", ", waysByName[v.Name]
                 .GroupBy(h => h.Via)
                 .Select(g => $"{g.Key} ({g.Count()}x, zuerst {g.First().Where})"));
-            report.Error("erreichbarer-anachronismus", name,
-                $"erreichbar ueber {ways}; Regel {hits[0].Rule}");
+
+            report.Error("erreichbarer-anachronismus", v.Name,
+                $"erreichbar ueber {ways}; verboten nach {v.By} [{v.Rule}]: {v.Reason}");
+        }
+
+        // Unaufloesbares ist kein Gruen. Es ist eine Kennung, ueber die nichts bekannt ist.
+        foreach (Verdict v in verdicts.Values
+            .Where(v => v.Definition.Kind == DefKind.Unresolved && !v.Blocked)
+            .OrderBy(v => v.Name, StringComparer.Ordinal))
+        {
+            report.Hint("unaufloesbare-kennung", v.Name,
+                "erreichbar, aber in items.xml, blocks.xml und item_modifiers.xml nicht "
+                + "definiert - ueber diese Kennung kann nicht nach Eigenschaft geurteilt werden.");
         }
 
         return report.Write(asJson);
+    }
+
+    private static void Limitations(
+        Report report, ConfigSource source, bool resolveExtends, IReadOnlySet<string> disabled)
+    {
+        if (!source.IsMerged)
+        {
+            report.Limitation(
+                "Dies ist ein Vorlauf gegen Vanilla, kein Nachweis: unsere Patches sind hier " +
+                "nicht angewandt. Ein Nachweis braucht einen ConfigsDump nach einem Spielstart " +
+                "mit den Modlets.");
+        }
+        else
+        {
+            report.Limitation(
+                "Ein ConfigsDump sagt nicht, von welcher Spielfassung er stammt und welche " +
+                "Modlets dabei geladen waren. Ein alter Dump sieht aus wie ein frischer - auf " +
+                "den Zeitstempel oben achten. Ein Dump ohne unsere Modlets ist trotz des " +
+                "Vermerks oben ein Vorlauf.");
+        }
+
+        report.Limitation(
+            "Geprueft werden Erreichbarkeitswege, die in XML stehen. Gegenstaende, die nur in " +
+            "einem Prefab liegen (platzierte Bloecke, Kisteninhalte in POIs), sieht dieses " +
+            "Werkzeug nicht - das ist die bekannte MVP-Luecke von F-01 und gehoert zu F-07.");
+        report.Limitation(
+            "Eigenschaften sind kein Verstaendnis, nur ein besseres Signal als Namen. Wo " +
+            "Vanilla keine fuehrt - Konserve gegen Rohfleisch, Verbandskasten gegen " +
+            "Wundauflage - entscheidet weiter der Name, und 'verboten_nach_name' sagt, wie " +
+            "viel daran haengt.");
+
+        if (!resolveExtends)
+        {
+            report.Limitation(
+                "ACHTUNG: --no-extends. Die Vererbung ist abgeschaltet, also sind die meisten " +
+                "Kennungen kuenstlich eigenschaftslos. Dieser Lauf ist eine Gegenprobe, kein " +
+                "Nachweis.");
+        }
+
+        if (disabled.Count > 0)
+        {
+            report.Limitation(
+                $"ACHTUNG: abgeschaltete Eigenschaftsregeln ({string.Join(", ", disabled)}). " +
+                "Dieser Lauf ist eine Gegenprobe, kein Nachweis.");
+        }
     }
 
     private static IEnumerable<(string Value, int Line)> StartingItems(ConfigSource source)
@@ -179,4 +368,12 @@ internal static class AnachronismCheck
 
     private static IEnumerable<string> Split(string value) =>
         value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    private sealed record Verdict(
+        string Name,
+        Definition Definition,
+        bool Blocked,
+        string By,
+        string? Rule,
+        string? Reason);
 }

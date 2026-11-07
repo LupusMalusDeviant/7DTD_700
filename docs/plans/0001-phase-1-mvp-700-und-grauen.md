@@ -240,9 +240,27 @@ Waffen- und Rüstungs-Mods werden über `installable_tags` abgeleitet statt aufg
 
 **Neuer Schritt, vor WP3.2:**
 
-- **WP3.1b** `[Claude-prüfbar]` `anachronisms` auf das Urteil nach Eigenschaften umbauen,
-  mit den fünf Gegenproben aus Vertrag 04 §3a. Schätzung: M (2 Tage). Danach erst die 844
-  sichten und die XPath-Zeilen schreiben.
+- **WP3.1b** `[Claude-prüfbar]` ~~`anachronisms` auf das Urteil nach Eigenschaften umbauen,
+  mit den fünf Gegenproben aus Vertrag 04 §3a. Schätzung: M (2 Tage).~~ **Erledigt
+  2026-11-07.** Danach erst die 800 sichten und die XPath-Zeilen schreiben.
+
+#### Stand 2026-11-07: WP3.1b erledigt
+
+| | vorher | nachher |
+|---|---|---|
+| verbotene Kennungen | 254 | **298** |
+| davon nach Eigenschaft | — | 61 |
+| davon über Mod-Ableitung | — | 22 |
+| davon nach Name | 254 | 215 |
+| ungeprüft | 844 | **800** |
+| Gegenproben | 13 | **19** |
+
+Drei Zeilen der Regeltabelle in Vertrag 04 §3a hielten der Messung nicht stand und sind dort
+berichtigt (die Tags `ammo44Magnum` und `ammoShotgun` gibt es nicht; `Group = Special Items`
+trifft 28 statt 14 und keinen `TEST_ITEM`; die Admin-Regel trifft 13 statt 4). Eine vierte
+Zahl war ein Fehler in meinem Messskript — 533 statt 28 — und wäre beinahe in den Vertrag
+gewandert. Seitdem gilt: Zahlen in Dokumenten kommen aus dem Werkzeug, nicht aus einem
+Hilfsskript ohne Gegenproben.
 
 ---
 

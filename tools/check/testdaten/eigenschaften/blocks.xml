@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Bloecke des Eigenschafts-Pruefsatzes.
+
+  pruefKraftstein traegt die Klasse selbst, pruefKraftsteinVariante erbt sie ueber Extends.
+  Das zweite ist der Nachweis, dass die Vererbung wirklich etwas beitraegt: mit
+  abgeschalteter Vererbung faellt die Variante durch, und genau das prueft eine der
+  Gegenproben. (Die Option kann hier nicht genannt werden: zwei Striche hintereinander sind
+  in einem XML-Kommentar verboten, und die Datei waere ungueltig.)
+
+  Keine Namensregel der Denylist passt auf 'pruef*'. Wird einer dieser Bloecke rot, hat die
+  Klasse entschieden und nichts anderes.
+-->
+<blocks>
+
+	<!-- Faellt: Class ist in der Stromliste (Regel strom). -->
+	<block name="pruefKraftstein">
+		<property name="Class" value="Generator" />
+		<property name="Group" value="Pruef/Technik" />
+	</block>
+
+	<!-- Faellt NUR mit aufgeloestem Extends: erbt Class von pruefKraftstein. -->
+	<block name="pruefKraftsteinVariante">
+		<property name="Extends" value="pruefKraftstein" />
+		<property name="Group" value="Pruef/Technik" />
+	</block>
+
+	<!-- Bleibt: eine Klasse, die nicht in der Stromliste steht. -->
+	<block name="pruefFeuerstelle">
+		<property name="Class" value="Campfire" />
+		<property name="Group" value="Pruef/Technik" />
+	</block>
+
+</blocks>

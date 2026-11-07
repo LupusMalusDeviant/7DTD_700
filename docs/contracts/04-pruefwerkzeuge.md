@@ -123,10 +123,28 @@ zählt ein späteres Grün. Das Ergebnis gehört in `tools/check/README.md`.
 
 ## 3a. Urteil nach Eigenschaften (Nachtrag WP3.1)
 
-- **Status:** Entwurf, wartet auf Abnahme
+- **Status:** abgenommen 2026-11-07, **gebaut** 2026-11-07 (WP3.1b). Die Regeltabelle unten
+  wurde beim Bau an drei Stellen berichtigt, siehe den Kasten dort.
 - **Anlass:** Die Namensmuster haben in WP3.1 dreimal auf drei Wegen versagt, und 844 der
   1129 erreichbaren Kennungen hat die Liste nie angesehen. Ein viertes Namensmuster-Versagen
   ist wahrscheinlicher als keines.
+
+**Stand nach dem Bau, gegen Vanilla gemessen:**
+
+| Zähler | Wert |
+|---|---|
+| geprüfte Kennungen | 1129 |
+| verboten nach **Eigenschaft** | **61** |
+| verboten durch **Mod-Ableitung** | **22** |
+| verboten nach **Name** | 215 |
+| verbotene Kennungen gesamt | **298** (vorher 254) |
+| ungeprüft | 800 (vorher 844) |
+| unauflösbar | 11 |
+| ohne Eigenschaft | 126 |
+| `Extends`-Tiefe erreicht | 0 |
+
+`verboten_nach_name` = 215 ist die ehrliche Restzahl: so viel hängt noch an Namensmustern.
+Die 83 neuen Treffer sind das, was die Eigenschaften zusätzlich fanden.
 
 ### Die Grundregel
 
@@ -171,16 +189,38 @@ Kette, die anstößt, ist ein Befund, keine stille Null.
 
 ### Die Eigenschaftsregeln
 
-| Regel | Woran | Trifft |
+| Regel | Woran | Trifft (gemessen) |
 |---|---|---|
-| Schusswaffe | Item-`Tags` enthält `gun` | Pistolen bis M60; Bögen tragen `bow`/`archery`/`crossbow` und bleiben |
-| Patronenmunition | Item-`Tags` enthält `ammo9mm`, `ammo762mm`, `ammo44Magnum`, `ammoShotgun` | Patronen; Pfeile tragen `perkArchery` und bleiben |
-| Entwickler-Gegenstand | Item-`Tags` enthält `admin` **oder** `Group` ist `Special Items` | die vier Admin-Items und die zehn `TEST_ITEM_*` |
-| Strom und Elektronik | Block-`Class` ∈ `Powered`, `PoweredLight`, `PoweredDoor`, `Generator`, `SolarPanel`, `Switch`, `TimerRelay`, `MotionSensor`, `PressurePlate`, `TripWire`, `Spotlight`, `Speaker`, `SpeakerTrader`, `VendingMachine`, `Mine` | Schalter, Melder, Scheinwerfer, Generator, Relais, Platten |
-| Elektrikerhandwerk | Block- oder Item-`Tags` enthält `electricianSkill` | Zweitsignal zur Zeile darüber |
+| `schusswaffe` | Item-`Tags` enthält `gun` | **19** Feuerwaffen, **kein** Bogen. Bögen tragen `bow`/`archery`/`crossbow` |
+| `patronenmunition` | Item-`Tags` enthält `ammo9mm` oder `ammo762mm` | **6** von 28 Munitionssorten |
+| `entwicklergegenstand` | Item-`Tags` enthält `admin` **oder** eigene `Group` ist `Special Items` | **13** + **28** |
+| `strom` | Block-`Class` ∈ `Powered`, `PoweredLight`, `PoweredDoor`, `Generator`, `SolarPanel`, `Switch`, `TimerRelay`, `MotionSensor`, `PressurePlate`, `TripWire`, `Spotlight`, `Speaker`, `SpeakerTrader`, `VendingMachine`, `Mine` | **108** Blöcke |
+| `elektrikerhandwerk` | Block- oder Item-`Tags` enthält `electricianSkill` | **97**, Zweitsignal zur Zeile darüber |
 
 Jede Regel trägt im Werkzeug eine **Begründung in einem Satz**, und der Befund nennt sie. Ein
 Befund ohne nachlesbare Regel ist kein Befund.
+
+#### Berichtigt beim Bau (2026-11-07): drei Zeilen hielten der Messung nicht stand
+
+Die Tabelle oben steht so erst **nach** dem Gegenlauf gegen Vanilla. Der erste Entwurf dieses
+Abschnitts war an drei Stellen falsch, und zwar weil ich Einzelfälle angesehen und daraus
+Mengen geschlossen hatte:
+
+| Entwurf sagte | Messung sagt |
+|---|---|
+| Munitionsregel deckt auch `ammo44Magnum` und `ammoShotgun` | **Diese Tags gibt es nicht.** Nur `ammo9mm` und `ammo762mm`; Schrot und Magnum bleiben beim Namen |
+| `Group = Special Items` trifft „die vier Admin-Items und die zehn `TEST_ITEM_*`" | Trifft **28** Entwickler- und Vorlagen-Gegenstände und **keinen einzigen** `TEST_ITEM`: die tragen `Group = Decor/Miscellaneous` und `Tags = ammo` |
+| Admin-Regel trifft 4 | trifft **13** |
+
+**Und eine vierte Zahl war ein Fehler in meinem eigenen Messskript.** Ein erster Lauf meldete
+533 Treffer für `Group = Special Items`; ein zweites Skript sagte 25, und `grep` auf die rohe
+Datei sagt **28**. Das erste Skript war fehlerhaft — die Zahl wäre beinahe in diesen Vertrag
+gewandert. Es war in dieser Arbeit die **dritte** Stelle, an der ein selbstgebauter Helfer
+lockerer gelesen hat, als er aussah (nach `IgnoreCase` und den XML-Kommentaren).
+
+**Daraus die Regel für diesen Vertrag:** Zahlen in Dokumenten kommen aus dem **Werkzeug** oder
+aus einem Befehl, den man in einer Zeile nachlesen kann — nicht aus einem Hilfsskript, das
+niemand gegengeprüft hat. Das Werkzeug hat Gegenproben, das Hilfsskript hat keine.
 
 ### Mods werden abgeleitet, nicht aufgezählt
 
@@ -208,17 +248,26 @@ Gegenstände beurteilt sind.
 | `ohne_eigenschaft` | aufgelöst, aber keine Eigenschaft vorhanden |
 | `extends_tiefe_erreicht` | abgebrochene Vererbungsketten |
 
-### Gegenproben (Projektregel 5), verbindlich
+### Gegenproben (Projektregel 5), verbindlich — alle fünf gebaut und grün
 
-1. **Das Paar, das ein Name verwechselt:** `gunHandgunT1Pistol` muss fallen,
-   `gunBowT1WoodenBow` bleiben — im selben Lauf, aus derselben `Group`.
-2. **Eine entfernte Eigenschaftsregel macht rot:** wird die Strom-Regel herausgenommen, muss
-   der Prüfsatz einen bisher gefundenen Block durchlassen und damit auffallen.
-3. **Eine Kennung ohne Definition** muss als `unaufloesbar` erscheinen und nicht als grün.
-4. **`Extends` abgeschaltet** muss die `ohne_eigenschaft`-Zahl sprunghaft steigen lassen — der
-   Nachweis, dass die Auflösung wirklich etwas beiträgt (dasselbe Muster wie
-   `--no-world-roots` bei `recipes`).
-5. **Ein Mod ohne überlebenden Träger** muss fallen, ein Mod mit einem überlebenden bleiben.
+Der Prüfsatz liegt unter `tools/check/testdaten/eigenschaften/`. Alle Kennungen darin beginnen
+mit `pruef`, und **keine Namensregel der Denylist passt auf sie**: was dort rot wird, wird
+allein durch eine Eigenschaft rot. In Vanilla wäre das nicht zu trennen — dort könnte immer
+auch zufällig ein Namensmuster gegriffen haben.
+
+| | Gegenprobe | Erwartung |
+|---|---|---|
+| 1 | `anachronisms eigenschaften` | `pruefFeuerrohr` fällt (`[schusswaffe]`), `pruefSelbstbogen` **nicht** — gleiche `Group`, nur die Tags trennen |
+| 2 | `--ohne-regel strom` | `pruefKraftstein` erscheint **nicht** mehr — fiele er weiter, hätte nicht die Regel entschieden |
+| 3 | `anachronisms eigenschaften` | `unaufloesbare-kennung: pruefGeisterding` steht in der Ausgabe |
+| 4 | `--no-extends` | `pruefKraftsteinVariante` erscheint **nicht** mehr — sie erbt ihre Klasse |
+| 5 | `anachronisms eigenschaften` | `pruefModRohrAufsatz` fällt über `mod-ohne-ueberlebenden-traeger`, `pruefModBogenauflage` bleibt |
+
+Dazu: eine unbekannte Regel-Kennung bei `--ohne-regel` ist Exit 2, kein Befund.
+
+Die Gegenproben 1, 3 und 5 prüfen die **Ausgabe**, nicht nur den Exit-Code. Dass ein Lauf rot
+ist, sagt noch nicht, dass er das Richtige gefunden hat — `gegenproben.ps1` hat dafür ein
+zweites Hilfsmittel (`Test-Output`) bekommen.
 
 ### Was dieser Nachtrag nicht behauptet
 
