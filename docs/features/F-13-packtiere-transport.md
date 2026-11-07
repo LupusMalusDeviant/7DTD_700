@@ -9,7 +9,7 @@ Ersatz für Fahrzeuge: Packpferd bzw. Esel (Lager, folgt dem Spieler), Handkarre
 Optional reitbares Pferd.
 
 ## Risiko
-Hoch. Braucht eigene Assets (Q3) und tiefe Eingriffe in Entity, KI und Netzwerk. Erst
+Hoch. Braucht neue Assets (D3, F-16) und tiefe Eingriffe in Entity, KI und Netzwerk. Erst
 angehen, wenn MVP und Phase 2 stehen und die REA-Analyse des Vanilla-Fahrzeugsystems einen
 gangbaren Weg zeigt (z. B. ein Pferd als „Fahrzeug“-Entity mit Tiermodell).
 

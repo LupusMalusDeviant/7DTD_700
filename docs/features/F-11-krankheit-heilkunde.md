@@ -16,7 +16,10 @@ Krankheit ist im Jahr 700 der eigentliche Feind. Die Vanilla-Infektion wird zur
 
 ## Umsetzung
 Weitgehend XML (`buffs.xml`, `items.xml`, `blocks.xml`). C# nur, falls Ansteckung
-zwischen Spielern gewünscht ist (Q: ja/nein?).
+zwischen Spielern gewünscht ist (Q10).
+
+Aberglaube (D2, F-15): Volksmittel wie Amulette und Segenssprüche können den Verlauf des
+Seuchenbrands **leicht** verlangsamen, aber nie heilen. Heilung bleibt Heilkunde.
 
 ## Akzeptanzkriterien
 - [ ] Seuchenbrand ist heilbar, aber nur mit T2-Wissen (Abschrift Heilkunde)

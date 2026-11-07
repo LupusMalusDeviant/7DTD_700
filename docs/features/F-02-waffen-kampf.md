@@ -16,12 +16,13 @@ Fernkampf ist knapp, handgemacht und munitionshungrig.
 | Handbeil / Bartaxt | T0–T2, Werkzeug + Waffe | Axe |
 | Sax (Kurzschwert) | T1–T2, schnell | Machete/Knife |
 | Speer / Ango | T1–T3, Reichweite | Spear |
-| Spatha | T3–T4, Allrounder | Machete (Modell offen, Q3) |
+| Spatha | T3–T4, Allrounder | Machete (MVP); neues Modell in Phase 2 (D3) |
 | Breitaxt | T3–T4, schwer, Rüstungsbrecher | Fireaxe |
 
-**Fernkampf:** Selbstbogen (T1), Langbogen (T3), Schleuder (T0), Wurfspeer (T1), Armbrust
-(T4, selten; historisch grenzwertig, Säule P1 → *Q: rein?*). Munition: Pfeile (Feuerstein,
-Knochen, Eisen), Bolzen, Schleudersteine.
+**Fernkampf:** Selbstbogen (T1), Langbogen (T3), Schleuder (T0), Wurfspeer (T1).
+**Armbrust** (Entscheidung D8): T4, selten. Nur über eine Meister-Abschrift oder seltenen Loot
+erhältlich, teure Bolzen, langsames Nachladen. Munition: Pfeile (Feuerstein, Knochen,
+Eisen), Bolzen, Schleudersteine.
 
 **Schild (C#):** Rundschild als Offhand mit aktivem Blocken (Schaden und Stagger
 reduzieren, Ausdauerkosten). Vanilla kennt kein Blocken, deshalb ist das der zentrale
@@ -42,8 +43,9 @@ beim Client. Das lässt sich per Buff und Item-Aktion nach unserem Kenntnisstand
 abbilden. **[verifizieren]** per REA: Gibt es eine Hook-Stelle im Schadenspfad, an der ein
 Buff- oder CVar-Check reicht? Dann ließe sich der C#-Anteil minimieren (Säule P5).
 ### Assets
-Ohne eigene Assets (Q3) laufen Spatha und Schild auf Vanilla-Modellen. Das ist ein bekannter
-Bruch mit Säule P1 im MVP.
+MVP: Spatha und Schild laufen auf Vanilla-Modellen (bekannter, temporärer Bruch mit P1).
+Phase 2 (D3, F-16): **neue Modelle** für Spatha, Sax, Rundschild, Langbogen und Armbrust;
+**Retexturen** für Keule, Beile und Speer.
 
 ## Schnittstellen (REA)
 → [hook-hypothesen.md#f-02](../rea/hook-hypothesen.md#f-02)

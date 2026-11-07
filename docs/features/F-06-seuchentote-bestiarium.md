@@ -16,8 +16,13 @@ dazu Wildtiere des frühmittelalterlichen Waldes.
 - **Entfernen:** moderne Sondergegner (z. B. Polizist, Soldat, Krankenschwester) → durch umbenannte Varianten ersetzen
 
 ## Umsetzung
-- MVP/P2 ohne Assets: Namen, Werte und Sounds per XML; die **Optik bleibt modern** (Q3). Das ist der größte Kompromiss gegenüber Säule P1.
-- Mit Assets (falls Q3 = ja): eigene Kleidungs-Texturen und -Meshes auf Vanilla-Rigs.
+- MVP: Namen, Werte und Sounds per XML; die Optik ist noch modern (temporärer Kompromiss).
+- Phase 2 (D3, F-16): **Retexturen** der Vanilla-Zombies sind der Hauptweg (Kittel, Kutte,
+  Wollmantel statt Jeans und Uniform). **Neue Meshes** auf Vanilla-Rigs nur für Leitfiguren
+  (z. B. Seuchenmönch, gefallener Krieger mit Kettenhemd).
+- Aberglaube (F-15): Bestimmte Seuchentote reagieren auf Reliquien bzw. Weihwasser
+  (kleiner Schadensbonus) — als Buff-Bedingung, nicht als Magie.
+- Kulturzonen (Q12): Gegner-Varianten je Biom (Klosterland, Burgwall-Land, Küste) möglich.
 
 ## Akzeptanzkriterien
 - [ ] Keine Gegnerbezeichnung mit modernem Bezug im Spiel

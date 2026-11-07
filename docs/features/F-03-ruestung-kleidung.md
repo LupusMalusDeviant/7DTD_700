@@ -23,7 +23,9 @@ Rüstung ist teuer, schwer und spürbar. Kleidung schützt vor Kälte und Nässe
 - Plattenrüstung (anachronistisch)
 
 ## Umsetzung
-Nur XML (Items, Rezepte, Localization). Modelle sind im MVP Vanilla (Q3).
+MVP: nur XML (Items, Rezepte, Localization) auf Vanilla-Modellen.
+Phase 2 (D3, F-16): **Retexturen** für T0–T2 (Stoff, Leder, Gambeson); **neue Modelle** für
+Kettenhemd und Spangenhelm (T3–T4).
 
 ## Akzeptanzkriterien
 - [ ] Kettenhemd erst nach Rennofen und Esse (F-04) herstellbar

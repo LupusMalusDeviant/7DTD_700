@@ -23,6 +23,8 @@ Legende:
 | [F-12](F-12-lokalisierung-ui.md) | Lokalisierung & UI-Theming | MVP | X | C | nein | – |
 | [F-13](F-13-packtiere-transport.md) | Packtiere & Transport | Stretch | H+A | S+C | ja | F-06 |
 | [F-14](F-14-siedlung-gefolge.md) | Siedlung & Gefolge | Stretch | H (+A) | S+C | ja | F-10 |
+| [F-15](F-15-aberglaube-reliquien.md) | Aberglaube & Reliquien | P2 | X (+A) | S | nein | F-04, F-11 |
+| [F-16](F-16-asset-pipeline.md) | Asset-Pipeline | P2 | A | C | nein | F-00 |
 
 ## Umsetzungsreihenfolge (Vorschlag)
 
@@ -31,6 +33,7 @@ Legende:
 3. **F-04 → F-03 → F-02** (Progression trägt Ausrüstung)
 4. **F-08** (erster echter Harmony-Patch, durch REA abgesichert)
 5. → **MVP-Playtest** → Phase 2
+6. Phase 2: **F-16** zuerst (Pipeline steht, bevor Assets entstehen), danach F-06/F-07 parallel zu F-15, F-11, F-09, F-10
 
 ## Template für neue Features
 

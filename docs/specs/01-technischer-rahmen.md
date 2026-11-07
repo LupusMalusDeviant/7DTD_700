@@ -32,8 +32,25 @@ Mods/7DTD_700/
 │   ├── Localization.txt
 │   └── XUi/ …                  # UI-Layout (Windows/Controls)
 ├── 7DTD_700.dll                # C#: IModApi-Einstieg + Harmony-Patches
-└── (Phase 2+: Resources/*.unity3d, Prefabs/)
+├── Resources/*.unity3d         # Phase 2: AssetBundles (neue Modelle, Retexturen, Sounds)
+├── UIAtlases/ItemIconAtlas/    # Phase 2: Item-Icons (PNG) [verifizieren: Pfad in V2.x]
+└── Prefabs/                    # Phase 2: eigene POIs
 ```
+
+### 2.3 Asset-Pipeline (ab Phase 2, Entscheidung D3)
+
+| Punkt | Festlegung |
+|---|---|
+| Arten | **Retexturen** vorhandener Vanilla-Modelle und **neue Modelle** (Waffen, Schild, Werkstätten, Rüstungsteile) |
+| Werkzeug | Unity-Editor in **exakt der Unity-Version des Spiels** [verifizieren: Version aus `Player.log` bzw. REA-Baseline]; Bundles per Editor-Skript bauen |
+| Referenzierung | In XML über `#@modfolder:Resources/<bundle>.unity3d?<asset>` [verifizieren: Syntax in V2.x] |
+| Shader | Nur Shader, die im Spiel vorhanden sind bzw. mit dem Bundle kompatibel sind; Test im Dedicated-Client |
+| Quellen & Lizenz | Jedes Asset steht in `assets/ASSETS.md` mit Quelle, Autor, Lizenz und Änderungen. **Keine** Assets aus anderen Spielen oder Mods ohne ausdrückliche Lizenz (Q9) |
+| Repo | Quell-Assets (`.blend`, `.psd`, Texturen) über **Git LFS** in `assets/`; gebaute Bundles nur im Release-Paket |
+| Budget | Texturen max. 2048², Standard 1024²; LODs für alles, was in Mengen spawnt (Gegner, Blöcke) |
+| Netz | Assets müssen auf **Clients** liegen. Ein Server mit Asset-Mod erfordert die Mod beim Client (wie die C#-DLL). |
+
+Details und Arbeitsablauf: [F-16 Asset-Pipeline](../features/F-16-asset-pipeline.md).
 
 ### 2.1 Schichtenregel
 
@@ -89,6 +106,23 @@ Regeln:
   mit Zieltyp, Methode, Signatur, Build und Klassifikation S/C/S+C.
 - XPath immer über stabile Attribute (`@name`) adressieren, nie über Positionen.
 
+### 4.1 Kompatibilität mit UI-Mods (Entscheidung D5)
+
+Andere Overhauls sind kein Ziel; **verbreitete UI-Mods sollen mitlaufen.** Daraus folgt:
+
+1. **XUi nur additiv und zielgenau:** keine `remove`- oder `set`-Operationen auf ganze
+   Fenster bzw. Window-Groups. Änderungen nur an einzelnen Attributen oder Kindelementen, die
+   wir wirklich brauchen.
+2. **Eigene Fenster und Controller** bekommen das Präfix `700_` und kollidieren dadurch nicht mit Namen anderer Mods.
+3. **Theming über Farben und Sprites**, nicht über Layout-Umbauten. Layout-Änderungen nur,
+   wo ein Feature sie zwingend braucht; dann im Feature-Dokument begründen.
+4. **Keine Harmony-Patches auf `XUiC_*`-Controller**, solange XML reicht. Falls doch nötig,
+   dann nur `Postfix`, nie `Prefix` mit `return false`.
+5. **Ladereihenfolge:** Die Mod wird so gebaut, dass UI-Mods *danach* laden können
+   (Ordnername bzw. `ModInfo`-Abhängigkeiten [verifizieren]).
+6. **Testmatrix:** Mod allein + Mod mit jeder Referenz-UI-Mod (Q8). Kriterium: keine
+   XML-Fehler im Log, alle 700-Fenster erreichbar.
+
 ## 5. Qualität & Tests
 
 | Ebene | Prüfung |
@@ -108,3 +142,4 @@ Regeln:
 - Die EULA bzw. Modding-Richtlinie von The Fun Pimps erlaubt nach unserem Kenntnisstand
   Modding. **[verifizieren]** vor öffentlichem Release.
 - Mod-Lizenz: offen (Vorschlag: MIT für Code, CC BY-NC-SA für Texte und Konzepte).
+- Fremd-Assets nur mit dokumentierter Lizenz (`assets/ASSETS.md`), siehe 2.3.

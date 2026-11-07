@@ -6,8 +6,10 @@
 | **Stand** | 2026-11-07 |
 | **Basisspiel** | 7 Days to Die V2.x (Stable) |
 | **Mod-Typ** | Total-Conversion-light: Setting-Wechsel + Overhaul + neue Inhalte |
-| **Tiefe** | XML-Modlets + C#/Harmony (keine eigenen Assets in Phase 1) |
+| **Tiefe** | XML-Modlets + C#/Harmony; ab Phase 2 zusätzlich eigene Assets + Retexturen |
 | **Spielmodi** | Singleplayer, Dedicated Server |
+| **Sprachen** | Deutsch + Englisch (Pflicht) |
+| **Name** | offen, Arbeitstitel `7DTD_700` |
 
 ---
 
@@ -50,12 +52,22 @@ P5 ist die wichtigste **technische** Säule. Jedes Feature muss begründen, waru
 
 - **Zeit:** um 700 n. Chr. Die letzten Wellen der *Justinianischen Pest* (541–~750) sind
   historisch belegt und liefern den Aufhänger: Diese Seuche hat die Toten wieder aufstehen lassen.
-- **Ort:** Ein fiktiver Landstrich in Mitteleuropa, an der Grenze zwischen Frankenreich und
-  sächsischem bzw. slawischem Gebiet. Dichter Wald, Moore, Flusstäler, Mittelgebirge.
-  *→ Offene Frage Q1: konkrete Region festlegen?*
+- **Ort:** Ein **fiktives Mischland** (Entscheidung D1). Kein realer Ort und keine realen
+  Herrscher. Das Land vereint, was im Europa um 700 nebeneinander existierte:
+  fränkisch-romanische Klöster und Römerruinen, germanische Langhäuser und Höfe, slawische
+  Burgwälle, keltisch geprägte Randgebiete im Westen, nordische Einflüsse an der Küste.
+  Dichter Wald, Moore, Flusstäler, Mittelgebirge, Heide.
+  - **Leitplanke Mischland:** Jedes Element muss *für sich* um 700 in Europa plausibel sein
+    (Säule P1). Gemischt wird die Herkunft, nicht die Epoche.
+  - **Namen:** frei erfunden, aber im Lautbild frühmittelalterlich (z. B. Orte auf
+    -heim/-feld/-wik/-grad/-dun). Regeln stehen im Glossar (F-12).
+  - Kulturelle Zonen lassen sich auf Biome abbilden (siehe F-07).
 - **Ursache der Untoten:** bewusst offen gelassen. Für die einen ist es Gottes Strafe, für
-  andere ein Fluch der alten Götter oder einfach eine Seuche. Die Mod bleibt **ohne
-  explizite Magie** (Abgrenzung zu Dark Fantasy). *→ Q2*
+  andere ein Fluch der alten Götter oder einfach eine Seuche.
+- **Aberglaube mit Wirkung** (Entscheidung D2): Amulette, Reliquien, Weihwasser, Schutzzeichen
+  und Rituale haben **kleine, messbare Spieleffekte** (Buffs). Es gibt **keine Zauber**,
+  keine sichtbaren Magie-Effekte und keine Fantasy-Kreaturen. Der Spieler soll nie sicher
+  sein, ob die Wirkung „echt“ ist oder nur Glaube (siehe F-15).
 
 ### 2.2 Ton
 
@@ -75,7 +87,8 @@ entfernt.
 | Trader | Wanderhändler, Klostermarkt, Fürstenhof | F-10 |
 | Dukes (Währung) | Silber (Sceattas / Denare), Hacksilber | F-05 |
 | Workbench / Forge / Chem Station / Cement Mixer | Zimmermannsbank, Rennofen + Esse, Kräuterküche, Kalkofen | F-04 |
-| Schusswaffen | Bögen, Schleuder, Wurfspeere, Armbrust (late, selten) | F-02 |
+| Schusswaffen | Bögen, Schleuder, Wurfspeere, Armbrust (T4, selten, D8) | F-02 |
+| Buffs/Boosts aus Pillen und Magazinen | Amulette, Reliquien, Schutzzeichen | F-15 |
 | Elektrizität, Fallen mit Strom | Mechanische Fallen: Spieße, Fallgruben, Schwingbalken | F-08 |
 | Fahrzeuge | entfallen; Stretch: Packpferd/Karren | F-13 |
 | Bücher/Magazine | Abschriften, Schriftrollen, Lehrmeister | F-04 |
@@ -135,11 +148,23 @@ die Zuordnung zu den Säulen:
 | F-12 Lokalisierung & UI-Theming | P1 | MVP |
 | F-13 Packtiere & Transport | P1 | Stretch |
 | F-14 Siedlung & Gefolge | P2 | Stretch |
+| F-15 Aberglaube & Reliquien | P1, P4 | Phase 2 |
+| F-16 Asset-Pipeline | P1 | Phase 2 |
 
-**MVP-Definition:** Eine Welt (RWG oder Navezgane) ist von Tag 1 bis zur ersten Seuchennacht
-ohne sichtbaren Anachronismus spielbar: mittelalterliche Waffen, Rüstung, Werkstätten,
-Währung und Beleuchtung. Gegner und POIs sind in dieser Phase noch Vanilla-Modelle mit neuen
-Namen.
+**MVP-Definition:** Eine RWG-Welt ist von Tag 1 bis zur ersten Seuchennacht ohne
+Anachronismus in Items, Rezepten, Loot und Texten spielbar: mittelalterliche Waffen,
+Rüstung, Werkstätten, Währung und Beleuchtung. Gegner, Waffen und POIs sind in dieser Phase
+noch Vanilla-Modelle mit neuen Namen.
+
+**Phase-2-Definition:** Der optische Bruch wird geschlossen, über eine Mischung aus
+**Retexturen** vorhandener Modelle (schnell, breit) und **neuen Assets** dort, wo Vanilla
+kein passendes Modell hat (Entscheidung D3; siehe F-16). Grobe Faustregel:
+
+| Retextur genügt (Beispiele) | Neues Asset nötig (Beispiele) |
+|---|---|
+| Kleidung der Seuchentoten, Lederrüstung, Fackel | Spatha, Rundschild, Spangenhelm, Kettenhemd |
+| Blöcke: Flechtwerk, Lehm, Reet, Bruchstein | Rennofen, Webstuhl, Langbogen |
+| Truhen, Möbel, Wildtiere | Amulette/Reliquien (Icons + kleine Modelle) |
 
 ---
 
@@ -157,23 +182,35 @@ Punkte:
 
 ---
 
-## 6. Offene Fragen
+## 6. Entscheidungen
+
+| ID | Datum | Frage | Entscheidung | Wirkt auf |
+|---|---|---|---|---|
+| D1 | 2026-11-07 | Region (Q1) | **Fiktives Mischland** mit Leitplanke „gemischt wird die Herkunft, nicht die Epoche“ | GDD 2.1, F-07, F-12 |
+| D2 | 2026-11-07 | Übernatürliches (Q2) | **Aberglaube mit Wirkung**: kleine Buff-Effekte, keine Zauber | F-11, F-15 |
+| D3 | 2026-11-07 | Assets (Q3) | **Mix aus neuen Assets und Retexturen** ab Phase 2; MVP mit Vanilla-Modellen | F-02, F-03, F-06, F-07, F-16 |
+| D4 | 2026-11-07 | Karte (Q4) | **RWG zuerst**, eigene handgebaute Karte als späteres Ziel | F-07 |
+| D5 | 2026-11-07 | Kompatibilität (Q5) | **Kompatibel mit UI-Mods**: XUi-Änderungen nur additiv und zielgenau | Spec 01, F-12 |
+| D6 | 2026-11-07 | Name (Q6) | **Später**: bis zum Release Arbeitstitel `7DTD_700` | F-12 |
+| D7 | 2026-11-07 | Sprachen (Q7) | **DE + EN Pflicht**, weitere über die Community | F-12 |
+| D8 | 2026-11-07 | Armbrust | **Ja**, selten, T4/Endgame | F-02 |
+
+## 7. Offene Fragen
 
 | ID | Frage | Blockiert |
 |---|---|---|
-| Q1 | Konkrete Region (Franken/Sachsen/Slawen/Britannien/Skandinavien)? Bestimmt Waffen, Bauten und Namen. | F-02, F-07, F-12 |
-| Q2 | Strikt ohne Übernatürliches oder dezenter Aberglaube mit Spielwirkung (Amulette, Reliquien)? | F-06, F-11 |
-| Q3 | Eigene Assets (Modelle, Texturen, Sounds) ab Phase 2? Ohne sie bleiben Gegner, Waffen und Prefabs Vanilla-Modelle mit neuem Namen, was dem Setting-Ziel (P1) widerspricht. | F-02, F-03, F-06, F-07, F-13 |
-| Q4 | RWG-only oder auch eine kuratierte Karte? | F-07 |
-| Q5 | Kompatibilität mit anderen Overhauls (z. B. gemeinsamer Betrieb mit UI-Mods) Ziel oder Nicht-Ziel? | F-00, F-12 |
-| Q6 | Mod-Name / Branding? | F-12 |
-| Q7 | Sprache: DE + EN als Pflicht, weitere über Community? | F-12 |
+| Q6 | Mod-Name / Branding (vertagt, D6) | Release, Ladebildschirm |
+| Q8 | Welche UI-Mods dienen als Kompatibilitäts-Referenz für Tests? | F-12 |
+| Q9 | Asset-Quellen: selbst modellieren, beauftragen oder lizenzierte Packs (CC0/kommerziell)? | F-16 |
+| Q10 | Ansteckung (Seuchenbrand) zwischen Spielern ja/nein? | F-11 |
+| Q11 | Bücher/Magazine: Rezeptfreischaltung wie Vanilla beibehalten oder auf Perks umstellen? | F-04 |
+| Q12 | Kulturzonen: sollen die Biome kulturell geprägt sein (z. B. Klosterland, Burgwall-Land, Küste)? | F-07, F-06 |
 
 ---
 
-## 7. Nicht-Ziele (v1)
+## 8. Nicht-Ziele (v1)
 
-- Keine Magie und keine Fantasy-Kreaturen.
+- Keine Zauber, keine sichtbare Magie und keine Fantasy-Kreaturen. Aberglaube wirkt nur über kleine Buffs (D2).
 - Keine historisch-akademische Simulation (kein Lehnswesen-Management, keine Fruchtfolge-Sim).
 - Kein Eingriff in Netcode-Grundlagen (keine eigenen NetPackages, solange es sich vermeiden lässt).
 - Keine EAC-Kompatibilität für den C#-Teil; das ist bei DLL-Mods technisch nicht möglich.
