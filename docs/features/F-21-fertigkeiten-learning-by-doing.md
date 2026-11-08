@@ -85,6 +85,40 @@ Handwerks-Stufen, deren Gegenstände der Purge vollständig entfernt hat, tragen
 `perkGunslinger` 149 Mal in `items.xml` — das sind Marken, und ein `<remove>` nimmt sie
 nicht mit.
 
+### WP7.2 — die Bäume sind besetzt (8. November 2026)
+
+| Baum | Attribut | Unterbereiche | Perks |
+|---|---|---|---|
+| Krieger | `attFortitude` | Wuchtwaffen, Faustkampf, Zähigkeit | **9** |
+| Jäger | `attAgility` | Bogen und Messer, Pirsch, Wurfwaffen, Fährte | **12** |
+| Fuhrmann | `attPerception` | Marsch, Tragkraft, Handel und Wege | **9** |
+| Handwerker | `attStrength` | Bergbau, Werkstattkunde | **4** |
+| Heiler | `attIntellect` | Heilkunde | **4** |
+
+13 Unterbereiche umgehängt (8 davon wechseln das Attribut), 38 Perks zugeordnet, **105**
+`progression_name`-Zeilen berichtigt, 9 Gegenstands-Marken umgehängt. Marke und Perk
+wandern in einem Stück: `perkFlurryOfStrength` geht mit den Keulen zum Krieger, obwohl es
+„Strength" heißt, und `perkFlurryOfPerception` mit den Speeren zum Jäger.
+
+**Zwei weitere Perks waren tot und niemand sah es am Namen.** `perkIntellectMastery` wirkt
+ausschließlich auf Fahrzeuge (`VehicleFuelUsePer`, `VehicleSelfDamage`), und `vehicle*` ist
+16 von 17 gesperrt; `perkFlurryOfIntellect` trägt seine Marke auf zwei gesperrten
+Gegenständen. Verborgen sind damit **zwölf** Perks, nicht zehn.
+
+**Der Handwerker und der Heiler verfehlen D67** („rund neun je Baum") mit vier Perks. Das
+ist das Ergebnis des Purge, nicht eine Entscheidung: `attIntellect` trug Elektrik,
+Geschütztürme und Fahrzeuge, und von `attStrength` sind die Keulen zum Krieger gewandert.
+Zwei gemessene Wege zum Füllen stehen in
+[WP7-fertigkeitsbaeume.md](../rea/findings/WP7-fertigkeitsbaeume.md) §6.4 — eigene Perks
+(braucht erfundene Zahlen) oder die überlebenden Handwerks-Stufen an die Bäume hängen
+(`craftingWorkstations` 15 von 20, `craftingMedical` 1 von 8; Risiko R8). **Entscheidung
+offen.**
+
+**Die Rang-Texte fehlen:** fünf Rangnamen und fünf Langtexte je Perk, rund **450**
+Schlüssel. Sie beschreiben die Wirkung, und die ändern wir nicht — Vanillas „Deal 10% more
+damage with knives" bleibt für „Tiefer Schnitt" sachlich richtig, nur englisch. Das ist
+Übersetzung und gehört zu **WP8.5** (D7).
+
 ### Was noch fehlt
 
 - **WP7.2** Perks und Unterbereiche umhängen, mit den Gegenstands-Marken **in einem

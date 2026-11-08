@@ -337,10 +337,57 @@ foreach ($path in $Patches) {
     }
 }
 
+# FORTSCHRITTS-VERWEISE (ergaenzt 2026-11-08, WP7.2). Die XPath-Pruefung oben sagt, ob ein
+# Patch LANDET. Sie sagt nichts darueber, ob der WERT, den er schreibt, etwas bedeutet.
+# Bei progression.xml ist das die gefaehrlichere Haelfte: ein <set .../@parent> mit
+# 'attFortitud' trifft den XPath einwandfrei, haengt den Unterbereich aber an ein Attribut,
+# das es nicht gibt - und er verschwindet aus dem Fertigkeitsfenster, ohne Fehlermeldung.
+# Dasselbe fuer progression_name: ein Perk verlangt dann die Stufe eines Attributs, das
+# nirgends existiert, und ist unerreichbar.
+#
+# Der Vorrat sind alle Fortschritts-Knoten aus Vanilla plus die, die wir selbst anlegen.
+# Geprueft werden die Werte von @parent und @progression_name.
+$progRefs = 0
+$progPool = @{}
+$progVanillaPfad = Join-Path $Vanilla 'progression.xml'
+if (Test-Path $progVanillaPfad) {
+    $pv = [xml](Get-Content $progVanillaPfad -Raw)
+    foreach ($n in $pv.SelectNodes('//attribute | //skill | //perk | //crafting_skill | //book_group | //book')) {
+        $nm = $n.GetAttribute('name')
+        if ($nm) { $progPool[$nm] = 'vanilla' }
+    }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        if ([IO.Path]::GetFileName($path) -ne 'progression.xml') { continue }
+        $xml = [xml](Get-Content $path -Raw)
+        # Erst unsere eigenen Fortschritts-Knoten einsammeln, falls wir welche anlegen.
+        foreach ($n in $xml.SelectNodes('//attribute | //skill | //perk | //crafting_skill | //book_group | //book')) {
+            $nm = $n.GetAttribute('name')
+            if ($nm) { $progPool[$nm] = 'unser' }
+        }
+        foreach ($node in $xml.DocumentElement.ChildNodes) {
+            if ($node.NodeType -ne 'Element') { continue }
+            if ($node.get_Name() -ne 'set') { continue }
+            $xp = $node.GetAttribute('xpath')
+            $art = $null
+            if ($xp -match '/@parent$')           { $art = 'Baum-Zuordnung' }
+            elseif ($xp -match '/@progression_name$') { $art = 'Stufenbedingung' }
+            if (-not $art) { continue }
+            $wert = $node.InnerText.Trim()
+            if ($wert.Length -eq 0) { continue }
+            $progRefs++
+            if (-not $progPool.ContainsKey($wert)) {
+                $unresolved += "$art '$wert' ist kein Fortschritts-Knoten  ($([IO.Path]::GetFileName($path)) / $xp)"
+            }
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
+Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

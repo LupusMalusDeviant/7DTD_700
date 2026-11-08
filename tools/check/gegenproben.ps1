@@ -560,6 +560,33 @@ Test-Script 'kette-pruefen: setattribute ohne Treffer wird rot' 1 @{
 } -MustContain @("XPath trifft nichts: /blocks/block[@name='pruefAuchnicht']")
 
 Write-Output ""
+Write-Output "== Gegenproben: kette-pruefen prueft die FORTSCHRITTS-VERWEISE =="
+# WARUM DIESE ZWEI PRUEFUNGEN EXISTIEREN (WP7.2, 8. November 2026). Die XPath-Pruefung sagt,
+# ob ein Patch LANDET - nicht, ob der Wert, den er schreibt, etwas bedeutet. Bei
+# progression.xml ist das die gefaehrlichere Haelfte: ein <set .../@parent> mit 'attFortitud'
+# trifft den XPath einwandfrei und haengt den Unterbereich an ein Attribut, das es nicht
+# gibt. Er verschwindet aus dem Fertigkeitsfenster, und nichts sagt es. Dasselbe bei
+# progression_name: der Perk verlangt dann eine Stufe, die niemand erreichen kann.
+# WP7.2 schreibt 105 solche Zeilen.
+Test-Script 'kette-pruefen: Fortschritts-Verweise werden gezaehlt, Schluessel nicht' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-gut\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Fortschritts-Verweise: 3')
+
+Test-Script 'kette-pruefen: vertippte Fortschritts-Verweise werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-schlecht\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "Baum-Zuordnung 'pruefAttGibtesnicht' ist kein Fortschritts-Knoten",
+    "Stufenbedingung 'pruefAttAuchnicht' ist kein Fortschritts-Knoten")
+
+Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {
     Write-Output "ROT"

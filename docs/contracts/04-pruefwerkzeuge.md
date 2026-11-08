@@ -1193,3 +1193,58 @@ Skript ist der Nachweis, wie sie entstanden ist, und das Werkzeug für den näch
 eine `.ps1` als ANSI, und aus „Jäger" wird „JÃ¤ger" — genau so stand es im ersten Lauf in
 der CSV. Die übrigen Skripte des Projekts umgehen das, indem sie gar keine Umlaute
 enthalten.
+
+## Nachtrag WP7.2 — Fortschritts-Verweise (8. November 2026), **Abnahme offen**
+
+Die XPath-Prüfung aus WP7.1 sagt, ob ein Patch **landet**. Sie sagt nichts darüber, ob der
+**Wert**, den er schreibt, etwas bedeutet. Bei `progression.xml` ist das die gefährlichere
+Hälfte: ein `<set …/@parent>` mit `attFortitud` trifft den XPath einwandfrei und hängt den
+Unterbereich an ein Attribut, das es nicht gibt — er verschwindet aus dem
+Fertigkeitsfenster, ohne Fehlermeldung. Dasselbe bei `progression_name`: der Perk verlangt
+dann die Stufe eines Attributs, das nirgends existiert, und ist unerreichbar. WP7.2
+schreibt **105** solcher Zeilen.
+
+**Was geprüft wird.** Aus Vanillas `progression.xml` werden alle Namen von `attribute`,
+`skill`, `perk`, `crafting_skill`, `book_group` und `book` eingesammelt, dazu die, die wir
+selbst anlegen. Dagegen werden die Werte von `@parent` und `@progression_name` aufgelöst.
+121 Verweise, 0 unaufgelöst.
+
+**Zwei neue Gegenproben, Stand 55** (vorher 53):
+
+| Gegenprobe | erwartet | beweist |
+|---|---|---|
+| Fortschritts-Verweise werden gezählt, Schlüssel nicht | Exit 0, `Fortschritts-Verweise: 3` | der Zähler ist wählerisch: die Testdatei trägt einen vierten `<set>`, der einen **Sprachschlüssel** schreibt, und der darf nicht mitgezählt werden |
+| vertippte Fortschritts-Verweise werden rot | Exit 1, nennt beide einzeln | `@parent` **und** `@progression_name`, und beide XPaths treffen — die XPath-Prüfung sagt also grün |
+
+Der zweite Fall ist der Beweis, dass die beiden Prüfungen nicht dasselbe tun: dieselbe
+Datei ist für die XPath-Prüfung einwandfrei und für diese rot.
+
+**Gemessene Grenzen:**
+
+- Geprüft werden nur `@parent` und `@progression_name`. `name_key`, `desc_key`, `icon` und
+  die Werte in `display_entry`/`unlock_entry` stehen ungeprüft; die Sprachschlüssel prüft
+  `mod700check localization`, die Symbole niemand.
+- Der Vorrat kommt aus **Vanilla** plus unseren eigenen Knoten in derselben Datei. Ein
+  Verweis auf einen Knoten, den ein **anderes** Modlet anlegt, gilt als rot — das Projekt
+  hat bisher nur eine `progression.xml`.
+- **Ein auflösbarer Verweis heißt nicht, dass die Zuordnung sinnvoll ist.** Dass der Bogen
+  beim Jäger und nicht beim Fuhrmann hängt, prüft kein Skript.
+
+## Nachtrag WP7.2b — der zweite Erzeuger, **Abnahme offen**
+
+`tools/gen/wp7-perks.ps1` hält die Zuordnung der 16 Unterbereiche und 38 lebenden Perks als
+Tabelle und erzeugt daraus drei Dateien: die Patch-Zeilen für `progression.xml`, die für
+`items.xml` und die Localization-Zeilen. Es **bricht ab**, sobald die Wirklichkeit nicht zur
+Tabelle passt, und das ist der eigentliche Wert:
+
+- ein Perk oder Unterbereich im Spiel, der in keiner Tabelle steht (oder umgekehrt),
+- ein Perk, der auf einen verborgenen Unterbereich zeigt,
+- ein Perk mit einer anderen Zahl als fünf `level_requirements`,
+- ein Gegenstand, der die Marke nicht trägt, die umgehängt werden soll,
+- **zwei Knoten, die denselben Sprachschlüssel bekommen würden.**
+
+Der letzte Wächter hat beim ersten Lauf `skillCombatPerksName` gefunden — fünf
+Nahkampf-Bereiche, ein Schlüssel. Ohne ihn hätten vier unserer Unterbereiche denselben
+Namen getragen.
+
+Auch diese Datei trägt eine **UTF-8-BOM** (Windows PowerShell 5.1, siehe Nachtrag WP7.1b).

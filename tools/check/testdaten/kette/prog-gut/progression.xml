@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: drei Fortschritts-Verweise, die aufgehen. Der vierte <set> schreibt einen
+     SCHLUESSEL und kein Fortschritts-Knoten - der darf NICHT mitgezaehlt werden, sonst
+     ist die Pruefung laut statt waehlerisch. Erfundene Kennungen. -->
+<config>
+	<set xpath="/progression/skills/skill[@name='pruefBereichA']/@parent">pruefAttB</set>
+	<set xpath="/progression/perks/perk[@name='pruefPerkA']/@parent">pruefBereichA</set>
+	<set xpath="/progression/perks/perk[@name='pruefPerkA']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">pruefAttB</set>
+	<set xpath="/progression/skills/skill[@name='pruefBereichA']/@name_key">prk700_pruefBereichAName</set>
+</config>

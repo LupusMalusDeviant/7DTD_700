@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, Vanilla-Stand der Fortschritts-Knoten.
+     Erfundene Kennungen (Projektregeln 1 und 7). -->
+<progression>
+	<attributes min_level="1" max_level="10">
+		<attribute name="pruefAttA" name_key="pruefAttAName" desc_key="pruefAttADesc" />
+		<attribute name="pruefAttB" name_key="pruefAttBName" desc_key="pruefAttBDesc" />
+	</attributes>
+	<skills>
+		<skill name="pruefBereichA" parent="pruefAttA" name_key="pruefBereichAName" />
+	</skills>
+	<perks min_level="0" max_level="5">
+		<perk name="pruefPerkA" parent="pruefBereichA" name_key="pruefPerkAName">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="pruefAttA" operation="GTE" value="1" /></level_requirements>
+		</perk>
+	</perks>
+</progression>

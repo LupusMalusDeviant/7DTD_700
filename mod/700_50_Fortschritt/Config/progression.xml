@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <config>
 	<!-- 700_50_Fortschritt / progression.xml
 	     F-21 Fertigkeitsbäume, Plan-0001 WP7.1 und WP7.3
@@ -134,4 +134,206 @@
 	     tragen always_unlocked="true", 203 tragen keines von beidem und sind von Anfang
 	     an verfügbar — darunter campfire, candle und ammoArrowStone. UNSERE 42 eigenen
 	     Rezepte tragen keine tags und sind damit heute offen; WP7.5 hängt sie an. -->
+
+	<!-- ========================================================================
+	     WP7.2 — die Unterbereiche und Perks an ihre Bäume
+	     ========================================================================
+
+	     ERZEUGT von tools/gen/wp7-perks.ps1. Die Zuordnung steht in der Tabelle
+	     dieses Skripts, die Begründung in docs/rea/findings/WP7-fertigkeitsbaeume.md.
+
+	     WARUM ERZEUGT UND NICHT VON HAND: jeder Perk, der sein Attribut wechselt,
+	     braucht SECHS Zeilen — eine für 'parent' und FÜNF für die progression_name
+	     in seinen level_requirements. Gemessen hat jeder der 50 Attribut-Perks genau
+	     fünf davon, und jede nennt ihr Attribut einzeln. Wird eine vergessen, hängt
+	     der Perk unter dem neuen Baum und verlangt die Stufe des alten: unerreichbar,
+	     ohne eine Fehlermeldung. 21 Perks wechseln, das sind 105 Zeilen.
+
+	     EIGENE SCHLÜSSEL FÜR DIE NAHKAMPF-BEREICHE: Vanilla gibt ALLEN FÜNF
+	     Nahkampf-Unterbereichen denselben Schlüssel skillCombatPerksName/Desc
+	     ("Combat Perks"). Vier davon sind unsere — wer ihn überschreibt, nennt alle
+	     vier gleich. Dieselbe Falle wie blockVariantHelperGroupDesc (50 Blöcke) in
+	     WP6.4. Darum tragen sie prk700_-Schlüssel.
+
+	     WAS NICHT ANGEFASST WIRD: die sieben Perks unter skillGeneralPerks (Rüstung
+	     leicht/mittel/schwer, Küchenmeister, Vom Land leben, Schlossknacken,
+	     Glückspilz). Sie haben GEMESSEN null level_requirements — sie hängen an
+	     keinem Attribut, sondern am Spielerrang. In einen Baum gehängt bräuchte jeder
+	     fünf erfundene Freischaltstufen, und das ist Balancing, keine Struktur.
+	-->
+	<!-- ERZEUGT von tools/gen/wp7-perks.ps1 - nicht von Hand aendern.
+	     Die Zuordnung steht in der Tabelle dieses Skripts (D66, D67). -->
+
+	<!-- Dreizehn Unterbereiche an ihren Baum -->
+	<set xpath="/progression/skills/skill[@name='skillStrengthCombat']/@parent">attFortitude</set>
+	<!-- skillFortitudeCombat liegt schon an attFortitude (Krieger) -->
+	<!-- skillFortitudeSurvival liegt schon an attFortitude (Krieger) -->
+	<!-- skillAgilityCombat liegt schon an attAgility (Jäger) -->
+	<!-- skillAgilityStealth liegt schon an attAgility (Jäger) -->
+	<set xpath="/progression/skills/skill[@name='skillPerceptionCombat']/@parent">attAgility</set>
+	<set xpath="/progression/skills/skill[@name='skillPerceptionGeneral']/@parent">attAgility</set>
+	<!-- skillStrengthConstruction liegt schon an attStrength (Handwerker) -->
+	<set xpath="/progression/skills/skill[@name='skillIntellectCraftsmanship']/@parent">attStrength</set>
+	<set xpath="/progression/skills/skill[@name='skillFortitudeRecovery']/@parent">attIntellect</set>
+	<set xpath="/progression/skills/skill[@name='skillAgilityAthletics']/@parent">attPerception</set>
+	<set xpath="/progression/skills/skill[@name='skillStrengthGeneral']/@parent">attPerception</set>
+	<set xpath="/progression/skills/skill[@name='skillIntellectInfluence']/@parent">attPerception</set>
+
+	<!-- Zwei Unterbereiche sind nach dem Umhaengen leer -->
+	<setattribute name="hidden" xpath="/progression/skills/skill[@name='skillIntellectCombat']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/skill[@name='skillPerceptionScavenging']">true</setattribute>
+
+	<!-- Zwei weitere Perks ohne Gegenstaende, erst durch die Wirkungsmessung erkannt -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkIntellectMastery']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkFlurryOfIntellect']">true</setattribute>
+
+	<!-- perkPummelPete -> Krieger / Keulenschlag -->
+	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<!-- perkSkullCrusher -> Krieger / Schädelbrecher -->
+	<set xpath="/progression/perks/perk[@name='perkSkullCrusher']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkSkullCrusher']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkSkullCrusher']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkSkullCrusher']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkSkullCrusher']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<!-- perkGrandSlam -> Krieger / Rundschlag -->
+	<set xpath="/progression/perks/perk[@name='perkGrandSlam']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkGrandSlam']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkGrandSlam']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkGrandSlam']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkGrandSlam']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<!-- perkFlurryOfStrength -> Krieger / Schlagfolge -->
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfStrength']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfStrength']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfStrength']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfStrength']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfStrength']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
+	<!-- perkSiphoningStrikes -> Krieger / Blutzoll -->
+	<set xpath="/progression/perks/perk[@name='perkSiphoningStrikes']/@parent">skillFortitudeSurvival</set>
+	<!-- perkAgilityMastery -> Jäger / Ruhige Hand -->
+	<set xpath="/progression/perks/perk[@name='perkAgilityMastery']/@parent">skillAgilityCombat</set>
+	<!-- perkInfiltrator -> Jäger / Schleichgang -->
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/@parent">skillAgilityStealth</set>
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkInfiltrator']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkJavelinMaster -> Jäger / Speerkunde -->
+	<set xpath="/progression/perks/perk[@name='perkJavelinMaster']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkJavelinMaster']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkJavelinMaster']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkJavelinMaster']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkJavelinMaster']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkFlurryOfPerception -> Jäger / Stoßfolge -->
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfPerception']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfPerception']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfPerception']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfPerception']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkFlurryOfPerception']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkAnimalTracker -> Jäger / Fährtenlesen -->
+	<set xpath="/progression/perks/perk[@name='perkAnimalTracker']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkAnimalTracker']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkAnimalTracker']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkAnimalTracker']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkAnimalTracker']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkPenetrator -> Jäger / Durchschlag -->
+	<set xpath="/progression/perks/perk[@name='perkPenetrator']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkPenetrator']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkPenetrator']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkPenetrator']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkPenetrator']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkTheHuntsman -> Jäger / Waidwerk -->
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/@parent">skillPerceptionGeneral</set>
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<set xpath="/progression/perks/perk[@name='perkTheHuntsman']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attAgility</set>
+	<!-- perkStrengthMastery -> Handwerker / Geübte Faust -->
+	<set xpath="/progression/perks/perk[@name='perkStrengthMastery']/@parent">skillStrengthConstruction</set>
+	<!-- perkAdvancedEngineering -> Handwerker / Werkstattkunst -->
+	<set xpath="/progression/perks/perk[@name='perkAdvancedEngineering']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attStrength</set>
+	<set xpath="/progression/perks/perk[@name='perkAdvancedEngineering']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attStrength</set>
+	<set xpath="/progression/perks/perk[@name='perkAdvancedEngineering']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attStrength</set>
+	<set xpath="/progression/perks/perk[@name='perkAdvancedEngineering']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attStrength</set>
+	<set xpath="/progression/perks/perk[@name='perkAdvancedEngineering']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attStrength</set>
+	<!-- perkPhysician -> Heiler / Wundarznei -->
+	<set xpath="/progression/perks/perk[@name='perkPhysician']/@parent">skillFortitudeRecovery</set>
+	<!-- perkHealingFactor -> Heiler / Heilschlaf -->
+	<set xpath="/progression/perks/perk[@name='perkHealingFactor']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkHealingFactor']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkHealingFactor']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkHealingFactor']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkHealingFactor']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<!-- perkSlowMetabolism -> Heiler / Karge Kost -->
+	<set xpath="/progression/perks/perk[@name='perkSlowMetabolism']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkSlowMetabolism']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkSlowMetabolism']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkSlowMetabolism']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkSlowMetabolism']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<!-- perkRuleOneCardio -> Heiler / Langer Atem -->
+	<set xpath="/progression/perks/perk[@name='perkRuleOneCardio']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkRuleOneCardio']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkRuleOneCardio']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkRuleOneCardio']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<set xpath="/progression/perks/perk[@name='perkRuleOneCardio']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attIntellect</set>
+	<!-- perkPackMule -> Fuhrmann / Saumlast -->
+	<set xpath="/progression/perks/perk[@name='perkPackMule']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkPackMule']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkPackMule']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkPackMule']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkPackMule']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkPerceptionMastery -> Fuhrmann / Geübtes Auge -->
+	<set xpath="/progression/perks/perk[@name='perkPerceptionMastery']/@parent">skillStrengthGeneral</set>
+	<!-- perkParkour -> Fuhrmann / Trittsicherheit -->
+	<set xpath="/progression/perks/perk[@name='perkParkour']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkParkour']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkParkour']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkParkour']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkParkour']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkRunAndGun -> Fuhrmann / Im Gehen -->
+	<set xpath="/progression/perks/perk[@name='perkRunAndGun']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkRunAndGun']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkRunAndGun']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkRunAndGun']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkRunAndGun']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkHardTarget -> Fuhrmann / Schweres Ziel -->
+	<set xpath="/progression/perks/perk[@name='perkHardTarget']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkHardTarget']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkHardTarget']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkHardTarget']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkHardTarget']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkBetterBarter -> Fuhrmann / Feilschen -->
+	<set xpath="/progression/perks/perk[@name='perkBetterBarter']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkBetterBarter']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkBetterBarter']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkBetterBarter']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkBetterBarter']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkDaringAdventurer -> Fuhrmann / Wagemut -->
+	<set xpath="/progression/perks/perk[@name='perkDaringAdventurer']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkDaringAdventurer']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkDaringAdventurer']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkDaringAdventurer']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkDaringAdventurer']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkCharismaticNature -> Fuhrmann / Gutes Wort -->
+	<set xpath="/progression/perks/perk[@name='perkCharismaticNature']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkCharismaticNature']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkCharismaticNature']/level_requirements[@level='3']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkCharismaticNature']/level_requirements[@level='4']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<set xpath="/progression/perks/perk[@name='perkCharismaticNature']/level_requirements[@level='5']/requirement[@name='ProgressionLevel']/@progression_name">attPerception</set>
+	<!-- perkTreasureHunter -> Fuhrmann / Schatzwitterung -->
+	<set xpath="/progression/perks/perk[@name='perkTreasureHunter']/@parent">skillIntellectInfluence</set>
+	<set xpath="/progression/skills/skill[@name='skillStrengthCombat']/@name_key">prk700_strengthCombatName</set>
+	<set xpath="/progression/skills/skill[@name='skillStrengthCombat']/@desc_key">prk700_strengthCombatDesc</set>
+	<set xpath="/progression/skills/skill[@name='skillFortitudeCombat']/@name_key">prk700_fortitudeCombatName</set>
+	<set xpath="/progression/skills/skill[@name='skillFortitudeCombat']/@desc_key">prk700_fortitudeCombatDesc</set>
+	<set xpath="/progression/skills/skill[@name='skillAgilityCombat']/@name_key">prk700_agilityCombatName</set>
+	<set xpath="/progression/skills/skill[@name='skillAgilityCombat']/@desc_key">prk700_agilityCombatDesc</set>
+	<set xpath="/progression/skills/skill[@name='skillPerceptionCombat']/@name_key">prk700_perceptionCombatName</set>
+	<set xpath="/progression/skills/skill[@name='skillPerceptionCombat']/@desc_key">prk700_perceptionCombatDesc</set>
+	<setattribute name="desc_key" xpath="/progression/skills/skill[@name='skillPerceptionGeneral']">prk700_perceptionGeneralDesc</setattribute>
 </config>

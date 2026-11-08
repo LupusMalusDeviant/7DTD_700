@@ -279,3 +279,107 @@ anderen.
   beobachtet. Prüfliste WP7.6.
 - Der Rechenweg hinter `attFortitude` in `EntityPlayerLocal::Update` ist **nicht**
   aufgeklärt (siehe 2.1).
+
+---
+
+## 6 WP7.2 — die Zuordnung, gemessen und gebaut (8. November 2026)
+
+### 6.1 Flurry und Mastery gehören zu den Waffen, nicht zu ihrem alten Attribut
+
+Zehn der 57 Perks sind Struktur: je Attribut ein `perkFlurryOfX` und ein `perkXMastery`.
+Ihre Wirkung gemessen:
+
+| Perk | Wirkung | Marke | lebende Träger |
+|---|---|---|---|
+| `perkFlurryOfStrength` | `AttacksPerMinute` | eigene | **6** Keulen und Vorschlaghämmer |
+| `perkFlurryOfFortitude` | `AttacksPerMinute` | eigene | **5** Schlagringe, bloße Hand |
+| `perkFlurryOfAgility` | `AttacksPerMinute` | eigene | **4** Messer |
+| `perkFlurryOfPerception` | `AttacksPerMinute` | eigene | **3** Speere |
+| `perkFlurryOfIntellect` | `AttacksPerMinute` | eigene | **0** — beide Träger gesperrt |
+| `perkStrengthMastery` | `HarvestCount`, `EntityDamage [perkMiner69r]`, `DismemberChance [head]` | Blockmarken | Bergbau |
+| `perkFortitudeMastery` | `HealthMax` | keine | wirkt immer |
+| `perkAgilityMastery` | `ReloadSpeedMultiplier`, `GeneralDamageResist` | keine | Nachladen = Bogen |
+| `perkPerceptionMastery` | 2× `HarvestCount`, `EntityDamage [perkDeadEye]`, `EntityDamage [perkJavelinMaster]` | Blockmarken | Zerlegen |
+| `perkIntellectMastery` | `VehicleFuelUsePer`, `VehicleSelfDamage [vehicle]` | Fahrzeuge | **0** — `vehicle*` ist 16 von 17 gesperrt |
+
+**Zwei neue Tote.** `perkIntellectMastery` wirkt ausschließlich auf Fahrzeuge und
+`perkFlurryOfIntellect` auf zwei gesperrte Gegenstände. Beide sind in WP7.2 dazugekommen —
+WP7.3 hatte zehn verborgen, jetzt sind es **zwölf**. Keiner der beiden war am Namen zu
+erkennen; erst die Wirkung hat sie entlarvt.
+
+**Folge für den Bau:** `perkFlurryOfStrength` wandert mit den Keulen zum Krieger, obwohl es
+„Strength" heißt, und `perkFlurryOfPerception` mit den Speeren zum Jäger. Marke und Perk in
+einem Stück — ein Perk unter einem Baum und sein Gegenstand unter einem anderen wäre ein
+Perk, den niemand nutzen kann.
+
+Die drei Ernte-Marken `perkStrengthMasteryBrassHarvest`, `PercMasteryDukeHarvest` und
+`PercMasterySteelHarvest` tragen **keine Gegenstände**, sondern Blöcke: 5, 102 und 31
+Nennungen in `blocks.xml`. Beide Mastery-Perks sind damit wirksam.
+
+### 6.2 Jeder Attribut-Perk nennt sein Attribut fünfmal
+
+Gemessen hat **jeder** der 50 Attribut-Perks genau **fünf** `level_requirements` mit
+`<requirement name="ProgressionLevel" progression_name="attX">`. Wer ein Attribut wechselt,
+braucht also sechs Patch-Zeilen: eine für `parent` und fünf für `progression_name`. Wird
+eine vergessen, hängt der Perk unter dem neuen Baum und verlangt die Stufe des alten —
+**unerreichbar, ohne eine Fehlermeldung**. 21 Perks wechseln, das sind 105 Zeilen. Darum
+erzeugt `tools/gen/wp7-perks.ps1` sie.
+
+Die **sieben** Perks unter `skillGeneralPerks` haben gemessen **null**
+`level_requirements`. Sie hängen an keinem Attribut, sondern am Spielerrang, und bleiben
+darum unberührt: sie in einen Baum zu hängen hieße, fünf Freischaltstufen je Perk zu
+erfinden — Balancing, keine Struktur.
+
+### 6.3 Vanilla gibt allen fünf Nahkampf-Bereichen denselben Schlüssel
+
+`skillCombatPerksName` und `skillCombatPerksDesc` teilen **alle fünf** `*Combat`-Bereiche —
+`skillPerceptionCombat`, `skillStrengthCombat`, `skillFortitudeCombat`,
+`skillAgilityCombat`, `skillIntellectCombat`. Vier davon sind unsere. Wer den Schlüssel
+überschreibt, nennt Wuchtwaffen, Faustkampf, Bogen und Messer und Wurfwaffen **alle gleich**
+— dieselbe Falle wie `blockVariantHelperGroupDesc` (50 Blöcke) und `doorGroupDesc` (55) in
+WP6. Sie tragen darum eigene `prk700_`-Schlüssel, gesetzt per `<set>` auf `name_key` und
+`desc_key`. Der Doppel-Schlüssel-Wächter im Erzeuger hat das gefunden, nicht das Lesen.
+
+Ebenfalls geteilt, aber nicht unser Problem: `perkBookGroupLongDesc` über alle **19**
+Buchreihen (WP7.4).
+
+`skillPerceptionGeneral` hat gemessen **kein** `desc_key`. Dort steht darum ein
+`<setattribute>`, kein `<set>`.
+
+### 6.4 Was dabei herauskommt — und wo es dünn ist
+
+| Baum | Attribut | Unterbereiche | Perks |
+|---|---|---|---|
+| Krieger | `attFortitude` | Wuchtwaffen, Faustkampf, Zähigkeit | **9** |
+| Jäger | `attAgility` | Bogen und Messer, Pirsch, Wurfwaffen, Fährte | **12** |
+| Fuhrmann | `attPerception` | Marsch, Tragkraft, Handel und Wege | **9** |
+| Handwerker | `attStrength` | Bergbau, Werkstattkunde | **4** |
+| Heiler | `attIntellect` | Heilkunde | **4** |
+
+**Der Handwerker und der Heiler verfehlen D67** („rund neun je Baum"), und das ist kein
+Versehen, sondern das Ergebnis des Purge: Vanillas `attIntellect` trug Elektrik,
+Geschütztürme und Fahrzeuge — alles gesperrt —, und von `attStrength` sind die Keulen zum
+Krieger gewandert. Übrig bleiben in diesen beiden Bäumen vier Perks, die inhaltlich passen.
+Weitere wären Erfindung; die Zahlen dafür gibt es nicht, und D61 hat denselben Fall schon
+einmal gegen erfundene Staffeln entschieden.
+
+Zwei gemessene Wege, das zu füllen, beide nicht gegangen:
+
+1. **Eigene Perks.** Vier bis fünf je Baum, mit Vanillas `passive_effect`-Namen. Braucht
+   Zahlen ohne Balancing-Grundlage.
+2. **Die überlebenden Handwerks-Stufen an die Bäume hängen.** `craftingWorkstations`
+   behält 15 von 20 Marken, `craftingHarvestingTools` 8 von 10 — das ist die Tiefe des
+   Handwerkers, und `craftingMedical` (1 von 8) die des Heilers. Sie hängen heute an
+   `attCrafting`. Ein `<set .../@parent>` würde sie umhängen. **Risiko R8:**
+   `XUiC_CategoryList::SetupCategoriesByWorkstation` liest `attcrafting`; gemessen filtert
+   die Methode `IsAttribute` und nutzt nur Attributnamen und -symbole, die
+   Handwerks-Stufen also nicht — aber das ist ein Schluss aus der Aufrufliste, kein
+   beobachtetes Verhalten.
+
+### 6.5 Was WP7.2 nicht gemacht hat
+
+Die **Rang-Texte**: fünf Rangnamen und fünf Langtexte je Perk, zusammen rund **450**
+Schlüssel. Sie beschreiben die Wirkung, und die Wirkung ändern wir nicht — Vanillas
+„Deal 10% more damage with knives" bleibt für einen Perk namens „Tiefer Schnitt" sachlich
+richtig, nur englisch. Das ist eine Übersetzungsaufgabe und gehört zu **WP8.5** (D7), nicht
+zu WP7.2. Gezählt sind 670 Schlüssel an allen 57 Perks; 102 davon trägt WP7.2.

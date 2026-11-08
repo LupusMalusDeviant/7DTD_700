@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- ERZEUGT von tools/gen/wp7-perks.ps1 - nicht von Hand aendern.
+	     Marke und Perk wandern in EINEM Stueck: ein Perk unter einem Baum und sein
+	     Gegenstand unter einem anderen waere ein Perk, den niemand nutzen kann. -->
+
+	<!-- attStrength -> attFortitude: Keulen und Vorschlaghaemmer gehoeren zum Krieger -->
+	<set xpath="/items/item[@name='meleeWpnClubT0WoodenClub']/property[@name='Tags']/@value">T0,blunt,club,melee,grunting,light,longShaft,perkFlurryOfStrength,weapon,meleeWeapon,attFortitude,perkPummelPete,canHaveCosmetic,clubSkill</set>
+	<set xpath="/items/item[@name='meleeWpnClubT1CandyClub']/property[@name='Tags']/@value">T1,blunt,club,melee,grunting,light,longShaft,perkFlurryOfStrength,weapon,meleeWeapon,attFortitude,perkPummelPete,canHaveCosmetic,clubSkill</set>
+	<set xpath="/items/item[@name='meleeWpnClubT3SteelClub']/property[@name='Tags']/@value">T3,blunt,club,melee,grunting,light,longShaft,perkFlurryOfStrength,weapon,meleeWeapon,attFortitude,perkPummelPete,canHaveCosmetic,clubSkill</set>
+	<set xpath="/items/item[@name='meleeWpnSledgeT0StoneSledgehammer']/property[@name='Tags']/@value">T0,blunt,melee,grunting,heavy,sledge,weapon,meleeWeapon,longShaft,attFortitude,perkSkullCrusher,perkFlurryOfStrength,canHaveCosmetic,sledgeSkill</set>
+	<set xpath="/items/item[@name='meleeWpnSledgeT1IronSledgehammer']/property[@name='Tags']/@value">T1,blunt,melee,grunting,heavy,sledge,weapon,meleeWeapon,longShaft,attFortitude,perkSkullCrusher,perkFlurryOfStrength,canHaveCosmetic,sledgeSkill,scrap100</set>
+	<set xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammer']/property[@name='Tags']/@value">T3,blunt,melee,grunting,heavy,sledge,weapon,meleeWeapon,longShaft,attFortitude,perkSkullCrusher,perkFlurryOfStrength,canHaveCosmetic,sledgeSkill</set>
+
+	<!-- attPerception -> attAgility: Speere gehoeren zum Jaeger -->
+	<set xpath="/items/item[@name='meleeWpnSpearT0StoneSpear']/property[@name='Tags']/@value">T0,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill</set>
+	<set xpath="/items/item[@name='meleeWpnSpearT1IronSpear']/property[@name='Tags']/@value">T1,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill,scrap100</set>
+	<set xpath="/items/item[@name='meleeWpnSpearT3SteelSpear']/property[@name='Tags']/@value">T3,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill</set>
+</config>

@@ -1165,7 +1165,22 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Heiler (0). 115 Localization-Schlüssel, erzeugt von `tools/gen/wp7-baumtexte.ps1`.
    Die Annahme des Plans („nur `attFortitude` steht im Code") war **halb richtig**: es
    sind zwei, `attcrafting` steht ebenfalls drin — was Schritt 3 unten schon wusste.
-2. **WP7.2** `[Claude-prüfbar]` Perks je Baum, mit Freischaltstufen und Beschreibungstexten.
+2. ~~**WP7.2** `[Claude-prüfbar]` Perks je Baum, mit Freischaltstufen und Beschreibungstexten.~~
+   **Erledigt 2026-11-08, bis auf die Rang-Texte.** 13 Unterbereiche an ihre Bäume (8
+   umgehängt), 38 Perks zugeordnet, **105 `progression_name`-Zeilen** berichtigt und 9
+   Gegenstands-Marken umgehängt — erzeugt von `tools/gen/wp7-perks.ps1`, weil jeder Perk,
+   der sein Attribut wechselt, sechs Zeilen braucht und eine vergessene ihn unerreichbar
+   macht, ohne Fehlermeldung. **Zwei weitere Perks sind dabei als tot aufgefallen**
+   (`perkIntellectMastery` wirkt nur auf Fahrzeuge, `perkFlurryOfIntellect` auf zwei
+   gesperrte Gegenstände) — WP7.3 verbirgt jetzt **zwölf** statt zehn.
+   **Vanilla gibt allen fünf Nahkampf-Bereichen denselben Schlüssel**
+   (`skillCombatPerksName`, vier davon unsere); sie tragen darum `prk700_`-Schlüssel.
+   **Offen und dem Nutzer vorzulegen:** Handwerker und Heiler tragen nur **4** Perks statt
+   der neun aus D67 — der Purge hat `attIntellect` vollständig geleert (Elektrik,
+   Geschütztürme, Fahrzeuge) und die Keulen sind zum Krieger gewandert. Krieger 9,
+   Jäger 12, Fuhrmann 9.
+   **Nicht gemacht:** die Rang-Texte, rund 450 Schlüssel. Sie beschreiben die Wirkung, und
+   die ändern wir nicht — sie gehören zu WP8.5 (D7).
 3. **WP7.3** `[Claude-prüfbar]` Vanilla-Attribute und -Perks sperren bzw. in die neuen Bäume
    umhängen. **Achtung:** `attcrafting` wird von `XUiC_CategoryList::SetupCategoriesByWorkstation`
    gelesen — der Behälter `attCrafting` bleibt bestehen, auch wenn er leer wirkt.

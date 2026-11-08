@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten: zwei vertippte Fortschritts-Verweise. Beide XPaths TREFFEN - das ist der
+     Punkt. Die XPath-Pruefung sagt gruen, und der Baum verschwindet trotzdem aus dem
+     Fertigkeitsfenster, weil das Attribut nicht existiert. Erfundene Kennungen. -->
+<config>
+	<set xpath="/progression/skills/skill[@name='pruefBereichA']/@parent">pruefAttGibtesnicht</set>
+	<set xpath="/progression/perks/perk[@name='pruefPerkA']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">pruefAttAuchnicht</set>
+</config>
