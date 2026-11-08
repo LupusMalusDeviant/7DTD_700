@@ -1,0 +1,4 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+700_modName,blocks,Block,,,,Test Overhaul,"Kein Kennungsschluessel: Mod-Name, traegt nur 700_",Testüberbau,,,,,,,,,,,
+itm700_pruefklinge,items,Item,,,,Test Blade,"Kennungsschluessel: der Gegenstand heisst so, also heisst der Schluessel so",Prüfklinge,,,,,,,,,,,
+itm700_pruefklingeDesc,items,Item,,,,A blade that exists only in the test data.,,"Eine Klinge, die nur in den Pruefdaten existiert.",,,,,,,,,,,

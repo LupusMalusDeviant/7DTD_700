@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_20_Material / recipes.xml
+	     F-04 Beispielkette, Plan-0001 WP4.6
+
+	     Raseneisenerz + Holzkohle -> (Rennofen) Luppe -> (Esse) Schmiedeeisen ->
+	     (Esse + Amboss) Klinge -> (Zimmermannsbank) Spatha. Dazu Tiegelstahl per
+	     Aufkohlen (T3).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     WARUM HOLZKOHLE EINE ZUTAT IST UND KEIN BRENNSTOFF. D26 sagt "Vanilla-
+	     Forge-Prinzip" fuer den Brennstoff, und das heisst: die Brennstoffkammer nimmt
+	     alles, was eine FuelValue traegt - Holz 50, Holzkohle 100, dazu Stoff, Leder,
+	     Fett, Federn. Holzkohle ist dort also nur doppelt so gut wie Holz, nicht
+	     notwendig. Ohne Holzkohle kommt aber kein Eisen aus dem Erz; das ist der Kern
+	     der Kette und nicht eine Frage der Geschwindigkeit. Darum steht sie als
+	     ZUTAT in jedem Rezept der Kette. Der Brennstoffgrid bleibt Vanilla (D26), und
+	     der Zwang steckt an der Stelle, an der die Pruefung ihn sehen kann.
+
+	     WERKZEUG TRENNT RENNOFEN VON ESSE. F-04 nennt zwei Werkstaetten, Vanilla hat
+	     einen Block mit drei Werkzeugslots (Blasebalg, Amboss, Schmelztiegel). Also
+	     trennt das Werkzeug, nicht der Block: Luppe braucht den Blasebalg (Rennofen),
+	     Schmiedeeisen und Klinge den Amboss (Esse), Tiegelstahl den Schmelztiegel.
+	     Das ist genau "Werkzeugslots schalten bessere Rezepte frei" aus D26 und
+	     braucht keinen neuen Block und kein neues XUi-Fenster.
+
+	     KEINE PERK-MARKEN. Vanilla haengt diese Rezepte an 'perkAdvancedEngineering'.
+	     Die sechs Baeume baut F-21 in WP7 (D47); bis dahin tragen unsere Rezepte keine
+	     Perk-Marke und sind damit von Anfang an bekannt. Das ist eine Luecke mit
+	     Adresse, keine Entscheidung gegen D24.
+
+	     STUECKZAHLEN SIND SETZUNGEN FUER WP9. Zehn Erz und sieben Holzkohle je
+	     Schmiedeeisen ist ein Anfangswert, kein Ergebnis eines Playtests. -->
+
+	<!-- Vanillas Umweg faellt. Beide Rezepte machen aus Schrott bzw. aus der
+	     Schmelzeinheit direkt Schmiedeeisen und wuerden die Luppe zur Zierde machen:
+	     wer den kuerzeren Weg hat, nimmt ihn. Ein 'remove' auf einen Rezeptnamen
+	     trifft beide Fassungen (use_smelter und replace_smelter) - mehrfacher Treffer
+	     ist hier Absicht, Vertrag 03 Nachtrag WP3.2. Ein Rezept ist ein WEG, keine
+	     Definition; D9 bleibt gewahrt. -->
+	<remove xpath="/recipes/recipe[@name='resourceForgedIron']" />
+	<remove xpath="/recipes/recipe[@name='resourceForgedSteel']" />
+
+	<append xpath="/recipes">
+
+		<!-- 1. Rennofen: Erz und Holzkohle werden zur Luppe. -->
+		<recipe name="itm700_luppe" count="1" craft_area="forge" craft_tool="toolBellows"
+		        is_trackable="false">
+			<ingredient name="resourceScrapIron" count="10" />
+			<ingredient name="resourceCoal" count="5" />
+		</recipe>
+
+		<!-- 2. Esse: die Luppe wird unter dem Hammer vom Schlackenanteil befreit. -->
+		<recipe name="resourceForgedIron" count="1" craft_area="forge" craft_tool="toolAnvil"
+		        is_trackable="false">
+			<ingredient name="itm700_luppe" count="1" />
+			<ingredient name="resourceCoal" count="2" />
+		</recipe>
+
+		<!-- 3. Esse mit Tiegel: Aufkohlen zu Tiegelstahl (T3). D55 - Stahl ist eine
+		     Materialstufe, kein eigener Gegenstandsbaum. Damast (T4) kommt erst mit der
+		     Meister-Abschrift und gehoert zu F-21 in WP7. -->
+		<recipe name="resourceForgedSteel" count="1" craft_area="forge"
+		        craft_tool="toolForgeCrucible" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="5" />
+			<ingredient name="resourceCoal" count="10" />
+		</recipe>
+
+		<!-- 4. Esse und Amboss: die Klinge, noch ohne Griff. -->
+		<recipe name="itm700_klinge" count="1" craft_area="forge" craft_tool="toolAnvil"
+		        is_trackable="false">
+			<ingredient name="resourceForgedIron" count="5" />
+			<ingredient name="resourceCoal" count="2" />
+		</recipe>
+
+		<!-- 5. Zimmermannsbank: Griff, Wicklung, Scheide - daraus wird die Spatha. -->
+		<recipe name="itm700_spatha" count="1" craft_area="workbench" is_trackable="false">
+			<ingredient name="itm700_klinge" count="1" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="5" />
+		</recipe>
+
+	</append>
+</config>

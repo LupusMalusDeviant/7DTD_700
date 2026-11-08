@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_40_Bauen / blocks.xml
+	     F-04 Werkstaetten, Plan-0001 WP4.3 und WP4.5
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Die fuenf Vanilla-Werkstaetten werden UMGEDEUTET, nicht neu gebaut. F-04 ordnet
+	     zu:
+
+	       campfire          -> Feuerstelle
+	       workbench         -> Zimmermannsbank
+	       forge             -> Rennofen UND Esse, getrennt durch das Werkzeug
+	       chemistryStation  -> Kraeuterkueche
+	       cementMixer       -> Kalkofen
+
+	     Der sichtbare Teil der Umdeutung ist Sprache und steht in
+	     mod/700_90_Sprache/Config/Localization.csv. Hier steht nur, was Verhalten ist -
+	     und das ist genau eine Zeile. -->
+
+	<!-- WP4.5: Der Kalkofen braucht Feuer. F-04 nennt fuer ihn "Holz/Holzkohle", aber
+	     Vanillas Betonmischer hat 'Modules="output"' und damit keine Brennstoffkammer -
+	     er ruehrt, er brennt nicht. Kalk wird gebrannt, also bekommt er eine. Dieselbe
+	     Zeile macht aus einer elektrisch gedachten Maschine einen Ofen, ohne dass ein
+	     neuer Block noetig ist.
+
+	     Das Fenster dazu steht in XUi_InGame/xui.xml: ein Modul ohne sein Fenster waere
+	     eine Kammer, die der Spieler nicht sehen kann. Beide Zeilen gehoeren zusammen. -->
+	<set xpath="/blocks/block[@name='cementMixer']/property[@class='Workstation']/property[@name='Modules']/@value">output,fuel</set>
+
+	<!-- NICHT GEMACHT, UND WARUM. F-04 gibt der Zimmermannsbank Saege, Hobel und Bohrer
+	     und der Esse zusaetzlich Zange und Hammer. Das sind fuenf neue Gegenstaende und
+	     zwei neue XUi-Werkzeugfenster - also Inhalt, und Inhalt gehoert in das Paket,
+	     das ihn braucht (D50). Die Zimmermannsbank bleibt darum bei 'Modules="output"',
+	     und die Esse behaelt Vanillas drei Slots (Blasebalg, Amboss, Schmelztiegel), die
+	     F-04 ohnehin nennt und die fuer die Kette aus WP4.6 ausreichen.
+
+	     Ebenfalls offen: 'CraftActionName' heisst am Kalkofen weiter 'lblContextActionMix'
+	     ("Mischen") statt "Brennen". Der Schluessel gehoert Vanilla und wird auch von der
+	     Kraeuterkueche benutzt; ihn zu ueberschreiben wuerde beide treffen. Ein eigener
+	     Schluessel je Werkstatt waere richtig und ist eine Zeile mehr, als WP4.5
+	     verlangt - vermerkt fuer F-12 in WP8, wo die Sprache ohnehin durchgesehen wird. -->
+</config>

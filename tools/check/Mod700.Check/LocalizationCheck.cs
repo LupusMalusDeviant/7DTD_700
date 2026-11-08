@@ -26,7 +26,15 @@ internal static class LocalizationCheck
     public static int Run(string path, string[] args)
     {
         var required = new List<string> { "english", "german" };
-        string? prefix = null;
+
+        // Mehrere Praefixe, nicht eines. Vertrag 02 §2 gibt je Art ein eigenes Praefix
+        // (itm700_, blk700_, buff700_ ...), und der Sprachschluessel eines Gegenstands IST
+        // seine Kennung - es gibt in 7DTD keine Eigenschaft, mit der ein Gegenstand auf
+        // einen anderen Namensschluessel zeigen koennte. Mit einem einzelnen '700_' waere
+        // jeder eigene Gegenstand rot, und der Ausweg waere, ihn in vanilla-keys.txt zu
+        // schreiben: eine Freigabe fuer etwas, das gar kein Vanilla ist, und damit eine
+        // Luege in genau der Datei, die die Ausnahmen aufzaehlt.
+        List<string>? prefixes = null;
         string? allowFile = null;
         bool asJson = false;
 
@@ -39,7 +47,17 @@ internal static class LocalizationCheck
                                                     StringSplitOptions.TrimEntries).ToList();
                     break;
                 case "--prefix" when i + 1 < args.Length:
-                    prefix = args[++i];
+                    prefixes = args[++i]
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries |
+                                    StringSplitOptions.TrimEntries)
+                        .ToList();
+                    if (prefixes.Count == 0)
+                    {
+                        throw new UsageException(
+                            "--prefix braucht mindestens ein Praefix, etwa '700_' oder " +
+                            "'700_,itm700_,blk700_'.");
+                    }
+
                     break;
                 case "--vanilla-keys" when i + 1 < args.Length:
                     allowFile = args[++i];
@@ -85,9 +103,9 @@ internal static class LocalizationCheck
             path,
             "localization-csv",
             File.GetLastWriteTimeUtc(path).ToString("yyyy-MM-dd HH:mm:ss'Z'"),
-            prefix is null
+            prefixes is null
                 ? "Praefix-Pruefung aus (kein --prefix)"
-                : $"Praefix-Pruefung auf '{prefix}'");
+                : $"Praefix-Pruefung auf {string.Join(", ", prefixes.Select(p => $"'{p}'"))}");
         var report = new Report("localization", source);
 
         report.Limitation(
@@ -206,11 +224,13 @@ internal static class LocalizationCheck
                 seen[key] = row.Line;
             }
 
-            if (prefix is not null && !key.StartsWith(prefix, StringComparison.Ordinal)
-                                   && !allowed.Contains(key))
+            if (prefixes is not null
+                && !prefixes.Any(p => key.StartsWith(p, StringComparison.Ordinal))
+                && !allowed.Contains(key))
             {
                 report.Error("schluessel-ohne-praefix", where,
-                    $"'{key}' hat kein '{prefix}' am Anfang. Bewusste Vanilla-Ueberschreibungen " +
+                    $"'{key}' faengt mit keinem der erwarteten Praefixe an " +
+                    $"({string.Join(", ", prefixes)}). Bewusste Vanilla-Ueberschreibungen " +
                     "gehoeren in die Datei hinter --vanilla-keys.");
             }
 

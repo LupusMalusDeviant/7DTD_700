@@ -149,7 +149,12 @@ else {
 # des Sprach-Modlets.
 $ourCsv = Join-Path $repoRoot 'mod\700_90_Sprache\Config\Localization.csv'
 if (Test-Path $ourCsv) {
-    $arguments = @('localization', $ourCsv, '--prefix', '700_')
+    # Die Praefixliste ist woertlich die aus Vertrag 02 §2, plus '700_' fuer alles, was
+    # keine Kennung ist (700_modName, XUi-Elemente). Der Sprachschluessel eines
+    # Gegenstands IST seine Kennung - siehe die Berichtigung in Vertrag 02 §5 -, also
+    # muss hier jedes Kennungspraefix stehen und nicht nur '700_'.
+    $praefixe = '700_,itm700_,blk700_,buff700_,cv700_,prk700_,att700_,lg700_,ent700_'
+    $arguments = @('localization', $ourCsv, '--prefix', $praefixe)
     $vanillaKeys = Join-Path $here 'vanilla-keys.txt'
     if (Test-Path $vanillaKeys) { $arguments += @('--vanilla-keys', $vanillaKeys) }
     Invoke-Check 'localization (unser Modlet)' $arguments
@@ -159,6 +164,21 @@ else {
     Write-Output "---- localization ----"
     Write-Output "  uebersprungen: $ourCsv gibt es noch nicht (kommt mit WP8)."
     Write-Output "  Das ist kein Gruen, sondern eine fehlende Pruefung."
+}
+
+# ---------------------------------------------------- Unsere eigene Kette
+# 'recipes' prueft eine QUELLE, und unsere Modlets sind in keiner, die ohne Spielstart zu
+# haben ist (WP3.6). 'recipes gruen' heisst darum heute "Vanilla hat keine Sackgasse" und
+# sagt nichts ueber unsere Kette. kette-pruefen.ps1 schliesst die kleinere Haelfte der
+# Luecke: es loest jeden Verweis unserer eigenen Rezepte auf.
+$ketteSkript = Join-Path $here 'kette-pruefen.ps1'
+if (Test-Path $ketteSkript) {
+    $ran++
+    Write-Output ""
+    Write-Output "---- eigene Kette (Verweise) ----"
+    & $ketteSkript
+    if ($LASTEXITCODE -ne 0) { $red++; Write-Output "  -> rot" }
+    else { Write-Output "  -> gruen" }
 }
 
 Write-Output ""

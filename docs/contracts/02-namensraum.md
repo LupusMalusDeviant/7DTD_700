@@ -102,9 +102,39 @@ polish,brazilian,russian,turkish,schinese,tchinese
 
 ### Schlüssel-Aufbau
 
+> **BERICHTIGT am 8. November 2026 in WP4.6 — Abnahme offen.** Der Aufbau unten war
+> **falsch und nicht umsetzbar.** Er stand da, bevor ein eigener Gegenstand existierte; beim
+> ersten (`itm700_luppe`) ist er aufgefallen. Der neue Aufbau steht darunter.
+>
+> ```
+> 700_<art>_<kennung ohne präfix>          700_itm_spatha      <-- funktioniert NICHT
+> 700_<art>_<kennung>Desc                  700_itm_spathaDesc
+> ```
+>
+> **Warum nicht:** In 7DTD ist der Sprachschlüssel eines Gegenstands **seine Kennung
+> selbst**. Es gibt keine Eigenschaft, mit der ein Gegenstand auf einen anderen
+> Namensschlüssel zeigen könnte — `ItemClass::GetLocalizedItemName` liest nur das Feld
+> `localizedName`, das beim Laden aus der Kennung gefüllt wird, und in den ausgelieferten
+> `items.xml` und `blocks.xml` gibt es **1124 `DescriptionKey`-Einträge und null**
+> Eigenschaften für einen Namensschlüssel. Die Vanilla-`Localization.csv` bestätigt es von
+> der anderen Seite: jeder Gegenstandsschlüssel ist wörtlich der Gegenstandsname.
+>
+> Ein Gegenstand `itm700_spatha` mit dem Schlüssel `700_itm_spatha` hätte also schlicht
+> keinen Namen — im Inventar stünde die Kennung. Der alte Aufbau wäre mit §2 nur
+> vereinbar, wenn Gegenstände `700_itm_spatha` **hießen**, und das widerspricht §2.
+>
+> **Der Schlüssel ist die Kennung.** Punkt 5 oben liest sich damit so: ein Schlüssel ist
+> entweder ein bewusst überschriebener Vanilla-Schlüssel (Liste in
+> `tools/check/vanilla-keys.txt`) oder er trägt **eines der Präfixe aus §2** —
+> `itm700_`, `blk700_`, `buff700_`, `cv700_`, `prk700_`, `att700_`, `lg700_`, `ent700_` —
+> oder `700_` selbst für alles, was keine Kennung ist (`700_modName`, XUi-Elemente).
+> `mod700check localization --prefix` nimmt dafür seit WP4.6 eine Liste statt eines
+> einzelnen Präfixes; `check-all.ps1` übergibt genau die Liste aus §2.
+
 ```
-700_<art>_<kennung ohne präfix>          700_itm_spatha
-700_<art>_<kennung>Desc                  700_itm_spathaDesc
+<kennung>                                itm700_spatha
+<kennung>Desc                            itm700_spathaDesc
+700_<name>                               700_modName, 700_WindowGrauen
 ```
 
 Beschreibungstexte hängen `Desc` an. Das folgt dem Vanilla-Muster (`itemNameDesc`).

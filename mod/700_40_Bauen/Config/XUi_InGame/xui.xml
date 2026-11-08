@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_40_Bauen / XUi_InGame/xui.xml
+	     F-04 Werkstaetten, Plan-0001 WP4.5
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Jede Werkstatt in 7DTD hat eine eigene Fenstergruppe 'workstation_<Blockname>'
+	     in dieser Datei. Welche Fenster darin stehen, entscheidet, was der Spieler sieht;
+	     'Modules' in blocks.xml entscheidet, was der Block fuehrt. BEIDE muessen
+	     zusammenpassen - ein Modul ohne Fenster ist eine Kammer, die niemand oeffnen
+	     kann, und ein Fenster ohne Modul ist ein leerer Rahmen.
+
+	     Die Datei ist patchbar: sie steht in StockFileHashes und der Ordner heisst
+	     XUi_InGame (mit Unterstrich), nicht XUi - siehe Vertrag 03 Abschnitt 3. -->
+
+	<!-- Der Kalkofen bekommt seine Brennstoffkammer auch im Bild. Eingehaengt VOR
+	     windowOutput, in derselben Reihenfolge, in der die Feuerstelle ihre Fenster
+	     fuehrt (Liste, Infotafel, Warteschlange, Werkzeuge, Brennstoff, Ausgabe,
+	     Kopfzeile) - sonst sitzt die Kammer hinter der Ausgabe und liest sich falsch. -->
+	<insertBefore xpath="/xui/window_group[@name='workstation_cementMixer']/window[@name='windowOutput']">
+		<window name="windowFuel" />
+	</insertBefore>
+</config>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- Pruefdaten fuer kette-pruefen.ps1: drei Verweise, die nirgends definiert sind.
+	     Der Tippfehler in der Zutat ist der realistische Fall - 'resourceCole' statt
+	     'resourceCoal' liest sich beim Durchsehen richtig, und das Spiel sagt dazu
+	     nichts: ein Rezept mit unbekannter Zutat ist einfach nicht herstellbar. -->
+	<append xpath="/recipes">
+		<recipe name="pruefGibtEsNicht" count="1" craft_area="forge" craft_tool="toolGibtEsNicht">
+			<ingredient name="resourceCole" count="5" />
+			<ingredient name="resourceWood" count="1" />
+		</recipe>
+	</append>
+</config>

@@ -82,13 +82,18 @@ Projektregel 5: ein Check zählt erst, wenn er einmal nachweislich an einem fals
 scheitert. `tools/check/gegenproben.ps1` erbringt das und ist wiederholbar — die Prüfdaten unter
 `testdaten/` bestehen aus **erfundenen** Kennungen, nicht aus Spielinhalt (Projektregeln 1 und 7).
 
-Lauf vom 2026-11-07: **38 Gegenproben, 0 fehlgeschlagen.**
+Lauf vom 2026-11-08: **40 Gegenproben, 0 fehlgeschlagen.**
 
-Die drei jüngsten gehören zu `vanilla-keys.txt`, der Liste bewusster
+Fünf davon sind jung. Drei gehören zu `vanilla-keys.txt`, der Liste bewusster
 Vanilla-Überschreibungen in `Localization.csv` (Vertrag 04 §5, Nachtrag WP4.1). Sie ist eine
 **Abschaltung** der Präfix-Prüfung, also wird geprüft, dass sie wirkt, dass sie einen
 nachgestellten Grund verträgt — **das war ein echter Fehler, der Leser schnitt den Kommentar
 nicht ab** — und dass ein Eintrag ohne zugehörige Zeile genannt wird.
+
+Zwei halten eine Berichtigung an Vertrag 02 §5 fest: der Sprachschlüssel eines Gegenstands
+**ist seine Kennung**, und Kennungen heißen `itm700_…`. Mit dem alten Rezept (ein einzelnes
+`700_`) war jeder eigene Gegenstand rot. `--prefix` nimmt seit WP4.6 eine Liste; die
+Gegenproben zeigen rot mit dem alten und grün mit dem neuen Rezept.
 
 | Gegenprobe | Erwartung | Ergebnis |
 |---|---|---|
@@ -247,6 +252,27 @@ Unerreichbar wird er allein durch die entfernten Wege.
 Was dem Spieler *statt* der gesperrten Startausrüstung gegeben wird, steht nicht im Purge-Modlet,
 sondern von Hand in `mod/700_30_Ausruestung/Config/entityclasses.xml` (WP3.4). Das ist die
 Grenze: was aus der Denylist folgt, wird erzeugt; was eine Entscheidung ist, wird geschrieben.
+
+### `kette-pruefen.ps1` — unsere eigenen Rezepte
+
+`recipes` prüft eine **Quelle**, und unsere Modlets stehen in keiner, die ohne Spielstart zu
+haben ist. **„`recipes` grün" heißt heute „Vanilla hat keine Sackgasse"** und sagt über unsere
+Kette nichts. Das gehört gesagt, weil ein grünes `recipes` sonst wie eine Aussage über unsere
+Arbeit aussieht.
+
+`kette-pruefen.ps1` schließt die kleinere Hälfte: es löst **jeden** Verweis unserer
+Rezept-Patches auf — Ergebnis, Zutaten, `craft_tool` — gegen Vanillas `items.xml`/`blocks.xml`
+und unsere eigenen `items.xml`. Gemessen am 2026-11-08: 8.092 Vanilla-Definitionen, 3 eigene,
+**5 Rezepte, 4 werkzeuggebunden, 0 unaufgelöste Verweise.**
+
+Rot vorgeführt an `testdaten/kette-rot.xml`: drei erfundene Namen, darunter `resourceCole`
+statt `resourceCoal` — der Fall, der sich beim Durchsehen richtig liest und über den das Spiel
+schweigt, weil ein Rezept mit unbekannter Zutat einfach nicht herstellbar ist. Der Lauf meldet
+3 rot, Exit 1.
+
+Ohne `SDTD_PATH` überspringt es sich und sagt „KEIN GRUEN". Was es nicht prüft, sagt es in
+jeder Ausgabe: Erreichbarkeit von T0, Zyklen, und ob der XML-Patcher des Spiels unsere XPaths
+trifft.
 
 ## Grenzen
 

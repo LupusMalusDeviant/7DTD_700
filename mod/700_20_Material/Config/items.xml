@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_20_Material / items.xml
+	     F-05 Rohstoffe und F-04 Handwerk, Plan-0001 WP4.6
+
+	     Die drei Glieder, die Vanilla in der Eisenkette fehlen. F-04 nennt den Weg:
+	     Raseneisenerz + Holzkohle -> (Rennofen) Luppe -> (Esse) Schmiedeeisen ->
+	     (Esse + Amboss) Klinge -> (Zimmermannsbank) Spatha. Raseneisenerz,
+	     Schmiedeeisen und Holzkohle sind umgedeutete Vanilla-Gegenstaende (WP4.1);
+	     Luppe, Klinge und Spatha gibt es in Vanilla nicht, weil Vanilla aus Schrott
+	     direkt Schmiedeeisen macht.
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt: das ist eine Entscheidung und folgt aus
+	     keiner Liste (D53 - 700_10_Purge nimmt weg, die anderen fuegen hinzu).
+
+	     Alle drei erben von einem Vanilla-Gegenstand, statt jede Eigenschaft neu zu
+	     setzen. Das ist Absicht und hat eine Grenze: Modell, Symbol, Gewicht und
+	     Trefferwerte sind die des Vorfahren. Eine Spatha, die wie ein Jagdmesser
+	     zuschlaegt, ist fuer die KETTE richtig und fuer das SPIELGEFUEHL falsch - das
+	     richtet F-02/F-03 in WP5, die Zahlen WP9, Modell und Symbol Phase 2. Hier geht
+	     es darum, dass der Pfad T0 -> T4 ohne Sackgasse existiert. -->
+
+	<append xpath="/items">
+
+		<!-- Luppe: der Eisenschwamm, der im Rennofen anfaellt - poroes, voller Schlacke,
+		     noch kein Werkstoff. Erbt von resourceScrapIron (Raseneisenerz), weil sie auf
+		     derselben Stufe steht: etwas, das erst ausgeschmiedet werden muss. -->
+		<item name="itm700_luppe">
+			<property name="Extends" value="resourceScrapIron" />
+			<property name="CustomIcon" value="resourceScrapIron" />
+			<property name="CustomIconTint" value="8a7a66" />
+			<property name="EconomicValue" value="24" />
+			<property name="EconomicBundleSize" value="1" />
+			<property name="Stacknumber" value="500" />
+			<property name="CraftingIngredientTime" value="4" />
+		</item>
+
+		<!-- Klinge: ausgeschmiedet, noch ohne Griff und Scheide. Erbt von
+		     resourceForgedIron (Schmiedeeisen) - sie ist ein Halbzeug, kein Werkzeug. -->
+		<item name="itm700_klinge">
+			<property name="Extends" value="resourceForgedIron" />
+			<property name="CustomIcon" value="resourceForgedIron" />
+			<property name="CustomIconTint" value="d8dee0" />
+			<property name="EconomicValue" value="90" />
+			<property name="Stacknumber" value="50" />
+			<property name="CraftingIngredientTime" value="8" />
+		</item>
+
+		<!-- Spatha: das zweischneidige Langschwert der Zeit. Erbt vom Jagdmesser, weil
+		     das die einzige erlaubte Vanilla-Klinge ist (meleeWpnBladeT0BoneKnife und
+		     meleeWpnBladeT1HuntingKnife; die Macheten sind gesperrt). Was sie damit NICHT
+		     ist: eine Waffe mit eigener Reichweite, eigenem Schlag und eigener Animation.
+		     Das steht so da, damit niemand die Zahl fuer eine Entscheidung haelt. -->
+		<item name="itm700_spatha">
+			<property name="Extends" value="meleeWpnBladeT1HuntingKnife" />
+			<property name="CustomIcon" value="meleeWpnBladeT1HuntingKnife" />
+			<property name="EconomicValue" value="450" />
+			<property name="Group" value="Ammo/Weapons" />
+		</item>
+
+	</append>
+</config>

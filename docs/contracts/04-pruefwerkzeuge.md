@@ -769,6 +769,42 @@ Drei Regeln für diese Datei, alle drei mit einer Gegenprobe:
 **Jede Zeile dort ist eine Entscheidung.** Wer einen Schlüssel einträgt, nur damit die Prüfung
 schweigt, hat die Prüfung abgeschaltet und nicht bestanden. Der Grund gehört daneben.
 
+### Nachtrag WP4.6 (2026-11-08): `--prefix` nimmt eine Liste
+
+`--prefix` nahm ein einzelnes Präfix, weil Vertrag 02 §5 ein einzelnes `700_` vorschrieb.
+Dieser Teil von §5 war **falsch** und ist berichtigt: der Sprachschlüssel eines Gegenstands
+**ist seine Kennung**, und Kennungen heißen nach §2 `itm700_…`, `blk700_…` und so weiter. Mit
+nur `700_` war jeder eigene Gegenstand rot — und der naheliegende Ausweg, ihn in
+`vanilla-keys.txt` zu schreiben, wäre eine Freigabe für etwas, das gar kein Vanilla ist: eine
+Lüge in genau der Datei, die die Ausnahmen aufzählt.
+
+`--prefix` nimmt darum eine kommagetrennte Liste, und `check-all.ps1` übergibt wörtlich die
+aus §2 plus `700_` für alles, was keine Kennung ist. Zwei Gegenproben halten es fest: ein
+Kennungsschlüssel ist mit `--prefix 700_` **rot** und mit der Liste **grün**.
+
+## 5a. `kette-pruefen.ps1` — unsere eigenen Rezepte (Nachtrag WP4.6)
+
+`recipes` prüft eine **Quelle**, und unsere Modlets stehen in keiner, die ohne Spielstart zu
+haben ist: der vorhandene `ConfigsDump` ist vom 7. Juli und kennt sie nicht. **„`recipes`
+grün" heißt heute „Vanilla hat keine Sackgasse"** und sagt über unsere Kette nichts. Das ist
+keine Schwäche des Werkzeugs, sondern die Stelle, an der der Spielstart aus WP3.6 fehlt — und
+sie gehört benannt, weil ein grünes `recipes` sonst wie eine Aussage über unsere Arbeit
+aussieht.
+
+`tools/check/kette-pruefen.ps1` schließt die kleinere Hälfte: es liest unsere
+Rezept-Patches, sammelt **jeden** Verweis — Ergebnis, Zutaten, `craft_tool` — und sucht ihn
+in Vanillas `items.xml`/`blocks.xml` und in unseren eigenen `items.xml`. Ein Tippfehler in
+einer Zutat ist der wahrscheinlichste Fehler in handgeschriebenen Rezepten, und das Spiel
+sagt dazu nichts: ein Rezept mit unbekannter Zutat ist einfach nicht herstellbar.
+
+Gegenprobe (Projektregel 5): `testdaten/kette-rot.xml` trägt drei erfundene Namen, darunter
+`resourceCole` statt `resourceCoal` — der Lauf meldet 3 rot und endet mit Exit 1. Gegen die
+echten Dateien: 5 Rezepte, 4 werkzeuggebunden, **0 unaufgelöste Verweise**.
+
+**Was es nicht prüft** und in seiner Ausgabe selbst sagt: Erreichbarkeit von T0 aus, Zyklen,
+und ob der XML-Patcher des Spiels unsere XPaths trifft. Ohne `SDTD_PATH` überspringt es sich
+und sagt ausdrücklich „KEIN GRUEN".
+
 ## 6. Ein Befehl für alles
 
 `tools/check/check-all.ps1` ruft die drei Befehle, fasst zusammen und endet mit Exit 1, wenn
@@ -808,6 +844,22 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
 
 ### Weiter offen
 
+- **Der Purge deckt Wege, nicht VERWEISE** (gefunden am 2026-11-08 in WP4.5, von Hand).
+  Erreichbarkeit heißt „der Spieler kann es bekommen". Wo Vanilla eine gesperrte Kennung nur
+  **nennt**, bleibt der Name stehen, und keine der sechs Wegarten sieht das:
+  - **Werkzeugslots in XUi.** Vanillas Werkzeugfenster der Feuerstelle verlangt
+    `required_tools="toolCookingPot,toolCookingGrill,toolBeaker"`. Das Becherglas ist
+    gesperrt, also blieb ein dritter Platz übrig, den niemand füllen kann. Behoben in
+    `700_40_Bauen`, aber eben von Hand.
+  - **`RepairItems`.** Der Betonmischer verlangt zur Reparatur `resourceSpring` und
+    `resourceMechanicalParts`, beide gesperrt. Ein unreparierbarer Block ist kein Absturz,
+    aber auch keine Entscheidung.
+  - **Prefab-Inhalte.** Steht ungeprüft, siehe §3d.
+
+  Eine Prüfung dafür gibt es nicht. Sie wäre machbar — dieselben Dateien, andere Frage: nicht
+  „woher bekommt man es", sondern „wo wird es genannt" — und sie würde vermutlich viel
+  finden, von dem das meiste harmlos ist. Das ist der Grund, warum sie noch nicht gebaut ist
+  und nicht, dass die Frage unwichtig wäre.
 - **Der Inhalt der Denylist** ist ein Anfang, kein Ende. `tools/check/denylist.txt` deckt
   Schusswaffen, Munition, Fahrzeuge, Elektronik, moderne Nahrung und Medizin, Treibstoff und
   industrielle Baustoffe ab, dazu 19 Freigaben nach D9. Die vollständige Liste entsteht in WP3.1

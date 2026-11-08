@@ -423,17 +423,19 @@ aus 1780 gerechneten Zeilen einen Nachweis.
 2. ~~**WP4.2** `[Claude-prüfbar]` **Währung auf Silber** (D30). Das ist belegt eine Zeile:
    `currency_item` in `traders.xml`; `casinoCoin` kommt im Code an keiner Stelle vor.~~
    **Erledigt 2026-11-07 — und zwar in null Zeilen `traders.xml`**, siehe Stand.
-3. **WP4.3** `[Claude-prüfbar]` Die fünf Vanilla-Werkstätten umdeuten: Feuerstelle,
-   Zimmermannsbank, Rennofen, Esse + Amboss, Kräuterküche, Kalkofen.
+3. ~~**WP4.3** `[Claude-prüfbar]` Die fünf Vanilla-Werkstätten umdeuten: Feuerstelle,
+   Zimmermannsbank, Rennofen, Esse + Amboss, Kräuterküche, Kalkofen.~~
+   **Erledigt 2026-11-08.**
 4. **WP4.4** `[Claude-prüfbar]` Die vier geklonten Werkstätten: Runenritzer-Bank, Webstuhl,
    Räucherkammer, Trockengestell. Jede mit Bau-Rezept, Brennstoffregel bzw. Werkzeugslots und
-   **mindestens fünf Rezepten**.
-5. **WP4.5** `[Claude-prüfbar]` Brennstoff- und Werkzeugslot-Regeln nach dem Vanilla-Forge-Prinzip
-   (D26).
-6. **WP4.6** `[Claude-prüfbar]` Die Beispielkette aus F-04 vollständig durchziehen:
+   **mindestens fünf Rezepten**. — **nicht angefangen, braucht eine Entscheidung**, siehe Stand.
+5. ~~**WP4.5** `[Claude-prüfbar]` Brennstoff- und Werkzeugslot-Regeln nach dem
+   Vanilla-Forge-Prinzip (D26).~~ **Erledigt 2026-11-08.**
+6. ~~**WP4.6** `[Claude-prüfbar]` Die Beispielkette aus F-04 vollständig durchziehen:
    `Raseneisenerz + Holzkohle → Luppe → Schmiedeeisen → Klinge → Spatha`. Stahl per Aufkohlen,
-   Damast erst mit Meister-Abschrift.
+   Damast erst mit Meister-Abschrift.~~ **Erledigt 2026-11-08**, Damast bleibt bei WP7.
 7. **WP4.7** `[Claude-prüfbar]` `mod700check recipes` grün: kein T0→T4-Pfad mit Sackgasse.
+   — **nur teilweise möglich**, siehe Stand.
 
 **Ergebnis:** Eine vollständige, geprüfte Rohstoff- und Werkstattkette von T0 bis T4.
 
@@ -471,6 +473,105 @@ wäre eine Zahl, die nichts bewirkt, und „Setzung für WP9" dazuzuschreiben w�
 Der Engpass hängt an der Bergeökonomie der Welt (F-17/F-18) und an WP9 — und an derselben
 585-Zahl, die den sechsten Weg aufgedeckt hat. Kalk, Bernstein und Salz fehlen ebenfalls: sie
 sind neue Gegenstände und gehören zu den Werkstätten, die sie verarbeiten (WP4.3 bis WP4.6).
+
+**Stand WP4.3, WP4.5 und WP4.6 (8. November 2026): die Werkstätten stehen, die Kette läuft.**
+
+F-04 ordnet fünf Vanilla-Blöcke sechs Namen zu — `forge` trägt **zwei**, weil Rennofen und
+Esse in Vanilla ein Block mit drei Werkzeugslots sind. Daraus folgt der Trick von WP4.6:
+**getrennt wird durch das Werkzeug, nicht durch den Block.**
+
+| 700-Werkstatt | Vanilla | was wirklich geändert wurde |
+|---|---|---|
+| Feuerstelle | `campfire` | Sprache; Werkzeugslots von 3 auf 2 (siehe unten) |
+| Zimmermannsbank | `workbench` | nur Sprache |
+| Rennofen und Esse | `forge` | nur Sprache; Vanillas drei Slots reichen |
+| Kräuterküche | `chemistryStation` | nur Sprache |
+| Kalkofen | `cementMixer` | Sprache **+ Brennstoffkammer** (`Modules`, plus ihr XUi-Fenster) |
+
+Der Kalkofen ist die einzige echte Verhaltensänderung: Vanillas Betonmischer hat
+`Modules="output"` und damit kein Feuer — er rührt. Kalk wird gebrannt, also bekommt er eine
+Brennstoffkammer, und weil ein Modul ohne Fenster eine Kammer ist, die niemand öffnen kann,
+auch das Fenster in `XUi_InGame/xui.xml`.
+
+**Die Kette (WP4.6), fünf Schritte, vier davon werkzeuggebunden:**
+
+```
+Raseneisenerz 10 + Holzkohle 5   --(Esse, Blasebalg)--> Luppe
+Luppe 1 + Holzkohle 2            --(Esse, Amboss)-----> Schmiedeeisen
+Schmiedeeisen 5 + Holzkohle 10   --(Esse, Tiegel)-----> Tiegelstahl     (T3, Aufkohlen)
+Schmiedeeisen 5 + Holzkohle 2    --(Esse, Amboss)-----> Klinge
+Klinge 1 + Holz 10 + Leder 5     --(Zimmermannsbank)--> Spatha
+```
+
+Drei neue Gegenstände (`itm700_luppe`, `itm700_klinge`, `itm700_spatha`), und **Vanillas
+Umweg fällt**: die vier Rezepte, die aus Schrott bzw. Schmelzeinheit direkt Schmiedeeisen
+oder Stahl machen, sind entfernt. Ohne das wäre die Luppe Zierde — wer den kürzeren Weg hat,
+nimmt ihn.
+
+**Holzkohle ist Zutat, nicht Brennstoff.** D26 sagt „Vanilla-Forge-Prinzip" für den
+Brennstoff, und das heißt: die Kammer nimmt alles mit `FuelValue` — Holz 50, Holzkohle 100,
+dazu Stoff, Leder, Fett, Federn. Holzkohle wäre dort nur doppelt so gut wie Holz, nicht
+*nötig*. Ohne sie kommt aber kein Eisen aus dem Erz. Darum steht sie als Zutat in jedem
+Glied: der Zwang sitzt an der Stelle, an der die Prüfung ihn sehen kann, und der
+Brennstoffgrid bleibt Vanilla.
+
+**Ein gesperrter Gegenstand in einem Werkzeugslot.** Vanillas Werkzeugfenster der Feuerstelle
+verlangt `toolCookingPot,toolCookingGrill,toolBeaker`. Das Becherglas steht auf der Denylist;
+der Purge nimmt ihm alle Wege, sieht aber XUi nicht an — ein Werkzeugslot ist kein Weg, auf
+dem man etwas *bekommt*. Übrig blieb ein dritter Platz, den niemand füllen kann. Jetzt zwei
+Slots, und das ist genau, was F-04 der Feuerstelle zuschreibt („Topf, Spieß"). **Daraus folgt
+allgemein: der Purge deckt Wege, nicht Verweise.** Werkzeugslots, `RepairItems` und
+Prefab-Inhalte nennen gesperrte Kennungen weiter. Diese Stelle ist von Hand gefunden, nicht
+von einer Prüfung — als offener Punkt in Vertrag 04 vermerkt.
+
+| | Zahl |
+|---|---|
+| Patchdateien neu | 5 (`items`, `recipes`, `blocks`, `XUi_InGame/windows`, `XUi_InGame/xui`) |
+| eigene Rezepte | 5, davon 4 werkzeuggebunden |
+| Vanilla-Rezepte entfernt | 4 (2× Schmiedeeisen, 2× Tiegelstahl) |
+| Sprachschlüssel | 42 (vorher 26) |
+| Gegenproben | 38 → **40**, 0 fehlgeschlagen |
+| Paket | 8 Modlets, 23 Dateien (vorher 18) |
+
+**WP4.7 ist nur zur Hälfte möglich, und das liegt nicht an WP4.** `mod700check recipes`
+prüft eine *Quelle*, und unsere Modlets stehen in keiner, die ohne Spielstart zu haben ist:
+der vorhandene `ConfigsDump` ist vom 7. Juli und kennt sie nicht. „recipes grün" heißt heute
+**„Vanilla hat keine Sackgasse"** und sagt über unsere Kette nichts. Dafür gibt es jetzt
+`tools/check/kette-pruefen.ps1`: es löst jeden Verweis unserer Rezepte auf — Ergebnis,
+Zutaten, Werkzeug — gegen Vanilla und unsere eigenen `items.xml`. Gemessen 5 Rezepte,
+0 unaufgelöste Verweise; rot vorgeführt an `testdaten/kette-rot.xml` mit drei erfundenen
+Namen, darunter der realistische Fall `resourceCole` statt `resourceCoal`. Was es **nicht**
+prüft: Erreichbarkeit von T0 aus, Zyklen, und ob der XML-Patcher des Spiels unsere XPaths
+trifft. Das bleibt WP3.6.
+
+**WP4.4 ist nicht angefangen, und zwar absichtlich — hier steht eine Entscheidung an.**
+F-04 nennt drei Klone, nicht vier (der Plan hat „Räucherkammer / Trockengestell" in zwei
+Zeilen getrennt), und F-04 schreibt jedem zu, was er erzeugen soll:
+
+| Klon | erzeugt laut F-04 | in Phase 1 vorhanden |
+|---|---|---|
+| Runenritzer-Bank | Runen, Runensteine, Glutladungen **(F-15)** | nichts — F-15 ist Phase 2 |
+| Webstuhl | Tuch, Gambeson-Teile, Segeltuch | nur Tuch (`resourceCloth`); Gambeson ist F-03/WP5, Segeltuch wäre neu |
+| Räucherkammer / Trockengestell | Konserven **(F-19)** | nichts — F-19 ist Phase 2 |
+
+Gemessen: nach dem Purge sind in ganz Vanilla noch 252 Rezepte übrig (Zimmermannsbank 71,
+Esse 36, Feuerstelle 14, Kräuterküche 4, Kalkofen 3, ohne Werkstatt 124). Darunter ist
+**kein** Satz von fünf, der auf einen Webstuhl, eine Räucherkammer oder eine Runenbank
+gehört. Das Akzeptanzkriterium „jede Werkstatt … mindestens fünf Rezepte" ist in Phase 1
+also nur zu erfüllen, indem Phase-2-Inhalt vorgezogen wird — und **D50 verbietet das
+ausdrücklich** („nur Features der aktuellen Phase umsetzen").
+
+Drei Wege, und die Wahl gehört dem Nutzer (Projektregel 4):
+1. **Die drei Blöcke jetzt bauen, leer.** Block, XUi-Fenstergruppe, Bau-Rezept — je rund
+   zwanzig Zeilen. Sie stehen dann in der Welt und haben zu wenige Rezepte; „mindestens
+   fünf" wird in Phase 2 nachgezogen. Das Kriterium bleibt bis dahin offen und sichtbar.
+2. **WP4.4 verschieben**, in die Pakete, die den Inhalt bringen (F-15 und F-19 in Phase 2,
+   Gambeson in WP5). Phase 1 endet dann mit fünf Werkstätten statt acht.
+3. **D50 für WP4.4 beugen** und den Inhalt jetzt erfinden. Das wäre eine neue D-Zeile.
+
+Empfehlung: **Weg 2.** Eine Werkstatt ohne Rezepte ist für den Spieler eine Enttäuschung und
+für den Prüfer ein dauerhaft offenes Kriterium; der Webstuhl lohnt sich, sobald F-03 in WP5
+die Gambeson-Teile bringt, und dann in einem Stück.
 
 ---
 

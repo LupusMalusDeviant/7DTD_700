@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_40_Bauen / XUi_InGame/windows.xml
+	     F-04 Werkstaetten, Plan-0001 WP4.5
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     EIN GESPERRTER GEGENSTAND IN EINEM WERKZEUGSLOT. Vanillas Werkzeugfenster der
+	     Feuerstelle fuehrt 'required_tools="toolCookingPot,toolCookingGrill,toolBeaker"'
+	     mit 'required_tools_only="true"'. toolBeaker ist das Becherglas und steht auf
+	     der Denylist ("Chemie gehoert nicht in Phase 1"). Der Purge aus WP3 nimmt ihm
+	     alle Wege - kein Rezept, kein Loot, keine Haendlerware -, aber er sieht diese
+	     Datei nicht an: XUi gehoert zu keiner der sechs Wegarten, und ein Werkzeugslot
+	     ist auch kein Weg, auf dem man etwas BEKOMMT.
+
+	     Uebrig bleibt also ein Slot, der nach einem Gegenstand verlangt, den es nicht
+	     mehr gibt. Das ist kein Absturz, aber es ist ein Loch im Bild: der Spieler sieht
+	     einen dritten Platz an der Feuerstelle, den er nie fuellen kann. Darum hier zwei
+	     Slots statt drei - Topf und Rost, und das ist genau, was F-04 der Feuerstelle
+	     zuschreibt ("Topf, Spiess").
+
+	     WAS DARAUS FOLGT, UND ZWAR ALLGEMEIN: der Purge deckt Wege, nicht VERWEISE. Wo
+	     Vanilla eine gesperrte Kennung nur NENNT - Werkzeugslots, Reparaturkosten
+	     ('RepairItems'), Prefab-Inhalte -, bleibt der Name stehen. Diese Stelle ist von
+	     Hand gefunden, nicht von einer Pruefung, und eine Pruefung dafuer gibt es
+	     bisher nicht. Vermerkt als offener Punkt in Vertrag 04. -->
+
+	<setattribute name="required_tools"
+	              xpath="/windows/window[@name='windowToolsCampfire']/rect[@name='content']/grid[@name='inventory']">toolCookingPot,toolCookingGrill</setattribute>
+</config>

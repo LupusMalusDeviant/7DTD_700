@@ -44,3 +44,22 @@ resourceCropCottonPlantDesc
 # --- WP4.2: Waehrung (D30) ------------------------------------------------------
 casinoCoin                        # Silberpfennig; D30 nennt die 1:1-Umdeutung der Dukes
 casinoCoinDesc
+
+# --- WP4.3: die fuenf Vanilla-Werkstaetten (F-04) -------------------------------
+# Hier bleibt der Blockname Vanilla, weil der Block Vanilla BLEIBT: 309 Rezepte zeigen
+# auf craft_area="workbench", 62 auf "forge". Ein eigener Block waere ein eigener
+# Rezeptbaum und ein eigenes XUi-Fenster fuer nichts.
+#
+# forge traegt zwei Namen in einem: F-04 nennt Rennofen (Teil 1) und Esse (Teil 2),
+# Vanilla hat einen Block mit drei Werkzeugslots. Getrennt wird darum durch das
+# Werkzeug, nicht durch den Block - deshalb heisst er "Rennofen und Esse".
+campfire                          # Feuerstelle
+campfireDesc
+workbench                         # Zimmermannsbank
+workbenchDesc
+forge                             # Rennofen und Esse
+forgeDesc
+chemistryStation                  # Kraeuterkueche
+chemistryStationDesc
+cementMixer                       # Kalkofen
+cementMixerDesc

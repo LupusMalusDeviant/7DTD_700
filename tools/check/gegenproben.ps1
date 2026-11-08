@@ -163,6 +163,16 @@ Write-Output "== Gegenproben: die Liste der bewussten Vanilla-Ueberschreibungen 
 Test-Case 'localization: freigegebener Vanilla-Schluessel ist gruen' 0 @(
     'localization', (Join-Path $data 'Localization-vanilla.csv'), '--prefix', '700_',
     '--vanilla-keys', (Join-Path $data 'vanilla-keys-mit-kommentar.txt'))
+# Vertrag 02 §5 verlangte bis WP4.6 ein einzelnes Praefix '700_'. Der Sprachschluessel
+# eines Gegenstands IST aber seine Kennung, und die heisst nach §2 'itm700_...'. Mit dem
+# alten Rezept waere jeder eigene Gegenstand rot gewesen - und der naheliegende Ausweg
+# (ihn in vanilla-keys.txt schreiben) eine Freigabe fuer etwas, das kein Vanilla ist.
+# Diese beiden halten die Berichtigung fest: rot mit dem alten Rezept, gruen mit dem neuen.
+Test-Case 'localization: Kennungsschluessel ist mit nur 700_ rot' 1 @(
+    'localization', (Join-Path $data 'Localization-kennung.csv'), '--prefix', '700_')
+Test-Case 'localization: Kennungsschluessel ist mit der Praefixliste gruen' 0 @(
+    'localization', (Join-Path $data 'Localization-kennung.csv'),
+    '--prefix', '700_,itm700_,blk700_')
 Test-Output 'localization nennt den uebrigen Freigabe-Eintrag' 0 @(
     'localization', (Join-Path $data 'Localization-vanilla.csv'), '--prefix', '700_',
     '--vanilla-keys', (Join-Path $data 'vanilla-keys-uebrig.txt')) `
