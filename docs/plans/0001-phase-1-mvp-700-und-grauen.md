@@ -613,6 +613,7 @@ verschoben ist (D57, 8. November 2026).
    16 geworden statt sieben — siehe Stand.
 2. **WP5.2** `[Claude-prüfbar]` Fernkampf: Schleuder, Selbstbogen, Langbogen, Armbrust (selten,
    D8) und die Munition (Feuerstein-, Knochen-, Eisenpfeile, Bolzen, Schleudersteine).
+   — **wartet auf das Urteil über die sieben modernen Kennungen**, siehe Stand.
 3. ~~**WP5.3** `[Claude-prüfbar]` **Zwei Qualitätsachsen** (D23): Material als Grundstufe
    (Knochen < Bronze < Schmiedeeisen < Stahl < Damast), Handwerksqualität als Feinstufe
    (Vanilla 1–6 umbenannt: grob, einfach, solide, gut, meisterlich, legendär).~~
@@ -623,6 +624,7 @@ verschoben ist (D57, 8. November 2026).
    Verlust an Maximal-Haltbarkeit — den kennt Vanilla nicht. Siehe Stand.
 5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
    Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
+   — **nicht angefangen**, Richtung steht mit D59, drei Dinge sind davor zu messen: siehe Stand.
 6. **WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
    8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslot Weberschiffchen —
    und als Rezepte die Gambeson-Teile aus WP5.5. Erst mit ihnen trägt er die fünf Rezepte, die
@@ -755,6 +757,44 @@ bis dahin sind die Rezepte ohne `learnable` von Anfang an bekannt), keine `*Part
 einen Namen bekommen), und kein `resourceLegendaryParts` — es ist gesperrt, also ist Vanillas
 legendäre Stufe über Zutaten nicht erreichbar. Wie Qualität 6 verdient wird, entscheidet F-21
 in WP7.
+
+**Stand WP5.2 und WP5.5 (8. November 2026): beide nicht angefangen, beide mit Grund.**
+
+**WP5.2 (Fernkampf) hängt an einer offenen Frage des Nutzers.** Die Kennungen, die dort
+umgedeutet werden sollen, stehen gleichzeitig auf der Liste der sieben modernen Kennungen, die
+das Urteil durchlässt: `gunBowT3CompoundBow`, `gunBowT3CompoundCrossbow`,
+`gunBowT1IronCrossbow`, `ammoArrowExploding`, `ammoArrowSteelAP`. Ob ein Compoundbogen bleibt
+und was aus Spreng- und Panzerpfeilen wird, ist eine Inhaltsentscheidung (Projektregel 4, D54
+spricht nur von Pfeilen) — und sie bestimmt, welches Vanilla-Modell Langbogen und Armbrust
+werden. Dazu gemessen: Vanilla hat sechs Fernkampfwaffen (`gunBowT0PrimitiveBow`,
+`gunBowT1WoodenBow`, `gunBowT1IronCrossbow`, `gunBowT1DevCrossbow`, `gunBowT3CompoundBow`,
+`gunBowT3CompoundCrossbow`) und zehn Geschosse. **Für die Schleuder (T0) gibt es keine
+Vanilla-Grundlage** — sie wäre der erste Gegenstand dieses Pakets ohne Vorfahren, und das
+gehört in dieselbe Entscheidung.
+
+**WP5.5 (Rüstung): die Richtung steht mit D59, drei Dinge sind davor zu messen.** Gemessen ist
+schon: die drei Gewichtsklassen `armorLightMaster`, `armorMediumMaster`, `armorHeavyMaster`
+tragen `Class="ItemClassArmor"`, `DisplayType`, `Material`, Trefferklänge, `RepairTools` und
+`ShowQuality`, aber **keinen Slot und kein Modell**. Ein echtes Rüstungsteil setzt darauf:
+`EquipSlot` (Chest, Head, Hands, Feet), `Tags` (die Gewichtsklasse und ihre Mali),
+`ArmorGroup` für den Set-Bonus, ein `effect_group` mit `PhysicalDamageResist`,
+`DegradationMax`, `Mobility` und `StaminaChangeOT` — und ein `<property class="SDCS">` mit
+einem `Prefab` unter `Entities/Player/{sex}/Gear/…`. Das Modell kommt also aus einem
+**Prefab-Pfad**, nicht aus einer Mesh-Datei.
+
+Vor der ersten Zeile zu klären:
+
+1. **Welche Gear-Prefabs es gibt.** D59 sagt „Modelle aus den gesperrten Garnituren geborgt" —
+   welche Pfade das sind, steht in den Garnituren, und ob ein Pfad ohne seine Garnitur lädt,
+   steht nirgends. Raten verbietet sich: ein falscher Pfad ist ein unsichtbarer Spieler.
+2. **Wie `ArmorGroup` den Set-Bonus bildet** (`groupPrimitive`, `groupNomad` …) und wo die
+   Gruppen definiert sind. F-03 will die Zuordnung umdeuten, nicht neu erfinden.
+3. **Welche Zahlen gelten.** Vanilla staffelt `PhysicalDamageResist` je Stufe und Garnitur
+   (Primitiv 8–12,3; Nomad 18–21). Eigene Werte wären erfundene Zahlen — die gehören in die
+   Tabelle von WP5.6 und nach WP9, nicht in ein Nebenbei.
+
+Angefangen ist davon nichts. Sechzehn halbe Rüstungsteile mit geratenen Prefab-Pfaden wären
+schlechter als keine.
 
 **Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
 `Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in
