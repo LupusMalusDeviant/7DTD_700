@@ -631,6 +631,27 @@ verschoben ist (D57, 8. November 2026).
 **Ergebnis:** Alle Waffen und Rüstungsteile T0–T4 herstellbar, zwei Qualitätsachsen im Tooltip,
 Verschleiß und zwei Reparaturwege, plus eine Balancing-Tabelle in `docs/balancing/`.
 
+**Vor dem Bauen geklärt (8. November 2026): drei Vorgaben hielten der Messung nicht stand.**
+WP5 beginnt nicht mit XML, sondern mit drei Entscheidungen, weil F-02 und F-03 an drei Stellen
+von einer Spielfassung ausgehen, die V 3.40 nicht ist:
+
+| Vorgabe | gemessen | Entscheidung |
+|---|---|---|
+| Machete als Basis für Sax und Spatha, Feuerwehraxt für die Breitaxt | beide in WP3 gesperrt; Vanilla hat kein weiteres Klingenmodell über Messerlänge und keine zweite lange Axt | **D58**: umdeuten statt sperren, wie D54 bei den Bögen |
+| Fünf Rüstungsgarnituren Primitive→Steel | 178 Rüstungsteile, davon **sechs erreichbar**; die Garnituren sind DLC-/Event-Inhalt ohne Weg. Vanilla trägt Rüstung über drei Gewichtsklassen | **D59**: eigene Teile auf `armorLight/Medium/HeavyMaster`, vier Slots je Stufe, Meshes aus den gesperrten Garnituren geborgt |
+| Schleifstein kostet Maximal-Haltbarkeit | Vanilla kennt `RepairTools`, `RepairAmount`, `RepairTime`, `Degradation*` — keinen Verlust an Maximal-Haltbarkeit | **D60**: zwei Reparatur-Gegenstände (Schleifstein teilweise, Schmiedeflicken an der Esse voll); der Verlust wandert nach Phase 2 |
+
+Dazu ein Befund, der **Arbeit wegnimmt**: die Handwerksqualität aus WP5.3 ist reine
+Sprachdatei. `QualityInfo::GetQualityLevelName` liest sieben Schlüssel `lblQuality*`;
+`qualityinfo.xml` enthält nur Farben, die Stufennamen stehen dort als XML-Kommentar und sind
+für einen Patch unerreichbar. Beleg und Grenzen:
+[WP5-qualitaetsnamen-sind-sprachschluessel.md](../rea/findings/WP5-qualitaetsnamen-sind-sprachschluessel.md).
+
+**WP5 löst außerdem zwei Aufschübe ein**, die seit WP3 auf dieses Paket zeigen:
+`resourceRepairKit` und `resourceArmorCraftingKit` (`tools/check/aufschub.txt`). Beide sind
+Vanilla-Mechanik in Gegenstandsform; mit WP5.4 und WP5.5 gibt es einen Ersatz, und erst dann
+dürfen sie fallen.
+
 **Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
 `Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in
 Phase 2 nicht erfunden werden. In Phase 1 bleiben sie **aus** (D50, strikte Phasen).
