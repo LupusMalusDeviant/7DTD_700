@@ -1114,6 +1114,37 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
 
 ---
 
+**Stand WP6 (8. November 2026): WP6.1 bis WP6.5 stehen, WP6.6 und WP6.7 warten auf das Spiel.**
+
+Fünf von sieben Schritten sind erledigt, und drei davon dadurch, dass eine Annahme des Plans
+beim Nachsehen nicht hielt:
+
+| Schritt | Ergebnis |
+|---|---|
+| **WP6.1** Ausbaupfad | Fünf Stufen, zwei Aufwertungskosten umgebogen, ein `damage_category`. **D63** deutet Branntkalk, Mörtel, Bruchstein und Mörtelstein um — Denylist 591 → **587**. Nebenbefund: der Kalkofen aus WP4.3 hatte kein Erzeugnis |
+| **WP6.2** Wehrbauten | Vier stehen, zwei brauchten nie einen Block, zwei aufgeschoben nach F-15. Acht Palisadenteile lagen als Dev-Requisite im Spiel; die gespitzten tun jetzt wirklich weh |
+| **WP6.3** D29 | **Keine Zahl geändert** — Mörtelstein *ist* Vanilla-Stahl, D29s Ziel stand schon. **D65** hebt die erste Hälfte von D29 auf |
+| **WP6.4** Lichtquellen | Vier, davon drei umgedeutet und eine neu. Für die Wandfackel war **eine Zeile** nötig: Vanillas `torchWallHolder` ist der kalte Halter *und* der Weg zurück |
+| **WP6.5** Brenndauer | `PlantGrowing` an jeder Lichtquelle. **Löst nebenbei ein Phase-2-Kriterium** (Brennstoff nachlegen) und lässt `GrowthDeviation` bewusst leer |
+
+**Dreimal lag der Plan daneben, und jedes Mal auf dieselbe Art: eine Datei oder ein
+Schlüsselname war nie nachgesehen worden.** `BlockDamage` steht nicht in `entityclasses.xml`;
+die Streuung heißt `GrowthDeviation`, nicht `IsRandom`; und `resourceClay` gibt es nicht
+(mein eigener Fehler aus WP5.5b). Alle drei sind berichtigt und mit Nachweis belegt.
+
+**`kette-pruefen` hat in diesem Paket vier neue Verweisklassen bekommen**, jede nach demselben
+Muster: eine Kennung, die weder in einem Rezept noch in einem einfachen Attribut stand.
+Eingehängte Zutaten, `RepairTools`-Kommalisten, umgebogene `<set>`-Werte und die Attribute
+eigener Blockdefinitionen — **46 + 6 + 6 Verweise**, die vorher niemand ansah. Gegenproben
+42 → **50**. Zweimal hat der Prüfer sich im selben Lauf bezahlt: einmal fand er
+`resourceClay` nicht (die Lücke), einmal fand er `----` in einem XML-Kommentar in Sekunden.
+
+**Was in diesem Paket noch niemand im Spiel gesehen hat:** alles. Das ist geschriebenes und
+auflösbar geprüftes XML. Die drei Fragen, die nur WP6.6 beantworten kann, stehen dort
+ausdrücklich, und die Breitaxt-Entscheidung aus WP5.6 ist weiter offen.
+
+---
+
 ### WP7: F-21 (Bäume) — Sechs Fertigkeitsbäume
 
 **Zweck:** Das Vanilla-Attributsystem vollständig ersetzen. **Nur die Bäume** — Learning by
@@ -1391,9 +1422,14 @@ werden:
 
 ## Offene Punkte
 
-- **Die Fackel-Zahl.** `GrowthRate` steht in Minuten, gewünscht ist eine Brenndauer in
+- ~~**Die Fackel-Zahl.** `GrowthRate` steht in Minuten, gewünscht ist eine Brenndauer in
   Ingame-Stunden. Der Umrechnungsfaktor hängt an der Tageslänge der Welt und ist nicht
-  festgelegt. → WP6.5.
+  festgelegt. → WP6.5.~~ **Teilweise beantwortet am 2026-11-08:** `goDayNightLength` ist
+  gemessen „wie viele Minuten in der realen Welt vergehen, bis im Spiel 24 Stunden vergangen
+  sind", Vorgabe 60. Die Startwerte stehen (15/30/45/60 Minuten), **aber die Einheit von
+  `GrowthRate` ist noch nicht belegt** — real oder ingame —, und `GetTickRate` multipliziert
+  zusätzlich mit einem spielweiten `CropGrowthModifier`. **Bleibt offen bis WP6.6**, und
+  solange bleibt `GrowthDeviation` ungesetzt.
 - **B2 Stille-Logik.** „Tierlaute verstummen, wenn Seuchentote nahe sind" braucht C#. In diesem
   Plan nach Phase 2 verschoben. Falls das den MVP-Grusel zu stark schwächt, wäre es der erste
   Kandidat, Phase 1 doch um einen Patch zu erweitern — **das wäre eine Entscheidung des Nutzers**,
