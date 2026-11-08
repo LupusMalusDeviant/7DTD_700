@@ -622,14 +622,14 @@ verschoben ist (D57, 8. November 2026).
 4. ~~**WP5.4** `[Claude-prüfbar]` Verschleiß und Reparatur: Schleifstein (einfach, kostet
    Maximal-Haltbarkeit) gegen Esse (voll).~~ **Erledigt 2026-11-08 nach D60**, ohne den
    Verlust an Maximal-Haltbarkeit — den kennt Vanilla nicht. Siehe Stand.
-5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
-   Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
-   — **gemessen 2026-11-08, nicht gebaut**: die drei Vorfragen sind beantwortet, dafür steht
-   eine vierte an (V 3.40 hat keine Rüstungsstufen). Siehe Stand.
-6. **WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
-   8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslot Weberschiffchen —
-   und als Rezepte die Gambeson-Teile aus WP5.5. Erst mit ihnen trägt er die fünf Rezepte, die
-   F-04 verlangt; vor WP5.5 wäre er ein leerer Block. Zusammen mit WP5.5 bauen, nicht davor.
+5. ~~**WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
+   Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.~~
+   **Erledigt 2026-11-08 nach D61** — **drei Stufen plus T0 statt fünf**, zwölf Rüstungsteile.
+   Siehe Stand.
+6. ~~**WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
+   8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, ~~Werkzeugslot
+   Weberschiffchen~~ — und als Rezepte die Gambeson-Teile aus WP5.5.~~ **Erledigt 2026-11-08,
+   ohne den Werkzeugslot** (Abweichung von F-04, begründet im Stand und im Block-Kommentar).
 7. **WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro Waffe
    mit Zweck, Schaden, Reichweite, Ausdauer, Tier.
 8. **WP5.7** `[braucht Nutzer]` Spieltest: Tooltip verständlich? Ist jeder Waffe ihr Zweck
@@ -819,12 +819,129 @@ Empfehlung: **Weg 2.** Er kostet eine Zeile in der F-03-Tabelle und spart fünf 
 Zahlen und einen enttäuschenden T4. „Rüstung ist teuer, schwer und spürbar" (F-03) trägt nur,
 wenn die Stufen sich auch messbar unterscheiden.
 
-Gebaut ist nichts. Sechzehn Rüstungsteile zu schreiben, bevor klar ist, ob es zwölf oder
-sechzehn sind, wäre Arbeit auf Verdacht.
+**Der Nutzer hat am 8. November 2026 Weg 2 gewählt** („Drei plus T0") → **D61**. Gebaut wurde
+danach; was dabei herauskam, steht im nächsten Stand.
 
 **Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
 `Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in
 Phase 2 nicht erfunden werden. In Phase 1 bleiben sie **aus** (D50, strikte Phasen).
+
+---
+
+**Stand WP5.5 und WP5.5b (8. November 2026): zwölf Rüstungsteile, der erste eigene Block — und
+vier Werkstätten, die niemand bauen konnte.**
+
+**Was gebaut ist.** Zwölf Rüstungsteile in `mod/700_30_Ausruestung/Config/items.xml`, je vier
+Slots auf drei Gewichtsklassen, dazu siebzehn neue Rezepte:
+
+| Stufe | Teile | Klasse | Prefab (Aussehen) | `ArmorGroup` (Bonus) | hergestellt |
+|---|---|---|---|---|---|
+| T0 | `armorPrimitive*` (umgedeutet) | primitiv | `Gear/Fiber/` | `groupPrimitive` — **keiner, Vanilla hat dafür keinen** | Vanilla |
+| T1 | Lederwams, Lederkappe, Wollhandschuhe, Wickelschuhe | leicht | `Gear/Stealth/` | `groupNomad` — Nahrung und Wasser je Ausdauerpunkt | von Hand |
+| T2 | Gambeson, Stepphaube, Stepphandschuhe, Steppschuhe | mittel | `Gear/Assassin/` | `groupAssassin` — Gegner verliert die Spur schneller | **am Webstuhl** |
+| T3 | Kettenhemd, Spangenhelm, Armschienen, Beinschienen | schwer | `Gear/Raider/` | `groupRaider` — 20–45 % weniger kritische Verletzungen | Esse mit Amboss |
+
+**Prefab und `ArmorGroup` sind zwei unabhängige Anleihen**, und jede ist nach ihrem eigenen
+Maßstab gewählt: der Pfad bestimmt das Aussehen, die Gruppe den Bonus. Darum trägt T1 das
+Aussehen der Rogue-Garnitur und den Bonus der Nomad-Garnitur. Zwei Dinge sind **nicht** gebaut
+und benannt statt weggelassen: die **Slot-Vergünstigungen** (Vanillas Tragkraft am Rumpf,
+Laufgeschwindigkeit an den Schuhen, Schleichbonus) hängen an der Garnitur und bräuchten je Teil
+einen `item_display_info`-Eintrag — unsere Teile erben `DisplayType` vom Master, und die
+Vergünstigungen gehören in WP5.6. Und **Armschienen statt Kettenhandschuhe**: Fingerhandschuhe
+aus Kette sind Hochmittelalter, Schienen aus Eisenstreifen auf Leder sind für Vendel und
+Valsgärde belegt und sitzen in denselben beiden Slots.
+
+**Der Webstuhl ist der erste eigene Block des Projekts.** `blk700_webstuhl`, voll
+ausgeschrieben statt per `Extends` von `workbench` — die Werkbank bringt `RepairItems` und
+Bergungs-Abwürfe mit gesperrten Kennungen mit, und wie sich eine neu deklarierte `drop`-Liste
+gegen die geerbte verhält, ist nicht gemessen. Eigene Fenstergruppe
+`workstation_blk700_webstuhl` in `XUi_InGame/xui.xml` (fünf von fünf laufenden Werkstätten
+machen es so; der kürzere Weg `WorkstationWindow` kommt in ganz `blocks.xml` **einmal** vor, an
+einem Block mit `CreativeMode="Dev"` und auskommentiertem Bau-Rezept). Bau-Rezept an der
+Zimmermannsbank, **fünf Rezepte** darauf — Steppbahn plus die vier Gambeson-Teile —, damit ist
+F-04s Kriterium erfüllt, mit zwei benannten Abweichungen: **kein Werkzeugslot** (Weberschiffchen
+wäre ein XUi-Werkzeugfenster plus Gegenstand plus `Modules`-Zeile für eine Feinheit, die kein
+Rezept der Phase 1 braucht) und **das Modell sieht aus wie die Zimmermannsbank** (Vanilla hat
+keinen Webstuhl; eigenes Modell in Phase 2, D3/F-16).
+
+**DIE VIERTE BERICHTIGUNG DIESES ARBEITSPAKETS, UND DIE SCHWERSTE: vier von fünf Werkstätten
+waren nicht zu bauen.** Beim Lesen des Webstuhl-Musters gemessen — WP4.3 hat die fünf
+Vanilla-Werkstätten umgedeutet und nie nachgesehen, ob ihr **Bau-Rezept** nach dem Purge noch
+geht:
+
+| Werkstatt | gesperrte Zutat | berichtigt mit |
+|---|---|---|
+| Feuerstelle | — | ging schon |
+| Zimmermannsbank | `resourceMechanicalParts`, `resourceDuctTape` | Leder (Riemen) |
+| Rennofen + Esse | `resourceDuctTape`, `resourceMetalPipe` | Lehm (Ofenwand) |
+| Kräuterküche | `toolBeaker`, `resourceMetalPipe`, `resourceAcid` | Lehm; Eisen von 100 auf 20 |
+| Kalkofen | `resourceSpring`, `smallEngine`, `resourceMechanicalParts` | Bruchstein und Lehm |
+
+**Ohne Esse kein Schmiedeeisen, ohne Schmiedeeisen keine Klinge, keine Spatha, kein
+Kettenhemd.** Die ganze Kette aus WP4.6 stand auf einem Block, den niemand bauen kann, und
+F-04s Kriterium „jede Werkstatt hat ein Bau-Rezept" war auf dem Papier abgehakt. Gefunden hat es
+nicht ein Blick, sondern die Zählung `rezepte_mit_gesperrter_zutat` aus WP5.1 — die 94 toten
+Rezepte, von denen hier vier standen. Geändert wird so wenig wie möglich: gesperrte Zutat
+heraus, zeitgemäße hinein, der Rest der Vanilla-Zeile samt `tags` bleibt stehen. Patches in
+`mod/700_40_Bauen/Config/recipes.xml`.
+
+**Das Nähzeug (D62), und warum es eine Frage an den Nutzer war.** Die fünf
+Rüstungs-Basisklassen zeigten auf das gesperrte `resourceRepairKit` — ohne Zutun wäre die ganze
+neue Rüstung unreparierbar. D60 nennt aber **zwei** Reparatur-Gegenstände, und beide sind für
+Metall; ein Wetzstein am Wollhemd ist eine Inhaltsentscheidung und keine, die nebenbei fällt
+(Projektregel 4). Gewählt: Vanillas `resourceSewingKit`, in der Denylist längst freigegeben und
+mit den Tags `armorLightSkill/MediumSkill/HeavySkill` versehen, bekommt **ein Rezept** (es hatte
+keines — gemessen: der Name kommt in ganz `recipes.xml` nicht als Rezeptname vor) und **einen
+`RepairAmount`** (ohne den repariert ein Gegenstand nichts).
+
+**Der Aufschub auf das Reparatur-Kit: 13 von 23 eingelöst, gezählt statt geschätzt.**
+
+| Gruppe | Anzahl | Stand |
+|---|---|---|
+| Waffen | 8 | Schleifstein und Schmiedeflicken (D60, WP5.4) |
+| Rüstungsklassen | 5 | Nähzeug bzw. Schmiedeflicken (D62, WP5.5) |
+| Bögen | 4 | **offen** — WP5.2, hängt am Urteil über die modernen Kennungen |
+| Werkzeuge | 5 | **offen** — Spitzhacke, Schaufel, Klauenhammer; F-05, kein Paket der Phase 1 |
+| `partsMaster` | 1 | **offen** — WP7 |
+
+`resourceArmorCraftingKit` dagegen **ist eingelöst**: unsere zwölf Teile brauchen ihn nicht, die
+Zeile ist aus `aufschub.txt` gefallen, und die Purge-Patches sind neu erzeugt — damit nimmt der
+Purge ihm jetzt seine Wege. Das hebt die Zahl der gesperrten Kennungen von 590 auf **591** und
+die Patchzeilen von 1807 auf **1810**.
+
+**Ein Prüfer, der nur ein falsches Rot zeigte — und was daran das Glück war.** `kette-pruefen`
+las Vanillas `blocks.xml`, unsere aber nicht, und meldete darum `blk700_webstuhl` als „nirgends
+definiert". Diesmal war der Fehler ein falsches **Rot**; genau darum fiel er auf. Hätte das
+Projekt den Block ohne Rezept gebaut, wäre er umgekehrt gelaufen und ein Tippfehler in einem
+Blocknamen wäre nie aufgefallen — dieselbe Bauart wie der feste Pfad aus WP5.1. Behoben, und
+nach Projektregel 5 mit **zwei Gegenproben** belegt (neue Hilfsfunktion `Test-Script`, weil auch
+ein PowerShell-Skript ein Prüfwerkzeug ist): der saubere Satz löst den eigenen Block auf, der
+vertippte Blockname bleibt rot. Vertrag 04 §5a Nachtrag WP5.5b, **Abnahme offen**.
+
+**Nachweis (Befehl und Zahlen).**
+`powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/check-all.ps1`, mit gesetztem
+`SDTD_PATH`:
+
+| Prüfung | Ergebnis |
+|---|---|
+| Gegenproben | **44**, 0 fehlgeschlagen (vorher 42) |
+| `anachronisms` | 591 rot, 176 Hinweise — **die bekannte Grundlast**: der ConfigsDump vom 7. Juli kennt unsere Modlets nicht, aufgelöst erst in WP3.6 |
+| `recipes` | 0 rot |
+| `purge-patch --vergleiche` | 0 rot, `patchdateien_abweichend 0`, `wege_uebrig 0`, `patches_ohne_treffer 0` |
+| `localization` | 0 rot, **142 Schlüssel** (vorher 95), 106 freigegebene Vanilla-Schlüssel |
+| `kette-pruefen` | 0 rot, **32 eigene Rezepte**, 17 werkzeuggebunden, 18 eigene Definitionen |
+
+**Ohne `SDTD_PATH` hätte dieser Lauf die beiden Prüfungen übersprungen, die die Arbeit
+wirklich angesehen haben** — und dabei wäre auch der XML-Fehler durchgegangen, den
+`kette-pruefen` gefunden hat: meine Kommentartrenner `----------------` enthalten `--`, und das
+ist in einem XML-Kommentar verboten. Das Spiel hätte die Datei abgewiesen. Vermerkt als
+Arbeitsgewohnheit: `check-all.ps1` ohne gesetzten Spielpfad ist ein halber Lauf.
+
+**Was dieser Stand nicht behauptet.** Kein Spielstart. Ob ein geborgter Gear-Prefab lädt, wenn
+kein Vanilla-Gegenstand mehr darauf zeigt; ob eine fremde `ArmorGroup` mit unseren vier Teilen
+auslöst; ob die Fenstergruppe `workstation_blk700_webstuhl` gefunden wird; ob `RepairTools` mit
+zwei Namen beide annimmt (Setzung aus WP5.4); und ob die geborgten Garnituren in einem
+Frühmittelalter-Spiel erträglich **aussehen** — das steht alles in WP3.6 und WP5.7, nicht hier.
 
 ---
 
@@ -1079,13 +1196,16 @@ werden:
 3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
    Dazu sind inzwischen drei **Berichtigungen** gekommen, die je eine eigene Abnahme brauchen:
    Vertrag 04 §3a (Erreichbarkeit), Vertrag 04 §3d samt den §5-Nachträgen (der sechste Weg,
-   `vanilla-keys.txt`, `--prefix` als Liste, `kette-pruefen.ps1`) und **Vertrag 02 §5** — der
-   Sprachschlüssel IST die Kennung, der alte Aufbau `700_itm_spatha` ist nicht umsetzbar.
+   `vanilla-keys.txt`, `--prefix` als Liste, `kette-pruefen.ps1` — jetzt auch mit §5b
+   `rezepte_mit_gesperrter_zutat` und §5a Nachtrag WP5.5b, eigene Blöcke) und **Vertrag 02 §5**
+   — der Sprachschlüssel IST die Kennung, der alte Aufbau `700_itm_spatha` ist nicht umsetzbar.
 4. **Referenz-UI-Mods benennen** (Q8) für die Kompatibilitäts-Testmatrix. *(Braucht es erst
    für WP8.9.)*
 5. **Durchsatz-Annahme korrigieren:** drei Arbeitstage pro Woche, oder andere Zahl?
    *(Verschiebt alle Meilensteine.)*
-6. **Spieltests urteilen:** Waffenzweck erkennbar (WP5.7), jeder Baum tragfähig bis T4 (WP7.6),
+6. **Spieltests urteilen:** Waffenzweck erkennbar (WP5.7), **ob die vier geborgten
+   Rüstungs-Garnituren in einem Frühmittelalter-Spiel erträglich aussehen** (WP5.7; ein anderer
+   Prefab-Pfad ist eine Zeile je Stufe, siehe D61), jeder Baum tragfähig bis T4 (WP7.6),
    Fackel-Last (WP6.6), T3-Basis gegen Seuchennacht (WP6.7), drei Tage ohne Anachronismus
    (WP3.7), Durchlauf bis zur ersten Seuchennacht (WP9.3).
 7. **Release-Entscheidung** nach dem Playtest (D46, WP9.6).
