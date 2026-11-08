@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_30_Ausruestung / recipes.xml
+	     F-02 Nahkampfwaffen, Plan-0001 WP5.1
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     WARUM HIER 16 REZEPTE ERSETZT WERDEN UND NICHT NUR SIEBEN GESCHRIEBEN
+	     ===================================================================
+
+	     Gemessen am 8. November 2026: von den 247 Rezepten, die den Purge ueberleben,
+	     sind 94 toter Buchstabe - mindestens eine ihrer Zutaten ist gesperrt. Bei den
+	     Waffen ist der Grund immer derselbe: FAST JEDES VANILLA-WAFFENREZEPT AB T1
+	     VERLANGT PANZERBAND (resourceDuctTape, 40 Rezepte), die Schlagringe dazu
+	     Mechanikteile (resourceMechanicalParts, 34 Rezepte).
+
+	     Der Gegenstand bleibt also erlaubt, das Rezept bleibt stehen, und im
+	     Handwerksfenster ist es grau. Kein Lauf hat das gemeldet: 'anachronisms'
+	     urteilt ueber Kennungen und nicht ueber Zutatenlisten, und 'recipes' prueft
+	     eine Quelle, in der unsere Modlets nicht geladen sind - dort ist Panzerband
+	     noch da. Seit diesem Paket zaehlt 'purge-patch' es mit
+	     ('rezepte_mit_gesperrter_zutat'), mit zwei Gegenproben.
+
+	     Darum ersetzt dieses Modlet die Rezepte, statt sie zu ergaenzen. Ersetzt wird
+	     je ZUTAT: Panzerband wird zu Leder (Riemen und Wicklung), Mechanikteile werden
+	     zu Schmiedeeisen.
+
+	     ===================================================================
+	     UMDEUTUNG, NICHT ERSATZ - UND ZWEI FREIGABEN AUS D58
+	     ===================================================================
+
+	     Kein neuer Gegenstand. Jede der Waffen unten IST eine Vanilla-Waffe; sie
+	     bekommt in 700_90_Sprache einen Namen und hier ein Rezept aus unserer Kette.
+	     Das ist derselbe Weg wie bei den Ressourcen in WP4.1 und bei den Boegen in
+	     D54: Vanilla bringt Modell, Werte, Loot und Perk-Anbindung mit.
+
+	     Zwei davon hatte WP3 gesperrt, und D58 hat sie freigegeben, weil Vanilla kein
+	     anderes Klingenmodell ueber Messerlaenge und keine zweite lange Axt hat:
+	       meleeWpnBladeT3Machete    -> Spatha
+	       meleeToolAxeT1IronFireaxe -> Breitaxt
+
+	     DAS LOEST itm700_spatha AUS WP4.6 AB. Dort endete die Kette an einem eigenen
+	     Gegenstand, der vom Jagdmesser erbte - eine Spatha, die wie ein Messer
+	     zuschlaegt. Mit D58 endet sie an der Machete, und itm700_spatha ist aus
+	     700_20_Material entfernt. Die Klinge (itm700_klinge) bleibt, sie ist das
+	     Zwischenprodukt.
+
+	     ===================================================================
+	     WAS ABSICHTLICH NICHT DRIN STEHT
+	     ===================================================================
+
+	     KEINE PERK-MARKEN, wie in WP4.6. Vanilla haengt diese Rezepte an perkDeepCuts,
+	     perkPummelPete, perkSkullCrusher, perkJavelinMaster, perkBrawler und
+	     perkMiner69r. Die sechs Baeume baut F-21 in WP7 (D47); bis dahin sind unsere
+	     Rezepte ohne 'learnable' von Anfang an bekannt. Luecke mit Adresse, nicht
+	     Vergessen.
+
+	     KEINE *Parts-ZUTATEN. Vanilla verlangt fuer die T3-Waffen ein Bauteil aus dem
+	     Zerlegen (meleeWpnBladeT3MacheteParts und seine Geschwister). Die Teile sind
+	     erlaubt und bleiben als Altmetall aus Ruinen herstellbar bzw. zerlegbar - das
+	     ist das Ventil, das F-04 fuer den Eisenengpass nennt (D31). Als ZUTAT unserer
+	     Waffen taugen sie nicht: eine Spatha aus einem gefundenen Macheten-Bauteil
+	     waere keine Schmiedearbeit.
+
+	     KEIN resourceLegendaryParts. Vanilla nennt es mit count="0" in jedem
+	     Waffenrezept und hebt die Zahl per passive_effect auf der Stufe 6. Es ist
+	     gesperrt, also ist die legendaere Stufe ueber Zutaten nicht erreichbar. Wie
+	     Qualitaet 6 ("legendaer", D23) verdient wird, entscheidet F-21 in WP7 - das
+	     ist dort eine offene Frage und hier keine stille Streichung.
+
+	     KEINE ZAHLEN AN DEN WAFFEN. Schaden, Reichweite, Haltbarkeit und Ausdauer
+	     bleiben Vanilla. Die Mengen unten sind Setzungen, die die Kette abbilden
+	     (Klinge fuer Schneidwaffen, Schmiedeeisen fuer T1/T2, Tiegelstahl fuer T3/T4),
+	     keine Balance. Beides kommt mit der Tabelle in WP5.6 und den Zahlen in WP9.
+	-->
+
+	<!-- ============================================================
+	     1. Die Vanilla-Rezepte, die ersetzt werden
+	     ============================================================
+	     Ein Rezept ist ein WEG, keine Definition - D9 bleibt gewahrt. Entfernt werden
+	     nur Rezepte, fuer die unten ein eigenes steht; was nicht ersetzt wird, bleibt
+	     unberuehrt (Keule, Knochenmesser, Steinspeer, Steinhammer, Faustriemen tragen
+	     keine gesperrte Zutat und brauchen kein neues Rezept).
+	-->
+	<remove xpath="/recipes/recipe[@name='meleeWpnBladeT1HuntingKnife']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnBladeT3Machete']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnSpearT1IronSpear']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnSpearT3SteelSpear']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnSledgeT1IronSledgehammer']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnSledgeT3SteelSledgehammer']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnClubT3SteelClub']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnKnucklesT1IronKnuckles']" />
+	<remove xpath="/recipes/recipe[@name='meleeWpnKnucklesT3SteelKnuckles']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolAxeT1IronFireaxe']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolAxeT2SteelAxe']" />
+
+	<append xpath="/recipes">
+
+		<!-- ====================================================
+		     T1 - Schmiedeeisen, an der Zimmermannsbank gefasst
+		     ==================================================== -->
+
+		<!-- Sax. Die Klinge kommt aus der Esse, Griff und Scheide von der Bank.
+		     Vanilla: Schmiedeeisen 8, Holz 4, Leder 2, PANZERBAND 2. -->
+		<recipe name="meleeWpnBladeT1HuntingKnife" count="1" craft_area="workbench" is_trackable="false">
+			<ingredient name="itm700_klinge" count="1" />
+			<ingredient name="resourceWood" count="4" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- Ango. Eine Wurflanze mit langer Eisentuelle: Eisen und Schaft, keine
+		     Klinge. Vanilla: Schmiedeeisen 16, Holz 10, Leder 2, PANZERBAND 2. -->
+		<recipe name="meleeWpnSpearT1IronSpear" count="1" craft_area="workbench" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="8" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- Eisenfaust. Vanilla: Schmiedeeisen 12, MECHANIKTEILE 4, Leder 2,
+		     PANZERBAND 2 - zwei gesperrte Zutaten in einem Rezept. -->
+		<recipe name="meleeWpnKnucklesT1IronKnuckles" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="6" />
+			<ingredient name="resourceLeather" count="4" />
+		</recipe>
+
+		<!-- ====================================================
+		     T2 - Schmiedeeisen, schwer
+		     ==================================================== -->
+
+		<!-- Bartaxt. Vanilla baut die Stahlaxt aus einem Bauteil und Tiegelstahl;
+		     bei uns ist sie die EISENaxt der Stufe T2, denn die Breitaxt darunter
+		     ist die Stahlwaffe. Vanilla: AllSteelParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeToolAxeT2SteelAxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="10" />
+			<ingredient name="resourceWood" count="8" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- Eisenhammer. Vanilla: Schmiedeeisen 30, Holz 10, Leder 2,
+		     PANZERBAND 2. Dreissig Eisen sind bei knappem Eisen (D31) ein halber
+		     Tag Verhuettung - darum 20. -->
+		<recipe name="meleeWpnSledgeT1IronSledgehammer" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="20" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- ====================================================
+		     T3 - Tiegelstahl, an der Esse geschmiedet
+		     ==================================================== -->
+
+		<!-- Spatha. Das Ende der Kette aus WP4.6, jetzt an der Vanilla-Machete
+		     statt an itm700_spatha (D58). Klinge aus der Esse, Griff und Wicklung
+		     von der Bank. Vanilla: MacheteParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeWpnBladeT3Machete" count="1" craft_area="workbench" craft_time="60" is_trackable="false">
+			<ingredient name="itm700_klinge" count="1" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="5" />
+		</recipe>
+
+		<!-- Breitaxt. Die zweite Freigabe aus D58. Schwer, Ruestungsbrecher.
+		     Vanilla: Schmiedeeisen 20, Holz 10, Leder 2, PANZERBAND 2. -->
+		<recipe name="meleeToolAxeT1IronFireaxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedSteel" count="8" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="3" />
+		</recipe>
+
+		<!-- Streitkolben. Vanilla: SteelClubParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeWpnClubT3SteelClub" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedSteel" count="8" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- Stahlfaust. Vanilla: KnucklesParts 1, Tiegelstahl 10, Leder 3,
+		     PANZERBAND 3. -->
+		<recipe name="meleeWpnKnucklesT3SteelKnuckles" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedSteel" count="6" />
+			<ingredient name="resourceLeather" count="4" />
+		</recipe>
+
+		<!-- ====================================================
+		     T4 - Tiegelstahl, die schweren Stuecke
+		     ==================================================== -->
+
+		<!-- Fluegellanze. Vanilla: SpearParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeWpnSpearT3SteelSpear" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedSteel" count="10" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="3" />
+		</recipe>
+
+		<!-- Streithammer. Vanilla: SledgehammerParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeWpnSledgeT3SteelSledgehammer" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedSteel" count="12" />
+			<ingredient name="resourceWood" count="10" />
+			<ingredient name="resourceLeather" count="3" />
+		</recipe>
+
+	</append>
+
+</config>

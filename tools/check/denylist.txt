@@ -213,11 +213,11 @@ armorScavenger*
 meleeToolFlashlight*            # Taschenlampe
 meleeToolPaintTool              # Sprühpistole
 meleeToolSalvage*               # Schraubenschluessel und Ratsche
-meleeToolAxeT1IronFireaxe       # Feuerwehraxt; die Eisenaxt baut F-02 in WP5 neu
 meleeWpnClubT1BaseballBat       # Baseballschlaeger
 meleeWpnBladeT1CandyKnife       # Zuckerstangen-Messer, Vanilla-Eventgegenstand
 meleeWpnClubT1CandyClub         # dasselbe als Knueppel
-meleeWpnBladeT3Machete*         # Machete und ihre Teile
+# meleeToolAxeT1IronFireaxe     -> freigegeben in WP5 (D58), siehe Freigaben unten
+# meleeWpnBladeT3Machete*       -> freigegeben in WP5 (D58), siehe Freigaben unten
 
 # --- Aufsaetze, die kein 'modifier_tags' verraet --------------------------------
 # Die Regel 'moderner_aufsatz' urteilt ueber modifier_tags. Diese neun tragen keines,
@@ -460,6 +460,13 @@ noteDuke01                      # Dukes Brief, liegt in der Startausruestung
 !meleeWpnSpearT0*
 !meleeWpnSpearT1*
 !meleeWpnSpearT3*
+
+# Umgedeutet statt gesperrt (D58, 8. November 2026). Gemessen hat Vanilla kein weiteres
+# Klingenmodell ueber Messerlaenge und keine zweite lange Axt. Gesperrt haette WP5 die
+# Spatha vom Jagdmesser erben lassen - eine Spatha, die wie ein Messer zuschlaegt. Derselbe
+# Weg wie D54 bei den Boegen: WP5 gibt beiden Namen, Werte und Rezepte, Phase 2 das Modell.
+!meleeWpnBladeT3Machete*        # wird die Spatha (T3/T4, Allrounder)
+!meleeToolAxeT1IronFireaxe      # wird die Breitaxt (T3/T4, schwer)
 
 # --- Nahrung und Getraenke ------------------------------------------------------
 !foodRawMeat

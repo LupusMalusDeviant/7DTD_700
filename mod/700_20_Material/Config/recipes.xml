@@ -74,12 +74,14 @@
 			<ingredient name="resourceCoal" count="2" />
 		</recipe>
 
-		<!-- 5. Zimmermannsbank: Griff, Wicklung, Scheide - daraus wird die Spatha. -->
-		<recipe name="itm700_spatha" count="1" craft_area="workbench" is_trackable="false">
-			<ingredient name="itm700_klinge" count="1" />
-			<ingredient name="resourceWood" count="10" />
-			<ingredient name="resourceLeather" count="5" />
-		</recipe>
+		<!-- 5. HIER STAND DAS SPATHA-REZEPT, und es ist nach 700_30_Ausruestung
+		        gewandert (D58, 8. November 2026). Die Zutaten sind dieselben - Klinge,
+		        Holz, Leder, Zimmermannsbank -, nur das Ergebnis heisst jetzt
+		        meleeWpnBladeT3Machete statt itm700_spatha: die Machete ist freigegeben
+		        und wird umgedeutet, statt dass die Spatha vom Jagdmesser erbt.
+
+		        Dieses Modlet traegt die KETTE, nicht die Waffen (Vertrag 01: F-05/F-04
+		        hier, F-02/F-03 in 700_30). Die Kette endet darum an der Klinge. -->
 
 	</append>
 </config>

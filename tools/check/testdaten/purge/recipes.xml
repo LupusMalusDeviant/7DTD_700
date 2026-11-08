@@ -25,4 +25,28 @@
 		<ingredient name="pruefRohstoff" count="2" />
 	</recipe>
 
+	<!--
+	  Die beiden naechsten pruefen den Zaehler 'rezepte_mit_gesperrter_zutat'.
+
+	  pruefKoecher ist ERLAUBT und ueberlebt den Purge. Seine zweite Zutat ist gesperrt,
+	  also ist das Rezept toter Buchstabe: im Handwerksfenster steht es grau, und bis zum
+	  8. November 2026 hat kein Lauf das gemeldet. Genau dieser Fall steckt in Vanilla 94
+	  Mal - fast jedes Waffenrezept ab T1 verlangt Panzerband.
+
+	  pruefSehne nennt dieselbe gesperrte Zutat mit count="0". So schreibt Vanilla eine
+	  Zutat, die nur die Qualitaetsstufen staffelt und nichts kostet: sie blockiert nichts
+	  und darf nicht mitgezaehlt werden. Zaehlt der Zaehler sie doch, meldet dieser Satz
+	  zwei statt eines Rezepts - und in Vanilla waere jedes Waffenrezept betroffen, weil
+	  resourceLegendaryParts ueberall mit count="0" dasteht.
+	-->
+	<recipe name="pruefKoecher" count="1">
+		<ingredient name="pruefRohstoff" count="2" />
+		<ingredient name="pruefFeuerrohrGeerbt" count="1" />
+	</recipe>
+
+	<recipe name="pruefSehne" count="1">
+		<ingredient name="pruefRohstoff" count="2" />
+		<ingredient name="pruefFeuerrohrGeerbt" count="0" />
+	</recipe>
+
 </recipes>

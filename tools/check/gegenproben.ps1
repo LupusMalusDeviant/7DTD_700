@@ -321,6 +321,22 @@ Test-Output 'ohne die Entfernungen bleibt der Weg offen' 1 `
     -MustContain @('weg-bleibt-offen: recipes.xml',
                    'gesperrt-trotz-patch: pruefFeuerrohrEigen')
 
+# 3b. Der Zaehler, der am 8. November 2026 dazukam: Rezepte, die den Purge UEBERLEBEN und
+#     trotzdem nicht herstellbar sind, weil eine Zutat gesperrt ist. pruefKoecher ist so ein
+#     Fall, pruefSehne nennt dieselbe gesperrte Zutat mit count="0" und darf NICHT mitzaehlen.
+#     Steht hier "2 von", zaehlt der Zaehler Vanillas Qualitaetszutaten mit und meldet jedes
+#     Waffenrezept als tot.
+Test-Output 'tote Rezepte werden gezaehlt, eine Zutat mit count=0 nicht' 0 `
+    @('purge-patch', $purge, '--trocken') `
+    -MustContain @('rezept-mit-gesperrter-zutat: 1 von',
+                   'pruefFeuerrohrGeerbt (1)')
+
+# 3c. Und die Gegenrichtung: ein Satz ohne gesperrte Zutat MUSS null melden. Ohne diese
+#     Probe koennte der Zaehler jedes Rezept melden und saehe wachsam aus.
+Test-Output 'ohne gesperrte Zutat meldet der Zaehler nichts' 0 `
+    @('purge-patch', (Join-Path $data 'sauber'), '--trocken') `
+    -MustNotContain @('rezept-mit-gesperrter-zutat')
+
 # 4. Erzeugte Dateien und die Denylist koennen auseinanderlaufen. --vergleiche findet das;
 #    gegen einen Ordner ohne die Dateien muss es rot werden.
 Test-Output 'fehlende Patchdatei faellt auf' 1 `

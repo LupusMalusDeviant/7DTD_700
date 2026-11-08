@@ -12,7 +12,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     438 Zeilen. -->
+	     435 Zeilen. -->
 
 	<set xpath="/items/item[@name='TEST_ITEM_00']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
 	<set xpath="/items/item[@name='TEST_ITEM_01']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
@@ -232,7 +232,6 @@
 	<append xpath="/items/item[@name='medicalBloodBag']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:46 -->
 	<append xpath="/items/item[@name='medicalFirstAidKit']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:46 -->
 	<append xpath="/items/item[@name='medicalPlasterCast']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:46 -->
-	<append xpath="/items/item[@name='meleeToolAxeT1IronFireaxe']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:216 -->
 	<append xpath="/items/item[@name='meleeToolAxeT3Chainsaw']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:110 -->
 	<append xpath="/items/item[@name='meleeToolAxeT3ChainsawParts']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:110 -->
 	<append xpath="/items/item[@name='meleeToolFlashlight02']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:213 -->
@@ -247,11 +246,9 @@
 	<append xpath="/items/item[@name='meleeWpnBatonT0PipeBaton']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: robotik -->
 	<append xpath="/items/item[@name='meleeWpnBatonT2StunBaton']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: robotik -->
 	<append xpath="/items/item[@name='meleeWpnBatonT2StunBatonParts']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: robotik -->
-	<append xpath="/items/item[@name='meleeWpnBladeT1CandyKnife']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:218 -->
-	<append xpath="/items/item[@name='meleeWpnBladeT3Machete']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:220 -->
-	<append xpath="/items/item[@name='meleeWpnBladeT3MacheteParts']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:220 -->
-	<append xpath="/items/item[@name='meleeWpnClubT1BaseballBat']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:217 -->
-	<append xpath="/items/item[@name='meleeWpnClubT1CandyClub']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:219 -->
+	<append xpath="/items/item[@name='meleeWpnBladeT1CandyKnife']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:217 -->
+	<append xpath="/items/item[@name='meleeWpnClubT1BaseballBat']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:216 -->
+	<append xpath="/items/item[@name='meleeWpnClubT1CandyClub']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:218 -->
 	<set xpath="/items/item[@name='modArmorHelmetLightSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach unlocks-ableitung: schaltet-gesperrtes-frei -->
 	<set xpath="/items/item[@name='modArmorWaterPurifierSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach unlocks-ableitung: schaltet-gesperrtes-frei -->
 	<set xpath="/items/item[@name='modFuelTankLargeSchematic']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach unlocks-ableitung: schaltet-gesperrtes-frei -->

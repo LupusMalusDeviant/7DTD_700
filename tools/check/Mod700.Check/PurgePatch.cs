@@ -370,6 +370,39 @@ internal static class PurgePatch
                 + "Protokolllauf in WP3.6 beantworten muss.");
         }
 
+        // Und dieselbe Frage ein drittes Mal, diesmal fuer Rezepte: welche ueberleben den
+        // Purge und sind trotzdem nicht herstellbar, weil eine Zutat gesperrt ist? Das ist
+        // keine Folge, die man einplant, sondern eine, die man uebersieht - siehe DeadRecipes.
+        PatchFile recipeFile = files.First(f => f.FileName == "recipes.xml");
+        (var deadRecipes, int recipesLeft) = DeadRecipes(source, recipeFile, blockedNames);
+        var deadNames = deadRecipes.Select(d => d.Recipe).ToHashSet(StringComparer.Ordinal);
+        report.Count("rezepte_nach_purge", recipesLeft);
+        report.Count("rezepte_mit_gesperrter_zutat", deadNames.Count);
+
+        if (deadNames.Count > 0)
+        {
+            // Genannt werden die ZUTATEN, nicht die 102 Rezepte: ersetzt wird je Zutat, nicht
+            // je Rezept. Wer Panzerband durch Sehne tauscht, erledigt 44 Zeilen auf einmal.
+            string worst = string.Join(", ", deadRecipes
+                .GroupBy(d => d.Ingredient, StringComparer.Ordinal)
+                .OrderByDescending(g => g.Select(d => d.Recipe).Distinct(StringComparer.Ordinal).Count())
+                .ThenBy(g => g.Key, StringComparer.Ordinal)
+                .Select(g => $"{g.Key} ({g.Select(d => d.Recipe).Distinct(StringComparer.Ordinal).Count()})"));
+
+            report.Hint("rezept-mit-gesperrter-zutat",
+                $"{deadNames.Count} von {recipesLeft} Rezepten",
+                "diese Rezepte ueberleben den Purge und sind trotzdem nicht herstellbar: "
+                + "mindestens eine Zutat ist gesperrt. Der Gegenstand bleibt erlaubt, das "
+                + "Rezept bleibt stehen, und im Handwerksfenster ist es grau. Ersetzt wird je "
+                + "ZUTAT, nicht je Rezept - F-02 bis F-05 in WP5 bis WP7 schreiben die "
+                + "betroffenen Rezepte um. ACHTUNG, DIESE ZAHL IST EINE ARBEITSLISTE UND KEIN "
+                + "FORTSCHRITTSBALKEN: erzeugt wird gegen VANILLA, unsere eigenen Modlets sind "
+                + "hier nicht geladen. Ein Rezept, das ein Paket von uns schon ersetzt hat, "
+                + "steht trotzdem weiter in dieser Zahl. Dass es wirklich ersetzt ist, sagt "
+                + "erst ein Lauf gegen einen frischen ConfigsDump (WP3.6). Gesperrte Zutaten "
+                + "nach Zahl der Rezepte: " + worst);
+        }
+
         if (onDefinition > 0)
         {
             report.Error("remove-auf-definition", "Vertrag 03 §4",
@@ -801,6 +834,71 @@ internal static class PurgePatch
             b => b.Attribute("name") is { } a && namesBefore.Contains(a.Value) && Named(b) == 0);
 
         return (mute, withDrops);
+    }
+
+    /// <summary>
+    /// Die Rezepte, die den Purge UEBERLEBEN und trotzdem toter Buchstabe sind, weil eine ihrer
+    /// Zutaten gesperrt ist. Gezaehlt an einer Kopie, auf die die erzeugten Entfernungen
+    /// angewandt sind.
+    ///
+    /// NACHGETRAGEN AM 2026-11-08, UND DAS WAR WIEDER EIN LOCH. Der Purge nimmt die Wege zu
+    /// gesperrten Gegenstaenden. Niemand hatte gefragt, ob die UEBRIGEN Rezepte danach noch
+    /// herstellbar sind - und fast jedes Vanilla-Waffenrezept ab T1 verlangt Panzerband. Der
+    /// Gegenstand bleibt erlaubt, das Rezept bleibt stehen, im Handwerksfenster steht es grau,
+    /// und kein Lauf hat es gemeldet: 'anachronisms' urteilt ueber Kennungen, nicht ueber
+    /// Zutatenlisten, und 'recipes' prueft eine Quelle, in der unsere Modlets nicht geladen
+    /// sind - dort ist Panzerband noch da. Gefunden beim Lesen der Waffenrezepte fuer WP5.1.
+    /// </summary>
+    private static (List<(string Recipe, string Ingredient)> Dead, int Total) DeadRecipes(
+        ConfigSource source, PatchFile recipes, HashSet<string> blocked)
+    {
+        var dead = new List<(string, string)>();
+
+        XDocument? original = source.Load(recipes.FileName);
+        if (original is null)
+        {
+            return (dead, 0);
+        }
+
+        var copy = new XDocument(original);
+        foreach (PatchOperation op in recipes.Operations)
+        {
+            foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
+            {
+                hit.Remove();
+            }
+        }
+
+        var surviving = copy.Descendants("recipe").ToList();
+        foreach (XElement recipe in surviving)
+        {
+            string name = recipe.Attribute("name")?.Value ?? string.Empty;
+            if (name.Length == 0)
+            {
+                continue;
+            }
+
+            foreach (XElement ingredient in recipe.Elements("ingredient"))
+            {
+                string ing = ingredient.Attribute("name")?.Value ?? string.Empty;
+
+                // count="0" ist Vanillas Art, eine Zutat nur fuer die Qualitaetsstufen zu
+                // nennen (resourceLegendaryParts steht so in fast jedem Waffenrezept). Sie
+                // kostet nichts und blockiert darum auch nichts.
+                string count = ingredient.Attribute("count")?.Value ?? "1";
+                if (count == "0")
+                {
+                    continue;
+                }
+
+                if (ing.Length > 0 && blocked.Contains(ing))
+                {
+                    dead.Add((name, ing));
+                }
+            }
+        }
+
+        return (dead, surviving.Count);
     }
 
     private static (int Emptied, int Total) EmptiedLootGroups(ConfigSource source, PatchFile loot)

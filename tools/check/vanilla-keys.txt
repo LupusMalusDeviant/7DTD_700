@@ -63,3 +63,77 @@ chemistryStation                  # Kraeuterkueche
 chemistryStationDesc
 cementMixer                       # Kalkofen
 cementMixerDesc
+
+# --- WP5.3: die sieben Namen der Handwerksqualitaet (D23, F-02) -----------------
+# Vanilla liest sie ueber QualityInfo::GetQualityLevelName; qualityinfo.xml enthaelt nur
+# Farben, die Namen stehen dort als XML-Kommentar und sind fuer einen Patch unerreichbar.
+# Beleg: docs/rea/findings/WP5-qualitaetsnamen-sind-sprachschluessel.md
+#
+# Das {0} ist PFLICHT: es nimmt den Gegenstandsnamen auf. Eine Zeile ohne {0} liefert
+# einen Tooltip ohne Waffennamen. Darum die deutsche Vanilla-Bauform "{0} (…)" woertlich
+# uebernommen und nur das Wort in der Klammer getauscht.
+#
+# Stufe 0 bis 6 in dieser Reihenfolge. Welcher Schluessel zu welcher Zahl gehoert, folgt
+# aus der Reihenfolge der Literale im IL und ist NICHT gemessen - geprueft wird es mit
+# einem Gegenstand je Stufe in WP3.6.
+lblQualityBroken                  # zerbrochen (0)
+lblQualityDamaged                 # grob (1)
+lblQualityPoor                    # einfach (2)
+lblQualityAverage                 # solide (3)
+lblQualityGreat                   # gut (4)
+lblQualityFlawless                # meisterlich (5)
+lblQualityLegendary               # legendaer (6)
+
+# --- WP5.1: die Nahkampfwaffen (F-02) -------------------------------------------
+# Umdeutung, kein Ersatz: jede dieser Waffen IST eine Vanilla-Waffe und bringt Modell,
+# Werte, Loot und Perk-Anbindung mit. Hier steht nur der Name. Zwei davon waren bis
+# D58 gesperrt - die Machete wird die Spatha, die Feuerwehraxt die Breitaxt.
+meleeWpnClubT0WoodenClub                  # Keule (T0)
+meleeWpnClubT0WoodenClubDesc
+meleeWpnBladeT0BoneKnife                  # Knochenmesser (T0)
+meleeWpnBladeT0BoneKnifeDesc
+meleeWpnSpearT0StoneSpear                 # Jagdspeer (T0)
+meleeWpnSpearT0StoneSpearDesc
+meleeWpnSledgeT0StoneSledgehammer         # Steinhammer (T0)
+meleeWpnSledgeT0StoneSledgehammerDesc
+meleeWpnKnucklesT0LeatherKnuckles         # Faustriemen (T0)
+meleeWpnKnucklesT0LeatherKnucklesDesc
+meleeWpnBladeT1HuntingKnife               # Sax (T1)
+meleeWpnBladeT1HuntingKnifeDesc
+meleeWpnSpearT1IronSpear                  # Ango (T1)
+meleeWpnSpearT1IronSpearDesc
+meleeWpnKnucklesT1IronKnuckles            # Eisenfaust (T1)
+meleeWpnKnucklesT1IronKnucklesDesc
+meleeToolAxeT2SteelAxe                    # Bartaxt (T2)
+meleeToolAxeT2SteelAxeDesc
+meleeWpnSledgeT1IronSledgehammer          # Eisenhammer (T2)
+meleeWpnSledgeT1IronSledgehammerDesc
+meleeWpnBladeT3Machete                    # Spatha (T3) - Freigabe aus D58
+meleeWpnBladeT3MacheteDesc
+meleeToolAxeT1IronFireaxe                 # Breitaxt (T3) - Freigabe aus D58
+meleeToolAxeT1IronFireaxeDesc
+meleeWpnClubT3SteelClub                   # Streitkolben (T3)
+meleeWpnClubT3SteelClubDesc
+meleeWpnKnucklesT3SteelKnuckles           # Stahlfaust (T3)
+meleeWpnKnucklesT3SteelKnucklesDesc
+meleeWpnSpearT3SteelSpear                 # Fluegellanze (T4)
+meleeWpnSpearT3SteelSpearDesc
+meleeWpnSledgeT3SteelSledgehammer         # Streithammer (T4)
+meleeWpnSledgeT3SteelSledgehammerDesc
+
+# Vanillas Bauteile aus dem Zerlegen. Sie bleiben erreichbar - das ist das Ventil fuer
+# den Eisenengpass aus D31 ("Altmetall aus Ruinen") - und tragen darum einen Namen, der
+# nicht "Macheten-Bauteile" lautet. Als Zutat unserer Waffen taugen sie nicht; eine
+# Spatha aus einem gefundenen Bauteil waere keine Schmiedearbeit.
+meleeWpnBladeT3MacheteParts               # Klingenbruchstuecke
+meleeWpnBladeT3MachetePartsDesc
+meleeToolAllSteelParts                    # Werkzeugbruchstuecke
+meleeToolAllSteelPartsDesc
+meleeWpnClubT3SteelClubParts              # Kolbenbruchstuecke
+meleeWpnClubT3SteelClubPartsDesc
+meleeWpnSpearT3SteelSpearParts            # Lanzenbruchstuecke
+meleeWpnSpearT3SteelSpearPartsDesc
+meleeWpnSledgeT3SteelSledgehammerParts    # Hammerbruchstuecke
+meleeWpnSledgeT3SteelSledgehammerPartsDesc
+meleeWpnKnucklesT3SteelKnucklesParts      # Eisenbeschlaege
+meleeWpnKnucklesT3SteelKnucklesPartsDesc

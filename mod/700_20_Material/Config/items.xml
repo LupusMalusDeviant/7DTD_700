@@ -46,17 +46,18 @@
 			<property name="CraftingIngredientTime" value="8" />
 		</item>
 
-		<!-- Spatha: das zweischneidige Langschwert der Zeit. Erbt vom Jagdmesser, weil
-		     das die einzige erlaubte Vanilla-Klinge ist (meleeWpnBladeT0BoneKnife und
-		     meleeWpnBladeT1HuntingKnife; die Macheten sind gesperrt). Was sie damit NICHT
-		     ist: eine Waffe mit eigener Reichweite, eigenem Schlag und eigener Animation.
-		     Das steht so da, damit niemand die Zahl fuer eine Entscheidung haelt. -->
-		<item name="itm700_spatha">
-			<property name="Extends" value="meleeWpnBladeT1HuntingKnife" />
-			<property name="CustomIcon" value="meleeWpnBladeT1HuntingKnife" />
-			<property name="EconomicValue" value="450" />
-			<property name="Group" value="Ammo/Weapons" />
-		</item>
+		<!-- HIER STAND itm700_spatha, UND ER IST WEG (D58, 8. November 2026).
+
+		     Er erbte vom Jagdmesser, weil die Machete gesperrt war - eine Spatha mit
+		     der Reichweite, dem Schlag und der Animation eines Messers. Genau das stand
+		     als Grenze im Kopf dieser Datei, und WP5 hat es nicht ertragen: gemessen hat
+		     Vanilla kein anderes Klingenmodell ueber Messerlaenge, also gibt D58 die
+		     Machete frei und deutet sie zur Spatha um - wie D54 die Boegen.
+
+		     Die Spatha ist seitdem meleeWpnBladeT3Machete. Ihr Rezept steht in
+		     700_30_Ausruestung/Config/recipes.xml (WP5.1) und hat dieselben Zutaten:
+		     Klinge, Holz, Leder. Die Kette dieses Modlets endet an der Klinge; was aus
+		     ihr wird, ist Sache von F-02. -->
 
 	</append>
 </config>

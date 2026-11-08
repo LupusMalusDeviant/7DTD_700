@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     346 Zeilen. -->
+	     344 Zeilen. -->
 
 	<remove xpath="/traders/trader_info/trader_items/item[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_info/trader_items/item[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -207,7 +207,6 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='lanternDecorLightBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='medicalBloodBag']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='medicalFirstAidKit']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolAxeT1IronFireaxe']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolAxeT3Chainsaw']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolFlashlight02']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolPaintTool']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -218,7 +217,6 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolSalvageT3ImpactDriver']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeToolWireTool']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeWpnBatonT2StunBaton']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeWpnBladeT3Machete']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='meleeWpnClubT1BaseballBat']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='mineAirFilter']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='mineCandyTin']" />  <!-- Weg zu einer gesperrten Kennung -->

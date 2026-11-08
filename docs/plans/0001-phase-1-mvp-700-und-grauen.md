@@ -608,8 +608,9 @@ verschoben ist (D57, 8. November 2026).
 
 **Schritte:**
 
-1. **WP5.1** `[Claude-prüfbar]` Sieben Nahkampfwaffen auf Vanilla-Basis (Keule, Handbeil, Sax,
-   Speer, Spatha, Breitaxt, Streitkolben) samt Rezepten.
+1. ~~**WP5.1** `[Claude-prüfbar]` Sieben Nahkampfwaffen auf Vanilla-Basis (Keule, Handbeil, Sax,
+   Speer, Spatha, Breitaxt, Streitkolben) samt Rezepten.~~ **Erledigt 2026-11-08**, und es sind
+   16 geworden statt sieben — siehe Stand.
 2. **WP5.2** `[Claude-prüfbar]` Fernkampf: Schleuder, Selbstbogen, Langbogen, Armbrust (selten,
    D8) und die Munition (Feuerstein-, Knochen-, Eisenpfeile, Bolzen, Schleudersteine).
 3. **WP5.3** `[Claude-prüfbar]` **Zwei Qualitätsachsen** (D23): Material als Grundstufe
@@ -651,6 +652,69 @@ für einen Patch unerreichbar. Beleg und Grenzen:
 `resourceRepairKit` und `resourceArmorCraftingKit` (`tools/check/aufschub.txt`). Beide sind
 Vanilla-Mechanik in Gegenstandsform; mit WP5.4 und WP5.5 gibt es einen Ersatz, und erst dann
 dürfen sie fallen.
+
+**Stand WP5.1 (8. November 2026): 16 Waffen statt sieben, und der Grund ist ein Loch.**
+
+Der Plan nannte sieben Waffen. Gebaut sind 16 — nicht aus Eifer, sondern weil beim Lesen der
+Vanilla-Rezepte eine Lücke aufgefallen ist, die größer ist als WP5: **von den 247 Rezepten,
+die den Purge überleben, sind 94 toter Buchstabe.** Mindestens eine ihrer Zutaten ist
+gesperrt, der Gegenstand bleibt erlaubt, das Rezept bleibt stehen, und im Handwerksfenster ist
+es grau. Bei den Waffen ist der Grund immer derselbe: fast jedes Vanilla-Waffenrezept ab T1
+verlangt **Panzerband** (40 Rezepte), die Schlagringe dazu Mechanikteile (34).
+
+Kein Lauf hatte das gemeldet. `anachronisms` urteilt über Kennungen und nicht über
+Zutatenlisten; `recipes` prüft eine Quelle, in der unsere Modlets nicht geladen sind — dort
+ist Panzerband noch da. Seit diesem Paket zählt `purge-patch` es mit
+(`rezepte_mit_gesperrter_zutat`), mit zwei Gegenproben, und der Hinweis sagt selbst, dass die
+Zahl eine **Arbeitsliste und kein Fortschrittsbalken** ist: sie entsteht gegen Vanilla, unsere
+Ersätze stehen trotzdem weiter darin. Vertrag 04 §5b.
+
+Darum deckt WP5.1 jede Nahkampfwaffe ab, die den Purge überlebt hat, und nicht nur die sieben
+aus der F-02-Tabelle:
+
+| Stufe | Waffe | Vanilla-Kennung | Rezept |
+|---|---|---|---|
+| T0 | Keule | `meleeWpnClubT0WoodenClub` | Vanilla unberührt (keine gesperrte Zutat) |
+| T0 | Knochenmesser | `meleeWpnBladeT0BoneKnife` | Vanilla unberührt |
+| T0 | Jagdspeer | `meleeWpnSpearT0StoneSpear` | Vanilla unberührt |
+| T0 | Steinhammer | `meleeWpnSledgeT0StoneSledgehammer` | Vanilla unberührt |
+| T0 | Faustriemen | `meleeWpnKnucklesT0LeatherKnuckles` | Vanilla unberührt |
+| T1 | Sax | `meleeWpnBladeT1HuntingKnife` | Klinge + Holz + Leder, Bank |
+| T1 | Ango | `meleeWpnSpearT1IronSpear` | Schmiedeeisen + Holz + Leder, Bank |
+| T1 | Eisenfaust | `meleeWpnKnucklesT1IronKnuckles` | Schmiedeeisen + Leder, Esse/Amboss |
+| T2 | Bartaxt | `meleeToolAxeT2SteelAxe` | Schmiedeeisen + Holz + Leder, Esse/Amboss |
+| T2 | Eisenhammer | `meleeWpnSledgeT1IronSledgehammer` | Schmiedeeisen 20 + Holz + Leder, Esse/Amboss |
+| T3 | **Spatha** | `meleeWpnBladeT3Machete` | Klinge + Holz + Leder, Bank — **Freigabe D58** |
+| T3 | **Breitaxt** | `meleeToolAxeT1IronFireaxe` | Tiegelstahl + Holz + Leder, Esse — **Freigabe D58** |
+| T3 | Streitkolben | `meleeWpnClubT3SteelClub` | Tiegelstahl + Holz + Leder, Esse/Amboss |
+| T3 | Stahlfaust | `meleeWpnKnucklesT3SteelKnuckles` | Tiegelstahl + Leder, Esse/Amboss |
+| T4 | Flügellanze | `meleeWpnSpearT3SteelSpear` | Tiegelstahl + Holz + Leder, Esse/Amboss |
+| T4 | Streithammer | `meleeWpnSledgeT3SteelSledgehammer` | Tiegelstahl 12 + Holz + Leder, Esse/Amboss |
+
+11 Vanilla-Rezepte entfernt, 11 eigene geschrieben; fünf T0-Rezepte bleiben unberührt, weil
+sie keine gesperrte Zutat tragen. Panzerband ist überall zu **Leder** geworden (Riemen und
+Wicklung), Mechanikteile zu **Schmiedeeisen**.
+
+**itm700_spatha aus WP4.6 ist weg, und das ist eine Berichtigung.** Er erbte vom Jagdmesser,
+weil die Machete gesperrt war — eine Spatha mit der Reichweite, dem Schlag und der Animation
+eines Messers. Genau das stand als Grenze im Kopf der Datei. Mit D58 ist die Spatha die
+Machete; das Rezept hat dieselben Zutaten und steht jetzt in `700_30_Ausruestung`. Die Kette
+in `700_20_Material` endet an der **Klinge** — dieses Modlet trägt nach Vertrag 01 die Kette,
+nicht die Waffen.
+
+**Ein zweiter Prüfer war blind.** `kette-pruefen.ps1` hatte zwei feste Pfade auf
+`700_20_Material`. Die neuen Waffenrezepte in `700_30_Ausruestung` hat es **nicht gesehen und
+weiter grün gemeldet**. Es sucht die Dateien jetzt selbst (`mod/**/recipes.xml`,
+`mod/**/items.xml`, ohne das erzeugte `700_10_Purge`): 15 Rezepte, 12 werkzeuggebunden,
+0 unaufgelöste Verweise — vorher sah derselbe Lauf 4 davon.
+
+**Was WP5.1 absichtlich nicht anfasst:** keine Zahlen an den Waffen (Schaden, Reichweite,
+Haltbarkeit, Ausdauer bleiben Vanilla — WP5.6 und WP9), keine Perk-Marken (F-21 in WP7, D47;
+bis dahin sind die Rezepte ohne `learnable` von Anfang an bekannt), keine `*Parts` als Zutat
+(sie bleiben als Altmetall aus Ruinen das Ventil für den Eisenengpass aus D31 und haben nur
+einen Namen bekommen), und kein `resourceLegendaryParts` — es ist gesperrt, also ist Vanillas
+legendäre Stufe über Zutaten nicht erreichbar. Wie Qualität 6 verdient wird, entscheidet F-21
+in WP7.
 
 **Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
 `Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in

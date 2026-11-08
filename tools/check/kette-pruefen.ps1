@@ -46,11 +46,20 @@ if (-not $Vanilla) {
     $Vanilla = Join-Path $env:SDTD_PATH 'Data\Config'
 }
 
+# Gefunden statt aufgezaehlt (geaendert 2026-11-08, WP5.1). Vorher standen hier zwei feste
+# Pfade auf 700_20_Material. Als WP5.1 die Waffenrezepte in 700_30_Ausruestung anlegte, hat
+# dieses Skript sie nicht gesehen und weiter gruen gemeldet - ein Pruefer, der nur die
+# Dateien kennt, die man ihm beim Schreiben genannt hat, prueft das falsche Projekt.
+# 700_10_Purge bleibt aussen vor: die Datei ist ERZEUGT und enthaelt nur Entfernungen.
 if (-not $Rezepte) {
-    $Rezepte = @(Join-Path $repoRoot 'mod\700_20_Material\Config\recipes.xml')
+    $Rezepte = @(Get-ChildItem (Join-Path $repoRoot 'mod') -Recurse -Filter 'recipes.xml' |
+        Where-Object { $_.FullName -notmatch '700_10_Purge' } |
+        Select-Object -ExpandProperty FullName)
 }
 if (-not $Gegenstaende) {
-    $Gegenstaende = @(Join-Path $repoRoot 'mod\700_20_Material\Config\items.xml')
+    $Gegenstaende = @(Get-ChildItem (Join-Path $repoRoot 'mod') -Recurse -Filter 'items.xml' |
+        Where-Object { $_.FullName -notmatch '700_10_Purge' } |
+        Select-Object -ExpandProperty FullName)
 }
 
 Write-Output '== kette-pruefen =='

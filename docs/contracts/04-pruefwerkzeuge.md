@@ -805,6 +805,76 @@ echten Dateien: 5 Rezepte, 4 werkzeuggebunden, **0 unaufgelöste Verweise**.
 und ob der XML-Patcher des Spiels unsere XPaths trifft. Ohne `SDTD_PATH` überspringt es sich
 und sagt ausdrücklich „KEIN GRUEN".
 
+### Nachtrag WP5.1 (2026-11-08): es sucht die Dateien jetzt selbst — **Abnahme offen**
+
+Die beiden Pfade standen fest im Skript, auf `700_20_Material`. Als WP5.1 die Waffenrezepte in
+`700_30_Ausruestung` anlegte, **hat das Skript sie nicht gesehen und weiter grün gemeldet**.
+Ein Prüfer, der nur die Dateien kennt, die man ihm beim Schreiben genannt hat, prüft das
+falsche Projekt — und er fällt nicht auf, weil er grün bleibt.
+
+Jetzt sucht es `mod/**/recipes.xml` und `mod/**/items.xml` selbst und nimmt `700_10_Purge`
+aus (erzeugt, enthält nur Entfernungen). Gemessen nach der Änderung: **15 Rezepte, 12
+werkzeuggebunden, 0 unaufgelöste Verweise** — vorher sah derselbe Lauf nur 4 davon.
+
+## 5b. `rezepte_mit_gesperrter_zutat` — der dritte Nebeneffekt des Purge (Nachtrag WP5.1) — **Abnahme offen**
+
+**Stand:** 8. November 2026, gebaut, zwei Gegenproben grün. Dieser Nachtrag ergänzt §3c.
+
+### Was übersehen war
+
+Der Purge nimmt die **Wege zu gesperrten Gegenständen**. Niemand hatte gefragt, ob die
+**übrigen** Rezepte danach noch herstellbar sind. Gemessen: von den 247 Rezepten, die den
+Purge überleben, sind **94 toter Buchstabe** — mindestens eine ihrer Zutaten ist gesperrt.
+Der Gegenstand bleibt erlaubt, das Rezept bleibt stehen, und im Handwerksfenster ist es grau.
+
+Kein Lauf hat das gemeldet, und zwar aus zwei Gründen gleichzeitig: `anachronisms` urteilt
+über **Kennungen** und nicht über Zutatenlisten, und `recipes` prüft eine **Quelle**, in der
+unsere Modlets nicht geladen sind — dort ist Panzerband noch da. Gefunden wurde es beim Lesen
+der Vanilla-Waffenrezepte für WP5.1: **fast jedes Waffenrezept ab T1 verlangt Panzerband.**
+
+### Die Zähler
+
+| Zähler | Bedeutung |
+|---|---|
+| `rezepte_nach_purge` | Rezepte, die nach den Entfernungen übrig sind (gemessen 247) |
+| `rezepte_mit_gesperrter_zutat` | davon die, die mindestens eine gesperrte Zutat haben (gemessen 94) |
+
+Der Hinweis nennt die **Zutaten** mit der Zahl ihrer Rezepte, nicht die 94 Rezepte: ersetzt
+wird je Zutat. Die größten: `resourceDuctTape` (40), `resourceMechanicalParts` (34),
+`resourceScrapPolymers` (31), `resourceSpring` (18), `resourceGunPowder` (8).
+
+**`count="0"` zählt nicht.** So schreibt Vanilla eine Zutat, die nur die Qualitätsstufen
+staffelt und nichts kostet — `resourceLegendaryParts` steht so in fast jedem Waffenrezept.
+Wer sie mitzählt, meldet jedes Waffenrezept als tot.
+
+### Diese Zahl ist eine Arbeitsliste, kein Fortschrittsbalken
+
+Erzeugt wird gegen **Vanilla**; unsere eigenen Modlets sind dabei nicht geladen. Ein Rezept,
+das ein Paket von uns schon ersetzt hat, steht trotzdem weiter in den 94. Der Hinweis sagt das
+selbst. Dass ein Ersatz wirklich greift, sagt erst ein Lauf gegen einen frischen
+`ConfigsDump` — **WP3.6**.
+
+### Gegenproben (Projektregel 5) — zwei gebaut und grün
+
+| Probe | Erwartung |
+|---|---|
+| `tote Rezepte werden gezaehlt, eine Zutat mit count=0 nicht` | `rezept-mit-gesperrter-zutat: 1 von`, und die gesperrte Zutat namentlich |
+| `ohne gesperrte Zutat meldet der Zaehler nichts` | der Hinweis fehlt ganz |
+
+Der Prüfsatz `testdaten/purge/recipes.xml` hat dafür zwei neue Rezepte: `pruefKoecher` nennt
+eine gesperrte Zutat mit `count="1"`, `pruefSehne` dieselbe mit `count="0"`. Meldet der Lauf
+„2 von", zählt der Zähler Vanillas Qualitätszutaten mit.
+
+### Was dieser Nachtrag nicht behauptet
+
+- **Kein Fehler, nur ein Hinweis.** Die 94 fallen nicht in WP5; sie fallen über WP5 bis WP7,
+  je Feature. Ein Fehler wäre eine Schuld ohne Adresse.
+- **Nichts über Loot und Händler.** Ein gesperrter Gegenstand kann weiter in einer Loot-Liste
+  stehen, die wir nicht angefasst haben — das deckt `wege_uebrig`, nicht dieser Zähler.
+- **Nichts über Verweise jenseits von Zutaten.** `RepairTools`, `required_tools` in XUi und
+  `RepairItems` an Blöcken nennen Gegenstände ebenfalls. Das ist der offene Punkt „der Purge
+  deckt Wege, nicht VERWEISE" in §8, und er bleibt offen.
+
 ## 6. Ein Befehl für alles
 
 `tools/check/check-all.ps1` ruft die drei Befehle, fasst zusammen und endet mit Exit 1, wenn
