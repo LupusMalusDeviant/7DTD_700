@@ -624,7 +624,8 @@ verschoben ist (D57, 8. November 2026).
    Verlust an Maximal-Haltbarkeit — den kennt Vanilla nicht. Siehe Stand.
 5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
    Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
-   — **nicht angefangen**, Richtung steht mit D59, drei Dinge sind davor zu messen: siehe Stand.
+   — **gemessen 2026-11-08, nicht gebaut**: die drei Vorfragen sind beantwortet, dafür steht
+   eine vierte an (V 3.40 hat keine Rüstungsstufen). Siehe Stand.
 6. **WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
    8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslot Weberschiffchen —
    und als Rezepte die Gambeson-Teile aus WP5.5. Erst mit ihnen trägt er die fünf Rezepte, die
@@ -772,29 +773,54 @@ werden. Dazu gemessen: Vanilla hat sechs Fernkampfwaffen (`gunBowT0PrimitiveBow`
 Vanilla-Grundlage** — sie wäre der erste Gegenstand dieses Pakets ohne Vorfahren, und das
 gehört in dieselbe Entscheidung.
 
-**WP5.5 (Rüstung): die Richtung steht mit D59, drei Dinge sind davor zu messen.** Gemessen ist
-schon: die drei Gewichtsklassen `armorLightMaster`, `armorMediumMaster`, `armorHeavyMaster`
-tragen `Class="ItemClassArmor"`, `DisplayType`, `Material`, Trefferklänge, `RepairTools` und
-`ShowQuality`, aber **keinen Slot und kein Modell**. Ein echtes Rüstungsteil setzt darauf:
-`EquipSlot` (Chest, Head, Hands, Feet), `Tags` (die Gewichtsklasse und ihre Mali),
-`ArmorGroup` für den Set-Bonus, ein `effect_group` mit `PhysicalDamageResist`,
-`DegradationMax`, `Mobility` und `StaminaChangeOT` — und ein `<property class="SDCS">` mit
-einem `Prefab` unter `Entities/Player/{sex}/Gear/…`. Das Modell kommt also aus einem
-**Prefab-Pfad**, nicht aus einer Mesh-Datei.
+**WP5.5 (Rüstung): die drei Messungen sind erledigt, und sie haben eine vierte Frage
+aufgedeckt.** Vollständig in
+[WP5-ruestung-in-v340.md](../rea/findings/WP5-ruestung-in-v340.md); hier das Ergebnis:
 
-Vor der ersten Zeile zu klären:
+1. **Die Modelle.** Ein Rüstungsteil trägt seinen Körper nicht als `Meshfile`, sondern in
+   einem `<property class="SDCS">` mit einem `Prefab` unter `Entities/Player/{sex}/Gear/…` —
+   und **alle vier Teile einer Garnitur zeigen auf denselben Pfad**; `EquipSlot` entscheidet,
+   welcher Teil erscheint. Elf Garnituren holen ihren Helm aus einer `HeadgearMorphMatrix` mit
+   `{race}{variant}{hair}` — von dort borgen wir nicht. **Fünf Garnituren des Grundspiels
+   brauchen keine Kopf-Matrix**: `armorPrimitive` (`Gear/Fiber/`, unser T0, erlaubt) und die
+   vier gesperrten `armorAssassin`, `armorNomad`, `armorRaider`, `armorRogue`
+   (`Gear/Assassin|Nomad|Raider|Stealth/`). Vier geborgte Garnituren für T1 bis T4 — das geht
+   genau auf. Alles andere liegt unter `@:DLC/…` oder `@:TwitchDrops/…` und fehlt auf dem
+   Rechner, der das DLC nicht hat.
+2. **Der Set-Bonus** hängt an `ArmorGroup` und steht zentral in `buffs.xml`: vier Teile
+   derselben Gruppe → `buff<Set>SetBonus`, gestaffelt über `ArmorGroupLowestQuality` in sechs
+   Stufen. Behalten unsere Teile die Gruppe der Garnitur, von der sie den Prefab borgen, dann
+   **wirkt Vanillas Bonus unverändert** und es sind nur drei Sprachschlüssel zu setzen. Kein
+   `buffs.xml`-Patch. Das geht nur, weil die Vanilla-Garnitur unerreichbar ist: die Gruppe
+   lässt sich nur noch mit **unseren** vier Teilen vollmachen.
+3. **Die Zahlen sind nicht zu erfinden.** Gemessen an neun Garnituren: `PhysicalDamageResist`,
+   `DegradationMax`, `Mobility` und `StaminaChangeOT` hängen **allein an der Gewichtsklasse**
+   und sind über alle Garnituren derselben Klasse identisch — leicht 8→12,3 ohne Malus, mittel
+   13→17,3 bei −5 % Mobilität, schwer 18→21 bei −7,5 %. Unsere Teile nehmen die Zahlen ihrer
+   Klasse. Der Punkt ist damit erledigt und nicht nach WP9 verschoben.
 
-1. **Welche Gear-Prefabs es gibt.** D59 sagt „Modelle aus den gesperrten Garnituren geborgt" —
-   welche Pfade das sind, steht in den Garnituren, und ob ein Pfad ohne seine Garnitur lädt,
-   steht nirgends. Raten verbietet sich: ein falscher Pfad ist ein unsichtbarer Spieler.
-2. **Wie `ArmorGroup` den Set-Bonus bildet** (`groupPrimitive`, `groupNomad` …) und wo die
-   Gruppen definiert sind. F-03 will die Zuordnung umdeuten, nicht neu erfinden.
-3. **Welche Zahlen gelten.** Vanilla staffelt `PhysicalDamageResist` je Stufe und Garnitur
-   (Primitiv 8–12,3; Nomad 18–21). Eigene Werte wären erfundene Zahlen — die gehören in die
-   Tabelle von WP5.6 und nach WP9, nicht in ein Nebenbei.
+**Die vierte Frage: V 3.40 hat keine Rüstungsstufen.** Drei Gewichtsklassen, und sonst nichts
+— die Stufe eines Rüstungsteils ist seine **Qualität 1–6**, also Handwerksqualität und keine
+Materialstufe. F-03 will fünf Stufen. **Fünf auf drei geht nicht auf**, und das ist eine
+Entscheidung des Nutzers, weil die F-03-Tabelle daran hängt:
 
-Angefangen ist davon nichts. Sechzehn halbe Rüstungsteile mit geratenen Prefab-Pfaden wären
-schlechter als keine.
+1. **Fünf Namen, drei Klassen.** T3 und T4 beide schwer, Unterschied nur in Name, Rezept,
+   Preis und Set-Bonus — **nicht im Schutz**. Ein langes Kettenhemd, das nicht besser schützt
+   als ein kurzes, ist eine Enttäuschung, sobald jemand die Werte vergleicht.
+2. **Drei Rüstungsstufen in Phase 1**, plus T0: Lumpen (primitiv), Wolle und Leder (leicht),
+   Gambeson (mittel), Kettenhemd (schwer). T4 wird zur Qualitätsspitze des Kettenhemds statt
+   zu einem eigenen Gegenstand. Änderung an der F-03-Tabelle, aber keine stille Lücke — und
+   D23s zwei Achsen bleiben genau so stehen, wie sie gedacht waren: Material als Grundstufe,
+   Handwerksqualität als Feinstufe.
+3. **Eigene Zahlen je Stufe**, über `armorHeavyMaster` hinaus. Erfundene Zahlen ohne
+   Balancing-Grundlage; die gehören nach WP9, und bis dahin stünde WP5.5 still.
+
+Empfehlung: **Weg 2.** Er kostet eine Zeile in der F-03-Tabelle und spart fünf erfundene
+Zahlen und einen enttäuschenden T4. „Rüstung ist teuer, schwer und spürbar" (F-03) trägt nur,
+wenn die Stufen sich auch messbar unterscheiden.
+
+Gebaut ist nichts. Sechzehn Rüstungsteile zu schreiben, bevor klar ist, ob es zwölf oder
+sechzehn sind, wäre Arbeit auf Verdacht.
 
 **Vorgezogene Notiz für Phase 2:** `EnumDamageTypes` enthält `Piercing`, `Slashing`, `Bashing`,
 `Crushing` bereits, und `DamageSource` trägt ein `DamageTypeTag`. Die Schadensarten müssen in

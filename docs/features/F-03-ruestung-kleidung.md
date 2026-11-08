@@ -43,6 +43,26 @@ Die Alternative — vier der 16 gesperrten Garnituren wieder freigeben und umdeu
 billiger gewesen und holt laut Denylist-Kommentar Warnweste, Schutzhelm und Kevlar zurück,
 dazu vier D-Zeilen Rückbau an WP3.
 
+**Gemessen für WP5.5 (8. November 2026).** Vollständig in
+[WP5-ruestung-in-v340.md](../rea/findings/WP5-ruestung-in-v340.md), kurz:
+
+- **Modell:** kein `Meshfile`, sondern `<property class="SDCS">` mit einem `Prefab` unter
+  `Entities/Player/{sex}/Gear/…`. **Alle vier Teile einer Garnitur teilen einen Pfad**;
+  `EquipSlot` entscheidet, was erscheint. Borgen lassen sich die vier gesperrten Garnituren
+  des Grundspiels ohne Kopf-Matrix: Assassin, Nomad, Raider, Rogue (`Gear/Stealth/`).
+  `armorPrimitive` liegt auf `Gear/Fiber/` und bleibt T0.
+- **Set-Bonus:** `ArmorGroup` am Teil, die Regel zentral in `buffs.xml` (vier Teile → Buff,
+  gestaffelt über `ArmorGroupLowestQuality`). Behalten unsere Teile die geborgte Gruppe, wirkt
+  Vanillas Bonus unverändert und es sind nur drei Sprachschlüssel zu setzen.
+- **Zahlen:** hängen allein an der Gewichtsklasse, über alle Garnituren identisch — leicht
+  8→12,3 ohne Malus, mittel 13→17,3 bei −5 % Mobilität, schwer 18→21 bei −7,5 %. Nichts zu
+  erfinden.
+- **Offen, und zwar für den Nutzer:** V 3.40 kennt **keine Rüstungsstufen**, nur drei
+  Gewichtsklassen plus Qualität 1–6. Die fünf Stufen der Tabelle oben gehen darauf nicht auf.
+  Drei Wege stehen im Plan bei WP5.5, Empfehlung ist **drei Rüstungsstufen plus T0** — dann
+  wird T4 die Qualitätsspitze des Kettenhemds statt eines Gegenstands, der genauso gut
+  schützt wie T3.
+
 - Gewicht → Bewegungs- und Ausdauer-Malus über vorhandene Rüstungs-Mechanik
 - Set-Boni über vorhandene Rüstungsset-Logik: Zuordnung umdeuten
 - **Qualität** (D23): Material = Grundstufe, Handwerksqualität = Feinstufe (wie F-02)
