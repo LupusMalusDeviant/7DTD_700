@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_30_Ausruestung / items.xml
+	     F-02 Verschleiss und Reparatur, Plan-0001 WP5.4, Entscheidung D60
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     WARUM ES ZWEI REPARATUR-GEGENSTAENDE SIND UND KEINE MECHANIK
+	     ===================================================================
+
+	     F-02 wollte einen Schleifstein, der MAXIMAL-HALTBARKEIT kostet, und volle
+	     Reparatur an der Esse. Gemessen kennt Vanilla an Reparatur nur vier Dinge:
+	     RepairTools (welcher Gegenstand repariert), RepairAmount (wieviel Haltbarkeit
+	     er zurueckgibt), RepairTime und die Degradation*-Werte. Einen Verlust an
+	     Maximal-Haltbarkeit gibt es nicht - Vanillas resourceRepairKit hat
+	     RepairAmount="32000" und repariert damit immer voll.
+
+	     Ohne C# ist die Mechanik also nicht zu bauen, und Phase 1 steht auf der
+	     Annahme, keinen Harmony-Patch zu brauchen. D60 loest das ueber die MENGE:
+
+	       Schleifstein      ueberall herstellbar, RepairAmount 400  -> teilweise
+	       Schmiedeflicken   nur an der Esse,      RepairAmount 32000 -> voll
+
+	     Die Esse wird damit ueber das REZEPT zur Bedingung, nicht ueber den
+	     Reparaturvorgang - derselbe Griff wie bei der Holzkohle in WP4.6, wo der Zwang
+	     dort sitzt, wo eine Pruefung ihn sehen kann. Der Verlust an
+	     Maximal-Haltbarkeit wandert nach Phase 2 und bekommt dort Finding und
+	     Patch-Manifest-Eintrag (D60 verfeinert D21, hebt es nicht auf).
+
+	     ===================================================================
+	     RepairTools IST EINE LISTE - GELESEN, NICHT GELAUFEN
+	     ===================================================================
+
+	     Dass BEIDE Gegenstaende an derselben Waffe wirken koennen, haengt daran, dass
+	     RepairTools mehrere Namen aufnimmt. Gemessen mit mod700meta: das Feld
+	     ItemClass::RepairTools hat den Typ
+	     XMLData.Item.ItemData/DataItemArrayRepairTools und liefert ueber get_Item(int)
+	     ein DataItem<string> - es ist ein ARRAY. Vanilla schreibt ueberall nur einen
+	     Namen hinein, also sagt Vanilla nichts ueber das Trennzeichen; jede andere
+	     Array-Eigenschaft der items.xml trennt mit Komma (Group, Tags, Modules, und in
+	     XUi required_tools).
+
+	     DAS IST EINE SETZUNG AUS ZWEI BELEGEN UND EINER GEWOHNHEIT, kein Nachweis.
+	     Traegt das Spiel nur den ersten Namen, repariert nur der Schleifstein, und das
+	     faellt erst im Spiel auf. Gehoert in den Protokolllauf von WP3.6.
+
+	     ===================================================================
+	     DIE FUENF T0-WAFFEN STEHEN HIER NICHT
+	     ===================================================================
+
+	     Keule, Knochenmesser, Jagdspeer, Steinhammer und Faustriemen reparieren in
+	     Vanilla mit ihrem eigenen Werkstoff - Holz, Knochen, Stein, Stoff. Das ist
+	     genau, was ein Mensch um 700 getan haette, und es ist schon so. Angefasst wird
+	     nur, was auf das gesperrte Reparatur-Kit zeigt.
+	-->
+
+	<append xpath="/items">
+
+		<!-- Schleifstein. Erbt vom Stein: Modell, Symbol und Werkstoff passen, und er
+		     ist erlaubt. RepairAmount 400 statt 300 - ein zugerichteter Wetzstein ist
+		     besser als ein Feldstein und bleibt weit unter dem Flicken. -->
+		<item name="itm700_schleifstein">
+			<property name="Extends" value="resourceRockSmall" />
+			<property name="CustomIcon" value="resourceRockSmall" />
+			<property name="CustomIconTint" value="9aa3a8" />
+			<property name="Stacknumber" value="50" />
+			<property name="EconomicValue" value="30" />
+			<property name="RepairAmount" value="400" />
+			<property name="RepairTime" value="3" />
+			<property name="Group" value="Resources" />
+		</item>
+
+		<!-- Schmiedeflicken. Erbt vom Schmiedeeisen. RepairAmount 32000 ist Vanillas
+		     Zahl fuer "so viel, wie das Stueck fassen kann" - uebernommen, damit "voll"
+		     wirklich voll heisst und nicht knapp daneben. RepairTime 6: die doppelte
+		     Zeit des Schleifsteins, weil man dafuer ans Feuer muss. -->
+		<item name="itm700_schmiedeflicken">
+			<property name="Extends" value="resourceForgedIron" />
+			<property name="CustomIcon" value="resourceForgedIron" />
+			<property name="CustomIconTint" value="d8b48a" />
+			<property name="Stacknumber" value="50" />
+			<property name="EconomicValue" value="60" />
+			<property name="RepairAmount" value="32000" />
+			<property name="RepairTime" value="6" />
+			<property name="Group" value="Resources" />
+		</item>
+
+	</append>
+
+	<!-- Die acht Waffen, die auf das gesperrte Reparatur-Kit zeigen. Drei weitere erben
+	     ihr RepairTools von einer dieser acht (meleeToolAxeT2SteelAxe von der Breitaxt,
+	     meleeWpnKnucklesT3SteelKnuckles von der Eisenfaust, meleeWpnSpearT3SteelSpear
+	     vom Ango) und folgen darum von selbst: Extends wird nach dem Patchen aufgeloest.
+	-->
+	<set xpath="/items/item[@name='meleeWpnBladeT1HuntingKnife']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnSpearT1IronSpear']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnKnucklesT1IronKnuckles']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnSledgeT1IronSledgehammer']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnBladeT3Machete']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeToolAxeT1IronFireaxe']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnClubT3SteelClub']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammer']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+
+</config>

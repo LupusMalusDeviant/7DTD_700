@@ -204,6 +204,31 @@
 			<ingredient name="resourceLeather" count="3" />
 		</recipe>
 
+		<!-- ====================================================
+		     WP5.4 - die beiden Reparatur-Gegenstaende (D60)
+		     ====================================================
+		     Der Unterschied zwischen "einfach" und "voll" steckt in RepairAmount
+		     (siehe items.xml). Was ihn im Spiel durchsetzt, ist die Herstellung:
+		     der Schleifstein braucht nichts als zwei Steine, der Flicken braucht
+		     Esse und Amboss. "Beim Schmied" ist damit das Rezept und nicht der
+		     Reparaturvorgang.
+		-->
+
+		<!-- Schleifstein: ueberall, aus zwei Feldsteinen und etwas Sand. Sand hat
+		     Vanilla nicht als Gegenstand, also bleibt es bei Stein und Holz
+		     (Halter). -->
+		<recipe name="itm700_schleifstein" count="1" is_trackable="false">
+			<ingredient name="resourceRockSmall" count="20" />
+			<ingredient name="resourceWood" count="2" />
+		</recipe>
+
+		<!-- Schmiedeflicken: zwei auf einmal, an der Esse. Holzkohle steht dabei, weil
+		     ohne Feuer nichts geflickt wird - dieselbe Begruendung wie in WP4.6. -->
+		<recipe name="itm700_schmiedeflicken" count="2" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="2" />
+			<ingredient name="resourceCoal" count="1" />
+		</recipe>
+
 	</append>
 
 </config>

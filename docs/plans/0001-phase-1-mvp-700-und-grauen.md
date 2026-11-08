@@ -613,11 +613,14 @@ verschoben ist (D57, 8. November 2026).
    16 geworden statt sieben — siehe Stand.
 2. **WP5.2** `[Claude-prüfbar]` Fernkampf: Schleuder, Selbstbogen, Langbogen, Armbrust (selten,
    D8) und die Munition (Feuerstein-, Knochen-, Eisenpfeile, Bolzen, Schleudersteine).
-3. **WP5.3** `[Claude-prüfbar]` **Zwei Qualitätsachsen** (D23): Material als Grundstufe
+3. ~~**WP5.3** `[Claude-prüfbar]` **Zwei Qualitätsachsen** (D23): Material als Grundstufe
    (Knochen < Bronze < Schmiedeeisen < Stahl < Damast), Handwerksqualität als Feinstufe
-   (Vanilla 1–6 umbenannt: grob, einfach, solide, gut, meisterlich, legendär).
-4. **WP5.4** `[Claude-prüfbar]` Verschleiß und Reparatur: Schleifstein (einfach, kostet
-   Maximal-Haltbarkeit) gegen Esse (voll).
+   (Vanilla 1–6 umbenannt: grob, einfach, solide, gut, meisterlich, legendär).~~
+   **Handwerksqualität erledigt 2026-11-08** (sieben Sprachschlüssel); die Materialstufe
+   steckt in den Gegenständen selbst, siehe Stand.
+4. ~~**WP5.4** `[Claude-prüfbar]` Verschleiß und Reparatur: Schleifstein (einfach, kostet
+   Maximal-Haltbarkeit) gegen Esse (voll).~~ **Erledigt 2026-11-08 nach D60**, ohne den
+   Verlust an Maximal-Haltbarkeit — den kennt Vanilla nicht. Siehe Stand.
 5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
    Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
 6. **WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
@@ -707,6 +710,43 @@ nicht die Waffen.
 weiter grün gemeldet**. Es sucht die Dateien jetzt selbst (`mod/**/recipes.xml`,
 `mod/**/items.xml`, ohne das erzeugte `700_10_Purge`): 15 Rezepte, 12 werkzeuggebunden,
 0 unaufgelöste Verweise — vorher sah derselbe Lauf 4 davon.
+
+**Stand WP5.3 und WP5.4 (8. November 2026): Qualitätsnamen und zwei Reparatur-Gegenstände.**
+
+**WP5.3** ist eine Sprachdatei-Arbeit, sieben Zeilen: `lblQualityBroken` bis
+`lblQualityLegendary` heißen jetzt zerbrochen, grob, einfach, solide, gut, meisterlich,
+legendär. Die Bauform `{0} (…)` ist übernommen, weil das `{0}` den Gegenstandsnamen aufnimmt
+— eine Zeile ohne `{0}` liefert einen Tooltip ohne Waffennamen. Die **Materialstufe** aus D23
+(Knochen < Bronze < Schmiedeeisen < Stahl < Damast) hat in Vanilla kein Gegenstück und steckt
+in den Gegenständen selbst, nicht in diesen sieben Schlüsseln. Welcher Schlüssel zu welcher
+Zahl gehört, ist **gelesen und nicht gemessen** — ein Gegenstand je Stufe in WP3.6 klärt es.
+
+**WP5.4** baut nach D60 zwei Gegenstände statt einer Mechanik:
+
+| Gegenstand | herstellbar | `RepairAmount` | Vergleich |
+|---|---|---|---|
+| Schleifstein | überall, 20 Stein + 2 Holz | 400 | Feldstein 300, Stoff 50 |
+| Schmiedeflicken | **Esse + Amboss**, 2 Schmiedeeisen + 1 Holzkohle → 2 Stück | 32000 | Vanillas Reparatur-Kit 32000 |
+
+Acht Waffen zeigten auf das gesperrte `resourceRepairKit` und zeigen jetzt auf beide; drei
+weitere erben es von einer der acht (`meleeToolAxeT2SteelAxe` von der Breitaxt,
+`meleeWpnKnucklesT3SteelKnuckles` von der Eisenfaust, `meleeWpnSpearT3SteelSpear` vom Ango)
+und folgen von selbst, weil `Extends` nach dem Patchen aufgelöst wird. Die fünf T0-Waffen
+bleiben unberührt: sie reparieren in Vanilla schon mit Holz, Knochen, Stein und Stoff — genau,
+was ein Mensch um 700 getan hätte.
+
+**Dass beide an derselben Waffe wirken, ist eine Setzung aus zwei Belegen und einer
+Gewohnheit.** `ItemClass::RepairTools` hat den Typ `DataItemArrayRepairTools` und liefert über
+`get_Item(int)` ein `DataItem<string>` — es ist ein Array. Vanilla schreibt überall nur **einen**
+Namen hinein, sagt also nichts über das Trennzeichen; jede andere Array-Eigenschaft der
+`items.xml` trennt mit Komma (`Group`, `Tags`, `Modules`, in XUi `required_tools`). Trägt das
+Spiel nur den ersten Namen, repariert nur der Schleifstein — und das fällt erst im Spiel auf.
+**WP3.6.**
+
+**Der Aufschub ist halb eingelöst, und das steht so in `aufschub.txt`.** `resourceRepairKit`
+darf erst fallen, wenn auch die `armor*Master`-Klassen nicht mehr darauf zeigen; das ist
+WP5.5. `resourceArmorCraftingKit` hängt ganz an der Rüstung. Teilweise eingelöst ist nicht
+eingelöst, also bleiben beide Zeilen stehen.
 
 **Was WP5.1 absichtlich nicht anfasst:** keine Zahlen an den Waffen (Schaden, Reichweite,
 Haltbarkeit, Ausdauer bleiben Vanilla — WP5.6 und WP9), keine Perk-Marken (F-21 in WP7, D47;
