@@ -856,6 +856,10 @@ werden:
 2. **Dedicated Server** installieren — oder entscheiden, dass Z7 gestrichen wird. *(Blockiert
    WP9.2 und drei F-00-Kriterien. Aufgabe liegt offen.)*
 3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
+   Dazu sind inzwischen drei **Berichtigungen** gekommen, die je eine eigene Abnahme brauchen:
+   Vertrag 04 §3a (Erreichbarkeit), Vertrag 04 §3d samt den §5-Nachträgen (der sechste Weg,
+   `vanilla-keys.txt`, `--prefix` als Liste, `kette-pruefen.ps1`) und **Vertrag 02 §5** — der
+   Sprachschlüssel IST die Kennung, der alte Aufbau `700_itm_spatha` ist nicht umsetzbar.
 4. **Referenz-UI-Mods benennen** (Q8) für die Kompatibilitäts-Testmatrix. *(Braucht es erst
    für WP8.9.)*
 5. **Durchsatz-Annahme korrigieren:** drei Arbeitstage pro Woche, oder andere Zahl?
@@ -864,6 +868,17 @@ werden:
    Fackel-Last (WP6.6), T3-Basis gegen Seuchennacht (WP6.7), drei Tage ohne Anachronismus
    (WP3.7), Durchlauf bis zur ersten Seuchennacht (WP9.3).
 7. **Release-Entscheidung** nach dem Playtest (D46, WP9.6).
+8. **Sieben moderne Kennungen urteilen**, die das Anachronismus-Urteil heute auf `erlaubt`
+   stehen lässt, weil keine Regel sie dem Namen nach trifft: `gunBowT3CompoundBow`,
+   `gunBowT3CompoundCrossbow`, `gunBowT1IronCrossbow`, `ammoArrowExploding`, `ammoArrowSteelAP`,
+   `modArmorCoolingMesh`, `tableSaw` (dazu `modRoboticDroneWeaponMod`, das trotz der Regel
+   `modRoboticDrone*` über die Mod-Ableitung durchfällt). D54 spricht nur von Pfeilen; ob ein
+   Compoundbogen, eine Armbrust oder eine Tischkreissäge bleiben darf, ist eine
+   **Inhaltsentscheidung** (Projektregel 4). *(Blockiert nichts, verfälscht aber die
+   Purge-Zahlen, solange sie offen ist.)*
+9. **WP4.4 entscheiden**: die drei Werkstatt-Klone jetzt leer bauen, verschieben (Empfehlung)
+   oder D50 beugen. Die drei Wege stehen oben bei WP4.4. *(Blockiert WP4.4 und damit den
+   Abschluss von WP4.)*
 
 ## Offene Punkte
 
