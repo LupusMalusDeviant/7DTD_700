@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, XPath-Pruefung: drei Patches, die NICHTS treffen.
+     Das Spiel wuerde dazu je eine Zeile ins Protokoll schreiben und weiterladen -
+     darum muss der Pruefer sie finden.
+
+     Der zweite Fall ist zugleich die Wache gegen einen Rueckfall: liest der Pruefer den
+     Elementnamen als $node.Name statt als $node.get_Name(), ueberdeckt das XML-Attribut
+     name="hidden" den Elementnamen, der Patch faellt durch die Verb-Liste und diese
+     Gegenprobe wird GRUEN statt rot. Genau so blieb mod/700_50_Fortschritt zuerst
+     ungeprueft.
+
+     Erfundene Kennungen (Projektregeln 1 und 7). -->
+<config>
+	<!-- Der Block gibt es nicht. -->
+	<set xpath="/blocks/block[@name='pruefGibtesnicht']/property[@name='Class']/@value">Pruefklasse</set>
+	<!-- setattribute auf einen Block, den es nicht gibt. -->
+	<setattribute name="hidden" xpath="/blocks/block[@name='pruefAuchnicht']">true</setattribute>
+	<!-- Der Block gibt es, die EIGENSCHAFT nicht - der Fehler der Oellampen aus WP6.4. -->
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@name='PruefGibtEsNicht']/@value">x</set>
+</config>

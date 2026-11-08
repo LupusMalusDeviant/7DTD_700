@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, XPath-Pruefung: drei Patches, die TREFFEN.
+     Die Datei MUSS blocks.xml heissen - der Pruefer sucht die Vanilla-Datei gleichen
+     Namens, genau wie XmlPatcher::LoadAndPatchConfig. Erfundene Kennungen
+     (Projektregeln 1 und 7). -->
+<config>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@name='Class']/@value">Pruefklasse</set>
+	<setattribute name="hidden" xpath="/blocks/block[@name='pruefWerkbank']">true</setattribute>
+	<append xpath="/blocks">
+		<block name="pruefNeuerBlock">
+			<property name="Class" value="Pruefklasse" />
+		</block>
+	</append>
+</config>

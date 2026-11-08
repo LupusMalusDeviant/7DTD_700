@@ -32,6 +32,10 @@ param(
     [string[]]$Gegenstaende,
     # Ordner mit unseren Block-Patches.
     [string[]]$Bloecke,
+    # Alle unsere Patch-Dateien, fuer die XPath-Pruefung. Ohne Angabe gefunden unter mod/.
+    # Als Parameter, damit die Gegenproben dieselbe Pruefung an Testdaten fahren koennen:
+    # ein Pruefer, der seine Dateien selbst sucht, laesst sich nicht gegenpruefen.
+    [string[]]$Patches,
     # Vanilla Data/Config. Ohne Angabe aus SDTD_PATH.
     [string]$Vanilla
 )
@@ -263,9 +267,80 @@ foreach ($path in @($Gegenstaende) + @($Bloecke)) {
     }
 }
 
+# DIE XPATHS SELBST (ergaenzt 2026-11-08, WP7.1). Bis hierher stand unter 'Grenzen'
+# wortwoertlich: "Ob der XML-Patcher des Spiels unsere XPaths trifft, steht hier nicht."
+# Das war die groesste Luecke, die das Projekt noch hatte. Ein Patch, dessen XPath nichts
+# trifft, ist NICHT laut: XmlPatcher::PatchXml schreibt eine Zeile ins Protokoll
+# ("XML patch for ... did not apply") und laedt weiter. Das Spiel startet, der Baum fehlt,
+# und niemand erfaehrt es, bis jemand im Spiel nachsieht. Vier Verweisklassen pruefen den
+# INHALT unserer Patches - diese prueft, ob der Patch ueberhaupt irgendwo landet.
+#
+# Geprueft wird gegen die Vanilla-Datei GLEICHEN NAMENS, denn genau so sucht
+# XmlPatcher::LoadAndPatchConfig (<Modlet>/Config/<gleicher Name>, D53). Trifft der XPath
+# dort nichts, kann der Knoten noch von einem FRUEHEREN Modlet stammen (Ladereihenfolge
+# ueber das Zahlenpraefix): dann muss die Kennung im XPath eine sein, die wir selbst
+# definieren. Trifft keines von beidem, ist der Patch toter Text.
+$xpathChecked = 0
+$xpathVanilla = 0
+$xpathOwn = 0
+$patchVerbs = @('set', 'setattribute', 'removeattribute', 'append', 'prepend',
+                'insertAfter', 'insertBefore', 'remove', 'csv')
+$vanillaDocs = @{}
+# ContainsKey und nicht '-not $Patches': eine Gegenprobe, die ABSICHTLICH keine Patch-Datei
+# prueft, uebergibt @() - und ein leeres Feld ist in PowerShell falsch, waere also wieder in
+# die Suche unter mod/ gelaufen. Drei bestehende Gegenproben sind beim ersten Lauf genau
+# daran rot geworden: sie haben die echten Mod-Dateien gegen das Test-Vanilla gehalten.
+if (-not $PSBoundParameters.ContainsKey('Patches')) {
+    $Patches = @(Get-ChildItem (Join-Path $repoRoot 'mod') -Recurse -Filter '*.xml' |
+        Where-Object { $_.FullName -match '\\Config\\' -and $_.FullName -notmatch '700_10_Purge' } |
+        Select-Object -ExpandProperty FullName)
+}
+foreach ($path in $Patches) {
+    if (-not $path -or -not (Test-Path $path)) { continue }
+    $name = [IO.Path]::GetFileName($path)
+    $vanillaPath = Join-Path $Vanilla $name
+    # XUi-Dateien liegen in Vanilla in Unterordnern (XUi_InGame) und tragen dort denselben
+    # Namen wie andere; Localization.csv ist kein XML. Beides bleibt aussen vor und wird
+    # gezaehlt, nicht stillschweigend uebersprungen.
+    if (-not (Test-Path $vanillaPath)) { continue }
+    if (-not $vanillaDocs.ContainsKey($name)) {
+        $vanillaDocs[$name] = [xml](Get-Content $vanillaPath -Raw)
+    }
+    $vdoc = $vanillaDocs[$name]
+    $xml = [xml](Get-Content $path -Raw)
+    foreach ($node in $xml.DocumentElement.ChildNodes) {
+        if ($node.NodeType -ne 'Element') { continue }
+        # get_Name() UND NICHT .Name. PowerShells XML-Adapter legt die XML-Attribute als
+        # Eigenschaften ueber das Objekt, und ein Attribut 'name' ueberdeckt dabei die
+        # Eigenschaft 'Name' des Elements. Bei <setattribute name="hidden" xpath="...">
+        # liefert $node.Name darum "hidden" statt "setattribute" - der Patch faellt durch
+        # die Verb-Liste und die ganze Datei bleibt ungeprueft, ohne eine Zeile Ausgabe.
+        # Genau so ist mod/700_50_Fortschritt/Config/progression.xml beim ersten Lauf mit
+        # ihren 20 Patches unbemerkt uebersprungen worden (WP7.1). Ein Methodenaufruf geht
+        # am Adapter vorbei.
+        if ($patchVerbs -notcontains $node.get_Name()) { continue }
+        $xp = $node.GetAttribute('xpath')
+        if (-not $xp) { continue }
+        $xpathChecked++
+        $hits = 0
+        try { $hits = @($vdoc.SelectNodes($xp)).Count }
+        catch {
+            $unresolved += "XPath ist kein gueltiger Ausdruck: $xp  ($name)"
+            continue
+        }
+        if ($hits -gt 0) { $xpathVanilla++; continue }
+        # Kein Treffer in Vanilla: stammt das Ziel aus einem eigenen Modlet?
+        $ownNames = @([regex]::Matches($xp, "@name='([^']+)'") | ForEach-Object { $_.Groups[1].Value })
+        $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
+        if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { $xpathOwn++; continue }
+        $unresolved += "XPath trifft nichts: $xp  ($name)"
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
+Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }
@@ -275,7 +350,16 @@ Write-Output '  Grenzen dieser Pruefung:'
 Write-Output '    - Geprueft werden VERWEISE, nicht Erreichbarkeit. Ob die Kette von T0 aus'
 Write-Output '      erreichbar ist und ob ein Zyklus darin steckt, sagt erst mod700check recipes'
 Write-Output '      gegen einen ConfigsDump, in dem unsere Modlets geladen waren (WP3.6).'
-Write-Output '    - Ob der XML-Patcher des Spiels unsere XPaths trifft, steht hier nicht.'
+Write-Output '    - XPaths werden gegen die Vanilla-Datei gleichen Namens geprueft, nicht gegen'
+Write-Output '      den fertig gepatchten Stand. Ein XPath, der NUR auf einen Knoten eines'
+Write-Output '      FRUEHEREN eigenen Modlets zeigt, gilt als gruen, sobald jede Kennung darin'
+Write-Output '      von uns definiert ist - dass das frueher laedt, prueft die Ladereihenfolge,'
+Write-Output '      nicht dieses Skript.'
+Write-Output '    - Geprueft wird der ERSTE Knoten unter <config>. Patches, die in einem'
+Write-Output '      <conditional> stecken, sieht diese Pruefung nicht; das Projekt benutzt'
+Write-Output '      bisher keines.'
+Write-Output '    - Dateien, die Vanilla unter diesem Namen nicht hat (XUi_InGame, Localization.csv),'
+Write-Output '      bleiben aussen vor.'
 
 if ($unresolved.Count -gt 0) {
     Write-Output ''

@@ -320,10 +320,16 @@
 	     an (gemessen: BlockPlantGrowing ruft nichts an LightLOD), aber ob eine leere
 	     Klasse und PlantGrowing hier gleich wirken, sagt erst das Spiel. WP6.6 muss eine
 	     Oellampe UNMITTELBAR NACH DEM SETZEN ansehen. -->
+	<!-- NUR AM 01 EIN <set>, AN 02 BIS 04 EIN <append> — berichtigt 2026-11-08 (WP7.1).
+	     Hier standen vier <set> auf Class und vier auf DescriptionKey. Drei davon haben
+	     NICHTS getroffen und das Spiel haette es nur ins Protokoll geschrieben:
+	     lanternOld_02/03/04_Player fuehren beide Eigenschaften nicht selbst, sie ERBEN sie
+	     per Extends von lanternOld_01_Player. Ein <set> auf einen Knoten, den es nicht gibt,
+	     ist kein Fehler, sondern ein Nichts.
+	     Aufgefallen beim ersten Lauf der neuen XPath-Pruefung in kette-pruefen.ps1, nicht
+	     beim Lesen. Angehaengt statt vererbt, weil 'Extends wird nach dem Patchen
+	     aufgeloest' eine Annahme ist und ein <append> keine braucht. -->
 	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@name='Class']/@value">PlantGrowing</set>
-	<set xpath="/blocks/block[@name='lanternOld_02_Player']/property[@name='Class']/@value">PlantGrowing</set>
-	<set xpath="/blocks/block[@name='lanternOld_03_Player']/property[@name='Class']/@value">PlantGrowing</set>
-	<set xpath="/blocks/block[@name='lanternOld_04_Player']/property[@name='Class']/@value">PlantGrowing</set>
 	<append xpath="/blocks/block[@name='lanternOld_01_Player']">
 		<property class="PlantGrowing">
 			<property name="Next" value="blk700_oellampe_leer" />
@@ -336,6 +342,8 @@
 		</property>
 	</append>
 	<append xpath="/blocks/block[@name='lanternOld_02_Player']">
+		<property name="Class" value="PlantGrowing" />
+		<property name="DescriptionKey" value="blk700_oellampeDesc" />
 		<property class="PlantGrowing">
 			<property name="Next" value="blk700_oellampe_leer" />
 			<property name="GrowthRate" value="60" />
@@ -347,6 +355,8 @@
 		</property>
 	</append>
 	<append xpath="/blocks/block[@name='lanternOld_03_Player']">
+		<property name="Class" value="PlantGrowing" />
+		<property name="DescriptionKey" value="blk700_oellampeDesc" />
 		<property class="PlantGrowing">
 			<property name="Next" value="blk700_oellampe_leer" />
 			<property name="GrowthRate" value="60" />
@@ -358,6 +368,8 @@
 		</property>
 	</append>
 	<append xpath="/blocks/block[@name='lanternOld_04_Player']">
+		<property name="Class" value="PlantGrowing" />
+		<property name="DescriptionKey" value="blk700_oellampeDesc" />
 		<property class="PlantGrowing">
 			<property name="Next" value="blk700_oellampe_leer" />
 			<property name="GrowthRate" value="60" />
@@ -382,10 +394,9 @@
 	     ueberschreibt, schreibt die Beschreibung der Oellampe auf alle fuenfzig. Genau
 	     diese Falle steht oben schon beim Kalkofen und seinem 'CraftActionName'.
 	     Darum zeigen unsere vier Lampen auf einen eigenen Schluessel. -->
+	<!-- Nur das 01 traegt den Schluessel selbst; 02 bis 04 bekommen ihn oben per
+	     <append> mitgeliefert (siehe die Berichtigung dort). -->
 	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
-	<set xpath="/blocks/block[@name='lanternOld_02_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
-	<set xpath="/blocks/block[@name='lanternOld_03_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
-	<set xpath="/blocks/block[@name='lanternOld_04_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
 
 	<append xpath="/blocks">
 

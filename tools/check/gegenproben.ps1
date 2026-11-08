@@ -439,6 +439,7 @@ Test-Script 'kette-pruefen: eigener Block wird aufgeloest' 0 @{
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
     Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @()   # diese Gegenprobe prueft keine XPaths
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('unaufgeloeste Verweise: 0')
 Test-Script 'kette-pruefen: vertippter Blockname bleibt rot' 1 @{
@@ -458,6 +459,7 @@ Test-Script 'kette-pruefen: eingehaengte Zutat und Reparaturwerkzeug werden geza
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
     Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @()   # diese Gegenprobe prueft keine XPaths
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('eingehaengte Zutaten: 1, Reparaturwerkzeuge: 2', 'unaufgeloeste Verweise: 0')
 Test-Script 'kette-pruefen: vertippte eingehaengte Zutat wird rot' 1 @{
@@ -483,6 +485,7 @@ Test-Script 'kette-pruefen: umgebogene Verweise werden gezaehlt, Zahlen nicht' 0
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
     Bloecke      = @(Join-Path $data 'kette\eigen\blocks-umgebogen.xml')
+    Patches      = @()   # diese Gegenprobe prueft keine XPaths
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('umgebogene Verweise: 4', 'unaufgeloeste Verweise: 0')
 Test-Script 'kette-pruefen: vertippte Aufwertungs-Zutat wird rot' 1 @{
@@ -514,6 +517,47 @@ Test-Script 'kette-pruefen: vertippte Verweise in eigener Definition werden rot'
     "Grundlage 'pruefBasisGibtesnicht' ist nirgends definiert",
     "Reparaturstoff 'pruefWachsGibtesnicht' ist nirgends definiert",
     "Abwurf 'pruefAscheGibtesnicht' ist nirgends definiert")
+
+Write-Output ""
+Write-Output "== Gegenproben: kette-pruefen prueft die XPATHS selbst =="
+# WARUM DIESE DREI PRUEFUNGEN EXISTIEREN (WP7.1, 8. November 2026). Unter 'Grenzen' stand
+# in kette-pruefen.ps1 wortwoertlich: "Ob der XML-Patcher des Spiels unsere XPaths trifft,
+# steht hier nicht." Das war die groesste Luecke des Projekts, denn ein XPath, der nichts
+# trifft, ist STILL: XmlPatcher::PatchXml schreibt "XML patch for ... did not apply" ins
+# Protokoll und laedt weiter. Das Spiel startet, der Patch fehlt.
+#
+# Beim ERSTEN Lauf der neuen Pruefung fielen sechs Patches aus dem schon committeten WP6.4
+# durch: lanternOld_02/03/04_Player fuehren Class und DescriptionKey nicht selbst, sie
+# erben sie. Vier Verweisklassen pruefen den INHALT unserer Patches; diese prueft, ob der
+# Patch ueberhaupt irgendwo landet.
+Test-Script 'kette-pruefen: treffende XPaths werden gezaehlt' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('geprueefte XPaths: 3 (3 in Vanilla, 0 auf eigene Knoten)')
+
+Test-Script 'kette-pruefen: XPath ohne Treffer wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-schlecht\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "XPath trifft nichts: /blocks/block[@name='pruefGibtesnicht']/property[@name='Class']/@value",
+    "XPath trifft nichts: /blocks/block[@name='pruefWerkbank']/property[@name='PruefGibtEsNicht']/@value")
+
+# Eigener Fall, weil er eine andere Sache beweist als die beiden oben: dass der Pruefer
+# <setattribute> UEBERHAUPT ansieht. Mit $node.Name statt $node.get_Name() wird dieser
+# Fall gruen, und die Pruefung ist fuer jede setattribute-Datei blind.
+Test-Script 'kette-pruefen: setattribute ohne Treffer wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-schlecht\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("XPath trifft nichts: /blocks/block[@name='pruefAuchnicht']")
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

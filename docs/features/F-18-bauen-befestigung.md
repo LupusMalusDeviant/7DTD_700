@@ -83,8 +83,8 @@ Sieben waren gefordert. Was davon mit XML geht, und was nicht:
 | **Torhaus-Tor** | `doorWoodLargeGate` | Block war fertig, **Rezept fehlte**. Jetzt 100 Holz + 20 Nägel + 10 Schmiedeeisen an der Zimmermannsbank |
 | **Graben** | — | **kein Block.** Ein Graben ist abgetragenes Gelände; der Spieler hebt ihn mit der Schaufel aus. Gehört zur Bauweise, nicht zum Bausatz |
 | **Wehrgang** | — | **kein Block.** Eine Platte mit Brüstung oben auf der Mauer, gebaut aus den Vanilla-Formen, die WP6.1 umgedeutet hat. P5 sagt ausdrücklich, dass die Formen bleiben |
-| **Schwingbalken-Falle** | — | **aufgeschoben.** Ein Pendel braucht bewegte Physik und einen Auslöser; Vanillas einzige mechanische Fallenklasse ist `BladeTrap` und hängt am Strom (gesperrt). Keine der 50 Blockklassen in V 3.40 hat ein Pendel → C#, und Phase 1 steht ohne Harmony-Patch. **F-15 in WP7** |
-| **Pechtopf** | — | **aufgeschoben.** Braucht denselben Auslöser. Was XML gibt, ist ein *brennender Platz*, und den liefert WP6.4 schon als `blk700_holzfeuer` (`BuffsWhenWalkedOn="buffBurningEnvironment"`). Ein zweiter Block mit derselben Wirkung und anderem Namen wäre Verdopplung. **F-15 in WP7** |
+| **Schwingbalken-Falle** | — | **aufgeschoben.** Ein Pendel braucht bewegte Physik und einen Auslöser; Vanillas einzige mechanische Fallenklasse ist `BladeTrap` und hängt am Strom (gesperrt). Keine der 50 Blockklassen in V 3.40 hat ein Pendel → C#, und Phase 1 steht ohne Harmony-Patch. **F-15, Phase 2** |
+| **Pechtopf** | — | **aufgeschoben.** Braucht denselben Auslöser. Was XML gibt, ist ein *brennender Platz*, und den liefert WP6.4 schon als `blk700_holzfeuer` (`BuffsWhenWalkedOn="buffBurningEnvironment"`). Ein zweiter Block mit derselben Wirkung und anderem Namen wäre Verdopplung. **F-15, Phase 2** |
 
 **Die acht Palisadenteile hat Vanilla modelliert und nie freigegeben.** Sie liegen unter
 `Entities/BanditProps`, tragen `CreativeMode="Dev"` und haben kein Rezept — Requisiten für

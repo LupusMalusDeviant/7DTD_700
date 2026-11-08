@@ -88,7 +88,7 @@ nie einen Block, zwei sind aufgeschoben. Die Tabelle mit Begründung je Zeile st
 - ~~**Schwingbalken-Falle**~~ und ~~**Pechtopf**~~ **aufgeschoben**: beide brauchen einen
   Auslöser, und keine der 50 Blockklassen in V 3.40 hat ein Pendel. Vanillas einzige
   mechanische Fallenklasse (`BladeTrap`) hängt am Strom und ist gesperrt. Das wäre C#, und
-  Phase 1 steht ausdrücklich ohne Harmony-Patch → **F-15 in WP7**, wo die Runenfallen ohnehin
+  Phase 1 steht ausdrücklich ohne Harmony-Patch → **F-15, Phase 2**, wo die Runenfallen ohnehin
   Fallenverhalten brauchen. Was XML an Stelle des Pechtopfs gibt, ist ein brennender Platz,
   und den liefert `blk700_holzfeuer` oben schon.
 - **Magische Verteidigung** kommt aus F-15: Runenstein der Glut (statt Geschützturm),

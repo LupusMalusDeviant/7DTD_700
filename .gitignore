@@ -19,3 +19,7 @@ obj/
 .vs/
 .idea/
 dist/
+
+# Zwischenstaende der Erzeuger unter tools/gen/. Das Erzeugnis ist die Zeile in
+# der Mod-Datei, nicht die Datei hier - siehe Vertrag 04, Nachtrag WP7.1b.
+tools/gen/out/

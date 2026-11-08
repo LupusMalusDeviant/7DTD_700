@@ -1108,3 +1108,88 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
   darin. Die Werkzeuge geben darum den Zeitstempel aus und nennen diese Grenze in jeder Ausgabe.
   Eine härtere Prüfung (etwa auf Spuren unserer Modlets im Dump) ist denkbar, aber noch nicht
   gebaut.
+
+---
+
+## Nachtrag WP7.1 — die XPaths selbst (8. November 2026), **Abnahme offen**
+
+Bis hierher stand unter den Grenzen von `kette-pruefen.ps1` wortwörtlich: *„Ob der
+XML-Patcher des Spiels unsere XPaths trifft, steht hier nicht."* Das war die größte Lücke
+des Projekts, und sie ist still: trifft ein XPath nichts, schreibt
+`XmlPatcher::PatchXml` die Zeile `XML patch for "…" from mod "…" did not apply` ins
+Protokoll und **lädt weiter**. Das Spiel startet, der Patch fehlt, und niemand erfährt es,
+bis jemand im Spiel nachsieht.
+
+Vier Verweisklassen prüfen den **Inhalt** unserer Patches. Diese fünfte prüft, ob ein Patch
+überhaupt **irgendwo landet**.
+
+**Was geprüft wird.** Je Patch-Datei unter `mod/*/Config/` wird die Vanilla-Datei
+**gleichen Namens** geladen — genau so sucht `XmlPatcher::LoadAndPatchConfig` (D53) — und
+jeder XPath der Verben `set`, `setattribute`, `removeattribute`, `append`, `prepend`,
+`insertAfter`, `insertBefore`, `remove`, `csv` dagegen aufgelöst. Null Treffer ist rot,
+außer jede Kennung im XPath ist eine, die wir selbst definieren (dann stammt der Knoten aus
+einem früher ladenden Modlet).
+
+**Was der erste Lauf gefunden hat.** Sechs Patches aus dem schon committeten WP6.4:
+`lanternOld_02/03/04_Player` führen `Class` und `DescriptionKey` nicht selbst, sie **erben**
+sie von `lanternOld_01_Player`. Drei `<set>` auf `Class` und drei auf `DescriptionKey`
+trafen nichts. Berichtigt zu `<append>` — nicht auf die Vererbung verlassen, weil
+„Extends wird nach dem Patchen aufgelöst" eine Annahme ist und ein `<append>` keine
+braucht.
+
+**Und einen Fehler im Prüfer selbst.** Beim ersten Lauf blieb
+`mod/700_50_Fortschritt/Config/progression.xml` mit ihren 20 Patches **unbemerkt
+übersprungen**, ohne eine Zeile Ausgabe. Ursache: PowerShells XML-Adapter legt die
+XML-Attribute als Eigenschaften über das Objekt, und ein Attribut `name="hidden"`
+überdeckt dabei die Eigenschaft `Name` des Elements — `$node.Name` liefert bei
+`<setattribute name="hidden" xpath="…">` also `"hidden"` statt `"setattribute"`. Behoben
+mit `$node.get_Name()`. Die Gegenprobe *„setattribute ohne Treffer wird rot"* steht genau
+dafür: mit `.Name` wird sie grün und die Prüfung ist für jede `setattribute`-Datei blind.
+
+**Drei neue Gegenproben, Stand 53** (vorher 50):
+
+| Gegenprobe | erwartet | beweist |
+|---|---|---|
+| treffende XPaths werden gezählt | Exit 0, `geprueefte XPaths: 3 (3 in Vanilla, 0 auf eigene Knoten)` | der Zähler sieht alle drei Verben, auch `setattribute` und `append` |
+| XPath ohne Treffer wird rot | Exit 1, nennt beide Fälle einzeln | fehlender Block **und** fehlende Eigenschaft bei vorhandenem Block |
+| setattribute ohne Treffer wird rot | Exit 1 | der Prüfer sieht `setattribute` überhaupt (Rückfallwache) |
+
+Die Prüfung brauchte dafür einen **Parameter** `-Patches`. Vorher suchte sie ihre Dateien
+selbst unter `mod/` — und ein Prüfer, der seine Dateien selbst sucht, lässt sich nicht
+gegenprüfen: die Gegenproben hielten die echten Mod-Dateien gegen das winzige
+Test-Vanilla und wurden rot. Der Vorgabewert hängt jetzt an
+`$PSBoundParameters.ContainsKey('Patches')` und nicht an `-not $Patches`, damit `@()`
+„prüfe keine XPaths" heißen kann statt „suche selbst".
+
+**Gemessene Grenzen, in der Ausgabe genannt:**
+
+- Geprüft wird gegen **Vanilla**, nicht gegen den fertig gepatchten Stand. Ein XPath, der
+  nur auf einen Knoten eines früheren eigenen Modlets zeigt, gilt als grün, sobald jede
+  Kennung darin von uns definiert ist. Dass dieses Modlet wirklich früher lädt, prüft die
+  Ladereihenfolge (D53), nicht dieses Skript.
+- Geprüft wird nur die **erste Ebene** unter `<config>`. Patches in einem `<conditional>`
+  sieht die Prüfung nicht; das Projekt benutzt bisher keines.
+- Dateien, die Vanilla unter diesem Namen nicht hat (`XUi_InGame/*`, `Localization.csv`),
+  bleiben außen vor.
+- **Ein getroffener XPath heißt nicht, dass der Patch das Richtige tut.** Dafür sind die
+  vier anderen Verweisklassen da — und für den Rest der Spieltest.
+
+## Nachtrag WP7.1b — ein Erzeuger für Localization-Zeilen, **Abnahme offen**
+
+`tools/gen/wp7-baumtexte.ps1` ist das erste Skript des Projekts, das **Mod-Inhalt
+erzeugt** statt ihn zu prüfen. Begründung: Vanilla benennt die Rangschlüssel der Attribute
+nicht einheitlich — vier Attribute schreiben `attXRank01Desc` bis `Rank10Desc`,
+`attIntellect` aber `Rank1Desc` bis `Rank9Desc` und dann `Rank10Desc`. Von Hand getippt
+wären neun von 115 Schlüsseln still falsch gewesen, und ein Schlüssel, den niemand liest,
+fällt nicht auf. Das Skript liest die Schlüssel aus `progression.xml` des Builds und setzt
+nur den Text dazu; es bricht ab, wenn das Spiel andere Rangzahlen führt als die Tabelle,
+und wenn ein Schlüssel zweimal entstünde.
+
+Die **Ausgabe** (`tools/gen/out/`) ist nicht das Erzeugnis — das Erzeugnis ist die Zeile in
+`mod/700_90_Sprache/Config/Localization.csv`, von Hand angehängt und mitcommittet. Das
+Skript ist der Nachweis, wie sie entstanden ist, und das Werkzeug für den nächsten Build.
+
+**Für PowerShell 5.1 trägt die Datei eine UTF-8-BOM.** Ohne sie liest Windows PowerShell
+eine `.ps1` als ANSI, und aus „Jäger" wird „JÃ¤ger" — genau so stand es im ersten Lauf in
+der CSV. Die übrigen Skripte des Projekts umgehen das, indem sie gar keine Umlaute
+enthalten.
