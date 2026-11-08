@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1: die drei UMGEBOGENEN Verweise des Ausbaupfades,
+     sauber. Jeder traegt eine Kennung als Elementtext - weder Attribut noch Rezept -,
+     und bis WP6.1 hat sie keine Pruefung angesehen.
+
+     Vier Verweise in dieser Datei, alle auf pruefWerkzeug aus dem Vanilla-Satz:
+     Aufwertungs-Zutat, Aufwertungs-Ziel, Reparaturstoff, Abwurf. -->
+<config>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='UpgradeBlock']/property[@name='Item']/@value">pruefWerkzeug</set>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='UpgradeBlock']/property[@name='ToBlock']/@value">pruefBlockEigen</set>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='RepairItems']/property[@name='pruefRohstoff']/@name">pruefWerkzeug</set>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/drop[@event='Harvest'][@name='pruefRohstoff']/@name">pruefWerkzeug</set>
+
+	<!-- Muss von der Pruefung IGNORIERT werden: eine Zahl ist keine Kennung. Steht hier,
+	     damit der Zaehler bei vier bleibt und nicht bei fuenf - sonst wuerde die
+	     Gegenprobe beweisen, dass der Pruefer schreit. -->
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='UpgradeBlock']/property[@name='ItemCount']/@value">25</set>
+
+	<append xpath="/blocks">
+		<block name="pruefBlockEigen">
+			<property name="Class" value="Workstation" />
+		</block>
+	</append>
+</config>

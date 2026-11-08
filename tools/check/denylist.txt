@@ -70,12 +70,19 @@ resourceLegendaryParts  # Endgame-Bauteil von Vanilla, ersetzt F-02
 # Sprengstoff: Freigabe unten (D9)
 
 # --- Industrielle Baustoffe ------------------------------------------------------
-resourceConcreteMix
-resourceCement
+# resourceConcreteMix -- gestrichen mit D63 (2026-11-08): wird MOERTEL. Vanillas Rezept
+#                        ist am cementMixer (nach WP4.3 der Kalkofen) Sand + Stein +
+#                        Branntkalk - genau Kalkmoertel. Freigabe unten.
+# resourceCement      -- gestrichen mit D63 (2026-11-08): wird BRANNTKALK. Vanillas
+#                        Rezept ist am Ofen 10 geschmolzener Stein - genau Kalkbrennen.
+#                        Freigabe unten. Der Kalkofen aus WP4.3 hatte bis hierher kein
+#                        Erzeugnis, weil sein einziges Produkt gesperrt war.
 # 'resourceSteel*' stand hier und traf nichts - Schmiedestahl heisst resourceForgedSteel
 # und bleibt nach D55. Industriestahl als Rohstoff gibt es in Vanilla nicht.
-concreteShapes*       # die Betonform-Sammelbloecke
-steelShapes*          # dito fuer Stahl
+# concreteShapes*     -- gestrichen mit D63 (2026-11-08): wird BRUCHSTEIN. Freigabe unten.
+# steelShapes*        -- gestrichen mit D63 (2026-11-08): wird MOERTELSTEIN. Freigabe unten.
+#                        Material Msteel_shapes bekommt damit damage_category "stone"
+#                        statt "metal" - Moertelstein schlaegt man mit der Spitzhacke.
 # resourceForgedSteel  -- gestrichen mit D55: Stahl ist laut D23 eine Materialstufe
 #                         (Knochen < Bronze < Schmiedeeisen < Stahl < Damast) und laut
 #                         GDD die T3-Stufe "Stahl (Damaszierung)". Schmiedestahl ist
@@ -558,6 +565,10 @@ noteDuke01                      # Dukes Brief, liegt in der Startausruestung
 !casinoCoin                # WP4.2: Silberpfennig (Sceatta), D30 nennt die 1:1-Umdeutung der Dukes ausdruecklich
 !chemistryStation          # WP4.3: Kraeuterkueche - Kessel, Moerser, Siebe; das Vanilla-Gestell hat die Rezeptflaeche
 !cementMixer               # WP4.3: Kalkofen - Kalk brennen ist belegt, Zement ist es nicht
+!resourceCement            # D63: Branntkalk - 10 geschmolzener Stein am Ofen, das ist Kalkbrennen
+!resourceConcreteMix       # D63: Moertel - Sand + Stein + Branntkalk am Kalkofen
+!concreteShapes*           # D63: Bruchstein - die vierte Baustufe
+!steelShapes*              # D63: Moertelstein - die fuenfte und oberste Baustufe
 
 # --- Werkstaetten, Pflanzungen, Behaelter ---------------------------------------
 !toolAnvil                 # Amboss

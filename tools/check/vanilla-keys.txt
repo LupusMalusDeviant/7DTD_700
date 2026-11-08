@@ -180,3 +180,18 @@ buffAssassinSetBonusTooltip
 buffRaiderSetBonusName                    # Kettengewand (T3, schwer)
 buffRaiderSetBonusDesc
 buffRaiderSetBonusTooltip
+
+# --- F-18 Ausbaupfad, WP6.1, D63 ---------------------------------------------
+# Die vier Baustoffnamen und die fuenf Gruppenbeschreibungen des Ausbaupfades.
+# Jede GroupDesc gilt gemessen nur fuer ihre eigene Baustufe (Shapes-Block plus
+# Master); woodFrameGroupDesc zusaetzlich fuer die zwei Rahmen ohne Aufwertung,
+# die ebenfalls Rahmen sind.
+resourceCement                            # Branntkalk
+resourceCementDesc
+resourceConcreteMix                       # Moertel
+resourceConcreteMixDesc
+woodFrameGroupDesc                        # Rahmen
+woodGroupDesc                             # Flechtwerk
+cobblestoneGroupDesc                      # Fachwerk
+concreteGroupDesc                         # Bruchstein
+steelBlockGroupDesc                       # Moertelstein

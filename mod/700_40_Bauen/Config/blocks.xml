@@ -141,4 +141,66 @@
 	     Kraeuterkueche benutzt; ihn zu ueberschreiben wuerde beide treffen. Ein eigener
 	     Schluessel je Werkstatt waere richtig und ist eine Zeile mehr, als WP4.5
 	     verlangt - vermerkt fuer F-12 in WP8, wo die Sprache ohnehin durchgesehen wird. -->
+
+	<!-- ================================================================================
+	     F-18 AUSBAUPFAD, Plan-0001 WP6.1, D63
+
+	     Rahmen -> Flechtwerk -> Fachwerk -> Bruchstein -> Moertelstein.
+
+	     GEMESSEN: der ganze Pfad haengt an FUENF Bloecken mit shapes="All", und jeder
+	     zeigt mit einem UpgradeBlock auf den naechsten. Die Zuordnung ist die
+	     Reihenfolge der Haltbarkeit ihrer Materialien, nichts sonst:
+
+	       frameShapes        Mwood_weak_shapes     MaxDamage   100   Rahmen
+	       woodShapes         Mwood_shapes          MaxDamage   500   Flechtwerk
+	       cobblestoneShapes  Mcobblestone_shapes   MaxDamage  1500   Fachwerk
+	       concreteShapes     Mconcrete_shapes      MaxDamage  5000   Bruchstein
+	       steelShapes        Msteel_shapes         MaxDamage 10000   Moertelstein
+
+	     Jedes dieser Materialien hat GENAU EINEN Block, der es benutzt - geprueft mit
+	     grep ueber blocks.xml. Eine Aenderung am Material trifft also nur seine
+	     Baustufe und nichts anderes.
+
+	     'Fachwerk' auf dem Pflasterstein ist die schwaechste Stelle der Zuordnung, und
+	     sie ist trotzdem die richtige: Vanillas resourceCobblestones entsteht aus
+	     1 Lehm + 1 Stein, und das ist die Ausfachung eines Fachwerks. Haltbarkeit
+	     zwischen Flechtwand und Steinmauer passt dazu.
+
+	     WAS GEAENDERT WIRD, und was nicht:
+
+	       Rahmen -> Flechtwerk     8 Holz             UNVERAENDERT, Flechtwerk ist Holz
+	       Flechtwerk -> Fachwerk  10 Pflasterstein    UNVERAENDERT, siehe oben
+	       Fachwerk -> Bruchstein  10 Moertel  ->  25 Bruchstein (resourceRockSmall)
+	       Bruchstein -> Moertelst. 10 Schmiedestahl -> 10 Moertel (resourceConcreteMix)
+
+	     Bruchstein wird TROCKEN gesetzt, darum Stein und kein Moertel; der Moertel ist
+	     genau der Unterschied zur obersten Stufe. Die 25 sind nicht gewuerfelt: so viele
+	     Steine gibt concreteShapes beim Abbau selbst her, der Ausbau kostet also das,
+	     was der Block wiegt.
+
+	     UpgradeBlock nimmt GENAU EINE Zutat (ein 'Item', ein 'ItemCount') - gemessen an
+	     allen neun Pfad- und Spiessbloecken. Mehrstoffige Stufen, wie F-18 sie sich
+	     wuenscht, brauchen darum einen Zwischengegenstand; hier ist das der Moertel, und
+	     den gibt es nach D63 schon: Vanillas resourceConcreteMix vom Kalkofen aus
+	     Sand + Stein + Branntkalk. -->
+
+	<set xpath="/blocks/block[@name='cobblestoneShapes']/property[@class='UpgradeBlock']/property[@name='Item']/@value">resourceRockSmall</set>
+	<set xpath="/blocks/block[@name='cobblestoneShapes']/property[@class='UpgradeBlock']/property[@name='ItemCount']/@value">25</set>
+
+	<set xpath="/blocks/block[@name='concreteShapes']/property[@class='UpgradeBlock']/property[@name='Item']/@value">resourceConcreteMix</set>
+
+	<!-- Reparatur folgt derselben Logik: trockener Bruchstein mit Stein, Moertelstein mit
+	     Moertel. Vanilla flickte den einen mit Betonmischung und den anderen mit
+	     Schmiedestahl. -->
+	<set xpath="/blocks/block[@name='concreteShapes']/property[@class='RepairItems']/property[@name='resourceConcreteMix']/@name">resourceRockSmall</set>
+	<set xpath="/blocks/block[@name='steelShapes']/property[@class='RepairItems']/property[@name='resourceForgedSteel']/@name">resourceConcreteMix</set>
+
+	<!-- Moertelstein gibt beim Abbau Stein her, nicht Alteisen. Vanillas steelShapes
+	     wirft 15 resourceScrapIron ab - das ist die einzige Stelle im Pfad, an der der
+	     Abbau noch verraet, dass der Block einmal Stahl war.
+
+	     Die Stueckzahl wird ZUERST gesetzt, dann der Name: danach heisst der Abwurf
+	     nicht mehr resourceScrapIron, und der zweite XPath wuerde ins Leere greifen. -->
+	<set xpath="/blocks/block[@name='steelShapes']/drop[@event='Harvest'][@name='resourceScrapIron']/@count">20</set>
+	<set xpath="/blocks/block[@name='steelShapes']/drop[@event='Harvest'][@name='resourceScrapIron']/@name">resourceRockSmall</set>
 </config>

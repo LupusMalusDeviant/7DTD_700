@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_40_Bauen / materials.xml
+	     F-18 Ausbaupfad, Plan-0001 WP6.1, D63
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt.
+
+	     EINE Zeile, und sie ist nicht kosmetisch. 'damage_category' entscheidet, welche
+	     Werkzeuge und welche Fertigkeiten gegen einen Block etwas ausrichten. Vanillas
+	     Msteel_shapes traegt "metal" - gedacht fuer Stahltraeger. Unsere oberste
+	     Baustufe ist Moertelstein (D63), also gemauerter Stein: dagegen hilft die
+	     Spitzhacke, nicht der Schraubenschluessel.
+
+	     GEMESSEN, dass das keinen Kollateralschaden anrichtet: Msteel_shapes wird in
+	     ganz blocks.xml von GENAU EINEM Block benutzt, naemlich steelShapes. Dasselbe
+	     gilt fuer Mconcrete_shapes, Mcobblestone_shapes und Mwood_shapes - jedes
+	     Material des Pfades hat einen einzigen Nutzer. Vanillas uebrige Stahlbloecke
+	     (Tueren, Luken, Traeger) haengen an anderen Materialien und bleiben "metal".
+
+	     Mconcrete_shapes traegt schon "stone" und bleibt, wie es ist: Bruchstein ist
+	     Stein, da war Vanilla zufaellig richtig.
+
+	     NICHT GEAENDERT, und warum: 'stability_glue' (300 bei Msteel_shapes gegen 120
+	     bei Stein) und 'MaxDamage' (10000) bleiben. Die Haltbarkeitsleiter
+	     100 - 500 - 1500 - 5000 - 10000 ist genau die Staffel, die F-18 als fuenf
+	     Baustufen will, und D29 rechnet damit, dass die oberste Stufe so haelt wie
+	     Vanillas Stahl. Wer die Zahlen senkt, nimmt D29 die Grundlage. Die Statik
+	     (stability_glue) entscheidet, wie weit eine Mauer freitragend ist; sie zu
+	     senken waere eine eigene Balancing-Entscheidung und steht nicht in WP6.1. -->
+
+	<set xpath="/materials/material[@id='Msteel_shapes']/property[@name='damage_category']/@value">stone</set>
+</config>

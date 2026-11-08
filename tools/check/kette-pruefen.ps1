@@ -181,8 +181,50 @@ foreach ($path in $Gegenstaende) {
     }
 }
 
+# UMGEBOGENE BLOCK-VERWEISE (ergaenzt 2026-11-08, WP6.1). Die dritte Stelle derselben
+# Lueche, gefunden beim Schreiben von WP6.1 und nicht durch einen Fehlschlag: der
+# Ausbaupfad biegt mit <set>-Zeilen die Zutat einer Aufwertung, einen Reparaturstoff und
+# den Namen eines Abwurfs um. Alle drei tragen eine Kennung - als Elementtext, nicht als
+# Attribut -, und keine davon ist ein Rezept.
+#
+#   <set xpath="...[@class='UpgradeBlock']/property[@name='Item']/@value">resourceRockSmall</set>
+#   <set xpath="...[@class='RepairItems']/property[@name='resourceConcreteMix']/@name">resourceRockSmall</set>
+#   <set xpath=".../drop[@event='Harvest'][@name='resourceScrapIron']/@name">resourceRockSmall</set>
+#
+# Ein Tippfehler in der ersten Zeile macht eine Baustufe unerreichbar, in der zweiten
+# einen Block unreparierbar, in der dritten einen Abbau ertraglos - und alle drei fallen
+# erst im Spiel auf. 'ToBlock' kommt mit, weil ein umgebogenes Aufwertungsziel genauso
+# eine Kennung ist. Aufgeloest wird gegen EINEN Topf aus Gegenstaenden UND Bloecken -
+# dieser Lauf prueft also, dass die Kennung ueberhaupt existiert, nicht dass sie von der
+# richtigen Art ist. Ein Block als Aufwertungs-Zutat bliebe hier gruen. Das ist bewusst
+# die billigere Pruefung: die Art steht erst im gemergten Dump fest (WP3.6).
+#
+# Wie bei RepairTools wird nur die ABGEZAEHLTE Liste von Pfaden aufgeloest. Ein
+# allgemeines "loese jeden set-Wert auf" wuerde ueber Zahlen (ItemCount, MaxDamage),
+# Marken (damage_category) und Prefab-Pfade stolpern.
+$rewiredRefs = 0
+foreach ($path in @($Gegenstaende) + @($Bloecke)) {
+    if (-not $path -or -not (Test-Path $path)) { continue }
+    $xml = [xml](Get-Content $path -Raw)
+    foreach ($node in $xml.SelectNodes('//set')) {
+        $xpath = $node.GetAttribute('xpath')
+        $kind = $null
+        if ($xpath -match "property\[@name='Item'\]/@value$")    { $kind = 'Aufwertungs-Zutat' }
+        elseif ($xpath -match "property\[@name='ToBlock'\]/@value$") { $kind = 'Aufwertungs-Ziel' }
+        elseif ($xpath -match "RepairItems'\].*/@name$")          { $kind = 'Reparaturstoff' }
+        elseif ($xpath -match "/drop\[.*\]/@name$")               { $kind = 'Abwurf' }
+        if (-not $kind) { continue }
+        $name = $node.InnerText.Trim()
+        if ($name.Length -eq 0) { continue }
+        $rewiredRefs++
+        if (-not $defined.ContainsKey($name)) {
+            $unresolved += "$kind '$name' ist nirgends definiert  ($([IO.Path]::GetFileName($path)) / $xpath)"
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
-Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}" -f $appendedTotal, $repairRefs)
+Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

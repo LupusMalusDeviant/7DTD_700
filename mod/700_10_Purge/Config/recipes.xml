@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     365 Zeilen. -->
+	     361 Zeilen. -->
 
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletAP']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletBall']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -132,7 +132,6 @@
 	<remove xpath="/recipes/recipe[@name='cntSteelWritableCrate']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='cntWallSafe_Player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='combineStation']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='concreteShapes:VariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='couchModernBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='couchUglyLargeBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='couchUglySingleBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -306,8 +305,6 @@
 	<remove xpath="/recipes/recipe[@name='resourceBuckshot']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceBulletCasing']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceBulletTip']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='resourceCement']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='resourceConcreteMix']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceDuctTape']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceElectricParts']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceGunPowder']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -336,7 +333,6 @@
 	<remove xpath="/recipes/recipe[@name='steelGarageDoor3x3_PoweredBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='steelGarageDoor4x3_PoweredBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='steelGarageDoor5x3_PoweredBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='steelShapes:VariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='switch']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='terrAsphalt']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='thrownAmmoMolotovCocktail']" />  <!-- Weg zu einer gesperrten Kennung -->

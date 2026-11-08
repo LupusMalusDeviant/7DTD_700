@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     344 Zeilen. -->
+	     342 Zeilen. -->
 
 	<remove xpath="/traders/trader_info/trader_items/item[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_info/trader_items/item[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -311,8 +311,6 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceBuckshot']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceBulletCasing']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceBulletTip']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceCement']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceConcreteMix']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceDuctTape']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceElectricParts']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='resourceGunPowder']" />  <!-- Weg zu einer gesperrten Kennung -->

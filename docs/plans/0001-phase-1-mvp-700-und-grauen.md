@@ -1004,8 +1004,23 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
 
 **Schritte:**
 
-1. **WP6.1** `[Claude-prüfbar]` Upgrade-Pfad umdeuten: Rahmen → Flechtwerk → Fachwerk →
-   Bruchstein → Mörtelstein. Vanilla-Blockformen bleiben (P5), nur Material und Rezept neu.
+1. ~~**WP6.1** `[Claude-prüfbar]` Upgrade-Pfad umdeuten: Rahmen → Flechtwerk → Fachwerk →
+   Bruchstein → Mörtelstein. Vanilla-Blockformen bleiben (P5), nur Material und Rezept neu.~~
+   **Erledigt am 2026-11-08.** Der Pfad hängt an fünf Blöcken mit `shapes="All"`; die Zuordnung
+   ist die Reihenfolge ihrer Material-Haltbarkeit (100 – 500 – 1500 – 5000 – 10000). Zwei
+   Aufwertungskosten umgebogen (Fachwerk → Bruchstein: 25 Stein statt 10 Betonmischung;
+   Bruchstein → Mörtelstein: 10 Mörtel statt 10 Schmiedestahl), zwei Reparaturstoffe, ein
+   Abwurf, ein `damage_category`. **D63** deutet dafür `resourceCement` → Branntkalk,
+   `resourceConcreteMix` → Mörtel, `concreteShapes` → Bruchstein und `steelShapes` →
+   Mörtelstein um; Denylist 591 → **587**, Patchzeilen 1810 → **1797**. Nebenbefund: **der
+   Kalkofen aus WP4.3 hatte kein Erzeugnis**, weil sein einziges Produkt gesperrt war.
+   Keine Zeile Rezeptarbeit nötig — Vanillas Ketten sind schon Kalkbrennen und Kalkmörtel.
+   `kette-pruefen` bekam eine dritte Verweisklasse (umgebogene `<set>`-Werte, 5 gezählt) und
+   zwei Gegenproben, 47 → **49**. Offen und gezählt: die Baustoffnamen stehen an **jeder
+   einzelnen Form** (830 Schlüssel beginnen mit einem der vier Wörter, bei mindestens 200 ist
+   der Rest ein Formname) — WP6.1 hat die fünf Gruppenbeschreibungen und zwei Baustoffnamen
+   umbenannt, die Formnamen nicht. Das ist ein Werkzeug, keine Handarbeit, und gehört zu F-12
+   in WP8. Siehe [F-18](../features/F-18-bauen-befestigung.md).
 2. **WP6.2** `[Claude-prüfbar]` Verteidigungsbauten: Palisade, Spitzpfähle, Graben, Wehrgang,
    Torhaus, Schwingbalken-Falle, Pechtopf.
 3. **WP6.3** `[Claude-prüfbar]` **D29 umsetzen:** Blockschaden der Seuchentoten senken, damit
@@ -1296,6 +1311,15 @@ werden:
     (Empfehlung, keine erfundene Zahl), eigene Zahlen (dann WP9), oder die Rolle berichtigen.
     Hängt an **D58** und an der F-02-Tabelle. *(Blockiert nichts, aber je später, desto mehr
     Rezepte und Sprachzeilen hängen an der falschen Zuordnung.)*
+11. **Die Wandfackel im geschlossenen Raum abbrennen lassen** (WP6.1/WP6.5, 8. November 2026).
+    Nach **D64** bekommen alle vier Lichtquellen `PlantGrowing`, auch die Wandfackel — und
+    gemessen ersetzt `CheckPlantAlive` einen Block bei Nichterfüllung durch **Luft** statt ihn
+    ausgehen zu lassen. Vanillas Höhlenpilze belegen, dass `FertileLevel`, `LightLevelStay` und
+    `LightLevelGrow` mit `0` offen sind; sie stehen aber auf **Boden**, und eine Wandfackel hat
+    **Luft unter sich**. Der Test muss darum ausdrücklich eine Wandfackel **in einem
+    geschlossenen Raum** stehen lassen, bis die Brenndauer abgelaufen ist, und danach nachsehen,
+    ob dort ein erloschener Halter hängt oder nichts. Eine im Freien beweist es nicht.
+    → gehört in den Lasttest WP6.6.
 
 ## Offene Punkte
 
@@ -1315,7 +1339,7 @@ werden:
 
 ## Referenzen
 
-- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D62
+- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D64
 - [Balancing WP5](../balancing/0001-wp5-waffen-ruestung-und-kosten.md) — 16 Waffen, 4
   Rüstungsstufen, 17 eigene Rezepte mit Erz-Äquivalent (WP5.6)
 - [Spec 01 — Technischer Rahmen](../specs/01-technischer-rahmen.md) — Modlet-Architektur,

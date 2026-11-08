@@ -886,6 +886,45 @@ Marken und Pfade stolpern und wäre ein Prüfer, der schreit.
 | vertippte eingehängte Zutat wird rot | Exit 1, nennt `pruefLehmGibtesnicht` | der Fehler von WP5.5b, nachgestellt |
 | vertipptes Reparaturwerkzeug wird rot | Exit 1, nennt `pruefFlickenGibtesnicht` | die zweite Stelle |
 
+### Nachtrag WP6.1 (2026-11-08): umgebogene Verweise — **Abnahme offen**
+
+**Diesmal vor dem Fehler geschlossen, nicht nach ihm.** Beim Schreiben des Ausbaupfades fiel
+auf, dass die drei Arten von `<set>`-Zeile, die WP6.1 braucht, in dieselbe Lücke fallen wie
+die zwei aus dem Nachtrag davor — eine Kennung im **Elementtext**, weder Attribut noch Rezept:
+
+```xml
+<set xpath="…[@class='UpgradeBlock']/property[@name='Item']/@value">resourceRockSmall</set>
+<set xpath="…[@class='RepairItems']/property[@name='resourceConcreteMix']/@name">resourceRockSmall</set>
+<set xpath="…/drop[@event='Harvest'][@name='resourceScrapIron']/@name">resourceRockSmall</set>
+```
+
+Ein Tippfehler in der ersten macht eine **Baustufe unerreichbar**, in der zweiten einen Block
+**unreparierbar**, in der dritten einen Abbau **ertraglos**. Alle drei fallen erst im Spiel
+auf. `ToBlock` kommt mit, weil ein umgebogenes Aufwertungsziel genauso eine Kennung ist.
+
+Der Lauf **zählt** sie jetzt:
+
+```
+eingehaengte Zutaten: 5, Reparaturwerkzeuge: 21, umgebogene Verweise: 5
+```
+
+Aufgelöst wird gegen **einen** Topf aus Gegenständen und Blöcken. Dieser Lauf prüft also, dass
+die Kennung **existiert**, nicht dass sie von der richtigen **Art** ist — ein Block als
+Aufwertungs-Zutat bliebe hier grün. Das ist bewusst die billigere Prüfung; die Art steht erst
+im gemergten Dump fest (WP3.6), und das steht auch in den „Grenzen dieser Prüfung".
+
+**Gegenproben (Projektregel 5) — zwei gebaut, 47 → 49:**
+
+| Gegenprobe | erwartet | prüft |
+|---|---|---|
+| umgebogene Verweise werden gezählt, Zahlen nicht | Exit 0, `umgebogene Verweise: 4` | dass die vier Pfade angesehen werden **und** die fünfte Zeile der Prüfdatei (`ItemCount`, eine Zahl) *nicht* mitzählt |
+| vertippte Aufwertungs-Zutat wird rot | Exit 1, nennt alle drei: `pruefSteinGibtesnicht`, `pruefMoertelGibtesnicht`, `pruefSchuttGibtesnicht` | jede der drei Stellen einzeln |
+
+Die erste Gegenprobe ist die wichtigere: ohne die Zahlenzeile würde sie nur beweisen, dass der
+Prüfer etwas sieht — mit ihr beweist sie, dass er nicht **alles** sieht. Ein Prüfer, der jeden
+`<set>`-Wert aufzulösen versucht, stolpert über `ItemCount`, `damage_category` und
+Prefab-Pfade und schreit, bis niemand mehr hinhört.
+
 **Was dieser Nachtrag nicht behauptet.** Dass `blk700_webstuhl` auflösbar ist, heißt nicht, dass
 der Block lädt: ob `Mwood`, `ui_game_symbol_workbench`, `advBuilding` und der geborgte
 Prefab-Pfad gültig sind, sieht dieses Skript nicht — es vergleicht Namen von Definitionen mit

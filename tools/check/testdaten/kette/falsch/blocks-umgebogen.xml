@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, FALSCHER SATZ, vierte Art: die drei umgebogenen
+     Verweise des Ausbaupfades sind vertippt.
+
+     Folge im Spiel, je Zeile: eine Baustufe ist nicht erreichbar, ein Block ist nicht
+     reparierbar, ein Abbau gibt nichts her. Alle drei merkt man erst beim Spielen. -->
+<config>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='UpgradeBlock']/property[@name='Item']/@value">pruefSteinGibtesnicht</set>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@class='RepairItems']/property[@name='pruefRohstoff']/@name">pruefMoertelGibtesnicht</set>
+	<set xpath="/blocks/block[@name='pruefWerkbank']/drop[@event='Harvest'][@name='pruefRohstoff']/@name">pruefSchuttGibtesnicht</set>
+
+	<append xpath="/blocks">
+		<block name="pruefBlockEigen">
+			<property name="Class" value="Workstation" />
+		</block>
+	</append>
+</config>

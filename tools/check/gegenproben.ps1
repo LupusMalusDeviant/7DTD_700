@@ -473,6 +473,28 @@ Test-Script 'kette-pruefen: vertipptes Reparaturwerkzeug wird rot' 1 @{
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @("Reparaturwerkzeug 'pruefFlickenGibtesnicht' ist nirgends definiert")
 
+# WP6.1: die dritte Stelle derselben Bauart, und diesmal VOR dem Fehler gefunden. Der
+# Ausbaupfad biegt mit <set>-Zeilen die Zutat einer Aufwertung, deren Ziel, einen
+# Reparaturstoff und den Namen eines Abwurfs um - vier Kennungen als Elementtext, keine
+# davon in einem Rezept oder Attribut. Der saubere Satz muss GENAU VIER zaehlen: die
+# fuenfte <set>-Zeile der Pruefdatei setzt eine Zahl (ItemCount), und die darf nicht
+# mitgezaehlt werden, sonst waere der Beweis, dass der Pruefer schreit.
+Test-Script 'kette-pruefen: umgebogene Verweise werden gezaehlt, Zahlen nicht' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks-umgebogen.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('umgebogene Verweise: 4', 'unaufgeloeste Verweise: 0')
+Test-Script 'kette-pruefen: vertippte Aufwertungs-Zutat wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\falsch\blocks-umgebogen.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "Aufwertungs-Zutat 'pruefSteinGibtesnicht' ist nirgends definiert",
+    "Reparaturstoff 'pruefMoertelGibtesnicht' ist nirgends definiert",
+    "Abwurf 'pruefSchuttGibtesnicht' ist nirgends definiert")
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {
