@@ -72,6 +72,15 @@ dazu vier D-Zeilen Rückbau an WP3.
 - **Noch nicht geprüft ist das Aussehen.** Gemessen sind Pfade, nicht Bilder. Ob die geborgten
   Garnituren in einem Frühmittelalter-Spiel erträglich aussehen, entscheidet der Nutzer im
   Spiel (WP5.7); ein anderer Pfad ist eine Zeile je Stufe.
+- **Die Zahlen und Kosten stehen in der Balancing-Tabelle** (WP5.6, 8. November 2026):
+  [0001-wp5-waffen-ruestung-und-kosten.md](../balancing/0001-wp5-waffen-ruestung-und-kosten.md),
+  §3 und §4. Zwei Punkte daraus gehören hierher. **T0 und T1 haben denselben
+  `PhysicalDamageResist`** (8 → 12,3): `armorPrimitiveMaster` trägt Vanillas leichte Klasse,
+  also bekommt T1 keinen besseren Schutz, sondern einen Set-Bonus, mehr Modplätze, 4,1 %
+  Widerstand gegen kritische Verletzungen und den Tag `biomeChallenge`. Für eine Stufe, die als
+  „Wollkleidung und Lederwams" verkauft wird, ist das wenig — Spieltest, dann WP9. Und: **eine
+  vollständige T3-Garnitur kostet 550 Raseneisenerz, ein Streithammer 600.** Eine Rüstung, die
+  billiger ist als eine einzelne Waffe, dreht die Reihenfolge, in der man sich ausrüstet.
 
 - Gewicht → Bewegungs- und Ausdauer-Malus über vorhandene Rüstungs-Mechanik
 - Set-Boni über vorhandene Rüstungsset-Logik: Zuordnung umdeuten

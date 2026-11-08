@@ -630,8 +630,11 @@ verschoben ist (D57, 8. November 2026).
    8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, ~~Werkzeugslot
    Weberschiffchen~~ — und als Rezepte die Gambeson-Teile aus WP5.5.~~ **Erledigt 2026-11-08,
    ohne den Werkzeugslot** (Abweichung von F-04, begründet im Stand und im Block-Kommentar).
-7. **WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro Waffe
-   mit Zweck, Schaden, Reichweite, Ausdauer, Tier.
+7. ~~**WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro
+   Waffe mit Zweck, Schaden, Reichweite, Ausdauer, Tier.~~ **Erledigt 2026-11-08** —
+   [0001-wp5-waffen-ruestung-und-kosten.md](../balancing/0001-wp5-waffen-ruestung-und-kosten.md),
+   16 Waffen, 4 Rüstungsstufen, 17 eigene Rezepte. **Drei Widersprüche gefunden**, einer davon
+   gehört dem Nutzer. Siehe Stand.
 8. **WP5.7** `[braucht Nutzer]` Spieltest: Tooltip verständlich? Ist jeder Waffe ihr Zweck
    anzusehen?
 
@@ -945,6 +948,53 @@ Frühmittelalter-Spiel erträglich **aussehen** — das steht alles in WP3.6 und
 
 ---
 
+**Stand WP5.6 (8. November 2026): die Tabelle steht, und sie findet drei Widersprüche.**
+
+[docs/balancing/0001-wp5-waffen-ruestung-und-kosten.md](../balancing/0001-wp5-waffen-ruestung-und-kosten.md)
+— 16 Nahkampfwaffen mit Schaden, Block, Hieben pro Minute, Ausdauer, Reichweite und
+Haltbarkeit; vier Rüstungsstufen mit Schutz, Mali und Set-Bonus; und die Kosten aller 17
+eigenen Rezepte, umgerechnet auf **Raseneisenerz**, weil D31 Eisen zum spürbaren Engpass macht.
+Reine XML-Messung, kein Spielstart. Schaden je Sekunde und Schaden je Ausdauerpunkt sind daraus
+gerechnet und als gerechnet gekennzeichnet.
+
+**Vanillas Staffelung trägt** — Schaden/s 10–15 (T0), 16–24 (T1), 26,6 (T2), 27–32 (T3) —, und
+unsere Umdeutung hat sie nicht verschoben. Die drei Widersprüche sitzen woanders:
+
+1. **DIE BREITAXT IST DIE SCHWÄCHSTE WAFFE DES SATZES ÜBER T0 — UND DIE TEUERSTE AXT.** F-02
+   nennt sie „T3–T4, schwer, Rüstungsbrecher". Gemessen ist sie `meleeToolAxeT1IronFireaxe`:
+   **T1**, 15 Schaden, 16,3 Schaden/s, 0,82 Schaden je Ausdauer — der schlechteste Wert über T0.
+   Ihr Rezept aus WP5.1 kostet **8 Schmiedestahl = 400 Raseneisenerz**; die Bartaxt, die F-02
+   bei T0–T2 führt, kostet 100 und schlägt fast doppelt so hart, die Spatha kostet 50 und
+   schlägt härter. **Die Reihenfolge steht auf dem Kopf.** Drei Wege, Empfehlung ist der
+   **Tausch der beiden Vanilla-Basen** (Breitaxt ← Stahlaxt, Bartaxt ← Feuerwehraxt): er kostet
+   zwei Zeilen Umdeutung und **null erfundene Zahlen**, und D58s Grundgedanke bleibt. Die Wahl
+   gehört dem Nutzer, weil D58 und die F-02-Tabelle daran hängen (Projektregel 4).
+2. **Beide Äxte sind in Vanillas Buchführung Werkzeuge** (`tool`, `perkMiner69r`,
+   `harvestingSkill`), keine Waffen: Kämpfen mit der Breitaxt steigert **Bergbau**, und die
+   Kampf-Perks greifen an ihr nicht. Ihr hoher `BlockDamage` (47 und 89) ist der Grund, warum
+   sie trotzdem taugen — sie sind zum Abbauen gebaut. Ändern heißt `Tags` bearbeiten, also
+   **F-21 in WP7**.
+3. **T1 schützt wie T0.** `armorPrimitiveMaster` trägt Vanillas leichte Klasse, also hat die
+   Lumpengarnitur denselben `PhysicalDamageResist` 8 → 12,3 wie Wolle und Leder. T1 bringt
+   stattdessen einen Set-Bonus, 2–5 statt 1–2 Modplätze, 4,1 % Widerstand gegen kritische
+   Verletzungen und den Tag `biomeChallenge`. Für eine Stufe, die als „Wollkleidung und
+   Lederwams" verkauft wird, ist das wenig — **Spieltest WP5.7, dann WP9.**
+
+Dazu eine Zahl, die vorher niemand gesehen hat: **eine vollständige T3-Garnitur kostet 550
+Raseneisenerz, ein Streithammer 600.** Eine Rüstung, die billiger ist als eine einzelne Waffe,
+dreht die Reihenfolge, in der man sich ausrüstet. Für WP9 vermerkt, nicht geändert.
+
+**Was die Tabelle ausdrücklich nicht tut:** Zahlen ändern. WP5.1 bis WP5.5 haben an Schaden,
+Reichweite, Haltbarkeit und Ausdauer **nichts** angefasst — die Waffen tragen Vanillas Werte,
+und das bleibt so, bis der Nutzer über Punkt 1 entscheidet und WP9 den Rest nimmt. Nicht
+gemessen und darum nicht behauptet: ob `PhysicalDamageResist` abgezogen oder prozentual
+gerechnet wird (also wie viele Hiebe ein Kettenhemd aushält) und ob `MaxRange` und das `Range`
+des Speer-Angriffsblocks dieselbe Strecke beschreiben.
+
+**Nur Dokumentation.** Kein Code, kein XML, keine Prüfzahl berührt.
+
+---
+
 ### WP6: F-18 + F-08 — Bauen, Befestigung, Licht und Feuer
 
 **Zweck:** Basenbau in Materialien von 700, und Licht als Ressource statt als Selbstverständlichkeit.
@@ -1220,6 +1270,13 @@ werden:
 9. ~~**WP4.4 entscheiden**: die drei Werkstatt-Klone jetzt leer bauen, verschieben (Empfehlung)
    oder D50 beugen.~~ **Entschieden am 8. November 2026: verschieben** (D57). Webstuhl nach
    WP5.5b, Räucherkammer nach F-19, Runenritzer-Bank nach F-15.
+10. **Über die Breitaxt entscheiden** (WP5.6, 8. November 2026). Sie soll „T3–T4, schwer,
+    Rüstungsbrecher" sein und ist gemessen die schwächste Waffe über T0 — T1, 15 Schaden,
+    während ihr Rezept 400 Raseneisenerz kostet und die Bartaxt bei 100 fast doppelt so hart
+    schlägt. Drei Wege in der Balancing-Tabelle §2.1: **Tausch der beiden Vanilla-Basen**
+    (Empfehlung, keine erfundene Zahl), eigene Zahlen (dann WP9), oder die Rolle berichtigen.
+    Hängt an **D58** und an der F-02-Tabelle. *(Blockiert nichts, aber je später, desto mehr
+    Rezepte und Sprachzeilen hängen an der falschen Zuordnung.)*
 
 ## Offene Punkte
 
@@ -1239,7 +1296,9 @@ werden:
 
 ## Referenzen
 
-- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D52
+- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D62
+- [Balancing WP5](../balancing/0001-wp5-waffen-ruestung-und-kosten.md) — 16 Waffen, 4
+  Rüstungsstufen, 17 eigene Rezepte mit Erz-Äquivalent (WP5.6)
 - [Spec 01 — Technischer Rahmen](../specs/01-technischer-rahmen.md) — Modlet-Architektur,
   Netz-Klassen, UI-Kompatibilität (D5)
 - [Kurz-Check Prio 2–10](../rea/findings/02-10-schnittstellen-kurzcheck.md) — die Befunde, auf

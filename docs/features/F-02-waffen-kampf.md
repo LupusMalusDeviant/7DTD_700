@@ -18,7 +18,7 @@ Schild-Blocken, Schadensarten, Verschleiß und Wurfwaffen (D21). Nahkampf ist di
 | Sax (Kurzschwert) | Schnitt/Stich | T1–T2, schnell | Machete/Knife |
 | Speer / Ango | Stich | T1–T3, Reichweite | Spear |
 | Spatha | Schnitt | T3–T4, Allrounder | Machete (Phase 1), neues Modell (Phase 2) |
-| Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher | Fireaxe |
+| Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher — **widerspricht den gemessenen Zahlen, siehe unten** | Fireaxe |
 | Streitkolben / Hammer | Wucht | T3–T4, gegen Rüstung (Kultisten, Plünderer) | Sledgehammer |
 
 **Die Vanilla-Basen, gemessen an V 3.40 (WP5, 8. November 2026).** Die Spalte oben nennt
@@ -35,6 +35,36 @@ Modellfamilien; das sind die wirklichen Kennungen, und zwei davon hatte WP3 gesp
 | Vorschlaghammer | `meleeWpnSledgeT0/T1/T3*` | frei, drei Stufen |
 | **Spatha** | `meleeWpnBladeT3Machete*` | **war gesperrt → freigegeben (D58)** |
 | **Breitaxt** | `meleeToolAxeT1IronFireaxe` | **war gesperrt → freigegeben (D58)** |
+
+**Die Zahlen dazu stehen in der Balancing-Tabelle (WP5.6, 8. November 2026):**
+[0001-wp5-waffen-ruestung-und-kosten.md](../balancing/0001-wp5-waffen-ruestung-und-kosten.md) —
+eine Zeile je Waffe mit Schaden, Block, Hieben pro Minute, Ausdauer, Reichweite, Haltbarkeit
+und dem Erz, das sie kostet. Vanillas Staffelung trägt: Schaden je Sekunde geht von 10–15 (T0)
+über 16–24 (T1) auf 27–32 (T3). **Mit einer Ausnahme, und die ist die Breitaxt:**
+
+| | Breitaxt | Bartaxt | Spatha |
+|---|---|---|---|
+| Vanilla-Stufe | **T1** | T2 | T3 |
+| Schaden (Qualität 1) | **15** | 29 | 25 |
+| Schaden je Sekunde | **16,3** | 26,6 | 27,1 |
+| Erz-Äquivalent des Rezepts | **400** | 100 | 50 |
+
+Die Breitaxt soll „T3–T4, schwer, Rüstungsbrecher" sein und ist gemessen die **schwächste
+Waffe des Satzes über T0** — bei der höchsten Erzrechnung nach Flügellanze und Streithammer.
+Die Bartaxt, die hier bei T0–T2 steht, schlägt sie um fast das Doppelte. Drei Wege stehen in
+der Balancing-Tabelle §2.1; die Empfehlung ist der **Tausch der beiden Vanilla-Basen** (Breitaxt
+← Stahlaxt, Bartaxt ← Feuerwehraxt), weil er keine erfundene Zahl kostet. **Die Entscheidung
+gehört dem Nutzer, weil sie an D58 und an der Tabelle oben hängt.**
+
+Zweiter Befund derselben Messung: **beide Äxte sind in Vanillas Buchführung Werkzeuge**
+(`tool`, `perkMiner69r`, `harvestingSkill`), keine Waffen. Wer mit der Breitaxt kämpft,
+steigert seine Bergbau-Fertigkeit, und die Kampf-Perks greifen an ihr nicht. Das zu ändern
+heißt `Tags` zu bearbeiten und gehört zu **F-21 in WP7**, wo der Fertigkeitsbaum entsteht.
+
+Und: **T4 ist auch bei den Waffen eine Qualität, keine Stufe.** Vanillas höchste Nahkampfstufe
+ist T3; „T3–T4" in der Tabelle oben kann nur denselben Gegenstand auf höherer
+Handwerksqualität meinen (Streithammer auf Qualität 6: 82,5 statt 55 Schaden). Dieselbe
+Einsicht wie **D61** bei der Rüstung.
 
 Gemessen hat Vanilla **kein** weiteres Klingenmodell über Messerlänge und keine zweite lange
 Axt: `meleeWpnBlade*` kennt nur Knochenmesser, Jagdmesser, Zuckerstangen-Messer (Event) und
