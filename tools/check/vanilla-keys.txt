@@ -246,3 +246,144 @@ logWallRightSpikes
 logWallPillar                             # Palisadenpfosten
 logWallPillarCap                          # Pfostenkappe
 doorWoodLargeGate                         # Torhaus-Tor
+
+# --- WP7.1: die fuenf Fertigkeitsbaeume (F-21, D66) -----------------------------
+# 115 Schluessel, 23 je Attribut, erzeugt von tools/gen/wp7-baumtexte.ps1.
+#
+# Die fuenf Baeume SIND die fuenf Vanilla-Attribute, umgedeutet - derselbe Weg wie
+# bei Raseneisenerz und Branntkalk. Darum keine eigenen Schluessel, sondern die
+# Vanilla-Schluessel mit unserem Text.
+#
+# GEMESSEN SICHER ZU UEBERSCHREIBEN: jeder dieser Schluessel steht GENAU EINMAL in
+# ganz Data/Config, naemlich in progression.xml. Kein geteilter Schluessel wie
+# blockVariantHelperGroupDesc (50 Bloecke) oder doorGroupDesc (55).
+# Ausnahme sind die fuenf kleingeschriebenen Kurznamen (attstrength und die vier
+# anderen): die stehen auch als MARKE an Gegenstaenden (attstrength 26 Mal in
+# items.xml). Eine Localization-Zeile aendert nur Text, keine Marke - und
+# XUiC_CategoryList::SetupCategoriesByWorkstation zeigt genau diesen Kurznamen auf
+# den Kategorie-Knoepfen der Werkbank, der muss also mit.
+
+# Handwerker (attStrength)
+attstrength
+attStrengthName
+attStrengthDesc
+attStrengthRank01Desc
+attStrengthRank01LongDesc
+attStrengthRank02Desc
+attStrengthRank02LongDesc
+attStrengthRank03Desc
+attStrengthRank03LongDesc
+attStrengthRank04Desc
+attStrengthRank04LongDesc
+attStrengthRank05Desc
+attStrengthRank05LongDesc
+attStrengthRank06Desc
+attStrengthRank06LongDesc
+attStrengthRank07Desc
+attStrengthRank07LongDesc
+attStrengthRank08Desc
+attStrengthRank08LongDesc
+attStrengthRank09Desc
+attStrengthRank09LongDesc
+attStrengthRank10Desc
+attStrengthRank10LongDesc
+
+# Krieger (attFortitude)
+attfortitude
+attFortitudeName
+attFortitudeDesc
+attFortitudeRank01Desc
+attFortitudeRank01LongDesc
+attFortitudeRank02Desc
+attFortitudeRank02LongDesc
+attFortitudeRank03Desc
+attFortitudeRank03LongDesc
+attFortitudeRank04Desc
+attFortitudeRank04LongDesc
+attFortitudeRank05Desc
+attFortitudeRank05LongDesc
+attFortitudeRank06Desc
+attFortitudeRank06LongDesc
+attFortitudeRank07Desc
+attFortitudeRank07LongDesc
+attFortitudeRank08Desc
+attFortitudeRank08LongDesc
+attFortitudeRank09Desc
+attFortitudeRank09LongDesc
+attFortitudeRank10Desc
+attFortitudeRank10LongDesc
+
+# Jaeger (attAgility)
+attagility
+attAgilityName
+attAgilityDesc
+attAgilityRank01Desc
+attAgilityRank01LongDesc
+attAgilityRank02Desc
+attAgilityRank02LongDesc
+attAgilityRank03Desc
+attAgilityRank03LongDesc
+attAgilityRank04Desc
+attAgilityRank04LongDesc
+attAgilityRank05Desc
+attAgilityRank05LongDesc
+attAgilityRank06Desc
+attAgilityRank06LongDesc
+attAgilityRank07Desc
+attAgilityRank07LongDesc
+attAgilityRank08Desc
+attAgilityRank08LongDesc
+attAgilityRank09Desc
+attAgilityRank09LongDesc
+attAgilityRank10Desc
+attAgilityRank10LongDesc
+
+# Heiler (attIntellect)
+attintellect
+attIntellectName
+attIntellectDesc
+attIntellectRank1Desc
+attIntellectRank1LongDesc
+attIntellectRank2Desc
+attIntellectRank2LongDesc
+attIntellectRank3Desc
+attIntellectRank3LongDesc
+attIntellectRank4Desc
+attIntellectRank4LongDesc
+attIntellectRank5Desc
+attIntellectRank5LongDesc
+attIntellectRank6Desc
+attIntellectRank6LongDesc
+attIntellectRank7Desc
+attIntellectRank7LongDesc
+attIntellectRank8Desc
+attIntellectRank8LongDesc
+attIntellectRank9Desc
+attIntellectRank9LongDesc
+attIntellectRank10Desc
+attIntellectRank10LongDesc
+
+# Fuhrmann (attPerception)
+attperception
+attPerceptionName
+attPerceptionDesc
+attPerceptionRank01Desc
+attPerceptionRank01LongDesc
+attPerceptionRank02Desc
+attPerceptionRank02LongDesc
+attPerceptionRank03Desc
+attPerceptionRank03LongDesc
+attPerceptionRank04Desc
+attPerceptionRank04LongDesc
+attPerceptionRank05Desc
+attPerceptionRank05LongDesc
+attPerceptionRank06Desc
+attPerceptionRank06LongDesc
+attPerceptionRank07Desc
+attPerceptionRank07LongDesc
+attPerceptionRank08Desc
+attPerceptionRank08LongDesc
+attPerceptionRank09Desc
+attPerceptionRank09LongDesc
+attPerceptionRank10Desc
+attPerceptionRank10LongDesc

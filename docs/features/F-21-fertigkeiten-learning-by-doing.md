@@ -1,27 +1,32 @@
-# F-21 — Fertigkeiten & Learning by Doing
+﻿# F-21 — Fertigkeiten & Learning by Doing
 
 | Phase | Tiefe | Netz | REA |
 |---|---|---|---|
-| 1: sechs Bäume (XML) · 2: Learning by Doing | X+H | S | ja |
+| 1: **fünf** Bäume (XML) · 2: Runenkundiger + Learning by Doing | X+H | S | ja |
 
 ## Ziel
 Ein **komplett neues Fertigkeitssystem** (D47) mit sechs Bäumen, die zu den Rollen von 700
 passen, und Fortschritt durch **Tun** statt Magazin-Lesen (D24).
 
-## Die sechs Bäume
+## Die Bäume — fünf in Phase 1, der sechste in Phase 2 (D66)
 
-| Baum | Schwerpunkt | Beispiel-Perks | Koop-Synergie (D44) |
-|---|---|---|---|
-| **Krieger** | Nahkampf, Schild, schwere Rüstung | Klingenkunde, Wuchtwaffen, Schildwall, Rüstungsgewöhnung | Schildwall-Bonus für Nachbarn |
-| **Jäger** | Bogen, Armbrust, Wurfwaffen, Schleichen, Spuren, Tiere jagen | Bogenschießen, Wurfarm, Fährtenlesen, Leiser Tritt | Gegner bzw. Spuren für Gruppe markieren |
-| **Handwerker** | Schmieden, Bauen, Werkstätten, Reparatur, Abbau | Schmiedekunst, Zimmerei, Steinmetz, Bergmann | Reparatur für andere, Gesellen anleiten |
-| **Runenkundiger** | Magie, Odem, Runen, Runensteine, Flüche | Runenritzen, Odemtiefe, Glutzauber, Bannkunde, Hochmagie | Gruppen-Schutzzeichen |
-| **Heiler** | Kräuter, Krankheiten, Tränke, Segen, Furcht | Kräuterkunde, Wundarzt, Seuchenkunde, Seelentrost | Heilt bzw. segnet Gruppe, Furcht-Aura senken |
-| **Transport & Logistik** | Tragkraft, Karren, Tiere, Pferde, Wegsteine, Marsch | Tragkraft, Wagnerei, Tierkunde, Sattlerei, Wegkunde | Gruppenlast, Wegsteine für Gruppe |
+Jeder Baum **ist** ein Vanilla-Attribut, umgedeutet (D66). Die Spalte „Attribut" ist
+nicht beliebig: jedes Vanilla-Attribut wirkt nur auf Gegenstände, die seine Marke tragen,
+und die Zuordnung folgt den Marken, die den Purge überleben — gemessen in
+[WP7-fertigkeitsbaeume.md](../rea/findings/WP7-fertigkeitsbaeume.md) §2.2.
 
-- **Attributwerte:** Jeder Baum hat einen Stufenwert (wie Vanilla-Attribute), der Perks im Baum freischaltet. Der Wert *Runenkundiger* ist der **Magiewert** (D36), z. B. für das Runenross.
-- **Fernkampf und Magie gleichwertig** (D22): Jäger und Runenkundiger sind gleich mächtige Fernkampf-Wege.
-- Das Vanilla-Attributsystem wird **vollständig ersetzt**; Vanilla-Perks werden gesperrt bzw. umgebaut. [verifizieren], wie hart Vanilla-Code an den fünf Attributnamen hängt → REA (wenig hart = XML; hart = Umdeuten statt Ersetzen).
+| Baum | Attribut | lebende Marken | Schwerpunkt | Beispiel-Perks | Koop-Synergie (D44) |
+|---|---|---|---|---|---|
+| **Krieger** | `attFortitude` | 4: Schlagringe, bloße Hand | Nahkampf, Schild, schwere Rüstung | Klingenkunde, Wuchtwaffen, Schildwall, Rüstungsgewöhnung | Schildwall-Bonus für Nachbarn |
+| **Jäger** | `attAgility` | 17: Bögen, Armbrüste, Pfeile, Messer | Bogen, Armbrust, Wurfwaffen, Schleichen, Spuren, Tiere jagen | Bogenschießen, Wurfarm, Fährtenlesen, Leiser Tritt | Gegner bzw. Spuren für Gruppe markieren |
+| **Handwerker** | `attStrength` | 18: Äxte, Hacken, Schaufeln, Hammer | Schmieden, Bauen, Werkstätten, Reparatur, Abbau | Schmiedekunst, Zimmerei, Steinmetz, Bergmann | Reparatur für andere, Gesellen anleiten |
+| ~~**Runenkundiger**~~ **Phase 2 (D66)** | — | — | Magie, Odem, Runen, Runensteine, Flüche | Runenritzen, Odemtiefe, Glutzauber, Bannkunde, Hochmagie | Gruppen-Schutzzeichen |
+| **Heiler** | `attIntellect` | 0 — keine Waffenmarke | Kräuter, Krankheiten, Tränke, Segen, Furcht | Kräuterkunde, Wundarzt, Seuchenkunde, Seelentrost | Heilt bzw. segnet Gruppe, Furcht-Aura senken |
+| **Fuhrmann** (hieß „Transport & Logistik") | `attPerception` | 4: Speere, wandern in WP7.2 zum Jäger | Tragkraft, Karren, Tiere, Pferde, Wegsteine, Marsch | Tragkraft, Wagnerei, Tierkunde, Sattlerei, Wegkunde | Gruppenlast, Wegsteine für Gruppe |
+
+- **Attributwerte:** Jeder Baum hat einen Stufenwert (wie Vanilla-Attribute), der Perks im Baum freischaltet. Der Wert *Runenkundiger* ist der **Magiewert** (D36), z. B. für das Runenross — in Phase 2.
+- **Fernkampf und Magie gleichwertig** (D22): Jäger und Runenkundiger sind gleich mächtige Fernkampf-Wege. **In Phase 1 nicht erfüllt** — der Jäger steht allein, weil es keinen magischen Weg gibt (D66, ausdrücklich getragen).
+- Das Vanilla-Attributsystem wird **umgedeutet, nicht ersetzt** (D66). Die `[verifizieren]`-Marke ist beantwortet: in 54 940 Methodenkörpern stehen genau **zwei** Attributnamen als Zeichenkette (`attFortitude` in `EntityPlayerLocal::Update`, `attcrafting` in `XUiC_CategoryList::SetupCategoriesByWorkstation`). Wenig hart — und trotzdem umgedeutet, weil ein umbenanntes Attribut diese zwei Zeilen heil lässt und ein gelöschtes nicht. Sichtbar bleibt kein Vanilla-Name: die 115 Attribut-Schlüssel tragen unseren Text, die zehn toten Perks und zehn toten Handwerks-Stufen `hidden="true"`.
 
 ## Learning by Doing (D24, D48)
 **Regel:** Ein Rezept bzw. eine Fertigkeit wird nur nutzbar, wenn die **Grundfähigkeit**
@@ -42,10 +47,69 @@ Materialverbrauch.
 REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 
 ## Akzeptanzkriterien
-- [ ] Sechs Bäume vollständig, keine Vanilla-Attribut- bzw. -Perknamen sichtbar
+- [ ] **Fünf** Bäume vollständig, keine Vanilla-Attribut- bzw. -Perknamen sichtbar (der sechste in Phase 2, D66)
 - [ ] Ohne Grundfähigkeit ist ein Rezept gesperrt; mit Grundfähigkeit steigt die Qualität durch wiederholtes Herstellen
 - [ ] Learning-by-Doing-Fortschritt bleibt nach Server-Neustart erhalten
 - [ ] Jeder Baum bietet einen tragfähigen Build bis T4
+
+
+## Stand 2026-11-08 — WP7.1 und WP7.3 stehen, drei Schritte fehlen
+
+Alles hier ist **geschriebenes und auflösbar geprüftes XML, im Spiel hat es niemand
+gesehen**. Messungen: [WP7-fertigkeitsbaeume.md](../rea/findings/WP7-fertigkeitsbaeume.md).
+
+### Was gebaut ist
+
+**WP7.1 — die fünf Bäume heißen so.** 115 Localization-Schlüssel, 23 je Attribut:
+der kleingeschriebene Kurzname, `…Name`, `…Desc` und je zehn `RankNNDesc` plus
+`RankNNLongDesc`. Jeder Baum hat zehn eigene Rangnamen:
+
+| Baum | Rang 1 | Rang 5 | Rang 10 |
+|---|---|---|---|
+| Handwerker | Hilfshand | Erzgräber | Altmeister |
+| Krieger | Raufbold | Recke | Heerführer |
+| Jäger | Schlingensteller | Bogenschütze | Waidmeister |
+| Heiler | Wundwäscher | Wundarzt | Lebensretter |
+| Fuhrmann | Lastträger | Treiber | Wegmeister |
+
+Erzeugt von `tools/gen/wp7-baumtexte.ps1`, und das ist kein Luxus: **Vanilla benennt die
+Rangschlüssel nicht einheitlich.** Vier Attribute schreiben `attXRank01Desc` bis
+`Rank10Desc`, `attIntellect` aber `attIntellectRank1Desc` bis `Rank9Desc` und dann
+`Rank10Desc` — ohne führende Null. Von Hand getippt wären neun Schlüssel still falsch
+gewesen, und neun Rangnamen hätten im Spiel englisch dagestanden, ohne dass eine Prüfung
+etwas meldet. Das Skript liest die Schlüssel aus `progression.xml` des Builds.
+
+**WP7.3, erster Teil — zwanzig tote Zweige verborgen.** Zehn Perks und zehn
+Handwerks-Stufen, deren Gegenstände der Purge vollständig entfernt hat, tragen
+`hidden="true"`. Gelöscht wird keiner: `perkJunkMiner` steht 792 Mal in `blocks.xml`,
+`perkGunslinger` 149 Mal in `items.xml` — das sind Marken, und ein `<remove>` nimmt sie
+nicht mit.
+
+### Was noch fehlt
+
+- **WP7.2** Perks und Unterbereiche umhängen, mit den Gegenstands-Marken **in einem
+  Stück**: Keulen und Vorschlaghämmer tragen heute die Handwerker-Marke und gehören zum
+  Krieger, die Speere tragen die Fuhrmann-Marke und gehören zum Jäger. Marke und Perk
+  müssen zusammen wandern, sonst steht ein Perk unter einem Baum und sein Gegenstand unter
+  einem anderen.
+- **WP7.4** die 133 Abschriften (19 Reihen à 7 Bücher plus je ein `*Complete`-Eintrag).
+  Sechs Reihen sind gemessen tot. Die Wirkung sitzt an den einzelnen `<book>`-Knoten, nicht
+  an den Gruppen — deren `<effect_group/>` ist leer.
+- **WP7.5** Rezepte an Grundfähigkeiten binden. Der Weg ist gemessen: ein Rezept ist genau
+  dann sperrbar, wenn seine `tags` die Marke `learnable` tragen. Unsere 42 eigenen Rezepte
+  tragen **keine** `tags` und sind damit heute offen.
+
+### Was dabei aufgefallen ist und nicht zu F-21 gehört
+
+- **Sechs Patches aus WP6.4 landeten nirgends.** `lanternOld_02/03/04_Player` führen
+  `Class` und `DescriptionKey` nicht selbst, sie erben sie — drei `<set>` auf `Class` und
+  drei auf `DescriptionKey` trafen nichts. Das Spiel hätte je eine Zeile ins Protokoll
+  geschrieben und weitergeladen. Gefunden vom ersten Lauf der neuen XPath-Prüfung,
+  berichtigt zu `<append>`.
+- **Die Denylist sagt acht tote Buchreihen, gemessen sind es sechs.** Die Zahl „133 Bücher
+  in 19 Serien" stimmt genau.
+- `drugHerbalAntibiotics` ist gesperrt und wäre ein Umdeutungs-Kandidat für den Heiler —
+  gehört aber zu F-11 und damit Phase 2 (D50).
 
 ## Stand 2026-11-07 — Kurz-Check, **Entscheidung offen**
 

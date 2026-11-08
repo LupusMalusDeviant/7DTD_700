@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_50_Fortschritt / progression.xml
+	     F-21 Fertigkeitsbäume, Plan-0001 WP7.1 und WP7.3
+
+	     VON HAND GESCHRIEBEN. Die Texte der fünf Bäume dagegen erzeugt
+	     tools/gen/wp7-baumtexte.ps1, weil Vanilla die Rangschlüssel nicht einheitlich
+	     benennt (siehe dort).
+
+	     ====== WAS HIER NICHT STEHT, UND WARUM ======
+
+	     Kein einziger neuer Baum. Die fünf Bäume sind die fünf Vanilla-Attribute,
+	     UMGEDEUTET — derselbe Weg wie bei Raseneisenerz, Branntkalk und der Wandfackel
+	     (D54 bis D65). Entscheidung D66.
+
+	     Zwei Messungen haben das entschieden, nicht der Geschmack:
+
+	     1. DER CODE HÄNGT AN ZWEI NAMEN. In 54.940 Methodenkörpern von
+	        Assembly-CSharp.dll stehen genau zwei Attributnamen als Zeichenkette:
+	        attFortitude in EntityPlayerLocal::Update (ruft
+	        Progression::GetProgressionValue und liest .Level — in derselben Methode
+	        liegen die Literale "_underwater" und "snow") und attcrafting in
+	        XUiC_CategoryList::SetupCategoriesByWorkstation. Ein gelöschtes attFortitude
+	        nimmt eine Code-Zeile mit, ein umbenanntes nicht.
+
+	     2. JEDES ATTRIBUT HÄNGT ÜBER GEGENSTANDS-MARKEN AN EINER WAFFENFAMILIE. Jedes
+	        Attribut trägt eine effect_group mit
+	        <requirement name="ItemHasTags" tags="attX"/>, die Kopftreffer-Schaden und
+	        Abtrenn-Aussicht hebt. Welche Gegenstände diese Marke tragen UND den Purge
+	        überleben, entscheidet, welcher Baum das Attribut sein kann:
+
+	          attStrength    18 bleiben  Äxte, Hacken, Schaufeln, Klauenhammer, Keulen,
+	                                     Vorschlaghämmer, Nagel        -> HANDWERKER
+	          attAgility     17 bleiben  Messer, Bögen, Armbrüste, Pfeile, Bolzen
+	                                                                   -> JÄGER
+	          attFortitude    4 bleiben  Schlagringe, die bloße Hand   -> KRIEGER
+	          attPerception   4 bleiben  Speere (+ ein Dev-Gegenstand) -> FUHRMANN
+	          attIntellect    0 bleiben  alles gesperrt                -> HEILER
+
+	        Darum ist attAgility der Jäger und nicht attPerception, obwohl dort die
+	        Fährtenlese-Perks liegen: der Bogen hängt an attAgility. Die Perks wandern
+	        (WP7.2), die Marken an den Waffen sind der Boden.
+
+	     DER RUNENKUNDIGE FEHLT, und das ist entschieden, nicht vergessen: Magie ist
+	     F-15 und damit Phase 2. Ein sechster Baum ohne Inhalt wäre dasselbe Loch wie die
+	     drei Werkstätten ohne Rezepte (D57). Er kommt mit seinem Inhalt. D66.
+
+	     DIE DREI BEHÄLTER-ATTRIBUTE BLEIBEN UNBERÜHRT: attGeneralPerks, attBooks und
+	     attCrafting tragen max_level="0" und sammeln nur. attCrafting anzufassen wäre
+	     gefährlich (Risiko R8): SetupCategoriesByWorkstation liest "attcrafting".
+	-->
+
+	<!-- ========================================================================
+	     WP7.3 — die Zweige, die der Purge leergeräumt hat
+	     ========================================================================
+
+	     GELÖSCHT WIRD HIER NICHTS. Gemessen tragen diese Namen Marken quer durch die
+	     Vanilla-Daten: perkJunkMiner steht 792 Mal in blocks.xml und 55 Mal in
+	     shapes.xml, perkGunslinger 149 Mal in items.xml, perkTurrets 100 Mal. Ein
+	     <remove> auf den Perk nimmt die Marken nicht mit, aber jede Regel, die den Perk
+	     als progression_name verlangt, zeigt danach ins Leere.
+
+	     Darum hidden="true". Das ist belegt beidseitig: ProgressionFromXml
+	     ::parseProgressionItem liest das Attribut 'hidden' (eines von 30 Literalen in
+	     der Methode), und XUiC_SkillList::updateFilteredList liest
+	     ProgressionClass::Hidden beim Aufbau der Liste. Vanilla benutzt es selbst,
+	     zweimal: attGeneralPerks und skillGeneralPerks.
+
+	     ACHTUNG, GEMESSENE GRENZE: hidden verbirgt NUR den Knoten, nicht seine Kinder.
+	     Vanillas attGeneralPerks ist hidden="true", seine Perks (Rüstung, Schlossknacken)
+	     stehen trotzdem im Fenster. Darum steht hier jeder tote Zweig einzeln und nicht
+	     sein Behälter.
+	-->
+
+	<!-- Zehn Perks, deren Waffen- bzw. Gerätefamilie vollständig gesperrt ist.
+	     Je Zeile die Messung, die das belegt. -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkDeadEye']">true</setattribute>
+	<!-- Scharfschützengewehre: gunRifle* gesperrt, craftingRifles 4 von 4 Marken weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkBoomstick']">true</setattribute>
+	<!-- Schrotflinten: craftingShotguns 4 von 4 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkGunslinger']">true</setattribute>
+	<!-- Faustfeuerwaffen: craftingHandguns 5 von 5 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkMachineGunner']">true</setattribute>
+	<!-- Maschinengewehre: craftingMachineGuns 4 von 4 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkDemolitionsExpert']">true</setattribute>
+	<!-- Sprengstoff: gunExplosives* 2 von 2 gesperrt, craftingExplosives 14 von 14 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkElectrocutioner']">true</setattribute>
+	<!-- Elektrofallen: craftingElectrician 27 von 27 weg; craftingTraps 6 von 6 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkTurrets']">true</setattribute>
+	<!-- Geschütztürme und Drohnen: gunBot* 4 von 4 gesperrt, craftingRobotics 5 von 5 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkGreaseMonkey']">true</setattribute>
+	<!-- Fahrzeuge: vehicle* 16 von 17 gesperrt (der 17. ist ein Magazin), craftingVehicles 14 von 14 weg -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkJunkMiner']">true</setattribute>
+	<!-- Erdbohrer und Kettensäge: meleeTool*Auger* und meleeTool*Chainsaw* gesperrt -->
+	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkSalvageOperations']">true</setattribute>
+	<!-- Schraubenschlüssel, Ratsche, Schlagschrauber: meleeToolSalvage* 3 von 4 gesperrt,
+	     der vierte ist meleeToolSalvageWrenchAdmin mit CreativeMode="Dev" -->
+
+	<!-- Zehn Handwerks-Stufen, deren RecipeTagUnlocked-Marken AUSNAHMSLOS auf gesperrte
+	     Rezepte zeigen. Gemessen gegen die 361 im Purge entfernten Rezepte: -->
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingSalvageTools']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingHandguns']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingShotguns']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingRifles']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingMachineGuns']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingExplosives']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingRobotics']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingElectrician']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingTraps']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingVehicles']">true</setattribute>
+
+	<!-- NICHT verborgen, obwohl es naheliegt — jedes Mal mit Zahl:
+	       craftingMedical        1 von 8 bleibt (medicalFirstAidBandage). Die Stufe des
+	                              Heilers in WP7.5. drugHerbalAntibiotics ist gesperrt und
+	                              wäre ein Umdeutungs-Kandidat, gehört aber zu F-11,
+	                              Phase 2 (D50).
+	       craftingWorkstations  15 von 20 bleiben. Die Stufe des Handwerkers.
+	       craftingArmor          8 von 68 bleiben, weil unsere Rüstung eigene
+	                              Gegenstände sind (27 Rezepte in 700_30).
+	       craftingHarvestingTools 8 von 10, craftingFood 9 von 37, craftingSeeds 4 von 12
+	       perkAdvancedEngineering  Elektrik ist weg, Werkstätten nicht. Wird in WP7.2
+	                              zur Werkstattkunde des Handwerkers, nicht verborgen.
+	       perkBetterBarter, perkDaringAdventurer, perkCharismaticNature
+	                              Händler sind F-10 (Phase 2), aber die Perks hängen an
+	                              keinem gesperrten Gegenstand (0 Marken). Sie wandern in
+	                              WP7.2 zum Fuhrmann.
+	  -->
+
+	<!-- WP7.2 (Perks und Unterbereiche umhängen), WP7.4 (die 133 Abschriften) und
+	     WP7.5 (Rezepte an Grundfähigkeiten binden) stehen noch aus. Was WP7.5 braucht,
+	     ist gemessen: ein Rezept ist genau dann gesperrt, wenn seine tags die Marke
+	     'learnable' tragen (Recipe::IsUnlocked prüft get_IsLearnable; Recipe::.cctor
+	     liest "learnable" als FastTag). Vanilla: 391 von 633 Rezepten tragen sie, 39
+	     tragen always_unlocked="true", 203 tragen keines von beidem und sind von Anfang
+	     an verfügbar — darunter campfire, candle und ammoArrowStone. UNSERE 42 eigenen
+	     Rezepte tragen keine tags und sind damit heute offen; WP7.5 hängt sie an. -->
+</config>

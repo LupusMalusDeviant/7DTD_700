@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  700_50_Fortschritt — F-21, die sechs Fertigkeitsbäume. Bindet Rezepte aus 20, 30 und 40
+  700_50_Fortschritt — F-21, die fünf Fertigkeitsbäume. Bindet Rezepte aus 20, 30 und 40
   an Grundfähigkeiten, darum nach ihnen.
 
-  Reines XML, keine DLL. Belegt tragfähig: von den fünf Vanilla-Attributnamen steht nur
-  attFortitude im Code, einmal, in EntityPlayerLocal::Update.
+  FÜNF, nicht sechs (D66, 8. November 2026): der Runenkundige hätte in Phase 1 keinen
+  Inhalt, weil Magie F-15 und damit Phase 2 ist. Er kommt mit seinem Inhalt, wie D57 es
+  mit den drei Werkstätten gemacht hat.
+
+  Reines XML, keine DLL. Belegt tragfähig: von den fünf Vanilla-Attributnamen stehen in
+  54.940 Methodenkörpern genau zwei als Zeichenkette — attFortitude in
+  EntityPlayerLocal::Update und attcrafting in der Werkbank-UI. Darum werden die fünf
+  Attribute UMGEDEUTET und nicht ersetzt: ein umbenanntes attFortitude nimmt keine
+  Code-Zeile mit, ein gelöschtes schon.
 
   Achtung: der Behälter attCrafting bleibt bestehen, auch wenn er leer wirkt —
   XUiC_CategoryList::SetupCategoriesByWorkstation liest ihn (Risiko R8 im Plan).
@@ -15,7 +22,7 @@
 <xml>
 	<Name value="700_50_Fortschritt" />
 	<DisplayName value="700 — Fertigkeiten" />
-	<Description value="Sechs eigene Fertigkeitsbäume statt der fünf Vanilla-Attribute: Krieger, Jäger, Handwerker, Runenkundiger, Heiler, Transport und Logistik." />
+	<Description value="Fünf Fertigkeitsbäume auf den fünf Vanilla-Attributen, umgedeutet: Handwerker, Krieger, Jäger, Heiler, Fuhrmann. Der Runenkundige kommt mit der Volksmagie in Phase 2." />
 	<Author value="Lupus Malus Deviant" />
 	<Version value="__VERSION__" />
 	<Website value="" />

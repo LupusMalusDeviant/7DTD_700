@@ -1,4 +1,4 @@
-# Plan-0001: Phase 1 — MVP „700 & Grauen"
+﻿# Plan-0001: Phase 1 — MVP „700 & Grauen"
 
 - **Status:** Entwurf
 - **Datum:** 2026-11-07
@@ -1033,7 +1033,7 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    `BlockDamage`, deshalb `Damage` und nicht `TrunkTip`). **Torhaus-Tor**: `doorWoodLargeGate`
    war vollständig, nur das Rezept fehlte. **Graben** und **Wehrgang** brauchen keinen Block —
    der eine wird gegraben, der andere aus den Formen gebaut, die WP6.1 umgedeutet hat (P5).
-   **Schwingbalken-Falle** und **Pechtopf** aufgeschoben nach **F-15 in WP7**: beide brauchen
+   **Schwingbalken-Falle** und **Pechtopf** aufgeschoben nach **F-15, Phase 2**: beide brauchen
    einen Auslöser, keine der 50 Blockklassen in V 3.40 hat ein Pendel, und Vanillas einzige
    mechanische Fallenklasse (`BladeTrap`) hängt am gesperrten Strom — das wäre C#, und Phase 1
    steht ohne Harmony-Patch. Ein brennender Platz als Pechtopf-Ersatz steht mit
@@ -1145,31 +1145,55 @@ ausdrücklich, und die Breitaxt-Entscheidung aus WP5.6 ist weiter offen.
 
 ---
 
-### WP7: F-21 (Bäume) — Sechs Fertigkeitsbäume
+### WP7: F-21 (Bäume) — ~~Sechs~~ **Fünf** Fertigkeitsbäume (D66)
 
-**Zweck:** Das Vanilla-Attributsystem vollständig ersetzen. **Nur die Bäume** — Learning by
-Doing ist Phase 2.
+**Zweck:** Das Vanilla-Attributsystem ~~vollständig ersetzen~~ **umdeuten** (D66). **Nur die
+Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
 **Rolle:** Claude
 **Schätzung:** L (14 Tage)
 **Hängt an:** WP4 (Rezepte müssen existieren, um sie zuzuordnen)
 
 **Schritte:**
 
-1. **WP7.1** `[Claude-prüfbar]` Sechs Attribute anlegen: Krieger, Jäger, Handwerker,
-   Runenkundiger, Heiler, Transport & Logistik. Das ist belegt tragfähig: von den fünf
-   Vanilla-Attributnamen steht nur `attFortitude` im Code, einmal, in `EntityPlayerLocal::Update`.
+1. ~~**WP7.1** `[Claude-prüfbar]` Sechs Attribute anlegen: Krieger, Jäger, Handwerker,
+   Runenkundiger, Heiler, Transport & Logistik.~~ **Erledigt 2026-11-08**, aber dreifach
+   anders als geplant: **fünf** statt sechs (der Runenkundige hat in Phase 1 keinen Inhalt,
+   D66), **umgedeutet** statt angelegt, und **Fuhrmann** statt „Transport & Logistik".
+   Die Zuordnung steht auf den Gegenstands-Marken, nicht auf den Perk-Namen:
+   `attStrength` → Handwerker (18 lebende Marken), `attAgility` → Jäger (17),
+   `attFortitude` → Krieger (4), `attPerception` → Fuhrmann (4), `attIntellect` →
+   Heiler (0). 115 Localization-Schlüssel, erzeugt von `tools/gen/wp7-baumtexte.ps1`.
+   Die Annahme des Plans („nur `attFortitude` steht im Code") war **halb richtig**: es
+   sind zwei, `attcrafting` steht ebenfalls drin — was Schritt 3 unten schon wusste.
 2. **WP7.2** `[Claude-prüfbar]` Perks je Baum, mit Freischaltstufen und Beschreibungstexten.
 3. **WP7.3** `[Claude-prüfbar]` Vanilla-Attribute und -Perks sperren bzw. in die neuen Bäume
    umhängen. **Achtung:** `attcrafting` wird von `XUiC_CategoryList::SetupCategoriesByWorkstation`
    gelesen — der Behälter `attCrafting` bleibt bestehen, auch wenn er leer wirkt.
-4. **WP7.4** `[Claude-prüfbar]` Die 152 Magazine (`<book>`) umdeuten: in Phase 1 bleiben sie das
+   **Erster Teil erledigt 2026-11-08:** zwanzig tote Zweige tragen `hidden="true"` — zehn
+   Perks und zehn Handwerks-Stufen, deren Gegenstände der Purge vollständig entfernt hat
+   (gemessen Marke für Marke gegen 361 entfernte Rezepte). **Gelöscht wird keiner:**
+   `perkJunkMiner` steht 792 Mal in `blocks.xml`, `perkGunslinger` 149 Mal in `items.xml`.
+   **Gemessene Grenze:** `hidden` verbirgt nur den Knoten, nicht seine Kinder — Vanillas
+   `attGeneralPerks` ist `hidden="true"` und seine Perks stehen trotzdem im Fenster.
+   Was noch fehlt: das Umhängen selbst, zusammen mit WP7.2.
+4. **WP7.4** `[Claude-prüfbar]` Die ~~152~~ **133** Magazine (`<book>`) umdeuten — 152
+   Knoten sind 19 Reihen à 7 Bücher plus je einen `*Complete`-Eintrag; sechs Reihen sind
+   gemessen tot, und die Wirkung sitzt an den einzelnen `<book>`-Knoten, nicht an den
+   Gruppen (deren `<effect_group/>` ist leer): in Phase 1 bleiben sie das
    Fortschrittsmittel, nur als **Abschriften** benannt. Learning by Doing ersetzt sie erst in
    Phase 2.
 5. **WP7.5** `[Claude-prüfbar]` Rezepte aus WP4–WP6 an Grundfähigkeiten binden: ohne
-   Grundfähigkeit ist ein Rezept gesperrt.
-6. **WP7.6** `[braucht Nutzer]` Spieltest: trägt jeder Baum einen Build bis T4, ohne Sackgasse?
+   Grundfähigkeit ist ein Rezept gesperrt. **Der Weg ist gemessen:** ein Rezept ist genau
+   dann sperrbar, wenn seine `tags` die Marke `learnable` tragen (`Recipe::IsUnlocked`
+   prüft `get_IsLearnable`; `Recipe::.cctor` liest `"learnable"`). Vanilla: 391 von 633
+   tragen sie, 39 tragen `always_unlocked`, 203 keines von beidem und sind von Anfang an
+   verfügbar. **Unsere 42 eigenen Rezepte tragen keine `tags`** und sind damit heute offen.
+6. **WP7.6** `[braucht Nutzer]` Spieltest: trägt jeder Baum einen Build bis T4, ohne
+   Sackgasse? Dazu zwei Punkte, die nur ein Lauf beantwortet: stehen die fünf Bäume mit
+   unseren Namen im Fertigkeitsfenster, und sind die zwanzig verborgenen Zweige wirklich
+   weg (Prüfliste 13 und 14)?
 
-**Ergebnis:** Sechs Bäume, kein sichtbarer Vanilla-Attribut- oder Perkname.
+**Ergebnis:** ~~Sechs~~ **Fünf** Bäume, kein sichtbarer Vanilla-Attribut- oder Perkname.
 
 ---
 
@@ -1419,6 +1443,26 @@ werden:
     in **WP6.3 erst nach WP6.7** festgezogen werden, nicht vorher. Nachweis:
     [WP6-Finding §2a](../rea/findings/WP6-brenndauer-und-blockschaden.md).
     *(Blockiert WP6.4 nicht — D64 steht. Es ändert, womit WP6.3 rechnet.)*
+
+13. **Nachsehen, ob die fünf Bäume mit unseren Namen dastehen** (WP7.1, 8. November 2026).
+    Fertigkeitsfenster öffnen: es müssen **Handwerker, Krieger, Jäger, Heiler, Fuhrmann**
+    stehen, nicht Strength, Fortitude, Agility, Intellect, Perception — und auf den
+    **Kategorie-Knöpfen der Werkbank** dieselben fünf Wörter, weil
+    `XUiC_CategoryList::SetupCategoriesByWorkstation` den kleingeschriebenen Kurznamen
+    zeigt. Steht dort noch englisch, hat eine der 115 Localization-Zeilen den falschen
+    Schlüssel. *(Belegt ist nur, dass jeder Schlüssel genau einmal in `progression.xml`
+    steht und von dort gelesen wird — gesehen hat es niemand.)*
+
+14. **Nachsehen, ob die zwanzig verborgenen Zweige weg sind** (WP7.3, 8. November 2026).
+    Zehn Perks (Scharfschütze, Schrotflinte, Pistolero, MG, Sprengmeister, Elektriker,
+    Geschütztürme, Schrauber, Erdbohrer, Verwerter) und zehn Handwerks-Stufen dürfen im
+    Fenster nicht mehr auftauchen. **Worauf besonders zu achten ist:** `hidden` verbirgt
+    gemessen nur den Knoten, nicht seine Kinder — Vanillas `attGeneralPerks` ist
+    `hidden="true"` und seine Perks stehen trotzdem da. Tauchen die zehn Handwerks-Stufen
+    weiter auf, obwohl jede ihre eigene Zeile hat, wirkt `hidden` an
+    `crafting_skill` anders als an `perk`, und WP7.3 braucht einen zweiten Weg.
+    Die drei Behälter-Attribute erscheinen weiter als Kategorie-Knöpfe an der Werkbank —
+    das ist Vanilla-Verhalten, kein Fehler von uns.
 
 ## Offene Punkte
 
