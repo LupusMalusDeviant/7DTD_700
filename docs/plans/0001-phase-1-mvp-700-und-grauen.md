@@ -1021,9 +1021,38 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    der Rest ein Formname) — WP6.1 hat die fünf Gruppenbeschreibungen und zwei Baustoffnamen
    umbenannt, die Formnamen nicht. Das ist ein Werkzeug, keine Handarbeit, und gehört zu F-12
    in WP8. Siehe [F-18](../features/F-18-bauen-befestigung.md).
-2. **WP6.2** `[Claude-prüfbar]` Verteidigungsbauten: Palisade, Spitzpfähle, Graben, Wehrgang,
-   Torhaus, Schwingbalken-Falle, Pechtopf.
-3. **WP6.3** `[Claude-prüfbar]` **D29 umsetzen:** Blockschaden der Seuchentoten senken, damit
+2. ~~**WP6.2** `[Claude-prüfbar]` Verteidigungsbauten: Palisade, Spitzpfähle, Graben, Wehrgang,
+   Torhaus, Schwingbalken-Falle, Pechtopf.~~ **Erledigt am 2026-11-08: vier stehen, zwei
+   brauchten nie einen Block, zwei sind aufgeschoben.** **Spitzpfähle** und **Eisenspitzen**
+   standen in Vanilla fertig (`trapSpikesWoodDmg0`, `Damage 33`, Rezept 20 Holz) — nur
+   umbenannt. **Palisade**: acht Blöcke, die Vanilla modelliert und nie freigegeben hat
+   (`CreativeMode="Dev"` unter `Entities/BanditProps`), jetzt baubar mit Rezepten nach Größe
+   (50 Holz je Abschnitt von 3×4 gegen 96 für dieselbe Fläche als gebaute Wand); die
+   **gespitzten Abschnitte tun jetzt wirklich weh** — in Vanilla sind ihre Spitzen rein
+   kosmetisch, jetzt tragen sie `Class="Damage"` mit 15 (`BlockTrunkTip` **erbt** gemessen von
+   `BlockDamage`, deshalb `Damage` und nicht `TrunkTip`). **Torhaus-Tor**: `doorWoodLargeGate`
+   war vollständig, nur das Rezept fehlte. **Graben** und **Wehrgang** brauchen keinen Block —
+   der eine wird gegraben, der andere aus den Formen gebaut, die WP6.1 umgedeutet hat (P5).
+   **Schwingbalken-Falle** und **Pechtopf** aufgeschoben nach **F-15 in WP7**: beide brauchen
+   einen Auslöser, keine der 50 Blockklassen in V 3.40 hat ein Pendel, und Vanillas einzige
+   mechanische Fallenklasse (`BladeTrap`) hängt am gesperrten Strom — das wäre C#, und Phase 1
+   steht ohne Harmony-Patch. Ein brennender Platz als Pechtopf-Ersatz steht mit
+   `blk700_holzfeuer` aus WP6.4 schon. Eigener `DescriptionKey` für das Tor, weil Vanillas
+   `doorGroupDesc` gemessen von **55** Blöcken geteilt wird. Siehe
+   [F-18 → Wehrbauten](../features/F-18-bauen-befestigung.md).
+3. ~~**WP6.3**~~ **Erledigt am 2026-11-08 — und zwar durch Messen statt Ändern.** Mörtelstein
+   **ist** Vanilla-Stahl (`steelShapes`, `Msteel_shapes`, 10 000 `MaxDamage`, unverändert), also
+   steht D29s Ziel schon durch die Zuordnung aus WP6.1. Ein Abschlag hätte unsere Basen
+   **stärker** gemacht als Vanillas, nicht gleich stark — und WP6.4 wirkt im selben Paket
+   schon in dieselbe Richtung. **D65** hebt darum die erste Hälfte von D29 auf; der
+   Blockschaden bleibt, wie Vanilla ihn setzt. Nebenbei drei Dinge gemessen, die der Plan
+   nicht wusste: die Leiter hat **neun** Stufen von 7 bis 500 (nicht einen Wert), sie steht als
+   `Action0/DamageBlock` in `items.xml` (~45 Werte), und `MaterialBlock::MaxIncomingDamage`
+   deckelt den Schaden **je Schlag** — ein gemessener, in Vanilla genau einmal benutzter Hebel,
+   der nach WP6.7 drei Zeilen kostet, falls der Spieltest zeigt, dass T4 zu früh erreichbar
+   ist. Zahlen und die drei verworfenen Wege:
+   [Balancing WP6 §2–§3](../balancing/0002-wp6-bauen-licht-und-blockschaden.md).
+   Der ursprüngliche Schritt lautete: **D29 umsetzen:** Blockschaden der Seuchentoten senken, damit
    Mörtelstein etwa so hält wie Vanilla-Stahl. Das ist belegt XML — ~~`BlockDamage` ist eine
    Eigenschaft in `entityclasses.xml`~~ **berichtigt 2026-11-08:** der normale
    Nahkampf-Blockschaden steht am Angriffs-*Gegenstand* `meleeHandZombie01` in `items.xml`

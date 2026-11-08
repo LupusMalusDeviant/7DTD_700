@@ -130,4 +130,55 @@
 		<ingredient name="resourceAnimalFat" count="5" />
 	</append>
 
+	<!-- ================================================================================
+	     F-18 WEHRBAUTEN, Plan-0001 WP6.2
+
+	     Acht Palisaden-Abschnitte und ein Tor, die Vanilla modelliert und nie freigegeben
+	     hat. Die Preise folgen der Groesse: ein Abschnitt ist MultiBlockDim 3,4,1, also
+	     zwoelf Zellen; die gespitzten sind 3,5,1, also fuenfzehn. Zum Vergleich kostet
+	     eine gebaute Holzwand ueber den Ausbaupfad 8 Holz JE ZELLE - eine Palisade ist
+	     also deutlich billiger als 96 Holz und haelt dafuer 200 statt 500.
+
+	     Ohne Werkstatt: Stammholz spaltet und setzt man mit Axt und Haenden. -->
+	<append xpath="/recipes">
+
+		<recipe name="logWallLeft" count="1" craft_time="30" is_trackable="false">
+			<ingredient name="resourceWood" count="50" />
+		</recipe>
+		<recipe name="logWallRight" count="1" craft_time="30" is_trackable="false">
+			<ingredient name="resourceWood" count="50" />
+		</recipe>
+		<recipe name="logWallLeft2" count="1" craft_time="30" is_trackable="false">
+			<ingredient name="resourceWood" count="50" />
+		</recipe>
+		<recipe name="logWallRight2" count="1" craft_time="30" is_trackable="false">
+			<ingredient name="resourceWood" count="50" />
+		</recipe>
+
+		<!-- Gespitzt: drei Zellen mehr Holz und das Zuspitzen. -->
+		<recipe name="logWallLeftSpikes" count="1" craft_time="40" is_trackable="false">
+			<ingredient name="resourceWood" count="65" />
+		</recipe>
+		<recipe name="logWallRightSpikes" count="1" craft_time="40" is_trackable="false">
+			<ingredient name="resourceWood" count="65" />
+		</recipe>
+
+		<recipe name="logWallPillar" count="1" craft_time="15" is_trackable="false">
+			<ingredient name="resourceWood" count="20" />
+		</recipe>
+		<recipe name="logWallPillarCap" count="1" craft_time="10" is_trackable="false">
+			<ingredient name="resourceWood" count="10" />
+		</recipe>
+
+		<!-- Das Torhaus-Tor: fuenf mal fuenf, und das Einzige an den Wehrbauten, das
+		     Eisen braucht - Baender und Angeln. An der Zimmermannsbank, weil ein Tor
+		     gezimmert und nicht gestapelt wird. -->
+		<recipe name="doorWoodLargeGate" count="1" craft_area="workbench" craft_time="90" is_trackable="false">
+			<ingredient name="resourceWood" count="100" />
+			<ingredient name="resourceNail" count="20" />
+			<ingredient name="resourceForgedIron" count="10" />
+		</recipe>
+
+	</append>
+
 </config>

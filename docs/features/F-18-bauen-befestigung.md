@@ -70,20 +70,82 @@ weggeschwiegen. Von Hand ist das keine Arbeit, sondern ein Werkzeug; es gehört 
 wo die Sprache ohnehin durchgesehen wird.
 
 - Dachformen: Reet, Schindeln, Grassoden
-- Verteidigung: Palisade, Spitzpfähle, Graben, Wehrgang, Torhaus (Block-Shapes umdeutet), Fallen aus F-08 und F-15
+
+### Wehrbauten — gebaut am 2026-11-08 (WP6.2)
+
+Sieben waren gefordert. Was davon mit XML geht, und was nicht:
+
+| gefordert | Träger | Stand |
+|---|---|---|
+| **Spitzpfähle** | `trapSpikesWoodDmg0` | **stand schon fertig** — `Damage 33`, `MaxDamage 100`, Rezept 20 Holz. Nur umbenannt |
+| **Eisenspitzen** | `trapSpikesIronDmg0` | dito, `MaxDamage 200`, Aufwertung 4 Schmiedeeisen |
+| **Palisade** | `logWall*`, 8 Blöcke | **Dev-Requisite, jetzt baubar.** `Mwood` (200), Abschnitt 3×4, gespitzt 3×5 |
+| **Torhaus-Tor** | `doorWoodLargeGate` | Block war fertig, **Rezept fehlte**. Jetzt 100 Holz + 20 Nägel + 10 Schmiedeeisen an der Zimmermannsbank |
+| **Graben** | — | **kein Block.** Ein Graben ist abgetragenes Gelände; der Spieler hebt ihn mit der Schaufel aus. Gehört zur Bauweise, nicht zum Bausatz |
+| **Wehrgang** | — | **kein Block.** Eine Platte mit Brüstung oben auf der Mauer, gebaut aus den Vanilla-Formen, die WP6.1 umgedeutet hat. P5 sagt ausdrücklich, dass die Formen bleiben |
+| **Schwingbalken-Falle** | — | **aufgeschoben.** Ein Pendel braucht bewegte Physik und einen Auslöser; Vanillas einzige mechanische Fallenklasse ist `BladeTrap` und hängt am Strom (gesperrt). Keine der 50 Blockklassen in V 3.40 hat ein Pendel → C#, und Phase 1 steht ohne Harmony-Patch. **F-15 in WP7** |
+| **Pechtopf** | — | **aufgeschoben.** Braucht denselben Auslöser. Was XML gibt, ist ein *brennender Platz*, und den liefert WP6.4 schon als `blk700_holzfeuer` (`BuffsWhenWalkedOn="buffBurningEnvironment"`). Ein zweiter Block mit derselben Wirkung und anderem Namen wäre Verdopplung. **F-15 in WP7** |
+
+**Die acht Palisadenteile hat Vanilla modelliert und nie freigegeben.** Sie liegen unter
+`Entities/BanditProps`, tragen `CreativeMode="Dev"` und haben kein Rezept — Requisiten für
+Banditenlager. Material `Mwood` mit `MaxDamage` **200**, also zwischen Spieß (100) und gebauter
+Holzwand (500): eine Palisade ist rauer als eine Wand und hält weniger. Preise nach Größe,
+50 Holz je Abschnitt (zwölf Zellen) gegen 96 Holz für dieselbe Fläche als gebaute Holzwand.
+
+**Der einzige Eingriff ins Verhalten: die gespitzten Abschnitte tun jetzt wirklich weh.**
+Vanillas `logWallLeftSpikes` hat Spitzen am Modell und **keinen** Schaden — sie sehen
+gefährlich aus und sind es nicht. Gemessen: `Damage` liest die Klasse `BlockDamage` (ihr `Init`
+schreibt eine Fehlerzeile, wenn der Wert fehlt), und `BlockTrunkTip` — die Klasse der Spieße —
+**erbt** von `BlockDamage` und legt nur `RotateVerticesOnCollisionCheck` darauf. Wir nehmen
+deshalb `Class="Damage"` und nicht `TrunkTip`: die Drehbehandlung ist für Baumstumpf-Modelle,
+unsere Palisade ist eine `ModelEntity`. **15** Schaden statt der 33 eines Spießes — eine Mauer
+ist keine Falle —, dazu `Damage_received 15`, damit sie sich am Angreifer abnutzt.
+
+**Eigener `DescriptionKey` für das Tor**, weil Vanillas `doorGroupDesc` gemessen von **55**
+Blöcken geteilt wird: jede Tür im Spiel. Dieselbe Falle wie bei den Öllampen in WP6.4.
+
+- Fallen aus F-08 und F-15
 - Blockformen: Vanilla-Shapes bleiben (P5), nur Materialien und Texturen neu (Retextur Phase 2, F-16)
 
-## Gegner-Anpassung (D29)
-- Seuchentote verursachen **deutlich weniger Blockschaden** — ~~Werte in `entityclasses.xml`~~
-  **berichtigt 2026-11-08:** der normale Nahkampf-Blockschaden steht am Angriffs-*Gegenstand*
-  `meleeHandZombie01` in `items.xml` (`passive_effect name="BlockDamage" base_set 100`). In
-  `entityclasses.xml` steht `BlockDamage` nur an Sprengkörpern (`zombieFatCop` 500,
-  `zombieDemolition` 5000) und an Fahrzeugen bzw. Geschützen;
-  `passive_effect name="BlockDamage"` kommt dort **null**-mal vor. Nachweis:
-  [WP6-Finding §1](../rea/findings/WP6-brenndauer-und-blockschaden.md). Angenehme Folge: die
-  Sprengkörper-Werte hängen nicht daran und müssen **nicht** mitgesenkt werden — sie sind
-  genau die „Brecher-Typen", die der nächste Punkt verlangt. Bei 100 Blockschaden je Schlag
-  hält Mörtelstein (10 000) **100 Schläge**; das ist die Zahl, an der WP6.3 rechnet
+## Gegner-Anpassung (D29 — erste Hälfte aufgehoben mit D65)
+
+**Beschlossen am 2026-11-08: hier wird keine Zahl geändert.** Mörtelstein **ist** Vanilla-Stahl
+— derselbe Block `steelShapes`, dasselbe Material, dieselben 10 000 `MaxDamage`. D29s Ziel
+(„hält etwa so wie Vanilla-Stahl") steht damit durch die Zuordnung aus WP6.1, und ein Abschlag
+hätte unsere Basen *stärker* gemacht als Vanillas. Die zweite Hälfte von D29 („mehr Gefahr für
+Spieler", `DamageEntity`) bleibt und gehört zu F-06/F-17.
+
+**Wie lange eine Mauer hält, gemessen** (`MaxDamage ÷ Schaden je Schlag`; die Leiter hat neun
+Stufen von 7 bis 500, nicht einen Wert):
+
+| | Flechtwerk 500 | Fachwerk 1 500 | Bruchstein 5 000 | Mörtelstein 10 000 |
+|---|---|---|---|---|
+| normal (8) | 63 | 188 | 625 | 1 250 |
+| zäh (24) | 21 | 63 | 208 | 417 |
+| aufgeladen (150) | 3 | 10 | 33 | **67** |
+| höllisch (250) | 2 | 6 | 20 | **40** |
+| Brecher (500) | 1 | 3 | 10 | **20** |
+
+**Der Hebel liegt bereit, falls der Spieltest ihn braucht.** `MaterialBlock::MaxIncomingDamage`
+deckelt den Schaden **je Schlag** (`FastMin` am Ende von `ItemActionAttack::GetDamageBlock`);
+Vorgabe `int.MaxValue`, in ganz Vanilla genau einmal gesetzt (`MtwitchHordeStone` auf 25). Drei
+Zeilen in `materials.xml` würden T2/T3/T4 decken, ohne POIs, Türen oder Sprengkörper zu
+berühren — **nach WP6.7, nicht vorher.** Zahlen und die verworfenen Wege:
+[Balancing WP6 §2–§3](../balancing/0002-wp6-bauen-licht-und-blockschaden.md).
+
+**Was offen bleibt:** unser T4 braucht Stein, Lehm und Sand (146 Stein für die ganze Treppe),
+Vanillas Stahl braucht Erz und Tiegel. Ist T4 früher erreichbar, verliert die Seuchennacht ihre
+Zähne, ohne dass eine Zahl falsch wäre. Das zeigt nur WP6.7.
+
+### Ursprünglicher Stand, zum Abgleich
+- ~~Seuchentote verursachen **deutlich weniger Blockschaden** (Werte in `entityclasses.xml`)~~
+  — **zweimal berichtigt am 2026-11-08.** Erstens die Datei: `entityclasses.xml` trägt
+  `BlockDamage` nur an Sprengkörpern (`zombieFatCop` 500, `zombieDemolition` 5000) und an
+  Fahrzeugen bzw. Geschützen, und `passive_effect name="BlockDamage"` kommt dort **null**-mal
+  vor. Der Nahkampf-Blockschaden steht als `Action0/DamageBlock` an den ~45 Hand-Gegenständen
+  in `items.xml`. Zweitens die Sache selbst: aufgehoben mit **D65**, siehe oben. Nachweise:
+  [WP6-Finding §1](../rea/findings/WP6-brenndauer-und-blockschaden.md) und
+  [Balancing WP6 §2](../balancing/0002-wp6-bauen-licht-und-blockschaden.md)
 - Ausgleich: **mehr Gefahr für Spieler** (höherer Schaden gegen Spieler, Grusel-Verhalten F-17, Sagengestalten)
 - Ausnahmen: einzelne Brecher-Typen (z. B. „Rammer“) in der Seuchennacht, damit Befestigung nicht trivial wird
 - Balancing-Ziel: Eine T3-Befestigung hält eine Seuchennacht der passenden Gamestage, wenn sie verteidigt wird

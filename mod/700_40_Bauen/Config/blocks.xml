@@ -537,4 +537,104 @@
 		</block>
 
 	</append>
+
+	<!-- ================================================================================
+	     F-18 / F-08 WEHRBAUTEN, Plan-0001 WP6.2
+
+	     SIEBEN WAREN GEFORDERT. Was davon mit XML zu machen ist, und was nicht:
+
+	       Spitzpfaehle      trapSpikesWoodDmg0   steht in Vanilla fertig, nur Sprache
+	       Eisenspitzen      trapSpikesIronDmg0   dito
+	       Palisade          logWall* (8 Bloecke) Dev-Requisite, wird baubar gemacht
+	       Torhaus-Tor       doorWoodLargeGate    steht, hatte aber kein Rezept
+	       Graben            -                    kein Block: der Spieler GRAEBT
+	       Wehrgang          -                    kein Block: aus Vanilla-Formen gebaut
+	       Schwingbalken     -                    aufgeschoben, Begruendung unten
+	       Pechtopf          -                    aufgeschoben, Begruendung unten
+
+	     DIE SPIESSE BRAUCHEN KEINE ZEILE HIER. trapSpikesWoodMaster traegt schon
+	     Damage 33, Damage_received 33, MaxDamage 100, Reparatur mit Holz und ein Rezept
+	     aus 20 Holz; die Eisenstufe kostet 4 Schmiedeeisen als Aufwertung und haelt 200.
+	     Beides ist fuer 700 richtig, wie es ist - gespitzte Pfaehle und eiserne Spitzen
+	     sind keine Erfindung der Neuzeit. Umgedeutet wird nur die Sprache.
+
+	     PALISADE: acht Bloecke, die Vanilla schon modelliert hat und nie freigegeben hat.
+	     Sie liegen unter Entities/BanditProps, tragen CreativeMode="Dev" und haben kein
+	     Rezept - Requisiten fuer Banditenlager. Material Mwood (MaxDamage 200), also
+	     zwischen Spiess (100) und gebauter Holzwand (500); eine Palisade ist rauer als
+	     eine Wand und haelt weniger. Ein Abschnitt ist 3 breit und 4 hoch
+	     (MultiBlockDim 3,4,1), die gespitzten sind 3x5.
+
+	     DIE GESPITZTEN TUN JETZT WIRKLICH WEH, und das ist der einzige Eingriff ins
+	     Verhalten. Vanillas logWallLeftSpikes hat Spitzen am Modell und keinen Schaden -
+	     sie sehen gefaehrlich aus und sind es nicht. Gemessen: 'Damage' wird von der
+	     Klasse BlockDamage gelesen (Init bricht mit einer Fehlerzeile ab, wenn sie fehlt),
+	     und BlockTrunkTip - die Klasse der Spiesse - ERBT von BlockDamage; sie legt nur
+	     RotateVerticesOnCollisionCheck darauf. Wir nehmen darum 'Damage' und nicht
+	     'TrunkTip': die Drehbehandlung ist fuer Baumstumpf-Modelle, unsere Palisade ist
+	     eine ModelEntity. 15 Schaden statt der 33 eines Spiesses - eine Mauer ist keine
+	     Falle -, und Damage_received 15, damit sie sich am Angreifer auch abnutzt.
+
+	     NICHT GEMACHT, UND WARUM:
+
+	       GRABEN. Ein Graben ist abgetragenes Gelaende, kein Block. Der Spieler hebt ihn
+	       mit der Schaufel aus; es gibt nichts zu bauen. F-18 nennt ihn unter
+	       "Verteidigungsbauten", er gehoert aber zur Bauweise, nicht zum Bausatz.
+
+	       WEHRGANG. Dasselbe: ein Wehrgang ist eine Platte mit Bruestung oben auf der
+	       Mauer, gebaut aus den Vanilla-Formen, die WP6.1 schon umgedeutet hat
+	       (*Plate, *CNRFull, Gelaender). P5 sagt ausdruecklich, dass die Formen bleiben.
+
+	       SCHWINGBALKEN-FALLE. Ein pendelnder Balken braucht bewegte Physik und einen
+	       Ausloeser. Vanillas einzige mechanische Fallen-Klasse ist BladeTrap, und die
+	       haengt am Strom (gesperrt). Von den 50 Blockklassen in V 3.40 hat keine ein
+	       Pendel. Das waere C# - und Phase 1 steht ausdruecklich ohne Harmony-Patch.
+	       Vermerkt fuer F-15 in WP7, wo die Runenfallen ohnehin Fallenverhalten brauchen.
+
+	       PECHTOPF. Auch das braucht einen Ausloeser: ein Topf, den man kippt. Was XML
+	       gibt, ist ein BRENNENDER PLATZ - und den liefert WP6.4 schon als
+	       blk700_holzfeuer: BuffsWhenWalkedOn="buffBurningEnvironment", wer hineintritt,
+	       verbrennt. Einen zweiten Block mit derselben Wirkung und einem anderen Namen
+	       zu bauen, waere Verdopplung ohne Gewinn. Vermerkt fuer F-15 in WP7. -->
+
+	<!-- Palisade sichtbar und baubar machen. Group und DescriptionKey stehen nur an
+	     logWallLeft - die anderen sieben erben beide ueber 'Extends'. CreativeMode steht
+	     an jedem einzeln und muss darum achtmal gesetzt werden. -->
+	<append xpath="/blocks/block[@name='logWallLeft']">
+		<property name="Group" value="Building,advBuilding" />
+		<property name="DescriptionKey" value="blk700_palisadeDesc" />
+	</append>
+	<set xpath="/blocks/block[@name='logWallLeft']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallRight']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallLeft2']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallRight2']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallLeftSpikes']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallRightSpikes']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallPillar']/property[@name='CreativeMode']/@value">Player</set>
+	<set xpath="/blocks/block[@name='logWallPillarCap']/property[@name='CreativeMode']/@value">Player</set>
+
+	<!-- Die gespitzten Abschnitte bekommen Schaden. Eigener DescriptionKey, weil ein
+	     Spieler wissen soll, dass DIESE Variante wehtut und die glatte nicht. -->
+	<append xpath="/blocks/block[@name='logWallLeftSpikes']">
+		<property name="Class" value="Damage" />
+		<property name="Damage" value="15" />
+		<property name="Damage_received" value="15" />
+		<property name="DescriptionKey" value="blk700_palisade_spitzenDesc" />
+	</append>
+	<append xpath="/blocks/block[@name='logWallRightSpikes']">
+		<property name="Class" value="Damage" />
+		<property name="Damage" value="15" />
+		<property name="Damage_received" value="15" />
+		<property name="DescriptionKey" value="blk700_palisade_spitzenDesc" />
+	</append>
+
+	<!-- Das grosse Holztor steht in Vanilla, hat aber kein Rezept (nur das Rezept fehlt,
+	     der Block ist vollstaendig: CompositeTileEntity, 5x5x1, MaxDamage 250, Reparatur
+	     mit 50 Holz). Eigener DescriptionKey, weil Vanillas 'doorGroupDesc' GEMESSEN von
+	     55 Bloecken geteilt wird - dieselbe Falle wie bei den Oellampen. -->
+	<set xpath="/blocks/block[@name='doorWoodLargeGate']/property[@name='DescriptionKey']/@value">blk700_torhausDesc</set>
+
+	<!-- Die Spiesse: kein Verhalten zu aendern, nur die Sprache. Der Vollstaendigkeit
+	     halber hier vermerkt, damit niemand sie in dieser Datei sucht - sie stehen in
+	     mod/700_90_Sprache/Config/Localization.csv. -->
 </config>

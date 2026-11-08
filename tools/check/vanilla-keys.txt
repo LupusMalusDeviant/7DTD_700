@@ -223,3 +223,26 @@ lanternOld_01_Player                      # Oellampe
 torchGroupDesc
 torchPlayerGroupDesc
 candlePlayerGroupDesc
+
+# --- F-18 Wehrbauten, WP6.2 ----------------------------------------------------
+# Spiesse und Palisade. Geltungsbereich vor dem Eintrag geprueft:
+#
+#   trapSpikesGroupDesc    2 Bloecke (trapSpikesWoodMaster, trapSpikesScrapIronMaster)
+#                          - genau die beiden Spiess-Stufen, Text nennt beide
+#
+# NICHT ueberschrieben, mit Absicht: 'doorGroupDesc', der Beschreibungsschluessel
+# des grossen Holztors. GEMESSEN teilen ihn 55 Bloecke - jede Tuer im Spiel.
+# Das Tor zeigt stattdessen per <set> auf unseren eigenen blk700_torhausDesc.
+# Dieselbe Falle wie bei den Oellampen in WP6.4.
+trapSpikesWoodDmg0                        # Spitzpfaehle
+trapSpikesIronDmg0                        # Eisenspitzen
+trapSpikesGroupDesc
+logWallLeft                               # Palisadenabschnitt
+logWallRight
+logWallLeft2
+logWallRight2
+logWallLeftSpikes                         # Palisade, gespitzt
+logWallRightSpikes
+logWallPillar                             # Palisadenpfosten
+logWallPillarCap                          # Pfostenkappe
+doorWoodLargeGate                         # Torhaus-Tor

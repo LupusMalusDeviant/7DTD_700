@@ -73,8 +73,24 @@ bleibt 5. Dazu geflickt: sie wurde mit `resourceElectricParts` repariert (jetzt
 - Dunklere Nächte, Mondphasen und Nebel: siehe **F-17 B1** (Echte Dunkelheit). F-08 liefert die Lichtquellen, F-17 die Dunkelheit.
 - Licht senkt Grauen (F-17 B3): Eine brennende Feuerstelle ist der wichtigste sichere Ort (B8).
 
-**Verteidigung (XML):**
-- Palisade, Spitzpfähle (Spikes-Umdeutung), Graben bzw. Fallgrube, Schwingbalken-Falle (mechanisch statt elektrisch), Pechtopf
+**Verteidigung (XML) — gebaut am 2026-11-08 (WP6.2).** Vier von sieben stehen, zwei brauchten
+nie einen Block, zwei sind aufgeschoben. Die Tabelle mit Begründung je Zeile steht in
+[F-18 → Wehrbauten](F-18-bauen-befestigung.md). Kurz:
+- **Spitzpfähle** und **Eisenspitzen** standen in Vanilla fertig (`trapSpikesWoodDmg0` mit
+  `Damage 33`) — nur umbenannt.
+- **Palisade**: acht Blöcke, die Vanilla modelliert und nie freigegeben hat
+  (`CreativeMode="Dev"` unter `Entities/BanditProps`). Jetzt baubar; die gespitzten Abschnitte
+  bekommen `Class="Damage"` mit 15 Schaden, weil ihre Spitzen in Vanilla **rein kosmetisch**
+  sind.
+- **Torhaus-Tor**: `doorWoodLargeGate` war vollständig, nur das Rezept fehlte.
+- ~~**Graben**~~ und ~~**Wehrgang**~~ brauchen keinen Block — der eine wird gegraben, der
+  andere aus den Vanilla-Formen gebaut (P5).
+- ~~**Schwingbalken-Falle**~~ und ~~**Pechtopf**~~ **aufgeschoben**: beide brauchen einen
+  Auslöser, und keine der 50 Blockklassen in V 3.40 hat ein Pendel. Vanillas einzige
+  mechanische Fallenklasse (`BladeTrap`) hängt am Strom und ist gesperrt. Das wäre C#, und
+  Phase 1 steht ausdrücklich ohne Harmony-Patch → **F-15 in WP7**, wo die Runenfallen ohnehin
+  Fallenverhalten brauchen. Was XML an Stelle des Pechtopfs gibt, ist ein brennender Platz,
+  und den liefert `blk700_holzfeuer` oben schon.
 - **Magische Verteidigung** kommt aus F-15: Runenstein der Glut (statt Geschützturm),
   Runenfallen (Glutzeichen statt Blade Trap, Bannkreis statt Elektrozaun), betrieben über
   Runenkraft (Kraftlinien, D37)
