@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, FALSCHER SATZ, zweite Art: die Zutat ist in ein
+     fremdes Rezept eingehaengt und vertippt. Genau so ist resourceClay in WP5.5b
+     durchgekommen - in Vanilla heisst der Lehm resourceClayLump. -->
+<config>
+	<append xpath="/recipes/recipe[@name='pruefFremdrezept']">
+		<ingredient name="pruefLehmGibtesnicht" count="20" />
+	</append>
+</config>

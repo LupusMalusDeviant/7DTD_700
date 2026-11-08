@@ -110,6 +110,7 @@ Write-Output ("  Definitionen: {0} aus Vanilla, {1} eigene" -f $vanillaCount, ($
 $unresolved = @()
 $recipeCount = 0
 $toolGated = 0
+$appendedTotal = 0
 
 foreach ($path in $Rezepte) {
     if (-not (Test-Path $path)) { continue }
@@ -135,9 +136,53 @@ foreach ($path in $Rezepte) {
             }
         }
     }
+
+    # ZUTATEN, DIE IN EIN FREMDES REZEPT EINGEHAENGT WERDEN (ergaenzt 2026-11-08, WP6).
+    # Die Schleife oben laeuft ueber <recipe>-Knoten. Wer eine Zutat an ein VANILLA-Rezept
+    # anhaengt - <append xpath="/recipes/recipe[@name='forge']"><ingredient .../></append> -,
+    # hat keinen <recipe>-Knoten in seiner Datei, und die Zutat wurde nie aufgeloest.
+    # So ist resourceClay in WP5.5b durchgekommen: die Kennung heisst in Vanilla
+    # resourceClayLump, und vier Werkstatt-Bau-Rezepte zeigten auf etwas, das es nicht gibt.
+    # Der Lauf war gruen.
+    $appended = 0
+    foreach ($ingredient in $xml.SelectNodes('//ingredient')) {
+        if ($ingredient.ParentNode.LocalName -eq 'recipe') { continue }
+        $appended++
+        $target = $ingredient.ParentNode.GetAttribute('xpath')
+        if (-not $target) { $target = $ingredient.ParentNode.LocalName }
+        $where = "$([IO.Path]::GetFileName($path)) / $target"
+        if (-not $defined.ContainsKey($ingredient.name)) {
+            $unresolved += "Eingehaengte Zutat '$($ingredient.name)' ist nirgends definiert  ($where)"
+        }
+    }
+    $appendedTotal += $appended
+}
+
+# REPARATURWERKZEUGE (ergaenzt 2026-11-08, WP6). Dieselbe Luecke, andere Stelle: unsere
+# <set>-Zeilen auf RepairTools tragen eine KOMMALISTE von Kennungen im Elementtext. Ein
+# Tippfehler darin macht einen Gegenstand unreparierbar, und keine Pruefung haette ihn
+# gesehen. Geprueft wird nur dieser eine Pfad - ein allgemeines "loese jeden set-Wert auf"
+# wuerde ueber Zahlen, Marken und Pfade stolpern und waere ein Pruefer, der schreit.
+$repairRefs = 0
+foreach ($path in $Gegenstaende) {
+    if (-not (Test-Path $path)) { continue }
+    $xml = [xml](Get-Content $path -Raw)
+    foreach ($node in $xml.SelectNodes('//set')) {
+        $xpath = $node.GetAttribute('xpath')
+        if ($xpath -notmatch "RepairTools'\]/@value$") { continue }
+        foreach ($name in ($node.InnerText -split ',')) {
+            $name = $name.Trim()
+            if ($name.Length -eq 0) { continue }
+            $repairRefs++
+            if (-not $defined.ContainsKey($name)) {
+                $unresolved += "Reparaturwerkzeug '$name' ist nirgends definiert  ($([IO.Path]::GetFileName($path)) / $xpath)"
+            }
+        }
+    }
 }
 
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
+Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}" -f $appendedTotal, $repairRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

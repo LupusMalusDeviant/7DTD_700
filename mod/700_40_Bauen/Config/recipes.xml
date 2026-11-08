@@ -56,7 +56,7 @@
 	<remove xpath="/recipes/recipe[@name='forge']/ingredient[@name='resourceDuctTape']" />
 	<remove xpath="/recipes/recipe[@name='forge']/ingredient[@name='resourceMetalPipe']" />
 	<append xpath="/recipes/recipe[@name='forge']">
-		<ingredient name="resourceClay" count="20" />
+		<ingredient name="resourceClayLump" count="50" />
 	</append>
 
 	<!-- Kraeuterkueche: drei gesperrte Zutaten fallen (Becherglas, Metallrohr, Saeure),
@@ -69,7 +69,7 @@
 	<remove xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='resourceAcid']" />
 	<set xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='resourceForgedIron']/@count">20</set>
 	<append xpath="/recipes/recipe[@name='chemistryStation']">
-		<ingredient name="resourceClay" count="30" />
+		<ingredient name="resourceClayLump" count="40" />
 	</append>
 
 	<!-- Kalkofen: Feder, Kleinmotor und Maschinenteile fallen - ein Ofen hat keinen
@@ -80,7 +80,7 @@
 	<remove xpath="/recipes/recipe[@name='cementMixer']/ingredient[@name='resourceMechanicalParts']" />
 	<append xpath="/recipes/recipe[@name='cementMixer']">
 		<ingredient name="resourceCobblestones" count="50" />
-		<ingredient name="resourceClay" count="20" />
+		<ingredient name="resourceClayLump" count="50" />
 	</append>
 
 	<!-- ===================================================================

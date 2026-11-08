@@ -234,10 +234,15 @@ Hand gezählt; eine Prüfung dafür gibt es nicht (Vertrag 04, offene Punkte).
 
 | Was | von | auf | Grund |
 |---|---|---|---|
-| Kräuterküche, Bau-Rezept | 100 Schmiedeeisen | 20 Schmiedeeisen + 30 Lehm | 100 Barren waren Vanillas Preis für eine Chemieanlage mit Destillationssäule; F-04 nennt Mörser und Destillierhelm |
+| Kräuterküche, Bau-Rezept | 100 Schmiedeeisen | 20 Schmiedeeisen + 40 Lehm | 100 Barren waren Vanillas Preis für eine Chemieanlage mit Destillationssäule; F-04 nennt Mörser und Destillierhelm |
 
 Die übrigen drei Werkstatt-Berichtigungen (Zimmermannsbank, Esse, Kalkofen) haben nur gesperrte
 Zutaten gegen zeitgemäße getauscht, ohne die Menge zu verschieben.
+
+**Nachtrag 8. November 2026, WP6:** die drei Lehm-Mengen hießen zuerst 20/30/20 und standen auf
+der falschen Kennung — `resourceClay` gibt es in Vanilla nicht, der Lehm heißt
+**`resourceClayLump`**. Beim Berichtigen gleich auf 50/40/50 gesetzt: ein Lehmblock gibt beim
+Abbauen 22 Klumpen, 20 wären für einen ganzen Ofen weniger als ein Block gewesen.
 
 ---
 

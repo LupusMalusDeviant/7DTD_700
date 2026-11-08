@@ -848,6 +848,44 @@ arbeiten auf `testdaten/kette/` mit erfundenen Kennungen:
 Gemessen nach der Änderung: **32 eigene Rezepte, 17 werkzeuggebunden, 18 eigene Definitionen,
 0 unaufgelöste Verweise**; 44 Gegenproben, 0 fehlgeschlagen.
 
+### Nachtrag WP6 (2026-11-08): eingehängte Zutaten und Reparaturwerkzeuge — **Abnahme offen**
+
+**Nach einem echten Fehler geschlossen.** WP5.5b hat vier Werkstatt-Bau-Rezepte berichtigt und
+dabei `resourceClay` als Zutat eingetragen. **Diese Kennung gibt es in Vanilla nicht** — der
+Lehm heißt `resourceClayLump`. Der Lauf war **grün**, und zwar aus einem Grund, der eine Bauart
+ist und kein Zufall: die Zutat steht in
+
+```xml
+<append xpath="/recipes/recipe[@name='forge']">
+    <ingredient name="resourceClay" count="20" />
+</append>
+```
+
+also in **keinem `<recipe>`-Knoten unserer Datei**. Das Skript lief über `//recipe` und sah sie
+nie. Dieselbe Lücke an einer zweiten Stelle: ein umgehängtes `RepairTools` ist eine **Kommaliste
+im Elementtext** eines `<set>` — weder Rezept noch Attribut. Ein Tippfehler darin macht einen
+Gegenstand unreparierbar, und das fällt erst im Spiel auf.
+
+Beides wird jetzt aufgelöst, und der Lauf **zählt** es, statt nur zu schweigen:
+
+```
+eingehaengte Zutaten: 5, Reparaturwerkzeuge: 21
+```
+
+Eine Zahl, die man sehen kann, ist der Unterschied zwischen „geprüft" und „nicht angesehen".
+
+Bei `RepairTools` wird **nur dieser eine Pfad** aufgelöst (`xpath` endet auf
+`RepairTools']/@value`). Ein allgemeines „löse jeden `<set>`-Wert auf" würde über Zahlen,
+Marken und Pfade stolpern und wäre ein Prüfer, der schreit.
+
+**Gegenproben (Projektregel 5) — drei gebaut und grün**, damit 47 statt 44:
+
+| Gegenprobe | erwartet | prüft |
+|---|---|---|
+| eingehängte Zutat und Reparaturwerkzeug werden gezählt | Exit 0, `eingehaengte Zutaten: 1, Reparaturwerkzeuge: 2` | dass die Pfade wirklich angesehen werden |
+| vertippte eingehängte Zutat wird rot | Exit 1, nennt `pruefLehmGibtesnicht` | der Fehler von WP5.5b, nachgestellt |
+| vertipptes Reparaturwerkzeug wird rot | Exit 1, nennt `pruefFlickenGibtesnicht` | die zweite Stelle |
+
 **Was dieser Nachtrag nicht behauptet.** Dass `blk700_webstuhl` auflösbar ist, heißt nicht, dass
 der Block lädt: ob `Mwood`, `ui_game_symbol_workbench`, `advBuilding` und der geborgte
 Prefab-Pfad gültig sind, sieht dieses Skript nicht — es vergleicht Namen von Definitionen mit

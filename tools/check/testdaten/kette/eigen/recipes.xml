@@ -9,4 +9,11 @@
 			<ingredient name="itm700_pruefteil" count="1" />
 		</recipe>
 	</append>
+
+	<!-- Eine Zutat, die in ein FREMDES Rezept eingehaengt wird. Sie steht in keinem
+	     <recipe>-Knoten dieser Datei, und genau darum hat die Pruefung sie bis WP6 nicht
+	     gesehen. -->
+	<append xpath="/recipes/recipe[@name='pruefFremdrezept']">
+		<ingredient name="pruefRohstoff" count="5" />
+	</append>
 </config>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, FALSCHER SATZ, dritte Art: ein Reparaturwerkzeug
+     in einer Kommaliste ist vertippt. Folge im Spiel: der Gegenstand ist nicht
+     reparierbar, und niemand merkt es vor dem Spieltest. -->
+<config>
+	<set xpath="/items/item[@name='pruefRohstoff']/property[@name='RepairTools']/@value">pruefWerkzeug,pruefFlickenGibtesnicht</set>
+</config>

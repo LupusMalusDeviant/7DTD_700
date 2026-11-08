@@ -448,6 +448,31 @@ Test-Script 'kette-pruefen: vertippter Blockname bleibt rot' 1 @{
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @("'pruefBlockGibtesnicht' ist nirgends definiert")
 
+# WP6: zwei Luecken derselben Bauart, beide nach einem echten Fehler geschlossen. Eine Zutat,
+# die per <append> in ein VANILLA-Rezept gehaengt wird, steht in keinem <recipe>-Knoten - so
+# ist resourceClay durchgekommen, obwohl der Lehm in Vanilla resourceClayLump heisst. Und ein
+# Reparaturwerkzeug steht als Kommaliste im Elementtext eines <set>, also weder in einem
+# Rezept noch in einem Attribut. Der saubere Satz muss beide Arten ZAEHLEN, nicht nur
+# schweigen - sonst waere die Pruefung gruen, weil sie nichts ansieht.
+Test-Script 'kette-pruefen: eingehaengte Zutat und Reparaturwerkzeug werden gezaehlt' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('eingehaengte Zutaten: 1, Reparaturwerkzeuge: 2', 'unaufgeloeste Verweise: 0')
+Test-Script 'kette-pruefen: vertippte eingehaengte Zutat wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\falsch\recipes-angehaengt.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("Eingehaengte Zutat 'pruefLehmGibtesnicht' ist nirgends definiert")
+Test-Script 'kette-pruefen: vertipptes Reparaturwerkzeug wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\falsch\items-repair.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("Reparaturwerkzeug 'pruefFlickenGibtesnicht' ist nirgends definiert")
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {

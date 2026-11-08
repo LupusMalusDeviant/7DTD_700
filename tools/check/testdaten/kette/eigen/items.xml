@@ -6,4 +6,9 @@
 			<property name="Extends" value="pruefRohstoff" />
 		</item>
 	</append>
+
+	<!-- Ein umgehaengtes Reparaturwerkzeug. Der Wert ist eine Kommaliste im Elementtext,
+	     also kein Attribut und kein Rezept - die zweite Stelle, an der ein Tippfehler bis
+	     WP6 unsichtbar blieb. -->
+	<set xpath="/items/item[@name='pruefRohstoff']/property[@name='RepairTools']/@value">pruefWerkzeug,itm700_pruefteil</set>
 </config>
