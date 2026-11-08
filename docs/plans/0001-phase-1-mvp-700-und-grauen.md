@@ -1009,13 +1009,32 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
 2. **WP6.2** `[Claude-prüfbar]` Verteidigungsbauten: Palisade, Spitzpfähle, Graben, Wehrgang,
    Torhaus, Schwingbalken-Falle, Pechtopf.
 3. **WP6.3** `[Claude-prüfbar]` **D29 umsetzen:** Blockschaden der Seuchentoten senken, damit
-   Mörtelstein etwa so hält wie Vanilla-Stahl. Das ist belegt XML — `BlockDamage` ist eine
-   Eigenschaft in `entityclasses.xml`. Ausgleich: mehr Schaden gegen Spieler, plus einzelne
-   Brecher-Typen für die Seuchennacht.
+   Mörtelstein etwa so hält wie Vanilla-Stahl. Das ist belegt XML — ~~`BlockDamage` ist eine
+   Eigenschaft in `entityclasses.xml`~~ **berichtigt 2026-11-08:** der normale
+   Nahkampf-Blockschaden steht am Angriffs-*Gegenstand* `meleeHandZombie01` in `items.xml`
+   (`passive_effect name="BlockDamage" base_set 100`). In `entityclasses.xml` steht
+   `BlockDamage` nur an Sprengkörpern (`zombieFatCop` 500, `zombieDemolition` 5000) und
+   Fahrzeugen/Geschützen — `passive_effect name="BlockDamage"` kommt dort **null**-mal vor.
+   Nachweis: [WP6-Finding §1](../rea/findings/WP6-brenndauer-und-blockschaden.md). D29 bleibt
+   unberührt, nur die Datei war falsch benannt. Ausgleich: mehr Schaden gegen Spieler, plus
+   einzelne Brecher-Typen für die Seuchennacht — die Sprengkörper-Werte bleiben dafür stehen.
 4. **WP6.4** `[Claude-prüfbar]` Lichtquellen: Fackel (Hand, Wand), Kienspan, Öllampe, Feuerkorb.
+   Träger sind vorhanden und vom Purge nicht gesperrt: `meleeToolTorch` (Hand),
+   `wallTorchLightPlayer` (Wand), `candleWallLightPlayer`/`candleTableLightPlayer`,
+   `lanternOld_01..04_Player`, `campfire`. Die Laterne wird mit `resourceElectricParts`
+   repariert und trägt `TraderStageTemplate electricTier1` — das muss mit.
 5. **WP6.5** `[Claude-prüfbar]` **Brenndauer per XML** — `Class="PlantGrowing"`, `Next` auf den
-   erloschenen Zustand, `GrowthRate` als Brenndauer in Minuten, `IsRandom` für Streuung. Zustand
-   und Netzsynchronisierung erledigt damit das Spiel. Zu bestimmen bleibt die Zahl.
+   erloschenen Zustand, `GrowthRate` als Brenndauer in Minuten, ~~`IsRandom` für Streuung~~
+   **berichtigt 2026-11-08:** `IsRandom` ist nur der Schalter, die Breite der Streuung heißt
+   **`GrowthDeviation`** (ein Gauss-Wurf mal diesem Wert); ohne ihn streut nichts, auch mit
+   `IsRandom="true"` nicht. Weitere gelesene Schlüssel: `FertileLevel`, `LightLevelStay`,
+   `LightLevelGrow`, `IsGrowOnTopEnabled`, `GrowOnTop`, `GrowIfAnythinOnTop` (der Tippfehler
+   ist im Spiel). Zustand und Netzsynchronisierung erledigt damit das Spiel. **Zwei neue
+   Vorbehalte**, beide aus [WP6-Finding §2](../rea/findings/WP6-brenndauer-und-blockschaden.md):
+   die Brenndauer wird mit einem spielweiten `CropGrowthModifier` multipliziert, und ein
+   nicht erfüllter Verbleib-Test ersetzt den Block durch **Luft** statt ihn ausgehen zu
+   lassen. Deshalb bodenständige Lichtquellen zuerst; die Wandfackel ist eine Nutzer-Frage.
+   Zu bestimmen bleibt die Zahl.
 6. **WP6.6** `[braucht Nutzer]` Lasttest: 200 Fackeln, keine messbaren Server-Frame-Einbrüche.
 7. **WP6.7** `[braucht Nutzer]` Balancing-Test: hält eine verteidigte T3-Basis eine Seuchennacht
    der passenden Gamestage — und eine unverteidigte nicht?
