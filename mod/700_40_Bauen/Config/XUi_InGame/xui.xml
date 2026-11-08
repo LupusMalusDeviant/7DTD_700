@@ -21,4 +21,22 @@
 	<insertBefore xpath="/xui/window_group[@name='workstation_cementMixer']/window[@name='windowOutput']">
 		<window name="windowFuel" />
 	</insertBefore>
+
+	<!-- WP5.5b: die Fenstergruppe des Webstuhls. Das Spiel sucht sie unter
+	     'workstation_<Blockname>'; der Block heisst blk700_webstuhl (blocks.xml).
+
+	     Die fuenf Fenster und ihre Reihenfolge sind von workstation_workbench
+	     abgeschrieben, samt der drei Attribute am window_group - eine Werkstatt ohne
+	     'open_backpack_on_open' zeigt dem Spieler seinen Beutel nicht und ist damit
+	     unbenutzbar. Kein windowFuel: der Webstuhl brennt nicht. Kein Werkzeugfenster:
+	     siehe den Vermerk in blocks.xml. -->
+	<append xpath="/xui">
+		<window_group name="workstation_blk700_webstuhl" controller="XUiC_WorkstationWindowGroup" open_backpack_on_open="true" close_compass_on_open="true" defaultselected="bp.content">
+			<window name="windowCraftingList" />
+			<window name="craftingInfoPanel" />
+			<window name="windowCraftingQueue" />
+			<window name="windowOutput" />
+			<window name="windowNonPagingHeader" />
+		</window_group>
+	</append>
 </config>

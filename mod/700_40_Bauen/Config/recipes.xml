@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_40_Bauen / recipes.xml
+	     F-04 Werkstaetten, Plan-0001 WP4.3 (Berichtigung) und WP5.5b
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     VIER VON FUENF WERKSTAETTEN WAREN NICHT ZU BAUEN
+	     ===================================================================
+
+	     Das ist eine BERICHTIGUNG AN WP4.3, gefunden beim Bauen des Webstuhls, und sie
+	     ist die vierte ihrer Art in WP5. WP4.3 hat die fuenf Vanilla-Werkstaetten
+	     umgedeutet - Namen, Brennstoff, Werkzeugslots - und dabei nie nachgesehen, ob
+	     ihr BAU-REZEPT nach dem Purge noch geht. Gemessen gegen die 590 gesperrten
+	     Kennungen:
+
+	       campfire          Feuerstelle       1 Zutat, alle erlaubt           GEHT
+	       workbench         Zimmermannsbank   resourceMechanicalParts,
+	                                           resourceDuctTape               TOT
+	       forge             Rennofen + Esse   resourceDuctTape,
+	                                           resourceMetalPipe              TOT
+	       chemistryStation  Kraeuterkueche    toolBeaker, resourceMetalPipe,
+	                                           resourceAcid                   TOT
+	       cementMixer       Kalkofen          resourceSpring, smallEngine,
+	                                           resourceMechanicalParts        TOT
+
+	     DAS IST KEINE KLEINIGKEIT, SONDERN DER TRAGENDE TEIL DER KETTE. Ohne Esse kein
+	     Schmiedeeisen; ohne Schmiedeeisen keine Klinge, keine Spatha, kein Kettenhemd.
+	     Die ganze Rohstoffkette aus WP4.6 stand auf einem Block, den niemand bauen
+	     kann, und F-04s Kriterium "jede Werkstatt hat ein Bau-Rezept" war auf dem
+	     Papier abgehakt. Gefunden hat es die Zaehlung 'rezepte_mit_gesperrter_zutat'
+	     aus WP5.1 - die 94 toten Rezepte, von denen hier vier stehen.
+
+	     WARUM ES KEINE NEUE ENTSCHEIDUNG BRAUCHT: die Zutaten kommen aus F-04s eigener
+	     Werkstatt-Tabelle (Lehm, Stein, Holz, Leder, Schmiedeeisen), und derselbe Griff
+	     - gesperrte Zutat heraus, zeitgemaesse hinein - ist in WP5.1 fuer elf Waffen
+	     schon gemacht. Geaendert wird so wenig wie moeglich: die gesperrten Zutaten
+	     fallen, eine zeitgemaesse kommt dazu, der Rest der Vanilla-Zeile bleibt stehen
+	     samt ihren tags. Dass die Rezepte weiter 'learnable' sind und damit an
+	     Abschriften haengen, bleibt wie es ist - das regelt WP7.
+	-->
+
+	<!-- Zimmermannsbank: Holz, Naegel, Schmiedeeisen - und Leder statt Klebeband und
+	     Maschinenteilen. Riemen und Lederscharniere sind das, was eine Bank aus dem
+	     8. Jahrhundert zusammenhaelt. -->
+	<remove xpath="/recipes/recipe[@name='workbench']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='workbench']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='workbench']">
+		<ingredient name="resourceLeather" count="10" />
+	</append>
+
+	<!-- Rennofen und Esse: Bruchstein, ein Pfosten, Leder (Blasebalg) - und Lehm statt
+	     Klebeband und Metallrohr. Ein Rennofen IST Lehm; ohne ihn haelt die Ofenwand
+	     die Hitze nicht. -->
+	<remove xpath="/recipes/recipe[@name='forge']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='forge']/ingredient[@name='resourceMetalPipe']" />
+	<append xpath="/recipes/recipe[@name='forge']">
+		<ingredient name="resourceClay" count="20" />
+	</append>
+
+	<!-- Kraeuterkueche: drei gesperrte Zutaten fallen (Becherglas, Metallrohr, Saeure),
+	     Toepfe bleiben, Lehm kommt dazu. Das Schmiedeeisen sinkt von 100 auf 20 - 100
+	     Barren fuer eine Kraeuterkueche waren Vanillas Preis fuer eine Chemieanlage mit
+	     Destillationssaeule, und F-04 nennt hier Moerser und Destillierhelm. Die
+	     Mengenaenderung ist Balancing und steht darum auch in der Tabelle von WP5.6. -->
+	<remove xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='toolBeaker']" />
+	<remove xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='resourceMetalPipe']" />
+	<remove xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='resourceAcid']" />
+	<set xpath="/recipes/recipe[@name='chemistryStation']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<append xpath="/recipes/recipe[@name='chemistryStation']">
+		<ingredient name="resourceClay" count="30" />
+	</append>
+
+	<!-- Kalkofen: Feder, Kleinmotor und Maschinenteile fallen - ein Ofen hat keinen
+	     Motor. Was bleibt, ist Schmiedeeisen fuer die Beschlaege, dazu Bruchstein und
+	     Lehm fuer den Schacht. -->
+	<remove xpath="/recipes/recipe[@name='cementMixer']/ingredient[@name='resourceSpring']" />
+	<remove xpath="/recipes/recipe[@name='cementMixer']/ingredient[@name='smallEngine']" />
+	<remove xpath="/recipes/recipe[@name='cementMixer']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='cementMixer']">
+		<ingredient name="resourceCobblestones" count="50" />
+		<ingredient name="resourceClay" count="20" />
+	</append>
+
+	<!-- ===================================================================
+	     DAS BAU-REZEPT DES WEBSTUHLS (WP5.5b)
+	     ===================================================================
+
+	     An der Zimmermannsbank, nicht von Hand: ein Trittwebstuhl ist Zimmermannsarbeit,
+	     und damit entsteht die Treppe Zimmermannsbank -> Webstuhl -> Gambeson. Holz und
+	     Faden tragen das Geraet, Leder haelt die Schaefte.
+
+	     Ohne 'tags="learnable"': das Rezept ist von Anfang an bekannt, wie alle eigenen
+	     Rezepte der Phase 1. Abschriften und Fertigkeitsbaum sind WP7.
+	-->
+	<append xpath="/recipes">
+
+		<recipe name="blk700_webstuhl" count="1" craft_area="workbench" craft_time="60" is_trackable="false">
+			<ingredient name="resourceWood" count="60" />
+			<ingredient name="resourceYuccaFibers" count="30" />
+			<ingredient name="resourceLeather" count="5" />
+			<ingredient name="resourceNail" count="10" />
+		</recipe>
+
+	</append>
+
+</config>

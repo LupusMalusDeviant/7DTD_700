@@ -28,6 +28,107 @@
 	     eine Kammer, die der Spieler nicht sehen kann. Beide Zeilen gehoeren zusammen. -->
 	<set xpath="/blocks/block[@name='cementMixer']/property[@class='Workstation']/property[@name='Modules']/@value">output,fuel</set>
 
+	<!-- ===========================================================================
+	     DER WEBSTUHL (D57, Plan-0001 WP5.5b, F-03 und F-04)
+	     ===========================================================================
+
+	     Der erste eigene Block des Projekts. Er stand in WP4.4 und ist mit D57 hierher
+	     gewandert, weil er mit resourceCloth allein EIN Rezept gehabt haette und keinen
+	     Zweck; erst die Gambeson-Teile aus T2 fuellen ihn. Jetzt traegt er fuenf
+	     Rezepte - Steppbahn und die vier Gambeson-Teile - und erfuellt damit F-04s
+	     Kriterium "mindestens fuenf Rezepte".
+
+	     VOLL AUSGESCHRIEBEN, OHNE Extends. Vanillas workbench waere die naheliegende
+	     Grundlage, aber sie bringt zwei Dinge mit, die wir nicht wollen: 'RepairItems'
+	     mit resourceMechanicalParts und Bergungs-Drops mit denselben gesperrten
+	     Kennungen. Geerbt wuerde beides, und wie sich eine neu deklarierte drop-Liste
+	     gegen die geerbte verhaelt, ist nicht gemessen. Darum steht hier jede
+	     Eigenschaft ausdruecklich - abgeschrieben von workbench, mit unseren Werten.
+
+	     DAS FENSTER STEHT IN XUi_InGame/xui.xml. Das Spiel sucht die Fenstergruppe
+	     'workstation_<Blockname>', also 'workstation_blk700_webstuhl'. Es gibt in
+	     V 3.40 EINEN kuerzeren Weg - 'WorkstationWindow' zeigt auf eine fremde Gruppe,
+	     tableSaw macht das so -, aber tableSaw ist unfertiger Vanilla-Inhalt
+	     (CreativeMode="Dev", Bau-Rezept auskommentiert) und die Eigenschaft kommt in
+	     ganz blocks.xml genau einmal vor. Fuenf von fuenf Werkstaetten, die wirklich
+	     laufen, haben ihre eigene Gruppe. Wir nehmen den Weg, der laeuft.
+
+	     DAS MODELL IST GEBORGT UND SIEHT AUS WIE DIE ZIMMERMANNSBANK. Vanilla hat
+	     keinen Webstuhl; von den Prefabs unter Entities/Crafting ist die Holzwerkbank
+	     das einzige Stueck Holzmoebel, das nicht Saegeblatt, Kessel oder
+	     Getraenkeautomat ist. Zwei Werkstaetten mit demselben Koerper sind im Spiel
+	     verwirrend - ein eigenes Modell steht in Phase 2 (D3, F-16), bis dahin
+	     unterscheiden sie Name, Symbol und Inhalt.
+	-->
+	<append xpath="/blocks">
+
+		<block name="blk700_webstuhl">
+			<property name="Class" value="Workstation" />
+			<property class="Workstation">
+				<property name="Modules" value="output" />
+				<property name="CraftingAreaRecipes" value="webstuhl" />
+			</property>
+
+			<property name="CreativeMode" value="Player" />
+			<property name="DescriptionKey" value="blk700_webstuhlDesc" />
+			<property name="DisplayType" value="blockMulti" />
+			<property name="WorkstationIcon" value="ui_game_symbol_workbench" />
+			<property name="CraftIcon" value="ui_game_symbol_workbench" />
+			<property name="Stacknumber" value="1" />
+
+			<property name="Material" value="Mwood" />
+			<property name="Shape" value="ModelEntity" />
+			<property name="Model" value="@:Entities/Crafting/woodWorkBenchPrefab.prefab" />
+			<property name="ModelOffset" value="0,.5,0" />
+			<property name="MultiBlockDim" value="2,2,1" />
+			<property name="ImposterDontBlock" value="true" />
+			<property name="WaterFlow" value="permitted" />
+
+			<property name="Place" value="TowardsPlacerInverted" />
+			<property name="OnlySimpleRotations" value="true" />
+			<property name="IsTerrainDecoration" value="true" />
+			<property name="StabilitySupport" value="false" />
+
+			<property name="Weight" value="0" />
+			<property name="EconomicValue" value="600" />
+
+			<property name="MaxDamage" value="500" />
+			<property name="OpenSound" value="open_workbench" />
+			<property name="CloseSound" value="close_workbench" />
+			<property name="TakeDelay" value="15" />
+
+			<!-- Geflickt wird er mit Holz und Faden, nicht mit Maschinenteilen. -->
+			<property class="RepairItems">
+				<property name="resourceWood" value="30" />
+				<property name="resourceYuccaFibers" value="20" />
+			</property>
+
+			<drop event="Harvest" name="resourceWood" count="20" tag="allHarvest,lumberjackHarvest,perkJunkMiner" />
+			<drop event="Harvest" name="resourceYuccaFibers" count="10" tag="salvageHarvest" />
+			<drop event="Destroy" count="0" />
+			<drop event="Fall" name="terrDestroyedWoodDebris" count="1" prob="0.75" stick_chance="1" />
+
+			<property name="SortOrder1" value="B281" />
+			<property name="SortOrder2" value="0310" />
+			<property name="Group" value="Limited,Building,advBuilding" />
+			<property name="Tags" value="workstationSkill" />
+			<property name="FilterTags" value="MC_playerBlocks,SC_decor" />
+			<property name="SoundPickup" value="workbench_grab" />
+			<property name="SoundPlace" value="workbench_place" />
+		</block>
+
+	</append>
+
+	<!-- KEIN WERKZEUGSLOT, UND DAS IST EINE ABWEICHUNG VON F-04. Die F-04-Tabelle gibt
+	     dem Webstuhl ein "Weberschiffchen" als Werkzeug. Ein Werkzeugslot ist kein
+	     Blockeintrag, sondern ein eigenes XUi-Werkzeugfenster plus ein Gegenstand plus
+	     eine Zeile 'Modules="output,tools"' - und Werkzeugfenster werden in Vanilla
+	     ueber 'required_tools' an einem Gitter gefuehrt, das je Werkstatt eigens
+	     definiert ist (siehe XUi_InGame/windows.xml). Das sind drei Dinge fuer eine
+	     Feinheit, die kein Rezept der Phase 1 braucht: alle fuenf Webstuhl-Rezepte
+	     laufen ohne Werkzeug. Vermerkt in F-04 als offener Punkt, nicht still
+	     weggelassen. -->
+
 	<!-- NICHT GEMACHT, UND WARUM. F-04 gibt der Zimmermannsbank Saege, Hobel und Bohrer
 	     und der Esse zusaetzlich Zange und Hammer. Das sind fuenf neue Gegenstaende und
 	     zwei neue XUi-Werkzeugfenster - also Inhalt, und Inhalt gehoert in das Paket,
