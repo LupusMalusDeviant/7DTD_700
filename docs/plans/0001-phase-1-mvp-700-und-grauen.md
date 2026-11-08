@@ -1320,6 +1320,18 @@ werden:
     geschlossenen Raum** stehen lassen, bis die Brenndauer abgelaufen ist, und danach nachsehen,
     ob dort ein erloschener Halter hängt oder nichts. Eine im Freien beweist es nicht.
     → gehört in den Lasttest WP6.6.
+12. **Entscheiden, ob Fackeln weiter Schreier anziehen dürfen** (WP6.4, 8. November 2026).
+    Gemessen nach D64: `wallTorchLightPlayer` trägt schon `Class="TorchHeatMap"`, und ein Block
+    hat genau **eine** Klasse. `PlantGrowing` ersetzt die ganze Kette
+    `BlockTorchHeatMap : BlockTorch : BlockParticle`. Aufnehmen und Flamme lassen sich mit
+    gewöhnlichen Eigenschaften zurückholen (`CanPickup`, `ParticleName`/`ParticleOffset`);
+    **die Schreier-Meldung nicht** — `AIDirector::NotifyActivity` wird für Fackeln allein von
+    `BlockTorchHeatMap::UpdateTick` gerufen. Folge: Fackeln machen keine Hitze mehr auf der
+    Karte. Das entlastet den Spieler — **und D29 entlastet ihn im selben Paket schon.** Zwei
+    Entlastungen aus einem Arbeitspaket, von denen nur eine gewollt war. Darum sollte die Zahl
+    in **WP6.3 erst nach WP6.7** festgezogen werden, nicht vorher. Nachweis:
+    [WP6-Finding §2a](../rea/findings/WP6-brenndauer-und-blockschaden.md).
+    *(Blockiert WP6.4 nicht — D64 steht. Es ändert, womit WP6.3 rechnet.)*
 
 ## Offene Punkte
 

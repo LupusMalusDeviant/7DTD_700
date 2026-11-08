@@ -149,6 +149,47 @@ es offen; das ist eine Entscheidung und keine Messung, und sie liegt beim Nutzer
 
 ---
 
+## 2a. Nachtrag: `PlantGrowing` an der Wandfackel kostet drei Dinge, nicht eines
+
+Gemessen **nach** D64, weil die Frage erst beim Bauen aufkam: `wallTorchLightPlayer` trägt
+schon eine Klasse, `TorchHeatMap`. Ein Block hat **genau eine** `Class` — `PlantGrowing`
+ersetzt sie also, und damit die ganze Vererbungskette:
+
+```
+BlockTorchHeatMap : BlockTorch : BlockParticle
+```
+
+Was an dieser Kette hängt, Methode für Methode:
+
+| Methode | was sie tut | bei `PlantGrowing` |
+|---|---|---|
+| `BlockTorchHeatMap::UpdateTick` | `GetAIDirector().NotifyActivity(…)` mit `Block::HeatMapStrength` | **weg** |
+| `BlockTorch::getParticleOffset` | setzt die Flamme je `BlockValue::rotation` an die richtige Stelle | **weg** |
+| `BlockTorch::OnBlockPickedUp` | gibt beim Aufnehmen den Gegenstand zurück, mit `UseTimes` aus `meta`/`meta2` | **weg** |
+
+**`HeatMapStrength` ist ein Feld auf `Block`** und wird für jeden Block aus dem XML gelesen —
+aber **gemeldet** wird es nur von `BlockTorchHeatMap::UpdateTick`. Eine Fackel ohne diese
+Klasse trägt die Zahl also weiter im XML und tut nichts damit.
+
+Zwei der drei Verluste lassen sich mit gewöhnlichen Block-Eigenschaften zurückholen, ohne
+Klasse:
+
+- **Aufnehmen:** `CanPickup value="true" param1="<Zielblock>"` ist eine Block-Eigenschaft, keine
+  Methode — `lanternOld_01_Player` benutzt genau das.
+- **Flamme:** `ParticleName` und `ParticleOffset` sind Block-Eigenschaften — `campfire` benutzt
+  genau das (`ParticleName="campfire"`, `ParticleOffset="0.5,0.1,0.5"`). Der Versatz ist dann
+  fest statt drehungsabhängig; bei einer Wandfackel mit vier Drehungen ist das sichtbar und
+  muss im Spieltest beurteilt werden.
+
+**Der dritte Verlust bleibt, und er ist eine Spielmechanik:** Fackeln ziehen keine Schreier
+mehr an. Das macht Basen sicherer — **und D29 macht sie im selben Arbeitspaket schon
+sicherer.** Zwei Entlastungen des Spielers aus einem Paket, von denen nur eine beabsichtigt
+war. Das gehört in den Balancing-Test WP6.7, und die Zahl in WP6.3 sollte erst danach
+festgezogen werden.
+
+`campfire` ist davon nicht betroffen: es trägt `Class="Campfire"` und hätte dasselbe Problem,
+weshalb der **Feuerkorb ein eigener Block** werden muss und nicht die Feuerstelle umdeuten darf.
+
 ## 3. Was dieses Finding nicht behauptet
 
 - Die CIL-Spuren von `mod700meta` enthalten **Aufrufe, Feldzugriffe und Zeichenketten, keine
