@@ -133,7 +133,21 @@ Fünf Stufen auf drei Klassen gehen also nicht auf. Drei Wege, und die Wahl geh�
    hinaus. Das sind erfundene Zahlen ohne Balancing-Grundlage — nach den Projektregeln
    gehören sie nach WP9, und bis dahin stünde WP5.5 still.
 
-Eine Empfehlung steht im Plan; eine Entscheidung steht hier nicht.
+Eine Empfehlung stand im Plan. **Der Nutzer hat am 8. November 2026 Weg 2 gewählt** (D61): drei
+Rüstungsstufen plus T0, T4 wird die Qualitätsspitze des Kettenhemds.
+
+**Nachtrag zum Set-Bonus, nach der Wahl gemessen.** Jedes Vanilla-Rüstungsteil trägt zusätzlich zum
+Set-Bonus eine eigene `effect_group` mit einer Slot-Vergünstigung — Tragkraft am Rumpf,
+Laufgeschwindigkeit an den Schuhen, Schaden gegen Strahlende an den Handschuhen, Schleichen bei Rogue
+und Assassin an allen vier Teilen. Diese Vergünstigungen hängen an der **Garnitur**, nicht an der
+Gewichtsklasse, und sie erscheinen im Tooltip über eine eigene `item_display_info` in `ui_display.xml`.
+Unsere Teile übernehmen sie **nicht**: sie erben `DisplayType` vom Master (`armorLight`, `armorMedium`,
+`armorHeavy`), damit bleibt `ui_display.xml` unberührt, und die Vergünstigungen gehören in die
+Balancing-Tabelle WP5.6. Die drei geborgten Set-Boni wirken unabhängig davon, denn sie stehen in
+`buffs.xml` und zählen nur `ArmorGroupCount`: `groupNomad` 5–30 % weniger Nahrungs- und
+Wasserverlust je Ausdauerpunkt, `groupAssassin` 15–100 % kürzere Suche des Gegners, `groupRaider`
+20–45 % mehr Widerstand gegen Erschöpfung, Verstauchung, Abschürfung, Fleischwunde, Infektion,
+Betäubung und Blutung.
 
 ## Was dieser Befund nicht sagt
 

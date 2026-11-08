@@ -137,3 +137,46 @@ meleeWpnSledgeT3SteelSledgehammerParts    # Hammerbruchstuecke
 meleeWpnSledgeT3SteelSledgehammerPartsDesc
 meleeWpnKnucklesT3SteelKnucklesParts      # Eisenbeschlaege
 meleeWpnKnucklesT3SteelKnucklesPartsDesc
+
+# --- WP5.5: die primitive Garnitur wird T0 (F-03, D59) --------------------------
+# Die vier armorPrimitive-Teile sind die EINZIGE Vanilla-Ruestung, die nach dem Purge noch
+# einen Weg hat (von 178 Teilen bleiben sechs erreichbar). Sie werden darum umgedeutet und
+# nicht ersetzt - derselbe Griff wie beim Raseneisenerz. Ihre Kennungen stehen in Loot,
+# Startausruestung und Rezepten; ein eigener Gegenstand haette all das nachzubauen.
+armorPrimitiveOutfit                      # Lumpenkittel (T0)
+armorPrimitiveOutfitDesc
+armorPrimitiveHelmet                      # Lumpenkapuze (T0)
+armorPrimitiveHelmetDesc
+armorPrimitiveGloves                      # Handlappen (T0)
+armorPrimitiveGlovesDesc
+armorPrimitiveBoots                       # Bastschuhe (T0)
+armorPrimitiveBootsDesc
+
+# --- WP5.5: das Naehzeug flickt Stoff und Leder (D62) --------------------------
+# resourceSewingKit ist in der Denylist freigegeben ("Nadel und Faden") und traegt in
+# Vanilla schon die Tags armorLightSkill/MediumSkill/HeavySkill. Es bekommt in WP5.5 ein
+# Rezept und einen RepairAmount, also auch einen deutschen Namen. "Sewing Kit" ist kein
+# moderner Begriff, aber "Naehzeug" liest sich im Mittelalter richtiger.
+resourceSewingKit                         # Naehzeug
+resourceSewingKitDesc
+
+# --- WP5.5: die drei geborgten Set-Boni (D61) ----------------------------------
+# UNSERE TEILE TRAGEN DIE ArmorGroup DER GARNITUR, VON DER SIE DEN PREFAB BORGEN. Damit
+# wirkt Vanillas Bonus unveraendert (buffs.xml zaehlt nur ArmorGroupCount) und es ist kein
+# einziger buffs.xml-Patch noetig - nur diese neun Zeilen. Das geht ueberhaupt nur, weil
+# die Vanilla-Garnituren gesperrt sind: die Gruppe laesst sich nur noch mit unseren vier
+# Teilen vollmachen, und darum liest niemand mehr "Nomad" oder "Assassin".
+#
+# DIE PLATZHALTER SIND PFLICHT. Jede Desc-Zeile traegt {cvar(.armor<Garnitur>FSBDisplay:0)}
+# und holt sich daraus die Prozentzahl, die buffs.xml je ArmorGroupLowestQuality setzt
+# (Nomad 5-30, Assassin 15-100, Raider 20-45). Fehlt der Platzhalter, steht im Tooltip ein
+# Bonus ohne Zahl - dieselbe Falle wie {0} bei den Qualitaetsnamen.
+buffNomadSetBonusName                     # Wanderkleidung (T1, leicht)
+buffNomadSetBonusDesc
+buffNomadSetBonusTooltip
+buffAssassinSetBonusName                  # Gesteppte Tracht (T2, mittel)
+buffAssassinSetBonusDesc
+buffAssassinSetBonusTooltip
+buffRaiderSetBonusName                    # Kettengewand (T3, schwer)
+buffRaiderSetBonusDesc
+buffRaiderSetBonusTooltip

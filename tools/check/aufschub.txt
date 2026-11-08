@@ -45,13 +45,24 @@ resourcePaper         # WP7: Papier traegt Vanillas Buecher und Bauplaene; ohne 
 # Ruestbau-Mechanik in Gegenstandsform. WP5 baut Qualitaet und Verschleiss neu; bis
 # dahin waere ein Spiel ohne Reparatur die haertere Abweichung.
 #
-# STAND 8. NOVEMBER 2026, WP5.4: der Ersatz steht zur Haelfte. Schleifstein und
-# Schmiedeflicken sind gebaut (D60), und die acht Waffen, die auf das Reparatur-Kit
-# zeigten, zeigen jetzt auf sie. Die armor*Master-Klassen tun es noch - deren
-# RepairTools haengt an WP5.5. Erst danach zeigt nichts von uns mehr auf das Kit, und
-# erst dann darf diese Zeile fallen. Teilweise eingeloest ist nicht eingeloest.
-resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.4 hat die Waffen, WP5.5 fehlt
-resourceArmorCraftingKit  # WP5.5: dieselbe Reihe, haengt ganz an der Ruestung
+# STAND 8. NOVEMBER 2026, NACH WP5.5: GEZAEHLT, NICHT GESCHAETZT. Erlaubte Gegenstaende,
+# die noch mit dem gesperrten Reparatur-Kit flicken: 23 waren es, 10 sind es.
+#
+#   erledigt  8 Waffen              -> Schleifstein und Schmiedeflicken (D60, WP5.4)
+#   erledigt  5 Ruestungsklassen    -> Naehzeug bzw. Schmiedeflicken (D62, WP5.5)
+#   offen     4 Boegen              -> WP5.2, haengt am Urteil ueber die modernen Kennungen
+#   offen     5 Werkzeuge           -> Spitzhacke, Schaufel und Klauenhammer; F-05, kein Paket der Phase 1
+#   offen     1 partsMaster         -> die Bauteile aus dem Zerlegen, WP7
+#
+# Die zehn sind VON HAND gezaehlt. Eine Pruefung, die "erlaubter Gegenstand repariert mit
+# gesperrtem Werkzeug" selbst findet, gibt es nicht - vermerkt als offener Punkt in
+# Vertrag 04. Teilweise eingeloest ist nicht eingeloest, auch bei 13 von 23.
+resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.4 und WP5.5 haben 13 von 23, die Boegen fehlen (WP5.2)
+# resourceArmorCraftingKit ist mit WP5.5 EINGELOEST und steht darum nicht mehr hier.
+# Gemessen: nach dem Purge verlangen ihn nur noch vier Rezepte, die Biom-Abzeichen
+# biomeWeatherItem1 bis 4 - und die sind ueber resourceScrapPolymers ohnehin schon tot.
+# Unsere zwoelf Ruestungsteile brauchen ihn nicht: sie werden aus Leder, Tuch und
+# Schmiedeeisen gemacht, nicht aus einem Ruestungs-Bausatz.
 
 # --- Vanillas Lore --------------------------------------------------------------
 noteDuke01            # WP8: F-12 ersetzt den Starttext; er liegt in der Startausruestung und ist das Erste, was ein Spieler liest

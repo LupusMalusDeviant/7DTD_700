@@ -86,6 +86,467 @@
 			<property name="Group" value="Resources" />
 		</item>
 
+		<!-- Steppbahn: zwei Lagen Tuch mit Werg dazwischen, vernaeht - das
+		     Zwischenprodukt, aus dem die vier Gambeson-Teile entstehen und das dem
+		     Webstuhl seinen Zweck gibt (D57). Erbt vom Tuch, damit Werkstoff, Gewicht
+		     und Stapelverhalten stimmen; der Farbton unterscheidet es im Beutel. -->
+		<item name="itm700_steppbahn">
+			<property name="Extends" value="resourceCloth" />
+			<property name="CustomIcon" value="resourceCloth" />
+			<property name="CustomIconTint" value="c8b48c" />
+			<property name="Stacknumber" value="50" />
+			<property name="EconomicValue" value="60" />
+			<property name="Group" value="Resources" />
+		</item>
+
+		<!-- ===================================================================
+		     ZWOELF RUESTUNGSTEILE, DREI STUFEN (D59, D61, Plan-0001 WP5.5)
+		     ===================================================================
+
+		     V 3.40 HAT KEINE RUESTUNGSSTUFEN. Gemessen (WP5-ruestung-in-v340.md):
+		     drei Gewichtsklassen, und die Stufe eines Teils ist seine Qualitaet 1-6.
+		     PhysicalDamageResist, DegradationMax, Mobility und StaminaChangeOT haengen
+		     ALLEIN AN DER KLASSE - zwei Garnituren derselben Klasse haben dieselben
+		     Zahlen. Darum stehen hier keine erfundenen Werte, sondern je Teil die Zahlen
+		     seiner Klasse, abgeschrieben von armorRogueOutfit (leicht),
+		     armorAssassinOutfit (mittel) und armorNomadOutfit (schwer).
+
+		     F-03 wollte fuenf Stufen. D61 macht daraus drei plus T0: T4 ist die
+		     QUALITAETSSPITZE DES KETTENHEMDS und kein eigener Gegenstand - ein langes
+		     Kettenhemd, das genauso gut schuetzt wie ein kurzes, ist eine Enttaeuschung,
+		     sobald jemand die Werte vergleicht. T0 bleibt armorPrimitive*, nur umgedeutet.
+
+		     GEBORGT WIRD ZWEIERLEI, UND BEIDES UNABHAENGIG:
+
+		       Stufe  Klasse   Prefab (Aussehen)  ArmorGroup (Set-Bonus)
+		       T1     leicht   Gear/Stealth/      groupNomad    Nahrung/Wasser je Ausdauer
+		       T2     mittel   Gear/Assassin/     groupAssassin Gegner verliert die Spur
+		       T3     schwer   Gear/Raider/       groupRaider   kritische Verletzungen
+
+		     Der Prefab-Pfad bestimmt, wie der Spieler AUSSIEHT; alle vier Teile einer
+		     Garnitur zeigen auf denselben Pfad, EquipSlot entscheidet, welcher Teil
+		     erscheint. Die ArmorGroup bestimmt den SET-BONUS: buffs.xml zaehlt nur
+		     ArmorGroupCount, also wirkt Vanillas Bonus unveraendert, sobald vier
+		     unserer Teile derselben Gruppe getragen werden - kein buffs.xml-Patch,
+		     nur Sprachschluessel. Das geht ueberhaupt nur, WEIL die Vanilla-Garnitur
+		     gesperrt ist: die Gruppe laesst sich nur noch mit unseren Teilen vollmachen.
+
+		     Beides ist nach seinem eigenen Massstab gewaehlt, darum traegt T1 das
+		     Aussehen der Rogue-Garnitur und den Bonus der Nomad-Garnitur. Klaenge,
+		     Symbole und der SDCS-Block sind je Stufe aus der geborgten Garnitur
+		     UNVERAENDERT uebernommen - eine Regel ohne Ausnahmen ist leichter zu
+		     pruefen als zwoelf Einzelurteile.
+
+		     WAS UNSERE TEILE NICHT TRAGEN: Vanillas Slot-Verguenstigungen (Tragkraft
+		     am Rumpf, Laufgeschwindigkeit an den Schuhen, Schaden gegen Strahlende an
+		     den Handschuhen, Schleichen bei Rogue und Assassin). Die haengen an der
+		     GARNITUR, nicht an der Klasse, und sie brauchen je Teil einen eigenen
+		     item_display_info-Eintrag in ui_display.xml. Unsere Teile erben DisplayType
+		     vom Master (armorLight/armorMedium/armorHeavy), damit bleibt ui_display.xml
+		     unberuehrt; die Verguenstigungen gehoeren in die Balancing-Tabelle WP5.6.
+
+		     NICHT GEPRUEFT: ob ein Gear-Prefab laedt, wenn kein Vanilla-Gegenstand mehr
+		     darauf zeigt, und ob eine fremde ArmorGroup mit unseren vier Teilen
+		     ausloest. Der Purge nimmt den gesperrten Garnituren ihre WEGE, nicht ihre
+		     Definition - die Pfade bleiben referenziert. Das spricht dafuer, bewiesen
+		     ist es in WP3.6. Wie die geborgten Garnituren AUSSEHEN, entscheidet der
+		     Nutzer in WP5.7; ein anderer Pfad ist eine Zeile je Stufe.
+		-->
+
+		<!-- ==== T1 leicht: Wolle und Leder ==== -->
+
+		<item name="itm700_lederwams">
+			<property name="Extends" value="armorLightMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRogueOutfit" />
+			<property name="DescriptionKey" value="itm700_lederwamsDesc" />
+			<property name="ArmorGroup" value="groupNomad" />
+			<property name="Tags" value="upperbody,chest,armor,armorChest,lightArmor,lightArmorDeg,armorLightSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Chest" />
+			<property name="SoundPickup" value="outfit_leather_grab" />
+			<property name="SoundPlace" value="outfit_leather_place" />
+			<property name="EconomicValue" value="300" />
+			<effect_group name="itm700_lederwams">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="lightArmorDeg" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Stealth/gear{sex}StealthPrefab.prefab" />
+				<property name="TransformName" value="body" />
+				<property name="Excludes" value="body" />
+			</property>
+		</item>
+
+		<item name="itm700_lederkappe">
+			<property name="Extends" value="armorLightMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRogueHelmet" />
+			<property name="DescriptionKey" value="itm700_lederkappeDesc" />
+			<property name="ArmorGroup" value="groupNomad" />
+			<property name="Tags" value="head,armor,armorHead,lightArmor,lightArmorDeg,armorLightSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Head" />
+			<property name="SoundPickup" value="headwear_cloth_grab" />
+			<property name="SoundPlace" value="headwear_cloth_place" />
+			<property name="EconomicValue" value="300" />
+			<effect_group name="itm700_lederkappe">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="lightArmorDeg" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Stealth/gear{sex}StealthPrefab.prefab" />
+				<property name="TransformName" value="head" />
+				<property name="Excludes" value="" />
+				<property name="HairMaskType" value="None" />
+				<property name="FacialHairMaskType" value="None" />
+			</property>
+		</item>
+
+		<item name="itm700_wollhandschuhe">
+			<property name="Extends" value="armorLightMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRogueGloves" />
+			<property name="DescriptionKey" value="itm700_wollhandschuheDesc" />
+			<property name="ArmorGroup" value="groupNomad" />
+			<property name="Tags" value="upperbody,hands,armor,armorHands,lightArmor,lightArmorDeg,armorLightSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Hands" />
+			<property name="SoundPickup" value="gloves_leather_grab" />
+			<property name="SoundPlace" value="gloves_leather_place" />
+			<property name="EconomicValue" value="300" />
+			<effect_group name="itm700_wollhandschuhe">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="lightArmorDeg" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Stealth/gear{sex}StealthPrefab.prefab" />
+				<property name="TransformName" value="hands" />
+				<property name="Excludes" value="hands" />
+			</property>
+		</item>
+
+		<item name="itm700_wickelschuhe">
+			<property name="Extends" value="armorLightMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRogueBoots" />
+			<property name="DescriptionKey" value="itm700_wickelschuheDesc" />
+			<property name="ArmorGroup" value="groupNomad" />
+			<property name="Tags" value="lowerbody,feet,armor,armorFeet,lightArmor,lightArmorDeg,armorLightSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Feet" />
+			<property name="SoundPickup" value="footwear_leather_grab" />
+			<property name="SoundPlace" value="footwear_leather_place" />
+			<property name="EconomicValue" value="300" />
+			<effect_group name="itm700_wickelschuhe">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="lightArmorDeg" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Stealth/gear{sex}StealthPrefab.prefab" />
+				<property name="TransformName" value="feet" />
+				<property name="Excludes" value="feet" />
+			</property>
+		</item>
+
+		<!-- ==== T2 mittel: Gambeson (gesteppter Stoff) ==== -->
+
+		<item name="itm700_gambeson">
+			<property name="Extends" value="armorMediumMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorAssassinOutfit" />
+			<property name="DescriptionKey" value="itm700_gambesonDesc" />
+			<property name="ArmorGroup" value="groupAssassin" />
+			<property name="Tags" value="upperbody,chest,armor,armorChest,mediumArmor,mediumArmorPenalty,mediumArmorDeg,armorMediumSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Chest" />
+			<property name="SoundPickup" value="outfit_clothmetal_grab" />
+			<property name="SoundPlace" value="outfit_clothmetal_place" />
+			<property name="EconomicValue" value="600" />
+			<effect_group name="itm700_gambeson">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="mediumArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.05" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0281" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0562" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.56" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Assassin/gear{sex}AssassinPrefab.prefab" />
+				<property name="TransformName" value="body" />
+				<property name="Excludes" value="body" />
+			</property>
+		</item>
+
+		<item name="itm700_stepphaube">
+			<property name="Extends" value="armorMediumMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorAssassinHelmet" />
+			<property name="DescriptionKey" value="itm700_stepphaubeDesc" />
+			<property name="ArmorGroup" value="groupAssassin" />
+			<property name="Tags" value="head,armor,armorHead,mediumArmor,mediumArmorPenalty,mediumArmorDeg,armorMediumSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Head" />
+			<property name="SoundPickup" value="headwear_cloth_grab" />
+			<property name="SoundPlace" value="headwear_cloth_place" />
+			<property name="EconomicValue" value="600" />
+			<effect_group name="itm700_stepphaube">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="mediumArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.05" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0281" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0562" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.56" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Assassin/gear{sex}AssassinPrefab.prefab" />
+				<property name="TransformName" value="head" />
+				<property name="Excludes" value="head" />
+				<property name="HairMaskType" value="None" />
+				<property name="FacialHairMaskType" value="None" />
+			</property>
+		</item>
+
+		<item name="itm700_stepphandschuhe">
+			<property name="Extends" value="armorMediumMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorAssassinGloves" />
+			<property name="DescriptionKey" value="itm700_stepphandschuheDesc" />
+			<property name="ArmorGroup" value="groupAssassin" />
+			<property name="Tags" value="upperbody,hands,armor,armorHands,mediumArmor,mediumArmorPenalty,mediumArmorDeg,armorMediumSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Hands" />
+			<property name="SoundPickup" value="gloves_leather_grab" />
+			<property name="SoundPlace" value="gloves_leather_place" />
+			<property name="EconomicValue" value="600" />
+			<effect_group name="itm700_stepphandschuhe">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="mediumArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.05" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0281" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0562" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.56" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Assassin/gear{sex}AssassinPrefab.prefab" />
+				<property name="TransformName" value="hands" />
+				<property name="Excludes" value="hands" />
+			</property>
+		</item>
+
+		<item name="itm700_steppschuhe">
+			<property name="Extends" value="armorMediumMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorAssassinBoots" />
+			<property name="DescriptionKey" value="itm700_steppschuheDesc" />
+			<property name="ArmorGroup" value="groupAssassin" />
+			<property name="Tags" value="lowerbody,feet,armor,armorFeet,mediumArmor,mediumArmorPenalty,mediumArmorDeg,armorMediumSkill,biomeChallenge" />
+			<property name="EquipSlot" value="Feet" />
+			<property name="SoundPickup" value="footwear_leather_grab" />
+			<property name="SoundPlace" value="footwear_leather_place" />
+			<property name="EconomicValue" value="600" />
+			<effect_group name="itm700_steppschuhe">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="mediumArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.05" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0281" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.0562" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.56" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Assassin/gear{sex}AssassinPrefab.prefab" />
+				<property name="TransformName" value="feet" />
+				<property name="Excludes" value="feet" />
+			</property>
+		</item>
+
+		<!-- ==== T3 schwer: Kette und Eisen ====
+
+		     Armschienen und Beinschienen statt Kettenhandschuhe und Kettenbeinlinge:
+		     Fingerhandschuhe aus Kette und durchgehende Beinlinge sind Hochmittelalter,
+		     nicht 700. Schienen aus Eisenstreifen auf Leder sind fuer Vendel und
+		     Valsgaerde belegt und sitzen in denselben beiden Slots (D59, F-16).
+		-->
+
+		<item name="itm700_kettenhemd">
+			<property name="Extends" value="armorHeavyMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRaiderOutfit" />
+			<property name="DescriptionKey" value="itm700_kettenhemdDesc" />
+			<property name="ArmorGroup" value="groupRaider" />
+			<property name="Tags" value="upperbody,chest,armor,armorChest,heavyArmor,heavyArmorPenalty,heavyArmorDeg,armorHeavySkill,biomeChallenge" />
+			<property name="EquipSlot" value="Chest" />
+			<property name="SoundPickup" value="outfit_metal_grab" />
+			<property name="SoundPlace" value="outfit_metal_place" />
+			<property name="EconomicValue" value="1000" />
+			<effect_group name="itm700_kettenhemd">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="heavyArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.075" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.045" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.09" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.9" />
+				<passive_effect name="NoiseMultiplier" operation="perc_add" value=".2" />
+				<display_value name="dNoiseMultiplier" value=".2" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Raider/gear{sex}RaiderPrefab.prefab" />
+				<property name="TransformName" value="body" />
+				<property name="Excludes" value="body" />
+			</property>
+		</item>
+
+		<item name="itm700_spangenhelm">
+			<property name="Extends" value="armorHeavyMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRaiderHelmet" />
+			<property name="DescriptionKey" value="itm700_spangenhelmDesc" />
+			<property name="ArmorGroup" value="groupRaider" />
+			<property name="Tags" value="head,armor,armorHead,heavyArmor,heavyArmorPenalty,heavyArmorDeg,armorHeavySkill,biomeChallenge" />
+			<property name="EquipSlot" value="Head" />
+			<property name="SoundPickup" value="headwear_metal_grab" />
+			<property name="SoundPlace" value="headwear_metal_place" />
+			<property name="EconomicValue" value="1000" />
+			<effect_group name="itm700_spangenhelm">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="heavyArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.075" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.045" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.09" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.9" />
+				<passive_effect name="NoiseMultiplier" operation="perc_add" value=".2" />
+				<display_value name="dNoiseMultiplier" value=".2" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Raider/gear{sex}RaiderPrefab.prefab" />
+				<property name="TransformName" value="head" />
+				<property name="Excludes" value="head" />
+				<property name="HairMaskType" value="None" />
+				<property name="FacialHairMaskType" value="None" />
+			</property>
+		</item>
+
+		<item name="itm700_armschienen">
+			<property name="Extends" value="armorHeavyMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRaiderGloves" />
+			<property name="DescriptionKey" value="itm700_armschienenDesc" />
+			<property name="ArmorGroup" value="groupRaider" />
+			<property name="Tags" value="upperbody,hands,armor,armorHands,heavyArmor,heavyArmorPenalty,heavyArmorDeg,armorHeavySkill,biomeChallenge" />
+			<property name="EquipSlot" value="Hands" />
+			<property name="SoundPickup" value="gloves_leather_grab" />
+			<property name="SoundPlace" value="gloves_leather_place" />
+			<property name="EconomicValue" value="1000" />
+			<effect_group name="itm700_armschienen">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="heavyArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.075" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.045" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.09" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.9" />
+				<passive_effect name="NoiseMultiplier" operation="perc_add" value=".2" />
+				<display_value name="dNoiseMultiplier" value=".2" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Raider/gear{sex}RaiderPrefab.prefab" />
+				<property name="TransformName" value="hands" />
+				<property name="Excludes" value="hands" />
+			</property>
+		</item>
+
+		<item name="itm700_beinschienen">
+			<property name="Extends" value="armorHeavyMaster" param1="CustomIcon" />
+			<property name="CustomIcon" value="armorRaiderBoots" />
+			<property name="DescriptionKey" value="itm700_beinschienenDesc" />
+			<property name="ArmorGroup" value="groupRaider" />
+			<property name="Tags" value="lowerbody,feet,armor,armorFeet,heavyArmor,heavyArmorPenalty,heavyArmorDeg,armorHeavySkill,biomeChallenge" />
+			<property name="EquipSlot" value="Feet" />
+			<property name="SoundPickup" value="footwear_leather_grab" />
+			<property name="SoundPlace" value="footwear_leather_place" />
+			<property name="EconomicValue" value="1000" />
+			<effect_group name="itm700_beinschienen">
+				<passive_effect name="ModSlots" operation="base_set" value="2,2,3,3,4,5" tier="1,2,3,4,5,6" />
+				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
+				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
+				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
+				<passive_effect name="DegradationMax" operation="base_set" value="250,500" tier="1,6" />
+				<passive_effect name="DegradationPerUse" operation="base_set" value="1" tags="heavyArmorDeg" />
+				<passive_effect name="Mobility" operation="perc_add" value="-.075" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.045" tags="walking" />
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.09" tags="running" />
+				<display_value name="dStaminaChangeOT" value="-.9" />
+				<passive_effect name="NoiseMultiplier" operation="perc_add" value=".2" />
+				<display_value name="dNoiseMultiplier" value=".2" />
+			</effect_group>
+			<property class="SDCS">
+				<property name="Prefab" value="@:Entities/Player/{sex}/Gear/Raider/gear{sex}RaiderPrefab.prefab" />
+				<property name="TransformName" value="feet" />
+				<property name="Excludes" value="feet" />
+			</property>
+		</item>
+
 	</append>
 
 	<!-- Die acht Waffen, die auf das gesperrte Reparatur-Kit zeigen. Drei weitere erben
@@ -101,5 +562,55 @@
 	<set xpath="/items/item[@name='meleeToolAxeT1IronFireaxe']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
 	<set xpath="/items/item[@name='meleeWpnClubT3SteelClub']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
 	<set xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammer']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+
+	<!-- ===========================================================================
+	     DAS NAEHZEUG FLICKT, WAS NICHT AUS EISEN IST (D62, 8. November 2026)
+	     ===========================================================================
+
+	     D60 nennt ZWEI Reparatur-Gegenstaende, und beide sind fuer Metall: ein
+	     Schleifstein schaerft eine Schneide, ein Schmiedeflicken setzt Eisen ein. Auf
+	     einem Wollhemd liest sich beides falsch, und die fuenf Ruestungs-Basisklassen
+	     zeigen alle auf das gesperrte resourceRepairKit - ohne Zutun waere unsere
+	     ganze Ruestung unreparierbar.
+
+	     resourceSewingKit steht schon als FREIGABE in der Denylist ("Nadel und Faden")
+	     und traegt in Vanilla sogar die Tags armorLightSkill, armorMediumSkill und
+	     armorHeavySkill. Es fehlen ihm aber zwei Dinge, und beide sind gemessen:
+
+	       - KEIN REZEPT. In ganz recipes.xml kommt resourceSewingKit nicht als
+	         Rezeptname vor; es gibt es nur aus Loot und beim Haendler. Das Rezept
+	         steht darum in recipes.xml dieses Modlets.
+	       - KEIN RepairAmount. Ein Gegenstand ohne diesen Wert gibt beim Reparieren
+	         keine Haltbarkeit zurueck. 32000 ist Vanillas Zahl fuer "so viel, wie das
+	         Stueck fassen kann" - uebernommen vom Reparatur-Kit.
+
+	     WARUM VOLL UND NICHT TEILWEISE: D60s Teilung (Schleifstein teilweise, Flicken
+	     voll an der Esse) haengt an der SCHNEIDE. Tuch und Leder naeht man ganz, dafuer
+	     braucht man kein Feuer. Das Kettenhemd dagegen flickt der Schmiedeflicken, also
+	     bleibt die Esse genau dort Bedingung, wo Eisen im Spiel ist. D62 ergaenzt D60,
+	     es hebt es nicht auf.
+	-->
+	<append xpath="/items/item[@name='resourceSewingKit']">
+		<property name="RepairAmount" value="32000" />
+		<property name="RepairTime" value="4" />
+	</append>
+
+	<!-- Die fuenf Ruestungs-Basisklassen. armorDLCMaster steht mit dabei, obwohl kein
+	     DLC-Teil erreichbar ist: ein Zeiger auf einen gesperrten Gegenstand ist ein
+	     offener Faden, und ein offener Faden kostet hier eine Zeile. -->
+	<set xpath="/items/item[@name='armorPrimitiveMaster']/property[@name='RepairTools']/@value">resourceSewingKit</set>
+	<set xpath="/items/item[@name='armorLightMaster']/property[@name='RepairTools']/@value">resourceSewingKit</set>
+	<set xpath="/items/item[@name='armorMediumMaster']/property[@name='RepairTools']/@value">resourceSewingKit</set>
+	<set xpath="/items/item[@name='armorHeavyMaster']/property[@name='RepairTools']/@value">itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='armorDLCMaster']/property[@name='RepairTools']/@value">resourceSewingKit</set>
+
+	<!-- NOCH OFFEN, UND ZWAR GEZAEHLT: nach diesem Schritt zeigen noch zehn erlaubte
+	     Gegenstaende auf resourceRepairKit - vier Boegen (WP5.2, haengt am Urteil ueber
+	     die modernen Kennungen), fuenf Werkzeuge (Spitzhacke, Schaufel, Klauenhammer je
+	     Stufe) und partsMaster. Die Werkzeuge gehoeren zu F-05 und keinem Paket der
+	     Phase 1, also bleibt der Aufschub in aufschub.txt stehen. Eine Pruefung, die
+	     "erlaubter Gegenstand repariert mit gesperrtem Werkzeug" von selbst findet,
+	     gibt es bisher NICHT - diese zehn sind von Hand gezaehlt. Vermerkt in
+	     Vertrag 04 als offener Punkt. -->
 
 </config>

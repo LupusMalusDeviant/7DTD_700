@@ -229,6 +229,118 @@
 			<ingredient name="resourceCoal" count="1" />
 		</recipe>
 
+		<!-- Naehzeug (D62). Vanilla hat resourceSewingKit, aber KEIN Rezept dafuer -
+		     gemessen: der Name kommt in recipes.xml nicht als Rezeptname vor, es gibt
+		     ihn nur aus Loot und beim Haendler. Ohne Rezept waere unsere Stoff- und
+		     Lederruestung von Fundgluck abhaengig. Knochennadel und Pflanzenfaden,
+		     zwei auf einmal, ueberall. -->
+		<recipe name="resourceSewingKit" count="2" is_trackable="false">
+			<ingredient name="resourceBone" count="1" />
+			<ingredient name="resourceYuccaFibers" count="10" />
+		</recipe>
+
+		<!-- ====================================================
+		     WP5.5 - die zwoelf Ruestungsteile (D59, D61)
+		     ====================================================
+		     Drei Stufen, je vier Slots, und die Werkstatt steigt mit der Stufe:
+
+		       T1 Wolle und Leder   von Hand          - Kleidung naeht man ueberall
+		       T2 Gambeson          am Webstuhl       - gesteppte Bahnen brauchen Gewebe
+		       T3 Kette und Eisen   Esse mit Amboss   - F-03: "Kettenhemd erst nach
+		                                                 Rennofen und Esse"
+
+		     Das ist dieselbe Treppe wie bei den Waffen (WP5.1) und sie macht die
+		     Werkstattkette aus WP4 zur Bedingung, ohne eine einzige neue Regel.
+		-->
+
+		<!-- ==== T1: von Hand ==== -->
+
+		<recipe name="itm700_lederwams" count="1" is_trackable="false">
+			<ingredient name="resourceLeather" count="10" />
+			<ingredient name="resourceCloth" count="5" />
+		</recipe>
+
+		<recipe name="itm700_lederkappe" count="1" is_trackable="false">
+			<ingredient name="resourceLeather" count="4" />
+			<ingredient name="resourceCloth" count="2" />
+		</recipe>
+
+		<recipe name="itm700_wollhandschuhe" count="1" is_trackable="false">
+			<ingredient name="resourceCloth" count="8" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<recipe name="itm700_wickelschuhe" count="1" is_trackable="false">
+			<ingredient name="resourceLeather" count="6" />
+			<ingredient name="resourceCloth" count="4" />
+		</recipe>
+
+		<!-- ==== T2: am Webstuhl ====
+
+		     Die Steppbahn ist das Zwischenprodukt, das dem Webstuhl seinen Zweck gibt:
+		     zwei Lagen Tuch mit Werg dazwischen, vernaeht. Mit ihr traegt der Webstuhl
+		     FUENF Rezepte (Steppbahn und die vier Gambeson-Teile) und erfuellt damit
+		     F-04s Kriterium "mindestens fuenf Rezepte" - genau der Grund, aus dem D57
+		     ihn aus WP4.4 hierher verschoben hat. Tuch allein waere ein Rezept gewesen.
+
+		     Tuch selbst bleibt, wo Vanilla es hat (von Hand, aus Baumwolle oder Fasern).
+		     Es an den Webstuhl zu binden wuerde das fruehe Spiel zumauern: Tuch braucht
+		     man fuer Verbaende und Bettzeug, lange bevor eine Werkstatt steht.
+		-->
+
+		<recipe name="itm700_steppbahn" count="1" craft_area="webstuhl" is_trackable="false">
+			<ingredient name="resourceCloth" count="6" />
+			<ingredient name="resourceYuccaFibers" count="10" />
+		</recipe>
+
+		<recipe name="itm700_gambeson" count="1" craft_area="webstuhl" craft_time="60" is_trackable="false">
+			<ingredient name="itm700_steppbahn" count="4" />
+			<ingredient name="resourceLeather" count="4" />
+		</recipe>
+
+		<recipe name="itm700_stepphaube" count="1" craft_area="webstuhl" is_trackable="false">
+			<ingredient name="itm700_steppbahn" count="1" />
+			<ingredient name="resourceLeather" count="1" />
+		</recipe>
+
+		<recipe name="itm700_stepphandschuhe" count="1" craft_area="webstuhl" is_trackable="false">
+			<ingredient name="itm700_steppbahn" count="1" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<recipe name="itm700_steppschuhe" count="1" craft_area="webstuhl" is_trackable="false">
+			<ingredient name="itm700_steppbahn" count="2" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<!-- ==== T3: Esse mit Amboss ====
+
+		     Schmiedeeisen, nicht Luppe: die Kette haengt an WP4.6, wo Raseneisenerz
+		     ueber die Luppe zum Schmiedeeisen wird. Leder steht in jedem der vier
+		     Rezepte, weil Schienen auf Leder sitzen und ein Kettenhemd einen Kragen
+		     und Riemen braucht.
+		-->
+
+		<recipe name="itm700_kettenhemd" count="1" craft_area="forge" craft_tool="toolAnvil" craft_time="120" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="25" />
+			<ingredient name="resourceLeather" count="5" />
+		</recipe>
+
+		<recipe name="itm700_spangenhelm" count="1" craft_area="forge" craft_tool="toolAnvil" craft_time="60" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="12" />
+			<ingredient name="resourceLeather" count="2" />
+		</recipe>
+
+		<recipe name="itm700_armschienen" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="8" />
+			<ingredient name="resourceLeather" count="3" />
+		</recipe>
+
+		<recipe name="itm700_beinschienen" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+			<ingredient name="resourceForgedIron" count="10" />
+			<ingredient name="resourceLeather" count="4" />
+		</recipe>
+
 	</append>
 
 </config>

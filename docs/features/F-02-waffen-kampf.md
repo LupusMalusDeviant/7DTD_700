@@ -73,9 +73,14 @@ und damit immer volle Reparatur. Daraus folgt für Phase 1, ohne Patch:
 |---|---|---|---|
 | **Schleifstein** | überall | klein | repariert nur teilweise, mehrere Steine je Instandsetzung |
 | **Schmiedeflicken** | **nur an der Esse** | voll | volle Reparatur — „beim Schmied" ist das Rezept, nicht der Vorgang |
+| **Nähzeug** (D62) | überall | voll | flickt, was nicht aus Eisen ist: T0, T1 und T2 der Rüstung. Vanillas `resourceSewingKit`, in WP5.5 um Rezept und `RepairAmount` ergänzt |
 
-Beide ersetzen `resourceRepairKit`, das genau dafür zu WP5 aufgeschoben war
-(`tools/check/aufschub.txt`). Der Verlust an Maximal-Haltbarkeit wandert nach **Phase 2** und
+Alle drei ersetzen `resourceRepairKit`, das genau dafür zu WP5 aufgeschoben war
+(`tools/check/aufschub.txt`). **Gezählt, nicht geschätzt:** 23 erlaubte Gegenstände zeigten auf
+das Kit, 13 sind umgehängt (8 Waffen in WP5.4, 5 Rüstungsklassen in WP5.5), **10 sind offen** —
+vier Bögen (WP5.2), fünf Werkzeuge (F-05, kein Paket der Phase 1) und `partsMaster` (WP7). Eine
+Prüfung, die „erlaubter Gegenstand repariert mit gesperrtem Werkzeug" selbst findet, gibt es
+**nicht**; die zehn sind von Hand gezählt und als offener Punkt in Vertrag 04 vermerkt. Der Verlust an Maximal-Haltbarkeit wandert nach **Phase 2** und
 bekommt dort Finding und Eintrag im Patch-Manifest; D21 bleibt gültig, D60 verfeinert es nur.
 
 **Die Handwerksqualität ist eine Sprachdatei-Arbeit, kein Patch.** Vanilla liest die sieben

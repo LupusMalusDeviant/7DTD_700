@@ -12,7 +12,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     435 Zeilen. -->
+	     436 Zeilen. -->
 
 	<set xpath="/items/item[@name='TEST_ITEM_00']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
 	<set xpath="/items/item[@name='TEST_ITEM_01']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:179 -->
@@ -384,6 +384,7 @@
 	<set xpath="/items/item[@name='questRewardT4FoodBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:149 -->
 	<set xpath="/items/item[@name='questRewardT5BookBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:149 -->
 	<append xpath="/items/item[@name='resourceAcid']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:57 -->
+	<append xpath="/items/item[@name='resourceArmorCraftingKit']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:270 -->
 	<append xpath="/items/item[@name='resourceBuckshot']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:59 -->
 	<append xpath="/items/item[@name='resourceBulletCasing']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:60 -->
 	<append xpath="/items/item[@name='resourceBulletTip']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:61 -->
