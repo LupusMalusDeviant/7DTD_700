@@ -313,6 +313,85 @@ $schonVerborgen = @('perkDeadEye','perkBoomstick','perkGunslinger','perkMachineG
                     'perkGreaseMonkey','perkJunkMiner','perkSalvageOperations')
 
 # ===========================================================================
+# 4b  Die 14 ueberlebenden Handwerks-Stufen an die Baeume (D68).
+#
+# Sie haengen in Vanilla alle an attCrafting und sind die TIEFE der Baeume, die der Purge
+# duenn gemacht hat: craftingWorkstations behaelt 15 von 20 Marken, craftingHarvestingTools
+# 8 von 10, craftingMedical 1 von 8. Vier Perks plus vier Handwerks-Stufen sind ein Baum,
+# vier Perks allein sind keiner.
+#
+# RISIKO R8, vom Nutzer getragen: XUiC_CategoryList::SetupCategoriesByWorkstation liest die
+# Zeichenkette "attcrafting". Gemessen filtert die Methode IsAttribute und nutzt nur
+# ProgressionClass::Name und ::Icon - die Handwerks-Stufen also nicht, und Hidden liest sie
+# auch nicht. Das ist ein Schluss aus der Aufrufliste, kein beobachtetes Verhalten
+# (Pruefliste 15).
+#
+# attCrafting selbst bleibt BESTEHEN (die Zeichenkette im Code zeigt darauf) und wird nur
+# verborgen, weil es nach dem Umhaengen ein leerer Behaelter mit Vanilla-Namen waere.
+$handwerk = @(
+    @{ Name = 'craftingHarvestingTools'; Attribut = 'attStrength'
+       De = 'Werkzeugschmiede';  En = 'Toolsmithing'
+       DeDesc = 'Axt, Hacke und Schaufel schmieden und in besserer Güte.'
+       EnDesc = 'Forge axe, pick and shovel, and in better grade.' }
+    @{ Name = 'craftingRepairTools';     Attribut = 'attStrength'
+       De = 'Flickwerk';         En = 'Mending'
+       DeDesc = 'Hammer und Flicken, mit denen man alles andere wieder herrichtet.'
+       EnDesc = 'Hammer and patch, with which everything else is set right again.' }
+    @{ Name = 'craftingWorkstations';    Attribut = 'attStrength'
+       De = 'Werkstattbau';      En = 'Workshop building'
+       DeDesc = 'Rennofen, Esse, Zimmermannsbank, Kalkofen und was dazugehört.'
+       EnDesc = 'Bloomery, forge, carpenter''s bench, lime kiln and what belongs to them.' }
+    @{ Name = 'craftingArmor';           Attribut = 'attStrength'
+       De = 'Rüstungsbau';       En = 'Armouring'
+       DeDesc = 'Wolle, Leder, Gambeson und Kette, genäht und genietet.'
+       EnDesc = 'Wool, leather, gambeson and mail, sewn and riveted.' }
+
+    @{ Name = 'craftingKnuckles';        Attribut = 'attFortitude'
+       De = 'Schlagringe';       En = 'Knuckles'
+       DeDesc = 'Was man um die Faust legt, wenn nichts anderes zur Hand ist.'
+       EnDesc = 'What you wrap around the fist when nothing else is to hand.' }
+    @{ Name = 'craftingClubs';           Attribut = 'attFortitude'
+       De = 'Keulenbau';         En = 'Club-making'
+       DeDesc = 'Holz, Beschlag und Griff: die einfachste Waffe und die zuverlässigste.'
+       EnDesc = 'Wood, fitting and grip: the simplest weapon and the most reliable.' }
+    @{ Name = 'craftingSledgehammers';   Attribut = 'attFortitude'
+       De = 'Hammerbau';         En = 'Hammer-making'
+       DeDesc = 'Der schwere Kopf auf dem langen Schaft.'
+       EnDesc = 'The heavy head on the long shaft.' }
+
+    @{ Name = 'craftingBlades';          Attribut = 'attAgility'
+       De = 'Klingenschmiede';   En = 'Bladesmithing'
+       DeDesc = 'Messer aus Knochen, Eisen und Stahl, geschärft und gehärtet.'
+       EnDesc = 'Knives of bone, iron and steel, sharpened and hardened.' }
+    @{ Name = 'craftingBows';            Attribut = 'attAgility'
+       De = 'Bogenbau';          En = 'Bowyery'
+       DeDesc = 'Bogen, Armbrust, Pfeil und Bolzen.'
+       EnDesc = 'Bow, crossbow, arrow and bolt.' }
+    @{ Name = 'craftingSpears';          Attribut = 'attAgility'
+       De = 'Speerbau';          En = 'Spear-making'
+       DeDesc = 'Spitze, Schaft und Bindung.'
+       EnDesc = 'Head, shaft and binding.' }
+
+    @{ Name = 'craftingMedical';         Attribut = 'attIntellect'
+       De = 'Wundversorgung';    En = 'Wound-dressing'
+       DeDesc = 'Verband, Salbe und was eine Wunde schließt.'
+       EnDesc = 'Dressing, salve and what closes a wound.' }
+    @{ Name = 'craftingFood';            Attribut = 'attIntellect'
+       De = 'Küche';             En = 'Cookery'
+       DeDesc = 'Kochen, braten, einlegen — und wissen, was gegessen werden kann.'
+       EnDesc = 'Boil, roast, preserve — and know what can be eaten.' }
+    @{ Name = 'craftingSeeds';           Attribut = 'attIntellect'
+       De = 'Kräutergarten';     En = 'Herb garden'
+       DeDesc = 'Saat ziehen und Kraut setzen.'
+       EnDesc = 'Raise seed and set herbs.' }
+
+    @{ Name = 'craftingBackpack';        Attribut = 'attPerception'
+       De = 'Sattlerei';         En = 'Saddlery'
+       DeDesc = 'Ranzen, Riemen und Traggestell.'
+       EnDesc = 'Pack, strap and carrying frame.' }
+)
+
+# ===========================================================================
 # 5  Gegenstands-Marken umhaengen. Marke und Perk wandern in EINEM Stueck.
 # ===========================================================================
 $marken = @(
@@ -406,6 +485,24 @@ $pz += "`t<!-- Zwei weitere Perks ohne Gegenstaende, erst durch die Wirkungsmess
 foreach ($n in $neuVerborgen) {
     $pz += "`t<setattribute name=`"hidden`" xpath=`"/progression/perks/perk[@name='$n']`">true</setattribute>"
 }
+$pz += ''
+
+# D68: die 14 ueberlebenden Handwerks-Stufen an die Baeume.
+$handwerkUmgehaengt = 0
+$pz += "`t<!-- D68: die 14 ueberlebenden Handwerks-Stufen von attCrafting an die Baeume -->"
+foreach ($h in $handwerk) {
+    $c = $prog.SelectSingleNode("//crafting_skill[@name='$($h.Name)']")
+    if (-not $c) { throw "Handwerks-Stufe '$($h.Name)' gibt es nicht." }
+    if ($c.parent -eq $h.Attribut) { $pz += "`t<!-- $($h.Name) liegt schon an $($h.Attribut) -->"; continue }
+    $pz += "`t<set xpath=`"/progression/crafting_skills/crafting_skill[@name='$($h.Name)']/@parent`">$($h.Attribut)</set>   <!-- $($baeume[$h.Attribut].de) / $($h.De) -->"
+    $handwerkUmgehaengt++
+}
+$pz += ''
+$pz += "`t<!-- attCrafting BLEIBT BESTEHEN - XUiC_CategoryList::SetupCategoriesByWorkstation liest"
+$pz += "`t     die Zeichenkette 'attcrafting'. Es wird nur verborgen, weil es nach dem Umhaengen"
+$pz += "`t     ein leerer Behaelter mit Vanilla-Namen waere. Gemessen liest die genannte Methode"
+$pz += "`t     ProgressionClass::Hidden NICHT, der Kategorie-Knopf bleibt also. -->"
+$pz += "`t<setattribute name=`"hidden`" xpath=`"/progression/attributes/attribute[@name='attCrafting']`">true</setattribute>"
 $pz += ''
 
 $umgehaengtePerks = 0
@@ -521,6 +618,15 @@ foreach ($k in $perks) {
     if ($n.long_desc_key) { $cz += Zeile $n.long_desc_key $k.EnDesc $k.DeDesc }
 }
 
+# D68: Namen und Beschreibungen der 14 Handwerks-Stufen. Alle 24 Vanilla-Schluessel sind
+# gemessen EINDEUTIG (kein Fall wie skillCombatPerksName), darum keine eigenen Schluessel.
+foreach ($h in $handwerk) {
+    $c = $prog.SelectSingleNode("//crafting_skill[@name='$($h.Name)']")
+    if ($c.name_key -and $keyNutzer[$c.name_key] -eq 1) { $cz += Zeile $c.name_key $h.En $h.De }
+    if ($c.desc_key -and $keyNutzer[$c.desc_key] -eq 1) { $cz += Zeile $c.desc_key $h.EnDesc $h.DeDesc }
+    if ($c.long_desc_key -and $keyNutzer[$c.long_desc_key] -eq 1) { $cz += Zeile $c.long_desc_key $h.EnDesc $h.DeDesc }
+}
+
 $doppelt = $cz | ForEach-Object { ($_ -split ',')[0] } | Group-Object | Where-Object { $_.Count -gt 1 }
 if ($doppelt) { throw ("Doppelte Schluessel: " + (($doppelt | ForEach-Object { $_.Name }) -join ', ')) }
 
@@ -539,6 +645,7 @@ Write-Output ("  Perks umgehaengt:              {0} von {1}" -f $umgehaengtePerk
 Write-Output ("  progression_name berichtigt:   {0} Zeilen" -f $reqZeilen)
 Write-Output ("  Perks neu verborgen:           {0}" -f $neuVerborgen.Count)
 Write-Output ("  Gegenstands-Marken umgehaengt: {0}" -f $markenZeilen)
+Write-Output ("  Handwerks-Stufen umgehaengt:   {0} von {1} (D68)" -f $handwerkUmgehaengt, $handwerk.Count)
 Write-Output ("  Perks unberuehrt (ohne Attributbedingung): {0}" -f $bleiben.Count)
 Write-Output ("  Localization-Zeilen:           {0}" -f $cz.Count)
 Write-Output ("  davon eigene Schluessel:       {0} (geteilte Vanilla-Schluessel umgebogen)" -f $eigeneSchluessel)

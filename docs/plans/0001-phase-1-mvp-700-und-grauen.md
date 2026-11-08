@@ -1479,6 +1479,19 @@ werden:
     Die drei Behälter-Attribute erscheinen weiter als Kategorie-Knöpfe an der Werkbank —
     das ist Vanilla-Verhalten, kein Fehler von uns.
 
+15. **Die Kategorie-Knöpfe an den Werkbänken ansehen** (WP7.2/D68, 8. November 2026).
+    Die 14 Handwerks-Stufen hängen jetzt an den fünf Bäumen statt an `attCrafting`, und
+    `attCrafting` selbst ist verborgen. **Das ist Risiko R8 und der einzige Punkt in WP7,**
+    **an dem ein Schluss aus einer Aufrufliste gegen das Spiel steht:**
+    `XUiC_CategoryList::SetupCategoriesByWorkstation` liest die Zeichenkette `attcrafting`,
+    filtert gemessen `get_IsAttribute` und nutzt nur `ProgressionClass::Name` und `::Icon` —
+    die Handwerks-Stufen also nicht, und `Hidden` liest sie auch nicht. Zu prüfen: an der
+    Zimmermannsbank, am Rennofen und an der Esse muss die Kategorie-Leiste oben wie vorher
+    aussehen. Fehlen Knöpfe oder ist die Leiste leer, war der Schluss falsch, und D68 muss
+    einen anderen Weg nehmen (die Stufen zurück an `attCrafting`, Bäume dünn lassen).
+    Zweitens: stehen die 14 Stufen mit deutschen Namen unter den Bäumen —
+    Werkzeugschmiede, Bogenbau, Wundversorgung, Sattlerei?
+
 ## Offene Punkte
 
 - ~~**Die Fackel-Zahl.** `GrowthRate` steht in Minuten, gewünscht ist eine Brenndauer in

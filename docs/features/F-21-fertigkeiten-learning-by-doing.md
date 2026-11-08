@@ -160,3 +160,28 @@ Projekts — Phase 2, nicht Phase 1, und vorher braucht es ein Finding plus Soll
 
 Wie weit Learning by Doing gehen soll, wenn es C# kostet, ist **noch nicht entschieden**.
 Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-2--f-21-lernen-und-fortschritt)
+
+### D68 — die Handwerks-Stufen sind jetzt die Tiefe der Bäume (8. November 2026)
+
+Vom Nutzer entschieden: die **14 überlebenden** Handwerks-Stufen wandern von `attCrafting`
+an die fünf Bäume. Je ein `<set>` auf `@parent`, keine erfundene Zahl.
+
+| Baum | Handwerks-Stufen | lebende Freischalt-Marken |
+|---|---|---|
+| Handwerker | Werkzeugschmiede, Flickwerk, Werkstattbau, Rüstungsbau | 8/10, 1/2, 15/20, 8/68 |
+| Krieger | Schlagringe, Keulenbau, Hammerbau | 3/3, 2/3, 3/3 |
+| Jäger | Klingenschmiede, Bogenbau, Speerbau | 3/3, 5/5, 3/3 |
+| Heiler | Wundversorgung, Küche, Kräutergarten | 1/8, 9/37, 4/12 |
+| Fuhrmann | Sattlerei | 3/3 |
+
+Damit hat der Handwerker 4 Perks plus 4 Stufen, der Heiler 4 plus 3 — D67 ist anders
+erfüllt als gedacht, aber erfüllt.
+
+`attCrafting` **bleibt bestehen** (`XUiC_CategoryList::SetupCategoriesByWorkstation` liest
+die Zeichenkette `attcrafting`) und wird nur **verborgen**, weil es nach dem Umhängen ein
+leerer Behälter mit Vanilla-Namen wäre.
+
+**Risiko R8 ist der einzige Punkt in WP7, an dem ein Schluss aus einer Aufrufliste gegen
+das Spiel steht.** Die Methode filtert gemessen `get_IsAttribute` und nutzt nur
+`ProgressionClass::Name` und `::Icon`; `Hidden` liest sie nicht. Beobachtet ist das nicht →
+**Prüfliste 15**. Fällt es falsch aus, fehlen Kategorie-Knöpfe an den Werkbänken.

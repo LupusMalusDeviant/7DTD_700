@@ -187,6 +187,28 @@
 	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkIntellectMastery']">true</setattribute>
 	<setattribute name="hidden" xpath="/progression/perks/perk[@name='perkFlurryOfIntellect']">true</setattribute>
 
+	<!-- D68: die 14 ueberlebenden Handwerks-Stufen von attCrafting an die Baeume -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingHarvestingTools']/@parent">attStrength</set>   <!-- Handwerker / Werkzeugschmiede -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingRepairTools']/@parent">attStrength</set>   <!-- Handwerker / Flickwerk -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/@parent">attStrength</set>   <!-- Handwerker / Werkstattbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/@parent">attStrength</set>   <!-- Handwerker / Rüstungsbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingKnuckles']/@parent">attFortitude</set>   <!-- Krieger / Schlagringe -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingClubs']/@parent">attFortitude</set>   <!-- Krieger / Keulenbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingSledgehammers']/@parent">attFortitude</set>   <!-- Krieger / Hammerbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingBlades']/@parent">attAgility</set>   <!-- Jäger / Klingenschmiede -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingBows']/@parent">attAgility</set>   <!-- Jäger / Bogenbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingSpears']/@parent">attAgility</set>   <!-- Jäger / Speerbau -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/@parent">attIntellect</set>   <!-- Heiler / Wundversorgung -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/@parent">attIntellect</set>   <!-- Heiler / Küche -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingSeeds']/@parent">attIntellect</set>   <!-- Heiler / Kräutergarten -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingBackpack']/@parent">attPerception</set>   <!-- Fuhrmann / Sattlerei -->
+
+	<!-- attCrafting BLEIBT BESTEHEN - XUiC_CategoryList::SetupCategoriesByWorkstation liest
+	     die Zeichenkette 'attcrafting'. Es wird nur verborgen, weil es nach dem Umhaengen
+	     ein leerer Behaelter mit Vanilla-Namen waere. Gemessen liest die genannte Methode
+	     ProgressionClass::Hidden NICHT, der Kategorie-Knopf bleibt also. -->
+	<setattribute name="hidden" xpath="/progression/attributes/attribute[@name='attCrafting']">true</setattribute>
+
 	<!-- perkPummelPete -> Krieger / Keulenschlag -->
 	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
 	<set xpath="/progression/perks/perk[@name='perkPummelPete']/level_requirements[@level='2']/requirement[@name='ProgressionLevel']/@progression_name">attFortitude</set>
