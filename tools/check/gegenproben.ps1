@@ -118,6 +118,58 @@ function Test-Output {
     }
 }
 
+function Test-Script {
+    <#
+        Wie Test-Output, laeuft aber gegen ein PowerShell-Pruefskript statt gegen
+        mod700check. Gebraucht seit WP5.5b fuer kette-pruefen.ps1: auch ein Skript ist ein
+        Pruefwerkzeug, und ein Pruefwerkzeug ohne Gegenprobe ist kein Signal
+        (Projektregel 5). Die Parameter kommen als Hashtable, weil das Skript benannte
+        Parameter nimmt und keine Argumentliste.
+    #>
+    param(
+        [string]$Name,
+        [int]$Expected,
+        [hashtable]$Parameters,
+        [string[]]$MustContain = @(),
+        [string[]]$MustNotContain = @()
+    )
+
+    $script:checked++
+    $skript = Join-Path $here 'kette-pruefen.ps1'
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = & $skript @Parameters
+        $actual = if ($LASTEXITCODE -ne $null) { $LASTEXITCODE } else { 0 }
+    }
+    catch {
+        $output = $_.Exception.Message
+        $actual = -1
+    }
+    finally {
+        $ErrorActionPreference = $previous
+    }
+    $text = ($output | Out-String)
+
+    $problems = @()
+    if ($actual -ne $Expected) { $problems += "Exit $actual erwartet $Expected" }
+    foreach ($m in $MustContain) {
+        if ($text -notmatch [regex]::Escape($m)) { $problems += "fehlt in der Ausgabe: $m" }
+    }
+    foreach ($m in $MustNotContain) {
+        if ($text -match [regex]::Escape($m)) { $problems += "darf nicht in der Ausgabe stehen: $m" }
+    }
+
+    if ($problems.Count -eq 0) {
+        Write-Output ("  [ok]   " + $Name + "  (Exit $actual)")
+    }
+    else {
+        $script:failed++
+        Write-Output ("  [ROT]  " + $Name)
+        $problems | ForEach-Object { Write-Output ("         " + $_) }
+    }
+}
+
 Write-Output "== Gegenproben: der saubere Satz muss gruen sein =="
 Test-Case 'anachronisms, sauberer Satz' 0 @(
     'anachronisms', (Join-Path $data 'sauber'),
@@ -374,6 +426,27 @@ Test-Case 'fehlender Pfad' 2 @('recipes')
 Test-Case 'Ordner ohne items.xml' 2 @('recipes', $here)
 Test-Case 'unbekannte Option' 2 @(
     'recipes', (Join-Path $data 'sauber'), '--quatsch')
+
+Write-Output ""
+Write-Output "== Gegenproben: kette-pruefen sieht auch eigene BLOECKE =="
+# WARUM DIESE ZWEI PRUEFUNGEN EXISTIEREN (WP5.5b, 8. November 2026). kette-pruefen hat
+# Vanillas blocks.xml gelesen, unsere aber nicht. Beim ersten eigenen Block des Projekts -
+# dem Webstuhl - meldete es darum dessen Bau-Rezept als 'nirgends definiert'. Die
+# Erweiterung liest jetzt auch unsere blocks.xml, und damit ist die Frage offen, ob sie
+# das Signal geschaerft oder abgeschaltet hat. Projektregel 5 verlangt eine Antwort: der
+# saubere Satz muss gruen sein UND der vertippte Blockname muss weiter rot werden.
+Test-Script 'kette-pruefen: eigener Block wird aufgeloest' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('unaufgeloeste Verweise: 0')
+Test-Script 'kette-pruefen: vertippter Blockname bleibt rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\falsch\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("'pruefBlockGibtesnicht' ist nirgends definiert")
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

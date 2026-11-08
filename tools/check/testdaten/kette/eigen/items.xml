@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1: ein eigener Gegenstand. -->
+<config>
+	<append xpath="/items">
+		<item name="itm700_pruefteil">
+			<property name="Extends" value="pruefRohstoff" />
+		</item>
+	</append>
+</config>

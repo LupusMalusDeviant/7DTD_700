@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, FALSCHER SATZ: der Blockname ist vertippt.
+     Das ist der Fehler, den die Erweiterung aus WP5.5b finden MUSS - sonst hat sie
+     das Signal nicht geschaerft, sondern abgeschaltet. -->
+<config>
+	<append xpath="/recipes">
+		<recipe name="pruefBlockGibtesnicht" count="1">
+			<ingredient name="pruefRohstoff" count="10" />
+		</recipe>
+	</append>
+</config>

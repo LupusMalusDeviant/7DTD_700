@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1: ein EIGENER Block. Vor WP5.5b hat das Skript
+     diese Datei nicht gelesen, und ein Rezept auf pruefBlockEigen galt als
+     unaufgeloest. -->
+<config>
+	<append xpath="/blocks">
+		<block name="pruefBlockEigen">
+			<property name="Class" value="Workstation" />
+		</block>
+	</append>
+</config>

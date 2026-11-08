@@ -816,6 +816,44 @@ Jetzt sucht es `mod/**/recipes.xml` und `mod/**/items.xml` selbst und nimmt `700
 aus (erzeugt, enthält nur Entfernungen). Gemessen nach der Änderung: **15 Rezepte, 12
 werkzeuggebunden, 0 unaufgelöste Verweise** — vorher sah derselbe Lauf nur 4 davon.
 
+### Nachtrag WP5.5b (2026-11-08): es sieht auch unsere **Blöcke** — **Abnahme offen**
+
+Derselbe Fehler, eine Stufe später bemerkt. Das Skript las Vanillas `blocks.xml`, **unsere
+aber nicht**: die Definitionen kamen aus Vanillas `items.xml` und `blocks.xml` plus unseren
+`items.xml`. Beim ersten eigenen Block des Projekts — dem Webstuhl — meldete es dessen
+Bau-Rezept darum als
+
+```
+[ROT]  Ergebnis 'blk700_webstuhl' ist nirgends definiert  (recipes.xml / blk700_webstuhl)
+```
+
+obwohl die Definition zwei Dateien weiter liegt. **Diesmal war der Fehler ein falsches Rot und
+kein falsches Grün** — und genau darum ist er aufgefallen. Hätte das Projekt den Block ohne
+Rezept gebaut, wäre er umgekehrt gelaufen: ein Tippfehler in einem Blocknamen wäre nie
+aufgefallen.
+
+Jetzt sucht es zusätzlich `mod/**/blocks.xml` (ohne `700_10_Purge`) und nimmt `<block name>`
+daraus auf. Neuer Parameter `-Bloecke`, damit der Satz Prüfdaten von außen zu setzen ist.
+
+**Gegenproben (Projektregel 5) — zwei gebaut und grün.** Eine Erweiterung, die nur ein Rot
+wegnimmt, kann das Signal auch abgeschaltet haben. Beide Läufe stehen in `gegenproben.ps1`
+(neue Hilfsfunktion `Test-Script`, weil auch ein PowerShell-Skript ein Prüfwerkzeug ist) und
+arbeiten auf `testdaten/kette/` mit erfundenen Kennungen:
+
+| Gegenprobe | erwartet | prüft |
+|---|---|---|
+| eigener Block wird aufgelöst | Exit 0, `unaufgeloeste Verweise: 0` | die Erweiterung wirkt |
+| vertippter Blockname bleibt rot | Exit 1, `'pruefBlockGibtesnicht' ist nirgends definiert` | sie hat das Signal nicht abgeschaltet |
+
+Gemessen nach der Änderung: **32 eigene Rezepte, 17 werkzeuggebunden, 18 eigene Definitionen,
+0 unaufgelöste Verweise**; 44 Gegenproben, 0 fehlgeschlagen.
+
+**Was dieser Nachtrag nicht behauptet.** Dass `blk700_webstuhl` auflösbar ist, heißt nicht, dass
+der Block lädt: ob `Mwood`, `ui_game_symbol_workbench`, `advBuilding` und der geborgte
+Prefab-Pfad gültig sind, sieht dieses Skript nicht — es vergleicht Namen von Definitionen mit
+Namen aus Rezepten. Und ob die Fenstergruppe `workstation_blk700_webstuhl` wirklich gefunden
+wird, entscheidet WP3.6.
+
 ## 5b. `rezepte_mit_gesperrter_zutat` — der dritte Nebeneffekt des Purge (Nachtrag WP5.1) — **Abnahme offen**
 
 **Stand:** 8. November 2026, gebaut, zwei Gegenproben grün. Dieser Nachtrag ergänzt §3c.
@@ -924,6 +962,13 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
   - **`RepairItems`.** Der Betonmischer verlangt zur Reparatur `resourceSpring` und
     `resourceMechanicalParts`, beide gesperrt. Ein unreparierbarer Block ist kein Absturz,
     aber auch keine Entscheidung.
+  - **`RepairTools`** (gefunden am 2026-11-08 in WP5.5, von Hand). **23 erlaubte Gegenstände
+    reparieren mit dem gesperrten `resourceRepairKit`** — acht Waffen, fünf
+    Rüstungs-Basisklassen, vier Bögen, fünf Werkzeuge und `partsMaster`. Ein Gegenstand, dessen
+    Reparaturwerkzeug es nicht mehr gibt, ist nicht reparierbar, und das fällt erst im Spiel
+    auf. WP5.4 und WP5.5 haben 13 davon umgehängt (D60, D62), **zehn sind offen**. Die Zahl ist
+    **von Hand gezählt**: eine Prüfung „erlaubter Gegenstand verweist auf gesperrtes Werkzeug"
+    gibt es nicht, und sie wäre dieselbe Frage wie die drei Punkte darüber.
   - **Prefab-Inhalte.** Steht ungeprüft, siehe §3d.
 
   Eine Prüfung dafür gibt es nicht. Sie wäre machbar — dieselben Dateien, andere Frage: nicht

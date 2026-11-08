@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, SAUBERER SATZ: jeder Verweis ist aufloesbar.
+     Das Rezept erzeugt einen eigenen BLOCK - genau der Fall, den das Skript vor
+     WP5.5b nicht kannte. -->
+<config>
+	<append xpath="/recipes">
+		<recipe name="pruefBlockEigen" count="1" craft_tool="pruefWerkzeug">
+			<ingredient name="pruefRohstoff" count="10" />
+			<ingredient name="itm700_pruefteil" count="1" />
+		</recipe>
+	</append>
+</config>

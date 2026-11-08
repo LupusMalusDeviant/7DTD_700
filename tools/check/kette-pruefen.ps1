@@ -30,6 +30,8 @@ param(
     [string[]]$Rezepte,
     # Ordner mit unseren Gegenstands-Patches.
     [string[]]$Gegenstaende,
+    # Ordner mit unseren Block-Patches.
+    [string[]]$Bloecke,
     # Vanilla Data/Config. Ohne Angabe aus SDTD_PATH.
     [string]$Vanilla
 )
@@ -61,6 +63,17 @@ if (-not $Gegenstaende) {
         Where-Object { $_.FullName -notmatch '700_10_Purge' } |
         Select-Object -ExpandProperty FullName)
 }
+# Eigene BLOECKE, hinzugefuegt 2026-11-08 (WP5.5b). Derselbe Fehler wie oben, eine Stufe
+# spaeter bemerkt: das Skript las Vanillas blocks.xml, aber unsere nicht. Der Webstuhl ist
+# der erste eigene Block des Projekts, und sein Bau-Rezept stand damit als 'nirgends
+# definiert' da, obwohl die Definition zwei Dateien weiter liegt. Haette dieses Skript
+# nicht EINEN eigenen Block gesehen, waere der Fehler umgekehrt gelaufen: ein Tippfehler
+# im Blocknamen waere nie aufgefallen.
+if (-not $Bloecke) {
+    $Bloecke = @(Get-ChildItem (Join-Path $repoRoot 'mod') -Recurse -Filter 'blocks.xml' |
+        Where-Object { $_.FullName -notmatch '700_10_Purge' } |
+        Select-Object -ExpandProperty FullName)
+}
 
 Write-Output '== kette-pruefen =='
 Write-Output "  Vanilla: $Vanilla"
@@ -79,6 +92,14 @@ $vanillaCount = $defined.Count
 foreach ($path in $Gegenstaende) {
     if (-not (Test-Path $path)) { continue }
     $matched = Select-String -Path $path -Pattern '<item name="([^"]+)"' -AllMatches
+    foreach ($m in $matched) {
+        foreach ($g in $m.Matches) { $defined[$g.Groups[1].Value] = 'unser' }
+    }
+}
+
+foreach ($path in $Bloecke) {
+    if (-not (Test-Path $path)) { continue }
+    $matched = Select-String -Path $path -Pattern '<block name="([^"]+)"' -AllMatches
     foreach ($m in $matched) {
         foreach ($g in $m.Matches) { $defined[$g.Groups[1].Value] = 'unser' }
     }
