@@ -163,23 +163,44 @@ Was an dieser Kette hängt, Methode für Methode:
 
 | Methode | was sie tut | bei `PlantGrowing` |
 |---|---|---|
-| `BlockTorchHeatMap::UpdateTick` | `GetAIDirector().NotifyActivity(…)` mit `Block::HeatMapStrength` | **weg** |
-| `BlockTorch::getParticleOffset` | setzt die Flamme je `BlockValue::rotation` an die richtige Stelle | **weg** |
-| `BlockTorch::OnBlockPickedUp` | gibt beim Aufnehmen den Gegenstand zurück, mit `UseTimes` aus `meta`/`meta2` | **weg** |
+| `BlockTorchHeatMap::UpdateTick` | `GetAIDirector().NotifyActivity(…)` mit `Block::HeatMapStrength` | **weg — und das bleibt so** |
+| `BlockTorch::getParticleOffset` | setzt die Flamme je `BlockValue::rotation` an die richtige Stelle | weg, aber **wirkungslos**: diese Blöcke melden kein `ParticleName` an |
+| `BlockTorch::OnBlockPickedUp` | gibt beim Aufnehmen den Gegenstand zurück, mit `UseTimes` aus `meta`/`meta2` | weg, aber **ersetzt**: `CanPickup` steht schon im Block |
 
 **`HeatMapStrength` ist ein Feld auf `Block`** und wird für jeden Block aus dem XML gelesen —
 aber **gemeldet** wird es nur von `BlockTorchHeatMap::UpdateTick`. Eine Fackel ohne diese
 Klasse trägt die Zahl also weiter im XML und tut nichts damit.
 
-Zwei der drei Verluste lassen sich mit gewöhnlichen Block-Eigenschaften zurückholen, ohne
-Klasse:
+**Berichtigt am 2026-11-08, noch am selben Tag: zwei der drei Verluste sind keine.** Beim
+Nachsehen der Blöcke selbst, statt nur der Klassen:
 
-- **Aufnehmen:** `CanPickup value="true" param1="<Zielblock>"` ist eine Block-Eigenschaft, keine
-  Methode — `lanternOld_01_Player` benutzt genau das.
-- **Flamme:** `ParticleName` und `ParticleOffset` sind Block-Eigenschaften — `campfire` benutzt
-  genau das (`ParticleName="campfire"`, `ParticleOffset="0.5,0.1,0.5"`). Der Versatz ist dann
-  fest statt drehungsabhängig; bei einer Wandfackel mit vier Drehungen ist das sichtbar und
-  muss im Spieltest beurteilt werden.
+- **Aufnehmen ist schon da.** `wallTorchLight` trägt
+  `CanPickup value="true" param1="meleeToolTorch"` und einen `drop event="Destroy"` auf
+  denselben Gegenstand — beides **Block-Eigenschaften**, die die Klasse nicht berührt.
+  `BlockTorch::OnBlockPickedUp` ergänzt das nur um `UseTimes` aus `meta`/`meta2`, und das
+  braucht eine Fackel ohne Abnutzung nicht. `candleWallLight` (`param1="candle"`) und
+  `candleTableLightPlayer` ebenso.
+- **Die Flamme ist im Prefab, nicht in der Klasse.** Weder `wallTorchLight` noch
+  `wallTorchLightPlayer` deklariert ein `ParticleName` — `BlockTorch::getParticleOffset`
+  berechnet also den Versatz für ein Partikel, das diese Blöcke nie anmelden. Der Verlust ist
+  rechnerisch, nicht sichtbar. (`campfire` macht es anders und deklariert
+  `ParticleName="campfire"` — dort wäre es ein echter Verlust, weshalb die Feuerstelle ohnehin
+  nicht umgedeutet wird.)
+
+**Und das Licht bleibt an.** Das war die naheliegende Sorge, und sie ist unbegründet:
+`BlockLight` ist die Klasse, die `LightLOD::SwitchOnOff` ruft und Intensität, Farbe, Schatten
+und Reichweite setzt — aber **Wandfackel und Kerze benutzen sie gar nicht.** Beide tragen
+`Class="TorchHeatMap"`, also `BlockTorchHeatMap : BlockTorch : BlockParticle`, und leuchten
+trotzdem. Das Licht steckt im Prefab (`MainLight`) und ist voreingestellt an; `BlockLight`
+existiert für **schaltbare** Lampen und setzt den Zustand in `meta`. Vanillas eigener Kommentar
+an `lanternOld_01_Player` sagt dasselbe von der anderen Seite: *„Needs to have a blank class to
+allow the light to turn on automatically when placed."* `PlantGrowing` ist in dieser Frage wie
+eine leere Klasse — es fasst Licht nicht an.
+
+**Offen bleibt genau dieser Punkt bei der Öllampe:** sie hatte bisher die *leere* Klasse, und
+Vanillas Kommentar warnt vor einer nicht-leeren. `PlantGrowing` berührt Licht nicht, aber das
+ist ein Schluss und keine Messung. WP6.6 muss eine Öllampe **unmittelbar nach dem Setzen**
+ansehen.
 
 **Der dritte Verlust bleibt, und er ist eine Spielmechanik:** Fackeln ziehen keine Schreier
 mehr an. Das macht Basen sicherer — **und D29 macht sie im selben Arbeitspaket schon

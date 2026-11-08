@@ -195,3 +195,31 @@ woodGroupDesc                             # Flechtwerk
 cobblestoneGroupDesc                      # Fachwerk
 concreteGroupDesc                         # Bruchstein
 steelBlockGroupDesc                       # Moertelstein
+
+# --- F-08 Licht, WP6.4, D64 ----------------------------------------------------
+# Die vier Lichtquellen. Jeder Schluessel ist gemessen auf seinen Geltungsbereich
+# geprueft, bevor er hier steht - ein geteilter Gruppenschluessel traegt die
+# Beschreibung sonst auf fremde Bloecke.
+#
+#   torchGroupDesc         2 Bloecke (wallTorchLight, candleWallLight) - beide
+#                          Dev-POI-Grundlagen, Text passt auf Fackel UND Kerze
+#   torchPlayerGroupDesc   2 Bloecke (wallTorchLightPlayer, torchWallHolder) -
+#                          brennende Fackel und kalter Halter, Text passt auf beide
+#   candlePlayerGroupDesc  1 Block (candleWallLightPlayer); die Standkerze erbt ihn
+#
+# NICHT ueberschrieben, mit Absicht: 'blockVariantHelperGroupDesc', der
+# Beschreibungsschluessel der Oellampen. GEMESSEN teilen ihn 50 Bloecke -
+# Waffenschraenke, Fernseher, Garagentore, Stuehle. Die vier Lampen zeigen
+# stattdessen per <set> auf unseren eigenen blk700_oellampeDesc.
+meleeToolTorch                            # Fackel (Hand)
+meleeToolTorchDesc
+candle                                    # Unschlittkerze (Gegenstand)
+candleDesc
+wallTorchLightPlayer                      # Wandfackel
+candleWallLightPlayer                     # Wandkerze
+candleTableLightPlayer                    # Standkerze
+torchWallHolder                           # Kalter Fackelhalter = ausgebrannte Fackel
+lanternOld_01_Player                      # Oellampe
+torchGroupDesc
+torchPlayerGroupDesc
+candlePlayerGroupDesc

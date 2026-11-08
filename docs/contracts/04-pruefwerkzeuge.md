@@ -925,6 +925,51 @@ Prüfer etwas sieht — mit ihr beweist sie, dass er nicht **alles** sieht. Ein 
 `<set>`-Wert aufzulösen versucht, stolpert über `ItemCount`, `damage_category` und
 Prefab-Pfade und schreit, bis niemand mehr hinhört.
 
+### Nachtrag WP6.4 (2026-11-08): Verweise in eigenen Definitionen — **Abnahme offen**
+
+**Die vierte Stelle, und die größte.** Die drei Nachträge davor schlossen Lücken im
+*Umbiegen* von Vanilla. Diese schließt eine im *eigenen Schreiben*: ein selbst geschriebener
+Block nennt Kennungen in **Attributen** — und `kette-pruefen` prüfte bis hierher nur, **dass**
+unsere Blöcke existieren, nicht, **worauf** sie zeigen.
+
+WP6.4 schreibt über dreißig solcher Verweise in einem Commit. Aufgelöst werden jetzt sechs
+Stellen, als abgezählte Liste:
+
+| Stelle | was dort steht | Tippfehler kostet |
+|---|---|---|
+| `property[@name='Next']/@value` | der Folgeblock einer `PlantGrowing`-Uhr | **die ganze `blocks.xml`** — `LateInit` wirft `Block with name '…' not found!` |
+| `property[@name='ToBlock']/@value` | das Ziel einer Aufwertung | der Weg zurück fehlt |
+| `property[@name='Item']/@value` | die Zutat einer Aufwertung | die Stufe ist unerreichbar |
+| `property[@name='Extends']/@value` | die Grundlage eines Blocks | der Block erbt nichts |
+| `drop/@name` | ein Abwurf | der Abbau gibt nichts her |
+| `property[@class='RepairItems']/property/@name` | ein Reparaturstoff | der Block ist unreparierbar |
+
+Der Lauf **zählt** sie:
+
+```
+Verweise in eigenen Definitionen: 46
+```
+
+**Nicht dabei, und mit Absicht:** `ActiveRadiusEffects` und `BuffsWhenWalkedOn` (Buffs, stehen
+in `buffs.xml`), `DescriptionKey` und `CustomIcon` (Sprachschlüssel und Symbole — die prüft
+`localization` bzw. das Auge), `Material` (`materials.xml`), `Model` (ein Prefab-Pfad, den nur
+das Spiel auflösen kann), `TraderStageTemplate`. Ein Prüfer, der auch die auflösen wollte,
+wäre ein Prüfer, der schreit.
+
+**Grenze, ausdrücklich:** aufgelöst wird gegen **einen** Topf aus Gegenständen und Blöcken.
+Geprüft ist, dass die Kennung **existiert**, nicht dass sie von der richtigen **Art** ist — ein
+Gegenstand als `Next` bliebe hier grün. Die Art steht erst im gemergten Dump fest (WP3.6).
+
+**Gegenprobe (Projektregel 5) — eine, 49 → 50:** ein eigener Block mit vier vertippten
+Verweisen (`Next`, `Extends`, Reparaturstoff, Abwurf) muss **alle vier einzeln** nennen und
+Exit 1 liefern. Der saubere Satz ist die Probe darüber, die weiter Exit 0 gibt.
+
+**Und der Prüfer hat sich im selben Lauf schon bezahlt:** meine Kommentar-Trennlinien in
+`blocks.xml` enthielten `----`, und `--` ist in einem XML-Kommentar nicht erlaubt. Der Lauf
+brach beim Einlesen ab und nannte Zeile und Spalte. Ohne ihn wäre die Datei im Spiel
+stillschweigend liegengeblieben — dasselbe Muster wie am 8. November früh, nur diesmal in
+Sekunden statt nach einem Commit.
+
 **Was dieser Nachtrag nicht behauptet.** Dass `blk700_webstuhl` auflösbar ist, heißt nicht, dass
 der Block lädt: ob `Mwood`, `ui_game_symbol_workbench`, `advBuilding` und der geborgte
 Prefab-Pfad gültig sind, sieht dieses Skript nicht — es vergleicht Namen von Definitionen mit

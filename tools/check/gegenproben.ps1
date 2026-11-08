@@ -495,6 +495,26 @@ Test-Script 'kette-pruefen: vertippte Aufwertungs-Zutat wird rot' 1 @{
     "Reparaturstoff 'pruefMoertelGibtesnicht' ist nirgends definiert",
     "Abwurf 'pruefSchuttGibtesnicht' ist nirgends definiert")
 
+# WP6.4: die vierte Stelle, und die groesste. Ein selbst geschriebener Block nennt Kennungen
+# in ATTRIBUTEN - Next, ToBlock, Item, Extends, Abwuerfe, Reparaturstoffe -, und bis hierher
+# hat kette-pruefen geprueft, DASS unsere Bloecke existieren, aber nicht, worauf sie zeigen.
+# WP6.4 schreibt davon ueber dreissig in einem Commit; der Lauf loest jetzt 46 auf.
+#
+# Der Folgeblock ist der teuerste Tippfehler: BlockPlantGrowing::LateInit wirft eine
+# Exception, wenn der Zielblock fehlt, und nimmt beim Spielstart die ganze blocks.xml mit.
+# Der saubere Satz steht in der Probe darueber (eigener Block wird aufgeloest, Exit 0) -
+# hier muss jede der vier Arten einzeln rot werden.
+Test-Script 'kette-pruefen: vertippte Verweise in eigener Definition werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\falsch\blocks-eigene-verweise.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "Folgeblock 'pruefStumpfGibtesnicht' ist nirgends definiert",
+    "Grundlage 'pruefBasisGibtesnicht' ist nirgends definiert",
+    "Reparaturstoff 'pruefWachsGibtesnicht' ist nirgends definiert",
+    "Abwurf 'pruefAscheGibtesnicht' ist nirgends definiert")
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {

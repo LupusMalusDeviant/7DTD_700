@@ -223,8 +223,49 @@ foreach ($path in @($Gegenstaende) + @($Bloecke)) {
     }
 }
 
+# VERWEISE IN EIGENEN DEFINITIONEN (ergaenzt 2026-11-08, WP6.4). Die vierte Stelle, und die
+# groesste: ein selbst geschriebener Block nennt Kennungen in Attributen, nicht im
+# Elementtext - Next, ToBlock, Item, Extends, Abwuerfe, Reparaturstoffe. WP6.4 schreibt davon
+# ueber dreissig in einem Commit. Bisher hat kette-pruefen GEPRUEFT, ob unsere Bloecke
+# existieren, aber nicht, worauf sie zeigen.
+#
+# Ein Tippfehler in 'Next' ist dabei der teuerste: BlockPlantGrowing::LateInit WIRFT eine
+# Exception, wenn der Zielblock nicht existiert ("Block with name ' … ' not found!"). Das
+# nimmt beim Start die ganze blocks.xml mit, nicht nur den einen Block.
+#
+# Wieder eine ABGEZAEHLTE Liste von Stellen. Nicht dabei und mit Absicht: ActiveRadiusEffects
+# und BuffsWhenWalkedOn (Buffs, stehen in buffs.xml), DescriptionKey und CustomIcon
+# (Sprachschluessel und Symbole, pruefen 'localization' und das Auge), Material (materials.xml),
+# Model (ein Prefab-Pfad, den nur das Spiel aufloesen kann), TraderStageTemplate.
+$ownRefs = 0
+$ownPaths = @(
+    @{ XPath = "//property[@name='Next']";     Attr = 'value'; Art = 'Folgeblock' },
+    @{ XPath = "//property[@name='ToBlock']";  Attr = 'value'; Art = 'Aufwertungs-Ziel' },
+    @{ XPath = "//property[@name='Item']";     Attr = 'value'; Art = 'Aufwertungs-Zutat' },
+    @{ XPath = "//property[@name='Extends']";  Attr = 'value'; Art = 'Grundlage' },
+    @{ XPath = "//drop";                       Attr = 'name';  Art = 'Abwurf' },
+    @{ XPath = "//property[@class='RepairItems']/property"; Attr = 'name'; Art = 'Reparaturstoff' }
+)
+foreach ($path in @($Gegenstaende) + @($Bloecke)) {
+    if (-not $path -or -not (Test-Path $path)) { continue }
+    $xml = [xml](Get-Content $path -Raw)
+    foreach ($spec in $ownPaths) {
+        foreach ($node in $xml.SelectNodes($spec.XPath)) {
+            $name = $node.GetAttribute($spec.Attr)
+            if (-not $name) { continue }
+            $name = $name.Trim()
+            if ($name.Length -eq 0) { continue }
+            $ownRefs++
+            if (-not $defined.ContainsKey($name)) {
+                $unresolved += "$($spec.Art) '$name' ist nirgends definiert  ($([IO.Path]::GetFileName($path)))"
+            }
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
+Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

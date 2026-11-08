@@ -103,6 +103,31 @@
 			<ingredient name="resourceNail" count="10" />
 		</recipe>
 
+		<!-- Holzfeuer (F-08, WP6.4): Scheite und ein paar Steine als Einfassung. Teuer
+		     genug, dass man es nicht ueberall hinstellt, billig genug fuer eine Nacht im
+		     Freien. Ohne Werkstatt - ein Feuer schichtet man mit den Haenden. -->
+		<recipe name="blk700_holzfeuer" count="1" craft_time="20" is_trackable="false">
+			<ingredient name="resourceWood" count="20" />
+			<ingredient name="resourceRockSmall" count="5" />
+		</recipe>
+
+	</append>
+
+	<!-- ================================================================================
+	     F-08 LICHT, Plan-0001 WP6.4
+
+	     DIE OELLAMPE WAR NICHT BAUBAR. Vanillas Rezept fuer lanternOldBlockVariantHelper
+	     verlangt 5 resourceOil, und resourceOil ist gesperrt (Mineraloel). Gefunden mit
+	     demselben Zaehler, der die vier unbaubaren Werkstaetten gefunden hat:
+	     rezepte_mit_gesperrter_zutat.
+
+	     Das Oel einer Blechlampe um 700 ist Tierfett oder Pflanzenoel, und Tierfett gibt
+	     es als resourceAnimalFat. Die Menge bleibt 5 - die Lampe fassen, nicht
+	     verbilligen. Die uebrigen drei Zutaten (Schmiedeeisen, Naegel, Tuch) stehen alle
+	     und passen zu einer genieteten Blechlampe mit Docht. -->
+	<remove xpath="/recipes/recipe[@name='lanternOldBlockVariantHelper']/ingredient[@name='resourceOil']" />
+	<append xpath="/recipes/recipe[@name='lanternOldBlockVariantHelper']">
+		<ingredient name="resourceAnimalFat" count="5" />
 	</append>
 
 </config>

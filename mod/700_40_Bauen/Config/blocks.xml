@@ -203,4 +203,338 @@
 	     nicht mehr resourceScrapIron, und der zweite XPath wuerde ins Leere greifen. -->
 	<set xpath="/blocks/block[@name='steelShapes']/drop[@event='Harvest'][@name='resourceScrapIron']/@count">20</set>
 	<set xpath="/blocks/block[@name='steelShapes']/drop[@event='Harvest'][@name='resourceScrapIron']/@name">resourceRockSmall</set>
+
+	<!-- ================================================================================
+	     F-08 LICHT, DAS AUSGEHT, Plan-0001 WP6.4 und WP6.5, D64
+
+	     VIER LICHTQUELLEN, drei davon Vanilla umgedeutet, eine neu:
+
+	       wallTorchLightPlayer      Wandfackel        ~30 min
+	       candleWallLightPlayer     Unschlittkerze    ~15 min   (Wand)
+	       candleTableLightPlayer    Unschlittkerze    ~15 min   (Tisch, erbt)
+	       lanternOld_01..04_Player  Oellampe          ~60 min
+	       blk700_holzfeuer          Holzfeuer         ~45 min   (neu)
+
+	     WIE DAS GEHT. 'Class="PlantGrowing"' ist in V 3.40 der einzige Weg, einen Block
+	     per XML nach einer Zeit in einen anderen zu verwandeln - gemessen an allen 50
+	     Block-Klassen; 'TriggerDowngrade' ist ereignisgesteuert (eine POI-Gasleitung),
+	     alles andere hat keine Uhr. Zustand und Netzsynchronisierung erledigt damit das
+	     Spiel.
+
+	     DIE DREI TORE MUESSEN ALLE AUF 0. FertileLevel, LightLevelStay und LightLevelGrow
+	     sind Bedingungen fuer Pflanzen, und eine Fackel erfuellt keine davon von sich aus.
+	     Dass 0 sie abschaltet, belegt Vanilla selbst: plantedMushroom1 ist ein vom Spieler
+	     setzbarer PlantGrowing-Block mit genau dieser Kombination - Pilze, die in dunklen
+	     Hoehlen wachsen.
+
+	     WAS BEI NICHTERFUELLUNG PASSIERT, und darum steht es hier: UpdateTick ruft als
+	     zweites CheckPlantAlive, und das setzt SetBlockRPC(pos, BlockValue::Air). Der
+	     Block geht dann nicht aus - er VERSCHWINDET. Das ist der Grund fuer
+	     Prueflistenpunkt 11 (D64): eine Wandfackel muss im GESCHLOSSENEN Raum abbrennen,
+	     eine im Freien beweist nichts.
+
+	     IsRandom="false", UND DAS IST ABSICHT. Die Streuung heisst GrowthDeviation (ein
+	     RandomGaussian mal diesem Wert), und Vanilla setzt sie in ganz blocks.xml NULL
+	     Mal - es gibt also keinen Wert, an dem man die Einheit ablesen koennte. Eine
+	     geratene Streuung kann eine Fackel in Sekunden ausgehen oder Tage brennen lassen.
+	     Erst die Brenndauer messen (WP6.6), dann streuen.
+
+	     GrowIfAnythinOnTop wird ausdruecklich gesetzt, obwohl true die Vorgabe ist: der
+	     Tippfehler ist in LateInit des Spiels, und wer 'GrowIfAnythingOnTop' schreibt,
+	     schreibt einen Schluessel, den niemand liest, und merkt nichts.
+
+	     WAS DER KLASSENWECHSEL KOSTET. wallTorchLightPlayer und candleWallLightPlayer
+	     trugen Class="TorchHeatMap", also BlockTorchHeatMap : BlockTorch : BlockParticle.
+	     Gemessen bleibt davon: das Licht (steckt im Prefab, nicht in der Klasse - beide
+	     Bloecke benutzen BlockLight gar nicht und leuchten trotzdem), das Aufnehmen
+	     (CanPickup steht als Block-Eigenschaft in wallTorchLight bzw. candleWallLight)
+	     und die Flamme (kein ParticleName angemeldet, der Versatz war rechnerisch).
+	     WEG IST EINES: AIDirector::NotifyActivity. Fackeln machen keine Hitze mehr auf
+	     der Karte, ziehen also keine Schreier. Vom Nutzer so entschieden; vermerkt als
+	     Prueflistenpunkt 12, weil D29 im selben Paket in dieselbe Richtung wirkt.
+
+	     GrowthRate ist nach Vanillas eigenem Kommentar an cropsGrowingMaster eine Angabe
+	     IN MINUTEN ("should be set no lower than 2"). Ob real oder ingame, sagt der
+	     Spieltest; bei der Vorgabe von 60 Minuten je 24-Stunden-Zyklus (goDayNightLength:
+	     "wie viele Minuten in der realen Welt vergehen, bis im Spiel 24 Stunden vergangen
+	     sind") waeren 30 Minuten eine halbe Spielnacht. Dazu kommt, dass GetTickRate den
+	     Wert mit einem spielweiten CropGrowthModifier multipliziert: wer die
+	     Pflanzenwachstums-Einstellung des Servers dreht, dreht die Brenndauer mit. -->
+
+	<!-- ==== Wandfackel: Vanilla hat beide Haelften des Kreislaufs schon gebaut ====
+	     torchWallHolder ist der unbeleuchtete Halter (CreativeMode="None", steht in POIs)
+	     und traegt schon einen UpgradeBlock zurueck auf wallTorchLightPlayer, zu bezahlen
+	     mit einer meleeToolTorch. Er ist damit der fertige "ausgebrannt"-Zustand UND der
+	     fertige Weg zum Wiederanzuenden. Wir setzen nur das Next darauf. -->
+	<set xpath="/blocks/block[@name='wallTorchLightPlayer']/property[@name='Class']/@value">PlantGrowing</set>
+	<append xpath="/blocks/block[@name='wallTorchLightPlayer']">
+		<property class="PlantGrowing">
+			<property name="Next" value="torchWallHolder" />
+			<property name="GrowthRate" value="30" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+
+	<!-- ==== Unschlittkerze: Wand und Tisch ====
+	     candleTableLightPlayer erbt von candleWallLightPlayer, bekommt das Class also
+	     geschenkt - aber NICHT den PlantGrowing-Block, denn der zeigt auf den falschen
+	     Ausgebrannt-Zustand (Wandkerze statt Tischkerze). Darum ein eigener fuer den
+	     Tisch; das 'Extends' ueberschreibt der eigene Eintrag. -->
+	<set xpath="/blocks/block[@name='candleWallLightPlayer']/property[@name='Class']/@value">PlantGrowing</set>
+	<append xpath="/blocks/block[@name='candleWallLightPlayer']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_kerzenstumpf_wand" />
+			<property name="GrowthRate" value="15" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+	<append xpath="/blocks/block[@name='candleTableLightPlayer']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_kerzenstumpf_tisch" />
+			<property name="GrowthRate" value="15" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+
+	<!-- ==== Oellampe ====
+	     VIER Varianten (01 bis 04), alle vom Spieler setzbar, alle mit demselben
+	     Ausgebrannt-Zustand: eine leere Lampe sieht aus wie eine leere Lampe. Das ist
+	     der einzige Punkt, an dem vier Zeilen auf einen Block zeigen - gewollt, weil
+	     sonst vier gleich aussehende Bloecke entstehen.
+
+	     ACHTUNG, EIN SCHLUSS UND KEINE MESSUNG: diese Bloecke hatten bisher die LEERE
+	     Klasse, und Vanillas Kommentar dazu lautet "Needs to have a blank class to allow
+	     the light to turn on automatically when placed". PlantGrowing fasst Licht nicht
+	     an (gemessen: BlockPlantGrowing ruft nichts an LightLOD), aber ob eine leere
+	     Klasse und PlantGrowing hier gleich wirken, sagt erst das Spiel. WP6.6 muss eine
+	     Oellampe UNMITTELBAR NACH DEM SETZEN ansehen. -->
+	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@name='Class']/@value">PlantGrowing</set>
+	<set xpath="/blocks/block[@name='lanternOld_02_Player']/property[@name='Class']/@value">PlantGrowing</set>
+	<set xpath="/blocks/block[@name='lanternOld_03_Player']/property[@name='Class']/@value">PlantGrowing</set>
+	<set xpath="/blocks/block[@name='lanternOld_04_Player']/property[@name='Class']/@value">PlantGrowing</set>
+	<append xpath="/blocks/block[@name='lanternOld_01_Player']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_oellampe_leer" />
+			<property name="GrowthRate" value="60" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+	<append xpath="/blocks/block[@name='lanternOld_02_Player']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_oellampe_leer" />
+			<property name="GrowthRate" value="60" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+	<append xpath="/blocks/block[@name='lanternOld_03_Player']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_oellampe_leer" />
+			<property name="GrowthRate" value="60" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+	<append xpath="/blocks/block[@name='lanternOld_04_Player']">
+		<property class="PlantGrowing">
+			<property name="Next" value="blk700_oellampe_leer" />
+			<property name="GrowthRate" value="60" />
+			<property name="FertileLevel" value="0" />
+			<property name="LightLevelStay" value="0" />
+			<property name="LightLevelGrow" value="0" />
+			<property name="GrowIfAnythinOnTop" value="true" />
+			<property name="IsRandom" value="false" />
+		</property>
+	</append>
+
+	<!-- Die Oellampe wurde mit resourceElectricParts geflickt und traegt
+	     TraderStageTemplate electricTier1. Beides ist gesperrt bzw. falsch: eine
+	     Blechlampe flickt der Schmied. Der Abwurf bleibt Alteisen - eine zerbrochene
+	     Lampe ist Blech. -->
+	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@class='RepairItems']/property[@name='resourceElectricParts']/@name">resourceForgedIron</set>
+	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@name='TraderStageTemplate']/@value">baseTier0</set>
+
+	<!-- EIGENER BESCHREIBUNGSSCHLUESSEL, und das ist kein Luxus. Vanillas Oellampen zeigen
+	     auf 'blockVariantHelperGroupDesc', und diesen Schluessel teilen GEMESSEN 50
+	     Bloecke: Waffenschraenke, Fernseher, Garagentore, Stuehle, Blumentoepfe. Wer ihn
+	     ueberschreibt, schreibt die Beschreibung der Oellampe auf alle fuenfzig. Genau
+	     diese Falle steht oben schon beim Kalkofen und seinem 'CraftActionName'.
+	     Darum zeigen unsere vier Lampen auf einen eigenen Schluessel. -->
+	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
+	<set xpath="/blocks/block[@name='lanternOld_02_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
+	<set xpath="/blocks/block[@name='lanternOld_03_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
+	<set xpath="/blocks/block[@name='lanternOld_04_Player']/property[@name='DescriptionKey']/@value">blk700_oellampeDesc</set>
+
+	<append xpath="/blocks">
+
+		<!-- ==== Kerzenstumpf, Wand und Tisch ====
+		     Dasselbe Modell wie die brennende Kerze, nur ohne Klasse und ohne Licht: ein
+		     Stumpf sieht aus wie eine Kerze, er leuchtet nur nicht. Wieder anzuzuenden
+		     mit einer Kerze, nach dem Muster von Vanillas torchWallHolder (vier Schlaege,
+		     ein Gegenstand). -->
+		<block name="blk700_kerzenstumpf_wand">
+			<property name="CreativeMode" value="None" />
+			<property name="CustomIcon" value="candleWallLight" />
+			<property name="DescriptionKey" value="blk700_kerzenstumpf_wandDesc" />
+			<property name="Material" value="Mpaper" />
+			<property name="Shape" value="ModelEntity" />
+			<property name="Model" value="@:Entities/Lighting/candle_wallPrefab.prefab" />
+			<property name="WaterFlow" value="permitted" />
+			<property name="Place" value="TowardsPlacerInverted" />
+			<property name="OnlySimpleRotations" value="true" />
+			<property name="IsTerrainDecoration" value="true" />
+			<property name="StabilitySupport" value="false" />
+			<property name="MaxDamage" value="1" />
+			<property class="UpgradeBlock">
+				<property name="ToBlock" value="candleWallLightPlayer" />
+				<property name="Item" value="candle" />
+				<property name="ItemCount" value="1" />
+				<property name="UpgradeHitCount" value="4" />
+			</property>
+			<drop event="Destroy" count="0" />
+			<property name="SortOrder1" value="B202" />
+			<property name="SortOrder2" value="3204" />
+			<property name="FilterTags" value="MC_building,SC_lighting" />
+		</block>
+
+		<block name="blk700_kerzenstumpf_tisch">
+			<property name="Extends" value="blk700_kerzenstumpf_wand" param1="CustomIcon,DescriptionKey,Model,Place,SortOrder2" />
+			<property name="CustomIcon" value="candleTableLight" />
+			<property name="DescriptionKey" value="blk700_kerzenstumpf_tischDesc" />
+			<property name="Model" value="@:Entities/Lighting/candle_tablePrefab.prefab" />
+			<property name="Place" value="TowardsPlacer90" />
+			<property name="SortOrder2" value="3205" />
+			<property class="UpgradeBlock">
+				<property name="ToBlock" value="candleTableLightPlayer" />
+				<property name="Item" value="candle" />
+				<property name="ItemCount" value="1" />
+				<property name="UpgradeHitCount" value="4" />
+			</property>
+		</block>
+
+		<!-- ==== Oellampe, leer ====
+		     Nachgefuellt wird mit Tierfett, nicht mit einer neuen Lampe: das Blech ist
+		     ganz, das Oel ist aus. Darum zwei Fett und nicht die fuenf des Bau-Rezepts. -->
+		<block name="blk700_oellampe_leer">
+			<property name="CreativeMode" value="None" />
+			<property name="CustomIcon" value="lanternOld_01" />
+			<property name="DescriptionKey" value="blk700_oellampe_leerDesc" />
+			<property name="Material" value="Mmetal_thin" />
+			<property name="Shape" value="ModelEntity" />
+			<property name="Model" value="@:Entities/Lighting/lanternOld_01Prefab.prefab" />
+			<property name="ImposterDontBlock" value="true" />
+			<property name="WaterFlow" value="permitted" />
+			<property name="Collide" value="movement,melee,bullet,arrow,rocket" />
+			<property name="Place" value="TowardsPlacerInverted" />
+			<property name="StabilitySupport" value="false" />
+			<property name="MaxDamage" value="50" />
+			<property class="UpgradeBlock">
+				<property name="ToBlock" value="lanternOld_01_Player" />
+				<property name="Item" value="resourceAnimalFat" />
+				<property name="ItemCount" value="2" />
+				<property name="UpgradeHitCount" value="4" />
+			</property>
+			<property class="RepairItems">
+				<property name="resourceForgedIron" value="2" />
+			</property>
+			<drop event="Destroy" name="resourceScrapIron" count="5" />
+			<property name="SortOrder1" value="B202" />
+			<property name="SortOrder2" value="1261" />
+			<property name="FilterTags" value="MC_building,SC_lighting" />
+		</block>
+
+		<!-- ==== Holzfeuer, brennend und erloschen ====
+		     ABWEICHUNG VON F-08, und sie ist benannt: F-08 nennt einen "Feuerkorb", also
+		     einen Korb auf einem Gestell. So ein Modell hat Vanilla nicht. Was es hat,
+		     ist ein Glutbett aus verbrannten Scheiten - mit Licht
+		     (pileEmberBurntLogs1LightPrefab) und ohne (…1NoEmissivePrefab), also beide
+		     Haelften aus derselben Modellfamilie. Darum heisst es Holzfeuer und nicht
+		     Feuerkorb: der Name folgt dem, was man sieht. Die Funktion, die F-08 will -
+		     ein helles Feuer im Freien, das laenger haelt als eine Fackel - steht damit;
+		     der Korb braucht ein eigenes Asset und gehoert zu F-16 in Phase 2.
+
+		     Vorbild ist Vanillas emberPileLightPOI1: dasselbe Modell, dieselbe Glut,
+		     dieselbe buffBurningEnvironment fuer den, der hineintritt, und derselbe
+		     Kohle-Abbau. Was wir ergaenzen: der Spieler darf es bauen, und es geht aus. -->
+		<block name="blk700_holzfeuer">
+			<property name="CreativeMode" value="Player" />
+			<property name="Class" value="PlantGrowing" />
+			<property class="PlantGrowing">
+				<property name="Next" value="blk700_holzfeuer_aus" />
+				<property name="GrowthRate" value="45" />
+				<property name="FertileLevel" value="0" />
+				<property name="LightLevelStay" value="0" />
+				<property name="LightLevelGrow" value="0" />
+				<property name="GrowIfAnythinOnTop" value="true" />
+				<property name="IsRandom" value="false" />
+			</property>
+			<property name="Light" value="0.5" />
+			<property name="CustomIcon" value="emberPileDeco1" />
+			<property name="DescriptionKey" value="blk700_holzfeuerDesc" />
+			<property name="Material" value="Mwood_weak" />
+			<property name="Shape" value="ModelEntity" />
+			<property name="Model" value="@:Entities/Lighting/pileEmberBurntLogs1LightPrefab.prefab" />
+			<property name="ModelOffset" value="0,0,0" />
+			<property name="WaterFlow" value="permitted" />
+			<property name="Collide" value="melee,bullet,arrow,rocket" />
+			<property name="Place" value="TowardsPlacer90" />
+			<property name="IsTerrainDecoration" value="true" />
+			<property name="StabilitySupport" value="false" />
+			<property name="MaxDamage" value="50" />
+			<property name="BuffsWhenWalkedOn" value="buffBurningEnvironment" />
+			<property name="ActiveRadiusEffects" value="buffCampfireAOE,3" />
+			<property name="EconomicValue" value="10" />
+			<property name="SellableToTrader" value="false" />
+			<property class="RepairItems">
+				<property name="resourceWood" value="5" />
+			</property>
+			<drop event="Harvest" name="resourceCoal" count="3,6" tag="oreWoodHarvest" />
+			<drop event="Harvest" name="resourceCoal" count="3,6" tag="coalHarvest" />
+			<drop event="Destroy" name="resourceWood" count="1" />
+			<property name="SortOrder1" value="B202" />
+			<property name="SortOrder2" value="3300" />
+			<property name="Group" value="Basics,Limited,Building,advBuilding" />
+			<property name="FilterTags" value="MC_playerBlocks,SC_lighting" />
+			<property name="SoundPickup" value="campfire_grab" />
+			<property name="SoundPlace" value="campfire_place" />
+		</block>
+
+		<block name="blk700_holzfeuer_aus">
+			<property name="Extends" value="blk700_holzfeuer" param1="Class,Light,DescriptionKey,Model,CreativeMode,BuffsWhenWalkedOn,ActiveRadiusEffects,SortOrder2" />
+			<property name="CreativeMode" value="None" />
+			<property name="Class" value="" />
+			<property name="DescriptionKey" value="blk700_holzfeuer_ausDesc" />
+			<property name="Model" value="@:Entities/Debris/pileEmberBurntLogs1NoEmissivePrefab.prefab" />
+			<property name="SortOrder2" value="3301" />
+			<property class="UpgradeBlock">
+				<property name="ToBlock" value="blk700_holzfeuer" />
+				<property name="Item" value="resourceWood" />
+				<property name="ItemCount" value="10" />
+				<property name="UpgradeHitCount" value="4" />
+			</property>
+		</block>
+
+	</append>
 </config>

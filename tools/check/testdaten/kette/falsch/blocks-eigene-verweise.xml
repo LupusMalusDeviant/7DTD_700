@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, FALSCHER SATZ, fuenfte Art: ein selbst
+     geschriebener Block zeigt auf Kennungen, die es nicht gibt - in ATTRIBUTEN, nicht im
+     Elementtext.
+
+     Der Folgeblock ist der teuerste Tippfehler von allen: BlockPlantGrowing::LateInit
+     wirft eine Exception ("Block with name ' … ' not found!"), und die nimmt beim
+     Spielstart die ganze blocks.xml mit, nicht nur diesen einen Block. -->
+<config>
+	<append xpath="/blocks">
+		<block name="pruefLichtEigen">
+			<property name="Class" value="PlantGrowing" />
+			<property name="Extends" value="pruefBasisGibtesnicht" />
+			<property class="PlantGrowing">
+				<property name="Next" value="pruefStumpfGibtesnicht" />
+				<property name="GrowthRate" value="30" />
+				<property name="FertileLevel" value="0" />
+			</property>
+			<property class="RepairItems">
+				<property name="pruefWachsGibtesnicht" value="2" />
+			</property>
+			<drop event="Destroy" name="pruefAscheGibtesnicht" count="1" />
+		</block>
+	</append>
+</config>

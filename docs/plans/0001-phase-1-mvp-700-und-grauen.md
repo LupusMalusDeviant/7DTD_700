@@ -1033,12 +1033,34 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    Nachweis: [WP6-Finding §1](../rea/findings/WP6-brenndauer-und-blockschaden.md). D29 bleibt
    unberührt, nur die Datei war falsch benannt. Ausgleich: mehr Schaden gegen Spieler, plus
    einzelne Brecher-Typen für die Seuchennacht — die Sprengkörper-Werte bleiben dafür stehen.
-4. **WP6.4** `[Claude-prüfbar]` Lichtquellen: Fackel (Hand, Wand), Kienspan, Öllampe, Feuerkorb.
-   Träger sind vorhanden und vom Purge nicht gesperrt: `meleeToolTorch` (Hand),
-   `wallTorchLightPlayer` (Wand), `candleWallLightPlayer`/`candleTableLightPlayer`,
-   `lanternOld_01..04_Player`, `campfire`. Die Laterne wird mit `resourceElectricParts`
-   repariert und trägt `TraderStageTemplate electricTier1` — das muss mit.
-5. **WP6.5** `[Claude-prüfbar]` **Brenndauer per XML** — `Class="PlantGrowing"`, `Next` auf den
+4. ~~**WP6.4** `[Claude-prüfbar]` Lichtquellen: Fackel (Hand, Wand), Kienspan, Öllampe,
+   Feuerkorb.~~ **Erledigt am 2026-11-08.** Vier Lichtquellen: Wandfackel (30),
+   Wand- und Standkerze (15), Öllampe in vier Varianten (60), **Holzfeuer** neu (45) — Zahlen
+   sind `GrowthRate` in Minuten und **unkalibriert bis WP6.6**. Fünf neue Blöcke, davon vier
+   erloschene Zustände; die Wandfackel brauchte **keinen**, weil Vanillas `torchWallHolder`
+   schon der kalte Halter **und** der Weg zurück ist (`UpgradeBlock` mit einer Fackel).
+   **Die Öllampe war nicht baubar** — Vanillas Rezept verlangt 5 × `resourceOil` (gesperrt);
+   jetzt Tierfett, dazu Reparatur von `resourceElectricParts` auf `resourceForgedIron` und
+   `TraderStageTemplate` auf `baseTier0`. **Zwei benannte Abweichungen von F-08:** der
+   Kienspan entfällt (kein Vanilla-Modell, seine Rolle füllt die Unschlittkerze), und der
+   „Feuerkorb" heißt Holzfeuer, weil das Modell ein Glutbett ist und der Name dem folgt, was
+   man sieht. **Eigener `DescriptionKey` für die Lampen**, weil Vanillas
+   `blockVariantHelperGroupDesc` gemessen von **50** Blöcken geteilt wird — Waffenschränke,
+   Garagentore, Stühle. `kette-pruefen` bekam eine vierte Verweisklasse (`Next`, `ToBlock`,
+   `Item`, `Extends`, Abwürfe, Reparaturstoffe in eigenen Definitionen — **46 aufgelöst**) und
+   eine Gegenprobe, 49 → **50**. Siehe
+   [F-08](../features/F-08-licht-feuer-verteidigung.md).
+5. ~~**WP6.5**~~ **Erledigt am 2026-11-08, zusammen mit WP6.4** — die Brenndauer ist keine
+   eigene Baustufe, sondern der `PlantGrowing`-Block an jeder Lichtquelle. Gesetzt sind
+   `Next`, `GrowthRate`, `FertileLevel="0"`, `LightLevelStay="0"`, `LightLevelGrow="0"`,
+   `GrowIfAnythinOnTop="true"` und **`IsRandom="false"`**. Das letzte ist Absicht: Vanilla
+   setzt `GrowthDeviation` in ganz `blocks.xml` **null**-mal, es gibt also keinen Wert, an dem
+   die Einheit abzulesen wäre, und eine geratene Streuung kann eine Fackel in Sekunden ausgehen
+   oder Tage brennen lassen. Erst die Brenndauer messen (WP6.6), dann streuen. **Nebenbei
+   gelöst:** das Nachlegen von Brennstoff, das F-08 nach Phase 2 verschoben hatte — ein
+   `UpgradeBlock` auf dem erloschenen Block genügt, weil der neue Block seine Uhr beim Setzen
+   selbst startet. Der ursprüngliche Schritt lautete:
+   **Brenndauer per XML** — `Class="PlantGrowing"`, `Next` auf den
    erloschenen Zustand, `GrowthRate` als Brenndauer in Minuten, ~~`IsRandom` für Streuung~~
    **berichtigt 2026-11-08:** `IsRandom` ist nur der Schalter, die Breite der Streuung heißt
    **`GrowthDeviation`** (ein Gauss-Wurf mal diesem Wert); ohne ihn streut nichts, auch mit
@@ -1051,6 +1073,11 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    lassen. Deshalb bodenständige Lichtquellen zuerst; die Wandfackel ist eine Nutzer-Frage.
    Zu bestimmen bleibt die Zahl.
 6. **WP6.6** `[braucht Nutzer]` Lasttest: 200 Fackeln, keine messbaren Server-Frame-Einbrüche.
+   **Dazu drei Dinge, die nur dieser Test beantworten kann:** (a) eine Wandfackel in einem
+   **geschlossenen** Raum abbrennen lassen und nachsehen, ob ein Halter hängt oder Luft ist
+   (Prüfliste 11); (b) eine **Öllampe unmittelbar nach dem Setzen** ansehen — leuchtet sie?;
+   (c) **die Einheit von `GrowthRate` messen** (real oder ingame, und wie stark der
+   `CropGrowthModifier` eingreift), denn erst danach lässt sich `GrowthDeviation` setzen.
 7. **WP6.7** `[braucht Nutzer]` Balancing-Test: hält eine verteidigte T3-Basis eine Seuchennacht
    der passenden Gamestage — und eine unverteidigte nicht?
 
