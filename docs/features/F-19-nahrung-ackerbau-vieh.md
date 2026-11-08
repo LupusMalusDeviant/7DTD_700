@@ -12,6 +12,12 @@ Lebensmittel **verderben** (D32), und eine Siedlung lebt von Acker und Vieh (D33
 ### Verderb (D32)
 - Frische Lebensmittel (Fleisch, Fisch, Milch, Gemüse) verderben nach Zeit → „verdorben“ (essbar mit Ruhr-Risiko, F-11)
 - **Konservieren:** Räuchern (Räucherkammer), Salzen (Salz knapp, Handelsware), Trocknen (Trockengestell), Einlegen
+- **Die Räucherkammer bzw. das Trockengestell wird hier gebaut, nicht in Phase 1 (D57,
+  8. November 2026).** F-04 führt sie als Werkstatt, und der Plan hatte sie in WP4.4; ihr Inhalt
+  — die Konserven — ist aber dieses Feature, und in Phase 1 gibt es kein Rezept, das auf sie
+  gehört. Zu bauen sind dann Klon-Block, XUi-Fenstergruppe, Bau-Rezept und die Brennstoffregel
+  (Holz, Vanilla-Forge-Prinzip nach D26); das Muster liegt vor
+  (`mod/700_40_Bauen/Config/XUi_InGame/`, WP4.5)
 - Kühle Lagerung (Erdkeller) verlangsamt den Verderb
 - [verifizieren] per REA: Hat V 3.40 ein Verfallssystem für Items, auf das man aufbauen kann? Sonst C# (Zeitstempel je Stack, Prüfung beim Öffnen bzw. Laden)
 

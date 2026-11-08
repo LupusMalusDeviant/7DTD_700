@@ -71,6 +71,12 @@ Nachzehrer, Lichtfunke gegen Irrlicht-Täuschung usw.
 - **Runenkreide** (Kalk + Ocker + Asche), **Bernstein** (Küste, selten), **Glutstein**
   (Holzkohle + Harz, Rennofen-Nebenprodukt), **geweihtes bzw. Quellwasser**, Kräuter (F-11)
 - **Runenritzer-Bank** (neue Werkstatt, Klon einer Vanilla-Station per XML): Runen, Steine, Ladungen
+  — **gebaut wird sie hier, nicht in Phase 1 (D57, 8. November 2026).** F-04 führt sie in seiner
+  Werkstatt-Tabelle, und der Plan hatte sie in WP4.4; gemessen gibt es in Phase 1 aber kein
+  einziges Rezept, das auf sie gehört, weil ihr Inhalt dieses Feature ist. Zu bauen sind dann:
+  Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslots Ritzmesser und Meißel — zusammen mit
+  den ersten Runen, damit sie nicht leer in der Welt steht. Das Muster dafür liegt vor
+  (`mod/700_40_Bauen/Config/XUi_InGame/`, WP4.5)
 - Tränke und Salben: Kräuterküche (F-04)
 
 ## Umsetzung

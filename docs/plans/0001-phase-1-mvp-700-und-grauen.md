@@ -412,7 +412,10 @@ aus 1780 gerechneten Zeilen einen Nachweis.
 
 **Zweck:** Das Rückgrat. Ohne Rohstoffe und Werkstätten hat kein Rezept in WP5 bis WP7 eine Basis.
 **Rolle:** Claude
-**Schätzung:** L (18 Tage)
+**Schätzung:** ~~L (18 Tage)~~ → **L (15 Tage)**, seit WP4.4 nach WP5 und Phase 2 verschoben ist
+(D57, 8. November 2026). Die drei Tage wandern mit: **WP5 steigt von 16 auf 17 Tage** (WP5.5b,
+der Webstuhl, kostet mit dem vorhandenen Klon-Muster rund einen Tag), die übrigen zwei liegen in
+Phase 2 bei F-15 und F-19 und zählen hier nicht mehr mit.
 **Hängt an:** WP3
 
 **Schritte:**
@@ -426,18 +429,27 @@ aus 1780 gerechneten Zeilen einen Nachweis.
 3. ~~**WP4.3** `[Claude-prüfbar]` Die fünf Vanilla-Werkstätten umdeuten: Feuerstelle,
    Zimmermannsbank, Rennofen, Esse + Amboss, Kräuterküche, Kalkofen.~~
    **Erledigt 2026-11-08.**
-4. **WP4.4** `[Claude-prüfbar]` Die vier geklonten Werkstätten: Runenritzer-Bank, Webstuhl,
+4. ~~**WP4.4** `[Claude-prüfbar]` Die vier geklonten Werkstätten: Runenritzer-Bank, Webstuhl,
    Räucherkammer, Trockengestell. Jede mit Bau-Rezept, Brennstoffregel bzw. Werkzeugslots und
-   **mindestens fünf Rezepten**. — **nicht angefangen, braucht eine Entscheidung**, siehe Stand.
+   **mindestens fünf Rezepten**.~~ — **verschoben am 8. November 2026 (D57)**, nicht gestrichen:
+   Webstuhl → **WP5.5b** (mit den Gambeson-Teilen), Räucherkammer → **F-19, Phase 2**,
+   Runenritzer-Bank → **F-15, Phase 2**. Begründung und Messung unten im Stand.
 5. ~~**WP4.5** `[Claude-prüfbar]` Brennstoff- und Werkzeugslot-Regeln nach dem
    Vanilla-Forge-Prinzip (D26).~~ **Erledigt 2026-11-08.**
 6. ~~**WP4.6** `[Claude-prüfbar]` Die Beispielkette aus F-04 vollständig durchziehen:
    `Raseneisenerz + Holzkohle → Luppe → Schmiedeeisen → Klinge → Spatha`. Stahl per Aufkohlen,
    Damast erst mit Meister-Abschrift.~~ **Erledigt 2026-11-08**, Damast bleibt bei WP7.
-7. **WP4.7** `[Claude-prüfbar]` `mod700check recipes` grün: kein T0→T4-Pfad mit Sackgasse.
-   — **nur teilweise möglich**, siehe Stand.
+7. ~~**WP4.7** `[Claude-prüfbar]` `mod700check recipes` grün: kein T0→T4-Pfad mit Sackgasse.~~
+   — **soweit erledigt, wie es ohne Spielstart geht (8. November 2026).** `kette-pruefen.ps1`
+   löst alle Verweise auf (0 unaufgelöst); Erreichbarkeit von T0 und Zyklen bleiben bei
+   **WP3.6**, weil `recipes` eine gemergte Quelle braucht. Siehe Stand.
 
 **Ergebnis:** Eine vollständige, geprüfte Rohstoff- und Werkstattkette von T0 bis T4.
+**Erreicht am 8. November 2026, mit zwei benannten Einschränkungen:** die Kette steht und ist
+verweisgeprüft, aber nicht im Spiel gelaufen (WP3.6), und sie endet bei T3 (Tiegelstahl) —
+Damast (T4) hängt an der Meister-Abschrift und damit an WP7. Von den neun Werkstätten in F-04
+liegen sieben in Phase 1 — sechs Namen auf fünf umgedeuteten Vanilla-Blöcken (`forge` trägt
+Rennofen und Esse) und der Webstuhl in WP5.5b —, zwei in Phase 2 (D57).
 
 **Stand WP4.1 und WP4.2 (7. November 2026): umgedeutet, nicht ersetzt.**
 
@@ -573,6 +585,16 @@ Empfehlung: **Weg 2.** Eine Werkstatt ohne Rezepte ist für den Spieler eine Ent
 für den Prüfer ein dauerhaft offenes Kriterium; der Webstuhl lohnt sich, sobald F-03 in WP5
 die Gambeson-Teile bringt, und dann in einem Stück.
 
+> **ENTSCHIEDEN am 8. November 2026: Weg 2, verschieben.** Festgehalten als **D57** im GDD
+> §7.4, nachgezogen in F-04 (Phasen-Zeile, Klon-Tabelle, Akzeptanzkriterium). Verschoben heißt
+> nicht gestrichen und nicht „irgendwann": jeder Klon hat ab jetzt eine Adresse —
+> **Webstuhl → WP5.5b** in diesem Plan, zusammen mit den Gambeson-Teilen aus WP5.5;
+> **Räucherkammer/Trockengestell → F-19** (Phase 2); **Runenritzer-Bank → F-15** (Phase 2).
+> Das Akzeptanzkriterium „mindestens fünf Rezepte" wird für diese drei dort abgenommen, nicht
+> hier. Gebaut war nichts davon, es gibt also keinen Rückbau — WP4.4 hat nie eine Zeile
+> geschrieben. Was bleibt: Phase 1 hat keine eigene Textil-, Konserven- oder Runenwerkstatt,
+> und wer die F-04-Tabelle liest, muss D57 daneben lesen.
+
 ---
 
 ### WP5: F-02 (Basis) + F-03 — Waffen, Rüstung, Qualität, Verschleiß
@@ -580,7 +602,8 @@ die Gambeson-Teile bringt, und dann in einem Stück.
 **Zweck:** Der spielbare Kern: mittelalterliche Waffen und Rüstung mit zwei Qualitätsachsen und
 spürbarem Verschleiß.
 **Rolle:** Claude
-**Schätzung:** L (16 Tage)
+**Schätzung:** ~~L (16 Tage)~~ → **L (17 Tage)**, seit der Webstuhl als WP5.5b aus WP4.4 hierher
+verschoben ist (D57, 8. November 2026).
 **Hängt an:** WP4
 
 **Schritte:**
@@ -596,9 +619,13 @@ spürbarem Verschleiß.
    Maximal-Haltbarkeit) gegen Esse (voll).
 5. **WP5.5** `[Claude-prüfbar]` Rüstung T0–T4 nach der F-03-Tabelle, mit Gewichts- und
    Ausdauer-Malus über die vorhandene Rüstungsmechanik; Set-Boni umgedeutet.
-6. **WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro Waffe
+6. **WP5.5b** `[Claude-prüfbar]` **Der Webstuhl**, hierher verschoben aus WP4.4 (D57,
+   8. November 2026). Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslot Weberschiffchen —
+   und als Rezepte die Gambeson-Teile aus WP5.5. Erst mit ihnen trägt er die fünf Rezepte, die
+   F-04 verlangt; vor WP5.5 wäre er ein leerer Block. Zusammen mit WP5.5 bauen, nicht davor.
+7. **WP5.6** `[Claude-prüfbar]` Balancing-Tabelle unter `docs/balancing/` — eine Zeile pro Waffe
    mit Zweck, Schaden, Reichweite, Ausdauer, Tier.
-7. **WP5.7** `[braucht Nutzer]` Spieltest: Tooltip verständlich? Ist jeder Waffe ihr Zweck
+8. **WP5.7** `[braucht Nutzer]` Spieltest: Tooltip verständlich? Ist jeder Waffe ihr Zweck
    anzusehen?
 
 **Ergebnis:** Alle Waffen und Rüstungsteile T0–T4 herstellbar, zwei Qualitätsachsen im Tooltip,
@@ -775,7 +802,7 @@ und die Rezept-Bindung erst in WP7.5 nach WP4 passiert.
 | **R6** | **UI-Mod-Kompatibilität (D5).** Welche Referenz-UI-Mods gelten, ist offen (Q8). | ~~mittel~~ niedrig | mittel | **Entschärft am 2026-11-07:** `XmlPatchConditionEvaluator` bietet `mod_loaded`, `game_version` und `xpath` als Bedingungen in bedingten XML-Blöcken. Ein XUi-Patch lässt sich damit auf das Vorhandensein einer anderen Mod stützen — ohne C#, was hier befürchtet worden war. WP8.9 zieht die Q8-Entscheidung weiterhin früh; die additiven XPath-Regeln aus WP1.3 bleiben Pflicht. |
 | **R7** | **Balancing D29 nur im Playtest messbar.** Ob Mörtelstein wie Vanilla-Stahl hält, zeigt keine Zahl im Voraus. | hoch | mittel | WP6.3 setzt begründete Startwerte, WP9.4 zieht nach. Der Zielwert steht in `docs/balancing/`, damit die Korrektur nachvollziehbar bleibt. |
 | **R8** | **Vanilla-Perks sperren bricht die UI.** `attcrafting` wird von `XUiC_CategoryList` gelesen; ein leerer Behälter kann die Werkbank-Kategorien zerlegen. | mittel | mittel | WP7.3 behält die Behälter-Attribute und hängt nur ihren Inhalt um. Prüfung: Werkbank öffnen, Kategorien zählen. |
-| **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen, und WP4 ist mit 18 Tagen das größte Paket. | mittel | hoch | `mod700check recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
+| **R9** | **Rezeptgraph-Sackgasse in WP4.** Ein Item ist herstellbar, aber keine Zutat erreichbar — in der Kette `Raseneisenerz → Luppe → Schmiedeeisen → Klinge → Spatha` über fünf Stufen leicht zu übersehen. (WP4 war mit 18 Tagen das größte Paket; seit D57 sind es 15, am Risiko ändert das nichts — die Kette ist gleich lang.) | mittel | hoch | `mod700check recipes` (WP2.2) prüft das maschinell, nicht von Hand, und läuft als WP4.7 gegen jede Kette. Gegenprobe gehört zur Abnahme des Werkzeugs. Zwischen-Check für WP4 bei M2. |
 | **R10** | **Prüfwerkzeuge in Python gebaut.** Verstoß gegen die globale Regel. | niedrig | mittel | In WP1.4 als C# festgeschrieben, Muster von `tools/meta` wird fortgeführt. Der Hook `policy-guard.py` fragt zusätzlich nach. |
 | **R11** | **Zwei Qualitätsachsen in einem Tooltip.** D23 will Material *und* Handwerksqualität getrennt sichtbar machen. Ob der Vanilla-Item-Tooltip beides lesbar darstellen kann, ist **nicht geprüft** — Vanilla kennt nur eine Achse (Qualität 1–6). | mittel | mittel | Vor WP5.3 kurz prüfen, ob sich Material über den Item-Namen und Handwerksqualität über die Vanilla-Stufe abbilden lässt (zwei Items je Material statt eine zweite Achse). Fällt das durch, wird D23 auf eine Achse reduziert — mit dem Nutzer, als neue D-Zeile. |
 | **R13** | **Die Denylist weiss nur, was ich beim Schreiben zu bedenken dachte.** WP3.1 hat drei Defekte gefunden (zu weite Präfixe, D9 als Freigabe statt als Klassenschutz, Vergleich ohne Rücksicht auf die Schreibung) — und 852 der 1139 erreichbaren Kennungen hat die Liste nie angesehen. Ein Prüfwerkzeug, das „0 rot" meldet, während ein Generator herstellbar ist, ist schlimmer als keines. | **eingetreten** | hoch | Alle drei behoben, zwei neue Gegenproben. Für die 852 ist die Methode offen: weitere Namensmuster oder ein Urteil nach Eigenschaften (`items.xml` `Group`, Block-`Class`). Letzteres urteilt über das, was ein Gegenstand *ist*, und hätte `motionsensor`, `switch` und `spotlightPlayer` ohne eine Regel gefunden. Der Nachweis bleibt in jedem Fall der `ConfigsDump`-Lauf aus WP3.6, nicht der Vorlauf. |
@@ -828,23 +855,26 @@ belegt sind — nicht mit einer Statusmeldung:
 | WP1 Verträge und Gerüst | M | 5 |
 | WP2 Prüfwerkzeuge | M | 6 |
 | WP3 F-01 Purge | L | 12 |
-| WP4 F-05 + F-04 Ressourcen, Werkstätten | L | 18 |
-| WP5 F-02 (Basis) + F-03 Waffen, Rüstung | L | 16 |
+| WP4 F-05 + F-04 Ressourcen, Werkstätten | L | ~~18~~ 15 |
+| WP5 F-02 (Basis) + F-03 Waffen, Rüstung | L | ~~16~~ 17 |
 | WP6 F-18 + F-08 Bauen, Licht | M | 9 |
 | WP7 F-21 Fertigkeitsbäume | L | 14 |
 | WP8 F-17 (B1, B8) + F-12 Nacht, Sprache | M | 10 |
 | WP9 Integration, Balancing, Playtest | M | 10 |
 
-- **Summe Arbeitspakete:** 100 Tage
+- **Summe Arbeitspakete:** ~~100~~ **98 Tage** (D57: WP4 −3, WP5 +1; die übrigen zwei Tage
+  liegen jetzt in Phase 2 bei F-15 und F-19 und zählen hier nicht mehr)
 - **Puffer (25 %):** 25 Tage
 - **Zuschlag für die sechs Risiken mit Wahrscheinlichkeit „hoch"** (R1, R2, R3, R5, R7, R12 —
   je 1–2 Tage auf das betroffene Paket): 8 Tage
-- **Gesamt:** **133 Arbeitstage**
+- **Gesamt:** ~~133~~ **131 Arbeitstage**
 - Bei 3 Tagen/Woche: ≈ 44 Kalenderwochen → **Mitte September 2027**
 - Bei 5 Tagen/Woche: ≈ 27 Kalenderwochen → **Mitte Mai 2027**
 
-Kein Paket ist XL. WP4 (18 Tage) liegt am oberen Rand von L und bekommt in M2 einen
-Zwischen-Check.
+Die beiden Daten bleiben stehen: zwei Tage weniger verschieben bei 3 bzw. 5 Tagen pro Woche
+keine ganze Woche. Kein Paket ist XL. WP4 liegt mit 15 Tagen nicht mehr am oberen Rand von L;
+der Zwischen-Check in M2 bleibt trotzdem, weil die Risiko-Zeile R9 (Rezeptgraph-Sackgasse) an
+der Kette hängt und nicht an der Paketgröße.
 
 ## Prüfliste für den Nutzer
 
@@ -876,9 +906,9 @@ werden:
    Compoundbogen, eine Armbrust oder eine Tischkreissäge bleiben darf, ist eine
    **Inhaltsentscheidung** (Projektregel 4). *(Blockiert nichts, verfälscht aber die
    Purge-Zahlen, solange sie offen ist.)*
-9. **WP4.4 entscheiden**: die drei Werkstatt-Klone jetzt leer bauen, verschieben (Empfehlung)
-   oder D50 beugen. Die drei Wege stehen oben bei WP4.4. *(Blockiert WP4.4 und damit den
-   Abschluss von WP4.)*
+9. ~~**WP4.4 entscheiden**: die drei Werkstatt-Klone jetzt leer bauen, verschieben (Empfehlung)
+   oder D50 beugen.~~ **Entschieden am 8. November 2026: verschieben** (D57). Webstuhl nach
+   WP5.5b, Räucherkammer nach F-19, Runenritzer-Bank nach F-15.
 
 ## Offene Punkte
 

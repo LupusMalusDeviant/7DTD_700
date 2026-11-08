@@ -2,7 +2,7 @@
 
 | Phase | Tiefe | Netz | REA |
 |---|---|---|---|
-| 1: Ketten, Werkstätten, Brennstoff, Werkzeuge · 3: Gesellen | X (+H) | S | optional |
+| 1: Ketten, Werkstätten, Brennstoff, Werkzeuge · 1/WP5: Webstuhl · 2: Runenbank, Räucherkammer · 3: Gesellen | X (+H) | S | optional |
 
 ## Ziel
 Fortschritt entsteht durch Werkstätten, Rohstoffketten und **eigenes Tun** (Säule P2, D24).
@@ -25,6 +25,20 @@ Fünf Tiers wie im GDD 3.1: Überleben → Hof → Werkstatt → Burg → Meiste
 | Webstuhl | (Klon per XML) | – | Weberschiffchen | Tuch, Gambeson-Teile, Segeltuch |
 | Räucherkammer / Trockengestell | (Klon per XML) | Holz | – | Konserven (F-19) |
 
+**Die drei Klone sind nicht Phase-1-Arbeit (D57, 8. November 2026).** Sie wandern in die Pakete,
+die ihren Inhalt bringen, weil nach dem Purge in ganz Vanilla kein Satz von fünf Rezepten übrig
+ist, der auf einen von ihnen gehört — ihr Inhalt liegt in anderen Features:
+
+| Klon | wandert nach | weil der Inhalt dort entsteht |
+|---|---|---|
+| Webstuhl | **F-03 / Plan WP5** (noch Phase 1) | Gambeson-Teile; Tuch allein trägt keine Werkstatt |
+| Räucherkammer / Trockengestell | **F-19, Phase 2** | Konserven |
+| Runenritzer-Bank | **F-15, Phase 2** | Runen, Runensteine, Glutladungen |
+
+Phase 1 endet damit mit den fünf umgedeuteten Vanilla-Blöcken, wobei `forge` Rennofen und Esse
+in einem Block trägt — und, sobald WP5 steht, dem Webstuhl. Leer gebaut wären die drei Blöcke
+eine Enttäuschung im Spiel und ein dauerhaft offenes Kriterium auf dem Papier.
+
 **Bedingungen (D26):**
 - **Brennstoff:** Vanilla-Forge-Prinzip für Rennofen, Esse, Kalkofen, Kräuterküche, Räucherkammer
 - **Werkzeuge:** Werkzeugslots schalten bessere Rezepte bzw. Qualitäten frei (Vanilla-Tool-Slots)
@@ -42,4 +56,6 @@ findet man in Klöstern und Ruinen und kauft sie bei Lehrmeistern (F-10).
 ## Akzeptanzkriterien
 - [ ] Vollständiger Pfad T0 → T4 ohne Sackgasse (Rezeptgraph-Prüfskript)
 - [ ] Jede Werkstatt hat Bau-Rezept, Brennstoffregel bzw. Werkzeugslots und mindestens 5 Rezepte
+      — in Phase 1 geprüft an den fünf umgedeuteten Vanilla-Werkstätten; für die drei Klone wird
+      das Kriterium mit ihrem Inhalt abgenommen (D57), nicht vorher
 - [ ] Eisen ist der spürbare Engpass (D31), aber nie eine harte Blockade (Altmetall aus Ruinen als Ventil)

@@ -21,6 +21,12 @@ Rüstung ist teuer, schwer und spürbar. Kleidung schützt vor Kälte und Nässe
 - **Qualität** (D23): Material = Grundstufe, Handwerksqualität = Feinstufe (wie F-02)
 - **Schutz je Schadensart** (D21): Gambeson gut gegen Wucht, Kette gut gegen Schnitt und schwächer gegen Stich (Phase 2)
 - **Verschleiß & Reparatur** wie bei Waffen (F-02)
+- **Der Webstuhl kommt mit diesem Feature (D57, 8. November 2026).** F-04 führt ihn in seiner
+  Werkstatt-Tabelle, und der Plan hatte ihn in WP4.4 — aber mit `resourceCloth` allein hätte er
+  ein Rezept und keinen Zweck. Erst die Gambeson-Teile aus T2 füllen ihn, darum wird er als
+  **WP5.5b** zusammen mit der Rüstung gebaut: Klon-Block, XUi-Fenstergruppe, Bau-Rezept,
+  Werkzeugslot Weberschiffchen. Segeltuch aus der F-04-Tabelle hängt an F-13 (Segel, Planen) und
+  bleibt davon unberührt
 
 ## Nicht im Umfang
 - Plattenrüstung (anachronistisch)
