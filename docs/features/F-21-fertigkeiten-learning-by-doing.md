@@ -272,8 +272,8 @@ Handwerks-Stufe.
 **Was das für „Learning by Doing" heißt (D24):** der Satz oben — Grundfähigkeit „per
 Skill-Punkt **oder** Abschrift" — ist in Phase 1 nur zur Hälfte gebaut. Für
 Handwerks-Stufen gibt es gemessen keinen Kaufweg; gebaut ist der Weg über das Lehrblatt.
-Das ist **nicht entschieden**, sondern festgehalten (Plan, Offene Punkte). *Notiz für
-Phase 2:* wenn Tun die Stufe hebt, ist das Lehrblatt der Sprung und nicht mehr der
+**Entschieden am 2026-11-16 (D71): das bleibt in Phase 1 so**, der Skill-Punkt-Weg kommt
+erst mit Learning by Doing. *Notiz für Phase 2:* wenn Tun die Stufe hebt, ist das Lehrblatt der Sprung und nicht mehr der
 einzige Weg — genau die Rolle, die Punkt 3 oben den Abschriften gibt.
 
 **Drei Zahlen sind Vanillas und nicht geprüft** (WP9): alle Rüstungsstufen öffnen bei

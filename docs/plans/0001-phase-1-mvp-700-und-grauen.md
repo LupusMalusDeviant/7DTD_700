@@ -1574,13 +1574,18 @@ werden:
 
 ## Offene Punkte
 
-- **D24s zweiter Weg fehlt** (WP7.5, 2026-11-16). D24 sagt, die Grundfähigkeit komme „per
+- ~~**D24s zweiter Weg fehlt** (WP7.5, 2026-11-16). D24 sagt, die Grundfähigkeit komme „per
   Skill-Punkt **oder** Abschrift". Gemessen steigt eine Handwerks-Stufe nur durch ihr
   Heft: `XUiC_SkillCraftingInfoWindow` kennt keinen Kaufweg (0 Vorkommen von Kosten oder
   Kauf, das Perk-Fenster hat sechs). Gebaut ist damit nur der Weg „Abschrift"
   (Lehrblatt). Den Skill-Punkt-Weg könnte ein Perk tragen, der `RecipeTagUnlocked` führt —
   das ist XML, aber eine zweite Quelle der Bindung und nicht „Vanillas Linie". **Nicht
-  entschieden;** bis dahin gilt D24 als halb gebaut, nicht als geändert.
+  entschieden;** bis dahin gilt D24 als halb gebaut, nicht als geändert.~~
+  **Entschieden am 2026-11-16 (D71): erst Phase 2.** Phase 1 baut nur den Weg über das
+  Lehrblatt; der Skill-Punkt-Weg kommt mit Learning by Doing. **Was daraus für WP7.6 und
+  WP9 folgt:** die Zahl der Lehrblätter in Loot und Handel ist jetzt die einzige Stellschraube
+  für das Tempo des Handwerks — im Spieltest darauf achten, ob eine Stufe bis 11 und bis
+  36 in vertretbarer Zeit erreichbar ist.
 - **Drei Zahlen aus Vanilla, die WP9 ansehen muss** (D70): alle drei Rüstungsstufen
   öffnen bei Rüstungsbau 11; der Schmelztiegel erst bei Werkstattbau 75, womit jede
   T3-Waffe an dieser Zahl hängt und nicht an den 36 ihrer eigenen Stufe; und Qualität 6
