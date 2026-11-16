@@ -433,4 +433,33 @@
 	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkUrbanCombatCigar']">true</setattribute>
 	<set xpath="/progression/perks/book[@name='perkWasteTreasuresWater']/@parent">skillTechJunkie</set>   <!-- Brachlandschätze: tot nach Rezept  -->
 	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkWasteTreasuresWater']">true</setattribute>
+
+	<!-- ===== WP7.5 Bindung (D70) - ERZEUGT von tools/gen/wp7-bindung.ps1, nicht von Hand aendern ===== -->
+
+	<!-- Ruestung: unsere zwoelf Teile bekommen eigene Zeilen neben Vanillas. Level und
+	     Qualitaetsleiter sind von der Vanilla-Zeile abgelesen, die die drei Meister fuehrt. -->
+	<append xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/effect_group">
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="11,100" value="1" tags="itm700_lederwams,itm700_lederkappe,itm700_wollhandschuhe,itm700_wickelschuhe,itm700_gambeson,itm700_stepphaube,itm700_stepphandschuhe,itm700_steppschuhe,itm700_kettenhemd,itm700_spangenhelm,itm700_armschienen,itm700_beinschienen"/>
+		<passive_effect name="CraftingTier" operation="base_add" level="20,40,60,80,100" value="1,2,3,4,5" tags="itm700_lederwams,itm700_lederkappe,itm700_wollhandschuhe,itm700_wickelschuhe,itm700_gambeson,itm700_stepphaube,itm700_stepphandschuhe,itm700_steppschuhe,itm700_kettenhemd,itm700_spangenhelm,itm700_armschienen,itm700_beinschienen"/>
+	</append>
+	<!-- Die drei Anzeigezeilen fuehrten nur noch gesperrte Garnituren. Sie zeigen jetzt unsere. -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT2']/@icon">armorRogueHelmet</set>   <!-- Wolle und Leder -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT2']/unlock_entry/@item">itm700_lederwams,itm700_lederkappe,itm700_wollhandschuhe,itm700_wickelschuhe</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT2']/unlock_entry/@recipes">itm700_lederwams,itm700_lederkappe,itm700_wollhandschuhe,itm700_wickelschuhe</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT3']/@icon">armorAssassinHelmet</set>   <!-- Gambeson -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT3']/unlock_entry/@item">itm700_gambeson,itm700_stepphaube,itm700_stepphandschuhe,itm700_steppschuhe</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT3']/unlock_entry/@recipes">itm700_gambeson,itm700_stepphaube,itm700_stepphandschuhe,itm700_steppschuhe</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT4']/@icon">armorRaiderHelmet</set>   <!-- Kettenzeug -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT4']/unlock_entry/@item">itm700_kettenhemd,itm700_spangenhelm,itm700_armschienen,itm700_beinschienen</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT4']/unlock_entry/@recipes">itm700_kettenhemd,itm700_spangenhelm,itm700_armschienen,itm700_beinschienen</set>
+
+	<!-- Werkstatt: der Webstuhl nimmt den Platz von toolChickenCoopLamp (Level 14), den der Purge
+	     freigemacht hat. Die Anzeigezeile wird ueber ihre name_key-Liste gefasst und der
+	     Eintrag ueber seine Stelle - beides aendern wir nicht, also haengt keine Zeile davon
+	     ab, dass eine andere schon gelaufen ist. -->
+	<append xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/effect_group">
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="14,100" value="1" tags="blk700_webstuhl"/>
+	</append>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT1-1,workstationsT1-2,workstationsT1-3,workstationsT1-4,workstationsT1-5,workstationsT1-6']/@icon">forge,cntChickenCoop,toolBellows,workbench,resourceLockPick,workbench</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT1-1,workstationsT1-2,workstationsT1-3,workstationsT1-4,workstationsT1-5,workstationsT1-6']/unlock_entry[@unlock_tier='6']/@item">blk700_webstuhl</set>
 </config>

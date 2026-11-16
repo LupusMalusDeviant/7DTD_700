@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_50_Fortschritt / recipes.xml
+	     F-21 Rezeptbindung, Plan-0001 WP7.5, D70
+
+	     ERZEUGT von tools/gen/wp7-bindung.ps1 - nicht von Hand aendern.
+
+	     Jede Zeile gibt einem unserer Rezepte ein tags-Attribut. Das ist die ganze
+	     Bindung: mit 'learnable' ist das Rezept gesperrt, bis eine Handwerks-Stufe
+	     seine Marke freischaltet - und der Lader haengt den Rezeptnamen von selbst an
+	     die tags, sobald es ein tags-Attribut gibt. Erst dadurch treffen auch die
+	     Qualitaetszeilen (CraftingTier) unsere Rezepte.
+
+	     Die Rezepte selbst stehen in 700_20, 700_30 und 700_40 und tragen dort KEINE
+	     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind
+	     alle Rezepte offen - nichts bricht.
+
+	     24 gebunden, 18 bewusst offen (Liste und Gruende im Erzeuger). -->
+
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_armschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_beinschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_gambeson']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorMediumMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_kettenhemd']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_lederkappe']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorLightMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_lederwams']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorLightMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_spangenhelm']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_stepphandschuhe']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorMediumMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_stepphaube']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorMediumMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_steppschuhe']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorMediumMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_wickelschuhe']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorLightMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_wollhandschuhe']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorLightMaster -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnBladeT1HuntingKnife']">learnable,perkDeepCuts,packMuleCrafting</setattribute>   <!-- craftingBlades ab 11: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnBladeT3Machete']">learnable,perkDeepCuts,workbenchCrafting</setattribute>   <!-- craftingBlades ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnClubT3SteelClub']">learnable,perkPummelPete,workbenchCrafting</setattribute>   <!-- craftingClubs ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeToolAxeT1IronFireaxe']">learnable,perkMiner69r,craftingHarvestingTools,packMuleCrafting</setattribute>   <!-- craftingHarvestingTools ab 11: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeToolAxeT2SteelAxe']">learnable,perkMiner69r,craftingHarvestingTools,workbenchCrafting</setattribute>   <!-- craftingHarvestingTools ab 26: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnKnucklesT1IronKnuckles']">learnable,perkBrawler,packMuleCrafting</setattribute>   <!-- craftingKnuckles ab 11: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnKnucklesT3SteelKnuckles']">learnable,perkBrawler,workbenchCrafting</setattribute>   <!-- craftingKnuckles ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSledgeT1IronSledgehammer']">learnable,perkSkullCrusher,packMuleCrafting</setattribute>   <!-- craftingSledgehammers ab 11: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSledgeT3SteelSledgehammer']">learnable,perkSkullCrusher,workbenchCrafting</setattribute>   <!-- craftingSledgehammers ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT1IronSpear']">learnable,perkJavelinMaster,craftingSpears,packMuleCrafting</setattribute>   <!-- craftingSpears ab 11: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT3SteelSpear']">learnable,perkJavelinMaster,craftingSpears,workbenchCrafting</setattribute>   <!-- craftingSpears ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='blk700_webstuhl']">learnable,workbenchCrafting</setattribute>   <!-- craftingWorkstations ab 14: Platz und Marken von toolChickenCoopLamp, der Purge hat ihn freigemacht -->
+</config>

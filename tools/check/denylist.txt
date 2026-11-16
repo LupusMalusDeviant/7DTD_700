@@ -155,6 +155,27 @@ book*
 !bookWasteTreasuresCloth              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
 !bookWasteTreasuresSinks              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
 
+# --- WP7.5 / D70: Lehrblaetter und Pergament -----------------------------------
+# ERZEUGT von tools/gen/wp7-bindung.ps1. '*SkillMagazine' bleibt verboten; freigegeben
+# ist das Heft jeder LEBENDEN Handwerks-Stufe, weil es umgedeutet ist (Lehrblatt) und
+# weil eine Stufe nur durch ihr Heft steigt: ohne Heft waere jedes daran gebundene
+# Rezept eine Sackgasse. Die Hefte der zehn toten Stufen bleiben gesperrt.
+!harvestingToolsSkillMagazine   # D70 -> Lehrblatt: Werkzeugschmiede
+!repairToolsSkillMagazine       # D70 -> Lehrblatt: Flickwerk
+!knucklesSkillMagazine          # D70 -> Lehrblatt: Schlagringe
+!bladesSkillMagazine            # D70 -> Lehrblatt: Klingenschmiede
+!clubsSkillMagazine             # D70 -> Lehrblatt: Keulenbau
+!sledgehammersSkillMagazine     # D70 -> Lehrblatt: Hammerbau
+!spearsSkillMagazine            # D70 -> Lehrblatt: Speerbau
+!bowsSkillMagazine              # D70 -> Lehrblatt: Bogenbau
+!armorSkillMagazine             # D70 -> Lehrblatt: Rüstungsbau
+!backpackSkillMagazine          # D70 -> Lehrblatt: Sattlerei
+!medicalSkillMagazine           # D70 -> Lehrblatt: Wundversorgung
+!foodSkillMagazine              # D70 -> Lehrblatt: Küche
+!seedSkillMagazine              # D70 -> Lehrblatt: Kräutergarten
+!workstationSkillMagazine       # D70 -> Lehrblatt: Werkstattbau
+!resourcePaper                  # D70 -> Pergament: traegt Abschriften und Lehrblaetter
+
 # --- Moderne Werkzeuge und Geraete -----------------------------------------------
 # Alle fuenf Regeln hiessen zuerst 'tool*Auger', 'toolNailgun' und so weiter und trafen
 # damit NICHTS: Vanilla stellt die Werkzeuge unter 'meleeTool...' und haengt die Stufe

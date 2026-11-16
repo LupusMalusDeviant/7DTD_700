@@ -25,10 +25,14 @@
 	     Das ist genau "Werkzeugslots schalten bessere Rezepte frei" aus D26 und
 	     braucht keinen neuen Block und kein neues XUi-Fenster.
 
-	     KEINE PERK-MARKEN. Vanilla haengt diese Rezepte an 'perkAdvancedEngineering'.
-	     Die sechs Baeume baut F-21 in WP7 (D47); bis dahin tragen unsere Rezepte keine
-	     Perk-Marke und sind damit von Anfang an bekannt. Das ist eine Luecke mit
-	     Adresse, keine Entscheidung gegen D24.
+	     KEINE MARKEN - UND SEIT WP7.5 IST DAS EINE ENTSCHEIDUNG (D70). Vanilla haengt
+	     diese Rezepte an 'perkAdvancedEngineering', macht sie aber nicht 'learnable':
+	     Schmiedeeisen und Stahl sind dort offen, und die Schranke ist das Werkzeug im
+	     Ofen. Genau so bleibt es hier - die Kette ist offen, und wer sie gehen will,
+	     braucht Blasebalg, Amboss und Schmelztiegel, die an der Stufe Werkstattbau
+	     haengen. Gebunden wird in 700_50_Fortschritt/Config/recipes.xml und nur dort;
+	     ein tags-Attribut in dieser Datei bricht den Erzeuger tools/gen/wp7-bindung.ps1
+	     ab.
 
 	     STUECKZAHLEN SIND SETZUNGEN FUER WP9. Zehn Erz und sieben Holzkohle je
 	     Schmiedeeisen ist ein Anfangswert, kein Ergebnis eines Playtests. -->

@@ -560,3 +560,134 @@ Der Purge erzeugt daraus 144 neue Zeilen (je 48 in `items.xml`, `loot.xml`,
   „Stumpfe Klinge"). Wer deutsch spielt, liest Vanillas Deutsch.
 - **Die 26 Fertigkeitshefte** (`*SkillMagazine`) sind nicht angefasst. Sie heben die
   Handwerks-Stufen und gehören zu WP7.5.
+
+## 8 WP7.5 — die Rezeptbindung, gemessen und gebaut (16. November 2026)
+
+Build: V 3.40 b10. Werkzeug: `mod700meta members --il` (Aufrufe, Feldzugriffe,
+Zeichenketten — **keine Verzweigungen**) und die XML des Builds.
+
+### 8.1 Ohne `tags` trägt ein Rezept nicht einmal seinen Namen
+
+`RecipesFromXml/<LoadRecipies>d__1::MoveNext` ruft in dieser Reihenfolge:
+`HasAttribute("tags")` → `GetAttribute` → `String::Concat` → `FastTags::Parse` →
+`stfld Recipe::tags`. Die Zeichenketten daneben sind `"tags"`, `","` und `"tag"`.
+
+**Schluss, nicht Messung:** der Lader hängt den Rezeptnamen mit einem Komma an die
+Marken — aber nur in dem Zweig, in dem das Attribut vorhanden ist. Dafür spricht, dass
+Vanillas Stufen ihre Rezepte **über den Gegenstandsnamen** freischalten
+(`RecipeTagUnlocked … tags="meleeWpnSpearT1IronSpear"`) und kein Vanilla-Rezept seinen
+eigenen Namen in `tags` führt.
+
+`Recipe::Init` setzt `IsLearnable` über `Test_AnySet(tags, LearnableRecipe)`;
+`Recipe::IsUnlocked` liest `IsLearnable`, `GetCVar(GetName())` und
+`EffectManager::GetValue` (Schlüssel 73) mit `Recipe::tags`.
+
+Die Folge für uns: die 42 eigenen Rezepte hatten kein `tags`-Attribut. Sie waren damit
+nicht nur offen — **keine Zeile `CraftingTier` konnte sie treffen.** Elf Waffen und zwölf
+Rüstungsteile standen ohne Qualitätsleiter da. Gefunden beim Binden, nicht gesucht.
+
+### 8.2 Eine Handwerks-Stufe steigt nur durch ihr Heft
+
+Jedes Heft führt `AddProgressionLevel progression_name="craftingX" level="1"`. Einen
+zweiten Weg gibt es gemessen nicht: `XUiC_SkillCraftingInfoWindow` und sein Eintrag
+enthalten **0** Vorkommen von Kosten, Kauf oder Skill-Punkten; das Perk-Fenster führt
+`CalculatedCostForLevel` sechsmal und eigene Kauf-Bindungen.
+
+Das trifft D24 („per Skill-Punkt **oder** Abschrift"): für Handwerks-Stufen gibt es in
+Phase 1 nur den zweiten Weg. Festgehalten in D70 und im Plan unter den offenen Punkten.
+
+### 8.3 Die Hefte
+
+26 Gegenstände enden auf `SkillMagazine`:
+
+| | Zahl | |
+|---|---|---|
+| lebende Stufe | 14 | freigegeben, „Lehrblatt: ‹Stufe›" |
+| tote Stufe | 10 | gesperrt: salvageTools, handguns, shotguns, rifles, machineGuns, explosives, robotics, electrician, traps, vehicles |
+| ohne `Unlocks` | 2 | `masterSkillMagazine` (Basis aller, `CreativeMode` None), `adminSkillMagazine` (Entwickler) |
+
+`questRewardT1SkillMagazineBundle` endet nicht auf `SkillMagazine`; es ist über die
+Regel `questReward*Bundle` gesperrt und bleibt es.
+
+### 8.4 Vanillas Leitern
+
+Waffen: je Stufe eine Zeile je Gegenstand, T1 ab 11, T3 ab 36, die Bartaxt (T2) ab 26;
+Qualität für T1 bei `15,20,25,30,35,75`, für T3 bei `43,51,59,67,75`, Werte `1…5`
+(nachgelesen an `craftingSpears` und `craftingBlades`).
+
+`craftingArmor`: Level 1 die Lumpen, **Level 11 alle 63 übrigen Marken in einer Zeile**
+— darunter die drei Basisklassen `armorLightMaster`, `armorMediumMaster`,
+`armorHeavyMaster`, von denen unsere Teile erben (D59). Qualität bei `20,40,60,80,100`.
+Vier Anzeigezeilen `armorT1`…`armorT4`; die drei oberen führten nur noch Garnituren,
+deren Rezepte der Purge entfernt hat.
+
+`craftingWorkstations`: forge 4, cntChickenCoop 6, toolBellows 8, workbench 10,
+resourceLockPick 12, **toolChickenCoopLamp 14**, cntDewCollector 16, toolChickenCoopRun
+18, toolAnvil 20, … toolForgeCrucible **75**. Die Plätze 14 und 16 hat der Purge
+freigemacht.
+
+Marken: Waffenrezepte tragen `learnable`, ihren Perk und `packMuleCrafting` (T1) oder
+`workbenchCrafting` (T2, T3); Speere und Äxte führen zusätzlich den Namen ihrer Stufe,
+Klingen, Keulen, Faustwaffen und Hämmer nicht. Rüstungsrezepte tragen nur `learnable`;
+`toolChickenCoopLamp` trägt `learnable,workbenchCrafting`. `resourceForgedIron` und
+`resourceForgedSteel` sind **nicht** `learnable`, `resourceRepairKit` auch nicht.
+`workbenchCrafting` und `packMuleCrafting` steuern nur zwei `CraftingTime`-Wirkungen.
+
+### 8.5 Papier
+
+Zehn Rezepte verbrauchen `resourcePaper`, fünf davon leben noch (vier Spreng-Pfeile und
+-Bolzen, `foodRawMeatBundle`); drei Rezepte stellen es her; vier Gegenstände sind aus
+`Mpaper` — darunter `schematicMaster`, von dem `masterSkillMagazine` und über ihn alle
+Hefte und Bücher erben. Entschieden: umdeuten zu Pergament (D70).
+
+### 8.6 Was gebaut ist
+
+Erzeugt von `tools/gen/wp7-bindung.ps1`:
+
+| | Zahl |
+|---|---|
+| eigene Rezepte / gebunden / bewusst offen | 42 / 24 / 18 |
+| davon Vanillas Linie (Marken, Stufe, Level gelesen) | 11 |
+| davon Rüstung an `craftingArmor` ab 11 | 12 |
+| davon Werkstatt (Webstuhl ab 14) | 1 |
+| Hefte freigegeben / gesperrt | 14 / 10 |
+| Localization-Zeilen | 35 |
+| Freigaben in `denylist.txt` | 15 |
+
+| Stufe | gebunden |
+|---|---|
+| `craftingBlades` | Sax 11, Spatha 36 |
+| `craftingClubs` | Streitkolben 36 |
+| `craftingHarvestingTools` | Breitaxt 11, Bartaxt 26 |
+| `craftingKnuckles` | T1 11, T3 36 |
+| `craftingSledgehammers` | T1 11, T3 36 |
+| `craftingSpears` | T1 11, T3 36 |
+| `craftingArmor` | zwölf Teile 11 |
+| `craftingWorkstations` | Webstuhl 14 |
+
+Der Purge erzeugt daraus 30 neue Zeilen (je 10 in `items.xml`, `loot.xml`,
+`traders.xml`): 1941 → 1971.
+
+**Die einzige Setzung** ist der Platz des Webstuhls. Er entsteht an der Werkbank
+(Level 10) und nimmt den ersten Platz danach, den der Purge freigemacht hat. Das Skript
+prüft beides und bricht ab, wenn ein früherer freier Platz übergangen wird.
+
+### 8.7 Grenzen
+
+- **Aufrufe und Felder, keine Verzweigungen.** Dass der Name nur im `tags`-Zweig
+  angehängt wird (§8.1), ist der tragende Schluss dieses Pakets und im Spiel nicht
+  gesehen → Prüfliste 17 (a) und (c).
+- **`<setattribute>` auf ein Rezept eines früheren eigenen Modlets.** `kette-pruefen`
+  rechnet solche XPaths grün, sobald die Kennung von uns definiert ist; dass 700_50 nach
+  700_20/30/40 lädt, prüft die Ladereihenfolge, nicht dieses Skript. Elf der 24 Zeilen
+  treffen dazu Rezeptnamen, die auch Vanilla führt und die wir ersetzt haben.
+- **Qualität 6.** Vanillas Rezepte heben bei `level="6"` die Zahl von
+  `resourceLegendaryParts`; unsere führen die Zutat nicht. Dass die oberste Sprosse der
+  Leiter „legendär" ist, ist aus den Zahlen geschlossen (Wert 5 über einer Grundstufe)
+  und nicht gemessen → Prüfliste 17 (c).
+- **Der Juli-Dump kennt `backpackSkillMagazine` nicht.** `anachronisms` meldet gegen ihn
+  darum zwei Freigaben ohne Treffer statt einer; gegen Vanilla V 3.40 b10 sind es null.
+  Das ist ein weiterer Beleg, dass der Dump von einem älteren Stand stammt, kein Fehler
+  der Freigabe.
+- **Die Texte der Lehrblätter sind eine Schablone** („Lehrblatt: ‹Stufe›"), keine 14
+  eigenen Texte.

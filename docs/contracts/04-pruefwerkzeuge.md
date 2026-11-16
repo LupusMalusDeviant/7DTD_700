@@ -1314,3 +1314,86 @@ Erzeuger noch einmal. Der zweite Lauf muss dieselben fünf Dateien schreiben; am
 - Geprüft wird gegen Vanilla und die erzeugten Purge-Zeilen, nicht gegen einen
   ConfigsDump.
 - Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 16.
+
+## Nachtrag WP7.5 — der vierte Erzeuger, **Abnahme offen**
+
+`tools/gen/wp7-bindung.ps1` erzeugt die Zeilen für D70. Im Skript stehen fünf Tabellen:
+welche Rezepte Vanillas Linie folgen, welche Rüstungsteile unter welcher Basisklasse
+stehen, wohin der Webstuhl gehört, welche Rezepte **offen** bleiben und **warum**, und die
+Schablonen für Lehrblätter und Pergament. **Stufe, Level und Marken stehen nicht im
+Skript** — sie werden aus dem Build gelesen.
+
+**Schnittstelle.** `-Spiel` (sonst `SDTD_PATH`), `-Repo`, `-AusOrdner` (sonst
+`tools/gen/out/`). Gelesen werden `progression.xml`, `recipes.xml`, `items.xml` und
+`Localization.csv` des Builds; aus dem Repo die drei handgeschriebenen Rezeptdateien
+(700_20, 700_30, 700_40), `700_30_Ausruestung/Config/items.xml`, unsere
+`progression.xml` (welche Stufen verborgen sind), unsere `Localization.csv` (die Namen
+der Stufen) und die **erzeugte** `700_10_Purge/Config/recipes.xml`. Geschrieben werden
+fünf Dateien: `recipes.xml` für 700_50 **als ganze Datei**, dazu Bruchstücke für
+`progression.xml`, `Localization.csv`, `denylist.txt` und `vanilla-keys.txt`.
+
+**Zum ersten Mal schreibt ein Erzeuger eine ganze Mod-Datei** — aber weiter nach
+`tools/gen/out/`, nicht in den Mod-Ordner; sie wird von Hand hinüberkopiert. Die Bindung
+hat damit eine Quelle. `progression.xml` trägt einen dritten erzeugten Block
+(`===== WP7.5 Bindung (D70) - ERZEUGT …`), für den dieselbe Lücke gilt wie im Nachtrag
+WP7.4: wer einen anderen Erzeuger über die Datei kopiert, verliert ihn unbemerkt.
+
+**Abbruchbedingungen** — bei jeder schreibt das Skript nichts:
+
+1. Eines unserer Rezepte steht in **keiner** Tabelle (weder gebunden noch offen), in
+   **zwei** Tabellen, oder eine Tabelle nennt ein Rezept, das wir nicht haben.
+2. Ein Rezept trägt in seiner eigenen Datei schon ein `tags`-Attribut.
+3. Vanillas Linie: Vanilla hat kein Rezept dieses Namens, führt mehrere mit
+   verschiedenen Marken, das Rezept ist dort nicht `learnable`, oder nicht **genau eine**
+   Handwerks-Stufe schaltet es frei.
+4. Rüstung: die Anzeigezeile beginnt nicht mit der genannten Basisklasse; sie führt noch
+   ein **lebendes** Rezept (das Überschreiben nähme es aus der Anzeige); ein Teil erbt
+   nicht von der genannten Klasse; das Symbol-Teil hat kein `CustomIcon`; die Klasse hat
+   nicht genau eine Freischalt- und eine Qualitätszeile.
+5. Werkstatt: der Platz ist nicht frei (sein Rezept lebt), er liegt nicht **nach** der
+   Werkbank des Rezepts, es gibt einen **früheren** freien Platz, oder das Vanilla-Rezept
+   des Platzes entsteht an einer anderen Werkbank (die Marken wären nicht übertragbar).
+6. Ein gebundenes Rezept hängt an einer verborgenen Stufe oder verlangt mehr als deren
+   Höchstlevel.
+7. Eine **lebende** Stufe hat nicht genau ein Heft, oder das Heft führt kein
+   `AddProgressionLevel` auf sie.
+8. Ein Schlüssel, der überschrieben wird, fehlt in Vanilla oder wird mehrfach benutzt;
+   ein erzeugter Schlüssel kommt doppelt vor.
+
+**Nachweis nach Projektregel 5.** Vier Läufe gegen eine absichtlich falsche Tabelle, jeder
+mit Exit 1 und null geschriebenen Dateien:
+
+| falsch gemacht | Meldung |
+|---|---|
+| `doorWoodLargeGate` aus der Tabelle „offen" genommen | „hat keine Entscheidung: weder gebunden noch offen" |
+| `resourceForgedIron` zusätzlich in Vanillas Linie | „steht in zwei Tabellen" und „verschiedene Marken" |
+| Platz des Webstuhls `cntDewCollector` | „Der erste freie Platz nach 'workbench' ist 'toolChickenCoopLamp' (Level 14)" |
+| Wolle und Leder unter `armorMediumMaster` | 5 Fehler (Basisklasse der Anzeigezeile und Vererbung der Teile passen nicht zur Tabelle) |
+
+Wie im Nachtrag WP7.4 stehen diese Läufe **nicht** in `gegenproben.ps1` (sie brauchen
+den Build und verändern das Skript); gelaufen von Hand am 16. November 2026.
+
+**Reihenfolge.** Erzeuger → Freigaben in die Denylist, `*SkillMagazine` und
+`resourcePaper` aus `aufschub.txt` → `mod700check purge-patch` → Erzeuger noch einmal.
+Der zweite Lauf schrieb am 16. November dieselben fünf Dateien (gleiche Prüfsummen), und
+`mod/700_50_Fortschritt/Config/recipes.xml` ist bytegleich mit dem Erzeugnis.
+
+**Was `check-all.ps1` danach meldet** (16. November 2026, `SDTD_PATH` gesetzt): 55
+Gegenproben, 0 fehlgeschlagen; `recipes`, `purge-patch`, `localization` und
+`kette-pruefen` grün (392 XPaths, 141 Fortschritts-Verweise, 0 unaufgelöst; 1971
+Patchzeilen, 0 ohne Treffer, 0 gesperrt und noch erreichbar); `anachronisms` **rot mit
+645** gegen den ConfigsDump vom 7. Juli, in dem unsere Modlets nicht geladen waren —
+derselbe Grund wie seit WP3, zehn mehr als nach WP7.4, weil zehn Hefte jetzt verboten
+statt aufgeschoben sind.
+
+**Grenzen.**
+
+- **Die Vollständigkeit prüft das Skript nur in eine Richtung.** Ein neues eigenes Rezept
+  ohne Zeile bricht den Lauf ab. Ob ein als „offen" geführtes Rezept offen sein *sollte*,
+  prüft niemand — der Grund daneben ist Text.
+- **`kette-pruefen` kennt `learnable` nicht.** Ein gebundenes Rezept ohne Stufe, die es
+  freischaltet, wäre nie herstellbar; das fängt allein der Erzeuger (Bedingung 3 und 6),
+  nicht der Prüflauf. Wer `recipes.xml` in 700_50 von Hand ändert, hat diesen Schutz nicht.
+- **Dass 700_50 nach 700_20/30/40 lädt**, setzt jede der 24 Zeilen voraus und prüft
+  dieses Skript nicht.
+- Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 17.

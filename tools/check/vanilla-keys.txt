@@ -662,3 +662,44 @@ bookWasteTreasuresSinks
 perkWasteTreasuresCompleteDesc
 perkWasteTreasuresCompleteLongDesc
 perkBookGroupLongDesc
+
+# --- WP7.5 / D70: Bindung, Lehrblaetter, Pergament ----------------------------
+# ERZEUGT von tools/gen/wp7-bindung.ps1. 35 Schluessel: die vier Anzeigezeilen des
+# Ruestungsbaus (armorT1 bis armorT4), der Platz des Webstuhls in der Werkstatt-
+# Leiter (workstationsT1-6), Name und Beschreibung der 14 lebenden Fertigkeitshefte
+# und die zwei Zeilen des Papiers. Jeder ist einmal benutzt; der Erzeuger prueft es.
+armorT2
+armorT3
+armorT4
+armorT1
+workstationsT1-6
+harvestingToolsSkillMagazine
+harvestingToolsSkillMagazineDesc
+repairToolsSkillMagazine
+repairToolsSkillMagazineDesc
+knucklesSkillMagazine
+knucklesSkillMagazineDesc
+bladesSkillMagazine
+bladesSkillMagazineDesc
+clubsSkillMagazine
+clubsSkillMagazineDesc
+sledgehammersSkillMagazine
+sledgehammersSkillMagazineDesc
+spearsSkillMagazine
+spearsSkillMagazineDesc
+bowsSkillMagazine
+bowsSkillMagazineDesc
+armorSkillMagazine
+armorSkillMagazineDesc
+backpackSkillMagazine
+backpackSkillMagazineDesc
+medicalSkillMagazine
+medicalSkillMagazineDesc
+foodSkillMagazine
+foodSkillMagazineDesc
+seedSkillMagazine
+seedSkillMagazineDesc
+workstationSkillMagazine
+workstationSkillMagazineDesc
+resourcePaper
+resourcePaperDesc

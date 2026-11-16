@@ -50,11 +50,14 @@
 	     WAS ABSICHTLICH NICHT DRIN STEHT
 	     ===================================================================
 
-	     KEINE PERK-MARKEN, wie in WP4.6. Vanilla haengt diese Rezepte an perkDeepCuts,
-	     perkPummelPete, perkSkullCrusher, perkJavelinMaster, perkBrawler und
-	     perkMiner69r. Die sechs Baeume baut F-21 in WP7 (D47); bis dahin sind unsere
-	     Rezepte ohne 'learnable' von Anfang an bekannt. Luecke mit Adresse, nicht
-	     Vergessen.
+	     KEINE MARKEN IN DIESER DATEI - SIE STEHEN SEIT WP7.5 IN 700_50 (D70). Vanilla
+	     haengt diese Rezepte an perkDeepCuts, perkPummelPete, perkSkullCrusher,
+	     perkJavelinMaster, perkBrawler und perkMiner69r und macht sie 'learnable'.
+	     700_50_Fortschritt/Config/recipes.xml setzt genau diese Marken per
+	     <setattribute> auf die elf Waffen- und Werkzeugrezepte hier und 'learnable' auf
+	     die zwoelf Ruestungsteile; erzeugt von tools/gen/wp7-bindung.ps1. Die Bindung
+	     hat damit EINE Quelle. Ein tags-Attribut in dieser Datei bricht den Erzeuger
+	     ab. Offen bleiben Schleifstein, Schmiedeflicken, Naehzeug und Steppbahn.
 
 	     KEINE *Parts-ZUTATEN. Vanilla verlangt fuer die T3-Waffen ein Bauteil aus dem
 	     Zerlegen (meleeWpnBladeT3MacheteParts und seine Geschwister). Die Teile sind
@@ -68,6 +71,14 @@
 	     gesperrt, also ist die legendaere Stufe ueber Zutaten nicht erreichbar. Wie
 	     Qualitaet 6 ("legendaer", D23) verdient wird, entscheidet F-21 in WP7 - das
 	     ist dort eine offene Frage und hier keine stille Streichung.
+	     STAND WP7.5: die Frage ist damit FAKTISCH beantwortet, aber nicht entschieden.
+	     Seit die Rezepte gebunden sind, treffen Vanillas CraftingTier-Zeilen sie, und
+	     deren hoechster Wert (5, bei T3 ab Level 75) steht am Ende der Stufe. Vanilla
+	     verlangt genau dort das legendaere Teil ('CraftingIngredientCount level="6"');
+	     unsere Rezepte fuehren es nicht. Qualitaet 6 kostet bei uns also nur die
+	     Stufe und keine Sonderzutat - ein SCHLUSS aus den Zahlen, im Spiel nicht
+	     gesehen (Prüfliste 17). Ob das so bleiben soll, ist eine Balancing-Frage
+	     fuer WP9 und steht im Plan unter den offenen Punkten.
 
 	     KEINE ZAHLEN AN DEN WAFFEN. Schaden, Reichweite, Haltbarkeit und Ausdauer
 	     bleiben Vanilla. Die Mengen unten sind Setzungen, die die Kette abbilden

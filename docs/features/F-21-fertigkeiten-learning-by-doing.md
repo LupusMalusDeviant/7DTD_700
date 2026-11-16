@@ -129,9 +129,10 @@ damage with knives" bleibt für „Tiefer Schnitt" sachlich richtig, nur englisc
 - **WP7.4** die 133 Abschriften (19 Reihen à 7 Bücher plus je ein `*Complete`-Eintrag).
   Sechs Reihen sind gemessen tot. Die Wirkung sitzt an den einzelnen `<book>`-Knoten, nicht
   an den Gruppen — deren `<effect_group/>` ist leer.
-- **WP7.5** Rezepte an Grundfähigkeiten binden. Der Weg ist gemessen: ein Rezept ist genau
+- ~~**WP7.5** Rezepte an Grundfähigkeiten binden. Der Weg ist gemessen: ein Rezept ist genau
   dann sperrbar, wenn seine `tags` die Marke `learnable` tragen. Unsere 42 eigenen Rezepte
-  tragen **keine** `tags` und sind damit heute offen.
+  tragen **keine** `tags` und sind damit heute offen.~~ Erledigt am 2026-11-16 (D70),
+  siehe unten „WP7.5 — die Rezepte hängen an Stufen".
 
 ### Was dabei aufgefallen ist und nicht zu F-21 gehört
 
@@ -226,3 +227,58 @@ fest.
 
 Einzelheiten und Messungen: `docs/rea/findings/WP7-fertigkeitsbaeume.md` §7.
 Im Spiel gesehen hat das niemand → Prüfliste 16 im Plan.
+
+### WP7.5 — die Rezepte hängen an Stufen, die Hefte sind Lehrblätter (D70, 16. November 2026)
+
+**Die Regel** (vom Nutzer entschieden): *Vanillas Linie* — jedes unserer Rezepte wird so
+behandelt, wie Vanilla sein Gegenstück behandelt. Von 42 eigenen Rezepten sind **24
+gebunden** und **18 bewusst offen**.
+
+| Stufe (unser Name) | Rezept | ab Level |
+|---|---|---|
+| Klingenschmiede | Sax | 11 |
+| | Spatha | 36 |
+| Keulenbau | Streitkolben | 36 |
+| Werkzeugschmiede | Breitaxt | 11 |
+| | Bartaxt | 26 |
+| Schlagringe, Hammerbau, Speerbau | je T1 | 11 |
+| | je T3 | 36 |
+| Rüstungsbau | Wolle und Leder, Gambeson, Kettenzeug (zwölf Teile) | 11 |
+| Werkstattbau | Webstuhl | 14 |
+
+**Offen bleiben:** Luppe, Schmiedeeisen, Tiegelstahl und Klinge (die Schranke ist das
+Werkzeug im Ofen — Blasebalg, Amboss, Schmelztiegel — und die hängen an Werkstattbau),
+Schleifstein und Schmiedeflicken (D60), Nähzeug, Steppbahn, Holzfeuer und die neun
+Bauteile der Wehrbauten.
+
+**Warum nicht XML-Marken an den Rezepten selbst?** Die Bindung steht in *einer* Datei,
+`mod/700_50_Fortschritt/Config/recipes.xml`; die Rezepte in 700_20, 700_30 und 700_40
+tragen keine `tags`. Fehlt das Fortschritts-Modlet, sind alle Rezepte offen und nichts
+bricht — und wer die Bindung ändern will, sucht an einer Stelle.
+
+**Die Bindung schaltet die Qualität mit ein.** Ohne `tags` trug ein Rezept nicht einmal
+seinen eigenen Namen als Marke; keine Qualitätszeile traf unsere Waffen und Rüstungen.
+Jetzt steigt die Qualität mit der Stufe, auf Vanillas Leiter.
+
+**Ein Lehrblatt hebt eine Stufe um eins.** Das ist der einzige Weg, auf dem eine
+Handwerks-Stufe steigt — darum gehören die Hefte zu diesem Paket. 14 Lehrblätter leben
+(„Lehrblatt: Klingenschmiede", „Lehrblatt: Rüstungsbau" …), die Hefte der zehn toten
+Stufen sind gesperrt. Papier heißt Pergament.
+
+Damit heißen zwei Dinge verschieden, die verschieden sind: eine **Abschrift** ist ein
+Blatt aus einer Reihe und lehrt eine Fähigkeit (WP7.4); ein **Lehrblatt** hebt eine
+Handwerks-Stufe.
+
+**Was das für „Learning by Doing" heißt (D24):** der Satz oben — Grundfähigkeit „per
+Skill-Punkt **oder** Abschrift" — ist in Phase 1 nur zur Hälfte gebaut. Für
+Handwerks-Stufen gibt es gemessen keinen Kaufweg; gebaut ist der Weg über das Lehrblatt.
+Das ist **nicht entschieden**, sondern festgehalten (Plan, Offene Punkte). *Notiz für
+Phase 2:* wenn Tun die Stufe hebt, ist das Lehrblatt der Sprung und nicht mehr der
+einzige Weg — genau die Rolle, die Punkt 3 oben den Abschriften gibt.
+
+**Drei Zahlen sind Vanillas und nicht geprüft** (WP9): alle Rüstungsstufen öffnen bei
+Rüstungsbau 11; der Schmelztiegel erst bei Werkstattbau 75; die oberste Qualität kostet
+nur die Stufe, keine Sonderzutat.
+
+Einzelheiten und Messungen: `docs/rea/findings/WP7-fertigkeitsbaeume.md` §8.
+Im Spiel gesehen hat das niemand → Prüfliste 17 im Plan.

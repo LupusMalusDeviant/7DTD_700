@@ -1212,12 +1212,28 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    **Nicht gemacht:** die Wirkungstexte der Bände (`desc_key`, `long_desc_key`, rund 200
    Schlüssel) — sie bleiben Vanilla und gehören wie die Rang-Texte zu WP8.5.
    **Im Spiel gesehen hat das niemand** → Prüfliste 16.
-5. **WP7.5** `[Claude-prüfbar]` Rezepte aus WP4–WP6 an Grundfähigkeiten binden: ohne
+5. ~~**WP7.5** `[Claude-prüfbar]` Rezepte aus WP4–WP6 an Grundfähigkeiten binden: ohne
    Grundfähigkeit ist ein Rezept gesperrt. **Der Weg ist gemessen:** ein Rezept ist genau
    dann sperrbar, wenn seine `tags` die Marke `learnable` tragen (`Recipe::IsUnlocked`
    prüft `get_IsLearnable`; `Recipe::.cctor` liest `"learnable"`). Vanilla: 391 von 633
    tragen sie, 39 tragen `always_unlocked`, 203 keines von beidem und sind von Anfang an
-   verfügbar. **Unsere 42 eigenen Rezepte tragen keine `tags`** und sind damit heute offen.
+   verfügbar. **Unsere 42 eigenen Rezepte tragen keine `tags`** und sind damit heute offen.~~
+   **Erledigt 2026-11-16 (D70).** Vom Nutzer entschieden: „Vanillas Linie" — jedes Rezept
+   so, wie Vanilla sein Gegenstück behandelt. **24 gebunden, 18 bewusst offen.** Elf Waffen
+   und Werkzeuge an ihrer Vanilla-Stufe (Level 11, 26, 36), zwölf Rüstungsteile an
+   `craftingArmor` ab 11, der Webstuhl an `craftingWorkstations` ab 14; offen bleiben
+   Materialkette, Reparaturmittel, Nähzeug, Steppbahn, Holzfeuer und neun Bauteile.
+   **Was der Plan nicht wusste:** (a) Ohne `tags` trägt ein Rezept auch seinen eigenen
+   Namen nicht als Marke — unsere Waffen und Rüstungen hatten bis heute **keine
+   Qualitätsleiter**; die Bindung schaltet sie mit ein. (b) Eine Handwerks-Stufe steigt
+   **nur durch ihr Heft**. Darum gehören die Fertigkeitshefte in dieses Paket: 14 leben
+   als „Lehrblatt: ‹Stufe›", 10 sind gesperrt; Papier ist Pergament (vom Nutzer
+   entschieden). Der Aufschub `*SkillMagazine`/`resourcePaper` ist eingelöst, der Purge
+   wächst von 1941 auf **1971** Zeilen. (c) **D24s Weg „per Skill-Punkt" gibt es für
+   Handwerks-Stufen nicht** — siehe Offene Punkte. Die Bindung steht allein in
+   `mod/700_50_Fortschritt/Config/recipes.xml`, erzeugt von `tools/gen/wp7-bindung.ps1`,
+   das an vier absichtlich falschen Tabellen nachweislich abbricht.
+   **Im Spiel gesehen hat das niemand** → Prüfliste 17.
 6. **WP7.6** `[braucht Nutzer]` Spieltest: trägt jeder Baum einen Build bis T4, ohne
    Sackgasse? Dazu zwei Punkte, die nur ein Lauf beantwortet: stehen die fünf Bäume mit
    unseren Namen im Fertigkeitsfenster, und sind die zwanzig verborgenen Zweige wirklich
@@ -1530,7 +1546,45 @@ werden:
     Nebenbei: stehen die zwei Abschlüsse ohne Wirkung mit dem Satz „Diese Reihe schließt
     ohne eigene Lehre." da?
 
+17. **Ein gebundenes Rezept sperren sehen, freischalten und in Qualität bauen** (WP7.5/D70,
+    16. November 2026). Vier Schlüsse, wieder aus Aufrufen und Feldern, nicht aus
+    Verzweigungen:
+    (a) *Gebunden heißt gesperrt.* In einem **neuen** Spiel sind Sax
+    (`meleeWpnBladeT1HuntingKnife`), Lederwams und Webstuhl im Handwerksmenü
+    **gesperrt**; Luppe, Schmiedeeisen, Schleifstein, Holzfeuer und
+    Palisade sind **offen**. Ist ein gebundenes Rezept offen, hat `<setattribute>` das
+    `tags`-Attribut nicht gesetzt oder der Lader hängt den Namen doch nicht an.
+    (b) *Das Lehrblatt hebt die Stufe.* „Lehrblatt: Klingenschmiede" lesen (Kreativmenü)
+    hebt die Stufe um eins; bei Stufe 11 ist der Sax herstellbar, bei 36 die Spatha.
+    Steigt nichts, ist die Sackgasse da, vor der das Paket schützen sollte.
+    (c) *Die Qualitätsleiter greift.* Ein Sax bei Klingenschmiede 11 ist „grob" und
+    steigt bei 15, 20, 25, 30 und 35 je eine Stufe (Vanillas Zeile:
+    `level="15,20,25,30,35,75" value="1,2,3,4,5,5"`). Bleibt er bei jeder Stufe „grob",
+    trifft `CraftingTier` unsere Rezepte nicht. **Dazu die offene Zahl:** ist die oberste
+    Sprosse (Sax bei 35, Spatha bei 75) **„legendär"**, und entsteht sie ohne
+    Sonderzutat? Das ist die Folge (4) aus D70.
+    (d) *Die Anzeigezeilen.* Unter Rüstungsbau stehen „Lumpen", „Wolle und Leder",
+    „Gambeson", „Kettenzeug" mit unseren Teilen und einem Bild; unter Werkstattbau steht
+    an sechster Stelle der ersten Reihe „Stufe 1: Webstuhl" (mit dem Bild der
+    Zimmermannsbank — der Webstuhl hat bis Phase 2 kein eigenes).
+    Nebenbei: kein Heft einer toten Stufe (Handfeuerwaffen, Robotik, Elektrik, Fahrzeuge
+    …) in Loot oder beim Händler, und „Pergament" statt „Papier" im Inventar.
+    Fällt (a) falsch aus, ist der Rückweg eine Datei: `700_50_Fortschritt/Config/recipes.xml`
+    leeren — dann sind alle Rezepte wieder offen, und nichts anderes hängt daran.
+
 ## Offene Punkte
+
+- **D24s zweiter Weg fehlt** (WP7.5, 2026-11-16). D24 sagt, die Grundfähigkeit komme „per
+  Skill-Punkt **oder** Abschrift". Gemessen steigt eine Handwerks-Stufe nur durch ihr
+  Heft: `XUiC_SkillCraftingInfoWindow` kennt keinen Kaufweg (0 Vorkommen von Kosten oder
+  Kauf, das Perk-Fenster hat sechs). Gebaut ist damit nur der Weg „Abschrift"
+  (Lehrblatt). Den Skill-Punkt-Weg könnte ein Perk tragen, der `RecipeTagUnlocked` führt —
+  das ist XML, aber eine zweite Quelle der Bindung und nicht „Vanillas Linie". **Nicht
+  entschieden;** bis dahin gilt D24 als halb gebaut, nicht als geändert.
+- **Drei Zahlen aus Vanilla, die WP9 ansehen muss** (D70): alle drei Rüstungsstufen
+  öffnen bei Rüstungsbau 11; der Schmelztiegel erst bei Werkstattbau 75, womit jede
+  T3-Waffe an dieser Zahl hängt und nicht an den 36 ihrer eigenen Stufe; und Qualität 6
+  kostet nur die Stufe, weil unsere Rezepte kein legendäres Teil führen.
 
 - ~~**Die Fackel-Zahl.** `GrowthRate` steht in Minuten, gewünscht ist eine Brenndauer in
   Ingame-Stunden. Der Umrechnungsfaktor hängt an der Tageslänge der Welt und ist nicht

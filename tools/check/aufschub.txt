@@ -30,12 +30,14 @@
 # freigegeben, 48 sind gesperrt (6 tote Reihen, 6 tote Einzelbaende). Gemessen waren es
 # sechs tote Reihen, nicht acht - bookRangers und bookUrbanCombat leben.
 #
-# Die Fertigkeitshefte und das Papier bleiben aufgeschoben, aber mit genauerer Adresse:
-# die Hefte sind das, womit eine Handwerks-Stufe steigt, und WP7.5 bindet die Rezepte an
-# genau diese Stufen. Wer die Hefte vorher sperrt, sperrt den Fortschritt, an den WP7.5
-# erst bindet.
-*SkillMagazine        # WP7.5: die Fertigkeitshefte heben die Handwerks-Stufen, an die WP7.5 die Rezepte bindet
-resourcePaper         # WP7.5: Papier traegt die Hefte und Abschriften; ob es Pergament wird oder faellt, entscheidet sich mit den Heften
+# '*SkillMagazine' UND 'resourcePaper' SIND EINGELOEST IN WP7.5 (D70, 2026-11-16) und
+# stehen darum ebenfalls nicht mehr hier. Die Hefte der 14 lebenden Handwerks-Stufen sind
+# als Lehrblaetter umgedeutet und freigegeben - eine Stufe steigt nur durch ihr Heft, und
+# WP7.5 hat 24 Rezepte an diese Stufen gebunden. Die Hefte der zehn toten Stufen sind
+# gesperrt. Papier ist Pergament (vom Nutzer entschieden).
+#
+# Damit ist der ganze Abschnitt eingeloest. Er bleibt stehen, weil er sagt, wohin die
+# 133 + 26 + 1 Kennungen gegangen sind, die hier seit dem 2026-11-07 standen.
 
 # --- Erledigt in WP4.1 und WP4.2: Waehrung, Faser, Schrottwirtschaft -----------
 # Hier standen acht Aufschuebe mit der Adresse WP4. Sie sind eingeloest, aber nicht so,

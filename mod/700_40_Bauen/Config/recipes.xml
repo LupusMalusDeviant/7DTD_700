@@ -37,8 +37,9 @@
 	     - gesperrte Zutat heraus, zeitgemaesse hinein - ist in WP5.1 fuer elf Waffen
 	     schon gemacht. Geaendert wird so wenig wie moeglich: die gesperrten Zutaten
 	     fallen, eine zeitgemaesse kommt dazu, der Rest der Vanilla-Zeile bleibt stehen
-	     samt ihren tags. Dass die Rezepte weiter 'learnable' sind und damit an
-	     Abschriften haengen, bleibt wie es ist - das regelt WP7.
+	     samt ihren tags. Die Rezepte bleiben 'learnable' und haengen damit an der
+	     Stufe Werkstattbau (craftingWorkstations): Esse ab Level 4, Zimmermannsbank
+	     ab 10. Gemessen in WP7.5 (D70) - und die Stufe steigt nur durch ihr Lehrblatt.
 	-->
 
 	<!-- Zimmermannsbank: Holz, Naegel, Schmiedeeisen - und Leder statt Klebeband und
@@ -91,8 +92,12 @@
 	     und damit entsteht die Treppe Zimmermannsbank -> Webstuhl -> Gambeson. Holz und
 	     Faden tragen das Geraet, Leder haelt die Schaefte.
 
-	     Ohne 'tags="learnable"': das Rezept ist von Anfang an bekannt, wie alle eigenen
-	     Rezepte der Phase 1. Abschriften und Fertigkeitsbaum sind WP7.
+	     Ohne 'tags' in dieser Datei. Seit WP7.5 (D70) ist der Webstuhl trotzdem
+	     gebunden: 700_50_Fortschritt/Config/recipes.xml setzt ihm die Marken, und die
+	     Stufe Werkstattbau schaltet ihn ab Level 14 frei - auf dem ersten Platz, den
+	     der Purge nach der Werkbank freigemacht hat. Holzfeuer, Palisade und Tor
+	     bleiben offen: Vanilla bindet keine Bauteile, und eine Stufe fuers Bauen gibt
+	     es nicht.
 	-->
 	<append xpath="/recipes">
 
