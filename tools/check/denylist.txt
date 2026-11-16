@@ -102,12 +102,58 @@ resourceLegendaryParts  # Endgame-Bauteil von Vanilla, ersetzt F-02
 # durchlaufen. Sie fallen aber NICHT in WP3: aufschub.txt bucht sie nach WP7 um, so
 # wie der Nutzer am 2026-11-07 entschieden hat. Die Zahl bleibt dadurch im Bericht
 # sichtbar, statt zu verschwinden.
+#
+# EINGELOEST IN WP7.4 (D69, 2026-11-16) - und wie in WP4 nicht so, wie der Satz oben
+# es sich dachte: nicht ersetzt, sondern umgedeutet. 13 Reihen leben als Abschriften
+# weiter, 6 fallen ganz, dazu 6 tote Einzelbaende aus 4 lebenden Reihen. 'book*'
+# bleibt verboten und steht nicht mehr im Aufschub: 48 Baende sind damit wirklich
+# gesperrt, 85 stehen als Freigabe im Block direkt unter den Fertigkeitsheften.
+# Gemessen sind es SECHS tote Reihen, nicht acht (Befund WP7-fertigkeitsbaeume §3.3):
+# bookRangers und bookUrbanCombat leben.
 book*
 *SkillMagazine       # die Fertigkeitshefte derselben Reihe. Stand hier zuerst als
                      # 'magazine*' und traf damit NICHTS - Vanilla nennt sie
                      # electricianSkillMagazine, bowsSkillMagazine und so weiter.
                      # Aufgefallen ist es durch den neuen Zaehler fuer Verbotsregeln
                      # ohne Treffer, nicht durch Nachdenken.
+
+# --- WP7.4 / D69: Abschriften ----------------------------------------------------
+# ERZEUGT von tools/gen/wp7-abschriften.ps1. 'book*' bleibt verboten; freigegeben ist
+# jeder Band einer lebenden Reihe, weil er umgedeutet ist (Vanilla-Name in der XML,
+# 'Blatt n von N' auf dem Schirm). Reihen mit toten Einzelbaenden stehen Band fuer
+# Band hier und NICHT als Muster: eine Freigabe schlaegt jedes Verbot, und ein Muster
+# wuerde die toten Baende mit freigeben.
+!bookArtOfMiningLuckyStrike           # D69 -> Bergmannskunde, 5 von 7 Blaettern leben
+!bookArtOfMiningDiamondTools          # D69 -> Bergmannskunde, 5 von 7 Blaettern leben
+!bookArtOfMiningPallets               # D69 -> Bergmannskunde, 5 von 7 Blaettern leben
+!bookArtOfMiningAvalanche             # D69 -> Bergmannskunde, 5 von 7 Blaettern leben
+!bookArtOfMiningDamage                # D69 -> Bergmannskunde, 5 von 7 Blaettern leben
+!bookBatterUp*                        # D69 -> Vom Keulenschlag, sieben Blaetter
+!bookBarBrawling*                     # D69 -> Vom Faustkampf, sieben Blaetter
+!bookFiremansAlmanacHeat              # D69 -> Köhlerweisheit, 5 von 7 Blaettern leben
+!bookFiremansAlmanacSpeed             # D69 -> Köhlerweisheit, 5 von 7 Blaettern leben
+!bookFiremansAlmanacMolotov           # D69 -> Köhlerweisheit, 5 von 7 Blaettern leben
+!bookFiremansAlmanacPrevention        # D69 -> Köhlerweisheit, 5 von 7 Blaettern leben
+!bookFiremansAlmanacHarvest           # D69 -> Köhlerweisheit, 5 von 7 Blaettern leben
+!bookGreatHeist*                      # D69 -> Diebeshandwerk, sieben Blaetter
+!bookHuntingJournal*                  # D69 -> Vom Waidwerk, sieben Blaetter
+!bookLuckyLooter*                     # D69 -> Finderglück, sieben Blaetter
+!bookNightStalker*                    # D69 -> Der Nachtgänger, sieben Blaetter
+!bookRangers*                         # D69 -> Bogenlehre, sieben Blaetter
+!bookSledgeSaga*                      # D69 -> Vom Hammerschlag, sieben Blaetter
+!bookSpearHunter*                     # D69 -> Speerlehre, sieben Blaetter
+!bookUrbanCombatLanding               # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookUrbanCombatSneaking              # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookUrbanCombatJumping               # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookUrbanCombatLandMines             # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookUrbanCombatAdrenalineRush        # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookUrbanCombatRoomClearing          # D69 -> Kampf in Mauern, 6 von 7 Blaettern leben
+!bookWasteTreasuresHoney              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
+!bookWasteTreasuresCoffins            # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
+!bookWasteTreasuresAcid               # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
+!bookWasteTreasuresDoors              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
+!bookWasteTreasuresCloth              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
+!bookWasteTreasuresSinks              # D69 -> Brachlandschätze, 6 von 7 Blaettern leben
 
 # --- Moderne Werkzeuge und Geraete -----------------------------------------------
 # Alle fuenf Regeln hiessen zuerst 'tool*Auger', 'toolNailgun' und so weiter und trafen

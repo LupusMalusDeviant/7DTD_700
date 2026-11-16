@@ -185,3 +185,44 @@ leerer Behälter mit Vanilla-Namen wäre.
 das Spiel steht.** Die Methode filtert gemessen `get_IsAttribute` und nutzt nur
 `ProgressionClass::Name` und `::Icon`; `Hidden` liest sie nicht. Beobachtet ist das nicht →
 **Prüfliste 15**. Fällt es falsch aus, fehlen Kategorie-Knöpfe an den Werkbänken.
+
+### WP7.4 — die Bücher sind Abschriften (D69, 16. November 2026)
+
+Vanillas 19 Buchreihen bleiben in Phase 1 das Fortschrittsmittel, umgedeutet:
+
+| Reihe | Vanilla-Kennung | Blätter |
+|---|---|---|
+| Bergmannskunde | `skillArtOfMining` | 5 von 7 |
+| Vom Keulenschlag | `skillBatterUp` | 7 |
+| Vom Faustkampf | `skillBarBrawling` | 7 |
+| Köhlerweisheit | `skillFiremansAlmanac` | 5 von 7 |
+| Diebeshandwerk | `skillGreatHeist` | 7 |
+| Vom Waidwerk | `skillHuntingJournal` | 7 |
+| Finderglück | `skillLuckyLooter` | 7 |
+| Der Nachtgänger | `skillNightStalker` | 7 |
+| Bogenlehre | `skillArchery` | 7 |
+| Vom Hammerschlag | `skillSledgeSaga` | 7 |
+| Speerlehre | `skillSpearHunter` | 7 |
+| Kampf in Mauern | `skillUrbanCombat` | 6 von 7, Abschluss ohne Wirkung |
+| Brachlandschätze | `skillWasteTreasures` | 6 von 7, Abschluss ohne Wirkung |
+
+Sechs Reihen fallen ganz: AutoWeapons, Enforcer, PistolPete, Shotguns, Sniper, TechJunkie.
+
+**Die Reihen hängen an keinem Baum.** Sie bleiben unter `attBooks`, wie in Vanilla — eine
+Zuordnung zu den fünf Bäumen wäre möglich (Bogenlehre zum Jäger, Vom Hammerschlag zum
+Krieger), ist aber nicht gemessen und nicht entschieden.
+
+**Ein Band heißt „‹Reihe›, Blatt *n* von *N*"**, und *n* ist die Stelle, die auch das
+Fenster zeigt. Wo tote Bände gefallen sind, zählt die Reihe lückenlos neu, und der
+Abschluss kommt nach dem letzten **lebenden** Blatt (D69, vom Nutzer entschieden).
+
+**Was ein Blatt lehrt, steht noch in Vanillas Worten da** — rund 200 Wirkungstexte,
+WP8.5. Für wen deutsch spielt, sind sie deutsch: Vanilla übersetzt sie selbst.
+
+**Nicht Teil von WP7.4:** die 26 Fertigkeitshefte, mit denen eine Handwerks-Stufe steigt.
+Sie sind das, was F-21 oben „Abschrift als Grundfähigkeit" nennt, und gehören zu WP7.5.
+Zwei verschiedene Dinge heißen damit vorläufig ähnlich; den Namen der Hefte legt WP7.5
+fest.
+
+Einzelheiten und Messungen: `docs/rea/findings/WP7-fertigkeitsbaeume.md` §7.
+Im Spiel gesehen hat das niemand → Prüfliste 16 im Plan.

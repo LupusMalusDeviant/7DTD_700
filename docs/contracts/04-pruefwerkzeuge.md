@@ -1248,3 +1248,69 @@ Nahkampf-Bereiche, ein Schlüssel. Ohne ihn hätten vier unserer Unterbereiche d
 Namen getragen.
 
 Auch diese Datei trägt eine **UTF-8-BOM** (Windows PowerShell 5.1, siehe Nachtrag WP7.1b).
+
+## Nachtrag WP7.4 — der dritte Erzeuger, **Abnahme offen**
+
+`tools/gen/wp7-abschriften.ps1` erzeugt die Zeilen für D69 aus einer Tabelle im Skript:
+welche der 19 Buchreihen lebt, wie sie heißt, welche Einzelbände tot sind und **warum**.
+
+**Schnittstelle.** `-Spiel` (sonst `SDTD_PATH`), `-Repo` (sonst zwei Ebenen über dem
+Skript), `-AusOrdner` (sonst `tools/gen/out/`). Gelesen werden `progression.xml`,
+`items.xml`, `item_modifiers.xml` und `Localization.csv` des Builds sowie die **erzeugten**
+Purge-Dateien `mod/700_10_Purge/Config/items.xml` und `recipes.xml`. Geschrieben werden
+fünf Bruchstücke: Zeilen für `progression.xml`, für `items.xml`, für `Localization.csv`,
+Freigaben für `denylist.txt` und Schlüssel für `vanilla-keys.txt`.
+
+**Es schreibt keine Mod-Datei.** `mod/700_50_Fortschritt/Config/progression.xml` und
+`items.xml` tragen je einen Block zwischen der Zeile
+`===== WP7.4 Abschriften (D69) - ERZEUGT von tools/gen/wp7-abschriften.ps1 …` und
+`</config>`; er wird von Hand ersetzt. Das gilt jetzt auch für `items.xml`, die bisher
+ganz von `wp7-perks.ps1` kam: **eine Datei, zwei Erzeuger** (D53 erlaubt je Modlet nur
+eine Datei je Vanilla-Config). Wer `wp7-perks.ps1` neu laufen lässt und seine Ausgabe
+über die Datei kopiert, verliert den WP7.4-Block — `kette-pruefen` merkt das nicht, weil
+fehlende Zeilen keine falschen XPaths sind. **Das ist eine bekannte Lücke, kein Schutz.**
+
+**Abbruchbedingungen** — bei jeder schreibt das Skript nichts:
+
+1. Eine Reihe steht im Spiel und nicht in der Tabelle, oder umgekehrt.
+2. Eine Reihe hat nicht genau acht Knoten, der Abschluss ist nicht der letzte, oder ein
+   Band hat nicht genau einen Gegenstand.
+3. Ein Gegenstand trägt nicht genau zwei `PerksUnlocked`-Bedingungen auf die eigene Reihe
+   mit dem Wert 7.
+4. Ein Band wird als tot geführt und ist es nach dem genannten Grund gemessen **nicht**
+   (`Rezept`: alle freigeschalteten Rezepte entfernt; `Marke`: jeder Träger gesperrt;
+   `Buff`: jeder Geber gesperrt; `ModTraeger`: jeder Träger der Marke gesperrt).
+5. Ein Band wird als lebend geführt, und der Purge hat **alle** seine Rezepte entfernt.
+6. Ein lebender Band erbt von einem toten.
+7. Die Ablage ist keine tote Reihe.
+8. Ein Schlüssel, der überschrieben werden soll, ist geteilt — außer
+   `perkBookGroupLongDesc`, der von genau den 19 Reihen geteilt sein **muss**.
+
+**Nachweis nach Projektregel 5.** Vier Läufe gegen eine absichtlich falsche Tabelle, jeder
+mit Exit 1 und null geschriebenen Dateien:
+
+| falsch gemacht | Meldung |
+|---|---|
+| `perkBatterUpBigHits` als tot mit Grund `Rezept` | „wird als tot gefuehrt …, ist es gemessen aber NICHT" |
+| `perkUrbanCombatCigar` aus der Tabelle genommen | „gilt als lebend, aber der Purge hat ALLE seine Rezepte entfernt" |
+| Ablage `skillArchery` | „Die Ablage 'skillArchery' ist keine tote Reihe" |
+| `perkFiremansAlmanacHeat` als tot | 17 Fehler, darunter 16 Mal „lebt, erbt aber vom toten" |
+
+Diese vier Läufe stehen **nicht** in `gegenproben.ps1`: sie brauchen den Build und
+verändern das Skript. Sie sind von Hand gelaufen, am 16. November 2026, und müssten nach
+einer Änderung am Skript von Hand wiederholt werden. **Auch das ist eine Lücke.**
+
+**Reihenfolge.** Das Skript liest die Purge-Dateien, und die Purge-Dateien entstehen aus
+der Denylist, in die das Skript Freigaben schreibt. Der Kreis ist keiner, solange die
+Reihenfolge stimmt: Erzeuger → Freigaben in die Denylist → `mod700check purge-patch` →
+Erzeuger noch einmal. Der zweite Lauf muss dieselben fünf Dateien schreiben; am
+16. November tat er das (gleiche Prüfsummen).
+
+**Grenzen.**
+
+- Der Grund eines toten Bandes wird geprüft, die **Vollständigkeit** nur für Rezepte:
+  ein Band, der über eine Marke oder einen Buff tot ist und in der Tabelle fehlt, fällt
+  nicht auf. Die sechs heutigen sind von Hand gefunden (Befund §7.4).
+- Geprüft wird gegen Vanilla und die erzeugten Purge-Zeilen, nicht gegen einen
+  ConfigsDump.
+- Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 16.

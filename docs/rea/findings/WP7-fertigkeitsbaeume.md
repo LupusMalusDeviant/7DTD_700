@@ -408,3 +408,155 @@ leerer Behälter mit Vanilla-Namen wäre.
 das Spiel steht.** Die Methode filtert gemessen `get_IsAttribute` und nutzt nur
 `ProgressionClass::Name` und `::Icon`; `Hidden` liest sie nicht. Beobachtet ist das nicht →
 **Prüfliste 15**. Fällt es falsch aus, fehlen Kategorie-Knöpfe an den Werkbänken.
+
+## 7 WP7.4 — die Abschriften, gemessen und gebaut (16. November 2026)
+
+### 7.1 Was das Buchfenster liest — und was nicht
+
+`XUiC_SkillBookLevel::GetBindingValueInternal` (eine Zeile je Band) liest von der
+`ProgressionClass` **`DescKey`**, `MaxLevel` und `Effects`. **`NameKey` liest es nicht.**
+`XUiC_SkillBookInfoWindow::GetBindingValueInternal` liest `Icon`, `NameKey`, `DescKey` und
+`LongDescKey` — Bindungen `groupicon`, `groupname`, `groupdescription`,
+`detailsdescription`.
+
+Daraus folgt, welche Texte auf dem Schirm stehen:
+
+| Text | Schlüssel | Zahl | geteilt? |
+|---|---|---|---|
+| Name der Reihe | `name_key` der `book_group` | 19 | nein, jeder einmal |
+| Beschreibung der Reihe | `desc_key` der `book_group` | 19 | nein |
+| Langtext der Reihe | `perkBookGroupLongDesc` | **1** | **von allen 19** |
+| Zeile je Band | `desc_key` des `<book>` | 152 | nein |
+| Einzelheiten je Band | `long_desc_key` des `<book>` | 152 | nein |
+| Name des Gegenstands | der Gegenstandsname selbst (`bookArtOfMiningLuckyStrike`) | 133 | nein |
+
+Ein `<book>` ohne `name_key` hat **keinen** eigenen Namens-Schlüssel: der Konstruktor
+`ProgressionClass::.ctor(string)` schreibt `Name` nach `NameKey` (`stfld Name`, `ldfld Name`,
+`stfld NameKey`), und einen Schlüssel `perkArtOfMiningLuckyStrike` führt Vanillas
+`Localization.csv` nicht. Das stört nicht, weil das Fenster ihn nicht liest. Wo ein
+`name_key` ausdrücklich gesetzt ist, zeigt er fast immer auf den Gegenstand
+(`name_key="bookArtOfMiningDiamondTools"`); zwei Abschlüsse führen einen eigenen
+(`perkGreatHeistCompleteName`, `perkRangersCompleteName`).
+
+**Der geteilte Schlüssel ist hier keine Falle, sondern die Lösung.** `perkBookGroupLongDesc`
+sagt für alle 19 Reihen dasselbe („Reading books will unlock permanent perks…"). Er wird
+einmal überschrieben, mit einem Satz, der für jede Reihe stimmt. Eine Falle wäre er erst,
+wenn jemand ihn reihenweise füllen wollte. Der Erzeuger bricht ab, sobald ihn ein
+zwanzigster Knoten benutzt.
+
+### 7.2 `hidden` verbirgt keinen Band
+
+`XUiC_SkillBookInfoWindow::UpdateSkill` ruft `Progression::GetPerkList(liste, name)`, und
+die liest genau drei Felder: `ProgressionValueQuickList`, `ProgressionClass::Type`,
+`ProgressionClass::Name` — dazu `get_Parent` und `String::op_Equality`. **`Hidden` kommt
+nicht vor**, weder dort noch im Fenster. Danach, in der Reihenfolge der Aufrufe:
+`set_Perk`, `ldc.i4.1`, `set_Volume` und `get_Count`, `ldc.i4.1`, `set_CompletionReward`.
+
+Gelesen heißt das: das Fenster zeigt **jedes Kind der Reihe**, nummeriert es nach seiner
+Stelle (Stelle + 1) und nennt das **letzte** den Abschluss. Ein Band, der nur
+`hidden="true"` trägt, bliebe als Zeile stehen — mit Vanilla-Text und für immer ungelesen.
+
+**Darum wandern tote Einzelbände an eine andere Reihe.** `skillTechJunkie` ist tot und
+verborgen und dient als Ablage; ein `<set>` auf `@parent` genügt. Die Reihenliste selbst
+(`XUiC_SkillList::updateFilteredList`) liest `Hidden`, wie §2 schon gemessen hat — die
+Ablage erscheint also nicht.
+
+Und darum bleibt ein toter **Abschluss** stehen: würde er die Reihe verlassen, hieße der
+letzte lebende Band „Abschluss".
+
+### 7.3 Die Sieben steht 266 Mal da
+
+Jeder der 133 Buch-Gegenstände trägt zweimal
+`<requirement name="PerksUnlocked" skill_name="skillX" operation="GTE" value="7"/>` —
+einmal vor dem `SetProgressionLevel` auf den Abschluss, einmal vor dem Klang. 19 Reihen ×
+7 Bände × 2 = **266**, gezählt.
+
+`PerksUnlocked::IsValid` liest `PerksUnlocked::skill_name`, holt die `ProgressionClass`,
+geht ihre **`Children`** durch und fragt je Kind `ProgressionValue::get_Level`. Es zählt
+also die Kinder der Reihe mit Stufe — ein umgehängter Band zählt nicht mehr mit.
+
+**Folge:** fällt ein Band aus einer Reihe, muss die Sieben an **jedem verbleibenden**
+Gegenstand der Reihe sinken, an beiden Stellen. Sonst ist der Abschluss unerreichbar, und
+nichts meldet es. Ein `<set>` je Gegenstand trifft beide Knoten; der Erzeuger prüft vorher,
+dass es genau zwei sind, dass beide auf die eigene Reihe zeigen und beide `7` sagen.
+
+### 7.4 Sechs tote Einzelbände, zwei tote Abschlüsse
+
+Gemessen gegen die Purge-Patches, Band für Band der 13 lebenden Reihen:
+
+| Band | Reihe | tot, weil |
+|---|---|---|
+| `perkArtOfMiningCoffee` | Bergmannskunde | wirkt nur unter `buffCoffee` / `buffBlackStrapCoffee`; beide gibt nur ein gesperrter Gegenstand |
+| `perkArtOfMiningBlackStrap` | Bergmannskunde | schaltet nur `drinkjarBlackStrapCoffee` frei, Rezept entfernt |
+| `perkFiremansAlmanacAxes` | Köhlerweisheit | schaltet nur `modMeleeFiremansAxeMod` frei, Rezept entfernt |
+| `perkFiremansAlmanacEquipment` | Köhlerweisheit | `VehicleSelfDamage` auf Marke `vehicle` — 5 Träger, 5 gesperrt |
+| `perkUrbanCombatCigar` | Kampf in Mauern | schaltet nur `modArmorCigar` frei, Rezept entfernt |
+| `perkWasteTreasuresWater` | Brachlandschätze | schaltet nur `drinkJarPureMineralWater` frei, Rezept entfernt |
+
+| Abschluss | tot, weil |
+|---|---|
+| `perkUrbanCombatComplete` | wird nur vom Schalldämpfer gelesen (`item_modifiers.xml`), und der passt auf die Marke `gun` — jeder Träger gesperrt |
+| `perkWasteTreasuresComplete` | `LootProb` auf `WasteTreasuresCompleteHarvest` — ein Träger, gesperrt |
+
+**Nicht als tot geführt, obwohl es so aussieht** — weil sich das Gegenteil nicht messen
+lässt, und „sieht tot aus" ist der Fehler, den §3 schon einmal aufgedeckt hat:
+`perkGreatHeistMotionDetection` (`TurretWakeUp`; ob in der Welt noch ein Geschützturm
+steht, entscheidet die Welt, nicht `items.xml`), `perkUrbanCombatLandMines`
+(`LandMineTriggerDelay`; die vier herstellbaren Minen sind gesperrt, die in der Welt
+gesetzten nicht), `perkWasteTreasuresAcid` (24 Blöcke tragen die Ernte-Marke) und der
+Abschluss der Köhlerweisheit, dessen Kettensägen-Hälfte tot ist und dessen Ausdauer-Hälfte
+lebt. Sie gehören in den Spieltest.
+
+**Offen durch Nutzer-Aufgabe 3:** `perkRangersExplodingBolts` und `perkRangersAPAmmo`
+schalten Spreng- und Stahlpfeile frei. Fällt dort ein Verbot, entfernt der Purge die
+Rezepte — und der Erzeuger bricht beim nächsten Lauf ab, weil ein Band als lebend geführt
+wird, dessen Rezepte alle fort sind. Die Bogenlehre hätte dann 5 oder 6 Blätter.
+
+### 7.5 Die Bände erben zweistufig — und meine erste Annahme war falsch
+
+Der Erzeuger prüft, dass kein lebender Band von einem toten erbt: der Purge sperrt über
+die Eigenschaft `CreativeMode`, und `Extends` vererbt Eigenschaften. In den Kommentar
+dazu hatte ich geschrieben, alle 132 anderen Bände erbten von `bookFiremansAlmanacHeat`.
+**Gemessen ist es anders:** sechs Bände je Reihe erben vom ersten Band **ihrer** Reihe
+(18 Reihen × 6 = 108), und die 18 ersten Bände erben zusammen mit den sechs Geschwistern
+von `bookFiremansAlmanacHeat` (24), der selbst von `schematicMaster` erbt. Aufgefallen ist
+es durch die vierte Gegenprobe, nicht durch Nachlesen.
+
+Tot darf also weder `bookFiremansAlmanacHeat` sein noch der erste Band einer lebenden
+Reihe. Beides trifft zu — `bookArtOfMiningLuckyStrike`, `bookUrbanCombatLanding` und
+`bookWasteTreasuresHoney` leben —, und beides prüft der Erzeuger jetzt bei jedem Lauf.
+
+### 7.6 Was gebaut ist
+
+Erzeugt von `tools/gen/wp7-abschriften.ps1`:
+
+| | Zahl |
+|---|---|
+| Reihen im Spiel / tot / lebend | 19 / 6 / 13 |
+| Knoten verborgen (6 Reihen × 9 + 6 Einzelbände) | 60 |
+| tote Einzelbände umgehängt | 6 |
+| Schwellen-Zeilen (je zwei Treffer) | 22 |
+| Abschlüsse ohne Wirkung, mit ehrlichem Text | 2 |
+| Buch-Gegenstände freigegeben / gesperrt | 85 / 48 |
+| Localization-Zeilen | 118 |
+| Freigaben in `denylist.txt` | 31 |
+
+Der Purge erzeugt daraus 144 neue Zeilen (je 48 in `items.xml`, `loot.xml`,
+`traders.xml`): 1797 → 1941.
+
+### 7.7 Grenzen
+
+- **Aufrufe und Felder, keine Verzweigungen.** Dass `Volume` die Stelle + 1 ist und
+  `CompletionReward` das letzte Kind trifft, ist aus der Reihenfolge von Aufrufen und
+  Konstanten gelesen. Dass `PerksUnlocked` nur Kinder **mit Stufe > 0** zählt, ebenso.
+  Alle drei stehen auf Prüfliste 16.
+- **Im Spiel hat das niemand gesehen.**
+- **Die Wirkungstexte der Bände sind Vanilla** (`desc_key`, `long_desc_key`, rund 200
+  Schlüssel an den 85 lebenden Bänden und 13 Abschlüssen). Sie beschreiben, was der Band
+  tut, und das ändert WP7.4 nicht — aber ihr Langtext beginnt mit Vanillas Bandtitel
+  („Stealing Bases: …"). Das ist dieselbe Lage wie bei den Rang-Texten und gehört zu WP8.5.
+- **Berichtigung zu §6.5:** dort steht, die Rang-Texte blieben „englisch". Vanillas
+  `Localization.csv` führt für sie eine deutsche Spalte (`perkDeepCutsRank1Desc` →
+  „Stumpfe Klinge"). Wer deutsch spielt, liest Vanillas Deutsch.
+- **Die 26 Fertigkeitshefte** (`*SkillMagazine`) sind nicht angefasst. Sie heben die
+  Handwerks-Stufen und gehören zu WP7.5.

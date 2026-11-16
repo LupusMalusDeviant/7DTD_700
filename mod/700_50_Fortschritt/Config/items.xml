@@ -16,4 +16,31 @@
 	<set xpath="/items/item[@name='meleeWpnSpearT0StoneSpear']/property[@name='Tags']/@value">T0,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill</set>
 	<set xpath="/items/item[@name='meleeWpnSpearT1IronSpear']/property[@name='Tags']/@value">T1,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill,scrap100</set>
 	<set xpath="/items/item[@name='meleeWpnSpearT3SteelSpear']/property[@name='Tags']/@value">T3,melee,grunting,medium,weapon,meleeWeapon,longShaft,attAgility,perkJavelinMaster,perkFlurryOfPerception,canHaveCosmetic,spearSkill</set>
+
+	<!-- ===== WP7.4 Abschriften (D69) - ERZEUGT von tools/gen/wp7-abschriften.ps1, nicht von Hand aendern =====
+	     Der Reihen-Abschluss verlangt in Vanilla 'PerksUnlocked >= 7', zweimal je Gegenstand.
+	     Wo tote Baende die Reihe verlassen haben, sinkt die Sieben auf die Zahl der lebenden.
+	     Jede Zeile trifft ZWEI Knoten (SetProgressionLevel und PlaySound). -->
+	<set xpath="/items/item[@name='bookArtOfMiningLuckyStrike']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Bergmannskunde: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookArtOfMiningDiamondTools']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Bergmannskunde: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookArtOfMiningPallets']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Bergmannskunde: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookArtOfMiningAvalanche']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Bergmannskunde: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookArtOfMiningDamage']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Bergmannskunde: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookFiremansAlmanacHeat']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Köhlerweisheit: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookFiremansAlmanacSpeed']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Köhlerweisheit: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookFiremansAlmanacMolotov']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Köhlerweisheit: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookFiremansAlmanacPrevention']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Köhlerweisheit: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookFiremansAlmanacHarvest']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">5</set>   <!-- Köhlerweisheit: 5 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatLanding']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatSneaking']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatJumping']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatLandMines']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatAdrenalineRush']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookUrbanCombatRoomClearing']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Kampf in Mauern: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresHoney']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresCoffins']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresAcid']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresDoors']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresCloth']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+	<set xpath="/items/item[@name='bookWasteTreasuresSinks']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
 </config>

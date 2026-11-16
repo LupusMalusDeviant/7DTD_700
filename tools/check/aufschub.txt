@@ -24,9 +24,18 @@
 # bookTechJunkie, bookRangers, bookUrbanCombat), die uebrigen Bergbau, Jagd, Nahkampf
 # und Pluendern. Sie fallen gemeinsam, weil sie ein System sind und nicht 133 einzelne
 # Gegenstaende.
-book*                 # WP7: F-21 ersetzt das Vanilla-Buchsystem durch sechs Baeume (D47)
-*SkillMagazine        # WP7: dieselbe Reihe - die Fertigkeitshefte gehoeren zum Buchsystem
-resourcePaper         # WP7: Papier traegt Vanillas Buecher und Bauplaene; ohne das Buchsystem hat es keinen Zweck mehr
+#
+# 'book*' IST EINGELOEST IN WP7.4 (D69, 2026-11-16) und steht darum nicht mehr hier:
+# 85 Baende aus 13 Reihen sind als Abschriften umgedeutet und in denylist.txt
+# freigegeben, 48 sind gesperrt (6 tote Reihen, 6 tote Einzelbaende). Gemessen waren es
+# sechs tote Reihen, nicht acht - bookRangers und bookUrbanCombat leben.
+#
+# Die Fertigkeitshefte und das Papier bleiben aufgeschoben, aber mit genauerer Adresse:
+# die Hefte sind das, womit eine Handwerks-Stufe steigt, und WP7.5 bindet die Rezepte an
+# genau diese Stufen. Wer die Hefte vorher sperrt, sperrt den Fortschritt, an den WP7.5
+# erst bindet.
+*SkillMagazine        # WP7.5: die Fertigkeitshefte heben die Handwerks-Stufen, an die WP7.5 die Rezepte bindet
+resourcePaper         # WP7.5: Papier traegt die Hefte und Abschriften; ob es Pergament wird oder faellt, entscheidet sich mit den Heften
 
 # --- Erledigt in WP4.1 und WP4.2: Waehrung, Faser, Schrottwirtschaft -----------
 # Hier standen acht Aufschuebe mit der Adresse WP4. Sie sind eingeloest, aber nicht so,

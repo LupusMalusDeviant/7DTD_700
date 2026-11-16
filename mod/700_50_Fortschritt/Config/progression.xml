@@ -358,4 +358,79 @@
 	<set xpath="/progression/skills/skill[@name='skillPerceptionCombat']/@name_key">prk700_perceptionCombatName</set>
 	<set xpath="/progression/skills/skill[@name='skillPerceptionCombat']/@desc_key">prk700_perceptionCombatDesc</set>
 	<setattribute name="desc_key" xpath="/progression/skills/skill[@name='skillPerceptionGeneral']">prk700_perceptionGeneralDesc</setattribute>
+
+	<!-- ===== WP7.4 Abschriften (D69) - ERZEUGT von tools/gen/wp7-abschriften.ps1, nicht von Hand aendern ===== -->
+
+	<!-- Sechs tote Reihen: die Reihe verborgen, dazu jeder ihrer acht Knoten. Das Buchfenster
+	     liest 'hidden' an einem <book> gemessen NICHT - die Zeilen an den Baenden sind die
+	     Rueckversicherung fuer jede andere Liste, die es liest (XUiC_SkillList tut es). -->
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillAutoWeapons']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsDamage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsUncontrolledBurst']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsMaintenance']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsDrumMag']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsRecoil']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsRagdoll']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsMachineGuns']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkAutoWeaponsComplete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillEnforcer']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerDamage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerApparel']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerPunks']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerIntimidation']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerAPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerHPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerCriminalPursuit']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkEnforcerComplete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillPistolPete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteTakeAim']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteSwissKnees']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteSteadyHand']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteMaintenance']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteHPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteAPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteDamage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkPistolPeteComplete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillShotguns']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahDamage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahBreachingSlugs']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahLimbShot']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahSlugs']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahMaintenance']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahMagazine']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahPartyStarter']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkShotgunMessiahComplete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillSniper']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperDamage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperCripplingShot']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperHeadShot']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperReload']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperControlledBreathing']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperAPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperHPAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkSniperComplete']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/skills/book_group[@name='skillTechJunkie']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie1Damage']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie2Maintenance']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie3APAmmo']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie4Shells']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie5Repulsor']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie6BatonCharge']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie7Hydraulics']">true</setattribute>
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkTechJunkie8Complete']">true</setattribute>
+
+	<!-- Tote Einzelbaende lebender Reihen wandern in die Ablage (skillTechJunkie, tot und verborgen).
+	     Nur so verlassen sie das Fenster ihrer Reihe UND die Zaehlung von PerksUnlocked. -->
+	<set xpath="/progression/perks/book[@name='perkArtOfMiningCoffee']/@parent">skillTechJunkie</set>   <!-- Bergmannskunde: tot nach Buff buffCoffee,buffBlackStrapCoffee -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkArtOfMiningCoffee']">true</setattribute>
+	<set xpath="/progression/perks/book[@name='perkArtOfMiningBlackStrap']/@parent">skillTechJunkie</set>   <!-- Bergmannskunde: tot nach Rezept  -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkArtOfMiningBlackStrap']">true</setattribute>
+	<set xpath="/progression/perks/book[@name='perkFiremansAlmanacAxes']/@parent">skillTechJunkie</set>   <!-- Köhlerweisheit: tot nach Rezept  -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkFiremansAlmanacAxes']">true</setattribute>
+	<set xpath="/progression/perks/book[@name='perkFiremansAlmanacEquipment']/@parent">skillTechJunkie</set>   <!-- Köhlerweisheit: tot nach Marke vehicle -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkFiremansAlmanacEquipment']">true</setattribute>
+	<set xpath="/progression/perks/book[@name='perkUrbanCombatCigar']/@parent">skillTechJunkie</set>   <!-- Kampf in Mauern: tot nach Rezept  -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkUrbanCombatCigar']">true</setattribute>
+	<set xpath="/progression/perks/book[@name='perkWasteTreasuresWater']/@parent">skillTechJunkie</set>   <!-- Brachlandschätze: tot nach Rezept  -->
+	<setattribute name="hidden" xpath="/progression/perks/book[@name='perkWasteTreasuresWater']">true</setattribute>
 </config>

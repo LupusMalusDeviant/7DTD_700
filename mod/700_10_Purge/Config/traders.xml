@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     342 Zeilen. -->
+	     390 Zeilen. -->
 
 	<remove xpath="/traders/trader_info/trader_items/item[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_info/trader_items/item[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -111,6 +111,54 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='barStoolVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='batterybank']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bladeTrap']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookArtOfMiningBlackStrap']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookArtOfMiningCoffee']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsDamage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsDrumMag']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsMachineGuns']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsMaintenance']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsRagdoll']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsRecoil']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookAutoWeaponsUncontrolledBurst']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerAPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerApparel']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerCriminalPursuit']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerDamage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerHPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerIntimidation']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookEnforcerPunks']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookFiremansAlmanacAxes']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookFiremansAlmanacEquipment']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteAPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteDamage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteHPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteMaintenance']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteSteadyHand']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteSwissKnees']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookPistolPeteTakeAim']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahBreachingSlugs']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahDamage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahLimbShot']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahMagazine']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahMaintenance']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahPartyStarter']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookShotgunMessiahSlugs']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperAPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperControlledBreathing']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperCripplingShot']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperDamage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperHPAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperHeadShot']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookSniperReload']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie1Damage']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie2Maintenance']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie3APAmmo']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie4Shells']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie5Repulsor']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie6BatonCharge']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookTechJunkie7Hydraulics']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookUrbanCombatCigar']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='bookWasteTreasuresWater']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='ceilingLight01_player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cntCashRegister_Player']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='cntCoolerVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->

@@ -1191,12 +1191,27 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    **Gemessene Grenze:** `hidden` verbirgt nur den Knoten, nicht seine Kinder — Vanillas
    `attGeneralPerks` ist `hidden="true"` und seine Perks stehen trotzdem im Fenster.
    Was noch fehlt: das Umhängen selbst, zusammen mit WP7.2.
-4. **WP7.4** `[Claude-prüfbar]` Die ~~152~~ **133** Magazine (`<book>`) umdeuten — 152
+4. ~~**WP7.4** `[Claude-prüfbar]` Die ~~152~~ **133** Magazine (`<book>`) umdeuten — 152
    Knoten sind 19 Reihen à 7 Bücher plus je einen `*Complete`-Eintrag; sechs Reihen sind
    gemessen tot, und die Wirkung sitzt an den einzelnen `<book>`-Knoten, nicht an den
    Gruppen (deren `<effect_group/>` ist leer): in Phase 1 bleiben sie das
    Fortschrittsmittel, nur als **Abschriften** benannt. Learning by Doing ersetzt sie erst in
-   Phase 2.
+   Phase 2.~~ **Erledigt 2026-11-16 (D69), bis auf die Wirkungstexte.** 13 Reihen leben
+   als Abschriften mit eigenem Namen, ihre **85** Bände heißen „‹Reihe›, Blatt *n* von
+   *N*"; 6 Reihen fallen ganz. **Was der Plan nicht wusste:** in vier lebenden Reihen
+   stecken **sechs tote Einzelbände**, und der Reihen-Abschluss verlangt alle sieben
+   (`PerksUnlocked >= 7`, zweimal je Buch-Gegenstand, 266 Mal in `items.xml`). Vom Nutzer
+   entschieden: die toten Bände fallen, die Schwelle sinkt auf die Zahl der lebenden
+   (5, 5, 6, 6) — **22 Zeilen, die je zwei Knoten treffen**. **Und `hidden` reicht dafür
+   nicht:** das Buchfenster liest es an einem `<book>` gemessen nicht, es zählt die
+   Kinder der Reihe. Die toten Bände hängen darum an einer toten, verborgenen Reihe
+   (`skillTechJunkie` als Ablage). 48 Buch-Gegenstände sind jetzt wirklich gesperrt, der
+   Aufschub `book*` ist eingelöst; `*SkillMagazine` und `resourcePaper` tragen die neue
+   Adresse **WP7.5**. Erzeugt von `tools/gen/wp7-abschriften.ps1`, das an vier
+   absichtlich falschen Tabellen nachweislich abbricht.
+   **Nicht gemacht:** die Wirkungstexte der Bände (`desc_key`, `long_desc_key`, rund 200
+   Schlüssel) — sie bleiben Vanilla und gehören wie die Rang-Texte zu WP8.5.
+   **Im Spiel gesehen hat das niemand** → Prüfliste 16.
 5. **WP7.5** `[Claude-prüfbar]` Rezepte aus WP4–WP6 an Grundfähigkeiten binden: ohne
    Grundfähigkeit ist ein Rezept gesperrt. **Der Weg ist gemessen:** ein Rezept ist genau
    dann sperrbar, wenn seine `tags` die Marke `learnable` tragen (`Recipe::IsUnlocked`
@@ -1491,6 +1506,29 @@ werden:
     einen anderen Weg nehmen (die Stufen zurück an `attCrafting`, Bäume dünn lassen).
     Zweitens: stehen die 14 Stufen mit deutschen Namen unter den Bäumen —
     Werkzeugschmiede, Bogenbau, Wundversorgung, Sattlerei?
+
+16. **Das Abschriften-Fenster ansehen und eine Reihe zu Ende lesen** (WP7.4/D69,
+    16. November 2026). **Seit WP7.4 ist Punkt 15 nicht mehr der einzige Schluss aus
+    einer Aufrufliste** — hier stehen drei weitere, und alle drei kommen aus Aufrufen und
+    Feldern, nicht aus Verzweigungen:
+    (a) *Das Fenster zählt nach Stelle.* `XUiC_SkillBookInfoWindow::UpdateSkill` holt die
+    Kinder der Reihe über `Progression::GetPerkList`, setzt `Volume` auf Stelle + 1 und
+    `CompletionReward` beim letzten. Zu prüfen: **Bergmannskunde** und **Köhlerweisheit**
+    zeigen 5 Blätter und darunter den Abschluss, **Kampf in Mauern** und
+    **Brachlandschätze** 6 — ohne Lücke, ohne Kaffee-, Zigarren- oder Fahrzeug-Band, und
+    die Nummer im Fenster ist dieselbe wie im Namen des Gegenstands („Blatt 2 von 5").
+    (b) *Die Schwelle zählt Kinder.* `PerksUnlocked::IsValid` liest
+    `ProgressionClass::Children` der Reihe. Zu prüfen: nach dem **fünften** Blatt der
+    Bergmannskunde kommt der Abschluss samt Klang — nicht früher, nicht nie. Im
+    Kreativmodus sind die Blätter schnell beisammen.
+    (c) *Die Ablage bleibt unsichtbar.* Unter den Abschriften stehen **13** Reihen; keine
+    der sechs toten taucht auf, und nirgends ein Blatt mit Vanilla-Namen („Pistol Pete",
+    „Tech Junkie").
+    Fällt (a) oder (b) falsch aus, ist der Rückweg billig: die sechs Bände zurück an ihre
+    Reihe und die 22 Schwellen-Zeilen streichen — dann gilt wieder Vanilla, und die
+    Entscheidung aus D69 muss den Weg „leere Blätter" nehmen.
+    Nebenbei: stehen die zwei Abschlüsse ohne Wirkung mit dem Satz „Diese Reihe schließt
+    ohne eigene Lehre." da?
 
 ## Offene Punkte
 
