@@ -1,0 +1,8 @@
+<config>
+	<!-- Testdatei: eine Patch-Datei in einem Unterordner von Config, wie
+	     mod/700_40_Bauen/Config/XUi_InGame/windows.xml. Vor dem 2026-11-20 suchte
+	     kette-pruefen nur den Dateinamen im obersten Vanilla-Ordner, fand dort keine
+	     windows.xml und uebersprang die Datei: der zweite XPath unten war gruen. -->
+	<set xpath="/windows/window[@name='pruefFenster']/rect[@name='content']/@name">inhalt</set>
+	<set xpath="/windows/window[@name='pruefGibtesnicht']/@name">nichts</set>
+</config>

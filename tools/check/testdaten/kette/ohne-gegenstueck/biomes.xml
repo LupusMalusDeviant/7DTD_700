@@ -1,0 +1,5 @@
+<config>
+	<!-- Testdatei: ein gueltiger Patch, zu dem das Test-Vanilla keine biomes.xml hat.
+	     Vor dem 2026-11-20 wurde die Datei still uebersprungen: "0 XPaths, GREEN". -->
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='default']/@prob">76</set>
+</config>

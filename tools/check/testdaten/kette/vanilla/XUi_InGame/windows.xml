@@ -1,0 +1,6 @@
+<windows>
+	<!-- Test-Vanilla fuer eine Patch-Datei in einem UNTERORDNER von Config. -->
+	<window name="pruefFenster">
+		<rect name="content" />
+	</window>
+</windows>

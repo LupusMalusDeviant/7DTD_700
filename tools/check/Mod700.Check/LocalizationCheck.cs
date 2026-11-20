@@ -118,18 +118,22 @@ internal static class LocalizationCheck
 
         var csvProblems = new List<Csv.Problem>();
         List<Csv.Row> rows = Csv.Read(path, csvProblems);
-        if (rows.Count == 0)
-        {
-            report.Error("leere-datei", path, "Die Datei hat keine Zeilen.");
-            return report.Write(asJson);
-        }
 
         // Kaputte Anfuehrung zuerst: eine Zeile, die kein gueltiges CSV ist, kann alle
-        // anderen Pruefungen bestehen und trotzdem falsch im Spiel ankommen.
+        // anderen Pruefungen bestehen und trotzdem falsch im Spiel ankommen. Und VOR der
+        // Abfrage auf eine leere Datei: eine Datei, die nur aus einem Anfuehrungszeichen
+        // besteht, hat keine Zeile - gemeldet wurde dann "leere-datei", und der eigentliche
+        // Grund ging verloren (drittes Review).
         report.Count("csv_form_fehler", csvProblems.Count);
         foreach (Csv.Problem problem in csvProblems)
         {
             report.Error("csv-form", $"{path}:{problem.Line}", problem.Text);
+        }
+
+        if (rows.Count == 0)
+        {
+            report.Error("leere-datei", path, "Die Datei hat keine Zeilen.");
+            return report.Write(asJson);
         }
 
         // --- Kopfzeile

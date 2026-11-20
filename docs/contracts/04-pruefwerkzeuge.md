@@ -1183,8 +1183,11 @@ Test-Vanilla und wurden rot. Der Vorgabewert hängt jetzt an
   Ladereihenfolge (D53), nicht dieses Skript.
 - Geprüft wird nur die **erste Ebene** unter `<config>`. Patches in einem `<conditional>`
   sieht die Prüfung nicht; das Projekt benutzt bisher keines.
-- Dateien, die Vanilla unter diesem Namen nicht hat (`XUi_InGame/*`, `Localization.csv`),
-  bleiben außen vor.
+- ~~Dateien, die Vanilla unter diesem Namen nicht hat (`XUi_InGame/*`, `Localization.csv`),
+  bleiben außen vor.~~ *(Seit dem 2026-11-20 anders, siehe „Nachtrag drittes Review":
+  Patches unter `XUi_InGame/` werden gegen Vanillas `XUi_InGame/` geprüft, eine XML-Patch-Datei
+  ohne Vanilla-Gegenstück ist rot. `Localization.csv` ist keine XML-Datei; sie prüft
+  `mod700check localization`.)*
 - **Ein getroffener XPath heißt nicht, dass der Patch das Richtige tut.** Dafür sind die
   vier anderen Verweisklassen da — und für den Rest der Spieltest.
 
@@ -1518,9 +1521,10 @@ Lauf setzt sie selbst).
 
 **Die übrigen Befunde — nicht behoben, damit sie nicht verloren gehen:**
 
-2. *(mittel)* Patches unter `XUi_InGame/` überspringt `kette-pruefen` still: die
+2. ~~*(mittel)* Patches unter `XUi_InGame/` überspringt `kette-pruefen` still: die
    Vanilla-Datei wird nur nach Dateinamen im obersten Ordner gesucht. Der Kommentar daneben
-   sagt „gezählt". Zwei Dateien in `700_40_Bauen` sind betroffen.
+   sagt „gezählt". Zwei Dateien in `700_40_Bauen` sind betroffen.~~ **Behoben am 2026-11-20,
+   siehe „Nachtrag drittes Review".**
 3. *(mittel)* `purge-patch --vergleiche` vergleicht eine Kopfzeile mit dem Änderungsdatum von
    `Data/Config` mit. Ein Steam-Update ohne inhaltliche Änderung meldet jede Datei als
    veraltet.
@@ -1599,3 +1603,82 @@ fehlgeschlagen** („Exit 0 erwartet 1"). Gegen das neu gebaute: 74, 0 fehlgesch
 **Grenze:** was das **Spiel** aus einer solchen Zeile macht, ist nicht gelesen
 (`Localization::addCsv`). Die Prüfung verlangt sauberes CSV, sie behauptet nicht, das Spiel
 verlange es auch.
+
+## Nachtrag drittes Review 2026-11-20 — fünf Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `537fa6c` und `034313f` hat Codex (`gpt-6.2-sol`) sieben Befunde gemeldet:
+keiner kritisch oder hoch, vier mittel, drei niedrig. Fünf sind hier behoben, einer schon in
+`4420e66` (Befund 7: die Einengung von D75 steht als eigene Zeile D76), einer wartet auf den
+Nutzer.
+
+| Nr. | Befund | Was jetzt gilt |
+|---|---|---|
+| 1 | `kette-pruefen -Patches <Ordner>` und eine Patch-Datei ohne Vanilla-Gegenstück: beides „0 XPaths, GREEN". | Ein genannter Pfad muss eine **Datei** sein → sonst Exit 2. Eine XML-Patch-Datei ohne Vanilla-Gegenstück ist **rot** (Exit 1), nicht „außen vor". |
+| 2 | Eine Glossar-Tabelle **ohne Randstriche** (gültiges Markdown) galt als Fließtext; ihre Verbote fielen weg, die Kopfzeilen-Prüfung sah sie nie. | Tabellen werden an ihrer **Trennzeile** erkannt, mit oder ohne Rand. Eine Trennzeile ohne Kopfzeile davor → Exit 2. |
+| 3 | Der CSV-Leser verwarf einen einzelnen Wagenrücklauf (CR ohne LF) außerhalb der Anführung: `"Hearth"<CR>,` las sich wie `"Hearth",`. | Vierter Fall von `csv-form`. Ein CR direkt vor einem LF bleibt gültig (unsere Datei ist CRLF). |
+| 5 | `SDTD_PATH` auf einem Laufwerk, das nicht eingehängt ist: `Join-Path` warf, `check-all.ps1` endete wieder ohne Ergebniszeile. | Beide Skripte bauen den Pfad mit `[IO.Path]::Combine`. `kette-pruefen` → Exit 2 („den Vanilla-Ordner … gibt es nicht"), `check-all.ps1` → „6 Pruefungen, 3 rot". |
+| 6 | Eine Datei aus einem einzigen Anführungszeichen meldete nur `leere-datei`. | `csv-form` wird **vor** der Abfrage auf eine leere Datei gemeldet; beide Fehler stehen da. |
+
+### Vertragsänderung an `kette-pruefen`: das Gegenstück wird nach Pfad gesucht
+
+Bisher wurde zu jeder Patch-Datei nur ihr **Dateiname** im obersten Vanilla-Ordner gesucht.
+`mod/700_40_Bauen/Config/XUi_InGame/xui.xml` und `…/windows.xml` fanden dort nichts und
+wurden übersprungen — Befund 2 des **ersten** Reviews, seit WP8.1 nur aufgeschrieben. Jetzt
+gilt der Pfad **relativ zu `Config\`**: `Config/XUi_InGame/windows.xml` wird gegen
+`Data/Config/XUi_InGame/windows.xml` gehalten. Liegt eine Datei unter keinem `Config`-Ordner
+(Testdaten), zählt wie bisher der Dateiname.
+
+Die Ausgabe hat eine neue Zeile: `Patch-Dateien: N mit Vanilla-Gegenstueck, M ohne`.
+
+**Gemessen am 2026-11-20:** 18 Patch-Dateien, 0 ohne Gegenstück; **418 XPaths** (vorher 415),
+405 in Vanilla, 13 auf eigene Knoten, 0 unaufgelöst. Die drei neuen sind die XUi-Patches aus
+`700_40_Bauen` — sie treffen.
+
+### Gegenproben — zehn neue, alle einmal rot gesehen
+
+Gegen die Skripte des Stands `4420e66` und das noch nicht neu gebaute `mod700check`:
+**84 Gegenproben, 12 fehlgeschlagen** — die zehn neuen und die zwei bestehenden, deren
+erwarteter Text sich geändert hat (ein Spielpfad ohne `Data\Config` meldet jetzt „den
+Vanilla-Ordner … gibt es nicht" statt „items.xml fehlt", weil der Ordner zuerst geprüft wird).
+Gegen den neuen Stand: 84, 0 fehlgeschlagen.
+
+| Gegenprobe | vorher | jetzt |
+|---|---|---|
+| `localization`: einzelnes CR (`Localization-einzelnes-cr.csv`) | Exit 0 | Exit 1, `csv-form` Zeile 2 |
+| `localization`: nur ein Anführungszeichen | nur `leere-datei` | dazu `csv-form` Zeile 1 |
+| `kette-pruefen -Patches <Ordner>` | Exit 0, GREEN | Exit 2 |
+| Patch-Datei ohne Gegenstück (`kette/ohne-gegenstueck/biomes.xml`) | Exit 0 | Exit 1 |
+| Patch im Unterordner (`kette/unterordner/Config/XUi_InGame/windows.xml`) | Exit 0 | Exit 1, „XPath trifft nichts" |
+| Glossar ohne Randstriche (`glossar-ohne-rand.md`) | Exit 2, „kein einziger Festbegriff" | gelesen; Exit 1 an `ZOMBIE` |
+| ohne Randstriche **und** „Sprachen" im Kopf | Exit 0, GREEN | Exit 2 |
+| Trennzeile ohne Kopfzeile | Exit 0, GREEN | Exit 2 |
+| `kette-pruefen`, Spielpfad auf fehlendem Laufwerk | Ausnahme | Exit 2 |
+| `check-all.ps1`, Spielpfad auf fehlendem Laufwerk | Ausnahme, keine Ergebniszeile | „6 Pruefungen, 3 rot" |
+
+Den Laufwerksbuchstaben für die letzten beiden **sucht** die Gegenprobe (der erste freie); ist
+keiner frei, zählen beide als fehlgeschlagen, nicht als übersprungen.
+`Localization-einzelnes-cr.csv` ist mit `printf` erzeugt, weil ein Editor das eine Byte `0x0D`
+nicht stehen lässt.
+
+### Grenzen und was offen bleibt
+
+- **Befund 4** (zugleich Befund 3 des zweiten Reviews): eine gefüllte dritte Sprachspalte ist
+  weiter nur ein Hinweis. Die Entscheidung liegt beim Nutzer.
+- **Eine Patch-Datei ohne Vanilla-Gegenstück ist rot** — das stützt sich auf Vertrag 03 §3
+  und das Finding WP1 (der Patcher ordnet über den Dateinamen zu). Legt ein späteres Paket
+  eine XML-Datei unter `Config/` an, die **kein** Patch ist, wird sie hier rot; dann ist diese
+  Regel zu ändern, nicht die Datei umzubenennen.
+- **Was unter einer Tabelle ohne Leerzeile steht, zählt als Tabellenzeile.** So liest es auch
+  Markdown; ein Satz direkt unter einer Tabelle wird damit „N Spalten statt M", Exit 2 —
+  laut, nicht still.
+- **Dass eine CRLF-Datei grün bleibt, zeigt nur unsere echte Datei** (618 CRLF,
+  `csv_form_fehler 0`). Eine Testdatei dafür gibt es nicht: `core.autocrlf` würde ihre
+  Zeilenenden je Rechner umschreiben.
+- **Dabei gefunden, nicht behoben:** Vertrag 03 §5 verlangt für **jeden** XUi-Eingriff einen
+  `conditional`-Block (D5). Die drei XUi-Patches in `700_40_Bauen` stehen ohne einen auf der
+  ersten Ebene — nur deshalb zählt `kette-pruefen` sie. Das ist eine Abweichung vom Vertrag,
+  die bisher nirgends stand. Und sie hat eine Kehrseite: sobald die Patches in einem
+  `<conditional>` stecken, sieht `kette-pruefen` sie **nicht** mehr (Grenze seit WP7.1). Beides
+  gehört zusammen gelöst, in WP8.7/WP8.9: die Schreibweise der Bedingungen ist noch nicht
+  belegt, und welche UI-Mods hineingehören, hängt an Q8 (Vertrag 03 §9).
+- Offen aus dem ersten Review bleiben die Befunde 3 bis 7.

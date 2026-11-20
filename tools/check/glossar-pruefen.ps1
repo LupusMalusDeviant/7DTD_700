@@ -81,7 +81,35 @@ try {
 catch {
     Stop-Unpruefbar "Glossar nicht lesbar: $Glossar ($($_.Exception.Message))"
 }
-$art = ''            # '', 'fest', 'verboten', 'andere'
+# TABELLEN OHNE RANDSTRICHE (ergaenzt 2026-11-20, drittes Review). Markdown erlaubt eine
+# Tabelle auch so:
+#       Verboten | Sprache | Stattdessen | Quelle
+#       ---|---|---|---
+#       `zombie` | beide | Seuchentote | Test
+# Die Schleife unten erkennt eine Tabellenzeile am fuehrenden '|'. Ohne ihn war die ganze
+# Tabelle Fliesstext - ihre Verbote galten nicht, und die Kopfzeilen-Pruefung sah sie nie.
+# Darum zuerst jede Tabelle an ihrer TRENNZEILE finden und Kopf, Trennzeile und alle Zeilen
+# bis zur naechsten Leerzeile mit Randstrichen versehen. Danach gilt fuer sie dieselbe
+# Pruefung wie fuer jede andere.
+$trennzeile = '^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?$'
+for ($i = 0; $i -lt $zeilen.Count; $i++) {
+    $z = $zeilen[$i].Trim()
+    if ($z.IndexOf('|') -lt 0 -or $z -notmatch $trennzeile) { continue }
+    if ($i -eq 0 -or $zeilen[$i - 1].Trim().IndexOf('|') -lt 0) {
+        Stop-Unpruefbar "Glossar Zeile $($i + 1): Trennzeile ohne Kopfzeile davor"
+    }
+    $j = $i - 1
+    while ($j -lt $zeilen.Count -and $zeilen[$j].Trim().Length -gt 0) {
+        $t = $zeilen[$j].Trim()
+        if (-not $t.StartsWith('|')) { $t = '| ' + $t }
+        if (-not $t.EndsWith('|')) { $t = $t + ' |' }
+        $zeilen[$j] = $t
+        $j++
+    }
+    $i = $j
+}
+
+$art = ''            # '', 'fest', 'verboten'
 $inTabelle = $false
 
 for ($i = 0; $i -lt $zeilen.Count; $i++) {

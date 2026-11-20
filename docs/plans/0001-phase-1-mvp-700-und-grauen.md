@@ -1712,6 +1712,19 @@ werden:
 
 ## Offene Punkte
 
+- **Unsere drei XUi-Patches stehen ohne `conditional`-Block** (gefunden am 2026-11-20 beim
+  Beheben des dritten Reviews). Vertrag 03 §5 verlangt für jeden Eingriff in `XUi_*` einen
+  Block, der mit `mod_loaded` auf die bekannten UI-Mods prüft (D5);
+  `700_40_Bauen/Config/XUi_InGame/xui.xml` und `windows.xml` haben keinen. Zwei Dinge fehlen
+  dafür: die belegte Schreibweise der Bedingung und die Liste der UI-Mods (Q8, WP8.9).
+  **Kehrseite für die Prüfung:** `kette-pruefen` sieht nur die erste Ebene unter `<config>` —
+  mit `conditional` fallen die drei XPaths wieder aus der Zählung, wenn das Skript nicht
+  zugleich hineinsieht. → WP8.7/WP8.9, [Vertrag 04](../contracts/04-pruefwerkzeuge.md)
+  „Nachtrag drittes Review".
+- **Eine gefüllte dritte Sprachspalte ist nur ein Hinweis** (Review-Befund, zweimal gemeldet
+  am 2026-11-20). F-12 sagt „Spalten leer lassen" **und** „weitere Sprachen später über die
+  Community". Ob `mod700check localization` daraus heute einen Fehler machen soll,
+  entscheidet der Nutzer.
 - **Eine Infektion hat in Phase 1 nur noch Honig** (gefunden in WP8.5, 20. November 2026).
   Vanillas Texte nennen drei Mittel: Honig, Kräuter-Antibiotika, Antibiotika. Gemessen sind
   `drugAntibiotics` und `drugHerbalAntibiotics` gesperrt (je eine Zeile in

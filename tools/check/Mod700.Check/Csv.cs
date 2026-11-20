@@ -100,6 +100,17 @@ internal static class Csv
                     break;
 
                 case '\r':
+                    // Ein CR gehoert zu einem CRLF: das LF danach schliesst die Zeile. Ein
+                    // CR ALLEIN wurde bis zum 2026-11-20 still verworfen - "Hearth"<CR>,
+                    // las sich damit genau wie "Hearth", und die Formpruefung sah nichts
+                    // (drittes Review). Gelesen wird weiter nachsichtig, gemeldet wird es.
+                    if (i + 1 >= text.Length || text[i + 1] != '\n')
+                    {
+                        problems.Add(new Problem(line,
+                            "Einzelner Wagenruecklauf (CR ohne LF) ausserhalb von " +
+                            "Anfuehrungszeichen. Zeilen enden mit CRLF oder LF."));
+                    }
+
                     break;
 
                 case '\n':

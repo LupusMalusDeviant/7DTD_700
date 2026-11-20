@@ -126,7 +126,10 @@ if (-not $Source) {
         $Source = $dumps[0].FullName
     }
     elseif ($env:SDTD_PATH) {
-        $Source = Join-Path $env:SDTD_PATH 'Data\Config'
+        # [IO.Path]::Combine, nicht Join-Path: Join-Path wirft, wenn das Laufwerk nicht
+        # eingehaengt ist, und reisst den Lauf ab, bevor eine Pruefung gezaehlt wurde
+        # (drittes Review, 2026-11-20).
+        $Source = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config')
     }
     else {
         throw "Keine Quelle gefunden und SDTD_PATH ist nicht gesetzt. -Source angeben."
@@ -149,9 +152,14 @@ Invoke-Check 'recipes' @('recipes', $Source)
 #
 # Erzeugt wird immer gegen VANILLA, nicht gegen $Source: gegen einen Dump, in dem
 # unsere Modlets schon geladen waren, waeren die Patches leer.
-$vanilla = if ($env:SDTD_PATH) { Join-Path $env:SDTD_PATH 'Data\Config' } else { $null }
+#
+# Der Pfad wird mit [IO.Path]::Combine gebaut und mit [IO.File]::Exists geprueft, nicht mit
+# Join-Path und Test-Path: zeigt SDTD_PATH auf ein Laufwerk, das nicht eingehaengt ist,
+# wirft Join-Path ("Cannot find drive"), und der Lauf endete ohne Ergebniszeile (drittes
+# Review, 2026-11-20). [IO.File]::Exists sagt in dem Fall schlicht nein.
+$vanilla = if ($env:SDTD_PATH) { [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config') } else { $null }
 $purgeConfig = Join-Path $repoRoot 'mod\700_10_Purge\Config'
-if ($vanilla -and (Test-Path (Join-Path $vanilla 'items.xml'))) {
+if ($vanilla -and [IO.File]::Exists([IO.Path]::Combine($vanilla, 'items.xml'))) {
     Invoke-Check 'purge-patch (sind die Patches aktuell?)' @(
         'purge-patch', $vanilla, '--vergleiche', '--out', $purgeConfig,
         '--denylist', (Join-Path $here 'denylist.txt'))

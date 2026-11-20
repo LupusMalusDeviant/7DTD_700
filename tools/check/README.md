@@ -274,8 +274,16 @@ Ohne `SDTD_PATH` (und ohne `-Vanilla`) endet es mit **Exit 2, „NICHT GEPRUEFT"
 `check-all.ps1` zählt das als rot. *(Bis zum 2026-11-20 schrieb es „KEIN GRUEN" und ging mit
 Exit 0 hinaus — der Prüflauf wurde damit grün, ohne etwas geprüft zu haben. Ebenso zählt
 ein `purge-patch`-Vergleich, der mangels Vanilla nicht laufen kann, seither als rot.)* Was es nicht prüft, sagt es in
-jeder Ausgabe: Erreichbarkeit von T0, Zyklen, und ob der XML-Patcher des Spiels unsere XPaths
-trifft.
+jeder Ausgabe: Erreichbarkeit von T0 und Zyklen.
+
+**XPaths (seit WP7.1).** Jeder XPath unserer Patch-Dateien wird gegen die Vanilla-Datei
+**gleichen Pfads unter `Config/`** gehalten — `Config/XUi_InGame/windows.xml` also gegen
+`Data/Config/XUi_InGame/windows.xml`. *(Bis zum 2026-11-20 zählte nur der Dateiname im
+obersten Ordner; Patches in Unterordnern wurden still übersprungen.)* Eine XML-Patch-Datei
+ohne Vanilla-Gegenstück ist **rot**, ein mit `-Patches` genannter Ordner Exit 2. Gemessen am
+2026-11-20: 18 Patch-Dateien, 418 XPaths (405 in Vanilla, 13 auf eigene Knoten), 0
+unaufgelöst. Grenzen: geprüft wird gegen Vanilla, nicht gegen den gepatchten Stand, und nur
+die erste Ebene unter `<config>` — Patches in einem `<conditional>` sieht es nicht.
 
 ### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
 
@@ -293,11 +301,14 @@ Tabellenformen zählen, erkannt an der Kopfzeile:
 Exit **0** grün, **1** Befunde, **2** nicht prüfbar (Datei fehlt, keine Tabelle gelesen, Muster
 kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 50 Festbegriffe mit
 Kennung, 13 ohne, 79 Muster, 617 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
-`testdaten/glossar/`: zwölf Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün),
+`testdaten/glossar/`: fünfzehn Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün),
 ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit Tippfehler.
 
 **Jede Tabelle des Glossars muss eine der beiden Formen haben.** Eine unbekannte Kopfzeile ist
 Exit 2 — sonst schaltet ein Tippfehler („Sprachen") eine ganze Verbots-Tabelle still ab.
+Erkannt wird eine Tabelle an ihrer **Trennzeile**, mit oder ohne Randstriche (seit dem
+2026-11-20; vorher war eine Tabelle ohne führendes `|` Fließtext). Eine Trennzeile ohne
+Kopfzeile davor ist Exit 2.
 
 **Es liest nur, was wir schreiben.** Vanilla-Zeilen, die wir nicht überschreiben, sieht es
 nicht — auch wenn der Spieler sie liest.

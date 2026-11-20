@@ -56,7 +56,11 @@ if (-not $Vanilla) {
         Write-Output '== Ergebnis: nicht pruefbar -> RED =='
         exit 2
     }
-    $Vanilla = Join-Path $env:SDTD_PATH 'Data\Config'
+    # [IO.Path]::Combine und nicht Join-Path (geaendert 2026-11-20, drittes Review):
+    # Join-Path wirft in Windows PowerShell 5.1 eine Ausnahme, wenn das LAUFWERK im Pfad
+    # nicht eingehaengt ist - noch vor jeder Pruefung hier, und check-all.ps1 endete damit
+    # wieder ohne Ergebniszeile.
+    $Vanilla = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config')
 }
 
 function Stop-Unpruefbar {
@@ -65,6 +69,12 @@ function Stop-Unpruefbar {
     Write-Output ''
     Write-Output '== Ergebnis: nicht pruefbar -> RED =='
     exit 2
+}
+
+$vanillaDa = $false
+try { $vanillaDa = Test-Path -LiteralPath $Vanilla -PathType Container } catch { $vanillaDa = $false }
+if (-not $vanillaDa) {
+    Stop-Unpruefbar "den Vanilla-Ordner '$Vanilla' gibt es nicht (zeigt SDTD_PATH auf eine Installation?)"
 }
 
 # Ein Pfad, den der Aufrufer NENNT und den es nicht gibt, ist ein Fehler des Aufrufs und
@@ -76,6 +86,9 @@ foreach ($name in 'Rezepte', 'Gegenstaende', 'Bloecke', 'Patches') {
     if (-not $PSBoundParameters.ContainsKey($name)) { continue }
     foreach ($pfad in @($PSBoundParameters[$name])) {
         if (-not $pfad -or -not (Test-Path -LiteralPath $pfad)) { Stop-Unpruefbar "-$name nennt '$pfad', und das gibt es nicht" }
+        # Eine DATEI, kein Ordner (drittes Review): ein Ordner bestand die Pruefung oben,
+        # und die Schleifen lasen dann nichts daraus - wieder "0 XPaths, GREEN".
+        if (-not (Test-Path -LiteralPath $pfad -PathType Leaf)) { Stop-Unpruefbar "-$name nennt '$pfad', und das ist keine Datei" }
     }
 }
 
@@ -316,6 +329,8 @@ $xpathOwn = 0
 $patchVerbs = @('set', 'setattribute', 'removeattribute', 'append', 'prepend',
                 'insertAfter', 'insertBefore', 'remove', 'csv')
 $vanillaDocs = @{}
+$patchDateien = 0
+$ohneGegenstueck = 0
 # ContainsKey und nicht '-not $Patches': eine Gegenprobe, die ABSICHTLICH keine Patch-Datei
 # prueft, uebergibt @() - und ein leeres Feld ist in PowerShell falsch, waere also wieder in
 # die Suche unter mod/ gelaufen. Drei bestehende Gegenproben sind beim ersten Lauf genau
@@ -327,14 +342,26 @@ if (-not $PSBoundParameters.ContainsKey('Patches')) {
 }
 foreach ($path in $Patches) {
     if (-not $path -or -not (Test-Path $path)) { continue }
-    $name = [IO.Path]::GetFileName($path)
-    $vanillaPath = Join-Path $Vanilla $name
-    # XUi-Dateien liegen in Vanilla in Unterordnern (XUi_InGame) und tragen dort denselben
-    # Namen wie andere; Localization.csv ist kein XML. Beides bleibt aussen vor und wird
-    # gezaehlt, nicht stillschweigend uebersprungen.
-    if (-not (Test-Path $vanillaPath)) { continue }
+    # Das Gegenstueck liegt in Vanilla unter DEMSELBEN PFAD RELATIV ZU Config\ - nicht nur
+    # unter demselben Dateinamen (geaendert 2026-11-20, erstes und drittes Review). Vorher
+    # wurde nur der Dateiname im obersten Ordner gesucht: mod/.../Config/XUi_InGame/xui.xml
+    # fand kein Gegenstueck und wurde mit 'continue' still uebersprungen, obwohl der
+    # Kommentar hier "gezaehlt" versprach. Zwei unserer Dateien blieben so ungeprueft.
+    # Liegt die Datei nicht unter einem Config-Ordner (Testdaten), zaehlt der Dateiname.
+    $voll = (Resolve-Path -LiteralPath $path).ProviderPath
+    $stelle = $voll.LastIndexOf('\Config\', [StringComparison]::OrdinalIgnoreCase)
+    $name = if ($stelle -ge 0) { $voll.Substring($stelle + 8) } else { [IO.Path]::GetFileName($voll) }
+    $vanillaPath = [IO.Path]::Combine($Vanilla, $name)
+    # Kein Gegenstueck ist ROT, nicht "aussen vor": das Spiel laedt eine Patch-Datei nur zu
+    # einer Config-Datei gleichen Pfads (D53). Fehlt die, landet kein Patch daraus.
+    if (-not (Test-Path -LiteralPath $vanillaPath -PathType Leaf)) {
+        $ohneGegenstueck++
+        $unresolved += "Patch-Datei ohne Vanilla-Gegenstueck: $name  (gesucht: $vanillaPath)"
+        continue
+    }
+    $patchDateien++
     if (-not $vanillaDocs.ContainsKey($name)) {
-        $vanillaDocs[$name] = [xml](Get-Content $vanillaPath -Raw)
+        $vanillaDocs[$name] = [xml](Get-Content -LiteralPath $vanillaPath -Raw)
     }
     $vdoc = $vanillaDocs[$name]
     $xml = [xml](Get-Content $path -Raw)
@@ -416,6 +443,7 @@ if (Test-Path $progVanillaPfad) {
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
+Write-Output ("  Patch-Dateien: {0} mit Vanilla-Gegenstueck, {1} ohne" -f $patchDateien, $ohneGegenstueck)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
@@ -427,7 +455,7 @@ Write-Output '  Grenzen dieser Pruefung:'
 Write-Output '    - Geprueft werden VERWEISE, nicht Erreichbarkeit. Ob die Kette von T0 aus'
 Write-Output '      erreichbar ist und ob ein Zyklus darin steckt, sagt erst mod700check recipes'
 Write-Output '      gegen einen ConfigsDump, in dem unsere Modlets geladen waren (WP3.6).'
-Write-Output '    - XPaths werden gegen die Vanilla-Datei gleichen Namens geprueft, nicht gegen'
+Write-Output '    - XPaths werden gegen die Vanilla-Datei gleichen Pfads unter Config geprueft, nicht gegen'
 Write-Output '      den fertig gepatchten Stand. Ein XPath, der NUR auf einen Knoten eines'
 Write-Output '      FRUEHEREN eigenen Modlets zeigt, gilt als gruen, sobald jede Kennung darin'
 Write-Output '      von uns definiert ist - dass das frueher laedt, prueft die Ladereihenfolge,'
@@ -435,8 +463,7 @@ Write-Output '      nicht dieses Skript.'
 Write-Output '    - Geprueft wird der ERSTE Knoten unter <config>. Patches, die in einem'
 Write-Output '      <conditional> stecken, sieht diese Pruefung nicht; das Projekt benutzt'
 Write-Output '      bisher keines.'
-Write-Output '    - Dateien, die Vanilla unter diesem Namen nicht hat (XUi_InGame, Localization.csv),'
-Write-Output '      bleiben aussen vor.'
+Write-Output '    - Gelesen werden XML-Dateien. Localization.csv prueft mod700check localization.'
 
 if ($unresolved.Count -gt 0) {
     Write-Output ''

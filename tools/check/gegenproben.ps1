@@ -268,6 +268,23 @@ Test-Output 'localization: offenes Anfuehrungszeichen nennt die Zeile, in der es
     'localization', (Join-Path $data 'Localization-anfuehrung-offen.csv'), '--prefix', '700_') `
     -MustContain @('csv-form', 'Localization-anfuehrung-offen.csv:3', 'nicht geschlossen')
 
+# Zwei Faelle aus dem dritten Review (2026-11-20).
+#
+# (1) Ein einzelner Wagenruecklauf (CR ohne LF) ausserhalb der Anfuehrung wurde still
+#     verworfen: "Hearth"<CR>, las sich wie "Hearth", - Spaltenzahl richtig, Lauf gruen. Die
+#     Testdatei traegt in Zeile 2 genau dieses eine Byte 0x0D; sie ist mit printf erzeugt,
+#     weil ein Editor es nicht stehen laesst.
+Test-Output 'localization: einzelner Wagenruecklauf ausserhalb der Anfuehrung wird rot' 1 @(
+    'localization', (Join-Path $data 'Localization-einzelnes-cr.csv'), '--prefix', '700_') `
+    -MustContain @('csv-form', 'Localization-einzelnes-cr.csv:2', 'Wagenruecklauf') `
+    -MustNotContain @('spaltenzahl', 'Localization-einzelnes-cr.csv:3')
+
+# (2) Eine Datei aus einem einzigen Anfuehrungszeichen hat keine Zeile. Gemeldet wurde nur
+#     "leere-datei" - rot, aber mit dem falschen Grund; der richtige ging verloren.
+Test-Output 'localization: Datei aus einem einzigen Anfuehrungszeichen nennt den Grund' 1 @(
+    'localization', (Join-Path $data 'Localization-nur-anfuehrung.csv'), '--prefix', '700_') `
+    -MustContain @('csv-form', 'Localization-nur-anfuehrung.csv:1', 'nicht geschlossen')
+
 Write-Output ""
 Write-Output "== Gegenproben: der Vergleich beachtet Gross- und Kleinschreibung =="
 # WP3.1, Befund 3.3: solange RegexOptions.IgnoreCase gesetzt war, traf die Regel
@@ -753,14 +770,14 @@ Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 
 # einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
 # endete ohne seine Ergebniszeile. Als Spielpfad dient hier ein Testordner, den es gibt.
 Test-Script 'kette-pruefen: Spielpfad ohne Data\Config ist nicht geprueft' 2 @{} `
-    -Spielpfad $glossarDaten -MustContain @('items.xml fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+    -Spielpfad $glossarDaten -MustContain @('den Vanilla-Ordner', 'gibt es nicht', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Abbruch' 1 @{
     SkipGegenproben = $true
     Source          = (Join-Path $data 'sauber')
     Configuration   = $Configuration
 } -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
-    'items.xml fehlt',
+    'den Vanilla-Ordner',
     '-> nicht geprueft, zaehlt als rot',
     '6 Pruefungen, 3 rot')
 
@@ -773,6 +790,102 @@ Test-Script 'kette-pruefen: genannter Patch-Pfad, den es nicht gibt, ist nicht g
     Patches      = @(Join-Path $data 'kette\gibt-es-nicht\biomes.xml')
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('-Patches nennt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# ------------------------------------------------- Drittes Review (2026-11-20)
+# Sieben Faelle, in denen ein Pruefer gruen war, ohne geprueft zu haben, oder abbrach, ohne
+# es zu sagen. Jeder ist einmal gegen den Stand davor gelaufen und war dort rot.
+#
+# (1) -Patches nennt einen ORDNER. Den gibt es, also bestand er die Pruefung "gibt es den
+#     Pfad"; gelesen wurde daraus nichts: "0 XPaths, GREEN".
+Test-Script 'kette-pruefen: -Patches nennt einen Ordner statt einer Datei' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('-Patches nennt', 'ist keine Datei', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (2) Eine Patch-Datei, zu der Vanilla keine Datei hat. Sie wurde uebersprungen, als waere
+#     sie nicht da. Das Spiel laedt sie nicht (D53) - also rot, nicht "aussen vor".
+Test-Script 'kette-pruefen: Patch-Datei ohne Vanilla-Gegenstueck wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\ohne-gegenstueck\biomes.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Patch-Datei ohne Vanilla-Gegenstueck: biomes.xml',
+    'Patch-Dateien: 0 mit Vanilla-Gegenstueck, 1 ohne')
+
+# (3) Eine Patch-Datei in einem UNTERORDNER von Config (bei uns: XUi_InGame). Gesucht wurde
+#     nur der Dateiname im obersten Vanilla-Ordner; dort liegt keine windows.xml, also fiel
+#     die Datei unter (2) und wurde uebersprungen. Der zweite XPath der Testdatei trifft
+#     nichts - und war gruen. (Befund 2 des ERSTEN Reviews, seit WP8.1 nur aufgeschrieben.)
+Test-Script 'kette-pruefen: Patch im Unterordner von Config wird gegen dasselbe Unterverzeichnis geprueft' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\unterordner\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Patch-Dateien: 1 mit Vanilla-Gegenstueck, 0 ohne',
+    'geprueefte XPaths: 2 (1 in Vanilla, 0 auf eigene Knoten)',
+    "XPath trifft nichts: /windows/window[@name='pruefGibtesnicht']/@name")
+
+# (4) Tabellen OHNE Randstriche sind gueltiges Markdown. glossar-pruefen erkannte eine
+#     Tabellenzeile am fuehrenden '|' - ohne ihn war die Tabelle Fliesstext, ihre Verbote
+#     galten nicht. Hier stehen BEIDE Tabellen ohne Rand; vorher: "kein einziger Festbegriff".
+Test-Script 'glossar-pruefen: Tabellen ohne Randstriche werden gelesen' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-ohne-rand.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gross.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    '2 Festbegriffe mit Kennung, 0 ohne Kennung, 1 verbotene Muster',
+    "'pruefGross' (deutsch): 'ZOMBIE'")
+
+# (5) Der Fall aus dem Review selbst: die zweite Verbots-Tabelle ohne Rand UND mit
+#     "Sprachen" in der Kopfzeile. Sie wurde uebersprungen, bevor die Kopfzeilen-Pruefung
+#     sie sah - mit Localization-gut.csv war das Ergebnis GREEN.
+Test-Script 'glossar-pruefen: Tippfehler im Kopf einer Tabelle ohne Randstriche ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-ohne-rand-kopf-kaputt.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('unbekannte Kopfzeile', 'Sprachen') -MustNotContain @('GREEN')
+
+# (6) Eine Trennzeile, ueber der keine Kopfzeile steht (Kopfzeile beim Bearbeiten verloren).
+#     Die Zeilen darunter sind dann keine Tabelle mehr und waeren wieder Fliesstext.
+Test-Script 'glossar-pruefen: Trennzeile ohne Kopfzeile ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-ohne-rand-ohne-kopf.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Trennzeile ohne Kopfzeile') -MustNotContain @('GREEN')
+
+# (7) SDTD_PATH zeigt auf ein Laufwerk, das nicht eingehaengt ist (USB-Platte ab, Netzlaufwerk
+#     weg). Join-Path wirft dann "Cannot find drive" - in kette-pruefen vor jeder Pruefung, in
+#     check-all.ps1 vor der Ergebniszeile. Der Buchstabe wird gesucht, nicht angenommen: auf
+#     einem Rechner, der Q: hat, waere die Gegenprobe sonst eine andere.
+$belegt = @([IO.DriveInfo]::GetDrives() | ForEach-Object { $_.Name.Substring(0, 1).ToUpperInvariant() })
+$freierBuchstabe = @('Q', 'Y', 'W', 'V', 'U', 'T', 'R', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I', 'H', 'G', 'B') |
+    Where-Object { $belegt -notcontains $_ } | Select-Object -First 1
+if (-not $freierBuchstabe) {
+    # Eine Gegenprobe, die nicht laufen kann, ist nicht bestanden.
+    $checked += 2
+    $failed += 2
+    Write-Output '  [ROT]  kein freier Laufwerksbuchstabe: die zwei Gegenproben zum fehlenden Laufwerk konnten nicht laufen'
+}
+else {
+    $ohneLaufwerk = $freierBuchstabe + ':\gibt-es-nicht\7 Days To Die'
+
+    Test-Script 'kette-pruefen: Spielpfad auf fehlendem Laufwerk ist nicht geprueft, kein Abbruch' 2 @{} `
+        -Spielpfad $ohneLaufwerk -MustContain @('den Vanilla-Ordner', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    Test-Script 'check-all: Spielpfad auf fehlendem Laufwerk endet mit Ergebniszeile' 1 @{
+        SkipGegenproben = $true
+        Source          = (Join-Path $data 'sauber')
+        Configuration   = $Configuration
+    } -Skript 'check-all.ps1' -Spielpfad $ohneLaufwerk -MustContain @(
+        'purge-patch (sind die Patches aktuell?)',
+        'den Vanilla-Ordner',
+        '-> nicht geprueft, zaehlt als rot',
+        '6 Pruefungen, 3 rot')
+}
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
