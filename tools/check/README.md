@@ -274,6 +274,28 @@ Ohne `SDTD_PATH` überspringt es sich und sagt „KEIN GRUEN". Was es nicht prü
 jeder Ausgabe: Erreichbarkeit von T0, Zyklen, und ob der XML-Patcher des Spiels unsere XPaths
 trifft.
 
+### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
+
+[`docs/glossar.md`](../../docs/glossar.md) ist die Begriffsquelle (F-12), und dieses Skript
+liest **genau diese Datei** — es gibt keine zweite Liste, die danebenlaufen könnte. Zwei
+Tabellenformen zählen, erkannt an der Kopfzeile:
+
+- **Festbegriffe** (`| Kennung | Deutsch | Englisch | Vanilla | Quelle |`): die Zeile unserer
+  `Localization.csv` mit diesem Schlüssel muss genau diesen deutschen und englischen Text
+  tragen.
+- **Verbotene Begriffe** (`| Verboten | Sprache | Stattdessen | Quelle |`): ein regulärer
+  Ausdruck je Zeile, gesucht in der deutschen und/oder englischen Spalte **jeder** unserer
+  Zeilen.
+
+Exit **0** grün, **1** Befunde, **2** nicht prüfbar (Datei fehlt, keine Tabelle gelesen, Muster
+kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 49 Festbegriffe mit
+Kennung, 13 ohne, 48 Muster, 612 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
+`testdaten/glossar/`: neun Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün) und
+ein Begriff, der nur in **einer** Sprache verboten ist.
+
+**Es liest nur, was wir schreiben.** Vanilla-Zeilen, die wir nicht überschreiben, sieht es
+nicht — auch wenn der Spieler sie liest.
+
 ## Grenzen
 
 Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtigsten:

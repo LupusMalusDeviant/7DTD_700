@@ -22,10 +22,11 @@
 	                                    reparierbar, erntet Holz und Stein.
 	       meleeToolTorch               Licht am ersten Abend. Gehoert zu F-08.
 	       medicalFirstAidBandage       Wundauflage, bleibt nach D56.
-	       noteDuke01                   Dukes Brief. Ein Anachronismus, aber nach WP8
-	                                    aufgeschoben (F-12 ersetzt den Starttext). Er steht
-	                                    hier, damit der Aufschub die Wahrheit sagt: solange
-	                                    er aufgeschoben ist, ist er auch noch da.
+	       noteDuke01                   Der Pergamentfetzen (WP8.5, D75). Die Kennung ist
+	                                    Vanillas, der Text ist unserer: wer den Spieler am
+	                                    Weg fand, hat ihm diese Dinge dagelassen. Der Text
+	                                    zaehlt genau die Gegenstaende dieser Liste auf -
+	                                    wer die Liste aendert, aendert noteDuke01Desc mit.
 
 	     Nicht drin: Nahrung. Vanilla gab eine Dose Chili, und F-01 nimmt sie weg; ein
 	     Ersatz waere Inhalt und gehoert zu F-19 (Phase 2). Der Spieler startet hungrig.

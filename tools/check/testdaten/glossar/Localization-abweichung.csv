@@ -1,0 +1,3 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruefFeuer,blocks,Block,,,,"Hearth",,"Herdstelle",,,,,,,,,,,
+pruefText,items,Item,,,,"Raises the skill by one level, says the duke.",,"Hebt die Fertigkeit um eine Stufe, sagt der Fürst.",,,,,,,,,,,

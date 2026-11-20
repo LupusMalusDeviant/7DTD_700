@@ -1411,3 +1411,71 @@ statt aufgeschoben sind.
 - **Dass 700_50 nach 700_20/30/40 lädt**, setzt jede der 24 Zeilen voraus und prüft
   dieses Skript nicht.
 - Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 17.
+
+## Nachtrag WP8.5 — Glossar gegen Sprachdatei (20. November 2026), **Abnahme offen**
+
+F-12 verlangt als Abnahme „Glossar und Localization sind konsistent (Prüfskript)". Dieser
+Nachtrag beschreibt das Skript. **Gebaut vor der Abnahme**, wie die Nachträge seit WP7.1 —
+das ist eine Abweichung von „Verträge zuerst" und steht darum hier und in Prüfliste 21.
+
+**Schnittstelle.** `tools/check/glossar-pruefen.ps1 [-Glossar <datei>] [-Sprachdatei <datei>]`.
+Ohne Angabe `docs/glossar.md` und `mod/700_90_Sprache/Config/Localization.csv`. Kein
+`SDTD_PATH`, kein Spiel: das Skript liest nur Dateien des Repos.
+
+**Eingabeformat — das Glossar ist die Quelle, es gibt keine zweite Liste.** Gelesen werden
+Markdown-Tabellen, erkannt an ihrer Kopfzeile; jede andere Tabelle und jeder Fließtext wird
+übersprungen.
+
+| Kopfzeile | Bedeutung einer Zeile |
+|---|---|
+| `Kennung, Deutsch, Englisch, Vanilla, Quelle` | Festbegriff. Erste Spalte: Kennung in Backticks, oder ein Gedankenstrich für „noch kein Schlüssel" (gezählt, nicht verglichen). |
+| `Verboten, Sprache, Stattdessen, Quelle` | Verbot. Erste Spalte: regulärer Ausdruck in Backticks, Groß-/Kleinschreibung egal. Sprache ist `DE`, `EN` oder `beide`. |
+
+**Was rot ist (Exit 1).**
+
+1. Ein Festbegriff, dessen Schlüssel in der Sprachdatei fehlt.
+2. Ein Festbegriff, dessen deutscher oder englischer Text nicht **zeichengenau** dem Glossar
+   entspricht.
+3. Eine Zeile der Sprachdatei, deren deutsche oder englische Spalte ein verbotenes Muster
+   enthält — in der Sprache, für die es verboten ist.
+
+**Was nicht prüfbar ist (Exit 2) — und in `check-all.ps1` als rot zählt.** Glossar oder
+Sprachdatei fehlt; im Glossar steht kein Festbegriff mit Kennung oder kein Verbot; eine
+Tabellenzeile hat die falsche Spaltenzahl (ein `|` im Muster); ein Muster ist kein regulärer
+Ausdruck; die Sprache ist unbekannt; der Sprachdatei fehlt eine der Spalten `Key`, `english`,
+`german`, oder sie hat keine Zeile. **Das ist die Lehre aus dem Befund zu `kette-pruefen`**
+(Review vom 20. November: ohne `SDTD_PATH` überspringt es sich mit Exit 0 und wird grün
+gezählt) — ein Prüfer, der nichts gelesen hat, hat nicht bestanden.
+
+**Gegenproben (Projektregel 5) — neun, alle grün am 20. November.** Testdaten unter
+`tools/check/testdaten/glossar/`. Sauber → 0. Verbotener Begriff → 1, **und** ein Wort, das
+nur im Deutschen verboten ist, bleibt im Englischen unbemerkt („level", „duke" in der
+Einzahl). Abweichender und fehlender Festbegriff → 1. Glossar ohne Tabelle, Glossar ohne
+Verbote, kaputtes Muster, `|` im Muster, fehlende Sprachdatei, fehlendes Glossar → je 2, und
+in keiner dieser Ausgaben steht „GREEN".
+
+**Was `check-all.ps1` danach meldet** (20. November 2026, `SDTD_PATH` gesetzt): 64
+Gegenproben, 0 fehlgeschlagen; sechs Prüfungen statt fünf; `recipes`, `purge-patch`,
+`localization` (612 Zeilen), **Glossar** (49 Festbegriffe mit Kennung, 13 ohne, 48 Muster, 0
+Abweichungen, 0 Treffer) und `kette-pruefen` (415 XPaths, 0 unaufgelöst) grün; `anachronisms`
+**rot mit 645** gegen den ConfigsDump vom 7. Juli — derselbe Grund wie seit WP3.
+
+**Grenzen.**
+
+- **Gelesen wird nur unsere Sprachdatei.** Vanilla-Zeilen, die wir nicht überschreiben, sieht
+  die Prüfung nicht. Gemessen tragen 686 davon einen Weltbegriff, 505 möglicherweise sichtbar
+  — das ist Arbeitsvorrat für WP8.5, und „Glossar grün" sagt darüber nichts.
+- **Gefunden wird das Verbotene, nicht das Fehlende.** Ob ein Text „Seuchentote" sagt, wo er
+  es sollte, prüft niemand.
+- **Ein Muster ist so gut wie sein Schreiber.** `beton(?![teu])` lässt „betont" durch und
+  fängt „Betonblock" — ein Wort, an das niemand dachte, fängt es nicht. Die Liste wächst mit
+  den Texten.
+- **Vollständigkeit prüft das Skript nicht.** Ein Name in der Sprachdatei, der im Glossar
+  fehlt, ist kein Fehler; 49 von rund 290 Namenszeilen stehen drin.
+- **Die Gegenproben der mod700check-Befehle und die von `kette-pruefen` laufen weiter über
+  dieselbe Hilfsfunktion** (`Test-Script`, jetzt mit dem Parameter `-Skript`); der Vorgabewert
+  hält die alten Aufrufe unverändert.
+
+**Nicht behoben, weil es ein eigener Schritt ist:** der Befund zu `kette-pruefen` selbst
+(Exit 0 ohne `SDTD_PATH`) und der übersprungene `purge-patch`-Lauf, der in `check-all.ps1`
+weder gezählt noch rot wird. Beides steht aus dem Review vom 20. November offen.

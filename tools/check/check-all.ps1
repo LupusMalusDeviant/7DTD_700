@@ -166,6 +166,26 @@ else {
     Write-Output "  Das ist kein Gruen, sondern eine fehlende Pruefung."
 }
 
+# ---------------------------------------------------- Glossar gegen Sprachdatei
+# F-12: "Glossar und Localization sind konsistent (Pruefskript)". docs/glossar.md nennt die
+# Festbegriffe und die verbotenen Begriffe; glossar-pruefen.ps1 liest genau diese Datei.
+# Ausgang 2 heisst "nichts gelesen" und zaehlt hier als rot - ein Pruefer, der seine
+# Eingabe nicht findet, hat nicht bestanden (WP8.5).
+$glossarSkript = Join-Path $here 'glossar-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Glossar gegen Sprachdatei ----"
+if (Test-Path $glossarSkript) {
+    & $glossarSkript
+    if ($LASTEXITCODE -ne 0) { $red++; Write-Output "  -> rot" }
+    else { Write-Output "  -> gruen" }
+}
+else {
+    $red++
+    Write-Output "  glossar-pruefen.ps1 fehlt: $glossarSkript"
+    Write-Output "  -> rot"
+}
+
 # ---------------------------------------------------- Unsere eigene Kette
 # 'recipes' prueft eine QUELLE, und unsere Modlets sind in keiner, die ohne Spielstart zu
 # haben ist (WP3.6). 'recipes gruen' heisst darum heute "Vanilla hat keine Sackgasse" und

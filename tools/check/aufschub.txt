@@ -76,4 +76,6 @@ resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.
 # Schmiedeeisen gemacht, nicht aus einem Ruestungs-Bausatz.
 
 # --- Vanillas Lore --------------------------------------------------------------
-noteDuke01            # WP8: F-12 ersetzt den Starttext; er liegt in der Startausruestung und ist das Erste, was ein Spieler liest
+# noteDuke01 ist mit WP8.5 EINGELOEST (D75) und steht darum nicht mehr hier: der Starttext
+# ist geschrieben (Localization.csv, sechs Schluessel), die Kennung traegt in der Denylist
+# eine Freigabe statt eines Verbots.

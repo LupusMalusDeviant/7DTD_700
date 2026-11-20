@@ -54,3 +54,24 @@ XUi-Änderungen müssen nach unserem Kenntnisstand auf dem Client liegen. **[ver
 - [ ] Alle 700-Einträge haben DE **und** EN (Prüfskript: keine leere Pflichtspalte)
 - [ ] Glossar und Localization sind konsistent (Prüfskript)
 - [ ] Mod läuft zusammen mit jeder Referenz-UI-Mod ohne XML-Fehler im Log
+
+## Stand 2026-11-20 — WP8.5, erste Scheibe (D75)
+
+**Gebaut, im Spiel ungesehen:**
+
+- [`docs/glossar.md`](../glossar.md): 49 Festbegriffe mit Kennung, 13 ohne, 48 verbotene Muster.
+  Die englischen Weltbegriffe hat der Nutzer entschieden: Seuchentote = „the plague-dead",
+  Seuchennacht = „Plague Night".
+- `tools/check/glossar-pruefen.ps1` hält das Glossar gegen unsere Sprachdatei und läuft in
+  `check-all.ps1` mit. Das ist das Prüfskript aus dem dritten Akzeptanzkriterium — **für unsere
+  Zeilen**. Das Kriterium bleibt offen, solange Vanilla-Zeilen mit Weltbegriffen sichtbar sind.
+- Die Startnotiz (`noteDuke01`) heißt „Pergamentfetzen" und trägt einen eigenen Text; drei
+  Beschreibungen lebender Gegenstände sagen jetzt „Seuchentote".
+
+**Was offen ist:** 505 möglicherweise sichtbare Vanilla-Zeilen mit einem Weltbegriff (Aufteilung
+und weitere Scheiben im Plan unter WP8.5), fünf offene Begriffe (Glossar Abschnitt 10) und die
+Abnahme des Glossars durch den Nutzer (Prüfliste 21).
+
+**Notiz für später (nicht Phase 1):** die sieben Wesen-Namen mit „Zombie" (`animalZombieBear`,
+`zombieSpiderFeral` …) gehören zu F-06 und brauchen die englischen Begriffe für Verderbte und
+Moorleichen.

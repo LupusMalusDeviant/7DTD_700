@@ -131,11 +131,14 @@ function Test-Script {
         [int]$Expected,
         [hashtable]$Parameters,
         [string[]]$MustContain = @(),
-        [string[]]$MustNotContain = @()
+        [string[]]$MustNotContain = @(),
+        # Seit WP8.5 gibt es ein zweites Pruefskript (glossar-pruefen.ps1). Der Vorgabewert
+        # haelt die aelteren Aufrufe unveraendert.
+        [string]$Skript = 'kette-pruefen.ps1'
     )
 
     $script:checked++
-    $skript = Join-Path $here 'kette-pruefen.ps1'
+    $skript = Join-Path $here $Skript
     $previous = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
@@ -585,6 +588,73 @@ Test-Script 'kette-pruefen: vertippte Fortschritts-Verweise werden rot' 1 @{
 } -MustContain @(
     "Baum-Zuordnung 'pruefAttGibtesnicht' ist kein Fortschritts-Knoten",
     "Stufenbedingung 'pruefAttAuchnicht' ist kein Fortschritts-Knoten")
+
+# ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
+# Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
+# Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen
+# Eingang: einen verbotenen Begriff finden (und zwar nur in der Sprache, fuer die er
+# verboten ist), einen abweichenden Festbegriff finden, und NICHT gruen werden, wenn sie
+# nichts gelesen hat. Das Dritte ist das Wichtigste: kette-pruefen hatte genau diese
+# Luecke (Vertrag 04, Codex-Befund vom 2026-11-20) - ein leeres Glossar waere sonst
+# "0 Verbote, 0 Treffer, GREEN".
+$glossarDaten = Join-Path $data 'glossar'
+
+Test-Script 'glossar-pruefen: sauberes Glossar und saubere Sprachdatei' 0 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    '2 Festbegriffe mit Kennung, 1 ohne Kennung, 4 verbotene Muster',
+    'Sprachdatei: 3 Zeilen')
+
+# 'level' ist nur im Deutschen verboten, 'dukes' nur im Englischen und nur in der Mehrzahl.
+# pruefText traegt englisch "level" und "duke" - beides erlaubt, darf also nicht auftauchen.
+Test-Script 'glossar-pruefen: verbotener Begriff wird rot, aber nur in seiner Sprache' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-begriff.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    'Zeilen mit verbotenem Begriff: 2',
+    "'pruefSchlecht1' (deutsch): 'Zombie'",
+    "'pruefSchlecht1' (deutsch): 'Lagerfeuer'",
+    "'pruefSchlecht2' (englisch): 'Dukes'") -MustNotContain @("'pruefText'")
+
+Test-Script 'glossar-pruefen: abweichender und fehlender Festbegriff werden rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-abweichung.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    'abweichende Festbegriffe: 2',
+    "deutsch steht 'Herdstelle', das Glossar sagt 'Feuerstelle'",
+    "Festbegriff 'pruefErz'",
+    'die Sprachdatei hat diesen Schluessel nicht')
+
+Test-Script 'glossar-pruefen: Glossar ohne Tabelle ist nicht pruefbar, nicht gruen' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-leer.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('NICHT PRUEFBAR', 'kein einziger Festbegriff') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: Glossar ohne Verbote ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-ohne-verbote.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('kein einziger verbotener Begriff') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: kaputtes Muster ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-muster-kaputt.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('ist kein regulaerer Ausdruck') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: ein | im Muster zerreisst die Zeile und wird gemeldet' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-muster-pipe.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Spalten statt 4') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: fehlende Sprachdatei ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'gibt-es-nicht.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Sprachdatei fehlt') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: fehlendes Glossar ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'gibt-es-nicht.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Glossar fehlt') -MustNotContain @('GREEN')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

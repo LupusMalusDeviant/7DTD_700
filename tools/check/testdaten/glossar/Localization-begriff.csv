@@ -1,0 +1,6 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruefFeuer,blocks,Block,,,,"Hearth",,"Feuerstelle",,,,,,,,,,,
+pruefErz,items,Item,,,,"Bog Iron Ore",,"Raseneisenerz",,,,,,,,,,,
+pruefText,items,Item,,,,"Raises the skill by one level, says the duke.",,"Hebt die Fertigkeit um eine Stufe, sagt der Fürst.",,,,,,,,,,,
+pruefSchlecht1,items,Item,,,,"The plague-dead come to the hearth.",,"Die Zombies kommen ans Lagerfeuer.",,,,,,,,,,,
+pruefSchlecht2,items,Item,,,,"Worth ten Dukes.",,"Zehn Silberpfennige wert.",,,,,,,,,,,

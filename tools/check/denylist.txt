@@ -410,7 +410,7 @@ ironGarageDoor*                 # Garagentor
 # Beides faellt, beides steht in aufschub.txt: ohne Ersatz gibt es keinen Handel.
 oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt die Marke, nicht den Geldschein
 # casinoCoin -- gestrichen mit WP4.2: wird zum Silberpfennig umgedeutet (D30), siehe unten
-noteDuke01                      # Dukes Brief, liegt in der Startausruestung
+# noteDuke01 -- gestrichen mit WP8.5 (D75): wird zum Pergamentfetzen umgedeutet, siehe unten
 
 # ================================================================================
 # Freigaben (D54, D56): Diese Gegenstaende sind kein Anachronismus. Sie tragen
@@ -636,6 +636,7 @@ noteDuke01                      # Dukes Brief, liegt in der Startausruestung
 !resourceConcreteMix       # D63: Moertel - Sand + Stein + Branntkalk am Kalkofen
 !concreteShapes*           # D63: Bruchstein - die vierte Baustufe
 !steelShapes*              # D63: Moertelstein - die fuenfte und oberste Baustufe
+!noteDuke01                # WP8.5/D75: Pergamentfetzen - ein beschriebenes Blatt gab es um 700; Vanillas Brief des Duke ist nur noch die Kennung
 
 # --- Werkstaetten, Pflanzungen, Behaelter ---------------------------------------
 !toolAnvil                 # Amboss

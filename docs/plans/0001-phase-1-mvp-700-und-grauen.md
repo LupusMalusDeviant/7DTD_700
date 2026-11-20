@@ -1293,6 +1293,28 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    `Config/Localization.csv` mit **DE und EN** für alle neuen und umgedeuteten Einträge (D7).
    Achtung auf die Spaltenlage: fünf Metadatenspalten vorweg, und `Context / Alternate Text`
    steht **zwischen** `english` und `german`.
+   **Erste Scheibe gebaut am 2026-11-20 (D75), im Spiel ungesehen — das Paket ist nicht
+   fertig.**
+   - *Gebaut:* `docs/glossar.md` (49 Festbegriffe mit Kennung, 13 ohne, 48 verbotene
+     Muster) und `tools/check/glossar-pruefen.ps1`, das genau diese Datei gegen unsere
+     Sprachdatei hält — sechste Prüfung in `check-all.ps1`, neun Gegenproben. Die
+     **Startnotiz** ist umgeschrieben (`noteDuke01` → „Pergamentfetzen", sechs Schlüssel),
+     dazu drei Beschreibungen lebender Gegenstände, die „Zombies" sagten. Der Aufschub
+     `noteDuke01` aus WP3 ist eingelöst.
+   - *Gemessen, der Arbeitsvorrat:* Vanillas Sprachdatei hat 25.930 Zeilen, wir
+     überschreiben 545. Nach dieser Scheibe tragen **686** nicht überschriebene Zeilen
+     einen Weltbegriff (Zombie, Blutmond, Horde Night, Dukes; vorher 694): 170 gehören zu
+     Twitch, 11 zu gesperrten Kennungen, **505 sind möglicherweise sichtbar** — UI 210,
+     Challenges 121, Quests 66, Fortschritt 25, Blöcke 19, Untertitel 18, Buffs 13,
+     Tagebuch-Tipps 7, Wesen 7, Gegenstände 5, Mods 4, Rest 10. „Möglicherweise", weil die
+     Zählung nur gesperrte Gegenstände und Blöcke abzieht (599 Kennungen aus den
+     Purge-Dateien), nicht gesperrte Mods, Quests oder Challenges.
+   - *Offen, weitere Scheiben:* (2) Buffs, Tagebuch-Tipps, Blöcke; (3) UI und Ladebildschirm;
+     (4) Quests und Challenges — erst zählen, was davon nach dem Purge überhaupt erreichbar
+     ist; (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
+     Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
+     Begriffe offen) und die Bogen-Texte (WP5.2 wartet auf den Nutzer).
+   - → Prüfliste 21.
 6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
    über **einen** Schlüssel `700_modName` (D6), damit die Umbenennung später eine Zeile ist.
 7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
@@ -1650,9 +1672,34 @@ werden:
     (c) *Schläfer.* Geduckt durch ein Haus mit Schläfern: stöhnt nur noch selten einer auf?
     (d) *Die offene Frage.* Fühlt sich der Laut beim **Bemerken** (`SoundSense`, nicht
     angefasst) nach der Stille davor zu früh an, wäre er der nächste Kandidat.
+21. **Lesen** (WP8.5/D75, 20. November 2026). Vier Dinge, eins davon im Spiel:
+    (a) *Die Startnotiz, im Spiel.* Neues Spiel, deutsch: heißt der Zettel im Inventar
+    **„Pergamentfetzen"**, steht oben die grüne Zeile „Jemand hat dir einen Pergamentfetzen
+    dagelassen", und zeigt das Lesen den neuen Text statt des Briefs vom Duke? Dasselbe
+    einmal englisch. Steht irgendwo noch „Duke", ist ein Schlüssel übersehen.
+    (b) *Der Wortlaut.* Der Text der Notiz ist eine Setzung (`noteDuke01Desc` in
+    `mod/700_90_Sprache/Config/Localization.csv`): namenlose Fremde, die den Spieler für tot
+    hielten. Passt der Ton — oder soll dort etwas anderes stehen?
+    (c) *Das Glossar abnehmen:* [`docs/glossar.md`](../glossar.md). Vor allem Abschnitt 9
+    „Spielerdeutsch" (kein Level, Skill, Perk, Buff, Loot im Deutschen) — das steht in
+    keinem älteren Dokument und ist meine Setzung.
+    (d) *Die offenen Begriffe entscheiden* (Glossar Abschnitt 10): englisch für Verderbte,
+    Moorleichen, Wanderhändler, Klostermarkt, Fürstenhof; „Schlagringe"; „Scrap Bronze".
 
 ## Offene Punkte
 
+- **Eine Infektion hat in Phase 1 nur noch Honig** (gefunden in WP8.5, 20. November 2026).
+  Vanillas Texte nennen drei Mittel: Honig, Kräuter-Antibiotika, Antibiotika. Gemessen sind
+  `drugAntibiotics` und `drugHerbalAntibiotics` gesperrt (je eine Zeile in
+  `700_10_Purge/Config/items.xml` und `recipes.xml`), `foodHoney` lebt. Die Texte
+  (`buffInfection01UntreatedDesc` und drei Verwandte) raten also zu etwas, das es nicht
+  gibt — **und dahinter steht eine Balance-Frage, keine Textfrage:** ob Honig allein eine
+  ernste Infektion noch aufhält, ist ungemessen. F-11 (Kräuter, Theriak) liegt in Phase 2.
+  Die Texte sind darum **nicht** umgeschrieben; erst muss feststehen, was sie versprechen
+  dürfen. → WP9 oder eine Entscheidung des Nutzers (ein Kräutermittel vorziehen?).
+- **Das Glossar führt fünf offene Begriffe** (WP8.5/D75, `docs/glossar.md` Abschnitt 10):
+  englisch für Verderbte, Moorleichen, Wanderhändler/Klostermarkt/Fürstenhof und die
+  Baustufen; dazu „Schlagringe" und „Scrap Bronze". → Prüfliste 21.
 - **„Abends dichter" ist nicht gebaut** (WP8.2/D72). `fogPower` in `worldglobal.xml` ist ein
   Exponent für Tag und Nacht (Vanilla `1, 1`), aber worauf er wirkt, steht in keiner
   Aufrufliste — und davon hängt ab, ob ein Wert unter 1 den Nachtnebel verdichtet oder

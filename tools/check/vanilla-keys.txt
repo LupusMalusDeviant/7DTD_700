@@ -703,3 +703,19 @@ workstationSkillMagazine
 workstationSkillMagazineDesc
 resourcePaper
 resourcePaperDesc
+
+# --- WP8.5 / D75: Startnotiz und erste umgeschriebene Texte ---------------------
+# noteDuke01 bleibt die Kennung (Startausruestung, gameevents.xml, buffDukeNote haengen
+# daran), der Spieler liest einen Pergamentfetzen. readTheNote ist die Beschreibung
+# genau dieses einen Gegenstands (gemessen: ein Treffer in items.xml).
+noteDuke01                        # Pergamentfetzen
+noteDuke01Desc
+readTheNote
+buffDukeNoteName
+buffDukeNoteDesc
+buffDukeNoteToolTip
+# Drei Beschreibungen lebender Gegenstaende, die "Zombies" sagten - die ersten Texte,
+# in denen der Weltbegriff "Seuchentote" steht.
+resourceRockSmallDesc
+foodAshChickenStewDesc
+resourceSnowBallDesc
