@@ -1476,6 +1476,61 @@ Abweichungen, 0 Treffer) und `kette-pruefen` (415 XPaths, 0 unaufgelöst) grün;
   dieselbe Hilfsfunktion** (`Test-Script`, jetzt mit dem Parameter `-Skript`); der Vorgabewert
   hält die alten Aufrufe unverändert.
 
-**Nicht behoben, weil es ein eigener Schritt ist:** der Befund zu `kette-pruefen` selbst
-(Exit 0 ohne `SDTD_PATH`) und der übersprungene `purge-patch`-Lauf, der in `check-all.ps1`
-weder gezählt noch rot wird. Beides steht aus dem Review vom 20. November offen.
+**Nicht in diesem Schritt behoben:** der Befund zu `kette-pruefen` selbst (Exit 0 ohne
+`SDTD_PATH`) und der übersprungene `purge-patch`-Lauf, der in `check-all.ps1` weder gezählt
+noch rot wurde. → Behoben im folgenden Nachtrag.
+
+## Nachtrag Review 2026-11-20 — ohne Spielpfad ist nichts grün, **Abnahme offen**
+
+Vor dem Push von WP1–WP8.4 hat ein unabhängiges Review (Codex war am Limit, darum eine
+getrennte, nur lesende Claude-Sitzung) sieben Befunde gemeldet. Dieser Nachtrag behebt den
+ersten und hält die übrigen fest.
+
+**Befund 1 (hoch), behoben.** Ohne `SDTD_PATH`, aber mit einem ConfigsDump unter
+`%APPDATA%`, endete `check-all.ps1` mit „N Prüfungen, 0 rot, GRUEN" und Exit 0:
+
+- `kette-pruefen.ps1` schrieb „übersprungen, KEIN GRUEN" und ging mit **Exit 0** hinaus —
+  der Text sagte das Richtige, der Ausgang das Gegenteil.
+- der `purge-patch`-Vergleich schrieb „kein Grün" und änderte **keinen Zähler**.
+
+Der Stop-Hook liest den Ausgang. **Vertragsänderung:** ein Prüfschritt, der nicht laufen
+kann, ist **nicht geprüft und zählt als rot** — für jeden Schritt von `check-all.ps1`, nicht
+nur für die `mod700check`-Befehle (dort galt Exit 2 = rot schon seit WP2).
+
+| Schritt | vorher | jetzt |
+|---|---|---|
+| `kette-pruefen.ps1` ohne `SDTD_PATH` und ohne `-Vanilla` | Exit 0 | **Exit 2**, „NICHT GEPRUEFT" |
+| `purge-patch` ohne Vanilla | nicht gezählt | gezählt, **rot** |
+| `localization`, wenn unsere Datei fehlt | nicht gezählt | gezählt, **rot** |
+| `kette-pruefen.ps1` fehlt | still ausgelassen | gezählt, **rot** |
+
+**Gegenproben — zwei, und beide einmal rot gesehen.** `Test-Script` hat dafür den Schalter
+`-OhneSpielpfad` (nimmt `SDTD_PATH` für den einen Lauf weg und stellt sie wieder her).
+(1) `kette-pruefen` ohne Spielpfad → Exit 2. (2) `check-all.ps1 -SkipGegenproben` ohne
+Spielpfad gegen `testdaten/sauber` → „6 Pruefungen, 3 rot", beide Schritte namentlich als
+nicht geprüft. **Gegen die alten Skripte gefahren** (Stand `c829afa`): 66 Gegenproben, **2
+fehlgeschlagen** — genau diese beiden („Exit 0 erwartet 2"; „fehlt in der Ausgabe: 6
+Pruefungen, 3 rot"). Mit den neuen: 66, 0 fehlgeschlagen.
+
+**Folge für die Arbeit:** wer `SDTD_PATH` nicht gesetzt hat, bekommt vom Prüfbefehl kein Grün
+mehr. Das ist gewollt. Die Variable ist auf diesem Rechner nicht dauerhaft gesetzt (jeder
+Lauf setzt sie selbst).
+
+**Die übrigen Befunde — nicht behoben, damit sie nicht verloren gehen:**
+
+2. *(mittel)* Patches unter `XUi_InGame/` überspringt `kette-pruefen` still: die
+   Vanilla-Datei wird nur nach Dateinamen im obersten Ordner gesucht. Der Kommentar daneben
+   sagt „gezählt". Zwei Dateien in `700_40_Bauen` sind betroffen.
+3. *(mittel)* `purge-patch --vergleiche` vergleicht eine Kopfzeile mit dem Änderungsdatum von
+   `Data/Config` mit. Ein Steam-Update ohne inhaltliche Änderung meldet jede Datei als
+   veraltet.
+4. *(mittel, bekannt)* Die Erzeuger unter `tools/gen/` haben keinen Vergleichslauf.
+5. *(mittel, bekannt seit WP8.3)* Buff-Verweise (`ActiveRadiusEffects`, `triggered_effect/@buff`)
+   löst niemand auf.
+6. *(niedrig)* `wp7-bindung.ps1` zählt seine Rezeptdateien von Hand auf — derselbe Fehler, den
+   `kette-pruefen` seit WP5.1 nicht mehr macht.
+7. *(niedrig, dokumentierte Grenze)* XPaths werden gegen Vanilla geprüft, nicht gegen den
+   Stand nach dem Purge.
+
+Dazu aus diesem Vertrag selbst, seit WP8.1 offen und von derselben Art wie Befund 1:
+`kette-pruefen -Patches <pfad, den es nicht gibt>` meldet „0 XPaths, GREEN".

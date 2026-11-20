@@ -46,8 +46,15 @@ $repoRoot = Split-Path -Parent (Split-Path -Parent $here)
 
 if (-not $Vanilla) {
     if (-not $env:SDTD_PATH) {
-        Write-Output 'kette-pruefen: SDTD_PATH ist nicht gesetzt - uebersprungen, KEIN GRUEN.'
-        exit 0
+        # Ausgang 2 statt 0 (geaendert 2026-11-20 nach dem Review-Befund). Vorher stand hier
+        # "uebersprungen, KEIN GRUEN" und dann 'exit 0' - der Text sagte das Richtige, der
+        # Ausgang das Gegenteil, und check-all.ps1 liest den Ausgang. Ohne SDTD_PATH, aber
+        # mit einem ConfigsDump, meldete der Prueflauf GRUEN, ohne einen einzigen XPath
+        # geprueft zu haben.
+        Write-Output 'kette-pruefen: SDTD_PATH ist nicht gesetzt und -Vanilla nicht angegeben - NICHT GEPRUEFT.'
+        Write-Output ''
+        Write-Output '== Ergebnis: nicht pruefbar -> RED =='
+        exit 2
     }
     $Vanilla = Join-Path $env:SDTD_PATH 'Data\Config'
 }

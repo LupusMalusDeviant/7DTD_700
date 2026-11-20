@@ -136,12 +136,18 @@ if ($vanilla -and (Test-Path (Join-Path $vanilla 'items.xml'))) {
         '--denylist', (Join-Path $here 'denylist.txt'))
 }
 else {
+    # Gezaehlt und rot (geaendert 2026-11-20 nach dem Review-Befund). Vorher stand hier
+    # nur der Text "kein Gruen" - und weder $ran noch $red aenderten sich. Das Ergebnis
+    # am Ende hiess dann "N Pruefungen, 0 rot, GRUEN", und der Stop-Hook nahm es als
+    # Nachweis. Eine Pruefung, die nicht laufen konnte, ist nicht bestanden.
+    $ran++
+    $red++
     Write-Output ""
-    Write-Output "---- purge-patch ----"
-    Write-Output "  uebersprungen: SDTD_PATH ist nicht gesetzt oder zeigt nicht auf eine"
+    Write-Output "---- purge-patch (sind die Patches aktuell?) ----"
+    Write-Output "  NICHT GEPRUEFT: SDTD_PATH ist nicht gesetzt oder zeigt nicht auf eine"
     Write-Output "  Installation mit Data\Config. Ohne Vanilla laesst sich nicht vergleichen,"
     Write-Output "  ob die erzeugten Patches noch zur Denylist passen."
-    Write-Output "  Das ist kein Gruen, sondern eine fehlende Pruefung."
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
 # ---------------------------------------------------- Unsere Localization
@@ -160,10 +166,13 @@ if (Test-Path $ourCsv) {
     Invoke-Check 'localization (unser Modlet)' $arguments
 }
 else {
+    # Seit WP4 gibt es die Datei; fehlt sie, ist das ein Fehler und kein "kommt noch".
+    $ran++
+    $red++
     Write-Output ""
-    Write-Output "---- localization ----"
-    Write-Output "  uebersprungen: $ourCsv gibt es noch nicht (kommt mit WP8)."
-    Write-Output "  Das ist kein Gruen, sondern eine fehlende Pruefung."
+    Write-Output "---- localization (unser Modlet) ----"
+    Write-Output "  NICHT GEPRUEFT: $ourCsv fehlt."
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
 # ---------------------------------------------------- Glossar gegen Sprachdatei
@@ -192,13 +201,21 @@ else {
 # sagt nichts ueber unsere Kette. kette-pruefen.ps1 schliesst die kleinere Haelfte der
 # Luecke: es loest jeden Verweis unserer eigenen Rezepte auf.
 $ketteSkript = Join-Path $here 'kette-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- eigene Kette (Verweise) ----"
 if (Test-Path $ketteSkript) {
-    $ran++
-    Write-Output ""
-    Write-Output "---- eigene Kette (Verweise) ----"
     & $ketteSkript
-    if ($LASTEXITCODE -ne 0) { $red++; Write-Output "  -> rot" }
-    else { Write-Output "  -> gruen" }
+    # Ausgang 2 heisst seit dem 2026-11-20 "nicht geprueft" (kein SDTD_PATH). Vorher kam
+    # dafuer 0 zurueck und wurde hier als gruen gezaehlt.
+    if ($LASTEXITCODE -eq 0) { Write-Output "  -> gruen" }
+    elseif ($LASTEXITCODE -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  kette-pruefen.ps1 fehlt: $ketteSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
 Write-Output ""

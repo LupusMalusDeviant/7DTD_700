@@ -134,15 +134,22 @@ function Test-Script {
         [string[]]$MustNotContain = @(),
         # Seit WP8.5 gibt es ein zweites Pruefskript (glossar-pruefen.ps1). Der Vorgabewert
         # haelt die aelteren Aufrufe unveraendert.
-        [string]$Skript = 'kette-pruefen.ps1'
+        [string]$Skript = 'kette-pruefen.ps1',
+        # Laesst das Skript OHNE SDTD_PATH laufen und stellt die Variable danach wieder
+        # her. Gebraucht seit dem 2026-11-20: der gefaehrlichste Zustand eines Pruefers ist
+        # der, in dem ihm seine Eingabe fehlt, und genau der liess sich bisher nicht
+        # gegenpruefen.
+        [switch]$OhneSpielpfad
     )
 
     $script:checked++
-    $skript = Join-Path $here $Skript
+    $skriptPfad = Join-Path $here $Skript
     $previous = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
+    $spielpfad = $env:SDTD_PATH
+    if ($OhneSpielpfad) { Remove-Item Env:SDTD_PATH -ErrorAction SilentlyContinue }
     try {
-        $output = & $skript @Parameters
+        $output = & $skriptPfad @Parameters
         $actual = if ($LASTEXITCODE -ne $null) { $LASTEXITCODE } else { 0 }
     }
     catch {
@@ -151,6 +158,7 @@ function Test-Script {
     }
     finally {
         $ErrorActionPreference = $previous
+        if ($OhneSpielpfad -and $spielpfad) { $env:SDTD_PATH = $spielpfad }
     }
     $text = ($output | Out-String)
 
@@ -655,6 +663,30 @@ Test-Script 'glossar-pruefen: fehlendes Glossar ist nicht pruefbar' 2 @{
     Glossar     = (Join-Path $glossarDaten 'gibt-es-nicht.md')
     Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
 } -Skript 'glossar-pruefen.ps1' -MustContain @('Glossar fehlt') -MustNotContain @('GREEN')
+
+# ------------------------------------------------- Ohne Spielpfad ist nichts gruen
+# Review-Befund vom 2026-11-20, und er war richtig: ohne SDTD_PATH, aber mit einem
+# ConfigsDump unter %APPDATA%, meldete check-all.ps1 "GRUEN". kette-pruefen schrieb
+# "uebersprungen, KEIN GRUEN" und ging mit 0 hinaus, und der uebersprungene
+# purge-patch-Vergleich wurde weder gezaehlt noch rot. Der Stop-Hook liest den Ausgang,
+# nicht den Text.
+#
+# Zwei Gegenproben, beide ohne Spielpfad. Die zweite faehrt check-all.ps1 selbst gegen
+# einen Testordner: vor der Aenderung hiess die letzte Zeile dort "5 Pruefungen" und
+# nannte purge-patch und die Kette nicht als rot. (Dass 'recipes' gegen diesen Ordner rot
+# ist, liegt am Ordner und ist hier gleichgueltig - geprueft werden die ZEILEN der beiden
+# Pruefungen, die nicht laufen konnten, und die Zahl am Ende.)
+Test-Script 'kette-pruefen: ohne Spielpfad ist es nicht geprueft, nicht gruen' 2 @{} `
+    -OhneSpielpfad -MustContain @('NICHT GEPRUEFT', 'nicht pruefbar -> RED') -MustNotContain @('GREEN')
+
+Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 @{
+    SkipGegenproben = $true
+    Source          = (Join-Path $data 'sauber')
+} -Skript 'check-all.ps1' -OhneSpielpfad -MustContain @(
+    'purge-patch (sind die Patches aktuell?)',
+    'kette-pruefen: SDTD_PATH ist nicht gesetzt',
+    '-> nicht geprueft, zaehlt als rot',
+    '6 Pruefungen, 3 rot')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

@@ -270,7 +270,10 @@ statt `resourceCoal` — der Fall, der sich beim Durchsehen richtig liest und ü
 schweigt, weil ein Rezept mit unbekannter Zutat einfach nicht herstellbar ist. Der Lauf meldet
 3 rot, Exit 1.
 
-Ohne `SDTD_PATH` überspringt es sich und sagt „KEIN GRUEN". Was es nicht prüft, sagt es in
+Ohne `SDTD_PATH` (und ohne `-Vanilla`) endet es mit **Exit 2, „NICHT GEPRUEFT"**, und
+`check-all.ps1` zählt das als rot. *(Bis zum 2026-11-20 schrieb es „KEIN GRUEN" und ging mit
+Exit 0 hinaus — der Prüflauf wurde damit grün, ohne etwas geprüft zu haben. Ebenso zählt
+ein `purge-patch`-Vergleich, der mangels Vanilla nicht laufen kann, seither als rot.)* Was es nicht prüft, sagt es in
 jeder Ausgabe: Erreichbarkeit von T0, Zyklen, und ob der XML-Patcher des Spiels unsere XPaths
 trifft.
 
