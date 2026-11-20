@@ -75,6 +75,27 @@ function Invoke-Check {
     }
 }
 
+function Invoke-Pruefskript {
+    <#
+        Faehrt ein PowerShell-Pruefskript, reicht seine Ausgabe durch und legt den Ausgang
+        in $script:pruefKode. Eine Ausnahme des Skripts wird gefangen und gilt als
+        "nicht geprueft" (2) - genauso ein Skript, das ohne Ausgangscode endet. Seit dem
+        2026-11-20: vorher riss eine Ausnahme in kette-pruefen den ganzen Lauf ab, und die
+        Zeile "N Pruefungen, M rot" erschien nie.
+    #>
+    param([string]$Pfad)
+
+    $global:LASTEXITCODE = $null
+    try {
+        & $Pfad
+        $script:pruefKode = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 2 }
+    }
+    catch {
+        Write-Output "  ABGEBROCHEN: $($_.Exception.Message)"
+        $script:pruefKode = 2
+    }
+}
+
 # ---------------------------------------------------- Gegenproben zuerst
 if (-not $SkipGegenproben) {
     Write-Output "==== Gegenproben (Projektregel 5) ===="
@@ -185,9 +206,11 @@ $ran++
 Write-Output ""
 Write-Output "---- Glossar gegen Sprachdatei ----"
 if (Test-Path $glossarSkript) {
-    & $glossarSkript
-    if ($LASTEXITCODE -ne 0) { $red++; Write-Output "  -> rot" }
-    else { Write-Output "  -> gruen" }
+    Invoke-Pruefskript $glossarSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
 }
 else {
     $red++
@@ -205,11 +228,13 @@ $ran++
 Write-Output ""
 Write-Output "---- eigene Kette (Verweise) ----"
 if (Test-Path $ketteSkript) {
-    & $ketteSkript
     # Ausgang 2 heisst seit dem 2026-11-20 "nicht geprueft" (kein SDTD_PATH). Vorher kam
-    # dafuer 0 zurueck und wurde hier als gruen gezaehlt.
-    if ($LASTEXITCODE -eq 0) { Write-Output "  -> gruen" }
-    elseif ($LASTEXITCODE -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    # dafuer 0 zurueck und wurde hier als gruen gezaehlt. Eine Ausnahme des Skripts wird
+    # gefangen und zaehlt ebenso: sonst endet dieser Lauf ohne seine Ergebniszeile.
+    Invoke-Pruefskript $ketteSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
     else { $red++; Write-Output "  -> rot" }
 }
 else {

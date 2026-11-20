@@ -1295,9 +1295,13 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    steht **zwischen** `english` und `german`.
    **Erste Scheibe gebaut am 2026-11-20 (D75), im Spiel ungesehen — das Paket ist nicht
    fertig.**
-   - *Gebaut:* `docs/glossar.md` (49 Festbegriffe mit Kennung, 13 ohne, 48 verbotene
+   - *Gebaut:* `docs/glossar.md` (49 Festbegriffe mit Kennung, 13 ohne, 77 verbotene
      Muster) und `tools/check/glossar-pruefen.ps1`, das genau diese Datei gegen unsere
-     Sprachdatei hält — sechste Prüfung in `check-all.ps1`, neun Gegenproben. Die
+     Sprachdatei hält — sechste Prüfung in `check-all.ps1`, zwölf Gegenproben. *(Beim
+     Anlegen 48 Muster und neun Gegenproben; das Review am selben Tag fand „Jagdmesser"
+     ohne Verbot und eine Kopfzeile, deren Tippfehler eine Tabelle still abschaltete. Die
+     29 nachgetragenen Muster fanden sofort vier Abweichungen in unseren eigenen Texten —
+     „forged iron" statt „wrought iron", „Vorschlaghammer" statt „Hammer".)* Die
      **Startnotiz** ist umgeschrieben (`noteDuke01` → „Pergamentfetzen", sechs Schlüssel),
      dazu drei Beschreibungen lebender Gegenstände, die „Zombies" sagten. Der Aufschub
      `noteDuke01` aus WP3 ist eingelöst.

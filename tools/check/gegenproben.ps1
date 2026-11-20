@@ -139,15 +139,20 @@ function Test-Script {
         # her. Gebraucht seit dem 2026-11-20: der gefaehrlichste Zustand eines Pruefers ist
         # der, in dem ihm seine Eingabe fehlt, und genau der liess sich bisher nicht
         # gegenpruefen.
-        [switch]$OhneSpielpfad
+        [switch]$OhneSpielpfad,
+        # Dasselbe mit einem FALSCHEN Spielpfad: gesetzt, aber ohne Data\Config darunter.
+        [string]$Spielpfad
     )
 
     $script:checked++
     $skriptPfad = Join-Path $here $Skript
     $previous = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    $spielpfad = $env:SDTD_PATH
+    # Achtung: PowerShell unterscheidet bei Variablennamen keine Gross-/Kleinschreibung.
+    # "$spielpfad" waere dieselbe Variable wie der Parameter $Spielpfad.
+    $pfadVorher = $env:SDTD_PATH
     if ($OhneSpielpfad) { Remove-Item Env:SDTD_PATH -ErrorAction SilentlyContinue }
+    if ($Spielpfad) { $env:SDTD_PATH = $Spielpfad }
     try {
         $output = & $skriptPfad @Parameters
         $actual = if ($LASTEXITCODE -ne $null) { $LASTEXITCODE } else { 0 }
@@ -158,7 +163,10 @@ function Test-Script {
     }
     finally {
         $ErrorActionPreference = $previous
-        if ($OhneSpielpfad -and $spielpfad) { $env:SDTD_PATH = $spielpfad }
+        if ($OhneSpielpfad -or $Spielpfad) {
+            if ($pfadVorher) { $env:SDTD_PATH = $pfadVorher }
+            else { Remove-Item Env:SDTD_PATH -ErrorAction SilentlyContinue }
+        }
     }
     $text = ($output | Out-String)
 
@@ -664,6 +672,40 @@ Test-Script 'glossar-pruefen: fehlendes Glossar ist nicht pruefbar' 2 @{
     Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
 } -Skript 'glossar-pruefen.ps1' -MustContain @('Glossar fehlt') -MustNotContain @('GREEN')
 
+# Drei Faelle aus dem Review vom 2026-11-20, alle im neuen Skript.
+#
+# (1) Ein Tippfehler in der Kopfzeile ("Sprachen") machte die Tabelle zu "Text fuer
+#     Menschen": ihre Verbote galten nicht mehr, der Lauf blieb gruen. Jetzt ist jede
+#     Tabelle mit unbekannter Kopfzeile nicht pruefbar.
+Test-Script 'glossar-pruefen: Tippfehler in einer Kopfzeile schaltet die Tabelle nicht still ab' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-kopf-kaputt.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-begriff.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('unbekannte Kopfzeile', 'Sprachen') -MustNotContain @('GREEN')
+
+# (2) Relativer Pfad nach einem Ordnerwechsel: Test-Path rechnet gegen den Ordner der
+#     PowerShell, [IO.File] gegen den des Prozesses. Die Datei wurde gefunden und dann
+#     nicht gelesen.
+Push-Location $here
+try {
+    Test-Script 'glossar-pruefen: relativer Pfad nach Ordnerwechsel wird gelesen' 0 @{
+        Glossar     = 'testdaten\glossar\glossar-gut.md'
+        Sprachdatei = 'testdaten\glossar\Localization-gut.csv'
+    } -Skript 'glossar-pruefen.ps1' -MustContain @('2 Festbegriffe mit Kennung')
+}
+finally { Pop-Location }
+
+# (3) Unter tuerkischer Kultur ist das kleine Gegenstueck zu 'I' das punktlose i. Ohne
+#     CultureInvariant trifft das Muster 'zombie' den Text 'ZOMBIES' dort nicht.
+$kulturVorher = [System.Threading.Thread]::CurrentThread.CurrentCulture
+[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::GetCultureInfo('tr-TR')
+try {
+    Test-Script 'glossar-pruefen: Grossschreibung trifft auch unter tuerkischer Kultur' 1 @{
+        Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+        Sprachdatei = (Join-Path $glossarDaten 'Localization-gross.csv')
+    } -Skript 'glossar-pruefen.ps1' -MustContain @("'pruefGross' (deutsch): 'ZOMBIE'")
+}
+finally { [System.Threading.Thread]::CurrentThread.CurrentCulture = $kulturVorher }
+
 # ------------------------------------------------- Ohne Spielpfad ist nichts gruen
 # Review-Befund vom 2026-11-20, und er war richtig: ohne SDTD_PATH, aber mit einem
 # ConfigsDump unter %APPDATA%, meldete check-all.ps1 "GRUEN". kette-pruefen schrieb
@@ -682,11 +724,37 @@ Test-Script 'kette-pruefen: ohne Spielpfad ist es nicht geprueft, nicht gruen' 2
 Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 @{
     SkipGegenproben = $true
     Source          = (Join-Path $data 'sauber')
+    Configuration   = $Configuration
 } -Skript 'check-all.ps1' -OhneSpielpfad -MustContain @(
     'purge-patch (sind die Patches aktuell?)',
     'kette-pruefen: SDTD_PATH ist nicht gesetzt',
     '-> nicht geprueft, zaehlt als rot',
     '6 Pruefungen, 3 rot')
+
+# Der Nachbarfall aus dem zweiten Review (2026-11-20): SDTD_PATH ist GESETZT, zeigt aber auf
+# einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
+# endete ohne seine Ergebniszeile. Als Spielpfad dient hier ein Testordner, den es gibt.
+Test-Script 'kette-pruefen: Spielpfad ohne Data\Config ist nicht geprueft' 2 @{} `
+    -Spielpfad $glossarDaten -MustContain @('items.xml fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Abbruch' 1 @{
+    SkipGegenproben = $true
+    Source          = (Join-Path $data 'sauber')
+    Configuration   = $Configuration
+} -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
+    'items.xml fehlt',
+    '-> nicht geprueft, zaehlt als rot',
+    '6 Pruefungen, 3 rot')
+
+# Und der Fall, der seit WP8.1 nur aufgeschrieben war (Vertrag 04): ein GENANNTER Pfad,
+# den es nicht gibt, meldete "0 XPaths, GREEN".
+Test-Script 'kette-pruefen: genannter Patch-Pfad, den es nicht gibt, ist nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\gibt-es-nicht\biomes.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('-Patches nennt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

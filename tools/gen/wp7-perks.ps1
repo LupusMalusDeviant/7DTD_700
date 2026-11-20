@@ -58,8 +58,8 @@ $baeume = [ordered]@{
 $bereiche = @(
     @{ Name = 'skillStrengthCombat';        Attribut = 'attFortitude';
        De = 'Wuchtwaffen';        En = 'Heavy arms'
-       DeDesc = 'Keule, Vorschlaghammer und Schlagstock: schwere Schläge, die durch Schild und Helm gehen.'
-       EnDesc = 'Club, sledgehammer and baton: heavy blows that go through shield and helm.' }
+       DeDesc = 'Keule, Hammer und Schlagstock: schwere Schläge, die durch Schild und Helm gehen.'
+       EnDesc = 'Club, hammer and baton: heavy blows that go through shield and helm.' }
     @{ Name = 'skillFortitudeCombat';       Attribut = 'attFortitude';
        De = 'Faustkampf';         En = 'Fist fighting'
        DeDesc = 'Die bloße Hand und der Schlagring. Was man immer dabei hat.'
@@ -135,8 +135,8 @@ $perks = @(
        EnDesc = 'The club hits harder and throws the struck one farther back.' }
     @{ Name = 'perkSkullCrusher';    Bereich = 'skillStrengthCombat'
        De = 'Schädelbrecher';   En = 'Skull-breaker'
-       DeDesc = 'Der Vorschlaghammer zerschlägt, was unter dem Helm sitzt.'
-       EnDesc = 'The sledgehammer breaks what sits beneath the helm.' }
+       DeDesc = 'Der Hammer zerschlägt, was unter dem Helm sitzt.'
+       EnDesc = 'The hammer breaks what sits beneath the helm.' }
     @{ Name = 'perkGrandSlam';       Bereich = 'skillStrengthCombat'
        De = 'Rundschlag';       En = 'Round blow'
        DeDesc = 'Der Schlagstock holt weiter aus und nimmt mehr mit.'

@@ -59,7 +59,7 @@ XUi-Änderungen müssen nach unserem Kenntnisstand auf dem Client liegen. **[ver
 
 **Gebaut, im Spiel ungesehen:**
 
-- [`docs/glossar.md`](../glossar.md): 49 Festbegriffe mit Kennung, 13 ohne, 48 verbotene Muster.
+- [`docs/glossar.md`](../glossar.md): 49 Festbegriffe mit Kennung, 13 ohne, 77 verbotene Muster (48 beim Anlegen, 29 nach dem Review am selben Tag).
   Die englischen Weltbegriffe hat der Nutzer entschieden: Seuchentote = „the plague-dead",
   Seuchennacht = „Plague Night".
 - `tools/check/glossar-pruefen.ps1` hält das Glossar gegen unsere Sprachdatei und läuft in

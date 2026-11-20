@@ -1533,4 +1533,46 @@ Lauf setzt sie selbst).
    Stand nach dem Purge.
 
 Dazu aus diesem Vertrag selbst, seit WP8.1 offen und von derselben Art wie Befund 1:
-`kette-pruefen -Patches <pfad, den es nicht gibt>` meldet „0 XPaths, GREEN".
+`kette-pruefen -Patches <pfad, den es nicht gibt>` meldet „0 XPaths, GREEN". → Behoben im
+folgenden Nachtrag.
+
+## Nachtrag zweites Review 2026-11-20 — sechs Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `c829afa` und `71cd623` hat Codex (`gpt-6.2-sol`) acht Befunde gemeldet:
+keiner kritisch oder hoch, fünf mittel, drei niedrig. Sechs sind hier behoben, zwei nicht.
+
+| Nr. | Befund | Was jetzt gilt |
+|---|---|---|
+| 1 | Tippfehler in einer Glossar-Kopfzeile („Sprachen") machte die Tabelle zu Fließtext; ihre Verbote fielen still weg. | **Jede Tabelle des Glossars muss eine der zwei Formen haben.** Unbekannte Kopfzeile → Exit 2. |
+| 4 | Relativer Pfad nach einem Ordnerwechsel: gefunden, aber nicht gelesen (PowerShell-Ordner ≠ Prozess-Ordner). | Beide Pfade werden vor dem Lesen aufgelöst; ein Lesefehler ist Exit 2. |
+| 5 | `SDTD_PATH` gesetzt, aber ohne `Data\Config`: `kette-pruefen` warf eine Ausnahme, `check-all.ps1` endete **ohne Ergebniszeile**. | `kette-pruefen` → Exit 2. `check-all.ps1` fängt Ausnahmen beider Prüfskripte und zählt sie als nicht geprüft. |
+| 6 | Die verschachtelte Gegenprobe rief `check-all.ps1` immer mit Release. | `Configuration` wird durchgereicht. |
+| 7 | „Groß-/Kleinschreibung egal" hing an der Sprache des Rechners (tr-TR: `zombie` traf `ZOMBIE` nicht). | `RegexOptions.CultureInvariant`. |
+| 8 | „Jagdmesser" stand im Glossar als alter Name, aber ohne Verbot. | 29 Muster nachgetragen (77 statt 48); eine Liste „alte Namen ohne Verbot, mit Grund" im Glossar. |
+
+Dazu der Fall aus WP8.1: **ein genannter Pfad, den es nicht gibt**
+(`-Rezepte`, `-Gegenstaende`, `-Bloecke`, `-Patches`), ist in `kette-pruefen` jetzt Exit 2.
+
+**Befund 8 hat sofort etwas gefunden.** Die nachgetragenen Muster machten den echten Lauf
+rot: vier unserer Zeilen benutzten einen alten Namen — „forged iron" statt „wrought iron"
+(`meleeWpnKnucklesT1IronKnucklesDesc`, `trapSpikesGroupDesc`) und „Vorschlaghammer" /
+„sledgehammer" statt „Hammer" (`prk700_strengthCombatDesc`, `perkSkullCrusherDesc`). Die
+Texte sind berichtigt, die beiden Perk-Texte auch im Erzeuger `tools/gen/wp7-perks.ps1`.
+
+**Gegenproben — sechs neue, alle einmal rot gesehen.** Gegen die Skripte des Stands
+`71cd623`: 72 Gegenproben, **6 fehlgeschlagen** — genau diese sechs (Kopfzeile, relativer
+Pfad, türkische Kultur, Spielpfad ohne `Data\Config` in `kette-pruefen` und in `check-all`,
+genannter Pfad ohne Datei). Gegen die neuen: 72, 0 fehlgeschlagen. `Test-Script` hat dafür
+den Parameter `-Spielpfad` (setzt `SDTD_PATH` für einen Lauf auf einen falschen Ordner).
+
+**Dabei selbst gebaut und selbst gefangen:** der erste Wurf von `-Spielpfad` sicherte den
+alten Wert in `$spielpfad` — in PowerShell dieselbe Variable wie der Parameter `$Spielpfad`.
+Vier Gegenproben wurden rot, bevor irgendetwas committet war.
+
+**Nicht behoben:**
+
+- **Befund 2** — der CSV-Leser von `mod700check` nimmt ein Anführungszeichen mitten in einem
+  Feld ohne Anführung hin. Eigener Schritt, eigener Commit.
+- **Befund 3** — eine gefüllte dritte Sprachspalte ist nur ein Hinweis. F-12 sagt „Spalten
+  leer lassen" **und** „weitere Sprachen später über die Community"; ob das heute ein Fehler
+  sein soll, entscheidet der Nutzer.

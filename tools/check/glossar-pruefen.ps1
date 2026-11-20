@@ -62,13 +62,25 @@ function Stop-Unpruefbar {
 if (-not (Test-Path -LiteralPath $Glossar -PathType Leaf)) { Stop-Unpruefbar "Glossar fehlt: $Glossar" }
 if (-not (Test-Path -LiteralPath $Sprachdatei -PathType Leaf)) { Stop-Unpruefbar "Sprachdatei fehlt: $Sprachdatei" }
 
+# Auf den vollen Pfad bringen (geaendert 2026-11-20 nach dem Review). Test-Path rechnet
+# einen relativen Pfad gegen den Ordner der PowerShell, [IO.File] gegen den Ordner des
+# PROZESSES - nach einem Push-Location sind das zwei verschiedene. Die Datei wurde dann
+# "gefunden" und beim Lesen nicht mehr.
+$Glossar = (Resolve-Path -LiteralPath $Glossar).ProviderPath
+$Sprachdatei = (Resolve-Path -LiteralPath $Sprachdatei).ProviderPath
+
 # ------------------------------------------------------------------ Glossar lesen
 $gedankenstrich = [string][char]0x2014
 $fest = @()          # Kennung, Deutsch, Englisch, Zeile
 $verboten = @()      # Muster (Regex), Text, Sprache, Stattdessen, Zeile
 $ohneKennung = 0
 
-$zeilen = [IO.File]::ReadAllLines($Glossar, [Text.Encoding]::UTF8)
+try {
+    $zeilen = [IO.File]::ReadAllLines($Glossar, [Text.Encoding]::UTF8)
+}
+catch {
+    Stop-Unpruefbar "Glossar nicht lesbar: $Glossar ($($_.Exception.Message))"
+}
 $art = ''            # '', 'fest', 'verboten', 'andere'
 $inTabelle = $false
 
@@ -91,15 +103,19 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
     if (-not $inTabelle) {
         # Erste Zeile einer Tabelle ist ihre Kopfzeile; sie bestimmt die Art.
         $inTabelle = $true
-        if ($zellen.Count -ge 3 -and $zellen[0] -eq 'Kennung' -and $zellen[1] -eq 'Deutsch' -and $zellen[2] -eq 'Englisch') {
-            if ($zellen.Count -ne 5) { Stop-Unpruefbar "Glossar Zeile ${nr}: Kopfzeile der Festbegriffe hat $($zellen.Count) Spalten, erwartet 5" }
-            $art = 'fest'
+        #
+        # JEDE Tabelle des Glossars muss eine der beiden Formen haben (geaendert 2026-11-20
+        # nach dem Review). Vorher galt eine Tabelle mit unbekannter Kopfzeile als "Text
+        # fuer Menschen" und wurde uebersprungen - und damit schaltete ein Tippfehler in
+        # der Kopfzeile ("Sprachen" statt "Sprache") eine ganze Verbots-Tabelle still ab:
+        # zwoelf Regeln weg, Ergebnis GREEN. Eine Tabelle, die der Pruefer nicht versteht,
+        # ist darum nicht pruefbar, nicht unwichtig.
+        $kopf = $zellen -join '|'
+        if ($kopf -ceq 'Kennung|Deutsch|Englisch|Vanilla|Quelle') { $art = 'fest' }
+        elseif ($kopf -ceq 'Verboten|Sprache|Stattdessen|Quelle') { $art = 'verboten' }
+        else {
+            Stop-Unpruefbar ("Glossar Zeile ${nr}: unbekannte Kopfzeile '| " + ($zellen -join ' | ') + " |'. Erlaubt sind genau '| Kennung | Deutsch | Englisch | Vanilla | Quelle |' und '| Verboten | Sprache | Stattdessen | Quelle |'")
         }
-        elseif ($zellen.Count -ge 2 -and $zellen[0] -eq 'Verboten' -and $zellen[1] -eq 'Sprache') {
-            if ($zellen.Count -ne 4) { Stop-Unpruefbar "Glossar Zeile ${nr}: Kopfzeile der Verbote hat $($zellen.Count) Spalten, erwartet 4" }
-            $art = 'verboten'
-        }
-        else { $art = 'andere' }
         continue
     }
 
@@ -121,7 +137,11 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
         $sprache = $zellen[1]
         if (@('DE', 'EN', 'beide') -cnotcontains $sprache) { Stop-Unpruefbar "Glossar Zeile ${nr}: Sprache '$sprache' ist weder DE noch EN noch beide" }
         try {
-            $regex = New-Object System.Text.RegularExpressions.Regex($muster, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            # CultureInvariant: ohne das haengt "Gross-/Kleinschreibung egal" an der Sprache
+            # des Rechners. Unter tr-TR ist das kleine Gegenstueck zu 'I' das punktlose i,
+            # und 'zombie' trifft 'ZOMBIE' nicht mehr (Review vom 2026-11-20).
+            $optionen = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::CultureInvariant
+            $regex = New-Object System.Text.RegularExpressions.Regex($muster, $optionen)
         }
         catch {
             Stop-Unpruefbar "Glossar Zeile ${nr}: '$muster' ist kein regulaerer Ausdruck"
@@ -135,7 +155,12 @@ if ($fest.Count -eq 0) { Stop-Unpruefbar "im Glossar steht kein einziger Festbeg
 if ($verboten.Count -eq 0) { Stop-Unpruefbar "im Glossar steht kein einziger verbotener Begriff (Kopfzeile '| Verboten | Sprache | Stattdessen | Quelle |')" }
 
 # -------------------------------------------------------------- Sprachdatei lesen
-$reihen = @(Import-Csv -LiteralPath $Sprachdatei -Encoding UTF8)
+try {
+    $reihen = @(Import-Csv -LiteralPath $Sprachdatei -Encoding UTF8)
+}
+catch {
+    Stop-Unpruefbar "Sprachdatei nicht lesbar: $Sprachdatei ($($_.Exception.Message))"
+}
 if ($reihen.Count -eq 0) { Stop-Unpruefbar "die Sprachdatei hat keine Zeile: $Sprachdatei" }
 $spalten = @($reihen[0].PSObject.Properties.Name)
 foreach ($pflicht in 'Key', 'english', 'german') {

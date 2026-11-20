@@ -292,9 +292,12 @@ Tabellenformen zählen, erkannt an der Kopfzeile:
 
 Exit **0** grün, **1** Befunde, **2** nicht prüfbar (Datei fehlt, keine Tabelle gelesen, Muster
 kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 49 Festbegriffe mit
-Kennung, 13 ohne, 48 Muster, 612 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
-`testdaten/glossar/`: neun Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün) und
-ein Begriff, der nur in **einer** Sprache verboten ist.
+Kennung, 13 ohne, 77 Muster, 612 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
+`testdaten/glossar/`: zwölf Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün),
+ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit Tippfehler.
+
+**Jede Tabelle des Glossars muss eine der beiden Formen haben.** Eine unbekannte Kopfzeile ist
+Exit 2 — sonst schaltet ein Tippfehler („Sprachen") eine ganze Verbots-Tabelle still ab.
 
 **Es liest nur, was wir schreiben.** Vanilla-Zeilen, die wir nicht überschreiben, sieht es
 nicht — auch wenn der Spieler sie liest.

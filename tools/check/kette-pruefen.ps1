@@ -59,6 +59,26 @@ if (-not $Vanilla) {
     $Vanilla = Join-Path $env:SDTD_PATH 'Data\Config'
 }
 
+function Stop-Unpruefbar {
+    param([string]$Grund)
+    Write-Output "kette-pruefen: $Grund - NICHT GEPRUEFT."
+    Write-Output ''
+    Write-Output '== Ergebnis: nicht pruefbar -> RED =='
+    exit 2
+}
+
+# Ein Pfad, den der Aufrufer NENNT und den es nicht gibt, ist ein Fehler des Aufrufs und
+# kein leerer Ordner (geaendert 2026-11-20). Vorher uebersprang jede Schleife weiter unten
+# eine fehlende Datei mit 'continue': "-Patches <Tippfehler>" meldete "0 XPaths, GREEN".
+# Gefunden beim Bau von WP8.1 (Vertrag 04), damals nur aufgeschrieben. Dateien, die das
+# Skript SELBST unter mod/ findet, gibt es immer; die Schleifen bleiben darum, wie sie sind.
+foreach ($name in 'Rezepte', 'Gegenstaende', 'Bloecke', 'Patches') {
+    if (-not $PSBoundParameters.ContainsKey($name)) { continue }
+    foreach ($pfad in @($PSBoundParameters[$name])) {
+        if (-not $pfad -or -not (Test-Path -LiteralPath $pfad)) { Stop-Unpruefbar "-$name nennt '$pfad', und das gibt es nicht" }
+    }
+}
+
 # Gefunden statt aufgezaehlt (geaendert 2026-11-08, WP5.1). Vorher standen hier zwei feste
 # Pfade auf 700_20_Material. Als WP5.1 die Waffenrezepte in 700_30_Ausruestung anlegte, hat
 # dieses Skript sie nicht gesehen und weiter gruen gemeldet - ein Pruefer, der nur die
@@ -92,7 +112,10 @@ Write-Output "  Vanilla: $Vanilla"
 $defined = @{}
 foreach ($file in @('items.xml', 'blocks.xml')) {
     $path = Join-Path $Vanilla $file
-    if (-not (Test-Path $path)) { throw "kette-pruefen: $path fehlt." }
+    # Ausgang 2 statt Ausnahme (geaendert 2026-11-20 nach dem Review): ein SDTD_PATH, der
+    # auf einen Ordner OHNE Data\Config zeigt, brach den ganzen Prueflauf ab, bevor
+    # check-all.ps1 seine Ergebniszeile schreiben konnte.
+    if (-not (Test-Path -LiteralPath $path)) { Stop-Unpruefbar "$path fehlt (zeigt SDTD_PATH auf eine Installation?)" }
     $matched = Select-String -Path $path -Pattern '<(item|block) name="([^"]+)"' -AllMatches
     foreach ($m in $matched) {
         foreach ($g in $m.Matches) { $defined[$g.Groups[2].Value] = 'vanilla' }

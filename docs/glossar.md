@@ -26,7 +26,9 @@ läuft in `check-all.ps1` mit.
 
 ### So liest die Prüfung diese Datei
 
-Zwei Tabellenformen zählen, erkannt an ihrer Kopfzeile. Alles andere ist Text für Menschen.
+**Jede Tabelle dieser Datei hat eine von zwei Formen**, erkannt an ihrer Kopfzeile. Eine
+Tabelle mit einer anderen Kopfzeile macht die Prüfung rot („nicht prüfbar") — sonst würde
+ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext ist frei.
 
 - **Festbegriffe** — Kopfzeile `| Kennung | Deutsch | Englisch | Vanilla | Quelle |`.
   Steht in der ersten Spalte eine Kennung in Backticks, muss die Zeile der Sprachdatei mit
@@ -193,6 +195,49 @@ Arbeitsvorrat im Plan (WP8.5).
 | `feueraxt` | DE | Breitaxt | D58 |
 | `\bpaper` | EN | Parchment | WP7.5 |
 | `papier` | DE | Pergament | WP7.5 |
+| `hunting knife` | EN | Sax | D58 |
+| `jagdmesser` | DE | Sax | D58 |
+| `iron spear` | EN | Ango | WP5.1 |
+| `eisenspeer` | DE | Ango | WP5.1 |
+| `steel spear` | EN | Winged Lance | WP5.1 |
+| `stahlspeer` | DE | Flügellanze | WP5.1 |
+| `steel axe` | EN | Bearded Axe | WP5.1 |
+| `stahlaxt` | DE | Bartaxt | WP5.1 |
+| `steel club` | EN | Mace | WP5.1 |
+| `stahlknüppel` | DE | Streitkolben | WP5.1 |
+| `sledgehammer` | EN | Stone Maul, Iron Maul, War Hammer; die Gattung: hammer | WP5.1 |
+| `vorschlaghammer` | DE | Steinhammer, Eisenhammer, Streithammer; die Gattung: Hammer | WP5.1 |
+| `forged iron` | EN | Wrought Iron | WP4.1 |
+| `\bgeschmiedetes eisen` | DE | Schmiedeeisen („ausgeschmiedetes Eisen" bleibt erlaubt) | WP4.1 |
+| `forged steel` | EN | Crucible Steel | D55 |
+| `\bgeschmiedeter stahl` | DE | Tiegelstahl | D55 |
+| `\bcoal\b` | EN | Charcoal | WP4 |
+| `\bkohle\b` | DE | Holzkohle | WP4 |
+| `plant fiber` | EN | Nettle Fiber | WP4.1 |
+| `pflanzenfaser` | DE | Nesselfaser | WP4.1 |
+| `nähset` | DE | Nähzeug | WP5.5 |
+| `log wall` | EN | Palisade Section | WP6 |
+| `blockwand` | DE | Palisadenabschnitt | WP6 |
+| `old lantern` | EN | Oil Lamp | WP6 |
+| `alte laterne` | DE | Öllampe | WP6 |
+| `spikes trap` | EN | Sharpened Stakes | WP6 |
+| `holzstachel` | DE | Spitzpfähle | WP6 |
+| `primitive armor` | EN | Rags | D59 |
+| `primitive rüstung` | DE | Lumpen | D59 |
+
+**Alte Namen ohne Verbot, mit Grund** (ergänzt am 2026-11-20 nach dem Review, das „Jagdmesser"
+als Lücke fand). Nicht jeder Vanilla-Name aus den Tabellen oben lässt sich verbieten:
+
+- *Das Wort ist auch unser Wort oder steckt in unserem Namen:* Eisen / Iron, Forge und
+  Schmiede („Bloomery and Forge", „Werkzeugschmiede"), Kerze / Candle, Fackel / Torch,
+  Blei / Lead, Sewing Kit.
+- *Das Wort ist Alltagssprache:* Messing / Brass (unsere Beschreibung des Buntmetalls nennt
+  es), Leichte/Mittlere/Schwere Rüstung, Feral („wild"), Buch / Book, und die fünf
+  Attributnamen (Stärke, Standhaftigkeit, Beweglichkeit, Intelligenz, Wahrnehmung).
+- *Der englische Ersatz ist noch offen:* Trader.
+
+Wer einen Festbegriff mit einem neuen Vanilla-Namen einträgt, trägt das Verbot dazu ein —
+oder den Grund hier.
 
 ### Moderne Dinge ohne Entsprechung in Phase 1
 
