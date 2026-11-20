@@ -69,6 +69,7 @@ ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext 
 | `resourceConcreteMix` | Mörtel | Mortar | Betonmischung / Concrete Mix | D63 |
 | `resourcePaper` | Pergament | Parchment | Papier / Paper | WP7.5 |
 | `resourceSewingKit` | Nähzeug | Sewing Kit | Nähset / Sewing Kit | WP5.5 |
+| `resourceGlue` | Leim | Glue | Kleber / Glue | D78 |
 
 ## 4. Werkstätten und Feuer
 
@@ -217,6 +218,7 @@ Arbeitsvorrat im Plan (WP8.5).
 | `plant fiber` | EN | Nettle Fiber | WP4.1 |
 | `pflanzenfaser` | DE | Nesselfaser | WP4.1 |
 | `nähset` | DE | Nähzeug | WP5.5 |
+| `\bkleber` | DE | Leim | D78 |
 | `log wall` | EN | Palisade Section | WP6 |
 | `blockwand` | DE | Palisadenabschnitt | WP6 |
 | `old lantern` | EN | Oil Lamp | WP6 |
@@ -233,7 +235,8 @@ als Lücke fand). Nicht jeder Vanilla-Name aus den Tabellen oben lässt sich ver
 
 - *Das Wort ist auch unser Wort oder steckt in unserem Namen:* Eisen / Iron, Forge und
   Schmiede („Bloomery and Forge", „Werkzeugschmiede"), Kerze / Candle, Fackel / Torch,
-  Blei / Lead, Sewing Kit.
+  Blei / Lead, Sewing Kit, Glue (englisch unverändert; nur das deutsche „Kleber" ist
+  verboten).
 - *Das Wort ist Alltagssprache:* Messing / Brass (unsere Beschreibung des Buntmetalls nennt
   es), Leichte/Mittlere/Schwere Rüstung, Feral („wild"), Buch / Book, und die fünf
   Attributnamen (Stärke, Standhaftigkeit, Beweglichkeit, Intelligenz, Wahrnehmung).
@@ -253,6 +256,9 @@ oder den Grund hier.
 | `elektri` | DE | (Phase 2: Kraftsteine — F-15) | GDD 2.3 |
 | `\bguns?\b` | EN | Bogen, Schleuder, Wurfspeer, Armbrust | GDD 2.3 |
 | `schusswaffe` | DE | Bogen, Schleuder, Wurfspeer, Armbrust | GDD 2.3 |
+| `duct tape` | EN | (kein Ersatz — gesperrt; Leim bindet) | D78 |
+| `klebeband` | DE | (kein Ersatz — gesperrt; Leim bindet) | D78 |
+| `twitch` | beide | (kein Ersatz) | D78 |
 
 ### Spielerdeutsch
 

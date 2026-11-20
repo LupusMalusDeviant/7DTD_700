@@ -728,3 +728,49 @@ keystoneBlockDesc                 # Gebietsschutzblock - der Name bleibt Vanilla
 fencesGroupDesc
 buffPerkTheDentistName            # Totenpfennig statt "Der Zahnarzt" (Standhaftigkeit Stufe 3, Faustwaffen)
 buffPerkTheDentistDesc
+
+# --- WP8.5 / D78: dritte Scheibe - der Ladebildschirm ------------------------------
+# loadingscreen.xml zeigt 40 Tipps (ein 41. ist in Vanilla auskommentiert). 13 bleiben
+# Vanilla, 27 sind umgeschrieben. Die Schluessel bleiben - der Name eines Schluessels
+# sagt nach der Umdeutung nicht mehr, wovon der Tipp handelt:
+loadingTipMainHUD                 # nur die Sprache: Vanillas Deutsch sagte "Buff"
+loadingTipBuffs                   # ebenso
+loadingTipUsingIronTools          # ebenso: "Levelaufstiege"
+loadingTipDistraction
+loadingTipEncumbrance
+loadingTipHonkHorn                # jetzt: Am Feuer (Fahrzeuge sind gesperrt)
+loadingTipHonkHorn_title
+loadingTipWorkstations
+loadingTipWorkstations_title
+loadingTipUnlockingRecipes
+loadingTipCraftingBetterQL
+loadingTipMagazines               # jetzt: Lehrblaetter
+loadingTipMagazines_title
+loadingTipPerkLootBoost           # jetzt: Die fuenf Attribute
+loadingTipPerkLootBoost_title
+loadingTipBaseUpgrading
+loadingTipHarvestingCorpses
+loadingTipGlue
+loadingTipGlue_title
+loadingTipProperTools
+loadingTipBladedWeapons
+loadingTipPickaxes
+loadingTipSteelKnuckles           # jetzt: Die Stahlfaust
+loadingTipSteelKnuckles_title
+loadingTipWrenches                # jetzt: Schleifstein und Schmiedeflicken (Schraubenschluessel sind gesperrt)
+loadingTipWrenches_title
+loadingTipSledgehammers           # jetzt: Haemmer
+loadingTipSledgehammers_title
+loadingTipScrapping
+loadingTipKnownSchematics
+loadingTipTwitchIntegration       # jetzt: Licht
+loadingTipTwitchIntegration_title
+loadingTipSmell
+loadingTipDewCollector            # jetzt: Wasser (der Tausammler ist gesperrt)
+loadingTipDewCollector_title
+loadingTipApiary
+loadingTipCollectors              # jetzt: Schlafstatt
+loadingTipCollectors_title
+# Leim: Vanillas Beschreibung von "Kleber" nannte nur das Klebeband, und das ist gesperrt.
+resourceGlue                      # Leim
+resourceGlueDesc

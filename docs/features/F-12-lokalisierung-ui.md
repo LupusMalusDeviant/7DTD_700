@@ -72,6 +72,17 @@ XUi-Änderungen müssen nach unserem Kenntnisstand auf dem Client liegen. **[ver
 und weitere Scheiben im Plan unter WP8.5), fünf offene Begriffe (Glossar Abschnitt 10) und die
 Abnahme des Glossars durch den Nutzer (Prüfliste 21).
 
+## Stand 2026-11-20 — WP8.5, dritte Scheibe, erster Teil: der Ladebildschirm (D78)
+
+**Gebaut, im Spiel ungesehen:** von den 40 Tipps des Ladebildschirms sind 27 umgeschrieben,
+13 bleiben Vanilla (reine Bedienhilfe). Geschrieben wird über die Sprachzeilen, nicht über
+`loadingscreen.xml`; acht Schlüssel tragen einen neuen Tipp, weil das Ding dahinter gesperrt
+ist. „Kleber" heißt deutsch „Leim". Sprachdatei 657 Zeilen, Glossar 51 Festbegriffe mit
+Kennung und 83 Muster.
+
+**Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** die Menü-Texte (der
+UI-Teil der dritten Scheibe) und die Abnahme der neuen Tipps im Spiel (Prüfliste 21 f).
+
 **Notiz für später (nicht Phase 1):** die sieben Wesen-Namen mit „Zombie" (`animalZombieBear`,
 `zombieSpiderFeral` …) gehören zu F-06 und brauchen die englischen Begriffe für Verderbte und
 Moorleichen.

@@ -123,11 +123,11 @@ $baeume = @(
         Name     = @{ en = 'Attribute: Healer'; de = 'Attribut: Heiler' }
         Desc     = @{
             en = 'The healer knows herb, wound and plague. This tree carries no weapon mark: its rank changes no headshot, but what the body endures and how fast it returns.'
-            de = 'Der Heiler kennt Kraut, Wunde und Seuche. Dieser Baum trägt keine Waffenmarke: seine Stufe ändert keinen Kopftreffer, sondern was der Körper aushält und wie schnell er zurueckkommt.'
+            de = 'Der Heiler kennt Kraut, Wunde und Seuche. Dieser Baum trägt keine Waffenmarke: seine Stufe ändert keinen Kopftreffer, sondern was der Körper aushält und wie schnell er zurückkommt.'
         }
         Lang     = @{
             en = 'Herb, wound and plague. This tree carries no weapon mark, so its rank raises no damage. It decides what the body endures and how fast it returns. What a rank brings in detail sits on the skills of this tree.'
-            de = 'Kraut, Wunde und Seuche. Dieser Baum trägt keine Waffenmarke, seine Stufe hebt also keinen Schaden. Sie entscheidet, was der Körper aushält und wie schnell er zurueckkommt. Was eine Stufe im Einzelnen bringt, steht an den Fertigkeiten dieses Baumes.'
+            de = 'Kraut, Wunde und Seuche. Dieser Baum trägt keine Waffenmarke, seine Stufe hebt also keinen Schaden. Sie entscheidet, was der Körper aushält und wie schnell er zurückkommt. Was eine Stufe im Einzelnen bringt, steht an den Fertigkeiten dieses Baumes.'
         }
         Raenge   = @(
             @{ en = 'Wound-washer';    de = 'Wundwäscher' }

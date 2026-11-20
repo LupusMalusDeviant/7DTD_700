@@ -93,6 +93,41 @@ Das ist für *eine Datei mit zwei gleichen Zeilen* richtig, liest sich aber wie 
 das einen Vanilla-Schlüssel setzt, verliert". Diese Lesart ist falsch, und sie hätte die
 ganze Umdeutung verhindert. Der Satz wird dort um den Verweis auf diesen Befund ergänzt.
 
+## Nachtrag 2026-11-20 (WP8.5, D78): wann die Modlet-Dateien geladen werden
+
+Gefragt für den Ladebildschirm: seine Tipps (`loadingTip…`) tragen in Vanilla die Marke
+`UsedInMainMenu = x`, unsere Zeilen nicht. Greifen unsere Zeilen, bevor der erste
+Ladebildschirm steht?
+
+Gelesen mit `mod700meta members … --type Localization --type ModManager --callers --il`,
+derselbe Build wie oben (SHA-256 `cb54022c…`, MVID `0dfd4a8c-…`):
+
+| Aufrufer | ruft | Bedeutung |
+|---|---|---|
+| `GameManager::Awake` | `ModManager::LoadPatchStuff` | beim Programmstart |
+| `GameManager/<startGameCo>` | `ModManager::LoadPatchStuff` | beim Start eines Spiels |
+| `ModManager/<LoadPatchStuff>` | `ModManager::LoadLocalizations` | |
+| `ModManager/<LoadLocalizations>` | `Localization::LoadPatchDictionaries` | je Modlet mit `Config/` |
+| `GameManager::SaveAndCleanupWorld` | `ModManager::GameEnded` | nach einem Spiel |
+| `ModManager::GameEnded` | `Localization::ReloadBaseLocalization`, `UnloadUnusedLanguages`, dann wieder `LoadLocalizations` | Vanilla neu, Modlets wieder darüber |
+
+**Folge:** die Sprachdateien der Modlets liegen schon im Hauptmenü über Vanilla und werden
+nach jedem Spielende neu darübergelegt. Eine Modlet-Zeile für `loadingTipStoneAxe` ist
+also geladen, bevor ein Ladebildschirm sie zeigt.
+
+**Was `UsedInMainMenu` und `KeepLoaded` tun, ist nicht gelesen** — nur, wo sie vorkommen:
+als Zeichenketten in `Localization::UnloadUnusedLanguages`, das `XUiC_MainMenu::OnOpen`
+und `ModManager::GameEnded` aufrufen. Dem Namen nach wirft die Methode Sprachspalten weg,
+die gerade nicht gebraucht werden, und nimmt markierte Zeilen aus. Ob das unsere Zeilen
+trifft, hängt am Kontrollfluss, und den zeigt die Aufrufliste nicht. **Darum tragen unsere
+Tipp-Zeilen dieselben Metaspalten wie Vanillas** (`UI, Loading Screen, x`; die zwei
+Twitch-Zeilen ohne `x`, wie in Vanilla): so ändert die Überschreibung an diesen Spalten
+nichts, gleich wie sie zellenweise gemischt werden.
+
+**Nicht gelesen:** wann `XUiC_LoadingScreen` den Text holt und ob ein XML-Patch auf
+`loadingscreen.xml` vor `XUiC_LoadingScreen/<LoadXml>` greift. D78 fasst die Datei deshalb
+nicht an.
+
 ## Was das nicht beweist
 
 Gelesen ist der ausgelieferte Code, nicht ein Lauf. Dass das Spiel unsere Datei **findet**

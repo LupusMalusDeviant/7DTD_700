@@ -1330,7 +1330,27 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      (`loadingTipHonkHorn`, `loadingTipTwitchIntegration`, `loadingTipWrenches` …) — bei
      jedem Laden sichtbar und zu einem guten Teil über Dinge, die es nicht mehr gibt. Das
      ist der lohnendste Teil der dritten Scheibe.
-   - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ (3) UI und Ladebildschirm;
+   - *Dritte Scheibe, erster Teil — der Ladebildschirm, gebaut am 2026-11-20 (D78),
+     ungesehen.* Gezählt sind **40** gezeigte Tipps, nicht 41: der 41.
+     (`loadingTipJournalEntries`) ist in Vanilla auskommentiert. **27 sind umgeschrieben, 13
+     bleiben Vanilla.** Acht davon tragen ein neues Thema, weil das alte gesperrt ist oder
+     seine Mechanik bei uns ungemessen (Hupe → Am Feuer, Twitch → Licht, Schraubenschlüssel
+     → Schleifstein und Schmiedeflicken, Tausammler → Wasser, Sammler → Schlafstatt,
+     Zeitschriften → Lehrblätter, Beutebonus → Die fünf Attribute, Stahlschlagringe → Die
+     Stahlfaust); sechzehn nennen umgedeutete Dinge jetzt beim Namen, drei sind nur im
+     Deutschen berichtigt („Buff", „Level"). 38 Zeilen (27 Texte, 11 Titel). Geschrieben
+     wird über die Sprachzeilen, `loadingscreen.xml` bleibt unangetastet — belegt ist, dass
+     die Modlet-Sprachdateien schon beim Programmstart geladen werden (Finding WP4,
+     Nachtrag). *Gegengeprüft:* die 45 Tipp-Zeilen, die Vanilla bleiben, tragen kein
+     verbotenes Muster des Glossars mehr (vorher drei). *Dabei gefunden und behoben:*
+     „zurueckkommt" statt „zurückkommt" in elf Heiler-Zeilen (und im Erzeuger
+     `wp7-baumtexte.ps1`); Vanillas Beschreibung von Kleber nannte nur das gesperrte
+     Klebeband — `resourceGlue` heißt deutsch jetzt „Leim" und hat einen eigenen Text.
+     Sprachdatei: 657 Zeilen. Glossar: 51 Festbegriffe mit Kennung, 13 ohne, 83 Muster.
+     **Nicht gebaut: der UI-Teil** (210 Vanilla-Zeilen mit Weltbegriff unter „UI"; welche
+     davon nach dem Purge sichtbar sind, ist nicht gezählt). → Prüfliste 21 (f).
+   - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ (3) ~~Ladebildschirm~~
+     und UI;
      (4) Quests und Challenges — erst zählen, was davon nach dem Purge überhaupt erreichbar
      ist; (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
      Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
@@ -1709,6 +1729,13 @@ werden:
     (e) *Zwei Namen aus der zweiten Scheibe (D77):* „Totenpfennig" / „Dead Man's Penny"
     statt „Der Zahnarzt" — gesetzt, wartet auf dein Ja. „Grenzstein" / „Boundary Stone"
     statt „Gebietsschutzblock" — nur vorgeschlagen, **nicht** umgesetzt.
+    (f) *Der Ladebildschirm, im Spiel (D78).* Ein Spiel laden, deutsch und englisch: stehen
+    dort unsere Tipps — erkennbar an Titeln wie **„Am Feuer"**, **„Licht"**, **„Lehrblätter"**,
+    **„Die fünf Attribute"**, **„Schlafstatt"**? Steht dagegen noch „Lärm machen", „Twitch-
+    Integration" oder „Schraubenschlüssel" da, greifen die Zeilen nicht, und die Spalte
+    `UsedInMainMenu` ist der erste Verdacht (Finding WP4, Nachtrag). Dann die Texte lesen:
+    acht Tipps tragen ein **neues Thema**, das ich gesetzt habe, und „Kleber" heißt deutsch
+    jetzt „Leim". Passt das — oder soll ein Tipp von etwas anderem handeln?
 
 ## Offene Punkte
 
