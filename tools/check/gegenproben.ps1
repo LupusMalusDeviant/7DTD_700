@@ -250,6 +250,24 @@ Test-Output 'localization nennt den uebrigen Freigabe-Eintrag' 0 @(
     -MustContain @('vanilla-schluessel-ohne-zeile', 'pruefNieGesetzt') `
     -MustNotContain @('pruefVanillaSchluessel'' steht als bewusste')
 
+# Kaputte Anfuehrung (Review vom 2026-11-20). Der CSV-Leser nahm ein Anfuehrungszeichen
+# mitten in einem Feld still hin. Die Testdatei ist so gebaut, dass die SPALTENZAHL stimmt:
+# an 'spaltenzahl' faellt sie nicht auf, und vor der Aenderung war dieser Lauf gruen.
+#   Zeile 2: Scrap of "Parchment"   - Anfuehrung mitten im Feld
+#   Zeile 3: "Hearth"x              - Zeichen nach dem schliessenden Anfuehrungszeichen
+#   Zeile 4: "A ""good"" word, ..." - gueltig: verdoppelt, in Anfuehrung, mit Komma
+Test-Output 'localization: kaputte Anfuehrung wird rot, auch wenn die Spaltenzahl stimmt' 1 @(
+    'localization', (Join-Path $data 'Localization-anfuehrung.csv'), '--prefix', '700_') `
+    -MustContain @('csv-form', 'Localization-anfuehrung.csv:2', 'Anfuehrungszeichen mitten im Feld',
+                   'Localization-anfuehrung.csv:3', 'nach dem schliessenden Anfuehrungszeichen') `
+    -MustNotContain @('Localization-anfuehrung.csv:4', 'spaltenzahl')
+
+# Ein nie geschlossenes Anfuehrungszeichen verschluckt alle Zeilen danach. Gemeldet wird
+# die Zeile, in der es AUFGEHT - nicht das Dateiende, an dem es auffaellt.
+Test-Output 'localization: offenes Anfuehrungszeichen nennt die Zeile, in der es aufgeht' 1 @(
+    'localization', (Join-Path $data 'Localization-anfuehrung-offen.csv'), '--prefix', '700_') `
+    -MustContain @('csv-form', 'Localization-anfuehrung-offen.csv:3', 'nicht geschlossen')
+
 Write-Output ""
 Write-Output "== Gegenproben: der Vergleich beachtet Gross- und Kleinschreibung =="
 # WP3.1, Befund 3.3: solange RegexOptions.IgnoreCase gesetzt war, traf die Regel

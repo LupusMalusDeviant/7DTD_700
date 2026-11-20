@@ -1571,8 +1571,31 @@ Vier Gegenproben wurden rot, bevor irgendetwas committet war.
 
 **Nicht behoben:**
 
-- **Befund 2** — der CSV-Leser von `mod700check` nimmt ein Anführungszeichen mitten in einem
-  Feld ohne Anführung hin. Eigener Schritt, eigener Commit.
+- ~~**Befund 2** — der CSV-Leser von `mod700check` nimmt ein Anführungszeichen mitten in einem
+  Feld ohne Anführung hin. Eigener Schritt, eigener Commit.~~ **Behoben im folgenden
+  Commit, siehe unten.**
 - **Befund 3** — eine gefüllte dritte Sprachspalte ist nur ein Hinweis. F-12 sagt „Spalten
   leer lassen" **und** „weitere Sprachen später über die Community"; ob das heute ein Fehler
   sein soll, entscheidet der Nutzer.
+
+### Befund 2 — `localization` meldet kaputte Anführung (`csv-form`)
+
+**Vertragsänderung an `mod700check localization`:** ein neuer Fehler `csv-form` und ein
+Zähler `csv_form_fehler`. Der CSV-Leser liest weiter nachsichtig (damit Spaltenzahl und
+Schlüssel prüfbar bleiben), **meldet** aber jede Stelle, an der die Anführung nicht stimmt:
+
+1. ein Anführungszeichen mitten in einem Feld (`Scrap of "Parchment"`),
+2. ein Zeichen nach dem schließenden Anführungszeichen (`"Hearth"x`),
+3. ein nie geschlossenes Anführungszeichen — gemeldet wird die Zeile, in der es **aufgeht**.
+
+Gültig bleibt das verdoppelte Zeichen in einem Feld in Anführung (`"A ""good"" word"`).
+
+**Gegenproben — zwei, beide einmal rot gesehen.** `testdaten/Localization-anfuehrung.csv` ist
+so gebaut, dass die Spaltenzahl stimmt. Gegen das alte Programm: 74 Gegenproben, **2
+fehlgeschlagen** („Exit 0 erwartet 1"). Gegen das neu gebaute: 74, 0 fehlgeschlagen.
+
+**Unsere Datei:** 612 Zeilen, `csv_form_fehler 0`.
+
+**Grenze:** was das **Spiel** aus einer solchen Zeile macht, ist nicht gelesen
+(`Localization::addCsv`). Die Prüfung verlangt sauberes CSV, sie behauptet nicht, das Spiel
+verlange es auch.

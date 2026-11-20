@@ -116,11 +116,20 @@ internal static class LocalizationCheck
             "eine Quelldatei, nie die gemergte Fassung - doppelte Schluessel ueber zwei Modlets " +
             "hinweg findet dieser Lauf nur, wenn beide Dateien zusammen geprueft werden.");
 
-        List<Csv.Row> rows = Csv.Read(path);
+        var csvProblems = new List<Csv.Problem>();
+        List<Csv.Row> rows = Csv.Read(path, csvProblems);
         if (rows.Count == 0)
         {
             report.Error("leere-datei", path, "Die Datei hat keine Zeilen.");
             return report.Write(asJson);
+        }
+
+        // Kaputte Anfuehrung zuerst: eine Zeile, die kein gueltiges CSV ist, kann alle
+        // anderen Pruefungen bestehen und trotzdem falsch im Spiel ankommen.
+        report.Count("csv_form_fehler", csvProblems.Count);
+        foreach (Csv.Problem problem in csvProblems)
+        {
+            report.Error("csv-form", $"{path}:{problem.Line}", problem.Text);
         }
 
         // --- Kopfzeile

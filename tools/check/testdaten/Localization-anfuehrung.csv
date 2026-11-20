@@ -1,0 +1,4 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+700_itm_fetzen,items,Item,,,,Scrap of "Parchment",,Pergamentfetzen,,,,,,,,,,,
+700_itm_herd,items,Item,,,,"Hearth"x,,"Feuerstelle",,,,,,,,,,,
+700_itm_gut,items,Item,,,,"A ""good"" word, with a comma.",,"Ein ""gutes"" Wort, mit Komma.",,,,,,,,,,,

@@ -1,0 +1,4 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+700_itm_gut,items,Item,,,,"Hearth",,"Feuerstelle",,,,,,,,,,,
+700_itm_offen,items,Item,,,,"Open,,Offen,,,,,,,,,,,
+700_itm_danach,items,Item,,,,After,,Danach,,,,,,,,,,,
