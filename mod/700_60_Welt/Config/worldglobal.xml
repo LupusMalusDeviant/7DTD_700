@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / worldglobal.xml
+	     F-17 Baustein B1 (echte Dunkelheit), Plan-0001 WP8.1, D72
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     VIER ZAHLEN, UND ALLE VIER SIND SETZUNGEN
+	     ===================================================================
+
+	     Vanilla fuehrt das Umgebungslicht als Paare "Tag, Nacht". Geaendert wird nur
+	     der ZWEITE Wert - der Tag bleibt, wie er ist. Was das Spiel damit macht, ist
+	     aus der Aufrufliste gelesen (WorldEnvironment.AmbientSpectrumFrameUpdate,
+	     Befund WP8-nacht-und-nebel), nicht aus dem Bild: wie dunkel .25 gegen .45
+	     wirklich AUSSIEHT, weiss niemand, bis jemand nachts im Wald gestanden hat.
+	     Pruefliste 18.
+
+	       ambientEquatorScale   .7, .45  ->  .7, .25    Licht von der Seite
+	       ambientGroundScale    .3, .05  ->  .3, .02    Licht von unten
+	       ambientSkyScale       1,  .7   ->  1,  .4     Licht von oben
+	       ambientMoon           .8, .4   ->  .5, .7     Sockel, Mondanteil
+
+	     DER MOND BEKOMMT GEWICHT. 'ambientMoon' ist "add, scale": ein Sockel, der immer
+	     gilt, und ein Anteil, der mit der Mondhelle waechst
+	     (SkyManager.GetMoonAmbientScale liest moonBright; moonBright kommt je Mondphase
+	     aus einer Tabelle im Code). Vanilla: Sockel .8, Anteil .4 - der Mond macht
+	     hoechstens ein Drittel aus. Hier: Sockel .5, Anteil .7. Bei vollem Mond ergibt
+	     beides zusammen dieselben 1.2 wie in Vanilla, bei Neumond bleiben .5 statt .8.
+	     Eine Vollmondnacht ist damit nur um die drei Zeilen darueber dunkler, eine
+	     Neumondnacht noch einmal um gut ein Drittel. DASS die Summe so gebildet wird,
+	     ist ein Schluss aus zwei Feldzugriffen und einem Lerp, keine gelesene Formel.
+
+	     WAS NICHT ANGEFASST IST - UND WARUM
+
+	     ambientInside*  Das Licht unter einem Dach. Vanilla hebt es nachts gegen
+	                     draussen an (Faktor 1.5 am Aequator). Ein Haus ohne Fackel ist
+	                     damit heller als der Wald davor; ob das stoert, zeigt erst der
+	                     Blick ins Spiel. Nicht geraten.
+	     ambientSkyDesat Entsaettigung, Tag und Nacht gleich. Kein Helligkeitswert.
+	     fogPower        "Tag, Nacht", in Vanilla 1, 1. Der Wert ist ein EXPONENT
+	                     (Mathf.Pow in SpectrumsFrameUpdate) - aber worauf er wirkt, steht
+	                     in keiner Aufrufliste, und davon haengt ab, ob .7 den Nebel
+	                     nachts dichter oder duenner macht. "Abends dichter" aus F-17 B1
+	                     ist darum NICHT gebaut. Offener Punkt im Plan.
+
+	     ZWEI GRENZEN, DIE XML NICHT HEBT
+
+	     1. Der Code fuehrt eine feste Untergrenze: WorldEnvironment.cBrightnessMin ist
+	        eine Konstante mit dem Wert 0.2. Ganz schwarz wird es ueber diese Datei
+	        nicht.
+	     2. Der Helligkeitsregler des Spielers (OptionsGfxBrightness) geht in dieselbe
+	        Rechnung ein. Wer ihn hochzieht, hellt sich die Nacht auf - auf dem eigenen
+	        Bildschirm, auch auf einem Server. Das ist Vanilla-Verhalten und laesst sich
+	        nur mit C# aendern (Phase 2, braeuchte ein REA-Finding, Projektregel 2).
+	-->
+
+	<set xpath="/worldglobal/environment/property[@name='ambientEquatorScale']/@value">.7, .25</set>
+	<set xpath="/worldglobal/environment/property[@name='ambientGroundScale']/@value">.3, .02</set>
+	<set xpath="/worldglobal/environment/property[@name='ambientSkyScale']/@value">1, .4</set>
+	<set xpath="/worldglobal/environment/property[@name='ambientMoon']/@value">.5, .7</set>
+
+</config>

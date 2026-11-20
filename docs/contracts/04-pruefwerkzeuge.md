@@ -1097,6 +1097,14 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
   „woher bekommt man es", sondern „wo wird es genannt" — und sie würde vermutlich viel
   finden, von dem das meiste harmlos ist. Das ist der Grund, warum sie noch nicht gebaut ist
   und nicht, dass die Frage unwichtig wäre.
+- **`kette-pruefen -Patches` mit einem Pfad, den es nicht gibt, ist grün** (gefunden am
+  2026-11-20 in WP8.1, beim Bau einer Gegenprobe). Zwei Pfade, versehentlich als *eine*
+  Zeichenkette übergeben, ergaben „0 XPaths … 0 rot → GREEN", Exit 0. Im normalen Lauf
+  sucht das Skript seine Dateien selbst unter `mod/` und ist nicht betroffen; betroffen ist
+  jede **Gegenprobe**, die Dateien übergibt — sie könnte grün sein, weil nichts geprüft
+  wurde. Nicht behoben: eine Datei, die nicht existiert, und ein Lauf mit null XPaths bei
+  übergebenen Dateien müssten Exit 2 sein. Bis dahin gilt für jede Gegenprobe: die Zahl
+  der geprüften XPaths mitlesen, nicht nur die Farbe.
 - **Der Inhalt der Denylist** ist ein Anfang, kein Ende. `tools/check/denylist.txt` deckt
   Schusswaffen, Munition, Fahrzeuge, Elektronik, moderne Nahrung und Medizin, Treibstoff und
   industrielle Baustoffe ab, dazu 19 Freigaben nach D9. Die vollständige Liste entsteht in WP3.1

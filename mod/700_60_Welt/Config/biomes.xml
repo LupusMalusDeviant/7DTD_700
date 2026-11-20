@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / biomes.xml
+	     F-17 Baustein B1 (Nebel), Plan-0001 WP8.2, D72
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     NEBEL IN ZWEI BIOMEN - UND EIN DRITTES GIBT ES NICHT
+	     ===================================================================
+
+	     F-17 will Nebel "in Wald, Moor und Flusstaelern". Die Kulturzonen sitzen nach
+	     D43 auf Vanillas Biomen: pine_forest ist das Klosterland (Wald), wasteland das
+	     Moorland. Ein FLUSSTAL IST KEIN BIOM - Vanilla kennt fuenf an Land, und ein
+	     Tal ist Gelaende, keine Wetterzone. Flusstal-Nebel ist darum nicht gebaut und
+	     gehoert zu F-07 (Welt, Phase 2).
+
+	     Geaendert werden nur Zahlen an Zeilen, die Vanilla schon fuehrt. Kein neues
+	     Wetter, kein eigenes Spektrum (das zeigt auf Unity-Assets, Phase 2).
+
+	     WALD (pine_forest)
+	       Wetter 'default'   Fog 0-2   -> 1-5      ein Rest Dunst, auch bei klarem Wetter
+	       Wetter 'default'   prob 83   -> 76
+	       Wetter 'fog'       prob 7    -> 14       Nebel doppelt so oft
+	       Wetter 'fog'       Fog 17-27 -> 20-32    und etwas dichter
+	     Die sieben Punkte, die 'fog' gewinnt, gibt 'default' ab: die vier Wetter mit
+	     prob > 0 zaehlen weiter zusammen 100 (76 + 14 + 6 + 4). Regen bleibt, wie er
+	     ist. 'fog' fuehrt in Vanilla die ALTE Schreibweise min/max, 'default' die neue
+	     range - beide bleiben, wie sie sind, nur die Zahlen aendern sich.
+
+	     MOOR (wasteland)
+	       Wetter 'default', 'cold', 'hot'   Fog 0-5 -> 6-14
+	     Das Moor hat in Vanilla KEIN Nebelwetter, nur drei trockene Wetter mit
+	     demselben duennen Dunst. "Dauerhafter Bodennebel" (F-07) heisst hier: alle
+	     drei tragen einen Nebel, der nie auf null faellt. 6-14 liegt unter dem
+	     Nebelwetter des Waldes (20-32) - im Moor ist es IMMER diesig, im Wald
+	     MANCHMAL dicht. Regen und Sturm im Moor bleiben Vanilla.
+
+	     WAS DIE ZAHLEN BEDEUTEN, IST NUR ZUR HAELFTE GEMESSEN. Der Wert ist ein
+	     Prozentwert (WeatherManager.BiomeWeather.FogPercent), Vanillas dichtestes
+	     Wetter ist 'twitch_fog' mit 35-45. Wie weit man bei 10 oder bei 30 SIEHT,
+	     steht in keiner XML. Pruefliste 18.
+
+	     NICHT ANGEFASST: das Brandland (burnt_forest, Fog 0-5 als Rauch), das
+	     Mittelgebirge (snow, hat ein eigenes Nebelwetter 9-18) und die Kueste
+	     (desert). Auch nicht: die Temperatur des Moors - Vanillas Wetter 'hot' fuehrt
+	     dort 95 bis 105 Grad Fahrenheit, das ist Oedland und kein Moor. Gehoert zu
+	     F-07, nicht zu F-17.
+	-->
+
+	<!-- Wald -->
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='default']/Fog/@range">1,5</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='default']/@prob">76</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='fog']/@prob">14</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='fog']/Fog/@min">20</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/weather[@name='fog']/Fog/@max">32</set>
+
+	<!-- Moor -->
+	<set xpath="/worldgeneration/biomes/biome[@name='wasteland']/weather[@name='default']/Fog/@range">6,14</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='wasteland']/weather[@name='cold']/Fog/@range">6,14</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='wasteland']/weather[@name='hot']/Fog/@range">6,14</set>
+
+</config>

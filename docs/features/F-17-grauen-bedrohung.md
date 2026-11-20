@@ -130,12 +130,37 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 ## Offene Fragen
 - Q17: Welche härteren Todesfolgen konkret? (vertagt; Rahmen D15)
 
+## Stand 2026-11-20 — B1 ist gebaut, soweit es eine Zahl ist (WP8.1, WP8.2, D72)
+
+**Warum nicht C#?** Weil es XML ist (Säule P5): zwölf `<set>` in `700_60_Welt`, kein Patch.
+
+| B1 verlangt | Stand |
+|---|---|
+| Nächte deutlich dunkler | gebaut: drei Nachtwerte gesenkt, der Tag bleibt |
+| Neumond fast schwarz, Mondphasen mit Gewicht | gebaut: Sockel runter, Mondanteil rauf — **aber „fast schwarz" hat eine feste Untergrenze im Code** |
+| Nebel in Wald und Moor | gebaut: Wald öfter und dichter, Moor dauerhaft diesig |
+| Nebel in Flusstälern | **nicht gebaut** — ein Flusstal ist kein Biom (F-07) |
+| abends dichter | **nicht gebaut** — `fogPower` ist ein Exponent mit ungelesener Richtung |
+| Licht mit kleinem Radius, flackernd | F-08, WP6.4 |
+| Fackeln blenden die Umgebung stärker ab | nicht gebaut, kein XML-Hebel gefunden |
+
+**Zwei Grenzen, die für B3 zählen werden.** Der Helligkeitsregler des Spielers geht in die
+Lichtrechnung ein, und der Code führt eine Untergrenze von 0,2. Wer nicht im Dunkeln
+stehen will, muss es auf seinem Bildschirm nicht. *Notiz für Phase 2 (Regel 6):* ein
+Furcht-System, das an Dunkelheit hängt, darf sich nicht auf das Bild verlassen, sondern
+braucht einen eigenen Wert für „dunkel" — und dann stellt sich die Frage, ob der Regler
+gedeckelt wird. Beides ist C# und braucht ein REA-Finding.
+
+**Alle zwölf Zahlen sind Setzungen und im Spiel ungesehen** → Prüfliste 18 im Plan.
+Messungen: [WP8-nacht-und-nebel.md](../rea/findings/WP8-nacht-und-nebel.md).
+
 ## Stand 2026-11-07 — Kurz-Check
 
 **Dunklere, nebligere Nächte sind XML.** `worldglobal.xml` führt die Himmelswerte als
 Tag-/Nacht-Paare (`ambientEquatorScale .7,.45`, `ambientGroundScale .3,.05`, `ambientSkyScale
-1,.7`, `ambientMoon .8,.4`, `fogPower`). D16 ist damit eine Zahl, kein Patch. Nebel pro Biom
-(`<Fog range prob>`) ebenfalls XML.
+1,.7`, `ambientMoon .8,.4`, `fogPower`). ~~D16~~ **D12** ist damit eine Zahl, kein Patch
+(*berichtigt am 2026-11-20: D16 ist die Mobilität*). Nebel pro Biom (`<Fog range prob>`)
+ebenfalls XML.
 
 **Das Grauen-System ist nicht so billig wie gehofft.** Als Buff-Bedingung vorhanden sind
 `TimeOfDay`, `IsSheltered`, `RandomRoll`, `CVarCompare`, `SandboxOptionBool`. **Nicht** gefunden:

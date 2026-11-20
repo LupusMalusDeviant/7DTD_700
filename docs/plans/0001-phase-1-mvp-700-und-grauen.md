@@ -1252,11 +1252,23 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
 
 **Schritte:**
 
-1. **WP8.1** `[Claude-prüfbar]` **B1 Echte Dunkelheit.** Belegt XML: `worldglobal.xml` führt die
+1. ~~**WP8.1** `[Claude-prüfbar]` **B1 Echte Dunkelheit.** Belegt XML: `worldglobal.xml` führt die
    Himmelswerte als Tag-/Nacht-Paare (`ambientEquatorScale .7,.45`, `ambientGroundScale .3,.05`,
-   `ambientSkyScale 1,.7`, `ambientMoon .8,.4`). Nachtwerte senken, Mondphasen gewichten.
-2. **WP8.2** `[Claude-prüfbar]` Nebel pro Biom (`<Fog range prob>`), in Wald, Moor und Flusstal
-   dichter. Ein **eigenes** Wetterspektrum bleibt Phase 2 (Assets).
+   `ambientSkyScale 1,.7`, `ambientMoon .8,.4`). Nachtwerte senken, Mondphasen gewichten.~~
+   **Gebaut 2026-11-20 (D72), ungesehen.** Vier Zeilen in
+   `mod/700_60_Welt/Config/worldglobal.xml`: Nachtwerte `.25`, `.02`, `.4`; `ambientMoon`
+   `.5, .7` (Sockel runter, Mondanteil rauf, Vollmond-Summe wie Vanilla). **Was der Plan
+   nicht wusste:** der Code hat eine feste Untergrenze (`cBrightnessMin` 0,2), und der
+   Helligkeitsregler des Spielers (`OptionsGfxBrightness`) geht in dieselbe Rechnung ein —
+   „fast schwarz" ist über XML nicht erzwingbar. → Prüfliste 18.
+2. ~~**WP8.2** `[Claude-prüfbar]` Nebel pro Biom (`<Fog range prob>`), in Wald, Moor und Flusstal
+   dichter. Ein **eigenes** Wetterspektrum bleibt Phase 2 (Assets).~~
+   **Gebaut 2026-11-20 (D72), ungesehen — für Wald und Moor.** Acht Zeilen in
+   `mod/700_60_Welt/Config/biomes.xml`: im Wald Nebelwetter doppelt so oft und dichter, im
+   Moor dauerhaft 6–14. **Nicht gebaut:** Flusstal (kein Biom → F-07) und „abends dichter"
+   (`fogPower` ist ein Exponent mit ungelesener Richtung) — beides unter Offene Punkte.
+   Nachweis: zwölf XPaths mit je genau einem Treffer, `kette-pruefen` 392 → 404, und zwei
+   absichtlich falsche XPaths wurden rot. → Prüfliste 18.
 3. **WP8.3** `[Claude-prüfbar]` **B8 Sichere Orte** als Buff-Aura um brennende Feuerstellen.
    Reines XML, keine offene Frage.
 4. **WP8.4** `[Claude-prüfbar]` **B2, soweit XML:** Vanilla-Sounds umdeuten und zuordnen,
@@ -1572,7 +1584,43 @@ werden:
     Fällt (a) falsch aus, ist der Rückweg eine Datei: `700_50_Fortschritt/Config/recipes.xml`
     leeren — dann sind alle Rezepte wieder offen, und nichts anderes hängt daran.
 
+18. **Eine Nacht im Wald und einen Gang ins Moor** (WP8.1, WP8.2/D72, 20. November 2026).
+    Hier geht es nicht um richtig oder falsch, sondern um **zu viel oder zu wenig** — alle
+    zwölf Zahlen sind Setzungen, und keine Prüfung kann sie beurteilen. Den Helligkeitsregler
+    in den Grafikoptionen dafür auf seinem Standard lassen.
+    (a) *Die Nacht.* Um Mitternacht im Wald ohne Fackel stehen: sieht man noch Stämme und
+    Boden auf ein paar Schritte? Mit Fackel: reicht der Lichtkreis zum Gehen?
+    **Zu dunkel** → in `700_60_Welt/Config/worldglobal.xml` die drei Nachtwerte auf halbem
+    Weg zu Vanilla setzen (`.35`, `.035`, `.55`). **Kaum ein Unterschied zu Vanilla**
+    → alle drei Nachtwerte halbieren.
+    (b) *Der Mond.* Dieselbe Stelle in einer Nacht mit vollem Mond und in einer ohne (über
+    die Konsole den Tag verstellen): ist der Unterschied **deutlich**? Ist er es nicht,
+    war der Schluss über `ambientMoon` falsch oder die Mondtabelle im Code flacher als
+    angenommen.
+    (c) *Drinnen.* In einem geschlossenen Raum ohne Licht: ist es dort **heller** als vor
+    der Tür? Vanilla hebt das Innenlicht nachts an, und das ist nicht angefasst. Wenn ja,
+    ist `ambientInsideEquatorScale` (`.55, 1.5`) die Zeile.
+    (d) *Nebel im Wald.* Über zwei, drei Spieltage: kommt Nebelwetter merklich öfter, und
+    ist bei klarem Wetter ein Dunst am Horizont — ohne dass der Tag grau wirkt?
+    (e) *Nebel im Moor* (Vanillas Ödland). Dauerhaft diesig, Sichtweite deutlich unter der
+    des Waldes bei klarem Wetter? **Zu dicht zum Kämpfen** → `6,14` auf `4,9` senken.
+    (f) *Bildrate.* Bricht sie im Nebel nicht ein (F-17, Akzeptanzkriterium)?
+    Der Rückweg ist der billigste des ganzen Plans: jede Zeile ist eine Zahl, und beide
+    Dateien lassen sich löschen, ohne dass etwas anderes davon abhängt.
+
 ## Offene Punkte
+
+- **„Abends dichter" ist nicht gebaut** (WP8.2/D72). `fogPower` in `worldglobal.xml` ist ein
+  Exponent für Tag und Nacht (Vanilla `1, 1`), aber worauf er wirkt, steht in keiner
+  Aufrufliste — und davon hängt ab, ob ein Wert unter 1 den Nachtnebel verdichtet oder
+  ausdünnt. **Ein Versuch im Spiel klärt es in fünf Minuten:** `fogPower` auf `1, .5`
+  setzen, nachts bei Nebelwetter hinsehen, dann `1, 2`. Bis dahin bleibt es Vanilla.
+- **Flusstal-Nebel hat keinen Ort** (WP8.2/D72). Ein Flusstal ist kein Biom. Entweder wird
+  es in F-07 eines (Phase 2), oder der Satz fällt aus F-17 und F-07.
+- **Die Nacht lässt sich am Regler aufhellen** (WP8.1/D72). `OptionsGfxBrightness` geht in
+  die Lichtrechnung ein, die Untergrenze `cBrightnessMin` ist fest. Für einen Server, auf
+  dem Dunkelheit Spielmechanik sein soll (F-08: „wer kein Licht hat, ist blind"), ist das
+  ein Loch, das nur C# schließt — Phase 2, mit REA-Finding (Projektregel 2).
 
 - ~~**D24s zweiter Weg fehlt** (WP7.5, 2026-11-16). D24 sagt, die Grundfähigkeit komme „per
   Skill-Punkt **oder** Abschrift". Gemessen steigt eine Handwerks-Stufe nur durch ihr
