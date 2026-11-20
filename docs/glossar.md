@@ -162,6 +162,7 @@ Arbeitsvorrat im Plan (WP8.5).
 | `blutmond` | DE | Seuchennacht | GDD 2.3 |
 | `horde night` | EN | Plague Night | GDD 2.3 |
 | `hordennacht` | DE | Seuchennacht | GDD 2.3 |
+| `\bBM\b` | beide | Plague Night / Seuchennacht, ausgeschrieben (Vanillas Kürzel für „Blood Moon" in den Spieloptionen) | D79 |
 | `navezgane` | beide | (kein Ersatz — Vanillas Land; das Mischland bleibt namenlos, D1) | D1 |
 | `\bdukes?\b` | DE | Silber, Silberpfennig; als Person: Fürst | D30 |
 | `\bdukes\b` | EN | silver, Silver Penny (ein „duke" als Titel ist erlaubt) | D30 |

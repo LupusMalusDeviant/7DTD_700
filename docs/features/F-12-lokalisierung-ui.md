@@ -80,8 +80,14 @@ Abnahme des Glossars durch den Nutzer (Prüfliste 21).
 ist. „Kleber" heißt deutsch „Leim". Sprachdatei 657 Zeilen, Glossar 51 Festbegriffe mit
 Kennung und 83 Muster.
 
-**Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** die Menü-Texte (der
-UI-Teil der dritten Scheibe) und die Abnahme der neuen Tipps im Spiel (Prüfliste 21 f).
+**Zweiter Teil (D79), ebenfalls ungesehen:** 53 Menü- und Anzeigezeilen — die Optionen des
+Spielstart-Menüs und drei Anzeigen — sprechen von Seuchentoten und Seuchennacht; Vanillas
+Kürzel „BM" ist ausgeschrieben. Sprachdatei 710 Zeilen, Glossar 84 Muster.
+
+**Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
+(F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die
+zwei Sandbox-Vorlagen, und die Abnahme im Spiel — vor allem, ob das Menü die längeren
+Optionsnamen abschneidet (Prüfliste 21 f und g).
 
 **Notiz für später (nicht Phase 1):** die sieben Wesen-Namen mit „Zombie" (`animalZombieBear`,
 `zombieSpiderFeral` …) gehören zu F-06 und brauchen die englischen Begriffe für Verderbte und

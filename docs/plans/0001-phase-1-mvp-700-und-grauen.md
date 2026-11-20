@@ -1347,10 +1347,20 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      `wp7-baumtexte.ps1`); Vanillas Beschreibung von Kleber nannte nur das gesperrte
      Klebeband — `resourceGlue` heißt deutsch jetzt „Leim" und hat einen eigenen Text.
      Sprachdatei: 657 Zeilen. Glossar: 51 Festbegriffe mit Kennung, 13 ohne, 83 Muster.
-     **Nicht gebaut: der UI-Teil** (210 Vanilla-Zeilen mit Weltbegriff unter „UI"; welche
-     davon nach dem Purge sichtbar sind, ist nicht gezählt). → Prüfliste 21 (f).
-   - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ (3) ~~Ladebildschirm~~
-     und UI;
+     → Prüfliste 21 (f).
+   - *Dritte Scheibe, zweiter Teil — Spieloptionen und Anzeige, gebaut am 2026-11-20 (D79),
+     ungesehen.* Neu gezählt: unter „UI" tragen **225** nicht überschriebene Zeilen einen
+     Weltbegriff oder das Kürzel „BM" (die „210" von oben stammten aus einer gröberen
+     Zählung). **158 sind Händler-Untertitel** und bleiben liegen (Offene Punkte: die
+     Händler sprechen modernes Englisch). Von den übrigen 67 sind **53 umgeschrieben** — die
+     Optionen des Spielstart-Menüs („Blutmondhäufigkeit" → „Seuchennacht: Häufigkeit",
+     „BM geschlossen" → „Zur Seuchennacht geschlossen") und drei Anzeigen. **14 bleiben:**
+     4 warten auf das englische Wort für Verderbte, 6 sind Twitch, 2 beschreiben Vanillas
+     Sandbox-Vorlagen, 2 sind Entwickler-Anzeigen. Die Metaspalten jeder Zeile sind aus
+     Vanillas Zeile übernommen, nicht von Hand gesetzt. Sprachdatei: 710 Zeilen. Glossar:
+     84 Muster (neu: `\bBM\b`). → Prüfliste 21 (g).
+   - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ ~~(3) UI und
+     Ladebildschirm;~~
      (4) Quests und Challenges — erst zählen, was davon nach dem Purge überhaupt erreichbar
      ist; (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
      Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
@@ -1736,6 +1746,14 @@ werden:
     `UsedInMainMenu` ist der erste Verdacht (Finding WP4, Nachtrag). Dann die Texte lesen:
     acht Tipps tragen ein **neues Thema**, das ich gesetzt habe, und „Kleber" heißt deutsch
     jetzt „Leim". Passt das — oder soll ein Tipp von etwas anderem handeln?
+    (g) *Die Spieloptionen, im Spiel (D79).* Neues Spiel → die Einstellungen durchsehen,
+    deutsch und englisch. Drei Fragen: Steht überall „Seuchennacht" / „Plague Night" und
+    „Seuchentote" / „plague-dead" (und nirgends mehr „BM")? **Schneidet das Menü einen der
+    längeren Namen ab** — verdächtig sind „Plague Night Block Damage", „Plague-dead Night
+    Speed", „Seuchentote: Tempo bei Nacht"? Und passt die Form „Seuchennacht: Häufigkeit"?
+    Dazu zwei Entscheidungen: das englische Wort für **Verderbte** (vier Optionszeilen
+    warten darauf) und ob es Vanillas **Sandbox-Vorlagen** („7 Days Later", „Undead
+    Matinee") bei uns geben soll.
 
 ## Offene Punkte
 

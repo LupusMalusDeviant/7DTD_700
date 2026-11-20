@@ -774,3 +774,62 @@ loadingTipCollectors_title
 # Leim: Vanillas Beschreibung von "Kleber" nannte nur das Klebeband, und das ist gesperrt.
 resourceGlue                      # Leim
 resourceGlueDesc
+
+# --- WP8.5 / D79: dritte Scheibe, zweiter Teil - Spieloptionen und Anzeige ---------
+# 53 Menue- und Anzeigezeilen, die "Zombie", "Blutmond", "Navezgane" oder das Kuerzel "BM"
+# trugen. Vier weitere warten auf den englischen Begriff fuer "Verderbte" (Feral) und
+# stehen NICHT hier: goEnemyDifficultyDesc, goZombieFeralMove, goZombieFeralMoveDesc,
+# goZombieFeralSense.
+gmSurvivalDesc
+gmZombieHorde
+goAISmellModeDesc
+goAllowZombieDigging
+goAllowZombieDiggingDesc
+goBedrollDeadZoneSizeDesc
+goBiomeAnimalRespawnDesc
+goBiomeDayAnimalRespawnDesc
+goBiomeNightAnimalRespawnDesc
+goBlockDamageAIBM                 # "BM" ausgeschrieben
+goBlockDamageAIBMDesc
+goBlockDurabilityDesc
+goBloodMoonEnemyCount
+goBloodMoonEnemyCountDesc
+goBloodMoonFrequency
+goBloodMoonFrequencyDesc
+goBloodMoonRange
+goBloodMoonRangeDesc
+goBloodMoonWarning
+goBloodMoonWarningDesc
+goDukesLootCountDesc
+goFullChickenStressEventDesc
+goGameModeDesc
+goGameWorldTypeDesc
+goGlobalGSModifierDesc
+goLootAbundanceDesc
+goMaxEnemyTierDesc
+goMaxSpawnedZombies
+goMaxSpawnedZombiesDesc
+goOnlyClosedOnBM                  # "BM" ausgeschrieben
+goShowDayTimeDesc
+goSillyBigHeadsDesc
+goSillyTinyZombies
+goSillyTinyZombiesDesc
+goTraderHoursDesc
+goWorkstationsInTheWildDesc
+goZombieBMMove                    # "BM" ausgeschrieben
+goZombieBMMoveDesc
+goZombieFeralSenseDesc            # der Text nennt "Feral" nicht; der Name dazu wartet
+goZombieHorde
+goZombieMove
+goZombieMoveDesc
+goZombieMoveNight
+goZombieMoveNightDesc
+goZombiePlayers
+goZombiePlayersDesc
+goZombieRageChance
+goZombieRageChanceDesc
+goZombiesEatAnimals
+goZombiesEatAnimalsDesc
+xuiTargetZombies
+xuiZombieKills
+xuiZombies
