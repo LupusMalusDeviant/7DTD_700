@@ -1313,7 +1313,24 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      Tagebuch-Tipps 7, Wesen 7, Gegenstände 5, Mods 4, Rest 10. „Möglicherweise", weil die
      Zählung nur gesperrte Gegenstände und Blöcke abzieht (599 Kennungen aus den
      Purge-Dateien), nicht gesperrte Mods, Quests oder Challenges.
-   - *Offen, weitere Scheiben:* (2) Buffs, Tagebuch-Tipps, Blöcke; (3) UI und Ladebildschirm;
+   - *Zweite Scheibe, gebaut am 2026-11-20 (D77), ungesehen — und sie ist klein.* Von 66
+     Vanilla-Zeilen mit einem Weltbegriff aus Buffs, Blöcken, Gegenständen, Mods, Wesen und
+     Tagebuch-Tipps sind **vier** in Phase 1 sichtbar und ohne offene Frage; die sind
+     umgeschrieben (`bedGroupDesc`, `keystoneBlockDesc`, `fencesGroupDesc`,
+     `buffPerkTheDentistDesc`), dazu der Name „Totenpfennig" statt „Der Zahnarzt". **Die
+     Einteilung der übrigen 62 ist das eigentliche Ergebnis:** 17 an gesperrten Kennungen ·
+     3 Schlüssel ohne Nutzer · 8 unerreichbar (Hühnerstall-Rezept gesperrt, ein von Vanilla
+     als „UNUSED" markierter Buff, eine Maske ohne Fundort) · 14 Prefab- und
+     Entwicklerblöcke (F-07) · 6 wartend (4 Infektion, 2 Bögen) · 7 Wesen-Namen (F-06) ·
+     7 Tagebuch-Tipps, für die es weder einen XML-Verweis noch eine Zeichenkette im Code
+     gibt (**vermutlich tot, nicht bewiesen** — `mod700meta find-string` sieht nur
+     `ldstr`). Von diesen 62 bleiben damit 27 möglicherweise sichtbar (34, falls die
+     Tagebuch-Tipps doch leben); die Gesamtzahl „505" oben ist nicht neu gezählt.
+   - *Dabei gemessen:* der **Ladebildschirm** zeigt 41 Tipps aus `loadingscreen.xml`
+     (`loadingTipHonkHorn`, `loadingTipTwitchIntegration`, `loadingTipWrenches` …) — bei
+     jedem Laden sichtbar und zu einem guten Teil über Dinge, die es nicht mehr gibt. Das
+     ist der lohnendste Teil der dritten Scheibe.
+   - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ (3) UI und Ladebildschirm;
      (4) Quests und Challenges — erst zählen, was davon nach dem Purge überhaupt erreichbar
      ist; (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
      Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
@@ -1689,6 +1706,9 @@ werden:
     keinem älteren Dokument und ist meine Setzung.
     (d) *Die offenen Begriffe entscheiden* (Glossar Abschnitt 10): englisch für Verderbte,
     Moorleichen, Wanderhändler, Klostermarkt, Fürstenhof; „Schlagringe"; „Scrap Bronze".
+    (e) *Zwei Namen aus der zweiten Scheibe (D77):* „Totenpfennig" / „Dead Man's Penny"
+    statt „Der Zahnarzt" — gesetzt, wartet auf dein Ja. „Grenzstein" / „Boundary Stone"
+    statt „Gebietsschutzblock" — nur vorgeschlagen, **nicht** umgesetzt.
 
 ## Offene Punkte
 
@@ -1701,7 +1721,8 @@ werden:
   ernste Infektion noch aufhält, ist ungemessen. F-11 (Kräuter, Theriak) liegt in Phase 2.
   Die Texte sind darum **nicht** umgeschrieben; erst muss feststehen, was sie versprechen
   dürfen. → WP9 oder eine Entscheidung des Nutzers (ein Kräutermittel vorziehen?).
-- **Das Glossar führt fünf offene Begriffe** (WP8.5/D75, `docs/glossar.md` Abschnitt 10):
+- **Das Glossar führt sieben offene Begriffe** (WP8.5/D75 und D77, `docs/glossar.md` Abschnitt 10;
+  seit der zweiten Scheibe auch „Gebietsschutzblock" und „Totenpfennig"):
   englisch für Verderbte, Moorleichen, Wanderhändler/Klostermarkt/Fürstenhof und die
   Baustufen; dazu „Schlagringe" und „Scrap Bronze". → Prüfliste 21.
 - **„Abends dichter" ist nicht gebaut** (WP8.2/D72). `fogPower` in `worldglobal.xml` ist ein

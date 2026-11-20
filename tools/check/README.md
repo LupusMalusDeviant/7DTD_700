@@ -291,8 +291,8 @@ Tabellenformen zählen, erkannt an der Kopfzeile:
   Zeilen.
 
 Exit **0** grün, **1** Befunde, **2** nicht prüfbar (Datei fehlt, keine Tabelle gelesen, Muster
-kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 49 Festbegriffe mit
-Kennung, 13 ohne, 77 Muster, 612 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
+kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 50 Festbegriffe mit
+Kennung, 13 ohne, 79 Muster, 617 Zeilen, 0 Abweichungen, 0 Treffer. Rot vorgeführt an
 `testdaten/glossar/`: zwölf Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün),
 ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit Tippfehler.
 

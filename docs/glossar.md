@@ -130,6 +130,7 @@ ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext 
 | `attagility` | Jäger | Hunter | Beweglichkeit / Agility | D66, WP7 |
 | `attintellect` | Heiler | Healer | Intelligenz / Intellect | D66, WP7 |
 | `attperception` | Fuhrmann | Carter | Wahrnehmung / Perception | D66, WP7 |
+| `buffPerkTheDentistName` | Totenpfennig | Dead Man's Penny | Der Zahnarzt / The Dentist | D77 |
 | — | Lehrblatt | Lesson | Magazin / Magazine | D70 |
 | — | Blatt (einer Abschrift) | leaf | Buch / Book | D69 |
 | — | Abschrift | transcript | Buchreihe | D24, D69 |
@@ -224,6 +225,8 @@ Arbeitsvorrat im Plan (WP8.5).
 | `holzstachel` | DE | Spitzpfähle | WP6 |
 | `primitive armor` | EN | Rags | D59 |
 | `primitive rüstung` | DE | Lumpen | D59 |
+| `dentist` | EN | Dead Man's Penny | D77 |
+| `zahnarzt` | DE | Totenpfennig | D77 |
 
 **Alte Namen ohne Verbot, mit Grund** (ergänzt am 2026-11-20 nach dem Review, das „Jagdmesser"
 als Lücke fand). Nicht jeder Vanilla-Name aus den Tabellen oben lässt sich verbieten:
@@ -281,3 +284,9 @@ Das entscheidet der Nutzer; bis dahin schreibt kein Text sie englisch aus.
    weil ein Name eine Entscheidung ist.
 5. **„Scrap Bronze"** für Buntmetall trägt das englische „scrap" weiter. Gemeint ist
    Altmetall aus Ruinen; ob „Old Bronze" besser trifft, ist offen.
+6. **„Gebietsschutzblock" / „Land Claim Block"** (`keystoneBlock`) heißt weiter wie in
+   Vanilla; nur seine Beschreibung ist umgeschrieben (D77). Vorschlag: „Grenzstein" /
+   „Boundary Stone" — nicht geändert, weil ein Name eine Entscheidung ist.
+7. **„Totenpfennig" / „Dead Man's Penny"** ist eine Setzung aus D77 für Vanillas „Der
+   Zahnarzt" und wartet auf die Abnahme: gemeint ist das Silber oder Gold, das man manchem
+   Toten mitgab — der Text sagt nicht, wohin.

@@ -719,3 +719,12 @@ buffDukeNoteToolTip
 resourceRockSmallDesc
 foodAshChickenStewDesc
 resourceSnowBallDesc
+
+# --- WP8.5 / D77: zweite Scheibe - was ein Spieler in Phase 1 sieht ---------------
+# Von 66 Vanilla-Zeilen mit einem Weltbegriff (Buffs, Bloecke, Gegenstaende, Mods, Wesen,
+# Tagebuch-Tipps) sind vier sichtbar und umschreibbar; die Einteilung der uebrigen steht im Plan.
+bedGroupDesc                      # Schlafstatt: Lager und Betten teilen sich diese Beschreibung
+keystoneBlockDesc                 # Gebietsschutzblock - der Name bleibt Vanilla, siehe Glossar "Offene Begriffe"
+fencesGroupDesc
+buffPerkTheDentistName            # Totenpfennig statt "Der Zahnarzt" (Standhaftigkeit Stufe 3, Faustwaffen)
+buffPerkTheDentistDesc
