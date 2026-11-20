@@ -211,3 +211,72 @@ Anzeige. Das passt zu §8.1: angelegt wird nur, wenn der Spieler den Buff **nich
   gelesen → Prüfliste 19 (a).
 - **Ob Wandfackeln wärmen**, ist offen (§8.2). Sie sind nicht angefasst.
 - **+20 % ist eine Setzung** für WP9.
+
+## 9 WP8.4 — Klang: die Lautstärke steht in keiner XML
+
+Gemessen am 20. November 2026.
+
+### 9.1 Was `sounds.xml` führt
+
+2555 Klangknoten (`SoundDataNode`), jeder mit `AudioSource` (eine Unity-Vorlage, etwa
+`@:Sounds/Prefabs/AudioSource_Creatures.prefab`), `AudioClip`-Einträgen und einer festen
+Zeile aus `LocalCrouchVolumeScale`, `CrouchNoiseScale`, `NoiseScale`, `MaxVoices`,
+`MaxRepeatRate`. Der Dateikopf erklärt alle Elemente.
+
+**Ein Element für den Pegel gibt es nicht.** `NoiseScale` und `Noise` sind die Lautstärke
+*für die KI* (Schleichanzeige, Wärmekarte), `LocalCrouchVolumeScale` gilt nur für den
+eigenen, geduckten Spieler. Pegel und Reichweite eines Lauts liegen in der Vorlage, also in
+einem Asset.
+
+### 9.2 Wie oft ein Gegner Laut gibt
+
+`entityclasses.xml` führt 27 verschiedene `Sound…`-Eigenschaften. Zwei sind Zeiten:
+
+- `SoundRandomTime` → `EntityAlive::soundRandomTicks`. `GetSoundRandomTicks` würfelt daraus
+  mit `GameRandom::RandomRange`; `OnUpdateEntity` zählt `soundDelayTicks` herunter und ruft
+  danach `GetSoundAlert` oder `GetSoundRandom`. Vanillas Kommentar: „every 30/15 seconds".
+- `SoundAlertTime` → `soundAlertTicks`, derselbe Weg; „x/2 to x seconds".
+
+`SleeperNoiseToSenseSoundChance` wird in `CopyPropertiesFromEntityClass` in ein Feld
+gleichen Namens kopiert.
+
+Eigene Werte führen nur `zombieTemplateMale` (30 / 25 / .5), `zombieSteveCrawler` (20 / 15),
+`animalZombieDog` (20 / 10) und die Händler-Vorlage. 22 Klassen erben unmittelbar von
+`zombieTemplateMale`, neun weitere über `zombieTemplateShort`.
+
+### 9.3 Was Vanilla an fernen Klängen hergibt
+
+Gesucht in den Namen der 2555 Knoten nach Glocke, Wolf, Vogel, Wind, Schrei, Flüstern,
+Ast: gefunden sind die 14 Wolfslaute (alle an ein Tier gebunden: `wolfroam`, `wolfalert` …)
+und **ein** Glockenschlag (`churchbellhit`). Weinen, Raunen, Rufe, knackende Äste: nichts.
+
+Abspielen ließe sich ein Klang aus XML: `buffs.xml` führt 184-mal `action="PlaySound"`,
+dazu die Bedingungen `RandomRoll` (45), `IsSheltered` (32), `InBiome` (13), `TimeOfDay` (1).
+
+### 9.4 Was gebaut ist
+
+`mod/700_60_Welt/Config/entityclasses.xml`, sieben `<set>`:
+
+| Klasse | `SoundRandomTime` | `SoundAlertTime` | Schläfer-Laut |
+|---|---|---|---|
+| `zombieTemplateMale` | 30 → 90 | 25 → 40 | .5 → .15 |
+| `zombieSteveCrawler` | 20 → 60 | 15 → 24 | — |
+| `animalZombieDog` | 20 → 60 | 10 → 16 | — |
+
+Sieben XPaths mit je genau einem Treffer und dem erwarteten alten Wert; `kette-pruefen`
+408 → **415**.
+
+### 9.5 Grenzen
+
+- **„Leiser" ist nicht gebaut, „seltener" ist es.** Der Pegel ist ein Asset.
+- **Die Einheit der Zeiten ist Vanillas Kommentar entnommen**, nicht gelesen: der Code
+  rechnet in Ticks, die Umrechnung ist nicht gelesen.
+- **`subtitles.xml` führt 1336 Untertitel, alle für die fünf Vanilla-Händler.** Jede Zeile
+  hat einen gesprochenen Klang dazu (`trader_hugh_greeting_01` …). Gegner-Untertitel gibt
+  es nicht. Nicht Teil von WP8.4; im Plan als offener Punkt.
+- **`SoundSense` ist nicht angefasst.** Was der Code mit einem leeren oder fehlenden
+  Klangnamen tut, ist nicht gelesen.
+- **Ferne Klänge sind nicht gebaut** — aus zwei Gründen, die beide im Entwurf stehen:
+  ein Laut ohne Quelle ist nach F-17 ein Trugbild (B4, Phase 2, erst ab „Verängstigt"),
+  und das Material sind ein Glockenschlag und Tierlaute, die ein Tier versprechen.
+- **Zahlen sind Setzungen** → Prüfliste 20.

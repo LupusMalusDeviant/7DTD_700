@@ -1278,9 +1278,17 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    das Holzfeuer (`PlantGrowing`) hat keine Kacheleinheit — seine Wärme-Zeile ist
    wirkungslos, sein Text berichtigt. Zwei Buffs in `700_60_Welt/Config/buffs.xml`, drei
    Zeilen in `blocks.xml`; `kette-pruefen` 404 → 408. → Prüfliste 19.
-4. **WP8.4** `[Claude-prüfbar]` **B2, soweit XML:** Vanilla-Sounds umdeuten und zuordnen,
+4. ~~**WP8.4** `[Claude-prüfbar]` **B2, soweit XML:** Vanilla-Sounds umdeuten und zuordnen,
    Seuchentote leiser stellen. **Die Stille-Logik (Tiere verstummen, wenn Seuchentote nahe sind)
-   braucht C# und rutscht in Phase 2** — ehrlicher Schnitt, siehe R1.
+   braucht C# und rutscht in Phase 2** — ehrlicher Schnitt, siehe R1.~~
+   **Gebaut 2026-11-20 (D74), ungesehen — und kleiner als geplant.** „Leiser" geht in XML
+   nicht: `sounds.xml` führt kein Element für den Pegel, er liegt in Unity-Vorlagen.
+   Gebaut ist **seltener**: sieben Zeilen in `700_60_Welt/Config/entityclasses.xml`
+   (Laute ohne Ziel ein Drittel so oft, in der Verfolgung gut halb so oft, Schläfer stöhnen
+   selten auf). **Nicht gebaut:** ferne Klänge (ein Laut ohne Quelle ist nach F-17 ein
+   Trugbild und damit Phase 2; Vanillas Material ist ein Glockenschlag) und das Streichen
+   von `SoundSense` — beides unter Offene Punkte. Für „umdeuten und zuordnen" gibt es in
+   Phase 1 kein Material. `kette-pruefen` 408 → 415. → Prüfliste 20.
 5. **WP8.5** `[Claude-prüfbar]` `docs/glossar.md` als verbindliche Begriffsquelle, dann
    `Config/Localization.csv` mit **DE und EN** für alle neuen und umgedeuteten Einträge (D7).
    Achtung auf die Spaltenlage: fünf Metadatenspalten vorweg, und `Context / Alternate Text`
@@ -1632,6 +1640,17 @@ werden:
     Auf einem Dedicated Server mit zweitem Client wiederholen (WP9.2): die Wirkung entsteht
     auf dem Client, beide Spieler müssen sie unabhängig voneinander tragen.
 
+20. **Hinhören** (WP8.4/D74, 20. November 2026). Wieder zu viel oder zu wenig, nicht
+    richtig oder falsch:
+    (a) *Ohne Ziel.* Nachts am Waldrand stehen, ein paar Seuchentote in Hörweite, die einen
+    nicht bemerkt haben: ist es **still genug, dass man sie übersieht** — und doch nicht so
+    still, dass die Welt leer wirkt? Zu still → `SoundRandomTime` von `90` auf `60`.
+    (b) *In der Verfolgung.* Hört man einen Verfolger hinter sich noch rechtzeitig? **Wenn
+    nicht, ist das ein Fehler, kein Grusel** → `SoundAlertTime` zurück auf `25`.
+    (c) *Schläfer.* Geduckt durch ein Haus mit Schläfern: stöhnt nur noch selten einer auf?
+    (d) *Die offene Frage.* Fühlt sich der Laut beim **Bemerken** (`SoundSense`, nicht
+    angefasst) nach der Stille davor zu früh an, wäre er der nächste Kandidat.
+
 ## Offene Punkte
 
 - **„Abends dichter" ist nicht gebaut** (WP8.2/D72). `fogPower` in `worldglobal.xml` ist ein
@@ -1639,6 +1658,23 @@ werden:
   Aufrufliste — und davon hängt ab, ob ein Wert unter 1 den Nachtnebel verdichtet oder
   ausdünnt. **Ein Versuch im Spiel klärt es in fünf Minuten:** `fogPower` auf `1, .5`
   setzen, nachts bei Nebelwetter hinsehen, dann `1, 2`. Bis dahin bleibt es Vanilla.
+- **Ferne Klänge: Phase 1 oder Phase 2?** (WP8.4/D74). B2 nennt sie „MVP: Vanilla-Sounds
+  umgedeutet", B4 nennt einen Laut ohne Quelle ein Trugbild und legt ihn in Phase 2. Beides
+  zugleich geht nicht; D74 folgt B4. Technisch wäre ein seltener Glockenschlag bei Nacht in
+  XML machbar (`PlaySound`, `RandomRoll`, `TimeOfDay`) — er käme aber „im Kopf", nicht aus
+  einer Richtung, und das Kloster dazu gibt es erst mit F-07. **Wenn du ihn trotzdem
+  willst, ist das eine Entscheidung gegen B4 und braucht eine D-Zeile.**
+- **Die Händler sprechen modernes Englisch** (gefunden in WP8.4, 2026-11-20).
+  `subtitles.xml` führt 1336 Untertitel, alle für die fünf Vanilla-Händler (Hugh, Rekt,
+  Joel, Jen, Bob) — also vermutlich ebenso viele **gesprochene** Zeilen (Schluss aus den
+  Namen: `sounds.xml` führt gleichnamige Knoten). Die Untertitel ließen
+  sich übersetzen, der Ton nicht. Kein Paket der Phase 1 greift das: der Purge sperrt
+  Gegenstände, WP8.5 schreibt Texte. Ob die Händlerstimmen stumm werden, bleiben oder
+  ersetzt werden, gehört zu F-10 und ist **nicht entschieden**.
+- **`SoundSense` streichen?** (WP8.4/D74). Der Laut, mit dem ein wacher Seuchentoter das
+  Bemerken ankündigt. Ohne ihn wäre „der erste Laut ist schon nah" wörtlich wahr. Nicht
+  gemacht, weil ungelesen ist, was ein leerer Klangname im Code auslöst; ein Versuch im
+  Spiel mit **einer** Klasse klärt es.
 - **Flusstal-Nebel hat keinen Ort** (WP8.2/D72). Ein Flusstal ist kein Biom. Entweder wird
   es in F-07 eines (Phase 2), oder der Satz fällt aus F-17 und F-07.
 - **Die Nacht lässt sich am Regler aufhellen** (WP8.1/D72). `OptionsGfxBrightness` geht in

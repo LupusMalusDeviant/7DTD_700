@@ -172,6 +172,24 @@ senken lässt. Die Wirkung entsteht auf dem Client — für „Gemeinschaft sch�
 
 Im Spiel ungesehen → Prüfliste 19 im Plan. Messungen: Befund §8.
 
+### B2 — Klang, soweit XML (WP8.4, D74)
+
+| B2 verlangt | Stand |
+|---|---|
+| Seuchentote leiser | **nicht als Pegel** — der liegt in Unity-Vorlagen. Gebaut: sie geben **seltener** Laut (ohne Ziel ein Drittel so oft, in der Verfolgung gut halb so oft) |
+| ihr erster Laut ist oft schon nah | zur Hälfte: Schläfer stöhnen selten auf; der Laut beim Bemerken (`SoundSense`) ist nicht angefasst |
+| ferne Klänge | **nicht gebaut** — siehe unten |
+| Stille als Werkzeug (Tiere verstummen) | Phase 2, C# |
+
+**B2 und B4 widersprechen sich, und D74 folgt B4.** B2 nennt ferne Klänge „MVP", B4 nennt
+einen Laut ohne Quelle ein Trugbild: Phase 2, erst ab „Verängstigt", nur beim Betroffenen,
+und nie so, dass ein echter Gegner vorgetäuscht wird. Vanillas Material sind ein
+Glockenschlag und Tierlaute. Ein Wolfslaut ohne Wolf bräche die Regel. *Notiz für Phase 2
+(Regel 6):* der XML-Weg steht (`PlaySound` mit `RandomRoll`, `TimeOfDay`, `InBiome`,
+`IsSheltered`); was fehlt, sind eigene Klänge (F-16) und der Grauen-Wert, der sie auslöst.
+
+Im Spiel ungehört → Prüfliste 20 im Plan. Messungen: Befund §9.
+
 ## Stand 2026-11-07 — Kurz-Check
 
 **Dunklere, nebligere Nächte sind XML.** `worldglobal.xml` führt die Himmelswerte als

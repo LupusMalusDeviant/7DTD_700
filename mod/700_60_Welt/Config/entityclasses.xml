@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / entityclasses.xml
+	     F-17 Baustein B2 (Klang, soweit XML), Plan-0001 WP8.4, D74
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     SEUCHENTOTE SIND NICHT LEISER - SIE SIND SELTENER ZU HOEREN
+	     ===================================================================
+
+	     B2 sagt: "Seuchentote sind leiser als Vanilla-Zombies; ihr erster Laut ist oft
+	     schon nah." Die LAUTSTAERKE steht in keiner XML: jeder Klangknoten in
+	     sounds.xml zeigt auf eine Unity-Vorlage (AudioSource_Creatures.prefab), und
+	     dort liegen Pegel und Reichweite. Ein Attribut dafuer fuehrt sounds.xml nicht.
+
+	     Was XML kann: WIE OFT ein Seuchentoter Laut gibt. Und das trifft den zweiten
+	     Halbsatz genauer als ein leiserer Pegel es taete - wer selten stoehnt, den
+	     hoert man nicht kommen.
+
+	       SoundRandomTime   Abstand der Laute ohne Ziel. Der Code wuerfelt daraus die
+	                         Pause (EntityAlive.GetSoundRandomTicks, RandomRange);
+	                         Vanillas Kommentar: "every 30/15 seconds".
+	       SoundAlertTime    Abstand der Laute bei der Verfolgung; "x/2 to x seconds".
+	       SleeperNoiseToSenseSoundChance
+	                         Die Wahrscheinlichkeit, dass ein Schlaefer aufstoehnt,
+	                         wenn er etwas hoert, ohne aufzuwachen.
+
+	     DIE ZAHLEN SIND SETZUNGEN FUER WP9.
+
+	       zombieTemplateMale   SoundRandomTime 30 -> 90   ein Drittel so oft
+	                            SoundAlertTime  25 -> 40   in der Jagd noch hoerbar
+	                            Schlaefer-Laut  .5 -> .15
+	       zombieSteveCrawler   20 -> 60,  15 -> 24        dieselben Verhaeltnisse
+	       animalZombieDog      20 -> 60,  10 -> 16
+
+	     zombieTemplateMale vererbt an 22 Klassen unmittelbar und ueber
+	     zombieTemplateShort an neun weitere; die beiden anderen fuehren eigene Werte
+	     und stehen darum eigens hier.
+
+	     DIE JAGD BLEIBT HOERBAR, MIT ABSICHT. Ein Gegner, der einen verfolgt und dabei
+	     schweigt, ist kein Grusel, sondern ein unfairer Tod von hinten (F-17, Grundsatz
+	     4: nie reiner Laerm - aber auch: der Spieler darf zweifeln, nicht betrogen
+	     werden). Darum sinkt der Abstand in der Verfolgung nur um gut die Haelfte.
+
+	     NICHT ANGEFASST - UND WARUM
+
+	     SoundSense   Der Laut, wenn ein wacher Seuchentoter den Spieler bemerkt. Ihn
+	                  zu streichen waere der kuerzeste Weg zu "der erste Laut ist schon
+	                  nah" - aber was der Code mit einem leeren Klangnamen tut, ist
+	                  nicht gelesen, und ein Fehler bei JEDEM Bemerken waere teurer
+	                  als der Gewinn. Offener Punkt im Plan.
+	     Tiere        Woelfe, Baeren, Wildschweine bleiben Vanilla. "Tiere verstummen,
+	                  wenn Seuchentote nahe sind" braucht C# (Phase 2).
+	-->
+
+	<set xpath="/entity_classes/entity_class[@name='zombieTemplateMale']/property[@name='SoundRandomTime']/@value">90</set>
+	<set xpath="/entity_classes/entity_class[@name='zombieTemplateMale']/property[@name='SoundAlertTime']/@value">40</set>
+	<set xpath="/entity_classes/entity_class[@name='zombieTemplateMale']/property[@name='SleeperNoiseToSenseSoundChance']/@value">.15</set>
+
+	<set xpath="/entity_classes/entity_class[@name='zombieSteveCrawler']/property[@name='SoundRandomTime']/@value">60</set>
+	<set xpath="/entity_classes/entity_class[@name='zombieSteveCrawler']/property[@name='SoundAlertTime']/@value">24</set>
+
+	<set xpath="/entity_classes/entity_class[@name='animalZombieDog']/property[@name='SoundRandomTime']/@value">60</set>
+	<set xpath="/entity_classes/entity_class[@name='animalZombieDog']/property[@name='SoundAlertTime']/@value">16</set>
+
+</config>
