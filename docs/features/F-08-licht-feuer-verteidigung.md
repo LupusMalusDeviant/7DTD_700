@@ -55,8 +55,11 @@ dann streuen.
   Vanilla nicht. Was es hat, ist ein Glutbett aus verbrannten Scheiten, **mit** Licht
   (`pileEmberBurntLogs1LightPrefab`) und **ohne** (`…1NoEmissivePrefab`) — beide Hälften aus
   derselben Modellfamilie. Der Name folgt dem, was man sieht. Die Funktion, die F-08 will
-  (helles Feuer im Freien, hält länger als eine Fackel, wärmt, verbrennt wer hineintritt,
-  gibt Holzkohle), steht.
+  (helles Feuer im Freien, hält länger als eine Fackel, ~~wärmt,~~ verbrennt wer hineintritt,
+  gibt Holzkohle), steht. **Berichtigt am 2026-11-20 (WP8.3, D73): „wärmt" stimmt nach
+  der Messung nicht.** Das Spiel legt eine Flächenwirkung nur um Blöcke mit Kacheleinheit,
+  und `PlantGrowing` hat keine — die Wärme-Zeile des Holzfeuers wird nie gelesen. Sein
+  Text verspricht sie nicht mehr; im Spiel zu bestätigen mit Prüfliste 19 (c).
 
 **Und die Öllampe war nicht baubar.** Vanillas Rezept verlangt 5 × `resourceOil` — gesperrt,
 weil Mineralöl. Gefunden mit demselben Zähler, der die vier unbaubaren Werkstätten fand

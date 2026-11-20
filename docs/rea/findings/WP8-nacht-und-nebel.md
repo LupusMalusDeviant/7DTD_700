@@ -137,3 +137,77 @@ aussieht, nicht.
   [02-10-schnittstellen-kurzcheck.md](02-10-schnittstellen-kurzcheck.md) und F-17 schreiben
   „der Hebel für D16 (dunklere Nächte)". D16 ist die Mobilität; dunklere Nächte gehören zu
   D12. In F-17 berichtigt, der alte Befund bleibt als Stand seines Tages stehen.
+
+## 8 WP8.3 — sichere Orte: die Wirkung hängt an der Kacheleinheit, nicht am Block
+
+Gemessen am 20. November 2026, dieselben Werkzeuge, dieselbe Grenze.
+
+### 8.1 Der Weg
+
+`ActiveRadiusEffects` steht als Zeichenkette nur in `Block::.cctor`; der Wert landet im Feld
+`Block::RadiusEffects` (ein `BlockRadiusEffect` mit `variable` und `radiusSq`). In den
+durchsuchten Klassen (`Block`, `EntityAlive`, `EntityPlayerLocal`, `EntityBuffs`, `Chunk`)
+wird das Feld an zwei Stellen gelesen, beide in `EntityPlayerLocal` — **das ganze Assembly
+ist nicht durchsucht**, ein zweiter Leser anderswo ist nicht ausgeschlossen:
+
+- `BlockRadiusEffectsTick` — aufgerufen aus `OnUpdateLive`. Ruft `Entity::GetBlockPosition`,
+  `World::toChunkXZ`, `WorldBase::GetChunkSync`, **`Chunk::GetTileEntities`**, dann je
+  Eintrag **`TileEntity::IsActive`**, `TileEntity::get_block`, `TileEntity::ToWorldPos` und
+  schließlich `BlockRadiusEffectsApply`.
+- `BlockRadiusEffectsApply(Block, Vector3)` — `Entity::GetDistanceSq` gegen `radiusSq`,
+  dann `EntityBuffs::HasBuff` und `EntityBuffs::AddBuff` mit `variable`.
+
+*Schluss:* die Wirkung entsteht nur an Blöcken, die eine **Kacheleinheit** haben, und nur,
+wenn diese **aktiv** ist. Sie entsteht auf dem **Client** des Spielers.
+
+### 8.2 Wer eine Kacheleinheit hat
+
+| Klasse | Kacheleinheit | `IsActive` |
+|---|---|---|
+| `BlockWorkstation` (`Campfire`, `Forge` erben) | ja — nennt `TileEntity` 49-mal, `AddTileEntity` zweimal | `TileEntityWorkstation` beantwortet es selbst |
+| `BlockLight` | ja (`TileEntityLight`) | **nicht selbst** — es gilt die Grundfassung, deren Antwort nicht gelesen ist |
+| `BlockPlantGrowing`, `BlockPlant` | **nein** — 0 Nennungen von `TileEntity` | — |
+
+Zehn Vanilla-Blöcke führen `ActiveRadiusEffects`: `campfire` (3), `forge` (5),
+`chemistryStation` (3), `wallTorchLight` und `wallTorchLightPlayer` (2), zwei brennende
+Fässer (3), `candleWallLight` und die Kürbislaterne (`buffCandleAOE`, 2) und ein
+verstrahltes Fass.
+
+### 8.3 Was daraus folgt — eine Berichtigung an WP6.4
+
+Unser **Holzfeuer** (`blk700_holzfeuer`) ist `Class="PlantGrowing"`, weil das in V 3.40 der
+einzige Weg ist, einen Block nach Zeit zu ersetzen (WP6.4). Es führt
+`ActiveRadiusEffects="buffCampfireAOE,3"` — und hat keine Kacheleinheit. **Die Zeile wird
+nie gelesen.** Das Holzfeuer leuchtet und verbrennt, wer hineintritt; es wärmt nicht.
+
+Sein Text versprach „wärmt, wer nahe steht". Der Text ist berichtigt, die Zeile bleibt mit
+einem Vermerk stehen, bis Prüfliste 19 den Schluss bestätigt.
+
+### 8.4 Vanillas Bauform der Aura
+
+`buffCampfireAOE` ist `hidden`, `stack_type ignore`, Dauer 1, und stößt mit
+`onSelfBuffStart` `buffCampfireAOEEffect` an (sichtbar, `stack_type replace`, Dauer 2,
+`HypothermalResist +20`). Vanillas eigener Kommentar: ohne den zweiten Buff flackert die
+Anzeige. Das passt zu §8.1: angelegt wird nur, wenn der Spieler den Buff **nicht** trägt.
+
+### 8.5 Was gebaut ist
+
+- `mod/700_60_Welt/Config/buffs.xml`: `buff700_feuerstelle_aura` (unsichtbar, Bauform wie
+  Vanilla) und `buff700_amfeuer` („Am Feuer": Kälteschutz +20 wie Vanilla, dazu
+  `StaminaChangeOT perc_add .2` — Vanillas Wert für `buffCoffee`).
+- `mod/700_60_Welt/Config/blocks.xml`: drei `<set>` — `campfire`, `forge`,
+  `chemistryStation` zeigen auf unsere Aura, Radius wie Vanilla (3, 5, 3).
+- Zwei Sprachzeilen, und die berichtigte Beschreibung des Holzfeuers.
+
+### 8.6 Nachweis und Grenzen
+
+- Drei XPaths mit je genau einem Treffer und dem erwarteten alten Wert; `kette-pruefen`
+  404 → **408**.
+- **Buff-Verweise prüft kein Werkzeug.** `kette-pruefen` kennt Gegenstände und Blöcke
+  (weiter „23 eigene" Definitionen), keine Buffs. Die vier Verweise dieses Pakets sind von
+  Hand aufgelöst (alle „eigen"), ein vertippter Name fiel als „UNBEKANNT" auf. Als Lücke
+  in Vertrag 04 vermerkt.
+- **`IsActive` heißt „brennt"** ist der naheliegende Schluss für eine Werkstatt, nicht
+  gelesen → Prüfliste 19 (a).
+- **Ob Wandfackeln wärmen**, ist offen (§8.2). Sie sind nicht angefasst.
+- **+20 % ist eine Setzung** für WP9.

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / blocks.xml
+	     F-17 Baustein B8 (sichere Orte), Plan-0001 WP8.3, D73
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     DREI FEUER, AN DENEN MAN ZU ATEM KOMMT
+	     ===================================================================
+
+	     Feuerstelle (campfire), Rennofen und Esse (forge), Kraeuterkueche
+	     (chemistryStation) zeigen mit 'ActiveRadiusEffects' auf Vanillas Waerme-Aura.
+	     Hier zeigen sie auf unsere (buff700_feuerstelle_aura, siehe buffs.xml). Der
+	     Radius bleibt, wie Vanilla ihn setzt: 3, 5, 3.
+
+	     WARUM GENAU DIESE DREI - GEMESSEN, NICHT GEWAEHLT. Das Spiel sucht die Wirkung
+	     nicht an BLOECKEN, sondern an KACHELEINHEITEN: EntityPlayerLocal.
+	     BlockRadiusEffectsTick geht die TileEntities der umliegenden Chunks durch, fragt
+	     TileEntity.IsActive und liest erst dann Block.RadiusEffects. Eine Werkstatt hat
+	     eine Kacheleinheit, und die ist aktiv, wenn sie brennt. "Brennende Feuerstelle"
+	     aus dem Plan ist damit woertlich das, was das Spiel prueft.
+
+	     WAS DARAUS FOLGT, UND WAS WP6.4 NICHT WUSSTE:
+
+	     - Unser HOLZFEUER (blk700_holzfeuer, Class PlantGrowing) hat keine
+	       Kacheleinheit - BlockPlantGrowing und BlockPlant nennen im ganzen Code keine.
+	       Seine Zeile ActiveRadiusEffects in 700_40_Bauen wird also nie gelesen: das
+	       Holzfeuer leuchtet und verbrennt, aber es waermt nicht und ist kein sicherer
+	       Ort. Sein Text hat Waerme versprochen; er ist berichtigt. Die Zeile bleibt
+	       stehen, bis ein Blick ins Spiel den Schluss bestaetigt (Pruefliste 19).
+	     - WANDFACKELN bleiben bei Vanillas Aura. Sie haben eine Kacheleinheit
+	       (TileEntityLight), die IsActive aber nicht selbst beantwortet - ob eine
+	       Fackel waermt, ist nicht gelesen. Ein sicherer Ort an jeder Fackel waere
+	       ohnehin keiner mehr: dann waere die ganze beleuchtete Halle "am Feuer".
+
+	     DIE WIRKUNG ENTSTEHT AUF DEM CLIENT (EntityPlayerLocal). Der Server muss die
+	     Bloecke und Buffs kennen, sonst passen die Daten nicht - Netz-Klasse S+C wie
+	     alles in diesem Modlet -, aber angelegt wird der Buff beim Spieler selbst.
+	-->
+
+	<set xpath="/blocks/block[@name='campfire']/property[@name='ActiveRadiusEffects']/@value">buff700_feuerstelle_aura,3</set>
+	<set xpath="/blocks/block[@name='forge']/property[@name='ActiveRadiusEffects']/@value">buff700_feuerstelle_aura,5</set>
+	<set xpath="/blocks/block[@name='chemistryStation']/property[@name='ActiveRadiusEffects']/@value">buff700_feuerstelle_aura,3</set>
+
+</config>

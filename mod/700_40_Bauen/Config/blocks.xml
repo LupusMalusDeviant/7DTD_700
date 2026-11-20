@@ -515,6 +515,10 @@
 			<property name="StabilitySupport" value="false" />
 			<property name="MaxDamage" value="50" />
 			<property name="BuffsWhenWalkedOn" value="buffBurningEnvironment" />
+			<!-- VERMUTLICH WIRKUNGSLOS (gemessen in WP8.3, D73): das Spiel liest
+			     ActiveRadiusEffects nur an Bloecken mit Kacheleinheit, und PlantGrowing
+			     hat keine. Die Zeile bleibt, bis Pruefliste 19 den Schluss bestaetigt;
+			     der Text des Holzfeuers verspricht die Waerme nicht mehr. -->
 			<property name="ActiveRadiusEffects" value="buffCampfireAOE,3" />
 			<property name="EconomicValue" value="10" />
 			<property name="SellableToTrader" value="false" />

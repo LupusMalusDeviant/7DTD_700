@@ -1105,6 +1105,12 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
   wurde. Nicht behoben: eine Datei, die nicht existiert, und ein Lauf mit null XPaths bei
   übergebenen Dateien müssten Exit 2 sein. Bis dahin gilt für jede Gegenprobe: die Zahl
   der geprüften XPaths mitlesen, nicht nur die Farbe.
+- **Buff-Verweise prüft kein Werkzeug** (gefunden am 2026-11-20 in WP8.3). `kette-pruefen`
+  löst Verweise auf Gegenstände und Blöcke auf, nicht auf Buffs: ein vertippter Name in
+  `ActiveRadiusEffects`, in `BuffsWhenWalkedOn` oder in `action="AddBuff" buff="…"` bleibt
+  grün und fällt erst im Spiel auf — als Wirkung, die still fehlt. WP8.3 führt vier solche
+  Verweise; sie sind von Hand aufgelöst. Mit dem Grauen-System (Phase 2) werden es viele.
+  Nicht gebaut; es wäre dieselbe Prüfung mit einer dritten Definitionsart.
 - **Der Inhalt der Denylist** ist ein Anfang, kein Ende. `tools/check/denylist.txt` deckt
   Schusswaffen, Munition, Fahrzeuge, Elektronik, moderne Nahrung und Medizin, Treibstoff und
   industrielle Baustoffe ab, dazu 19 Freigaben nach D9. Die vollständige Liste entsteht in WP3.1

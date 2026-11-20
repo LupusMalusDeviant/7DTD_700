@@ -1269,8 +1269,15 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    (`fogPower` ist ein Exponent mit ungelesener Richtung) — beides unter Offene Punkte.
    Nachweis: zwölf XPaths mit je genau einem Treffer, `kette-pruefen` 392 → 404, und zwei
    absichtlich falsche XPaths wurden rot. → Prüfliste 18.
-3. **WP8.3** `[Claude-prüfbar]` **B8 Sichere Orte** als Buff-Aura um brennende Feuerstellen.
-   Reines XML, keine offene Frage.
+3. ~~**WP8.3** `[Claude-prüfbar]` **B8 Sichere Orte** als Buff-Aura um brennende Feuerstellen.
+   Reines XML, keine offene Frage.~~ **Gebaut 2026-11-20 (D73), ungesehen — und es gab
+   zwei offene Fragen.** (a) *Was tut ein sicherer Ort ohne Grauen-System?* Vom Nutzer
+   entschieden: „Kleine Erholung" — sichtbare Wirkung „Am Feuer" mit Ausdauer-Erholung
+   +20 % und Vanillas Kälteschutz. (b) *Wo ist einer?* Gemessen nur an Blöcken mit aktiver
+   Kacheleinheit: brennende **Feuerstelle, Esse, Kräuterküche**. **Berichtigung an WP6.4:**
+   das Holzfeuer (`PlantGrowing`) hat keine Kacheleinheit — seine Wärme-Zeile ist
+   wirkungslos, sein Text berichtigt. Zwei Buffs in `700_60_Welt/Config/buffs.xml`, drei
+   Zeilen in `blocks.xml`; `kette-pruefen` 404 → 408. → Prüfliste 19.
 4. **WP8.4** `[Claude-prüfbar]` **B2, soweit XML:** Vanilla-Sounds umdeuten und zuordnen,
    Seuchentote leiser stellen. **Die Stille-Logik (Tiere verstummen, wenn Seuchentote nahe sind)
    braucht C# und rutscht in Phase 2** — ehrlicher Schnitt, siehe R1.
@@ -1607,6 +1614,23 @@ werden:
     (f) *Bildrate.* Bricht sie im Nebel nicht ein (F-17, Akzeptanzkriterium)?
     Der Rückweg ist der billigste des ganzen Plans: jede Zeile ist eine Zahl, und beide
     Dateien lassen sich löschen, ohne dass etwas anderes davon abhängt.
+
+19. **Ans Feuer setzen** (WP8.3/D73, 20. November 2026). Drei Schlüsse aus der
+    Aufrufliste:
+    (a) *Nur wenn es brennt.* Neben eine **brennende** Feuerstelle stellen: erscheint „Am
+    Feuer", und erholt sich die Ausdauer nach einem Sprint sichtbar schneller als zehn
+    Schritte weiter? Dann das Feuer ausgehen lassen: verschwindet die Wirkung nach zwei
+    Sekunden? Dasselbe an der Esse (Kreis größer: 5 statt 3).
+    (b) *Kein Flackern.* Die Anzeige steht ruhig, solange man im Kreis bleibt.
+    (c) *Das Holzfeuer wärmt nicht.* Neben ein brennendes Holzfeuer stellen: **keine**
+    Wirkung, weder „Am Feuer" noch Vanillas „Wärmendes Feuer". Erscheint doch eine, war
+    der Schluss über die Kacheleinheit falsch — dann stimmt der alte Text wieder, und das
+    Holzfeuer kann ein sicherer Ort werden (eine Zeile in `700_40_Bauen/Config/blocks.xml`).
+    (d) *Die Wandfackel.* Erscheint neben einer brennenden Wandfackel „Wärmendes Feuer"?
+    Das ist nicht gelesen, und die Antwort entscheidet, ob Fackeln in B3 als Licht **und**
+    Wärme zählen.
+    Auf einem Dedicated Server mit zweitem Client wiederholen (WP9.2): die Wirkung entsteht
+    auf dem Client, beide Spieler müssen sie unabhängig voneinander tragen.
 
 ## Offene Punkte
 

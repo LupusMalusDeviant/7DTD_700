@@ -154,6 +154,24 @@ gedeckelt wird. Beides ist C# und braucht ein REA-Finding.
 **Alle zwölf Zahlen sind Setzungen und im Spiel ungesehen** → Prüfliste 18 im Plan.
 Messungen: [WP8-nacht-und-nebel.md](../rea/findings/WP8-nacht-und-nebel.md).
 
+### B8 — sichere Orte (WP8.3, D73)
+
+**Warum nicht C#?** Zwei Buffs und drei Blockzeilen in `700_60_Welt`, kein Patch.
+
+- **Wo:** an brennender **Feuerstelle, Esse und Kräuterküche**. Das hat die Messung
+  entschieden: das Spiel legt eine Flächenwirkung nur um Blöcke mit aktiver Kacheleinheit.
+- **Was:** die sichtbare Wirkung **„Am Feuer"** — Kälteschutz wie bisher und
+  Ausdauer-Erholung +20 % (vom Nutzer entschieden: „Kleine Erholung"). Keine Heilung.
+- **Nicht:** das Holzfeuer (keine Kacheleinheit — Berichtigung an WP6.4) und Wandfackeln.
+- **Aus B8 nicht gebaut:** „befestigtes Heim mit Schutzzeichen" und „geweihter Boden" —
+  Phase 2 (F-15, F-07). „Senkt das Grauen" ebenfalls: es gibt noch kein Grauen.
+
+*Notiz für Phase 2 (Regel 6):* `buff700_amfeuer` ist die Stelle, an der B3 das Grauen
+senken lässt. Die Wirkung entsteht auf dem Client — für „Gemeinschaft schützt" (Grundsatz
+5) reicht sie also nicht, dafür braucht es die Abfrage „Mitspieler in der Nähe".
+
+Im Spiel ungesehen → Prüfliste 19 im Plan. Messungen: Befund §8.
+
 ## Stand 2026-11-07 — Kurz-Check
 
 **Dunklere, nebligere Nächte sind XML.** `worldglobal.xml` führt die Himmelswerte als

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / buffs.xml
+	     F-17 Baustein B8 (sichere Orte), Plan-0001 WP8.3, D73
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     AM FEUER
+	     ===================================================================
+
+	     B8 sagt, ein sicherer Ort "senkt das Grauen". Das Grauen (B3) gibt es in
+	     Phase 1 nicht - es braucht eine Lichtabfrage am Spielerort, und die ist C#.
+	     Was ein sicherer Ort bis dahin tut, hat der Nutzer am 2026-11-20 entschieden:
+	     "Kleine Erholung" - eine sichtbare Wirkung und schnellere Ausdauer-Erholung.
+
+	     ZWEI BUFFS, NICHT EINER - und das ist Vanillas Bauform, nicht unsere. Das Spiel
+	     legt die Wirkung eines Blocks nur an, wenn der Spieler sie NICHT traegt
+	     (EntityPlayerLocal.BlockRadiusEffectsApply: HasBuff, dann AddBuff). Der erste
+	     Buff ist unsichtbar, haelt eine Sekunde und stoesst beim Start den zweiten an;
+	     der zweite haelt zwei Sekunden und wird ersetzt. So laeuft der sichtbare nie
+	     ab, solange man im Kreis steht, und flackert nicht - Vanillas Kommentar an
+	     buffCampfireAOE sagt genau das. Die Dauern 1 und 2 sind von dort uebernommen.
+
+	     DIE WAERME BLEIBT. Vanillas sichtbare Wirkung am Feuer (buffCampfireAOEEffect)
+	     gibt Kaelteschutz +20. Unsere drei Feuerstellen zeigen kuenftig auf unsere
+	     Aura statt auf Vanillas, also traegt 'Am Feuer' den Kaelteschutz selbst - sonst
+	     waere das Feuer nach diesem Paket kaelter als davor.
+
+	     DIE ZAHL IST EINE SETZUNG FUER WP9. +20 % Ausdauer-Erholung ist der Wert, den
+	     Vanilla dem Kaffee gibt (buffCoffee, StaminaChangeOT perc_add 0.2): spuerbar,
+	     aber kein Grund, einen Kampf am Feuer zu suchen.
+	-->
+
+	<append xpath="/buffs">
+
+		<!-- Die Aura. Unsichtbar; der Block legt sie an, sie stoesst 'Am Feuer' an. -->
+		<buff name="buff700_feuerstelle_aura" hidden="true">
+			<stack_type value="ignore"/>
+			<duration value="1"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="AddBuff" buff="buff700_amfeuer"/>
+			</effect_group>
+		</buff>
+
+		<!-- Am Feuer. Sichtbar. -->
+		<buff name="buff700_amfeuer" name_key="buff700_amfeuerName" description_key="buff700_amfeuerDesc" icon="ui_game_symbol_campfire">
+			<stack_type value="replace"/>
+			<duration value="2"/>
+			<effect_group>
+				<passive_effect name="HypothermalResist" operation="base_add" value="20"/>
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value=".2"/>
+			</effect_group>
+		</buff>
+
+	</append>
+
+</config>
