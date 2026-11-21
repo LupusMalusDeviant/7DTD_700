@@ -1919,3 +1919,87 @@ Gegen den neuen Stand: **100, 0 fehlgeschlagen.**
 **vollständig in einer Zeile eines Kommentars** steht (`<!-- <item name="x"> -->`), zählt
 weiter als definiert. Das war mit `Select-String` schon so; es kann ein falsches Grün
 erzeugen, wenn ein Verweis auf eine auskommentierte Kennung zeigt.
+
+## Nachtrag Review zu WP8.6, 2026-11-21 — ein Befund behoben, **Abnahme offen**
+
+Vor dem Push von `9c74af9` hat Codex (`gpt-6.1-sol`) einen Befund gemeldet, mittel: die
+Absicherung des Mod-Namens aus WP8.6 hatte ein Loch, und ich hatte es im Glossar als
+„Grenze" notiert, statt es zu schließen.
+
+| Befund | Was jetzt gilt |
+|---|---|
+| Der Mod-Name stand im Glossar als Festbegriff unter `700_modName`, dazu zwei Verbotsmuster, die ihn nur **in** einem längeren Text trafen. Eine zweite Zeile mit anderem Schlüssel, deren Text **nur** aus dem Namen besteht, blieb grün — und damit wäre die Umbenennung zwei Zeilen statt einer (D6, Vertrag 02 §4). | **Dritte Tabellenform im Glossar: der Alleinname.** Ein Name, der in der ganzen Sprachdatei nur unter seinem einen Schlüssel stehen darf — egal ob als ganzer Text oder mitten in einem Satz. |
+
+### Vertragsänderung an `glossar-pruefen`: dritte Tabellenform
+
+Bisher: jede Tabelle des Glossars hat eine von **zwei** Kopfzeilen. Neu ist eine dritte:
+
+```
+| Alleinname | Deutsch | Englisch | Quelle |
+```
+
+Die erste Spalte trägt den Schlüssel in Backticks. Geprüft wird je Zeile zweierlei:
+
+1. **Die eine Zeile gibt es, und sie stimmt.** Die Sprachdatei hat diesen Schlüssel, und
+   seine deutsche und englische Spalte tragen zeichengenau die Namen des Glossars — wie
+   beim Festbegriff.
+2. **Es bleibt bei der einen.** In **jeder anderen** Zeile der Sprachdatei darf weder der
+   deutsche noch der englische Name vorkommen, in keiner der beiden Sprachspalten: gesucht
+   als Zeichenfolge, ohne Wortgrenzen, Groß- und Kleinschreibung egal (kulturunabhängig).
+   „Andere Zeile" heißt: jede außer der **ersten** mit diesem Schlüssel — eine zweite Zeile
+   mit demselben Schlüssel ist also auch ein Verstoß.
+
+**Nicht prüfbar (Exit 2):** die erste Spalte ist kein Schlüssel in Backticks (ein
+Gedankenstrich ist hier nicht erlaubt — ein Alleinname ohne Schlüssel hat keinen Sinn);
+die Zeile hat nicht vier Spalten; ein Name fehlt oder ist kürzer als drei Zeichen (er
+stünde in fast jedem Text, und das Ergebnis wäre Lärm statt Befund).
+
+**Eine Alleinname-Tabelle ist freiwillig.** Fehlt sie, bleibt das Glossar prüfbar; Pflicht
+sind weiter mindestens ein Festbegriff mit Kennung und ein Verbot.
+
+**Ausgabe:** eine neue Zeile `Alleinnamen: N, Verstoesse: M`; jeder Verstoß zählt als ein
+Rot. Die bestehenden Zeilen ändern sich nicht.
+
+### Gegenproben — acht neue, alle einmal rot gesehen
+
+Testdaten unter `tools/check/testdaten/glossar/` (`glossar-alleinname*.md`,
+`Localization-alleinname-*.csv`).
+
+| Fall | Erwartet |
+|---|---|
+| Name unter seinem Schlüssel und sonst nirgends | Exit 0, „Alleinnamen: 1, Verstoesse: 0" |
+| **Zweite Zeile mit anderem Schlüssel, deren Text nur der Name ist** (der Fall aus dem Review) | Exit 1, genannt in beiden Sprachen |
+| Name mitten in einem englischen Satz, groß geschrieben | Exit 1, nur englisch genannt |
+| Die Zeile des Schlüssels fehlt | Exit 1 |
+| Die Zeile trägt einen anderen Namen | Exit 1 |
+| Derselbe Schlüssel zweimal | Exit 1 |
+| Alleinname mit Gedankenstrich statt Schlüssel | Exit 2 |
+| Alleinname mit zwei Zeichen | Exit 2 |
+
+Gegen `glossar-pruefen.ps1` des Stands `9c74af9`: **108 Gegenproben, 13 fehlgeschlagen** —
+die acht neuen, dazu fünf `check-all`-Proben, deren Rot-Zahl sich verschiebt, weil das alte
+Skript das Glossar mit der neuen Tabelle als „unbekannte Kopfzeile" ablehnt. Gegen den neuen
+Stand: **108, 0 fehlgeschlagen.**
+
+Dazu elf Proben am **echten** Glossar auf Kopien der Sprachdatei (kein Bestandteil von
+`gegenproben.ps1`): unverändert → grün; ohne die Zeile, mit anderem Namen, Name mitten im
+Text, am Ende, am Anfang, zweite Zeile nur mit dem Namen, und jeder der vier alten
+Vanilla-Namen → je rot.
+
+**Gemessen am 2026-11-21, nach der Änderung:** 51 Festbegriffe mit Kennung, 13 ohne, 88
+Muster, 1 Alleinname, 887 Zeilen; 0 Abweichungen, 0 verbotene Begriffe, 0 Verstöße.
+
+### Grenzen und was offen bleibt
+
+- **Gesucht wird in unserer Sprachdatei, nirgends sonst.** Ein Mod-Name in einem
+  XUi-Attribut (`text="…"`) oder in einer Meldung aus dem Code fiele hier nicht auf. Heute
+  steht er an keiner solchen Stelle (gesucht am 2026-11-21 in `mod\` und `src\`: ein Treffer,
+  die Zeile `700_modName`; sonst nur Pfade in Build-Ausgaben unter `src\Mod700\obj\`); eine
+  Dauerprüfung dafür gibt es nicht.
+- **Ohne Wortgrenzen.** Ein Alleinname, der Teil eines anderen Wortes ist, wird dort
+  mitgefunden. Für „7DTD_700" ist das ohne Belang; ein kurzer künftiger Name („Asche") träfe
+  auch „Aschenlauge". Dann braucht die Form eine Wortgrenze — nicht vorher.
+- **`ModInfo.xml` liest diese Prüfung nicht.** Die acht `DisplayName` sagen „700 — …", nicht
+  „7DTD_700" (nachgesehen am 2026-11-21), und können keinen Sprachschlüssel lesen
+  (Vertrag 02 §4). Eine Umbenennung ist dort acht Zeilen von Hand, und kein Werkzeug hält
+  sie gegen `700_modName`.

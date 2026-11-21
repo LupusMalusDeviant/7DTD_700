@@ -114,7 +114,9 @@ ihn als Festbegriff und verbietet ihn in jedem Fließtext. Gelesen wird der Schl
 von nichts (erstes Etikett: WP8.7). Das Mischland hat keinen Ort und keine Person mit Namen;
 Vanillas „Pummel Pete", „Johnny Newcome" und „Wall Street Tycoon" samt sieben Berufstiteln
 der Neuzeit sind aus Rang-Titeln und -Texten entfernt (14 Zeilen neu, 3 berichtigt).
-Sprachdatei 887 Zeilen, Glossar 52 Festbegriffe mit Kennung und 90 Muster. **Offen:** die
+Sprachdatei 887 Zeilen. Nach dem Review vom selben Tag ist der Mod-Name im Glossar ein
+**Alleinname** (dritte Tabellenform: eine Zeile trägt ihn, keine andere darf ihn enthalten);
+Glossar danach 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname. **Offen:** die
 Händlernamen (F-10) und ob der sichtbare Arbeitstitel „7DTD_700" oder „700" heißt.
 
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel

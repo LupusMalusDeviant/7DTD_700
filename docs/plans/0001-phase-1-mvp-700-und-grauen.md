@@ -1432,6 +1432,16 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Zeilen, 0 und 0. **Offen:** die Händlernamen (Joel, Rekt, Jen, Bob, Hugh, Jimmy) widersprechen
    D1 und warten auf F-10; ob „7DTD_700" oder „700" der sichtbare Arbeitstitel sein soll,
    entscheidet der Nutzer (die acht `DisplayName` sagen „700 — …").
+
+   **Review zu WP8.6 (2026-11-21), ein Befund behoben.** Festbegriff plus zwei Muster
+   ließen eine zweite Zeile durch, die *nur* aus dem Mod-Namen besteht — ich hatte das im
+   Glossar als Grenze notiert statt geschlossen. Jetzt ist der Name ein **Alleinname**
+   (dritte Tabellenform des Glossars, `glossar-pruefen.ps1`): eine Zeile trägt ihn, keine
+   andere darf ihn enthalten. Acht neue Gegenproben; gegen das alte Skript 108 Gegenproben,
+   13 fehlgeschlagen (die acht, dazu fünf `check-all`-Proben), gegen das neue 108, 0.
+   Glossar danach: 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname, 0 Verstöße.
+   → [Vertrag 04](../contracts/04-pruefwerkzeuge.md) „Nachtrag Review zu WP8.6", Abnahme
+   offen.
 7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
    Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.

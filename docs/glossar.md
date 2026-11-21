@@ -26,7 +26,7 @@ läuft in `check-all.ps1` mit.
 
 ### So liest die Prüfung diese Datei
 
-**Jede Tabelle dieser Datei hat eine von zwei Formen**, erkannt an ihrer Kopfzeile. Eine
+**Jede Tabelle dieser Datei hat eine von drei Formen**, erkannt an ihrer Kopfzeile. Eine
 Tabelle mit einer anderen Kopfzeile macht die Prüfung rot („nicht prüfbar") — sonst würde
 ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext ist frei.
 
@@ -39,6 +39,10 @@ ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext 
   Kleinschreibung egal). Es darf in keiner Zeile unserer Sprachdatei vorkommen — in der
   deutschen Spalte (`DE`), der englischen (`EN`) oder in beiden (`beide`). Ein Muster
   enthält kein `|`; zwei Schreibweisen sind zwei Zeilen.
+- **Alleinnamen** — Kopfzeile `| Alleinname | Deutsch | Englisch | Quelle |`. Die erste
+  Spalte ist ein Schlüssel in Backticks. Die Zeile der Sprachdatei mit diesem Schlüssel muss
+  genau diesen deutschen und englischen Namen tragen, und **keine andere Zeile** darf einen
+  der beiden Namen enthalten (§11). Gesucht wird die Zeichenfolge, ohne Wortgrenzen.
 
 ## 2. Welt
 
@@ -312,19 +316,15 @@ liest diesen Schlüssel. **Kein Fließtext schreibt den Namen aus:** die Sprachd
 einem Text keinen anderen Schlüssel einsetzen, also wäre jede ausgeschriebene Stelle eine
 zweite Zeile, die bei der Umbenennung jemand finden muss.
 
-| Kennung | Deutsch | Englisch | Vanilla | Quelle |
-|---|---|---|---|---|
-| `700_modName` | 7DTD_700 | 7DTD_700 | — | D6 |
-
-Die zwei Muster darunter treffen den Namen **in** einem längeren Text — davor oder danach
-steht noch etwas. Die Zeile `700_modName` selbst, die nur aus dem Namen besteht, treffen sie
-nicht. Nicht gefangen wird eine zweite Zeile, deren Text ebenfalls nur aus dem Namen
-bestünde.
-
-| Verboten | Sprache | Stattdessen | Quelle |
+| Alleinname | Deutsch | Englisch | Quelle |
 |---|---|---|---|
-| `(?<!^)7DTD_700` | beide | den Namen nicht ausschreiben; ein Etikett liest `700_modName` | D6, Vertrag 02 §4 |
-| `7DTD_700(?!$)` | beide | den Namen nicht ausschreiben; ein Etikett liest `700_modName` | D6, Vertrag 02 §4 |
+| `700_modName` | 7DTD_700 | 7DTD_700 | D6, Vertrag 02 §4 |
+
+Ein **Alleinname** steht in der ganzen Sprachdatei nur unter seinem Schlüssel: die Zeile
+`700_modName` muss genau diesen Namen tragen, und keine andere Zeile darf ihn enthalten —
+weder als ganzen Text noch mitten in einem Satz, Groß- und Kleinschreibung egal.
+*(Bis zum Review vom 2026-11-21 stand hier ein Festbegriff mit zwei Verbotsmustern; eine
+zweite Zeile, die nur aus dem Namen bestand, ließen sie durch.)*
 
 ### Orte und Personen
 

@@ -1068,6 +1068,63 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
     'NICHT GEPRUEFT: keine Quelle',
     '6 Pruefungen, 4 rot')
 
+# ------------------------------------------------- Review zu WP8.6 (2026-11-21)
+# Der Name der Mod steht in EINER Zeile der Sprachdatei (D6). Abgesichert war das mit einem
+# Festbegriff und zwei Verbotsmustern, die den Namen nur IN einem laengeren Text trafen:
+# eine zweite Zeile, die nur aus dem Namen bestand, blieb gruen. Jetzt gibt es dafuer eine
+# dritte Tabellenform, den Alleinnamen. Acht Faelle - der erste muss gruen sein, sonst
+# bewiese ein Rot der anderen nichts.
+Test-Script 'glossar-pruefen: Alleinname unter seinem Schluessel und sonst nirgends ist gruen' 0 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Alleinnamen: 1, Verstoesse: 0', 'GREEN')
+
+# Der Fall aus dem Review: anderer Schluessel, der Text ist NUR der Name.
+Test-Script 'glossar-pruefen: zweite Zeile nur mit dem Alleinnamen wird rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-doppelt.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname 'Testland' steht auch in '700_zweiterName' (deutsch)",
+    "Alleinname 'Testland' steht auch in '700_zweiterName' (englisch)",
+    'Alleinnamen: 1, Verstoesse: 2') -MustNotContain @('GREEN')
+
+# Mitten im Satz und in anderer Schreibung ("TESTLAND"), nur im Englischen.
+Test-Script 'glossar-pruefen: Alleinname mitten im Text wird rot, auch gross geschrieben' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-im-text.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname 'Testland' steht auch in 'pruefTipp' (englisch)",
+    'Alleinnamen: 1, Verstoesse: 1') -MustNotContain @('GREEN', "'pruefTipp' (deutsch)")
+
+Test-Script 'glossar-pruefen: fehlt die Zeile des Alleinnamens, wird es rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname '700_modName'", 'die Sprachdatei hat diesen Schluessel nicht') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: traegt die Zeile einen anderen Namen, wird es rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-anders.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "deutsch steht 'Anderland', das Glossar sagt 'Testland'") -MustNotContain @('GREEN')
+
+# Derselbe Schluessel zweimal: die zweite Zeile ist eine "andere" Zeile.
+Test-Script 'glossar-pruefen: derselbe Schluessel zweimal ist auch eine zweite Zeile' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-zweimal.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname 'Testland' steht auch in '700_modName'") -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: Alleinname ohne Schluessel ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname-ohne-schluessel.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('braucht seinen Schluessel in Backticks') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: Alleinname mit zwei Zeichen ist nicht pruefbar' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname-kurz.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('kuerzer als drei Zeichen') -MustNotContain @('GREEN')
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {

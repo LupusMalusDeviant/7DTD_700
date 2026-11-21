@@ -323,12 +323,12 @@ kaputt). Exit 2 zählt in `check-all.ps1` als rot. Gemessen am 2026-11-20: 50 Fe
 Kennung, 13 ohne, 79 Muster, 617 Zeilen, 0 Abweichungen, 0 Treffer (nach der dritten Scheibe
 von WP8.5 am selben Tag: 51, 13, 84 Muster, 710 Zeilen, 0 und 0; nach der vierten am
 2026-11-21: 747 Zeilen, 0 und 0; nach der fünften am selben Tag: 836 und dann 872
-Zeilen, 0 und 0; nach WP8.6: 52 Festbegriffe mit Kennung, 90 Muster, 887 Zeilen, 0 und 0).
+Zeilen, 0 und 0; nach WP8.6 und dem Review dazu: 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname, 887 Zeilen, 0 und 0).
 Rot vorgeführt an
-`testdaten/glossar/`: fünfzehn Gegenproben, darunter ein leeres Glossar (Exit 2, nicht grün),
+`testdaten/glossar/`: fünfzehn Gegenproben (seit dem 2026-11-21 acht weitere für den Alleinnamen), darunter ein leeres Glossar (Exit 2, nicht grün),
 ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit Tippfehler.
 
-**Jede Tabelle des Glossars muss eine der beiden Formen haben.** Eine unbekannte Kopfzeile ist
+**Jede Tabelle des Glossars muss eine der drei Formen haben** (Festbegriffe, Verbote, seit dem 2026-11-21 Alleinnamen: ein Name, der nur unter seinem einen Schlüssel stehen darf — der Mod-Name). Eine unbekannte Kopfzeile ist
 Exit 2 — sonst schaltet ein Tippfehler („Sprachen") eine ganze Verbots-Tabelle still ab.
 Dasselbe gilt seit dem 2026-11-21 für eine **kaputte Trennzeile**: eine Zeile außerhalb jeder
 Tabelle, die (Code-Spannen abgezogen) zwei oder mehr `|` trägt, ist Exit 2.

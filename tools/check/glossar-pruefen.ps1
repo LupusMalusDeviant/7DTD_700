@@ -20,6 +20,13 @@
        englischen Spalte JEDER Zeile unserer Sprachdatei gesucht. Faellt auf: ein eigener
        Text, der "Zombie", "Blutmond" oder "Lagerfeuer" sagt.
 
+    3. ALLEINNAMEN (ergaenzt 2026-11-21, Review zu WP8.6). Ein Name, der in der ganzen
+       Sprachdatei nur unter EINEM Schluessel stehen darf - der Name der Mod, damit ihre
+       Umbenennung eine Zeile bleibt (D6). Die Zeile mit dem Schluessel muss genau den
+       Namen tragen, und in keiner anderen Zeile darf er vorkommen, weder als ganzer Text
+       noch mitten in einem Satz. Ein Festbegriff plus zwei Verbotsmuster leistete das
+       nicht: eine zweite Zeile, die NUR aus dem Namen bestand, blieb gruen.
+
     WAS ES NICHT PRUEFT:
     - Vanillas Sprachdatei. Die rund 500 sichtbaren Vanilla-Zeilen mit Weltbegriffen sieht
       dieses Skript nicht - es liest nur, was wir schreiben. Sie sind Arbeitsvorrat (WP8.5).
@@ -73,6 +80,7 @@ $Sprachdatei = (Resolve-Path -LiteralPath $Sprachdatei).ProviderPath
 $gedankenstrich = [string][char]0x2014
 $fest = @()          # Kennung, Deutsch, Englisch, Zeile
 $verboten = @()      # Muster (Regex), Text, Sprache, Stattdessen, Zeile
+$allein = @()        # Kennung, Deutsch, Englisch, Zeile
 $ohneKennung = 0
 
 try {
@@ -109,7 +117,7 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
     $i = $j
 }
 
-$art = ''            # '', 'fest', 'verboten'
+$art = ''            # '', 'fest', 'verboten', 'allein'
 $inTabelle = $false
 
 for ($i = 0; $i -lt $zeilen.Count; $i++) {
@@ -154,8 +162,9 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
         $kopf = $zellen -join '|'
         if ($kopf -ceq 'Kennung|Deutsch|Englisch|Vanilla|Quelle') { $art = 'fest' }
         elseif ($kopf -ceq 'Verboten|Sprache|Stattdessen|Quelle') { $art = 'verboten' }
+        elseif ($kopf -ceq 'Alleinname|Deutsch|Englisch|Quelle') { $art = 'allein' }
         else {
-            Stop-Unpruefbar ("Glossar Zeile ${nr}: unbekannte Kopfzeile '| " + ($zellen -join ' | ') + " |'. Erlaubt sind genau '| Kennung | Deutsch | Englisch | Vanilla | Quelle |' und '| Verboten | Sprache | Stattdessen | Quelle |'")
+            Stop-Unpruefbar ("Glossar Zeile ${nr}: unbekannte Kopfzeile '| " + ($zellen -join ' | ') + " |'. Erlaubt sind genau '| Kennung | Deutsch | Englisch | Vanilla | Quelle |', '| Verboten | Sprache | Stattdessen | Quelle |' und '| Alleinname | Deutsch | Englisch | Quelle |'")
         }
         continue
     }
@@ -188,6 +197,19 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
             Stop-Unpruefbar "Glossar Zeile ${nr}: '$muster' ist kein regulaerer Ausdruck"
         }
         $verboten += [pscustomobject]@{ Regex = $regex; Text = $muster; Sprache = $sprache; Stattdessen = $zellen[2]; Zeile = $nr }
+        continue
+    }
+
+    if ($art -eq 'allein') {
+        if ($zellen.Count -ne 4) { Stop-Unpruefbar "Glossar Zeile ${nr}: $($zellen.Count) Spalten statt 4 (steht ein '|' im Namen?)" }
+        # Kein Gedankenstrich wie beim Festbegriff: ein Alleinname ohne Schluessel haette
+        # keine Zeile, die ihn tragen darf.
+        if ($zellen[0] -notmatch '^`([^`]+)`$') { Stop-Unpruefbar "Glossar Zeile ${nr}: ein Alleinname braucht seinen Schluessel in Backticks: '$($zellen[0])'" }
+        $schluessel = $Matches[1]
+        # Drei Zeichen Mindestlaenge: gesucht wird der Name als Zeichenfolge in JEDEM Text.
+        # Ein leerer oder zwei Zeichen kurzer Name staende fast ueberall - Laerm statt Befund.
+        if ($zellen[1].Length -lt 3 -or $zellen[2].Length -lt 3) { Stop-Unpruefbar "Glossar Zeile ${nr}: der Alleinname zu '$schluessel' fehlt oder ist kuerzer als drei Zeichen" }
+        $allein += [pscustomobject]@{ Kennung = $schluessel; Deutsch = $zellen[1]; Englisch = $zellen[2]; Zeile = $nr }
         continue
     }
 }
@@ -229,6 +251,44 @@ foreach ($begriff in $fest) {
     }
 }
 
+# ------------------------------------------------------------------ 1b. Alleinnamen
+# Zwei Fragen je Name: traegt die eine Zeile ihn (wie beim Festbegriff), und traegt ihn
+# KEINE andere. "Andere" ist jede Zeile ausser der ERSTEN mit dem Schluessel - eine zweite
+# Zeile mit demselben Schluessel zaehlt also mit. Gesucht wird die Zeichenfolge, nicht ein
+# Muster: OrdinalIgnoreCase haengt nicht an der Kultur des Rechners (vgl. tr-TR oben).
+$alleinFehler = @()
+foreach ($name in $allein) {
+    $eigene = -1
+    for ($r = 0; $r -lt $reihen.Count; $r++) {
+        if ($reihen[$r].Key -eq $name.Kennung) { $eigene = $r; break }
+    }
+    if ($eigene -lt 0) {
+        $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): die Sprachdatei hat diesen Schluessel nicht"
+    }
+    else {
+        if ($reihen[$eigene].german -cne $name.Deutsch) {
+            $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): deutsch steht '$($reihen[$eigene].german)', das Glossar sagt '$($name.Deutsch)'"
+        }
+        if ($reihen[$eigene].english -cne $name.Englisch) {
+            $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): englisch steht '$($reihen[$eigene].english)', das Glossar sagt '$($name.Englisch)'"
+        }
+    }
+    $namen = @($name.Deutsch)
+    if ($name.Englisch -ne $name.Deutsch) { $namen += $name.Englisch }
+    for ($r = 0; $r -lt $reihen.Count; $r++) {
+        if ($r -eq $eigene) { continue }
+        foreach ($spalte in @(@('german', 'deutsch'), @('english', 'englisch'))) {
+            $text = [string]$reihen[$r].($spalte[0])
+            if (-not $text) { continue }
+            foreach ($n in $namen) {
+                if ($text.IndexOf($n, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                    $alleinFehler += "Alleinname '$n' steht auch in '$($reihen[$r].Key)' ($($spalte[1])): nur '$($name.Kennung)' darf ihn tragen  [Glossar Zeile $($name.Zeile)]"
+                }
+            }
+        }
+    }
+}
+
 # ------------------------------------------------------------ 2. Verbotene Begriffe
 $treffer = @()
 $betroffen = @{}
@@ -256,8 +316,10 @@ Write-Output ("  Glossar: {0} Festbegriffe mit Kennung, {1} ohne Kennung, {2} ve
 Write-Output ("  Sprachdatei: {0} Zeilen, deutsch und englisch gelesen" -f $reihen.Count)
 Write-Output ("  abweichende Festbegriffe: {0}" -f $abweichend.Count)
 Write-Output ("  Zeilen mit verbotenem Begriff: {0}" -f $betroffen.Count)
+Write-Output ("  Alleinnamen: {0}, Verstoesse: {1}" -f $allein.Count, $alleinFehler.Count)
 
 foreach ($problem in $abweichend) { Write-Output "  [ROT]  $problem" }
+foreach ($problem in $alleinFehler) { Write-Output "  [ROT]  $problem" }
 foreach ($problem in $treffer) { Write-Output "  [ROT]  $problem" }
 
 Write-Output ''
@@ -267,8 +329,10 @@ Write-Output '      sieht diese Pruefung nicht - auch wenn der Spieler sie liest
 Write-Output '    - Gefunden wird das Verbotene, nicht das Fehlende: ob ein Text "Seuchentote"'
 Write-Output '      sagt, wo er es sollte, prueft niemand.'
 Write-Output '    - Festbegriffe ohne Kennung werden gezaehlt, nicht verglichen.'
+Write-Output '    - Ein Alleinname wird als Zeichenfolge gesucht, ohne Wortgrenzen: ein Name, der'
+Write-Output '      auch Teil eines anderen Wortes ist, wird dort mitgefunden.'
 
-$rot = $abweichend.Count + $treffer.Count
+$rot = $abweichend.Count + $treffer.Count + $alleinFehler.Count
 if ($rot -gt 0) {
     Write-Output ''
     Write-Output "== Ergebnis: $rot rot -> RED =="
