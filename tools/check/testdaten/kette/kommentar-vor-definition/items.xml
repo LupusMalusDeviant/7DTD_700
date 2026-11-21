@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, VANILLA-Stand: gueltiges XML, in dem ein Kommentar
+     ein angefangenes Attribut traegt - und in der Zeile danach steht die echte Definition.
+     Ein Muster ueber den ganzen Text las von dem Anfuehrungszeichen im Kommentar bis zu dem
+     der Definition und verschluckte 'pruefRohstoff'. Zeile fuer Zeile passiert das nicht. -->
+<items>
+	<!-- Beispiel fuer die Schreibweise: <item name="
+	-->
+	<item name="pruefRohstoff">
+		<property name="Stacknumber" value="500" />
+	</item>
+	<item name="pruefWerkzeug">
+		<property name="Stacknumber" value="1" />
+	</item>
+</items>

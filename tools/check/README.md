@@ -300,7 +300,10 @@ kaputte **Vanilla**-Datei sind „nicht geprüft" (Exit 2). *(Seit dem sechsten 
 Tag gilt das auch für Vanillas `items.xml` und `blocks.xml`, deren Kennungen als Text gelesen
 werden; das Skript hat nur noch **eine** Stelle, die eine Datei öffnet. Die vier
 Gegenproben mit einer gesperrten Datei prüfen zuerst, ob die Sperre auf dem Dateisystem
-greift — wo nicht, sind sie rot mit diesem Grund.)*
+greift — wo nicht, sind sie rot mit diesem Grund.)* Die Kennungen werden **Zeile für Zeile**
+aus dem Text gelesen (siebtes Review: ein Muster über den ganzen Text ließ einen Kommentar
+die nächste Definition verschlucken). Grenze: eine Definition, die ganz in einer
+Kommentarzeile steht, zählt als definiert.
 
 ### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
 

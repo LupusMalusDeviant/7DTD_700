@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1, Vanilla-Stand. Erfundene Kennungen. -->
+<blocks>
+	<block name="pruefWerkbank">
+		<property name="Class" value="Workstation" />
+	</block>
+</blocks>

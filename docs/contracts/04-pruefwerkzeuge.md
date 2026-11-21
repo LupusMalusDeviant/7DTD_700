@@ -1891,3 +1891,31 @@ fehlgeschlagen, alle vier mit diesem Grund.
 - **Zwischen dem Lesen und dem Ende des Laufs** kann sich eine Datei ändern; gelesen wird
   jede nur einmal, das Skript prüft also einen festen Stand.
 - Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.
+
+## Nachtrag siebtes Review 2026-11-21 — ein Befund behoben, **Abnahme offen**
+
+Vor dem Push von `a231b8c` hat Codex (`gpt-6.1-sol`) einen Befund gemeldet, niedrig — und
+er widerlegt einen Satz des Nachtrags darüber: „Der Wechsel von `Select-String`
+(zeilenweise) auf ein Muster über den ganzen Text hat an der Zahl der Kennungen nichts
+geändert." Am echten Mod stimmte das. Als Aussage über das Skript war es falsch.
+
+| Befund | Was jetzt gilt |
+|---|---|
+| Das Muster für Kennungen lief über den ganzen Dateitext, und `[^"]+` schließt Zeilenumbrüche ein. Ein Kommentar mit einem angefangenen `<item name="` reichte dann bis zum Anführungszeichen der nächsten echten Definition und verschluckte sie; gültige Verweise wurden rot. | `Get-Kennungen` wendet das Muster wieder **Zeile für Zeile** an, wie `Select-String` es tat. Was das Muster selbst enthält, kann die Zeilengrenze so nicht überschreiten. |
+
+Die Richtung des Fehlers: ein **falsches Rot**, kein falsches Grün — eine Definition
+verschwand, es kam keine hinzu, auf die ein Verweis hätte zeigen können.
+
+**Gegenprobe, einmal rot gesehen.** `kette/kommentar-vor-definition/` ist ein Vanilla-Stand
+mit genau diesem Kommentar vor der Definition von `pruefRohstoff`. Erwartet ist **grün**
+(Exit 0, „unaufgeloeste Verweise: 0"). Gegen `kette-pruefen.ps1` des Stands `a231b8c`:
+**100 Gegenproben, 1 fehlgeschlagen** — diese, mit Exit 1 und „ist nirgends definiert".
+Gegen den neuen Stand: **100, 0 fehlgeschlagen.**
+
+**Gemessen am 2026-11-21, nach der Änderung:** 8.092 Definitionen aus Vanilla, 23 eigene,
+418 XPaths, 0 unaufgelöst — unverändert.
+
+**Grenze, alt und unverändert:** Gelesen wird Text, kein XML. Eine Definition, die
+**vollständig in einer Zeile eines Kommentars** steht (`<!-- <item name="x"> -->`), zählt
+weiter als definiert. Das war mit `Select-String` schon so; es kann ein falsches Grün
+erzeugen, wenn ein Verweis auf eine auskommentierte Kennung zeigt.

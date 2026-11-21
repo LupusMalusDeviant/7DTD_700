@@ -1020,6 +1020,20 @@ Test-Script 'kette-pruefen: kaputte Datei als Block- UND Vanilla-Datei ist nicht
     Vanilla      = (Join-Path $data 'kette\vanilla-kaputt')
 } -MustContain @('Vanilla-Datei', 'ist kein gueltiges XML', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
+# ------------------------------------------------- Siebtes Review (2026-11-21)
+# (3g) Diese Gegenprobe muss GRUEN sein - sie faengt ein falsches Rot. Vanillas items.xml
+#      traegt einen Kommentar mit einem angefangenen '<item name="', und in der Zeile danach
+#      steht die echte Definition von pruefRohstoff. Als das Muster ueber den ganzen Text
+#      lief, verschluckte der Treffer die Definition: "2 aus Vanilla" statt 3, und die drei
+#      Verweise auf pruefRohstoff standen als unaufgeloest da.
+Test-Script 'kette-pruefen: Kommentar mit angefangenem Attribut verschluckt keine Definition' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\kommentar-vor-definition')
+} -MustContain @('Definitionen: 3 aus Vanilla, 2 eigene', 'unaufgeloeste Verweise: 0') -MustNotContain @('ist nirgends definiert')
+
 # (4) Eine kaputte Trennzeile ("---|---|---|oops") unter einer Tabelle ohne Randstriche.
 #     Markdown liest das nicht als Tabelle; ihr Verbot 'zombie' fiel weg, und weil eine
 #     zweite Verbots-Tabelle heil war, blieb der Lauf GREEN - mit "ZOMBIE" in der Sprachdatei.

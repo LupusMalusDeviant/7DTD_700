@@ -158,12 +158,21 @@ function Get-Kennungen {
     # sich nicht lesen liess, warf mitten im Lauf. Jetzt geht auch dieser Leser durch
     # Read-Datei, und der Aufrufer beendet bei einem Lesefehler mit Exit 2.
     # Gross-/Kleinschreibung wie bei Select-String: nicht unterschieden.
+    #
+    # ZEILE FUER ZEILE, wie Select-String es tat (siebtes Review). Der erste Umbau liess das
+    # Muster ueber den ganzen Text laufen, und '[^"]+' schliesst Zeilenumbrueche ein: ein
+    # Kommentar mit einem angefangenen '<item name="' reichte dann bis zum Anfuehrungszeichen
+    # der naechsten ECHTEN Definition und verschluckte sie - gueltige Verweise wurden rot.
+    # Das Muster wird darum je Zeile angewandt; was es selbst enthaelt, kann die Grenze so
+    # nicht mehr ueberschreiten.
     param([string]$Pfad, [string]$Muster, [int]$Gruppe)
     $eintrag = Read-Datei $Pfad
     if ($eintrag.Lesefehler) { return @{ Namen = @(); Unlesbar = $eintrag.Lesefehler } }
     $namen = New-Object System.Collections.Generic.List[string]
-    foreach ($m in [regex]::Matches($eintrag.Text, $Muster, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
-        $namen.Add($m.Groups[$Gruppe].Value)
+    $regel = New-Object System.Text.RegularExpressions.Regex($Muster, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    $leser = New-Object System.IO.StringReader($eintrag.Text)
+    while ($null -ne ($zeile = $leser.ReadLine())) {
+        foreach ($m in $regel.Matches($zeile)) { $namen.Add($m.Groups[$Gruppe].Value) }
     }
     return @{ Namen = $namen; Unlesbar = $null }
 }
