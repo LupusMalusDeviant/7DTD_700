@@ -26,6 +26,15 @@
        Namen tragen, und in keiner anderen Zeile darf er vorkommen, weder als ganzer Text
        noch mitten in einem Satz. Ein Festbegriff plus zwei Verbotsmuster leistete das
        nicht: eine zweite Zeile, die NUR aus dem Namen bestand, blieb gruen.
+       Seit dem zweiten Review (2026-11-21): der Schluessel muss in der Sprachdatei genau
+       EINMAL stehen, er wird zeichengenau gesucht ('700_modname' ist nicht
+       '700_modName'), und gegen das echte Glossar ist '700_modName' PFLICHT - fehlt die
+       Glossarzeile, ist das nicht pruefbar statt gruen (Parameter -PflichtAlleinname).
+
+    WIE VERGLICHEN WIRD (seit dem zweiten Review): Kennungen und Texte Zeichen fuer Zeichen
+    (ordinal). PowerShells -ceq/-cne uebergehen Zeichen ohne Sortiergewicht - ein weiches
+    Trennzeichen im Namen galt als gleich -, und eine Hashtabelle @{} vergleicht ihre
+    Schluessel ohne Gross-/Kleinschreibung.
 
     WAS ES NICHT PRUEFT:
     - Vanillas Sprachdatei. Die rund 500 sichtbaren Vanilla-Zeilen mit Weltbegriffen sieht
@@ -48,12 +57,31 @@ param(
     # Das Glossar. Ohne Angabe docs/glossar.md.
     [string]$Glossar,
     # Unsere Sprachdatei. Ohne Angabe die des Sprach-Modlets.
-    [string]$Sprachdatei
+    [string]$Sprachdatei,
+    # Schluessel, die das Glossar als Alleinnamen fuehren MUSS, jeden genau einmal. Ohne
+    # Angabe: gegen das echte Glossar (kein -Glossar) '700_modName', gegen ein genanntes
+    # Glossar keiner. Fehlt ein Pflicht-Alleinname, ist das Ausgang 2.
+    [string[]]$PflichtAlleinname
 )
 
 $ErrorActionPreference = 'Stop'
 $here = $PSScriptRoot
 $repoRoot = Split-Path -Parent (Split-Path -Parent $here)
+
+# PFLICHT-ALLEINNAME (zweites Review zu WP8.6, 2026-11-21). Die Alleinnamen-Tabelle war
+# freiwillig: wer die Zeile '700_modName' aus dem Glossar UND aus der Sprachdatei nahm,
+# bekam "Alleinnamen: 0" und GREEN - die Pruefung fiel still aus. Gegen das echte Glossar
+# ist der Schluessel darum Pflicht. Testglossare (mit -Glossar) bleiben frei, sonst
+# braeuchte jede Gegenprobe eine Alleinnamen-Tabelle, die sie nichts angeht.
+if (-not $PSBoundParameters.ContainsKey('PflichtAlleinname')) {
+    if ($Glossar) { $PflichtAlleinname = @() } else { $PflichtAlleinname = @('700_modName') }
+}
+
+function Test-Gleich {
+    # Zeichen fuer Zeichen. -ceq uebergeht Zeichen ohne Sortiergewicht (U+00AD).
+    param([string]$Links, [string]$Rechts)
+    return [string]::Equals($Links, $Rechts, [System.StringComparison]::Ordinal)
+}
 
 if (-not $Glossar) { $Glossar = Join-Path $repoRoot 'docs\glossar.md' }
 if (-not $Sprachdatei) { $Sprachdatei = Join-Path $repoRoot 'mod\700_90_Sprache\Config\Localization.csv' }
@@ -216,6 +244,12 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
 
 if ($fest.Count -eq 0) { Stop-Unpruefbar "im Glossar steht kein einziger Festbegriff mit Kennung (Kopfzeile '| Kennung | Deutsch | Englisch | Vanilla | Quelle |')" }
 if ($verboten.Count -eq 0) { Stop-Unpruefbar "im Glossar steht kein einziger verbotener Begriff (Kopfzeile '| Verboten | Sprache | Stattdessen | Quelle |')" }
+foreach ($verlangt in $PflichtAlleinname) {
+    $vorhanden = @($allein | Where-Object { Test-Gleich $_.Kennung $verlangt })
+    if ($vorhanden.Count -ne 1) {
+        Stop-Unpruefbar "im Glossar steht der Pflicht-Alleinname '$verlangt' $($vorhanden.Count)-mal statt genau einmal (Kopfzeile '| Alleinname | Deutsch | Englisch | Quelle |')"
+    }
+}
 
 # -------------------------------------------------------------- Sprachdatei lesen
 try {
@@ -230,7 +264,9 @@ foreach ($pflicht in 'Key', 'english', 'german') {
     if ($spalten -notcontains $pflicht) { Stop-Unpruefbar "die Sprachdatei hat keine Spalte '$pflicht'" }
 }
 
-$nachSchluessel = @{}
+# Ordinal, nicht @{}: eine PowerShell-Hashtabelle vergleicht Schluessel ohne
+# Gross-/Kleinschreibung, und 'prueffeuer' haette als 'pruefFeuer' gegolten.
+$nachSchluessel = New-Object System.Collections.Hashtable ([System.StringComparer]::Ordinal)
 foreach ($reihe in $reihen) {
     if ($reihe.Key -and -not $nachSchluessel.ContainsKey($reihe.Key)) { $nachSchluessel[$reihe.Key] = $reihe }
 }
@@ -243,10 +279,10 @@ foreach ($begriff in $fest) {
         continue
     }
     $reihe = $nachSchluessel[$begriff.Kennung]
-    if ($reihe.german -cne $begriff.Deutsch) {
+    if (-not (Test-Gleich $reihe.german $begriff.Deutsch)) {
         $abweichend += "Festbegriff '$($begriff.Kennung)' (Glossar Zeile $($begriff.Zeile)): deutsch steht '$($reihe.german)', das Glossar sagt '$($begriff.Deutsch)'"
     }
-    if ($reihe.english -cne $begriff.Englisch) {
+    if (-not (Test-Gleich $reihe.english $begriff.Englisch)) {
         $abweichend += "Festbegriff '$($begriff.Kennung)' (Glossar Zeile $($begriff.Zeile)): englisch steht '$($reihe.english)', das Glossar sagt '$($begriff.Englisch)'"
     }
 }
@@ -256,25 +292,38 @@ foreach ($begriff in $fest) {
 # KEINE andere. "Andere" ist jede Zeile ausser der ERSTEN mit dem Schluessel - eine zweite
 # Zeile mit demselben Schluessel zaehlt also mit. Gesucht wird die Zeichenfolge, nicht ein
 # Muster: OrdinalIgnoreCase haengt nicht an der Kultur des Rechners (vgl. tr-TR oben).
+#
+# Zweites Review (2026-11-21), drei Aenderungen in diesem Block:
+# - Der SCHLUESSEL wird zeichengenau gesucht. Mit -eq galt '700_modname' als '700_modName';
+#   stand die klein geschriebene Zeile mit dem richtigen Namen zuerst, wurde sie geprueft
+#   und die echte Zeile mit dem falschen Namen nie.
+# - Der Schluessel wird GEZAEHLT. Eine zweite Zeile desselben Schluessels mit einem anderen
+#   Titel fiel hier nicht auf, nur in der CSV-Formpruefung.
+# - Soll und Ist werden ordinal verglichen (Test-Gleich), nicht mit -cne.
 $alleinFehler = @()
 foreach ($name in $allein) {
-    $eigene = -1
+    $eigeneAlle = @()
     for ($r = 0; $r -lt $reihen.Count; $r++) {
-        if ($reihen[$r].Key -eq $name.Kennung) { $eigene = $r; break }
+        if (Test-Gleich $reihen[$r].Key $name.Kennung) { $eigeneAlle += $r }
     }
+    $eigene = -1
+    if ($eigeneAlle.Count -gt 0) { $eigene = $eigeneAlle[0] }
     if ($eigene -lt 0) {
         $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): die Sprachdatei hat diesen Schluessel nicht"
     }
     else {
-        if ($reihen[$eigene].german -cne $name.Deutsch) {
+        if ($eigeneAlle.Count -gt 1) {
+            $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): der Schluessel steht $($eigeneAlle.Count)-mal in der Sprachdatei, erlaubt ist eine Zeile"
+        }
+        if (-not (Test-Gleich $reihen[$eigene].german $name.Deutsch)) {
             $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): deutsch steht '$($reihen[$eigene].german)', das Glossar sagt '$($name.Deutsch)'"
         }
-        if ($reihen[$eigene].english -cne $name.Englisch) {
+        if (-not (Test-Gleich $reihen[$eigene].english $name.Englisch)) {
             $alleinFehler += "Alleinname '$($name.Kennung)' (Glossar Zeile $($name.Zeile)): englisch steht '$($reihen[$eigene].english)', das Glossar sagt '$($name.Englisch)'"
         }
     }
     $namen = @($name.Deutsch)
-    if ($name.Englisch -ne $name.Deutsch) { $namen += $name.Englisch }
+    if (-not [string]::Equals($name.Englisch, $name.Deutsch, [System.StringComparison]::OrdinalIgnoreCase)) { $namen += $name.Englisch }
     for ($r = 0; $r -lt $reihen.Count; $r++) {
         if ($r -eq $eigene) { continue }
         foreach ($spalte in @(@('german', 'deutsch'), @('english', 'englisch'))) {

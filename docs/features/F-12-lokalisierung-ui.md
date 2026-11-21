@@ -110,13 +110,15 @@ Punkte). Sprachdatei 872 Zeilen.
 ## Stand 2026-11-21 — WP8.6: Mod-Name und Namensregeln (D83)
 
 Der Mod-Name steht in **einer** Zeile, `700_modName` = „7DTD_700"; das Glossar (§11) führt
-ihn als Festbegriff und verbietet ihn in jedem Fließtext. Gelesen wird der Schlüssel noch
-von nichts (erstes Etikett: WP8.7). Das Mischland hat keinen Ort und keine Person mit Namen;
+ihn als **Alleinnamen**: diese eine Zeile trägt ihn, keine andere Zeile darf ihn enthalten,
+der Schlüssel steht genau einmal, und die Glossarzeile ist Pflicht. Gelesen wird der
+Schlüssel noch von nichts (erstes Etikett: WP8.7). Das Mischland hat keinen Ort und keine Person mit Namen;
 Vanillas „Pummel Pete", „Johnny Newcome" und „Wall Street Tycoon" samt sieben Berufstiteln
 der Neuzeit sind aus Rang-Titeln und -Texten entfernt (14 Zeilen neu, 3 berichtigt).
-Sprachdatei 887 Zeilen. Nach dem Review vom selben Tag ist der Mod-Name im Glossar ein
-**Alleinname** (dritte Tabellenform: eine Zeile trägt ihn, keine andere darf ihn enthalten);
-Glossar danach 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname. **Offen:** die
+Sprachdatei 887 Zeilen, Glossar 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname.
+*(Am Tag des Baus stand der Name als Festbegriff mit zwei Verbotsmustern im Glossar; zwei
+Reviews haben daraus die Alleinnamen-Regel in ihrer heutigen Form gemacht — Vertrag 04,
+die beiden Nachträge zu WP8.6.)* **Offen:** die
 Händlernamen (F-10) und ob der sichtbare Arbeitstitel „7DTD_700" oder „700" heißt.
 
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel

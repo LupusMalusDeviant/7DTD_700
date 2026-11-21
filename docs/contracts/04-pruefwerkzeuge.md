@@ -2003,3 +2003,87 @@ Muster, 1 Alleinname, 887 Zeilen; 0 Abweichungen, 0 verbotene Begriffe, 0 Verst�
   „7DTD_700" (nachgesehen am 2026-11-21), und können keinen Sprachschlüssel lesen
   (Vertrag 02 §4). Eine Umbenennung ist dort acht Zeilen von Hand, und kein Werkzeug hält
   sie gegen `700_modName`.
+
+## Nachtrag zweites Review zu WP8.6, 2026-11-21 — fünf Befunde behoben, **Abnahme offen**
+
+Das Review des Stands `be1e58b` fand in der neuen Alleinnamen-Prüfung zwei mittlere und drei
+niedrige Lücken. Alle fünf waren echt.
+
+| # | Schwere | Befund | Wo behoben |
+|---|---|---|---|
+| 1 | mittel | Fehlt `700_modName` im Glossar **und** in der Sprachdatei, meldet die Prüfung „Alleinnamen: 0" und grün — die Tabelle war freiwillig | Pflicht-Alleinname |
+| 2 | mittel | Der Schlüssel wurde ohne Groß/Klein gesucht: `700_modname` mit richtigem Namen vor `700_modName` mit falschem — geprüft wurde die falsche Zeile, Ergebnis grün | Schlüssel zeichengenau |
+| 3 | niedrig | Derselbe Schlüssel zweimal, die zweite Zeile mit **anderem** Titel: grün; nur die CSV-Prüfung fing die Dublette | Schlüssel wird gezählt |
+| 4 | niedrig | Der Namensvergleich war nicht zeichengenau: ein weiches Trennzeichen (U+00AD) im Namen blieb unter PowerShell 5.1 grün | Vergleich ordinal |
+| 5 | niedrig | F-12 beschrieb im selben Absatz die alte Regel (Festbegriff) und die neue | F-12 berichtigt |
+
+### Vertragsänderungen an `glossar-pruefen`
+
+1. **Pflicht-Alleinname.** Neuer Parameter `-PflichtAlleinname <Schlüssel[,…]>`: jeder
+   genannte Schlüssel muss im Glossar **genau einmal** als Alleinname stehen, sonst Exit 2
+   (das Glossar ist unvollständig — nicht prüfbar, nicht grün). **Vorgabe:** läuft das
+   Skript gegen das echte Glossar (ohne `-Glossar`), gilt `700_modName` als Pflicht; mit
+   einem ausdrücklich genannten Glossar gilt keine Pflicht, solange der Parameter fehlt.
+   `check-all.ps1` ruft das Skript ohne Parameter und bekommt damit die Pflicht. Die Aussage
+   des vorigen Nachtrags, die Tabelle sei „freiwillig", gilt nur noch für Testglossare.
+2. **Schlüssel zeichengenau.** Der Schlüssel eines Alleinnamens **und** die Kennung eines
+   Festbegriffs werden in der Sprachdatei ordinal gesucht, Groß- und Kleinschreibung zählt.
+   `700_modname` ist nicht `700_modName`, `prueffeuer` nicht `pruefFeuer`. (Der Festbegriff
+   stand nicht im Review; er hatte denselben Fehler, weil eine PowerShell-Hashtabelle
+   Schlüssel ohne Groß/Klein vergleicht.)
+3. **Der Schlüssel eines Alleinnamens steht genau einmal.** Steht er öfter, ist das ein
+   Befund dieser Prüfung, gleich was die weiteren Zeilen tragen.
+4. **Texte ordinal.** Soll und Ist werden Zeichen für Zeichen verglichen
+   (`StringComparison.Ordinal`), beim Alleinnamen wie beim Festbegriff. Der Vergleich der
+   PowerShell (`-cne`) übergeht Zeichen ohne Sortiergewicht. Ob die englische Fassung eines
+   Alleinnamens eigens gesucht werden muss, entscheidet `OrdinalIgnoreCase`.
+
+Ausgabe, Tabellenformen und die übrigen Ausgänge bleiben wie sie sind.
+
+### Gegenproben — elf neue
+
+Testdaten unter `tools/check/testdaten/glossar/` (`Localization-alleinname-kleinschreibung*.csv`,
+`-doppelt-anders.csv`, `-trennzeichen.csv`, `Localization-kennung-kleinschreibung.csv`,
+`Localization-festbegriff-trennzeichen.csv`, `glossar-alleinname-zweimal.md`).
+
+| Fall | Erwartet | Gegen `be1e58b` |
+|---|---|---|
+| `700_modname` (richtiger Name) vor `700_modName` (falscher Name) | Exit 1, die echte Zeile ist geprüft | grün |
+| Dieselben zwei Zeilen in der anderen Reihenfolge | Exit 1 | schon rot |
+| `700_modName` zweimal, zweite Zeile mit anderem Titel | Exit 1, „steht 2-mal" | grün |
+| Weiches Trennzeichen im Alleinnamen | Exit 1 | grün |
+| Kennung eines Festbegriffs in anderer Schreibweise | Exit 1 | grün |
+| Weiches Trennzeichen im Festbegriff | Exit 1 | grün |
+| `-PflichtAlleinname`, Name fehlt im Glossar | Exit 2 | Abbruch (Parameter unbekannt) |
+| `-PflichtAlleinname`, Name vorhanden | Exit 0 | Abbruch (Parameter unbekannt) |
+| `-PflichtAlleinname`, Name zweimal im Glossar | Exit 2 | Abbruch (Parameter unbekannt) |
+| Ohne Parameter, echtes Glossar und echte Sprachdatei | Exit 0 | grün (muss es sein) |
+| **Ohne Parameter, `700_modName` fehlt in Glossar und Sprachdatei** (der Fall aus dem Review) | Exit 2 | grün |
+
+Die letzten beiden laufen gegen einen nachgebauten Baum im Temp-Ordner: eine Kopie des
+Skripts unter `tools\check\`, Kopien des echten Glossars und der echten Sprachdatei an
+ihren Plätzen, einmal unverändert, einmal ohne die Zeile. So ist der Aufruf geprüft, den
+`check-all.ps1` wirklich macht. Der Baum wird nach dem Lauf gelöscht.
+
+Gegen `glossar-pruefen.ps1` des Stands `be1e58b`: **119 Gegenproben, 9 fehlgeschlagen** (die
+neun, die oben nicht „schon rot" oder „muss es sein" tragen). Gegen den neuen Stand:
+**119, 0 fehlgeschlagen.**
+
+**`check-all.ps1` am 2026-11-21 nach der Änderung:** 6 Prüfungen, 1 rot. Glossar: 51
+Festbegriffe mit Kennung, 13 ohne, 88 Muster, 1 Alleinname, 0 Verstöße, 887 Zeilen — die
+strengeren Vergleiche haben an den echten Dateien nichts gefunden. Rot ist jetzt `recipes`
+(80 Sackgassen), nicht mehr `anachronisms` (grün): der Lauf liest zum ersten Mal einen
+ConfigsDump mit geladenen Modlets. Das hat mit dieser Änderung nichts zu tun und steht im
+Plan-0001 unter den offenen Punkten.
+
+### Grenzen
+
+- **Ein unsichtbares Zeichen im Namen einer ANDEREN Zeile** (`7DTD` + U+00AD + `_700` in
+  einem Fließtext) findet die Suche nicht: sie sucht die Zeichenfolge des Glossars, und die
+  steht dort dann nicht. Das wäre Absicht, kein Versehen, und dagegen prüft hier nichts.
+- **Die Pflicht hängt am Aufruf ohne `-Glossar`.** Wer das Skript mit `-Glossar
+  docs\glossar.md` ruft, bekommt sie nicht, solange er `-PflichtAlleinname` weglässt.
+  `check-all.ps1` ruft ohne Parameter.
+- **Die beiden Proben am nachgebauten Baum hängen an den echten Dateien.** Ist das echte
+  Glossar oder die echte Sprachdatei aus einem anderen Grund rot, fällt die erste der
+  beiden mit — dann ist `check-all` aber ohnehin rot.

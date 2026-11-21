@@ -43,6 +43,13 @@ ein Tippfehler in der Kopfzeile eine ganze Tabelle still abschalten. Fließtext 
   Spalte ist ein Schlüssel in Backticks. Die Zeile der Sprachdatei mit diesem Schlüssel muss
   genau diesen deutschen und englischen Namen tragen, und **keine andere Zeile** darf einen
   der beiden Namen enthalten (§11). Gesucht wird die Zeichenfolge, ohne Wortgrenzen.
+  Der Schlüssel steht in der Sprachdatei genau einmal und wird zeichengenau gesucht
+  (`700_modname` ist ein anderer Schlüssel). Die Zeile `700_modName` ist in diesem
+  Glossar **Pflicht**: fehlt sie, ist das Glossar nicht prüfbar.
+
+Kennungen und Texte vergleicht die Prüfung Zeichen für Zeichen, auch bei den
+Festbegriffen: andere Groß- und Kleinschreibung oder ein unsichtbares Zeichen im Namen ist
+eine Abweichung.
 
 ## 2. Welt
 

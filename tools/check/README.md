@@ -325,10 +325,10 @@ von WP8.5 am selben Tag: 51, 13, 84 Muster, 710 Zeilen, 0 und 0; nach der vierte
 2026-11-21: 747 Zeilen, 0 und 0; nach der fünften am selben Tag: 836 und dann 872
 Zeilen, 0 und 0; nach WP8.6 und dem Review dazu: 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname, 887 Zeilen, 0 und 0).
 Rot vorgeführt an
-`testdaten/glossar/`: fünfzehn Gegenproben (seit dem 2026-11-21 acht weitere für den Alleinnamen), darunter ein leeres Glossar (Exit 2, nicht grün),
+`testdaten/glossar/`: fünfzehn Gegenproben (seit dem 2026-11-21 neunzehn weitere: acht für den Alleinnamen, elf nach dem zweiten Review — Pflicht-Alleinname, Schlüssel und Texte zeichengenau), darunter ein leeres Glossar (Exit 2, nicht grün),
 ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit Tippfehler.
 
-**Jede Tabelle des Glossars muss eine der drei Formen haben** (Festbegriffe, Verbote, seit dem 2026-11-21 Alleinnamen: ein Name, der nur unter seinem einen Schlüssel stehen darf — der Mod-Name). Eine unbekannte Kopfzeile ist
+**Jede Tabelle des Glossars muss eine der drei Formen haben** (Festbegriffe, Verbote, seit dem 2026-11-21 Alleinnamen: ein Name, der nur unter seinem einen Schlüssel stehen darf — der Mod-Name; gegen das echte Glossar ist die Zeile `700_modName` Pflicht, Parameter `-PflichtAlleinname`). Eine unbekannte Kopfzeile ist
 Exit 2 — sonst schaltet ein Tippfehler („Sprachen") eine ganze Verbots-Tabelle still ab.
 Dasselbe gilt seit dem 2026-11-21 für eine **kaputte Trennzeile**: eine Zeile außerhalb jeder
 Tabelle, die (Code-Spannen abgezogen) zwei oder mehr `|` trägt, ist Exit 2.

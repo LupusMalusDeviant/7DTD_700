@@ -145,11 +145,18 @@ function Test-Script {
         # Setzt %APPDATA% fuer den einen Lauf um (seit 2026-11-21). check-all.ps1 sucht dort
         # nach einem ConfigsDump; auf einem Rechner, der einen hat, liesse sich der Fall
         # "keine Quelle" sonst nicht gegenpruefen.
-        [string]$Appdata
+        [string]$Appdata,
+        # Voller Pfad zu einer KOPIE des Skripts ausserhalb von tools\check (seit dem
+        # zweiten Review zu WP8.6). glossar-pruefen.ps1 rechnet das echte Glossar aus
+        # seinem eigenen Ordner; wer pruefen will, was es OHNE Parameter gegen ein falsches
+        # Glossar tut, muss es in einen nachgebauten Baum legen. Der Name darf nicht
+        # "SkriptPfad" heissen - das waere dieselbe Variable wie $skriptPfad unten.
+        [string]$FremdesSkript
     )
 
     $script:checked++
     $skriptPfad = Join-Path $here $Skript
+    if ($FremdesSkript) { $skriptPfad = $FremdesSkript }
     $previous = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     # Achtung: PowerShell unterscheidet bei Variablennamen keine Gross-/Kleinschreibung.
@@ -1124,6 +1131,113 @@ Test-Script 'glossar-pruefen: Alleinname mit zwei Zeichen ist nicht pruefbar' 2 
     Glossar     = (Join-Path $glossarDaten 'glossar-alleinname-kurz.md')
     Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
 } -Skript 'glossar-pruefen.ps1' -MustContain @('kuerzer als drei Zeichen') -MustNotContain @('GREEN')
+
+# ------------------------------------------ Zweites Review zu WP8.6 (2026-11-21)
+# Fuenf Befunde am Alleinnamen, vier davon im Skript. Jede Probe unten war gegen das
+# Skript des Stands be1e58b gruen, wo sie rot sein muss (ausser den zwei, die es dazusagen).
+
+# Befund 2: der Schluessel wurde ohne Gross/Klein gesucht. '700_modname' mit dem richtigen
+# Namen steht ZUERST, '700_modName' mit dem falschen danach - geprueft wurde die erste.
+Test-Script 'glossar-pruefen: klein geschriebener Schluessel zuerst - geprueft wird die echte Zeile' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-kleinschreibung.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "deutsch steht 'Anderland', das Glossar sagt 'Testland'",
+    "Alleinname 'Testland' steht auch in '700_modname'") -MustNotContain @('GREEN')
+
+# Dieselben zwei Schreibweisen in der anderen Reihenfolge. War schon vorher rot (die klein
+# geschriebene Zeile ist eine "andere"); steht hier, damit die Reihenfolge nichts entscheidet.
+Test-Script 'glossar-pruefen: klein geschriebener Schluessel danach traegt den Namen unerlaubt' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-kleinschreibung-danach.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname 'Testland' steht auch in '700_modname'", 'Verstoesse: 2') -MustNotContain @('GREEN')
+
+# Befund 3: derselbe Schluessel zweimal, die zweite Zeile mit ANDEREM Titel.
+Test-Script 'glossar-pruefen: Schluessel des Alleinnamens zweimal mit anderem Titel wird rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-doppelt-anders.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    'der Schluessel steht 2-mal in der Sprachdatei') -MustNotContain @('GREEN')
+
+# Befund 4: ein weiches Trennzeichen (U+00AD) im Namen. -cne sah darin keinen Unterschied.
+Test-Script 'glossar-pruefen: weiches Trennzeichen im Alleinnamen wird rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-alleinname-trennzeichen.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Alleinname '700_modName'", "das Glossar sagt 'Testland'") -MustNotContain @('GREEN')
+
+# Derselbe Fehler beim Festbegriff (stand nicht im Review): Kennung in anderer
+# Schreibweise, und ein weiches Trennzeichen im Namen.
+Test-Script 'glossar-pruefen: Kennung eines Festbegriffs in anderer Schreibweise gilt nicht' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-kennung-kleinschreibung.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Festbegriff 'pruefFeuer'", 'die Sprachdatei hat diesen Schluessel nicht') -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: weiches Trennzeichen im Festbegriff wird rot' 1 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-festbegriff-trennzeichen.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Festbegriff 'pruefFeuer'", "das Glossar sagt 'Feuerstelle'") -MustNotContain @('GREEN')
+
+# Befund 1: die Alleinnamen-Tabelle war freiwillig. Mit -PflichtAlleinname ist ein fehlender
+# Name nicht pruefbar; vorhanden ist er gruen; zweimal im Glossar ist er nicht pruefbar.
+Test-Script 'glossar-pruefen: Pflicht-Alleinname fehlt im Glossar - nicht pruefbar' 2 @{
+    Glossar           = (Join-Path $glossarDaten 'glossar-gut.md')
+    Sprachdatei       = (Join-Path $glossarDaten 'Localization-gut.csv')
+    PflichtAlleinname = @('700_modName')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Pflicht-Alleinname '700_modName' 0-mal statt genau einmal") -MustNotContain @('GREEN')
+
+Test-Script 'glossar-pruefen: Pflicht-Alleinname vorhanden ist gruen' 0 @{
+    Glossar           = (Join-Path $glossarDaten 'glossar-alleinname.md')
+    Sprachdatei       = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
+    PflichtAlleinname = @('700_modName')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('Alleinnamen: 1, Verstoesse: 0', 'GREEN')
+
+Test-Script 'glossar-pruefen: Pflicht-Alleinname zweimal im Glossar - nicht pruefbar' 2 @{
+    Glossar           = (Join-Path $glossarDaten 'glossar-alleinname-zweimal.md')
+    Sprachdatei       = (Join-Path $glossarDaten 'Localization-alleinname-gut.csv')
+    PflichtAlleinname = @('700_modName')
+} -Skript 'glossar-pruefen.ps1' -MustContain @(
+    "Pflicht-Alleinname '700_modName' 2-mal statt genau einmal") -MustNotContain @('GREEN')
+
+# Befund 1, der eigentliche Fall: das Skript OHNE Parameter, so wie check-all.ps1 es ruft,
+# gegen ein echtes Glossar, dem die Zeile fehlt. Das Skript rechnet Glossar und Sprachdatei
+# aus seinem eigenen Ordner, darum ein nachgebauter Baum im Temp-Ordner: einmal mit
+# unveraenderten Kopien (muss gruen sein, sonst bewiese das Rot nichts), einmal ohne die
+# Zeile '700_modName' in Glossar UND Sprachdatei.
+$probeBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-glossarprobe-' + [Guid]::NewGuid().ToString('N'))
+$ohneBom = New-Object System.Text.UTF8Encoding($false)
+try {
+    foreach ($probeFall in 'mit', 'ohne') {
+        $probeWurzel = Join-Path $probeBaum $probeFall
+        foreach ($ordner in 'tools\check', 'docs', 'mod\700_90_Sprache\Config') {
+            New-Item -ItemType Directory -Force -Path (Join-Path $probeWurzel $ordner) | Out-Null
+        }
+        Copy-Item -LiteralPath (Join-Path $here 'glossar-pruefen.ps1') -Destination (Join-Path $probeWurzel 'tools\check\glossar-pruefen.ps1')
+        $probeGlossar = [IO.File]::ReadAllLines((Join-Path $repoRoot 'docs\glossar.md'), [Text.Encoding]::UTF8)
+        $probeCsv = [IO.File]::ReadAllLines((Join-Path $repoRoot 'mod\700_90_Sprache\Config\Localization.csv'), [Text.Encoding]::UTF8)
+        if ($probeFall -eq 'ohne') {
+            $probeGlossar = @($probeGlossar | Where-Object { $_ -notmatch '^\|\s*`700_modName`' })
+            $probeCsv = @($probeCsv | Where-Object { $_ -notmatch '^700_modName,' })
+        }
+        [IO.File]::WriteAllLines((Join-Path $probeWurzel 'docs\glossar.md'), $probeGlossar, $ohneBom)
+        [IO.File]::WriteAllLines((Join-Path $probeWurzel 'mod\700_90_Sprache\Config\Localization.csv'), $probeCsv, $ohneBom)
+    }
+
+    Test-Script 'glossar-pruefen ohne Parameter: echtes Glossar und echte Sprachdatei sind gruen' 0 @{
+    } -FremdesSkript (Join-Path $probeBaum 'mit\tools\check\glossar-pruefen.ps1') -MustContain @(
+        'Alleinnamen: 1, Verstoesse: 0', 'GREEN')
+
+    Test-Script 'glossar-pruefen ohne Parameter: 700_modName fehlt in Glossar und Sprachdatei - nicht pruefbar' 2 @{
+    } -FremdesSkript (Join-Path $probeBaum 'ohne\tools\check\glossar-pruefen.ps1') -MustContain @(
+        "Pflicht-Alleinname '700_modName' 0-mal statt genau einmal") -MustNotContain @('GREEN')
+}
+finally {
+    if (Test-Path -LiteralPath $probeBaum) { Remove-Item -LiteralPath $probeBaum -Recurse -Force }
+}
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

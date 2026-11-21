@@ -1442,6 +1442,16 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Glossar danach: 51 Festbegriffe mit Kennung, 88 Muster, 1 Alleinname, 0 Verstöße.
    → [Vertrag 04](../contracts/04-pruefwerkzeuge.md) „Nachtrag Review zu WP8.6", Abnahme
    offen.
+
+   **Zweites Review zu WP8.6 (2026-11-21), fünf Befunde behoben.** Die Alleinnamen-Prüfung
+   hatte selbst Lücken: fehlte `700_modName` in Glossar und Sprachdatei zugleich, blieb sie
+   grün; der Schlüssel wurde ohne Groß/Klein gesucht; ein doppelter Schlüssel mit anderem
+   Titel und ein unsichtbares Zeichen im Namen fielen nicht auf; F-12 beschrieb zwei Regeln.
+   Jetzt ist `700_modName` gegen das echte Glossar Pflicht (Exit 2, wenn die Zeile fehlt),
+   der Schlüssel wird zeichengenau gesucht und gezählt, Texte werden ordinal verglichen —
+   die letzten beiden auch beim Festbegriff, der denselben Fehler hatte. Elf neue
+   Gegenproben; gegen das Skript des Stands `be1e58b` 119 Gegenproben, 9 fehlgeschlagen,
+   gegen das neue 119, 0. → Vertrag 04 „Nachtrag zweites Review zu WP8.6", Abnahme offen.
 7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
    Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
@@ -1915,8 +1925,19 @@ werden:
   der Kern übersprungen („AntiCheat enabled"), 0 `EXC`, 1 fremde `ERR` (Xbox Live), 83
   `WRN` (43 davon „ActionTarget implicitly converted … but failed", Herkunft ungeprüft).
   Daraus liegt der **erste ConfigsDump mit geladenen Modlets** vor
-  (`Saves\Navezgane\DND\ConfigsDump`, 18:11 Ortszeit) — **nicht ausgewertet**, und
-  `check-all.ps1` las beim Lauf danach weiter den Dump von 16:37; warum, ist offen.
+  (`Saves\Navezgane\DND\ConfigsDump`, 18:11 Ortszeit). ~~**nicht ausgewertet**, und
+  `check-all.ps1` las beim Lauf danach weiter den Dump von 16:37; warum, ist offen.~~
+  **Berichtigt am selben Abend:** das war mein Irrtum — der Prüflauf, auf den ich mich
+  bezog, lief um 18:01, zehn Minuten **vor** diesem Dump. `check-all.ps1` nimmt den
+  neuesten und liest ihn seit dem nächsten Lauf (Stand `2026-11-21 17:11:30Z`). **Erstes
+  Ergebnis gegen eine Config mit geladenen Modlets:** `anachronisms` **grün** — 523
+  geprüfte Kennungen, 0 verboten erreichbar, 40 Hinweise, 1 aufgeschoben; damit sind die
+  Patch-Zeilen des Purge zum ersten Mal am Spiel belegt und nicht nur gerechnet (der Kern
+  war übersprungen, er trägt aber kein XML). `recipes` **rot** — 278 Rezepte, 198
+  erreichbar, **80 Sackgassen**: Rezepte, die den Purge überleben und eine gesperrte Zutat
+  verlangen (`resourceScrapPolymers`, `resourceGunPowder` …). Das ist die Arbeitsliste, die
+  `purge-patch` bisher gegen Vanilla auf 92 schätzte; gemessen sind es 80. Die 40 Hinweise
+  und die 80 Sackgassen sind **nicht einzeln durchgesehen**.
   **Gefunden an diesem Dump:** von 496 `LootItem`-Belohnungen in `quests.xml` zeigen 115
   auf mindestens eine Loot-Gruppe, die nach dem Purge nichts mehr hergibt, 66 nur auf
   solche — darunter die Wahl-Belohnungen von `quest_tier1complete` bis
