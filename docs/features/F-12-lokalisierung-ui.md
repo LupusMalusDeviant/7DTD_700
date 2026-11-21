@@ -92,6 +92,15 @@ Schlüssel). Sprachdatei 747 Zeilen. **Gefunden, keine Textfrage:** 35 von 148 s
 Herausforderungen sind nach dem Purge unerfüllbar, Felder lassen sich nicht bauen, und die
 Händler bieten weiter Stromaufträge an (Plan-0001, Offene Punkte).
 
+**Fünfte Scheibe, erster Teil (D81), ungesehen:** 89 von 631 Rang-Texten und
+Blatt-Wirkungen an lebenden Fertigkeiten und Abschriften — nach der Regel des kleinsten
+Eingriffs: der gebrochene Begriff wird ersetzt, der Satzteil über ein gesperrtes Ding
+gestrichen, Vanillas Zahlen bleiben. 22 gemessene Zeilen warten mit Grund (F-06, F-07,
+offene Fragen; neun davon sind Ränge, deren ganze Wirkung an Gesperrtem hängt). Sprachdatei
+836 Zeilen. **Offen, zweiter Teil:** der Lesedurchgang über die 542 übrigen Zeilen — eine
+Stichprobe fand weitere, ungezählt, die kein Messverfahren sieht (Baseball-Vokabular der
+Abschrift „Vom Keulenschlag", Messing „für Patronen").
+
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die
 zwei Sandbox-Vorlagen, und die Abnahme im Spiel — vor allem, ob das Menü die längeren

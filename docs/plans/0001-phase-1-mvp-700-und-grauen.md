@@ -1375,10 +1375,32 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      Namen) findet in den neuen Zeilen nichts. *Dabei weggelassen statt übernommen:* dass
      Verrottendes Fleisch „für Felder" gebraucht wird — das Feld-Rezept verlangt gesperrtes
      Salpeterpulver. Sprachdatei: 747 Zeilen. → Prüfliste 21 (h).
+   - *Fünfte Scheibe, erster Teil — Rang-Texte und Blatt-Wirkungen, gebaut am 2026-11-21
+     (D81), ungesehen.* **Erst gezählt:** an 45 lebenden Fertigkeiten und 98 lebenden
+     Abschriften hängen **631** Zeilen mit Vanillas Wortlaut (439 Rang-Texte, 192
+     Blatt-Wirkungen; die Schätzung im Plan war 450 und 200). Glossar und Querprobe schlagen
+     zusammen bei **122** an. **Dann geschrieben: 89 Zeilen**, nach der Regel des kleinsten
+     Eingriffs — der gebrochene Begriff wird ersetzt, der Satzteil über ein gesperrtes Ding
+     gestrichen, der Rest bleibt Vanillas Text und Vanillas Zahl. Betroffen u. a.
+     Schädelbrecher, Rundschlag, Schlagfolge, Steinmetz, Reiche Ader, Werkstattkunst,
+     Wundarznei, Wagemut, die drei Rüstungs-Fertigkeiten, die Abschrift „Vom Hammerschlag". **33 bleiben:**
+     22 warten mit Grund (7 Dinge der Welt/F-07 · 2 Wesen/F-06 · 2 Kohle · 1 Infektion ·
+     1 Sprengpfeile · 9 Ränge, deren Wirkung an Gesperrtem hängt), 11 sind Fehltreffer
+     („Sammler", „Geräte", „Twitchy"). *Gegengeprüft:* Glossar grün über 836 Zeilen;
+     Querprobe über unsere Datei: 4 Treffer, alle Fehltreffer (Schädelbrecher ×2, Gatherer,
+     Spring); Zahlenfolge je Zeile gegen Vanilla: 17 Abweichungen, alle ein gestrichener
+     Satzteil. Sprachdatei: 836 Zeilen. → Prüfliste 21 (i).
+   - *Fünfte Scheibe, zweiter Teil — offen: der Lesedurchgang.* Beide Messverfahren finden
+     nur verbotene Begriffe und ganze Namen. Eine Stichprobe mit Schlagwörtern über die 542
+     verbliebenen Zeilen fand weitere, die weder das eine noch das andere sind: die sechzehn
+     Zeilen der Abschrift „Vom Keulenschlag" (Baseball: „Home Run", „Stealing Bases", „Bats and clubs"),
+     Messing und Blei „für Patronen", Säure aus Autos, Gewehre in zwei Wahrnehmungs-Rängen.
+     **Gezählt ist das nicht** — die Stichprobe traf auch Schlüsselnamen und ist kein Maß.
+     Die Zahl steht fest, wenn die 542 Zeilen gelesen sind.
    - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ ~~(3) UI und
      Ladebildschirm;~~ ~~(4) Quests und Challenges;~~
-     (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
-     Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
+     (5) Rang-Texte und Blatt-Wirkungen aus WP7: erster Teil gebaut, zweiter Teil
+     (Lesedurchgang) offen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
      Begriffe offen) und die Bogen-Texte (WP5.2 wartet auf den Nutzer).
    - → Prüfliste 21.
 6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
@@ -1777,6 +1799,15 @@ werden:
     frische Fackel sie)? Wie sieht eine der **unerfüllbaren** Herausforderungen aus
     („Tausammler platzieren", „Rohrbomben herstellen") — steht sie einfach da und lässt
     sich nie abhaken? Und zeigt das Fenster die **Twitch-Seite**, wenn Twitch aus ist?
+    (i) *Die Rang-Texte, im Spiel (D81).* Das Fertigkeiten-Fenster öffnen, deutsch und
+    englisch. **Schädelbrecher** Rang 1–5: steht „Hämmer" / „Hammers", nirgends
+    „Vorschlaghämmer"? **Werkstattkunst** Rang 1–3: „Rennofen und Esse", „Zimmermannsbänke
+    und Kalköfen", „Tiegelstahl" — und stimmt die Wirkung (ein Gegenstand an der
+    Zimmermannsbank mit und ohne Rang 2: 20 % schneller)? **Wundarznei** Rang 2 und 4:
+    „Kräuterküche"? **Steinmetz** und **Reiche Ader**: „Äxten, Spitzhacken oder Schaufeln".
+    Die drei **Rüstungs-Fertigkeiten**: nennt die Beschreibung „Lehrblatt: Rüstungsbau" in
+    der Farbe der anderen Lehrblätter? Dazu ein Blatt von „Vom Hammerschlag" lesen. Bricht
+    ein Text um oder wird er abgeschnitten?
 
 ## Offene Punkte
 
@@ -1815,6 +1846,24 @@ werden:
   (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und
   wirf die Generatoren wieder an" ist ein Anachronismus, den keine Regel trifft, weil er
   kein Gegenstand ist. → F-10 oder eine Purge-Regel für Auftragsarten.
+- **Neun Rang-Texte versprechen nur Gesperrtes, und der Rang lässt sich weiter kaufen**
+  (gefunden in WP8.5, fünfte Scheibe, 2026-11-21). `perkInfiltrator` Rang 1–4 handelt von
+  Landminen, `perkPenetrator` Rang 2–5 von panzerbrechender Munition und
+  Scharfschützengewehren, `perkPhysician` Rang 5 („Wundarznei") allein vom Schockstab. Die
+  drei Fertigkeiten leben nach WP7; ihre Texte sind nicht angefasst, weil ein ehrlicher Text
+  sagen müsste, was der Rang bei uns bringt — und das ist eine Entscheidung über die
+  Wirkung, nicht über Worte. Für Wundarznei Rang 5 liest sich aus Vanillas `progression.xml`
+  nur noch eine höhere Beutechance für das Lehrblatt; gemessen ist das nicht. Frage an den
+  Nutzer: Ränge verbergen, Wirkung ersetzen, oder stehen lassen?
+- **Der Plasmastab überlebt den Purge** (gefunden ebenda). `meleeWpnBatonT3PlasmaBaton`
+  („Plasma Baton") trägt „erlaubt", weil keine Regel ihn dem Namen nach trifft; die zwei
+  anderen Stäbe (Rohr, Schock) sind gesperrt. Derselbe Fall wie die sieben Kennungen der
+  Nutzer-Aufgabe zu D54 — er gehört auf dieselbe Liste.
+- **Kohlenerz hat bei uns keinen Namen und keinen Platz** (gefunden ebenda). Das Glossar
+  verbietet „Kohle" / „coal" (bei uns Holzkohle), aber `terrOreCoal` lebt mit Vanillas Namen
+  „Kohlenerz", und zwei Blatt-Wirkungen (`perkFiremansAlmanacHarvest…`) versprechen mehr
+  davon. Ob es in 700 Steinkohle gibt, sie anders heißt oder das Erz verschwindet, steht in
+  keinem Dokument. → F-03/F-07.
 - **Viertes Review (2026-11-21), fünf Befunde behoben.** Drei an den Prüfwerkzeugen
   (`kette-pruefen` las eine Datei mit falschem Wurzelknoten als „0 XPaths, grün"; eine kaputte
   Trennzeile schaltete eine Glossar-Tabelle ab; ein `SDTD_PATH` in Anführungszeichen ließ
