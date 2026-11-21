@@ -967,12 +967,34 @@ Test-Script 'kette-pruefen: kaputtes Vanilla-XML ist nicht pruefbar' 2 @{
 #      Laufs exklusiv offen (FileShare.None). Vorher: "kein gueltiges XML", Exit 1 - ein
 #      Befund, wo es ein fehlender Eingang ist. Jetzt Exit 2. Einmal als Patch-Datei, einmal
 #      als Rezept-Datei (die fruehe Lesestelle).
+#      Seit dem sechsten Review auch die zwei VANILLA-Dateien, deren Kennungen als Text
+#      gelesen werden: dort stand ein 'Select-String' ohne Abfang.
+#      DIE SPERRE WIRD ERST GEPRUEFT. Auf manchen Dateisystemen (so in der Umgebung des
+#      sechsten Reviews) laesst sich eine mit FileShare.None geoeffnete Datei trotzdem lesen.
+#      Dann laesst sich die Gegenprobe dort nicht fuehren - das steht dann da, als ROT mit
+#      diesem Grund, nicht als raetselhaftes "Exit 0 erwartet 2" und nicht als uebersprungen.
 foreach ($fall in @(
-        @{ Art = 'Patch-Datei'; Datei = 'kette\xpath-gut\blocks.xml'; Parameter = 'Patches' },
-        @{ Art = 'Rezept-Datei'; Datei = 'kette\eigen\recipes.xml'; Parameter = 'Rezepte' })) {
+        @{ Art = 'Patch-Datei'; Datei = 'kette\xpath-gut\blocks.xml' },
+        @{ Art = 'Rezept-Datei'; Datei = 'kette\eigen\recipes.xml' },
+        @{ Art = 'Vanilla-items.xml'; Datei = 'kette\vanilla\items.xml' },
+        @{ Art = 'Vanilla-blocks.xml'; Datei = 'kette\vanilla\blocks.xml' })) {
     $gesperrtePfad = Join-Path $data $fall.Datei
+    $titel = "kette-pruefen: gesperrte $($fall.Art) ist nicht pruefbar, kein Befund"
     $sperre = [IO.File]::Open($gesperrtePfad, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::None)
     try {
+        $sperreGreift = $false
+        try {
+            $zweite = [IO.File]::OpenRead($gesperrtePfad)
+            $zweite.Close()
+        }
+        catch { $sperreGreift = $true }
+        if (-not $sperreGreift) {
+            $script:checked++
+            $script:failed++
+            Write-Output ("  [ROT]  " + $titel)
+            Write-Output '         die Sperre (FileShare.None) greift auf diesem Dateisystem nicht - die Gegenprobe laesst sich hier nicht fuehren'
+            continue
+        }
         $p = @{
             Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
             Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
@@ -980,11 +1002,23 @@ foreach ($fall in @(
             Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
             Vanilla      = (Join-Path $data 'kette\vanilla')
         }
-        Test-Script "kette-pruefen: gesperrte $($fall.Art) ist nicht pruefbar, kein Befund" 2 $p `
+        Test-Script $titel 2 $p `
             -MustContain @('laesst sich nicht lesen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'kein gueltiges XML')
     }
     finally { $sperre.Close() }
 }
+
+# (3f) Dieselbe kaputte Datei in ZWEI ROLLEN: als eigene Block-Datei und als Vanillas
+#      blocks.xml. Der Zwischenspeicher hielt das Urteil der ersten Rolle fest ("Befund"),
+#      und die Vanilla-Rolle bekam es zurueck: Exit 1 mit falschen XPath-Befunden statt
+#      "nicht pruefbar". Jetzt entscheidet jeder Aufruf fuer seine Rolle.
+Test-Script 'kette-pruefen: kaputte Datei als Block- UND Vanilla-Datei ist nicht pruefbar' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\vanilla-kaputt\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla-kaputt')
+} -MustContain @('Vanilla-Datei', 'ist kein gueltiges XML', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 # (4) Eine kaputte Trennzeile ("---|---|---|oops") unter einer Tabelle ohne Randstriche.
 #     Markdown liest das nicht als Tabelle; ihr Verbot 'zombie' fiel weg, und weil eine

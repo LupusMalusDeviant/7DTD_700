@@ -296,7 +296,11 @@ gültiger Pfad ist (wörtliche Anführungszeichen), ist Exit 2 statt einer Ausna
 eine Funktion (`Read-XmlDatei`). Eine eigene Datei, die kein gültiges XML ist, ist **eine**
 rote Zeile mit Pfad, Zeile und Stelle (Exit 1) — gleich, ob sie als Rezept-, Gegenstands-,
 Block- oder Patch-Datei gebraucht wird. Eine Datei, die sich nicht **lesen** lässt, und eine
-kaputte **Vanilla**-Datei sind „nicht geprüft" (Exit 2).
+kaputte **Vanilla**-Datei sind „nicht geprüft" (Exit 2). *(Seit dem sechsten Review am selben
+Tag gilt das auch für Vanillas `items.xml` und `blocks.xml`, deren Kennungen als Text gelesen
+werden; das Skript hat nur noch **eine** Stelle, die eine Datei öffnet. Die vier
+Gegenproben mit einer gesperrten Datei prüfen zuerst, ob die Sperre auf dem Dateisystem
+greift — wo nicht, sind sie rot mit diesem Grund.)*
 
 ### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
 

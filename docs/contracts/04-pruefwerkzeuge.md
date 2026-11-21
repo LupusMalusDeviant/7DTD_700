@@ -1834,3 +1834,60 @@ Dateinamen nennt. Gegen den neuen Stand: **96, 0 fehlgeschlagen.**
   `check-all.ps1` lesen kein XML; `mod700check` (C#) hat seinen eigenen Leser. Geprüft ist
   hier nur `kette-pruefen.ps1`.
 - Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.
+
+## Nachtrag sechstes Review 2026-11-21 — zwei Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `071708b` hat Codex (`gpt-6.1-sol`) zwei Befunde gemeldet, wieder beide an
+`kette-pruefen.ps1`: einer mittel, einer niedrig. Beide zeigen, dass der Nachtrag darüber
+mehr versprach, als das Skript hielt.
+
+| Nr. | Befund | Was jetzt gilt |
+|---|---|---|
+| 1 | Vanillas `items.xml` und `blocks.xml` wurden für die Liste der Kennungen mit `Select-String` gelesen, ohne Abfang. Ließ sich eine nicht lesen, warf das Skript: Exit 1, keine Ergebniszeile — der Nachtrag zum fünften Review sagte „Exit 2". (Dort stand der Text-Leser unter „Grenzen", aber als Frage der Gültigkeit, nicht der Lesbarkeit.) | Auch dieser Leser geht durch dieselbe Lesestelle. Nicht lesbar → Exit 2. |
+| 2 | Der Zwischenspeicher hielt je Pfad das fertige **Urteil**. Dieselbe kaputte Datei, erst als eigene Block-Datei und dann als Vanilla-Datei gelesen, bekam das Urteil der ersten Rolle: Exit 1 mit falschen XPath-Befunden statt „nicht prüfbar". | Der Speicher hält nur, was gelesen wurde (Text, Dokument, Fehler). Was daraus folgt, entscheidet jeder Aufruf für seine Rolle. |
+
+### Was sich am Skript ändert
+
+- `Read-Datei` liest den **Text** einer Datei, einmal je Pfad. `Read-XmlDatei` zerlegt ihn
+  bei Bedarf und urteilt je Aufruf (`-Vanilla` oder nicht). `Get-Kennungen` holt die Namen
+  aus dem Text — für Vanilla **und** für unsere `items.xml`/`blocks.xml`.
+- **In `kette-pruefen.ps1` gibt es damit keinen Dateizugriff mehr außerhalb von
+  `Read-Datei`** (nachgezählt: kein `Select-String`, kein `Get-Content`, ein
+  `ReadAllText`).
+- Die rote Zeile „kein gueltiges XML" steht weiter **einmal** je Datei.
+
+**Gemessen am 2026-11-21, nach der Änderung:** 8.092 Definitionen aus Vanilla, 23 eigene;
+18 Patch-Dateien, 418 XPaths (405 in Vanilla, 13 auf eigene Knoten), 0 unaufgelöst —
+unverändert. Der Wechsel von `Select-String` (zeilenweise) auf ein Muster über den ganzen
+Text hat an der Zahl der Kennungen nichts geändert.
+
+### Gegenproben — drei neue, dazu eine Vorprüfung; alles einmal rot gesehen
+
+Gegen `kette-pruefen.ps1` des Stands `071708b`: **99 Gegenproben, 3 fehlgeschlagen** — genau
+die drei neuen. Gegen den neuen Stand: **99, 0 fehlgeschlagen.**
+
+| Gegenprobe | vorher | jetzt |
+|---|---|---|
+| gesperrte Vanilla-`items.xml` | Ausnahme | Exit 2, „laesst sich nicht lesen" |
+| gesperrte Vanilla-`blocks.xml` | Ausnahme | Exit 2 |
+| `kette/vanilla-kaputt/blocks.xml` als `-Bloecke` **und** als Vanilla-Datei | Exit 1 | Exit 2, „Vanilla-Datei … ist kein gueltiges XML" |
+
+**Die Sperre wird erst geprüft.** In der Umgebung des Reviews schlugen die zwei
+Sperr-Gegenproben aus dem fünften Review fehl („96 Gegenproben, 2 fehlgeschlagen"), weil das
+Dateisystem dort eine mit `FileShare.None` geöffnete Datei trotzdem lesen lässt. Jede der
+vier Sperr-Gegenproben versucht darum zuerst, die gesperrte Datei ein zweites Mal zu öffnen.
+Gelingt das, steht sie als **rot mit diesem Grund** da („die Sperre … greift auf diesem
+Dateisystem nicht") — nicht als rätselhaftes „Exit 0 erwartet 2", und nicht als
+übersprungen: eine Gegenprobe, die nicht geführt werden kann, ist kein Grün.
+*Vorgeführt:* mit `FileShare.Read` statt `None` in der Gegenprobe — 99 Gegenproben, 4
+fehlgeschlagen, alle vier mit diesem Grund.
+
+### Grenzen und was offen bleibt
+
+- **Auf einem Dateisystem ohne wirksame Sperre sind vier Gegenproben rot**, und
+  `check-all.ps1` bricht dort nach den Gegenproben ab. Das ist gewollt laut, aber es heißt:
+  der Prüflauf ist dort nicht führbar, bis es einen anderen Weg gibt, eine unlesbare Datei
+  herzustellen. Auf diesem Rechner (NTFS) greift die Sperre.
+- **Zwischen dem Lesen und dem Ende des Laufs** kann sich eine Datei ändern; gelesen wird
+  jede nur einmal, das Skript prüft also einen festen Stand.
+- Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.

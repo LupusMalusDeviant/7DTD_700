@@ -93,44 +93,79 @@ function Stop-Unpruefbar {
 # dort ginge ein Write-Output im Rueckgabewert unter.
 # Gelesen wird mit ReadAllText (UTF-8, BOM erkannt). '[xml](Get-Content -Raw)' las unter
 # Windows PowerShell 5.1 eine Datei ohne BOM in der ANSI-Codepage.
+#
+# DER ZWISCHENSPEICHER HAELT, WAS GELESEN WURDE - NICHT, WAS ES BEDEUTET (sechstes Review).
+# Zuerst lag hier das fertige Urteil je Pfad. Dieselbe kaputte Datei, erst als eigene
+# Block-Datei gelesen und dann als Vanilla-Datei, bekam damit das Urteil der ERSTEN Rolle:
+# "Befund, Exit 1" statt "nicht pruefbar, Exit 2". Jetzt steht im Speicher nur der Text,
+# das Dokument und der Fehler; was daraus folgt, entscheidet jeder Aufruf fuer seine Rolle.
 $unresolved = @()
-$xmlGelesen = @{}
+$dateiGelesen = @{}
+
+function Get-Innerste {
+    param($Ausnahme)
+    # Die aeussere Meldung nennt nur den Methodenaufruf; die innerste Zeile und Stelle.
+    while ($Ausnahme.InnerException) { $Ausnahme = $Ausnahme.InnerException }
+    return $Ausnahme.Message
+}
+
+function Read-Datei {
+    # Liest den TEXT einer Datei, einmal. Gibt den Eintrag des Speichers zurueck:
+    #   Voll, Text, Lesefehler  - sofort
+    #   Doc, XmlFehler, Zerlegt - erst, wenn Read-XmlDatei das Dokument braucht
+    #   Gemeldet                - ob die rote Zeile "kein gueltiges XML" schon steht
+    param([string]$Pfad)
+    try { $voll = (Resolve-Path -LiteralPath $Pfad).ProviderPath }
+    catch { return @{ Voll = $Pfad; Text = $null; Lesefehler = "die Datei '$Pfad' laesst sich nicht finden ($(Get-Innerste $_.Exception))" } }
+    if ($script:dateiGelesen.ContainsKey($voll)) { return $script:dateiGelesen[$voll] }
+    $eintrag = @{ Voll = $voll; Text = $null; Lesefehler = $null; Doc = $null; XmlFehler = $null; Zerlegt = $false; Gemeldet = $false }
+    try { $eintrag.Text = [IO.File]::ReadAllText($voll) }
+    catch { $eintrag.Lesefehler = "die Datei '$voll' laesst sich nicht lesen ($(Get-Innerste $_.Exception))" }
+    $script:dateiGelesen[$voll] = $eintrag
+    return $eintrag
+}
+
 function Read-XmlDatei {
     param([string]$Pfad, [switch]$Vanilla)
-    try { $voll = (Resolve-Path -LiteralPath $Pfad).ProviderPath }
-    catch { return @{ Doc = $null; Unlesbar = "die Datei '$Pfad' laesst sich nicht finden ($($_.Exception.Message))" } }
-    if ($script:xmlGelesen.ContainsKey($voll)) { return $script:xmlGelesen[$voll] }
-    $ergebnis = @{ Doc = $null; Unlesbar = $null }
-    $text = $null
-    try { $text = [IO.File]::ReadAllText($voll) }
-    catch {
-        $grund = $_.Exception
-        while ($grund.InnerException) { $grund = $grund.InnerException }
-        $ergebnis.Unlesbar = "die Datei '$voll' laesst sich nicht lesen ($($grund.Message))"
-    }
-    if ($null -ne $text) {
+    $eintrag = Read-Datei $Pfad
+    if ($eintrag.Lesefehler) { return @{ Doc = $null; Unlesbar = $eintrag.Lesefehler } }
+    if (-not $eintrag.Zerlegt) {
         $doc = New-Object System.Xml.XmlDocument
         try {
-            $doc.LoadXml($text)
-            $ergebnis.Doc = $doc
+            $doc.LoadXml($eintrag.Text)
+            $eintrag.Doc = $doc
         }
-        catch {
-            # Die aeussere Meldung nennt nur den Methodenaufruf; die innerste Zeile und Stelle.
-            $grund = $_.Exception
-            while ($grund.InnerException) { $grund = $grund.InnerException }
-            if ($Vanilla) {
-                $ergebnis.Unlesbar = "die Vanilla-Datei '$voll' ist kein gueltiges XML ($($grund.Message))"
-            }
-            else {
-                # Die letzten drei Glieder des Pfads: 'blocks.xml' allein gibt es in fuenf Modlets.
-                $glieder = $voll.Split('\')
-                $kurz = ($glieder | Select-Object -Last 3) -join '\'
-                $script:unresolved += "Datei ist kein gueltiges XML: $kurz  ($($grund.Message))"
-            }
-        }
+        catch { $eintrag.XmlFehler = Get-Innerste $_.Exception }
+        $eintrag.Zerlegt = $true
     }
-    $script:xmlGelesen[$voll] = $ergebnis
-    return $ergebnis
+    if ($null -ne $eintrag.Doc) { return @{ Doc = $eintrag.Doc; Unlesbar = $null } }
+    if ($Vanilla) {
+        return @{ Doc = $null; Unlesbar = "die Vanilla-Datei '$($eintrag.Voll)' ist kein gueltiges XML ($($eintrag.XmlFehler))" }
+    }
+    if (-not $eintrag.Gemeldet) {
+        # Die letzten drei Glieder des Pfads: 'blocks.xml' allein gibt es in fuenf Modlets.
+        $kurz = ($eintrag.Voll.Split('\') | Select-Object -Last 3) -join '\'
+        $script:unresolved += "Datei ist kein gueltiges XML: $kurz  ($($eintrag.XmlFehler))"
+        $eintrag.Gemeldet = $true
+    }
+    return @{ Doc = $null; Unlesbar = $null }
+}
+
+function Get-Kennungen {
+    # Die Kennungen einer Datei, aus ihrem TEXT gelesen (nicht als XML: Vanillas blocks.xml
+    # traegt ueber 6.000 Bloecke, und fuer die Liste der Namen reicht das Muster). Bis zum
+    # sechsten Review stand hier 'Select-String -Path' ohne Abfang: eine Vanilla-Datei, die
+    # sich nicht lesen liess, warf mitten im Lauf. Jetzt geht auch dieser Leser durch
+    # Read-Datei, und der Aufrufer beendet bei einem Lesefehler mit Exit 2.
+    # Gross-/Kleinschreibung wie bei Select-String: nicht unterschieden.
+    param([string]$Pfad, [string]$Muster, [int]$Gruppe)
+    $eintrag = Read-Datei $Pfad
+    if ($eintrag.Lesefehler) { return @{ Namen = @(); Unlesbar = $eintrag.Lesefehler } }
+    $namen = New-Object System.Collections.Generic.List[string]
+    foreach ($m in [regex]::Matches($eintrag.Text, $Muster, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+        $namen.Add($m.Groups[$Gruppe].Value)
+    }
+    return @{ Namen = $namen; Unlesbar = $null }
 }
 
 $vanillaDa = $false
@@ -200,27 +235,24 @@ foreach ($file in @('items.xml', 'blocks.xml')) {
     # auf einen Ordner OHNE Data\Config zeigt, brach den ganzen Prueflauf ab, bevor
     # check-all.ps1 seine Ergebniszeile schreiben konnte.
     if (-not (Test-Path -LiteralPath $path)) { Stop-Unpruefbar "$path fehlt (zeigt SDTD_PATH auf eine Installation?)" }
-    $matched = Select-String -Path $path -Pattern '<(item|block) name="([^"]+)"' -AllMatches
-    foreach ($m in $matched) {
-        foreach ($g in $m.Matches) { $defined[$g.Groups[2].Value] = 'vanilla' }
-    }
+    $kennungen = Get-Kennungen $path '<(item|block) name="([^"]+)"' 2
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $defined[$n] = 'vanilla' }
 }
 $vanillaCount = $defined.Count
 
 foreach ($path in $Gegenstaende) {
     if (-not (Test-Path $path)) { continue }
-    $matched = Select-String -Path $path -Pattern '<item name="([^"]+)"' -AllMatches
-    foreach ($m in $matched) {
-        foreach ($g in $m.Matches) { $defined[$g.Groups[1].Value] = 'unser' }
-    }
+    $kennungen = Get-Kennungen $path '<item name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $defined[$n] = 'unser' }
 }
 
 foreach ($path in $Bloecke) {
     if (-not (Test-Path $path)) { continue }
-    $matched = Select-String -Path $path -Pattern '<block name="([^"]+)"' -AllMatches
-    foreach ($m in $matched) {
-        foreach ($g in $m.Matches) { $defined[$g.Groups[1].Value] = 'unser' }
-    }
+    $kennungen = Get-Kennungen $path '<block name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $defined[$n] = 'unser' }
 }
 
 Write-Output ("  Definitionen: {0} aus Vanilla, {1} eigene" -f $vanillaCount, ($defined.Count - $vanillaCount))
