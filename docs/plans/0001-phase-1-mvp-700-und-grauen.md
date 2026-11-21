@@ -1766,6 +1766,15 @@ werden:
   mit `conditional` fallen die drei XPaths wieder aus der Zählung, wenn das Skript nicht
   zugleich hineinsieht. → WP8.7/WP8.9, [Vertrag 04](../contracts/04-pruefwerkzeuge.md)
   „Nachtrag drittes Review".
+- **Viertes Review (2026-11-21), fünf Befunde behoben.** Drei an den Prüfwerkzeugen
+  (`kette-pruefen` las eine Datei mit falschem Wurzelknoten als „0 XPaths, grün"; eine kaputte
+  Trennzeile schaltete eine Glossar-Tabelle ab; ein `SDTD_PATH` in Anführungszeichen ließ
+  `check-all.ps1` ohne Ergebniszeile enden), zwei an Texten der dritten Scheibe: **der
+  Imkerei-Tipp riet zu Chrysanthemen, die gesperrt sind** — mein Fehler, berichtigt, und eine
+  Einmal-Suche über alle 710 Zeilen fand keinen zweiten Fall. Die zwei Optionstexte zur
+  Obergrenze der Seuchentoten nennen jetzt, wann welche gilt; der Faktor 1,9 ist aus Vanillas
+  Text **gelesen, nicht gemessen**. Offen daraus: ob die Einmal-Suche eine Dauerprüfung
+  werden soll. → [Vertrag 04](../contracts/04-pruefwerkzeuge.md) „Nachtrag viertes Review".
 - **Eine gefüllte dritte Sprachspalte ist nur ein Hinweis** (Review-Befund, zweimal gemeldet
   am 2026-11-20). F-12 sagt „Spalten leer lassen" **und** „weitere Sprachen später über die
   Community". Ob `mod700check localization` daraus heute einen Fehler machen soll,

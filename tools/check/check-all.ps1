@@ -113,35 +113,63 @@ else {
     Write-Output "Gegenproben uebersprungen - dieses Ergebnis ist KEIN Nachweis."
 }
 
+# ---------------------------------------------------- Spielpfad, einmal und ohne Ausnahme
+# SDTD_PATH wird GENAU HIER zu einem Pfad gemacht, und nirgends sonst (geaendert 2026-11-21,
+# viertes Review). Drei Dinge koennen dabei schiefgehen, und jedes hat den Lauf schon einmal
+# ohne seine Ergebniszeile enden lassen:
+#   - die Variable fehlt                          -> $null
+#   - das Laufwerk ist nicht eingehaengt          -> Join-Path wirft (darum Combine)
+#   - der Wert traegt Zeichen, die kein Pfad hat  -> auch Combine wirft; etwa woertliche
+#     Anfuehrungszeichen, wie 'set SDTD_PATH="C:\..."' in cmd sie hinterlaesst
+# Alles, was vom Spielpfad abhaengt, fragt danach nur noch $spielConfig - und zaehlt als
+# "nicht geprueft", wenn es $null ist.
+$spielConfig = $null
+if ($env:SDTD_PATH) {
+    try { $spielConfig = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config') }
+    catch {
+        Write-Output "SDTD_PATH ist kein gueltiger Pfad: $($env:SDTD_PATH)"
+        $spielConfig = $null
+    }
+}
+
 # ---------------------------------------------------- Quelle bestimmen
 if (-not $Source) {
     $dumps = @()
-    $saves = Join-Path $env:APPDATA '7DaysToDie\Saves'
-    if (Test-Path $saves) {
-        $dumps = @(Get-ChildItem $saves -Recurse -Directory -Filter 'ConfigsDump' -ErrorAction SilentlyContinue |
-            Sort-Object LastWriteTime -Descending)
+    try {
+        $saves = [IO.Path]::Combine($env:APPDATA, '7DaysToDie\Saves')
+        if (Test-Path -LiteralPath $saves) {
+            $dumps = @(Get-ChildItem -LiteralPath $saves -Recurse -Directory -Filter 'ConfigsDump' -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTime -Descending)
+        }
     }
+    catch { $dumps = @() }
 
-    if ($dumps.Count -gt 0) {
-        $Source = $dumps[0].FullName
-    }
-    elseif ($env:SDTD_PATH) {
-        # [IO.Path]::Combine, nicht Join-Path: Join-Path wirft, wenn das Laufwerk nicht
-        # eingehaengt ist, und reisst den Lauf ab, bevor eine Pruefung gezaehlt wurde
-        # (drittes Review, 2026-11-20).
-        $Source = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config')
-    }
-    else {
-        throw "Keine Quelle gefunden und SDTD_PATH ist nicht gesetzt. -Source angeben."
-    }
+    if ($dumps.Count -gt 0) { $Source = $dumps[0].FullName }
+    elseif ($spielConfig) { $Source = $spielConfig }
 }
 
 Write-Output ""
 Write-Output "==== Inhaltspruefungen ===="
-Write-Output "Quelle: $Source"
 
-Invoke-Check 'anachronisms' @('anachronisms', $Source, '--denylist', (Join-Path $here 'denylist.txt'))
-Invoke-Check 'recipes' @('recipes', $Source)
+if ($Source) {
+    Write-Output "Quelle: $Source"
+    Invoke-Check 'anachronisms' @('anachronisms', $Source, '--denylist', (Join-Path $here 'denylist.txt'))
+    Invoke-Check 'recipes' @('recipes', $Source)
+}
+else {
+    # Keine Quelle ist "zwei Pruefungen nicht gelaufen", kein Abbruch. Vorher stand hier ein
+    # 'throw' - der Lauf endete ohne "N Pruefungen, M rot", und wer nur den Ausgang liest,
+    # sah einen Fehler des Skripts statt zweier roter Pruefungen.
+    Write-Output "Quelle: KEINE - kein ConfigsDump unter %APPDATA% und kein gueltiger SDTD_PATH. -Source angeben."
+    foreach ($ohne in 'anachronisms', 'recipes') {
+        $ran++
+        $red++
+        Write-Output ""
+        Write-Output "---- $ohne ----"
+        Write-Output "  NICHT GEPRUEFT: keine Quelle."
+        Write-Output "  -> nicht geprueft, zaehlt als rot"
+    }
+}
 
 # ---------------------------------------------------- Purge-Patches aktuell?
 # Die Patch-Dateien in 700_10_Purge sind ERZEUGT. Erzeugte und mitgelieferte Dateien
@@ -157,7 +185,7 @@ Invoke-Check 'recipes' @('recipes', $Source)
 # Join-Path und Test-Path: zeigt SDTD_PATH auf ein Laufwerk, das nicht eingehaengt ist,
 # wirft Join-Path ("Cannot find drive"), und der Lauf endete ohne Ergebniszeile (drittes
 # Review, 2026-11-20). [IO.File]::Exists sagt in dem Fall schlicht nein.
-$vanilla = if ($env:SDTD_PATH) { [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config') } else { $null }
+$vanilla = $spielConfig
 $purgeConfig = Join-Path $repoRoot 'mod\700_10_Purge\Config'
 if ($vanilla -and [IO.File]::Exists([IO.Path]::Combine($vanilla, 'items.xml'))) {
     Invoke-Check 'purge-patch (sind die Patches aktuell?)' @(

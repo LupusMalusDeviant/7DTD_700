@@ -117,6 +117,19 @@ for ($i = 0; $i -lt $zeilen.Count; $i++) {
     $nr = $i + 1
 
     if (-not $roh.StartsWith('|')) {
+        # VERWAISTE TABELLENZEILE (ergaenzt 2026-11-21, viertes Review). Die Vorstufe oben
+        # erkennt eine Tabelle an ihrer Trennzeile. Ist die Trennzeile kaputt
+        # ("---|---|---|oops") oder fehlt sie, bleiben Kopf und Zeilen ohne Randstrich hier
+        # liegen und galten als Fliesstext: die Verbote der Tabelle fielen weg, und solange
+        # eine ZWEITE Verbots-Tabelle heil war, blieb das Ergebnis GREEN.
+        # Darum: eine Zeile ausserhalb jeder Tabelle, die nach dem Streichen aller
+        # Backtick-Abschnitte noch zwei oder mehr '|' traegt, sieht aus wie eine
+        # Tabellenzeile und ist nicht pruefbar. Backticks zuerst, weil der Fliesstext die
+        # Kopfzeilen in Backticks ZITIERT - das ist Text ueber Tabellen, keine Tabelle.
+        $ohneCode = [regex]::Replace($roh, '`[^`]*`', '')
+        if (($ohneCode.Split('|').Count - 1) -ge 2) {
+            Stop-Unpruefbar "Glossar Zeile ${nr}: sieht aus wie eine Tabellenzeile, gehoert aber zu keiner Tabelle (fehlt die Trennzeile darunter, oder ist sie kaputt?)"
+        }
         $inTabelle = $false
         $art = ''
         continue

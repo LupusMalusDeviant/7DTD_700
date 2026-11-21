@@ -1682,3 +1682,100 @@ nicht stehen lässt.
   gehört zusammen gelöst, in WP8.7/WP8.9: die Schreibweise der Bedingungen ist noch nicht
   belegt, und welche UI-Mods hineingehören, hängt an Q8 (Vertrag 03 §9).
 - Offen aus dem ersten Review bleiben die Befunde 3 bis 7.
+
+## Nachtrag viertes Review 2026-11-21 — fünf Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `4420e66` bis `5fd3ea9` hat Codex (`gpt-6.2-sol`) fünf Befunde gemeldet:
+keiner kritisch oder hoch, drei mittel, zwei niedrig. Drei treffen die Prüfwerkzeuge, zwei
+die Texte der dritten Scheibe von WP8.5.
+
+| Nr. | Befund | Was jetzt gilt |
+|---|---|---|
+| 1 | `kette-pruefen` zählte eine Datei als geprüft, in der es **keinen** XPath fand: falscher Wurzelknoten (`<configs>`), eine Vanilla-Datei als Patch, ein Tippfehler im Namen der Operation. „1 Patch-Datei, 0 XPaths, GREEN". | Der Wurzelknoten muss `<config>` heißen (Vertrag 03 §7). Jedes Kind muss eine bekannte Operation sein und ein `xpath` tragen. Eine Patch-Datei ohne eine einzige Operation ist rot. Alles Exit 1. |
+| 2 | Eine kaputte Trennzeile (`---\|---\|---\|oops`) unter einer Glossar-Tabelle ohne Randstriche: die Tabelle fiel still weg; stand daneben eine heile Verbots-Tabelle, blieb der Lauf grün. | Eine Zeile außerhalb jeder Tabelle, die nach Abzug von Code-Spannen **zwei oder mehr** Striche `\|` trägt, ist Exit 2 („sieht aus wie eine Tabellenzeile"). |
+| 3 | Der Imkerei-Tipp (`loadingTipApiary`) riet zu Chrysanthemen; `resourceCropChrysanthemumPlant` ist gesperrt (Denylist Zeile 349). | Text berichtigt: Goldrute oder Flachs. Dazu eine Einmal-Suche über alle Texte, siehe unten. |
+| 4 | `SDTD_PATH` mit **wörtlichen** Anführungszeichen (`set SDTD_PATH="C:\…"` in cmd): `[IO.Path]::Combine` wirft, `check-all.ps1` endete ohne Ergebniszeile. Ebenso, wenn es gar keine Quelle fand (`throw`). | `kette-pruefen` → Exit 2 („SDTD_PATH ist kein gueltiger Pfad"). `check-all.ps1` fängt den Pfadfehler; ohne Quelle zählen `anachronisms` und `recipes` als rot, und die Ergebniszeile steht. |
+| 5 | Zwei Optionstexte nannten zwei verschiedene Obergrenzen für die ganze Karte, ohne zu sagen, wann welche gilt. | Beide Texte nennen jetzt den Geltungsbereich: die Einstellung, und in einer Seuchennacht etwa das 1,9-Fache davon. Herkunft siehe unten. |
+
+### Vertragsänderung an `kette-pruefen`: was eine Patch-Datei ist
+
+Bisher galt jedes Kind von `DocumentElement` mit einem `xpath`-Attribut als Operation, und
+alles andere wurde übergangen. Jetzt:
+
+- Der Wurzelknoten heißt `<config>` — sonst rot, und die Datei wird nicht weiter gelesen.
+- Bekannte Operationen: die Liste `$patchVerbs` des Skripts. Ein anderes Element ist rot
+  („unbekannte Patch-Operation"), eine bekannte Operation ohne `xpath` ebenso.
+- `<conditional>` und `<include>` sind bekannt, werden aber **nicht von innen geprüft**. Sie
+  werden gezählt: neue Ausgabezeile `nicht von innen geprueft (conditional, include): N`.
+  Das ist die alte Grenze (WP7.1), nur nicht mehr verschwiegen.
+- Eine Datei, die sich nicht als XML lesen lässt, ist rot statt einer Ausnahme.
+
+**Gemessen am 2026-11-21:** 18 Patch-Dateien, 418 XPaths (405 in Vanilla, 13 auf eigene
+Knoten), 0 unaufgelöst, **0** nicht von innen geprüft. Die neuen Regeln treffen im echten Mod
+also nichts — sie schließen eine Lücke, in die bisher niemand gefallen war.
+
+### Gegenproben — acht neue, alle einmal rot gesehen
+
+Gegen die Skripte des Stands `5fd3ea9`: **91 Gegenproben, 7 fehlgeschlagen** — genau die
+sieben neuen dieses Laufs. Die achte (kaputtes XML) kam danach dazu und ist einzeln gegen
+das alte Skript gehalten: eine Ausnahme mitten im Lauf, keine Ergebniszeile — die Gegenprobe
+verlangt die Ergebniszeile. Gegen den neuen Stand: **92, 0 fehlgeschlagen.**
+
+| Gegenprobe | vorher | jetzt |
+|---|---|---|
+| `kette/wurzel-falsch/blocks.xml` (`<configs>`, XPath trifft) | Exit 0, GREEN | Exit 1, „Wurzelknoten <configs> statt <config>" |
+| `kette/operation-falsch/blocks.xml` (`<sett>`, `<set>` ohne xpath, ein `<conditional>`) | Exit 0, „0 XPaths" | Exit 1, drei Meldungen; Zähler 1 |
+| Vanillas `blocks.xml` als Patch | Exit 0, GREEN | Exit 1, „Wurzelknoten <blocks>" |
+| `kette/xml-kaputt/blocks.xml` (ein Ende-Tag fehlt) | Ausnahme, keine Ergebniszeile | Exit 1, „kein gueltiges XML", mit Zeile und Stelle |
+| `glossar-trennzeile-kaputt.md` | Exit 0, GREEN (mit „ZOMBIE" in der Sprachdatei) | Exit 2 |
+| `kette-pruefen`, Spielpfad in Anführungszeichen | Ausnahme | Exit 2 |
+| `check-all.ps1`, Spielpfad in Anführungszeichen | Ausnahme, keine Ergebniszeile | „6 Pruefungen, 3 rot" |
+| `check-all.ps1` ohne jede Quelle | `throw`, keine Ergebniszeile | „Quelle: KEINE", „6 Pruefungen, 4 rot" |
+
+Für die letzte setzt die Gegenprobe `%APPDATA%` **für den einen Lauf** auf einen Testordner
+um (neuer Parameter `-Appdata` von `Test-Script`): auf einem Rechner mit einem ConfigsDump
+ließe sich „keine Quelle" sonst nicht herstellen.
+
+### Befund 3: die Einmal-Suche über alle Texte
+
+Der Fehler war meiner: ich hatte Vanillas Zutatenliste übernommen, ohne sie gegen den Purge
+zu halten. Damit das nicht der eine gefundene von mehreren ist, lief einmal eine Suche:
+aus `700_10_Purge/Config/items.xml` und `blocks.xml` die 598 als „verboten" markierten
+Kennungen, zu jeder Vanillas englischer und deutscher Name (1.131 Namen ab fünf Zeichen),
+gesucht als ganzes Wort in beiden Spalten unserer 710 Zeilen.
+
+- Gegen den Stand `5fd3ea9`: **3 Treffer** — „Chrysanthemum" und „Chrysantheme" in
+  `loadingTipApiary`, dazu „Schädelbrecher" in `perkSkullCrusherName`.
+- Gegen den neuen Stand: **1 Treffer**, „Schädelbrecher". Das ist der deutsche Name eines
+  Perks, der zufällig so heißt wie Vanillas gesperrte Süßigkeit (`drugSkullCrushers`) —
+  kein Verweis auf sie.
+
+Das ist **kein** Dauerprüfer, sondern ein Skript im Arbeitsordner der Sitzung. Als Prüfung
+taugte es erst mit einer Ausnahmeliste (der Perk-Name) und einer Antwort darauf, was mit
+umgedeuteten Kennungen ist, deren Vanilla-Name weiterlebt. **Vorschlag, nicht umgesetzt:**
+als siebte Prüfung in `check-all.ps1`, sobald der Nutzer das will.
+
+### Befund 5: woher die 1,9 kommt
+
+Beide Zahlen stehen in **Vanillas** eigenen Texten (`goMaxSpawnedZombiesDesc`: „only this
+many on the entire map"; `goBloodMoonEnemyCountDesc`: „the world cap is about 1.9x the
+MaxSpawnedZombies"). Im Code belegt ist davon nur die Gruppenobergrenze 30
+(`AIDirectorBloodMoonParty::InitParty`, `ldc.i4.s 30` vor `Utils::FastMin`). Den Faktor 1,9
+habe ich in `AIDirectorBloodMoonComponent` und `AIDirectorBloodMoonParty` **nicht** gefunden
+und nicht weiter gesucht. Unsere Texte sagen jetzt, was Vanillas zwei Texte zusammen sagen —
+in einer Seuchennacht gilt das 1,9-Fache —, und das ist **gelesen, nicht gemessen**.
+
+### Grenzen und was offen bleibt
+
+- **Die Strich-Regel des Glossars kennt nur Code-Spannen.** Ein Satz im Fließtext mit zwei
+  senkrechten Strichen außerhalb von Backticks wird Exit 2. Im heutigen Glossar gibt es
+  keinen (Lauf grün); wer einen schreibt, bekommt die Meldung mit Zeilennummer.
+- **`<conditional>` wird gezählt, nicht geprüft.** Sobald die XUi-Patches einen tragen
+  (Vertrag 03 §5, WP8.7/WP8.9), steht in der Ausgabe eine Zahl größer 0 — und dann muss das
+  Skript hineinsehen, sonst ist die Zahl nur ein besser sichtbares Loch.
+- **Flachs lässt sich nicht anbauen** (`plantedCotton*` ist gesperrt, Denylist Zeile 379;
+  die Faser `resourceCropCottonPlant` lebt, WP4.1). Der Imkerei-Tipp nennt ihn weiter als
+  Futter, weil es ihn gibt — ob er als Bienenfutter taugt, wenn man ihn nur findet, ist eine
+  Balance-Frage und hier nicht beantwortet.
+- Befund 4 des dritten Reviews (dritte Sprachspalte) wartet weiter auf den Nutzer; offen aus
+  dem ersten Review bleiben die Befunde 3 bis 7.

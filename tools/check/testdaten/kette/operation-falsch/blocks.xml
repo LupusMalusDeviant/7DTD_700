@@ -1,0 +1,14 @@
+<config>
+	<!-- Testdatei: drei Zeilen, die frueher still uebersprungen wurden.
+	       1. <sett>  - ein Tippfehler im Namen der Operation
+	       2. <set>   - ohne xpath
+	       3. <conditional> - bekannt, aber nicht von innen geprueft: wird gezaehlt, nicht rot
+	     Vor dem 2026-11-21: "1 Patch-Datei, 0 XPaths, GREEN". -->
+	<sett xpath="/blocks/block[@name='pruefWerkbank']/property[@name='Class']/@value">X</sett>
+	<set>ohne Ziel</set>
+	<conditional>
+		<if cond="mod_loaded('pruefMod')">
+			<set xpath="/blocks/block[@name='pruefGibtesnicht']/@name">X</set>
+		</if>
+	</conditional>
+</config>

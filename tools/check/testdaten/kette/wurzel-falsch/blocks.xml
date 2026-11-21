@@ -1,0 +1,6 @@
+<configs>
+	<!-- Testdatei: der Wurzelknoten heisst <configs> statt <config> (Vertrag 03 §7). Der
+	     XPath darunter TRIFFT - die Datei war darum vor dem 2026-11-21 gruen, und niemand
+	     sah den Wurzelknoten an. Geprueft wird jetzt er selbst. -->
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@name='Class']/@value">X</set>
+</configs>

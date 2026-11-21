@@ -141,7 +141,11 @@ function Test-Script {
         # gegenpruefen.
         [switch]$OhneSpielpfad,
         # Dasselbe mit einem FALSCHEN Spielpfad: gesetzt, aber ohne Data\Config darunter.
-        [string]$Spielpfad
+        [string]$Spielpfad,
+        # Setzt %APPDATA% fuer den einen Lauf um (seit 2026-11-21). check-all.ps1 sucht dort
+        # nach einem ConfigsDump; auf einem Rechner, der einen hat, liesse sich der Fall
+        # "keine Quelle" sonst nicht gegenpruefen.
+        [string]$Appdata
     )
 
     $script:checked++
@@ -153,6 +157,8 @@ function Test-Script {
     $pfadVorher = $env:SDTD_PATH
     if ($OhneSpielpfad) { Remove-Item Env:SDTD_PATH -ErrorAction SilentlyContinue }
     if ($Spielpfad) { $env:SDTD_PATH = $Spielpfad }
+    $appdataVorher = $env:APPDATA
+    if ($Appdata) { $env:APPDATA = $Appdata }
     try {
         $output = & $skriptPfad @Parameters
         $actual = if ($LASTEXITCODE -ne $null) { $LASTEXITCODE } else { 0 }
@@ -167,6 +173,7 @@ function Test-Script {
             if ($pfadVorher) { $env:SDTD_PATH = $pfadVorher }
             else { Remove-Item Env:SDTD_PATH -ErrorAction SilentlyContinue }
         }
+        if ($Appdata) { $env:APPDATA = $appdataVorher }
     }
     $text = ($output | Out-String)
 
@@ -886,6 +893,86 @@ else {
         '-> nicht geprueft, zaehlt als rot',
         '6 Pruefungen, 3 rot')
 }
+
+# ------------------------------------------------- Viertes Review (2026-11-21)
+# Wieder dieselbe Art Fehler: gruen, ohne geprueft zu haben, oder Abbruch ohne Ergebniszeile.
+#
+# (1) Der Wurzelknoten. Vertrag 03 §7 verlangt <config>. Die Testdatei traegt <configs> und
+#     einen XPath, der TRIFFT - sie war gruen, weil niemand den Wurzelknoten ansah.
+Test-Script 'kette-pruefen: falscher Wurzelknoten wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\wurzel-falsch\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Wurzelknoten <configs> statt <config>')
+
+# (2) Ein Tippfehler im Namen der Operation (<sett>) und eine Operation ohne xpath wurden
+#     uebersprungen: "1 Patch-Datei, 0 XPaths, GREEN". <conditional> bleibt eine Grenze,
+#     wird aber gezaehlt statt verschwiegen.
+Test-Script 'kette-pruefen: unbekannte Operation und fehlender xpath werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\operation-falsch\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'unbekannte Patch-Operation <sett>',
+    'Patch-Operation <set> ohne xpath',
+    'nicht von innen geprueft (conditional, include): 1')
+
+# (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
+#     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.
+Test-Script 'kette-pruefen: eine Datei, die kein Patch ist, wird rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\vanilla\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Wurzelknoten <blocks> statt <config>') -MustNotContain @('GREEN')
+
+# (3b) Eine Patch-Datei, die kein gueltiges XML ist: eine rote Zeile, keine Ausnahme.
+Test-Script 'kette-pruefen: kaputtes XML ist rot, kein Abbruch' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Patch-Datei ist kein gueltiges XML: blocks.xml', '== Ergebnis: 1 rot -> RED ==')
+
+# (4) Eine kaputte Trennzeile ("---|---|---|oops") unter einer Tabelle ohne Randstriche.
+#     Markdown liest das nicht als Tabelle; ihr Verbot 'zombie' fiel weg, und weil eine
+#     zweite Verbots-Tabelle heil war, blieb der Lauf GREEN - mit "ZOMBIE" in der Sprachdatei.
+Test-Script 'glossar-pruefen: kaputte Trennzeile schaltet die Tabelle nicht still ab' 2 @{
+    Glossar     = (Join-Path $glossarDaten 'glossar-trennzeile-kaputt.md')
+    Sprachdatei = (Join-Path $glossarDaten 'Localization-gross.csv')
+} -Skript 'glossar-pruefen.ps1' -MustContain @('sieht aus wie eine Tabellenzeile') -MustNotContain @('GREEN')
+
+# (5) SDTD_PATH mit WOERTLICHEN Anfuehrungszeichen, wie 'set SDTD_PATH="C:\..."' in cmd sie
+#     hinterlaesst. Unter Windows PowerShell 5.1 wirft dann auch [IO.Path]::Combine.
+$inAnfuehrung = '"' + $glossarDaten + '"'
+
+Test-Script 'kette-pruefen: Spielpfad in Anfuehrungszeichen ist nicht geprueft, kein Abbruch' 2 @{} `
+    -Spielpfad $inAnfuehrung -MustContain @('NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile' 1 @{
+    SkipGegenproben = $true
+    Source          = (Join-Path $data 'sauber')
+    Configuration   = $Configuration
+} -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -MustContain @(
+    '-> nicht geprueft, zaehlt als rot',
+    '6 Pruefungen, 3 rot')
+
+# (6) Dasselbe OHNE -Source und ohne ConfigsDump: %APPDATA% zeigt fuer diesen Lauf auf einen
+#     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
+#     anachronisms, recipes, purge-patch und die Kette koennen nicht laufen = 4 rot.
+Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als rot' 1 @{
+    SkipGegenproben = $true
+    Configuration   = $Configuration
+} -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $glossarDaten -MustContain @(
+    'Quelle: KEINE',
+    'NICHT GEPRUEFT: keine Quelle',
+    '6 Pruefungen, 4 rot')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

@@ -1,0 +1,5 @@
+<config>
+	<!-- Testdatei: kein gueltiges XML - das schliessende </set> fehlt. Erwartet ist eine rote
+	     Zeile mit dem Dateinamen, keine Ausnahme mitten im Lauf. -->
+	<set xpath="/blocks/block[@name='pruefWerkbank']/property[@name='Class']/@value">X
+</config>

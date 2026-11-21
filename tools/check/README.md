@@ -285,6 +285,13 @@ ohne Vanilla-Gegenstück ist **rot**, ein mit `-Patches` genannter Ordner Exit 2
 unaufgelöst. Grenzen: geprüft wird gegen Vanilla, nicht gegen den gepatchten Stand, und nur
 die erste Ebene unter `<config>` — Patches in einem `<conditional>` sieht es nicht.
 
+**Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
+ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei
+mit falschem Wurzelknoten oder einem Tippfehler wie `<sett>` als „geprüft, 0 XPaths, GREEN".)*
+`<conditional>` und `<include>` bleiben ungeprüft, werden aber gezählt:
+`nicht von innen geprueft (conditional, include): N` — heute 0. Ein `SDTD_PATH`, der kein
+gültiger Pfad ist (wörtliche Anführungszeichen), ist Exit 2 statt einer Ausnahme.
+
 ### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
 
 [`docs/glossar.md`](../../docs/glossar.md) ist die Begriffsquelle (F-12), und dieses Skript
@@ -307,6 +314,8 @@ ein Begriff, der nur in **einer** Sprache verboten ist, und eine Kopfzeile mit T
 
 **Jede Tabelle des Glossars muss eine der beiden Formen haben.** Eine unbekannte Kopfzeile ist
 Exit 2 — sonst schaltet ein Tippfehler („Sprachen") eine ganze Verbots-Tabelle still ab.
+Dasselbe gilt seit dem 2026-11-21 für eine **kaputte Trennzeile**: eine Zeile außerhalb jeder
+Tabelle, die (Code-Spannen abgezogen) zwei oder mehr `|` trägt, ist Exit 2.
 Erkannt wird eine Tabelle an ihrer **Trennzeile**, mit oder ohne Randstriche (seit dem
 2026-11-20; vorher war eine Tabelle ohne führendes `|` Fließtext). Eine Trennzeile ohne
 Kopfzeile davor ist Exit 2.

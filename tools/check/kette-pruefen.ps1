@@ -60,7 +60,17 @@ if (-not $Vanilla) {
     # Join-Path wirft in Windows PowerShell 5.1 eine Ausnahme, wenn das LAUFWERK im Pfad
     # nicht eingehaengt ist - noch vor jeder Pruefung hier, und check-all.ps1 endete damit
     # wieder ohne Ergebniszeile.
-    $Vanilla = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config')
+    #
+    # Und selbst Combine wirft, wenn der Pfad Zeichen traegt, die kein Pfad haben darf -
+    # etwa woertliche Anfuehrungszeichen, wie sie ein 'set SDTD_PATH="C:\..."' in cmd
+    # hinterlaesst (viertes Review, 2026-11-21). Das ist "nicht pruefbar", keine Ausnahme.
+    try { $Vanilla = [IO.Path]::Combine($env:SDTD_PATH, 'Data\Config') }
+    catch {
+        Write-Output "kette-pruefen: SDTD_PATH ist kein gueltiger Pfad ($($env:SDTD_PATH)) - NICHT GEPRUEFT."
+        Write-Output ''
+        Write-Output '== Ergebnis: nicht pruefbar -> RED =='
+        exit 2
+    }
 }
 
 function Stop-Unpruefbar {
@@ -331,6 +341,7 @@ $patchVerbs = @('set', 'setattribute', 'removeattribute', 'append', 'prepend',
 $vanillaDocs = @{}
 $patchDateien = 0
 $ohneGegenstueck = 0
+$ungeprueftEbene = 0
 # ContainsKey und nicht '-not $Patches': eine Gegenprobe, die ABSICHTLICH keine Patch-Datei
 # prueft, uebergibt @() - und ein leeres Feld ist in PowerShell falsch, waere also wieder in
 # die Suche unter mod/ gelaufen. Drei bestehende Gegenproben sind beim ersten Lauf genau
@@ -364,7 +375,32 @@ foreach ($path in $Patches) {
         $vanillaDocs[$name] = [xml](Get-Content -LiteralPath $vanillaPath -Raw)
     }
     $vdoc = $vanillaDocs[$name]
-    $xml = [xml](Get-Content $path -Raw)
+    # EINE DATEI, DIE GEZAEHLT WIRD, MUSS AUCH GEPRUEFT WERDEN (ergaenzt 2026-11-21, viertes
+    # Review). Drei Wege fuehrten zu "1 Patch-Datei, 0 XPaths, GREEN":
+    #   - ein anderer Wurzelknoten als <config> (Vertrag 03 §7 verlangt ihn),
+    #   - ein Kind, das keine der elf Operationen ist (Tippfehler: <sett xpath=...>),
+    #   - eine Operation ohne xpath.
+    # Jeder davon ist jetzt rot. Kaputtes XML ebenso - vorher brach das Skript mit einer
+    # Ausnahme ab, statt die Datei zu nennen.
+    try { $xml = [xml](Get-Content -LiteralPath $path -Raw) }
+    catch {
+        # Die aeussere Meldung der Typumwandlung zitiert die ganze Datei; die innerste nennt
+        # Zeile und Stelle.
+        $grund = $_.Exception
+        while ($grund.InnerException) { $grund = $grund.InnerException }
+        $unresolved += "Patch-Datei ist kein gueltiges XML: $name  ($($grund.Message))"
+        continue
+    }
+    if ($null -eq $xml.DocumentElement -or $xml.DocumentElement.get_Name() -cne 'config') {
+        $wurzel = if ($null -eq $xml.DocumentElement) { '(keiner)' } else { $xml.DocumentElement.get_Name() }
+        $unresolved += "Patch-Datei hat den Wurzelknoten <$wurzel> statt <config>: $name"
+        continue
+    }
+    $elemente = @($xml.DocumentElement.ChildNodes | Where-Object { $_.NodeType -eq 'Element' })
+    if ($elemente.Count -eq 0) {
+        $unresolved += "Patch-Datei ohne eine einzige Operation: $name"
+        continue
+    }
     foreach ($node in $xml.DocumentElement.ChildNodes) {
         if ($node.NodeType -ne 'Element') { continue }
         # get_Name() UND NICHT .Name. PowerShells XML-Adapter legt die XML-Attribute als
@@ -375,9 +411,20 @@ foreach ($path in $Patches) {
         # Genau so ist mod/700_50_Fortschritt/Config/progression.xml beim ersten Lauf mit
         # ihren 20 Patches unbemerkt uebersprungen worden (WP7.1). Ein Methodenaufruf geht
         # am Adapter vorbei.
-        if ($patchVerbs -notcontains $node.get_Name()) { continue }
+        $verb = $node.get_Name()
+        # <conditional> und <include> sind Operationen des Spiels, die diese Pruefung nicht
+        # von innen ansieht (unter 'Grenzen' genannt). Sie werden gezaehlt, damit die Grenze
+        # eine Zahl hat und nicht nur ein Satz ist.
+        if ($verb -ceq 'conditional' -or $verb -ceq 'include') { $ungeprueftEbene++; continue }
+        if ($patchVerbs -cnotcontains $verb) {
+            $unresolved += "unbekannte Patch-Operation <$verb>: $name  (bekannt: $($patchVerbs -join ', '), conditional, include)"
+            continue
+        }
         $xp = $node.GetAttribute('xpath')
-        if (-not $xp) { continue }
+        if (-not $xp) {
+            $unresolved += "Patch-Operation <$verb> ohne xpath: $name"
+            continue
+        }
         $xpathChecked++
         $hits = 0
         try { $hits = @($vdoc.SelectNodes($xp)).Count }
@@ -445,6 +492,7 @@ Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene 
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  Patch-Dateien: {0} mit Vanilla-Gegenstueck, {1} ohne" -f $patchDateien, $ohneGegenstueck)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
+Write-Output ("  nicht von innen geprueft (conditional, include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
