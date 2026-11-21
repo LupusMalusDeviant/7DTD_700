@@ -84,6 +84,14 @@ Kennung und 83 Muster.
 Spielstart-Menüs und drei Anzeigen — sprechen von Seuchentoten und Seuchennacht; Vanillas
 Kürzel „BM" ist ausgeschrieben. Sprachdatei 710 Zeilen, Glossar 84 Muster.
 
+**Vierte Scheibe (D80), ungesehen:** 37 Zeilen aus Herausforderungen und Aufträgen — die
+Seuchennacht-Herausforderungen, die allgemeinen Tötungsziele, neun Zeilen der
+Grundlagen-Seite, sechs neutrale Auftragszeilen. 153 Zeilen mit einem Weltbegriff bleiben
+liegen und sind eingeteilt (Twitch, Wesen-Namen/F-06, Händler-Rede/F-10, Biome/F-07, tote
+Schlüssel). Sprachdatei 747 Zeilen. **Gefunden, keine Textfrage:** 35 von 148 sichtbaren
+Herausforderungen sind nach dem Purge unerfüllbar, Felder lassen sich nicht bauen, und die
+Händler bieten weiter Stromaufträge an (Plan-0001, Offene Punkte).
+
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die
 zwei Sandbox-Vorlagen, und die Abnahme im Spiel — vor allem, ob das Menü die längeren

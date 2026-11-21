@@ -1359,10 +1359,25 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      Sandbox-Vorlagen, 2 sind Entwickler-Anzeigen. Die Metaspalten jeder Zeile sind aus
      Vanillas Zeile übernommen, nicht von Hand gesetzt. Sprachdatei: 710 Zeilen. Glossar:
      84 Muster (neu: `\bBM\b`). → Prüfliste 21 (g).
+   - *Vierte Scheibe — Herausforderungen und Aufträge, gebaut am 2026-11-21 (D80),
+     ungesehen.* **Erst gezählt:** Vanilla hat 175 Herausforderungen in 19 Gruppen, und
+     **keine unserer Dateien fasst `challenges.xml` an.** 27 gehören zur Twitch-Seite; von
+     den 148 übrigen nennen **41** in einem Ziel eine gesperrte Kennung, **35 sind damit
+     unerfüllbar** (Offene Punkte). Die Einstiegsreihe („Basics") ist heil. Bei den
+     Aufträgen: die 23 „Challenge-Notizen" der Sprachdatei benutzt kein Auftrag mehr (tot);
+     die **Stromaufträge** stehen dagegen weiter in allen fünf Händlerlisten. **Dann
+     geschrieben: 37 Zeilen** — die Seuchennacht-Herausforderungen (10), die zwei allgemeinen
+     Tötungsziele samt Gruppe und Belohnungsauftrag (12), neun Zeilen der Grundlagen-Seite,
+     sechs neutrale Auftragszeilen. **153 bleiben liegen, eingeteilt:** 52 Twitch · 26 Wesen
+     (F-06) · 26 Händler-Rede (F-10) · 23 tote Notizen · 16 Biome (F-07) · 4 Stromaufträge ·
+     4 Händler-Dialoge · 2 wartend. *Gegengeprüft:* Glossar grün über 747 Zeilen; die
+     Querprobe „nennt ein Text ein gesperrtes Ding beim Vanilla-Namen" (598 Kennungen, 1.131
+     Namen) findet in den neuen Zeilen nichts. *Dabei weggelassen statt übernommen:* dass
+     Verrottendes Fleisch „für Felder" gebraucht wird — das Feld-Rezept verlangt gesperrtes
+     Salpeterpulver. Sprachdatei: 747 Zeilen. → Prüfliste 21 (h).
    - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ ~~(3) UI und
-     Ladebildschirm;~~
-     (4) Quests und Challenges — erst zählen, was davon nach dem Purge überhaupt erreichbar
-     ist; (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
+     Ladebildschirm;~~ ~~(4) Quests und Challenges;~~
+     (5) die rund 450 Rang-Texte und 200 Blatt-Wirkungen aus WP7, die noch Vanillas
      Wortlaut tragen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
      Begriffe offen) und die Bogen-Texte (WP5.2 wartet auf den Nutzer).
    - → Prüfliste 21.
@@ -1754,6 +1769,14 @@ werden:
     Dazu zwei Entscheidungen: das englische Wort für **Verderbte** (vier Optionszeilen
     warten darauf) und ob es Vanillas **Sandbox-Vorlagen** („7 Days Later", „Undead
     Matinee") bei uns geben soll.
+    (h) *Die Herausforderungen, im Spiel (D80).* Das Herausforderungs-Fenster öffnen,
+    deutsch und englisch. Steht auf der Grundlagen-Seite **„Seuchentote töten"** und
+    **„Keule herstellen"**, auf der zweiten Seite **„Überlebe 1 Seuchennacht"** und die
+    Gruppe **„Seuchentoten-Schlächter"**? Dann drei Dinge ansehen, die nur das Spiel zeigt:
+    Stimmt der Text der Fackel-Herausforderung (brennt die Wandfackel ab, erneuert eine
+    frische Fackel sie)? Wie sieht eine der **unerfüllbaren** Herausforderungen aus
+    („Tausammler platzieren", „Rohrbomben herstellen") — steht sie einfach da und lässt
+    sich nie abhaken? Und zeigt das Fenster die **Twitch-Seite**, wenn Twitch aus ist?
 
 ## Offene Punkte
 
@@ -1766,6 +1789,32 @@ werden:
   mit `conditional` fallen die drei XPaths wieder aus der Zählung, wenn das Skript nicht
   zugleich hineinsieht. → WP8.7/WP8.9, [Vertrag 04](../contracts/04-pruefwerkzeuge.md)
   „Nachtrag drittes Review".
+- **35 Herausforderungen sind unerfüllbar, und der Purge sieht sie nicht** (gezählt in
+  WP8.5, vierte Scheibe, 2026-11-21). `challenges.xml` steht in keiner unserer Dateien und
+  nicht in der Erreichbarkeitsprüfung. 41 der 148 sichtbaren Herausforderungen nennen eine
+  gesperrte Kennung: „Tausammler platzieren", „Rohrbomben herstellen", „Benzinkanister
+  herstellen", fünf von zehn der Reihe „Ernten" (Rohre, Polymere, Autoteile, mechanische
+  und elektrische Teile), sieben von zehn Anbau-Zielen, zwei Sammel-Ziele (Salpeter,
+  Ölschiefer), acht Heiler-Ziele (bei sechs bleibt ein erlaubtes Mittel) und **je vier von
+  sieben in allen vier Biom-Reihen**. Drei Fragen, keine davon eine Textfrage, alle beim
+  Nutzer: (1) Entfernen, ersetzen oder stehen lassen? Eine Gruppe hat zehn Plätze und eine
+  Belohnung fürs Ganze — was das Spiel mit einer Gruppe von sechs macht, ist ungemessen.
+  (2) Soll `mod700check` die Ziele der Herausforderungen als Verweise prüfen (eine
+  Erweiterung von Vertrag 04)? (3) **Die Biom-Reihen sind mehr als Herausforderungen:** sie
+  gehören zu Vanillas Biom-Gefahren (Rauch, Hitze, Kälte, Strahlung), und alle vier Mittel
+  dagegen — die vier „Smoothies" und die Ausrüstungs-Zutaten — sind gesperrt. Ob die
+  Gefahren in Phase 1 an sind und was dann gegen sie hilft, steht in keinem Dokument.
+- **Felder lassen sich nicht bauen** (gefunden ebenda). Vanillas Rezept für das Feld
+  (`farmPlotBlockVariantHelper`) verlangt 25 `resourcePotassiumNitratePowder`, und das ist
+  gesperrt; keines unserer Modlets schreibt das Rezept um. Es ist eines der Rezepte, die
+  `purge-patch` als „überlebt, aber nicht herstellbar" zählt — nur stand dort nie, dass es
+  **der Ackerbau** ist. Ob sich die drei Anbau-Ziele, die der Purge übrig lässt, dann noch
+  aus Wildwuchs erfüllen lassen, ist ungeprüft.
+- **Die Händler bieten weiter Stromaufträge an** (gefunden ebenda). `tier2_restore_power`
+  bis `tier4_restore_power` stehen in allen fünf Händlerlisten von Vanillas `quests.xml`
+  (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und
+  wirf die Generatoren wieder an" ist ein Anachronismus, den keine Regel trifft, weil er
+  kein Gegenstand ist. → F-10 oder eine Purge-Regel für Auftragsarten.
 - **Viertes Review (2026-11-21), fünf Befunde behoben.** Drei an den Prüfwerkzeugen
   (`kette-pruefen` las eine Datei mit falschem Wurzelknoten als „0 XPaths, grün"; eine kaputte
   Trennzeile schaltete eine Glossar-Tabelle ab; ein `SDTD_PATH` in Anführungszeichen ließ

@@ -833,3 +833,46 @@ goZombiesEatAnimalsDesc
 xuiTargetZombies
 xuiZombieKills
 xuiZombies
+
+# --- WP8.5 / D80: vierte Scheibe - Herausforderungen und Auftraege ------------------
+# 37 Zeilen: die Seuchennacht-Herausforderungen, die zwei allgemeinen Toetungsziele mit
+# ihrer Gruppe und Belohnung, sechs Texte der Grundlagen-Seite und sechs neutrale
+# Auftragszeilen. NICHT hier: die neun Wesen-Herausforderungen (F-06), die vier
+# Biom-Reihen, die Twitch-Seite und alles, was ein Haendler SAGT (F-10).
+challengeBloodMoonSurvive1
+challengeBloodMoonSurvive1Desc
+challengeBloodMoonSurvive1Short
+challengeBloodMoonSurvive5
+challengeBloodMoonSurvive5Desc
+challengeBloodMoonSurvive5Short
+challengeBloodMoonSurvive10
+challengeBloodMoonSurvive10Desc
+challengeBloodMoonSurvive10Short
+challengeObjectiveBloodMoonCompleted
+challengeKillZombies
+challengeKillZombiesShort
+challengeKillZombiesDesc
+challengeKillAnyZombies
+challengeKillAnyZombiesShort
+challengeKillAnyZombiesDesc
+challengeGroupZombieSlayer
+zombie_slayer_name_any_zombies
+zombie_slayer_subtitle_any_zombies
+zombie_slayer_name
+zombie_slayer_subtitle
+zombie_slayer_desc
+challengeCraftWoodClub
+challengeCraftWoodClubHint1
+challengeCraftWoodClubShort
+challengeCraftBowShort
+challengeHarvestAnimalsDesc
+challengeHarvestRottingFleshDesc
+challengePlaceTorchDesc
+challengeUpgradeToCobblestoneDesc
+challengeQuestCompleteDesc
+quest_clear_description
+quest_clear_response
+quest_clear_statement
+quest_fetch_clear_description
+quest_fetch_clear_statement
+quest_infestation_statement
