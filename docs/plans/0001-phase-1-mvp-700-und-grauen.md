@@ -1390,7 +1390,18 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      Querprobe über unsere Datei: 4 Treffer, alle Fehltreffer (Schädelbrecher ×2, Gatherer,
      Spring); Zahlenfolge je Zeile gegen Vanilla: 17 Abweichungen, alle ein gestrichener
      Satzteil. Sprachdatei: 836 Zeilen. → Prüfliste 21 (i).
-   - *Fünfte Scheibe, zweiter Teil — offen: der Lesedurchgang.* Beide Messverfahren finden
+   - *Fünfte Scheibe, zweiter Teil — der Lesedurchgang, gebaut am 2026-11-21 (D82),
+     ungesehen.* **36 Zeilen:** 22 Blatt-Wirkungen (alle 85 offenen Blatt-Texte englisch
+     gelesen) und 14 Rang-Texte (368 Zeilen gegen eine Schlagwortliste gefiltert, 34 Treffer
+     gelesen — **kein vollständiges Lesen**). Ein Blatt spricht jetzt wie seine Abschrift
+     heißt (Köhler statt Feuerwehrmann, kein Baseball in „Vom Keulenschlag", kein
+     „Häuserkampf"); Buntmetall statt Messing; Olympia, Krankenhausrechnungen, Mutantengene,
+     Ninja und Fast Food aus Dosen sind fort. *Gegengeprüft:* Glossar grün über 872 Zeilen;
+     Zahlenfolge je Zeile gegen Vanilla: 0 Abweichungen; Querprobe über unsere Datei: 5
+     Treffer, alle Fehltreffer. **Stand der Scheibe: 125 von 631 umgeschrieben, 506 offen.**
+     21 gemessene Zeilen warten weiter (D81), dazu 6 beim Lesen gefundene mit toter Wirkung
+     (Offene Punkte). Sprachdatei: 872 Zeilen. → Prüfliste 21 (i).
+   - *Was D81 dazu vorab festhielt:* Beide Messverfahren finden
      nur verbotene Begriffe und ganze Namen. Eine Stichprobe mit Schlagwörtern über die 542
      verbliebenen Zeilen fand weitere, die weder das eine noch das andere sind: die sechzehn
      Zeilen der Abschrift „Vom Keulenschlag" (Baseball: „Home Run", „Stealing Bases", „Bats and clubs"),
@@ -1399,8 +1410,9 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      Die Zahl steht fest, wenn die 542 Zeilen gelesen sind.
    - *Offen, weitere Scheiben:* ~~(2) Buffs, Tagebuch-Tipps, Blöcke;~~ ~~(3) UI und
      Ladebildschirm;~~ ~~(4) Quests und Challenges;~~
-     (5) Rang-Texte und Blatt-Wirkungen aus WP7: erster Teil gebaut, zweiter Teil
-     (Lesedurchgang) offen. **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
+     ~~(5) Rang-Texte und Blatt-Wirkungen aus WP7~~ (beide Teile gebaut; ein
+     vollständiges Lesen der 354 übrigen Rang-Zeilen steht aus und ist kein Planpunkt
+     mehr, sondern Teil der Abnahme im Spiel). **Nicht in WP8.5:** die sieben Wesen-Namen (F-06, Phase 2, englische
      Begriffe offen) und die Bogen-Texte (WP5.2 wartet auf den Nutzer).
    - → Prüfliste 21.
 6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
@@ -1807,7 +1819,11 @@ werden:
     „Kräuterküche"? **Steinmetz** und **Reiche Ader**: „Äxten, Spitzhacken oder Schaufeln".
     Die drei **Rüstungs-Fertigkeiten**: nennt die Beschreibung „Lehrblatt: Rüstungsbau" in
     der Farbe der anderen Lehrblätter? Dazu ein Blatt von „Vom Hammerschlag" lesen. Bricht
-    ein Text um oder wird er abgeschnitten?
+    ein Text um oder wird er abgeschnitten? **Zum zweiten Teil (D82):** je ein Blatt von
+    „Köhlerweisheit", „Vom Keulenschlag" und „Kampf in Mauern" lesen — passt der Ton zum
+    Namen der Abschrift? Und beim Durchblättern der Fertigkeiten: **fällt ein Rang-Text
+    auf, der noch nach Neuzeit klingt?** Die 354 übrigen Rang-Zeilen sind gefiltert, nicht
+    gelesen; jede Fundstelle ist eine Zeile mehr.
 
 ## Offene Punkte
 
@@ -1854,7 +1870,12 @@ werden:
   sagen müsste, was der Rang bei uns bringt — und das ist eine Entscheidung über die
   Wirkung, nicht über Worte. Für Wundarznei Rang 5 liest sich aus Vanillas `progression.xml`
   nur noch eine höhere Beutechance für das Lehrblatt; gemessen ist das nicht. Frage an den
-  Nutzer: Ränge verbergen, Wirkung ersetzen, oder stehen lassen?
+  Nutzer: Ränge verbergen, Wirkung ersetzen, oder stehen lassen? **Beim Lesen (D82) kamen
+  sechs Zeilen derselben Art dazu:** `perkAgilityMastery` Rang 2 (lädt nur Handfeuerwaffen
+  schneller), `perkPerceptionMastery` Rang 5 (stärkt nur Gewehrschüsse), das Blatt
+  `perkUrbanCombatLandMines` (Landminen lösen später aus) und das Blatt
+  `perkWasteTreasuresAcid` (Säure aus Autos; `resourceAcid` ist gesperrt) — zusammen 15
+  Zeilen.
 - **Der Plasmastab überlebt den Purge** (gefunden ebenda). `meleeWpnBatonT3PlasmaBaton`
   („Plasma Baton") trägt „erlaubt", weil keine Regel ihn dem Namen nach trifft; die zwei
   anderen Stäbe (Rohr, Schock) sind gesperrt. Derselbe Fall wie die sieben Kennungen der

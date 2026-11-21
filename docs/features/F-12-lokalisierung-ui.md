@@ -97,9 +97,15 @@ Blatt-Wirkungen an lebenden Fertigkeiten und Abschriften — nach der Regel des 
 Eingriffs: der gebrochene Begriff wird ersetzt, der Satzteil über ein gesperrtes Ding
 gestrichen, Vanillas Zahlen bleiben. 22 gemessene Zeilen warten mit Grund (F-06, F-07,
 offene Fragen; neun davon sind Ränge, deren ganze Wirkung an Gesperrtem hängt). Sprachdatei
-836 Zeilen. **Offen, zweiter Teil:** der Lesedurchgang über die 542 übrigen Zeilen — eine
-Stichprobe fand weitere, ungezählt, die kein Messverfahren sieht (Baseball-Vokabular der
-Abschrift „Vom Keulenschlag", Messing „für Patronen").
+836 Zeilen.
+
+**Fünfte Scheibe, zweiter Teil (D82), ungesehen:** der Lesedurchgang — 36 Zeilen (22
+Blatt-Wirkungen, 14 Rang-Texte), die ein Ding der Neuzeit nennen oder dem Namen unserer
+Abschrift widersprechen (Köhler statt Feuerwehrmann, kein Baseball in „Vom Keulenschlag",
+Buntmetall statt Messing). Die Blatt-Texte sind ganz gelesen, die Rang-Texte gegen eine
+Schlagwortliste gefiltert. Stand: 125 von 631 Zeilen umgeschrieben, 506 tragen Vanillas
+Wortlaut; 15 Zeilen versprechen eine Wirkung, die nur Gesperrtes trifft (Plan-0001, Offene
+Punkte). Sprachdatei 872 Zeilen.
 
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die

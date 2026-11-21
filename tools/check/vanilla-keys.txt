@@ -970,3 +970,44 @@ perkMediumArmorRank3LongDesc
 perkMediumArmorRank4LongDesc
 perkRunAndGunRank3LongDesc
 perkRunAndGunRank5LongDesc
+
+# WP8.5 / D82: fuenfte Scheibe, zweiter Teil - der Lesedurchgang. 22 Blatt-Wirkungen
+# (alle 85 offenen Blaetter englisch gelesen) und 14 Rang-Texte (368 Zeilen gegen eine
+# Schlagwortliste gefiltert, die Treffer gelesen): Texte, die ein Ding der Neuzeit nennen
+# oder dem Namen unserer Abschrift widersprechen.
+perkBatterUpBigHitsLongDesc
+perkBatterUpCompleteLongDesc
+perkBatterUpFoulBallsLongDesc
+perkBatterUpMaintenanceDesc
+perkBatterUpMaintenanceLongDesc
+perkBatterUpMetalChainDesc
+perkBatterUpMetalChainLongDesc
+perkBatterUpStealingBasesLongDesc
+perkBarBrawling2DropABombLongDesc
+perkBarBrawling8CompleteLongDesc
+perkFiremansAlmanacHeatLongDesc
+perkFiremansAlmanacMolotovLongDesc
+perkFiremansAlmanacPreventionLongDesc
+perkFiremansAlmanacSpeedLongDesc
+perkLuckyLooterBrassDesc
+perkLuckyLooterBrassLongDesc
+perkLuckyLooterFoodLongDesc
+perkUrbanCombatJumpingLongDesc
+perkUrbanCombatRoomClearingLongDesc
+perkUrbanCombatSneakingLongDesc
+perkWasteTreasuresDoorsDesc
+perkWasteTreasuresDoorsLongDesc
+perkAgilityMasteryRank3LongDesc
+perkArcheryRank2LongDesc
+perkBetterBarterRank2LongDesc
+perkFromTheShadowsRank5Desc
+perkHealingFactorRank5LongDesc
+perkJavelinMasterRank5LongDesc
+perkParkourRank2LongDesc
+perkPenetratorRank1LongDesc
+perkPerceptionMasteryRank3LongDesc
+perkRunAndGunRank3Desc
+perkRunAndGunRank5Desc
+perkStrengthMasteryRank2Desc
+perkStrengthMasteryRank2LongDesc
+perkAdvancedEngineeringRank5Desc
