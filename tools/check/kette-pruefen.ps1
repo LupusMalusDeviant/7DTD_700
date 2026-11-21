@@ -81,6 +81,58 @@ function Stop-Unpruefbar {
     exit 2
 }
 
+# EINE STELLE, AN DER XML GELESEN WIRD (2026-11-21, fuenftes Review). Vorher stand
+# '[xml](Get-Content ...)' an acht Stellen, und nur eine davon fing kaputtes XML ab: dieselbe
+# Datei als -Bloecke UND -Patches fiel an der frueheren Stelle mit einer Ausnahme heraus.
+# Zwei Faelle, zwei Ausgaenge (Vertrag 04):
+#   - die Datei laesst sich nicht LESEN (gesperrt, kein Zugriff)  -> .Unlesbar, der Aufrufer
+#     beendet mit Exit 2. Ein Eingang, den es nicht gibt, ist "nicht pruefbar", kein Befund.
+#   - die Datei ist kein gueltiges XML                            -> EINE rote Zeile, Exit 1.
+#     Bei einer VANILLA-Datei ist auch das .Unlesbar: gegen sie laesst sich nichts pruefen.
+# Die Funktion schreibt nichts und beendet nichts: sie wird in Zuweisungen aufgerufen, und
+# dort ginge ein Write-Output im Rueckgabewert unter.
+# Gelesen wird mit ReadAllText (UTF-8, BOM erkannt). '[xml](Get-Content -Raw)' las unter
+# Windows PowerShell 5.1 eine Datei ohne BOM in der ANSI-Codepage.
+$unresolved = @()
+$xmlGelesen = @{}
+function Read-XmlDatei {
+    param([string]$Pfad, [switch]$Vanilla)
+    try { $voll = (Resolve-Path -LiteralPath $Pfad).ProviderPath }
+    catch { return @{ Doc = $null; Unlesbar = "die Datei '$Pfad' laesst sich nicht finden ($($_.Exception.Message))" } }
+    if ($script:xmlGelesen.ContainsKey($voll)) { return $script:xmlGelesen[$voll] }
+    $ergebnis = @{ Doc = $null; Unlesbar = $null }
+    $text = $null
+    try { $text = [IO.File]::ReadAllText($voll) }
+    catch {
+        $grund = $_.Exception
+        while ($grund.InnerException) { $grund = $grund.InnerException }
+        $ergebnis.Unlesbar = "die Datei '$voll' laesst sich nicht lesen ($($grund.Message))"
+    }
+    if ($null -ne $text) {
+        $doc = New-Object System.Xml.XmlDocument
+        try {
+            $doc.LoadXml($text)
+            $ergebnis.Doc = $doc
+        }
+        catch {
+            # Die aeussere Meldung nennt nur den Methodenaufruf; die innerste Zeile und Stelle.
+            $grund = $_.Exception
+            while ($grund.InnerException) { $grund = $grund.InnerException }
+            if ($Vanilla) {
+                $ergebnis.Unlesbar = "die Vanilla-Datei '$voll' ist kein gueltiges XML ($($grund.Message))"
+            }
+            else {
+                # Die letzten drei Glieder des Pfads: 'blocks.xml' allein gibt es in fuenf Modlets.
+                $glieder = $voll.Split('\')
+                $kurz = ($glieder | Select-Object -Last 3) -join '\'
+                $script:unresolved += "Datei ist kein gueltiges XML: $kurz  ($($grund.Message))"
+            }
+        }
+    }
+    $script:xmlGelesen[$voll] = $ergebnis
+    return $ergebnis
+}
+
 $vanillaDa = $false
 try { $vanillaDa = Test-Path -LiteralPath $Vanilla -PathType Container } catch { $vanillaDa = $false }
 if (-not $vanillaDa) {
@@ -129,6 +181,15 @@ if (-not $Bloecke) {
         Select-Object -ExpandProperty FullName)
 }
 
+# Jede eigene Eingangsdatei EINMAL lesen, bevor irgendetwas geprueft wird. Eine, die sich
+# nicht lesen laesst, beendet den Lauf hier mit Exit 2; eine mit kaputtem XML steht danach
+# als rote Zeile da, und jede Schleife weiter unten ueberspringt sie.
+foreach ($pfad in @($Rezepte) + @($Gegenstaende) + @($Bloecke)) {
+    if (-not $pfad -or -not (Test-Path -LiteralPath $pfad)) { continue }
+    $gelesen = Read-XmlDatei $pfad
+    if ($gelesen.Unlesbar) { Stop-Unpruefbar $gelesen.Unlesbar }
+}
+
 Write-Output '== kette-pruefen =='
 Write-Output "  Vanilla: $Vanilla"
 
@@ -164,14 +225,14 @@ foreach ($path in $Bloecke) {
 
 Write-Output ("  Definitionen: {0} aus Vanilla, {1} eigene" -f $vanillaCount, ($defined.Count - $vanillaCount))
 
-$unresolved = @()
 $recipeCount = 0
 $toolGated = 0
 $appendedTotal = 0
 
 foreach ($path in $Rezepte) {
     if (-not (Test-Path $path)) { continue }
-    $xml = [xml](Get-Content $path -Raw)
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
     foreach ($recipe in $xml.SelectNodes('//recipe')) {
         $recipeCount++
         $where = "$([IO.Path]::GetFileName($path)) / $($recipe.name)"
@@ -223,7 +284,8 @@ foreach ($path in $Rezepte) {
 $repairRefs = 0
 foreach ($path in $Gegenstaende) {
     if (-not (Test-Path $path)) { continue }
-    $xml = [xml](Get-Content $path -Raw)
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
     foreach ($node in $xml.SelectNodes('//set')) {
         $xpath = $node.GetAttribute('xpath')
         if ($xpath -notmatch "RepairTools'\]/@value$") { continue }
@@ -262,7 +324,8 @@ foreach ($path in $Gegenstaende) {
 $rewiredRefs = 0
 foreach ($path in @($Gegenstaende) + @($Bloecke)) {
     if (-not $path -or -not (Test-Path $path)) { continue }
-    $xml = [xml](Get-Content $path -Raw)
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
     foreach ($node in $xml.SelectNodes('//set')) {
         $xpath = $node.GetAttribute('xpath')
         $kind = $null
@@ -305,7 +368,8 @@ $ownPaths = @(
 )
 foreach ($path in @($Gegenstaende) + @($Bloecke)) {
     if (-not $path -or -not (Test-Path $path)) { continue }
-    $xml = [xml](Get-Content $path -Raw)
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
     foreach ($spec in $ownPaths) {
         foreach ($node in $xml.SelectNodes($spec.XPath)) {
             $name = $node.GetAttribute($spec.Attr)
@@ -372,7 +436,9 @@ foreach ($path in $Patches) {
     }
     $patchDateien++
     if (-not $vanillaDocs.ContainsKey($name)) {
-        $vanillaDocs[$name] = [xml](Get-Content -LiteralPath $vanillaPath -Raw)
+        $gelesen = Read-XmlDatei $vanillaPath -Vanilla
+        if ($gelesen.Unlesbar) { Stop-Unpruefbar $gelesen.Unlesbar }
+        $vanillaDocs[$name] = $gelesen.Doc
     }
     $vdoc = $vanillaDocs[$name]
     # EINE DATEI, DIE GEZAEHLT WIRD, MUSS AUCH GEPRUEFT WERDEN (ergaenzt 2026-11-21, viertes
@@ -380,17 +446,12 @@ foreach ($path in $Patches) {
     #   - ein anderer Wurzelknoten als <config> (Vertrag 03 §7 verlangt ihn),
     #   - ein Kind, das keine der elf Operationen ist (Tippfehler: <sett xpath=...>),
     #   - eine Operation ohne xpath.
-    # Jeder davon ist jetzt rot. Kaputtes XML ebenso - vorher brach das Skript mit einer
-    # Ausnahme ab, statt die Datei zu nennen.
-    try { $xml = [xml](Get-Content -LiteralPath $path -Raw) }
-    catch {
-        # Die aeussere Meldung der Typumwandlung zitiert die ganze Datei; die innerste nennt
-        # Zeile und Stelle.
-        $grund = $_.Exception
-        while ($grund.InnerException) { $grund = $grund.InnerException }
-        $unresolved += "Patch-Datei ist kein gueltiges XML: $name  ($($grund.Message))"
-        continue
-    }
+    # Jeder davon ist jetzt rot. Kaputtes XML ebenso (Read-XmlDatei schreibt die rote Zeile,
+    # einmal je Datei); eine Patch-Datei, die sich nicht LESEN laesst, ist Exit 2.
+    $gelesen = Read-XmlDatei $path
+    if ($gelesen.Unlesbar) { Stop-Unpruefbar $gelesen.Unlesbar }
+    $xml = $gelesen.Doc
+    if ($null -eq $xml) { continue }
     if ($null -eq $xml.DocumentElement -or $xml.DocumentElement.get_Name() -cne 'config') {
         $wurzel = if ($null -eq $xml.DocumentElement) { '(keiner)' } else { $xml.DocumentElement.get_Name() }
         $unresolved += "Patch-Datei hat den Wurzelknoten <$wurzel> statt <config>: $name"
@@ -455,7 +516,9 @@ $progRefs = 0
 $progPool = @{}
 $progVanillaPfad = Join-Path $Vanilla 'progression.xml'
 if (Test-Path $progVanillaPfad) {
-    $pv = [xml](Get-Content $progVanillaPfad -Raw)
+    $gelesen = Read-XmlDatei $progVanillaPfad -Vanilla
+    if ($gelesen.Unlesbar) { Stop-Unpruefbar $gelesen.Unlesbar }
+    $pv = $gelesen.Doc
     foreach ($n in $pv.SelectNodes('//attribute | //skill | //perk | //crafting_skill | //book_group | //book')) {
         $nm = $n.GetAttribute('name')
         if ($nm) { $progPool[$nm] = 'vanilla' }
@@ -463,7 +526,8 @@ if (Test-Path $progVanillaPfad) {
     foreach ($path in $Patches) {
         if (-not $path -or -not (Test-Path $path)) { continue }
         if ([IO.Path]::GetFileName($path) -ne 'progression.xml') { continue }
-        $xml = [xml](Get-Content $path -Raw)
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
         # Erst unsere eigenen Fortschritts-Knoten einsammeln, falls wir welche anlegen.
         foreach ($n in $xml.SelectNodes('//attribute | //skill | //perk | //crafting_skill | //book_group | //book')) {
             $nm = $n.GetAttribute('name')

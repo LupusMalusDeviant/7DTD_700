@@ -1779,3 +1779,58 @@ in einer Seuchennacht gilt das 1,9-Fache —, und das ist **gelesen, nicht gemes
   Balance-Frage und hier nicht beantwortet.
 - Befund 4 des dritten Reviews (dritte Sprachspalte) wartet weiter auf den Nutzer; offen aus
   dem ersten Review bleiben die Befunde 3 bis 7.
+
+## Nachtrag fünftes Review 2026-11-21 — zwei Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `5fc2d3f` und `fba889b` hat Codex (`gpt-6.1-sol`) zwei Befunde gemeldet,
+beide an `kette-pruefen.ps1`: einer mittel, einer niedrig. Zu Daten, Texten und Hygiene
+keiner. Beide treffen die Korrektur des vierten Reviews — sie war an **einer** Stelle
+gemacht, wo es acht gab.
+
+| Nr. | Befund | Was jetzt gilt |
+|---|---|---|
+| 1 | Kaputtes XML wurde nur in der Patch-Schleife abgefangen. Dieselbe Datei als `-Bloecke` **und** `-Patches` (im echten Mod der Normalfall: jede `blocks.xml` ist beides) fiel an der früheren Lesestelle mit einer Ausnahme heraus, ohne Ergebniszeile. Meine Gegenprobe gab eine heile Block-Datei mit und sah es nicht. | Eine Funktion `Read-XmlDatei` liest jede XML-Datei, einmal. Kaputtes XML ist **eine** rote Zeile je Datei (Exit 1), gleich an welcher Stelle sie gebraucht wird. |
+| 2 | Eine Patch-Datei, die sich nicht **lesen** lässt, meldete „kein gültiges XML", Exit 1 — ein Befund, wo ein Eingang fehlt. | Lesen und Zerlegen sind getrennt. Nicht lesbar → Exit 2 („laesst sich nicht lesen … NICHT GEPRUEFT"). |
+
+### Vertragsänderung an `kette-pruefen`: Lesen ist nicht Zerlegen
+
+- **Eine eigene Datei, die kein gültiges XML ist:** Befund, Exit 1. Die Meldung nennt die
+  letzten drei Glieder des Pfads (`700_40_Bauen\Config\blocks.xml`), weil es `blocks.xml`
+  in fünf Modlets gibt, und Zeile und Stelle des Fehlers.
+- **Eine Datei, die sich nicht lesen lässt** (gesperrt, kein Zugriff): nicht prüfbar, Exit 2.
+- **Eine Vanilla-Datei, die kein gültiges XML ist:** ebenfalls Exit 2. Das ist kein Befund an
+  unserem Mod; gegen sie lässt sich nichts prüfen.
+- Rezept-, Gegenstands- und Block-Dateien werden **vor** der ersten Ausgabe einmal gelesen.
+- **Gelesen wird als UTF-8** (`[IO.File]::ReadAllText`, BOM erkannt). Vorher las
+  `[xml](Get-Content -Raw)` unter Windows PowerShell 5.1 eine Datei ohne BOM in der
+  ANSI-Codepage. Für die Prüfung von Kennungen und XPaths ändert das nichts (gemessen: die
+  Zahlen unten sind dieselben), es ist nur nicht mehr vom Rechner abhängig.
+
+**Gemessen am 2026-11-21, nach der Änderung:** 18 Patch-Dateien, 418 XPaths (405 in Vanilla,
+13 auf eigene Knoten), 0 unaufgelöst — unverändert.
+
+### Gegenproben — vier neue, alle einmal rot gesehen
+
+Gegen `kette-pruefen.ps1` des Stands `fba889b`: **96 Gegenproben, 5 fehlgeschlagen** — die
+vier neuen und die bestehende „kaputtes XML", deren Meldung jetzt den Pfad statt nur den
+Dateinamen nennt. Gegen den neuen Stand: **96, 0 fehlgeschlagen.**
+
+| Gegenprobe | vorher | jetzt |
+|---|---|---|
+| `kette/xml-kaputt/blocks.xml` als Rezept-, Gegenstands-, Block- **und** Patch-Datei | Ausnahme, keine Ergebniszeile | Exit 1, **eine** rote Zeile, „1 rot" |
+| `kette/vanilla-kaputt/` (Vanillas `blocks.xml` kaputt) | Ausnahme | Exit 2, „Vanilla-Datei … ist kein gueltiges XML" |
+| gesperrte Patch-Datei | Exit 1, „kein gueltiges XML" | Exit 2, „laesst sich nicht lesen" |
+| gesperrte Rezept-Datei (die frühe Lesestelle) | Ausnahme | Exit 2 |
+
+„Gesperrt" heißt: die Gegenprobe hält die Datei für die Dauer des einen Laufs mit
+`FileShare.None` offen und gibt sie danach wieder frei.
+
+### Grenzen und was offen bleibt
+
+- **Vanillas `items.xml` und `blocks.xml` werden für die Liste der Kennungen weiter als Text
+  gelesen** (`Select-String`), nicht als XML. Eine kaputte Vanilla-`blocks.xml` fällt darum
+  nur auf, wenn eine Patch-Datei ihr Gegenstück braucht — im echten Mod immer.
+- **Die anderen Skripte haben keine gemeinsame Lesestelle.** `glossar-pruefen.ps1` und
+  `check-all.ps1` lesen kein XML; `mod700check` (C#) hat seinen eigenen Leser. Geprüft ist
+  hier nur `kette-pruefen.ps1`.
+- Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.

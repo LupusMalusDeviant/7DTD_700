@@ -938,7 +938,53 @@ Test-Script 'kette-pruefen: kaputtes XML ist rot, kein Abbruch' 1 @{
     Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
     Patches      = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
     Vanilla      = (Join-Path $data 'kette\vanilla')
-} -MustContain @('Patch-Datei ist kein gueltiges XML: blocks.xml', '== Ergebnis: 1 rot -> RED ==')
+} -MustContain @('Datei ist kein gueltiges XML: kette\xml-kaputt\blocks.xml', '== Ergebnis: 1 rot -> RED ==')
+
+# ------------------------------------------------- Fuenftes Review (2026-11-21)
+# (3c) Dieselbe kaputte Datei an JEDER Stelle, an der das Skript XML liest: als Rezept-,
+#      Gegenstands-, Block- und Patch-Datei zugleich. Vorher fing nur die Patch-Schleife den
+#      Fehler ab; die drei frueheren Leser fielen mit einer Ausnahme heraus, ohne
+#      Ergebniszeile. Jetzt: EINE rote Zeile (nicht vier), Exit 1.
+Test-Script 'kette-pruefen: kaputtes XML ist an jeder Lesestelle rot, und nur einmal' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
+    Gegenstaende = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
+    Bloecke      = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xml-kaputt\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Datei ist kein gueltiges XML: kette\xml-kaputt\blocks.xml', '== Ergebnis: 1 rot -> RED ==')
+
+# (3d) Eine VANILLA-Datei, die kein gueltiges XML ist. Das ist kein Befund an unserer Datei:
+#      gegen sie laesst sich nichts pruefen - Exit 2.
+Test-Script 'kette-pruefen: kaputtes Vanilla-XML ist nicht pruefbar' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla-kaputt')
+} -MustContain @('Vanilla-Datei', 'ist kein gueltiges XML', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (3e) Eine Datei, die sich nicht LESEN laesst. Die Gegenprobe haelt sie fuer die Dauer des
+#      Laufs exklusiv offen (FileShare.None). Vorher: "kein gueltiges XML", Exit 1 - ein
+#      Befund, wo es ein fehlender Eingang ist. Jetzt Exit 2. Einmal als Patch-Datei, einmal
+#      als Rezept-Datei (die fruehe Lesestelle).
+foreach ($fall in @(
+        @{ Art = 'Patch-Datei'; Datei = 'kette\xpath-gut\blocks.xml'; Parameter = 'Patches' },
+        @{ Art = 'Rezept-Datei'; Datei = 'kette\eigen\recipes.xml'; Parameter = 'Rezepte' })) {
+    $gesperrtePfad = Join-Path $data $fall.Datei
+    $sperre = [IO.File]::Open($gesperrtePfad, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::None)
+    try {
+        $p = @{
+            Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+            Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+            Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+            Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+            Vanilla      = (Join-Path $data 'kette\vanilla')
+        }
+        Test-Script "kette-pruefen: gesperrte $($fall.Art) ist nicht pruefbar, kein Befund" 2 $p `
+            -MustContain @('laesst sich nicht lesen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'kein gueltiges XML')
+    }
+    finally { $sperre.Close() }
+}
 
 # (4) Eine kaputte Trennzeile ("---|---|---|oops") unter einer Tabelle ohne Randstriche.
 #     Markdown liest das nicht als Tabelle; ihr Verbot 'zombie' fiel weg, und weil eine

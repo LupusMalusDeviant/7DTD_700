@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1: eine VANILLA-Datei, die kein gueltiges XML ist - das
+     schliessende </block> fehlt. Gegen sie laesst sich kein XPath pruefen; erwartet ist
+     "nicht pruefbar" (Exit 2), keine Ausnahme und kein Befund an UNSERER Datei. -->
+<blocks>
+	<block name="pruefWerkbank">
+		<property name="Class" value="Workstation" />
+</blocks>

@@ -292,6 +292,12 @@ mit falschem Wurzelknoten oder einem Tippfehler wie `<sett>` als „geprüft, 0 
 `nicht von innen geprueft (conditional, include): N` — heute 0. Ein `SDTD_PATH`, der kein
 gültiger Pfad ist (wörtliche Anführungszeichen), ist Exit 2 statt einer Ausnahme.
 
+**Lesen ist nicht Zerlegen (seit dem fünften Review, 2026-11-21).** Jede XML-Datei geht durch
+eine Funktion (`Read-XmlDatei`). Eine eigene Datei, die kein gültiges XML ist, ist **eine**
+rote Zeile mit Pfad, Zeile und Stelle (Exit 1) — gleich, ob sie als Rezept-, Gegenstands-,
+Block- oder Patch-Datei gebraucht wird. Eine Datei, die sich nicht **lesen** lässt, und eine
+kaputte **Vanilla**-Datei sind „nicht geprüft" (Exit 2).
+
 ### `glossar-pruefen.ps1` — Glossar gegen Sprachdatei (WP8.5, D75)
 
 [`docs/glossar.md`](../../docs/glossar.md) ist die Begriffsquelle (F-12), und dieses Skript
