@@ -1908,6 +1908,31 @@ werden:
   danach: 123 geprüft, 7 rot — alle sieben im Protokoll-Teil, der noch das Protokoll des
   Laufs **vor** der Installation liest (EAC an, Kern übersprungen). Die Nutzer-Aufgabe ist
   neu gestellt: Start über den Launcher ohne EAC, neue Welt.
+  **Zweiter Nachtrag, selber Tag — erster Lauf im Spiel, dann wieder herausgenommen.** Der
+  Nutzer hat von 18:03 bis 19:48 eine Runde mit zwei Mitspielern gespielt (neue Welt „DND"
+  auf Navezgane), ohne zu wissen, dass die Mod geladen war. Protokoll
+  `output_log_client__2026-11-21__18-03-25.txt`: sieben Modlets „Loaded Mod … (0.1.0)",
+  der Kern übersprungen („AntiCheat enabled"), 0 `EXC`, 1 fremde `ERR` (Xbox Live), 83
+  `WRN` (43 davon „ActionTarget implicitly converted … but failed", Herkunft ungeprüft).
+  Daraus liegt der **erste ConfigsDump mit geladenen Modlets** vor
+  (`Saves\Navezgane\DND\ConfigsDump`, 18:11 Ortszeit) — **nicht ausgewertet**, und
+  `check-all.ps1` las beim Lauf danach weiter den Dump von 16:37; warum, ist offen.
+  **Gefunden an diesem Dump:** von 496 `LootItem`-Belohnungen in `quests.xml` zeigen 115
+  auf mindestens eine Loot-Gruppe, die nach dem Purge nichts mehr hergibt, 66 nur auf
+  solche — darunter die Wahl-Belohnungen von `quest_tier1complete` bis
+  `quest_tier4complete` und `groupQuestGas` der Stufen 4 bis 6. Der Spieler bekommt einen
+  Eintrag ohne Gegenstand angeboten. Das ist die Antwort auf „was macht das Spiel mit
+  einer leeren Gruppe" für die Belohnungen: es bietet sie an. Ein Mitspieler meldete dazu
+  `ERR Unhandled exception in GetBindingValue. Binding name: rewardicon … EXC
+  NullReferenceException` (Fenster `questTurnIn`); im Protokoll des Hosts steht sie nicht.
+  **Ob die leere Belohnung diese Ausnahme auslöst, ist nicht bewiesen:** in der IL von
+  `XUiC_QuestTurnInEntry.GetBindingValueInternal` nimmt ein leerer Gegenstand bei
+  `rewardicon` den Zweig `reward.Icon` und wirft dort nicht; die Ausnahme verlangt einen
+  nicht leeren Gegenstand ohne auflösbare Klasse, und alle 222 Gegenstände, die eine
+  Belohnung hergeben kann, sind definiert. Es fehlt das Protokoll des Mitspielers. Auf
+  Anweisung des Nutzers sind die acht `700_*`-Ordner wieder **aus dem Spielordner
+  entfernt** (dort liegt nur noch `0_TFP_Harmony`); die Kopie steht in `dist\Mods`. Der
+  Spielstand „DND" ist mit der Mod angelegt und danach nicht ohne sie geladen worden.
 - **Neun Rang-Texte versprechen nur Gesperrtes, und der Rang lässt sich weiter kaufen**
   (gefunden in WP8.5, fünfte Scheibe, 2026-11-21). `perkInfiltrator` Rang 1–4 handelt von
   Landminen, `perkPenetrator` Rang 2–5 von panzerbrechender Munition und
