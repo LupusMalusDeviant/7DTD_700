@@ -107,6 +107,16 @@ Schlagwortliste gefiltert. Stand: 125 von 631 Zeilen umgeschrieben, 506 tragen V
 Wortlaut; 15 Zeilen versprechen eine Wirkung, die nur Gesperrtes trifft (Plan-0001, Offene
 Punkte). Sprachdatei 872 Zeilen.
 
+## Stand 2026-11-21 — WP8.6: Mod-Name und Namensregeln (D83)
+
+Der Mod-Name steht in **einer** Zeile, `700_modName` = „7DTD_700"; das Glossar (§11) führt
+ihn als Festbegriff und verbietet ihn in jedem Fließtext. Gelesen wird der Schlüssel noch
+von nichts (erstes Etikett: WP8.7). Das Mischland hat keinen Ort und keine Person mit Namen;
+Vanillas „Pummel Pete", „Johnny Newcome" und „Wall Street Tycoon" samt sieben Berufstiteln
+der Neuzeit sind aus Rang-Titeln und -Texten entfernt (14 Zeilen neu, 3 berichtigt).
+Sprachdatei 887 Zeilen, Glossar 52 Festbegriffe mit Kennung und 90 Muster. **Offen:** die
+Händlernamen (F-10) und ob der sichtbare Arbeitstitel „7DTD_700" oder „700" heißt.
+
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die
 zwei Sandbox-Vorlagen, und die Abnahme im Spiel — vor allem, ob das Menü die längeren

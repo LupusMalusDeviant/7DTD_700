@@ -1011,3 +1011,21 @@ perkRunAndGunRank5Desc
 perkStrengthMasteryRank2Desc
 perkStrengthMasteryRank2LongDesc
 perkAdvancedEngineeringRank5Desc
+
+# WP8.6 / D83: Namensregeln (D1) - Rang-Titel, die einen Personennamen, einen realen Ort
+# oder einen Berufstitel der Neuzeit tragen ("Pummel Pete", "Johnny Newcome",
+# "Wall Street Tycoon", "Corporate Marketing CEO"), und die Saetze dazu.
+perkBetterBarterRank3Desc
+perkBetterBarterRank3LongDesc
+perkBetterBarterRank4Desc
+perkBetterBarterRank5Desc
+perkBetterBarterRank5LongDesc
+perkBrawlerRank4Desc
+perkBrawlerRank5Desc
+perkBrawlerRank5LongDesc
+perkGrandSlamRank5Desc
+perkHeavyArmorRank4Desc
+perkMiner69rRank2Desc
+perkPummelPeteRank3Desc
+perkPummelPeteRank3LongDesc
+perkPummelPeteRank5Desc

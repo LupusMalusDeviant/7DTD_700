@@ -297,3 +297,55 @@ Das entscheidet der Nutzer; bis dahin schreibt kein Text sie englisch aus.
 7. **„Totenpfennig" / „Dead Man's Penny"** ist eine Setzung aus D77 für Vanillas „Der
    Zahnarzt" und wartet auf die Abnahme: gemeint ist das Silber oder Gold, das man manchem
    Toten mitgab — der Text sagt nicht, wohin.
+
+## 11. Namen (D1, D6)
+
+Angelegt am 21. November 2026 mit WP8.6 (D83). Die Regeln stehen in
+[Vertrag 02 §4 und §6](contracts/02-namensraum.md); hier steht, **welche Namen es gibt**.
+Jeder Name, der im Spiel auftaucht, steht vorher hier.
+
+### Der Name der Mod
+
+Der Arbeitstitel bleibt bis zum Release (D6). Er steht in **einer** Zeile der Sprachdatei,
+unter `700_modName`. Wer ihn zeigen will — ein Etikett im Menü, eine Meldung aus dem Code —,
+liest diesen Schlüssel. **Kein Fließtext schreibt den Namen aus:** die Sprachdatei kann in
+einem Text keinen anderen Schlüssel einsetzen, also wäre jede ausgeschriebene Stelle eine
+zweite Zeile, die bei der Umbenennung jemand finden muss.
+
+| Kennung | Deutsch | Englisch | Vanilla | Quelle |
+|---|---|---|---|---|
+| `700_modName` | 7DTD_700 | 7DTD_700 | — | D6 |
+
+Die zwei Muster darunter treffen den Namen **in** einem längeren Text — davor oder danach
+steht noch etwas. Die Zeile `700_modName` selbst, die nur aus dem Namen besteht, treffen sie
+nicht. Nicht gefangen wird eine zweite Zeile, deren Text ebenfalls nur aus dem Namen
+bestünde.
+
+| Verboten | Sprache | Stattdessen | Quelle |
+|---|---|---|---|
+| `(?<!^)7DTD_700` | beide | den Namen nicht ausschreiben; ein Etikett liest `700_modName` | D6, Vertrag 02 §4 |
+| `7DTD_700(?!$)` | beide | den Namen nicht ausschreiben; ein Etikett liest `700_modName` | D6, Vertrag 02 §4 |
+
+### Orte und Personen
+
+**Stand: Das Mischland hat keinen Ortsnamen und keine benannte Person.** Kein Text von uns
+nennt einen Ort oder einen Menschen beim Namen — der Zettel am Anfang (`noteDuke01Desc`) ist
+ohne Unterschrift, die Händler heißen weiter wie in Vanilla (F-10, Phase 2). Der erste Name,
+der gebraucht wird, kommt zuerst in diese Liste, gebildet nach Vertrag 02 §6: Orte erfunden,
+auf `-heim`, `-feld`, `-wik`, `-grad`, `-dun`, `-ing`; Personen aus dem germanischen,
+romanischen, slawischen und keltischen Namensschatz der Zeit.
+
+**Erlaubt und in Gebrauch — Völker der Zeit als Herkunft, nie als Gegner:** „Römer" /
+„Romans" (`resourceConcreteMixDesc`, `meleeWpnBladeT3MacheteDesc`), „fränkisch" /
+„Frankish" und „englisch" / „English" (`casinoCoinDesc`). Das ist die Leitplanke aus D1:
+gemischt wird die Herkunft, nicht die Epoche.
+
+**Vanillas Namen, die bei uns nicht mehr vorkommen.** Sie standen in Rang-Titeln und
+Rang-Texten lebender Fertigkeiten; die Muster halten sie draußen.
+
+| Verboten | Sprache | Stattdessen | Quelle |
+|---|---|---|---|
+| `pummel.pete` | EN | (keine Person; die Fertigkeit heißt Club blow, ihr letzter Rang Club Master) | D83 |
+| `pr.gel.peter` | DE | (keine Person; die Fertigkeit heißt Keulenschlag, ihr letzter Rang Keulenmeister) | D83 |
+| `johnny` | beide | mine hand / Bergknecht | D83 |
+| `wall.street` | beide | (kein realer Ort; der Rang heißt Merchant Prince / Handelsherr) | D83, Vertrag 02 §6 |

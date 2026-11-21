@@ -1417,6 +1417,21 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    - → Prüfliste 21.
 6. **WP8.6** `[Claude-prüfbar]` Namensregeln für das fiktive Mischland (D1) anwenden; Mod-Name
    über **einen** Schlüssel `700_modName` (D6), damit die Umbenennung später eine Zeile ist.
+
+   **Gebaut am 2026-11-21 (D83), im Spiel ungesehen.** *Erst gezählt:* der Mod-Name steht
+   in keinem Spieltext (nur in `ModInfo.xml`, das Vertrag 02 §4 ausnimmt, und als
+   Protokoll-Marke im Code); das Mischland hat keinen Ort und keine Person mit Namen.
+   *Mod-Name:* eine Zeile `700_modName` = „7DTD_700"; im Glossar (§11) Festbegriff und zwei
+   Verbotsmuster gegen das Ausschreiben in Fließtext. Gelesen wird der Schlüssel noch von
+   nichts — sein erstes Etikett kommt mit WP8.7. *Namen:* 14 Rang-Titel und -Sätze neu,
+   3 unserer Zeilen berichtigt („Pummel Pete", „Johnny Newcome", „Wall Street Tycoon",
+   „Irish baby buggy" und sieben Berufstitel der Neuzeit); vier Muster halten sie draußen.
+   Römer, fränkisch und englisch als Herkunft bleiben. *Gegengeprüft:* zehn Proben der
+   neuen Glossar-Zeilen (eine grün, neun rot, alle wie erwartet); `check-all.ps1`: 100
+   Gegenproben, 0 fehlgeschlagen; Glossar 52 Festbegriffe mit Kennung, 90 Muster, 887
+   Zeilen, 0 und 0. **Offen:** die Händlernamen (Joel, Rekt, Jen, Bob, Hugh, Jimmy) widersprechen
+   D1 und warten auf F-10; ob „7DTD_700" oder „700" der sichtbare Arbeitstitel sein soll,
+   entscheidet der Nutzer (die acht `DisplayName` sagen „700 — …").
 7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
    Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
@@ -1862,6 +1877,21 @@ werden:
   (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und
   wirf die Generatoren wieder an" ist ein Anachronismus, den keine Regel trifft, weil er
   kein Gegenstand ist. → F-10 oder eine Purge-Regel für Auftragsarten.
+- **Im Spielordner liegen die leeren Gerüste vom 7. November — der neue Dump beweist
+  nichts** (gefunden am 2026-11-21 beim Prüflauf zu WP8.6). `check-all.ps1` liest seit
+  heute einen ConfigsDump vom 2026-11-21 15:37 UTC (Welt „West Xuyofu Territory", Spielstand
+  „3.WoW") statt des Dumps vom 7. Juli; `anachronisms` zeigt darin weiter 645 rot. Grund,
+  nachgesehen: unter `<Spielpfad>\Mods\` liegen acht `700_*`-Ordner mit Datum 2026-11-07,
+  sieben nur mit `ModInfo.xml`, der Kern dazu mit der DLL, alle **ohne `Config`** — der Stand des Repos ist nie installiert
+  worden. Das Spielprotokoll von heute (`output_log_client__2026-11-21__16-36-44.txt`) lädt
+  sieben davon als leere Mods, überspringt `0_TFP_Harmony` und `700_00_Core` mit
+  „AntiCheat enabled", und meldet eine einzige fremde `ERR`-Zeile (Xbox Live). Im Dump
+  steht keine unserer Kennungen (`itm700_luppe`: 0 Treffer). **Folgen:** (1) Die
+  Nutzer-Aufgabe „Spiel mit abgeschaltetem EAC starten" ist mit diesem Lauf nicht erfüllt
+  — und ihr fehlte ein Satz: vorher `tools\build\build.ps1 -Install`. (2) Die Zeile
+  „`anachronisms` rot gegen den Dump vom 7. Juli" stimmt nicht mehr; rot ist es jetzt
+  gegen einen Dump von heute, in dem unsere Modlets leer waren. (3) Kein Text, kein Rezept
+  und keine Sperre dieses Plans ist bisher im Spiel gelaufen — auch nicht „versehentlich".
 - **Neun Rang-Texte versprechen nur Gesperrtes, und der Rang lässt sich weiter kaufen**
   (gefunden in WP8.5, fünfte Scheibe, 2026-11-21). `perkInfiltrator` Rang 1–4 handelt von
   Landminen, `perkPenetrator` Rang 2–5 von panzerbrechender Munition und
