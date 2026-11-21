@@ -1892,6 +1892,12 @@ werden:
   „`anachronisms` rot gegen den Dump vom 7. Juli" stimmt nicht mehr; rot ist es jetzt
   gegen einen Dump von heute, in dem unsere Modlets leer waren. (3) Kein Text, kein Rezept
   und keine Sperre dieses Plans ist bisher im Spiel gelaufen — auch nicht „versehentlich".
+  **Nachtrag, selber Tag:** auf Freigabe des Nutzers installiert mit
+  `tools\build\build.ps1 -Install` — 8 Modlets, 35 Dateien, `Mod700.dll` signiert (Status
+  Valid); die 26 Config-Dateien im Spielordner sind bytegleich mit `mod\`. `smoke.ps1`
+  danach: 123 geprüft, 7 rot — alle sieben im Protokoll-Teil, der noch das Protokoll des
+  Laufs **vor** der Installation liest (EAC an, Kern übersprungen). Die Nutzer-Aufgabe ist
+  neu gestellt: Start über den Launcher ohne EAC, neue Welt.
 - **Neun Rang-Texte versprechen nur Gesperrtes, und der Rang lässt sich weiter kaufen**
   (gefunden in WP8.5, fünfte Scheibe, 2026-11-21). `perkInfiltrator` Rang 1–4 handelt von
   Landminen, `perkPenetrator` Rang 2–5 von panzerbrechender Munition und
