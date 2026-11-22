@@ -292,7 +292,9 @@ ein Zweig hinter `<else>`, kein `<if>`, keine Operation) und eine falsche Beding
 verlangt einen Wahrheitswert und `xpath` liefert keinen —, ein XPath, der in Vanilla nichts
 trifft). Ausgabe: `bedingte Bloecke: N (Zweige: N, XPaths darin: N, xpath-Bedingungen: N)`
 und `in Bedingungen genannte Mods: …`; heute 9 Blöcke, keine genannte Mod. Ob eine Bedingung
-im Spiel wahr wird, prüft das Skript nicht.
+im Spiel wahr wird, prüft das Skript nicht. *(Seit dem Review am selben Tag: die Klammern
+des ganzen Ausdrucks müssen aufgehen, `(xpath(…)) != null` ist gültig, und ein toter Zweig
+fällt auch als `null != xpath(…)` auf.)*
 
 **Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
 ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei

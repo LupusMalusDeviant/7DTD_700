@@ -1,0 +1,41 @@
+<config>
+	<!-- Testdatei Review zu WP8.7: Klammern und Operandenseiten, die falsch sind. Je Block
+	     ein Fehler; die Patches darin stimmen.
+	       1. (mod_loaded('...')            - offene Klammer am Ende; war gruen
+	       2. mod_loaded('...'))            - eine schliessende zu viel; war gruen
+	       3. )mod_loaded('...')(           - gleich viele, aber in falscher Reihenfolge
+	       4. null != xpath(...), trifft nichts   - toter Zweig mit vertauschten Seiten; war gruen
+	       5. (xpath(...)) != null, trifft nichts - toter Zweig hinter einer Gruppierungsklammer
+	       6. (xpath(...))                  - geklammert, aber weiter ohne Vergleich
+	     Erwartet: Exit 1, 6 rot. -->
+	<conditional>
+		<if cond="(mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod'))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond=")mod_loaded('pruefUiMod')(">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="null != xpath('/windows/window[@name=&quot;pruefGibtesnicht&quot;]')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="(xpath('/windows/window[@name=&quot;pruefAuchNicht&quot;]')) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="(xpath('/windows/window[@name=&quot;pruefFenster&quot;]'))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

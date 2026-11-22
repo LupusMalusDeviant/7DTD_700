@@ -1,0 +1,40 @@
+<config>
+	<!-- Testdatei Review zu WP8.7: Klammern und Operandenseiten, an denen nichts falsch ist.
+	       1. (xpath(...)) != null          - Gruppierungsklammer um den Aufruf; war faelschlich rot
+	       2. null != xpath(...)            - Vergleich mit vertauschten Seiten, XPath trifft
+	       3. ((xpath(...))) != null        - zwei Klammerpaare
+	       4. not (xpath(...) = null)       - Klammer hinter einem Wort der Sprache
+	       5. (not mod_loaded(...)) and (xpath(...) != null)
+	       6. mod_loaded(...) or (xpath(...)) != null  - Gruppierungsklammer hinter 'or'
+	     Erwartet: Exit 0, 6 Bloecke, 6 Zweige, 6 XPaths darin, 6 xpath-Bedingungen. -->
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod') or (xpath('/windows/window[@name=&quot;pruefFenster&quot;]')) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="(xpath('/windows/window[@name=&quot;pruefFenster&quot;]')) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="null != xpath('/windows/window[@name=&quot;pruefFenster&quot;]')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="( ( xpath('/windows/window[@name=&quot;pruefFenster&quot;]') ) ) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="not (xpath('/windows/window[@name=&quot;pruefFenster&quot;]') = null)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="(not mod_loaded('pruefUiMod')) and (xpath('/windows/window[@name=&quot;pruefFenster&quot;]') != null)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

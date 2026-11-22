@@ -1004,6 +1004,40 @@ Test-Script 'kette-pruefen: falsch gebaute bedingte Bloecke werden rot' 1 @{
     '<conditional> ohne eine einzige Operation',
     '7 rot')
 
+# Review zu WP8.7 (2026-11-22): drei Befunde an der Zerlegung der Bedingung.
+#
+# (e) Gueltige Formen, die gruen sein muessen. Die erste - "(xpath(...)) != null" - war
+#     ROT: gesucht wurde der Vergleich direkt neben dem Aufruf, und dazwischen stand eine
+#     Gruppierungsklammer. Eine Pruefung, die Richtiges abweist, wird abgeschaltet.
+Test-Script 'kette-pruefen: Gruppierungsklammern und vertauschte Seiten sind gueltig' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-klammern-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'bedingte Bloecke: 6 (Zweige: 6, XPaths darin: 6, xpath-Bedingungen: 6)',
+    'in Bedingungen genannte Mods: pruefUiMod') -MustNotContain @('steht ohne Vergleich')
+
+# (f) Falsche Formen, die GRUEN waren: Klammern, die nicht aufgehen (offen am Ende, eine zu
+#     viel, falsche Reihenfolge), und ein toter Zweig, wenn 'null' links steht. Dazu zwei,
+#     die mit der neuen Klammer-Behandlung rot bleiben muessen: toter Zweig hinter einer
+#     Gruppierungsklammer, und ein geklammerter Aufruf ohne Vergleich.
+Test-Script 'kette-pruefen: falsche Klammern und tote Zweige mit vertauschten Seiten werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-klammern-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "die Klammern gehen nicht auf: (mod_loaded('pruefUiMod')  (",
+    "die Klammern gehen nicht auf: mod_loaded('pruefUiMod'))",
+    "die Klammern gehen nicht auf: )mod_loaded('pruefUiMod')(",
+    'der Zweig ist toter Text: /windows/window[@name="pruefGibtesnicht"]',
+    'der Zweig ist toter Text: /windows/window[@name="pruefAuchNicht"]',
+    'xpath(...) steht ohne Vergleich',
+    '6 rot')
+
 # (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
 #     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.
 Test-Script 'kette-pruefen: eine Datei, die kein Patch ist, wird rot' 1 @{

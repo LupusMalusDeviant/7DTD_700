@@ -1485,6 +1485,16 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    die `mod_loaded`-Teile hängen an Q8 (WP8.9). → Prüfliste 22,
    [Vertrag 03](../contracts/03-xpath-regeln.md) und
    [Vertrag 04](../contracts/04-pruefwerkzeuge.md) je „Nachtrag WP8.7", Abnahme offen.
+
+   **Review zu WP8.7 (2026-11-22), drei Befunde behoben.** Alle drei an der neuen
+   Zerlegung der Bedingung in `kette-pruefen`, keiner an den Mod-Dateien: Klammern, die
+   nicht aufgehen, waren grün; ein toter Zweig in der Schreibweise `null != xpath(…)` war
+   grün; das gültige `(xpath(…)) != null` war rot. Jetzt werden die Klammern des ganzen
+   Ausdrucks gezählt, beide Seiten des Vergleichs gelten gleich, und Gruppierungsklammern
+   um den Aufruf werden abgestreift. Zwei neue Gegenproben mit je sechs Formen; gegen das
+   Skript des Stands `f4a0476` 125 Gegenproben, 2 fehlgeschlagen, gegen das neue 125, 0.
+   Die zwölf Formen sind auch mit der `NCalc.dll` des Spiels ausgewertet, mit derselben
+   Einteilung. → Vertrag 04 „Nachtrag Review zu WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.

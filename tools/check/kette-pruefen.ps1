@@ -506,6 +506,21 @@ function Test-Bedingung {
         return
     }
     $m = $maske.ToString()
+    # DIE KLAMMERN DES GANZEN AUSDRUCKS (ergaenzt 2026-11-22, Review zu WP8.7). Vorher wurde
+    # nur von einem Funktionsaufruf aus nach seiner schliessenden Klammer gesucht:
+    # "(mod_loaded('X')" und "mod_loaded('X'))" waren gruen, obwohl NCalc beide nicht lesen
+    # kann. Jetzt wird ueber den maskierten Text gezaehlt - eine schliessende Klammer ohne
+    # offene ist ebenso rot wie eine offene am Ende.
+    $stand = 0
+    $unterNull = $false
+    foreach ($zeichen in $m.ToCharArray()) {
+        if ($zeichen -eq [char]'(') { $stand++ }
+        elseif ($zeichen -eq [char]')') { $stand--; if ($stand -lt 0) { $unterNull = $true } }
+    }
+    if ($unterNull -or $stand -ne 0) {
+        $script:unresolved += "Bedingung: die Klammern gehen nicht auf: $Ausdruck  ($Datei)"
+        return
+    }
     foreach ($treffer in [regex]::Matches($m, '([A-Za-z_][A-Za-z0-9_]*)\s*\(')) {
         $fn = $treffer.Groups[1].Value
         if (@('not', 'and', 'or') -ccontains $fn) { continue }
@@ -544,13 +559,49 @@ function Test-Bedingung {
             $script:unresolved += "XPath in der Bedingung ist kein gueltiger Ausdruck: $text  ($Datei)"
             continue
         }
-        $danach = $m.Substring($zu + 1).TrimStart()
-        $davor = $m.Substring(0, $treffer.Index).TrimEnd()
-        if ($danach -notmatch '^(!=|==|=|<>)' -and $davor -notmatch '(!=|==|=|<>)$') {
+        # WAS NEBEN DEM AUFRUF STEHT (geaendert 2026-11-22, Review zu WP8.7). Zwei Fehler der
+        # ersten Fassung:
+        #   - "(xpath('...')) != null" wurde rot: zwischen Aufruf und Vergleich stand eine
+        #     gueltige Gruppierungsklammer, und gesucht wurde der Operator DIREKT daneben.
+        #     Jetzt werden Klammerpaare, die nur den Aufruf umschliessen, erst abgestreift.
+        #   - "null != xpath('...')" galt als Vergleich, aber die Probe auf den toten Zweig
+        #     sah nur nach RECHTS: ein XPath ohne Treffer blieb gruen. Jetzt gelten beide
+        #     Seiten gleich.
+        $links = $treffer.Index
+        $rechts = $zu
+        while ($true) {
+            $l = $links - 1
+            while ($l -ge 0 -and [char]::IsWhiteSpace($m[$l])) { $l-- }
+            $r = $rechts + 1
+            while ($r -lt $m.Length -and [char]::IsWhiteSpace($m[$r])) { $r++ }
+            if ($l -ge 0 -and $r -lt $m.Length -and $m[$l] -eq [char]'(' -and $m[$r] -eq [char]')') {
+                # Ein Name direkt vor der Klammer macht sie zum Aufruf einer Funktion - das ist
+                # keine Gruppierung mehr. Ausgenommen not/and/or: das sind Woerter der
+                # Sprache, die Klammer dahinter gruppiert.
+                $v = $l - 1
+                while ($v -ge 0 -and [char]::IsWhiteSpace($m[$v])) { $v-- }
+                $e = $v
+                while ($v -ge 0 -and ([char]::IsLetterOrDigit($m[$v]) -or $m[$v] -eq [char]'_')) { $v-- }
+                if ($e -gt $v) {
+                    $wort = $m.Substring($v + 1, $e - $v)
+                    if (@('not', 'and', 'or') -cnotcontains $wort) { break }
+                }
+                $links = $l
+                $rechts = $r
+                continue
+            }
+            break
+        }
+        $danach = $m.Substring($rechts + 1).TrimStart()
+        $davor = $m.Substring(0, $links).TrimEnd()
+        $vergleichDanach = $danach -match '^(!=|==|=|<>)'
+        $vergleichDavor = $davor -match '(!=|==|=|<>)$'
+        if (-not $vergleichDanach -and -not $vergleichDavor) {
             $script:unresolved += "Bedingung: xpath(...) steht ohne Vergleich. Das Spiel verlangt einen Wahrheitswert, xpath liefert keinen (gebraucht: xpath('...') != null): $Ausdruck  ($Datei)"
             continue
         }
-        if ($danach -match '^(!=|<>)\s*null\b' -and $hits -eq 0) {
+        $ungleichNull = ($danach -match '^(!=|<>)\s*null\b') -or ($davor -match '\bnull\s*(!=|<>)$')
+        if ($ungleichNull -and $hits -eq 0) {
             $ownNames = @([regex]::Matches($text, "@name=['""]([^'""]+)['""]") | ForEach-Object { $_.Groups[1].Value })
             $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
             if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { continue }

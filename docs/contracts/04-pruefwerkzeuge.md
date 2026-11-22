@@ -2165,3 +2165,51 @@ Vanilla, 13 auf eigene Knoten), 9 bedingte Blöcke mit 9 Zweigen, 9 XPaths darin
   Ebene gelesen, nicht in einem Block.
 - **Kein Lauf im Spiel.** Dass ein bedingter Block von uns lädt, zeigt erst das Protokoll
   (Plan-0001, Prüfliste 22).
+
+## Nachtrag Review zu WP8.7, 2026-11-22 — drei Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `a390459` und `f4a0476` hat Codex (`gpt-6.1-sol`) drei Befunde gemeldet,
+alle mittel, alle an der Zerlegung der Bedingung aus dem Nachtrag oben. Die Mod-Dateien
+waren nicht betroffen: unsere neun Bedingungen benutzen keine der drei Formen.
+
+| # | Befund | Folge | jetzt |
+|---|---|---|---|
+| 1 | Klammern wurden nur von einem Funktionsaufruf aus gezählt. `(mod_loaded('X')` und `mod_loaded('X'))` waren **grün**. | NCalc kann beide nicht lesen; im Spiel bliebe die Patch-Datei an der Stelle unangewandt. | Die Klammern des ganzen Ausdrucks werden gezählt (über den maskierten Text). Rot: eine schließende ohne offene, eine offene am Ende. |
+| 2 | Die Probe auf den toten Zweig sah nur nach rechts. `null != xpath('…')` mit einem XPath ohne Treffer war **grün**. | Ein Tippfehler im Ziel der Bedingung blieb unentdeckt, der Zweig liefe nie. | Beide Seiten gelten gleich: `xpath(…) != null` und `null != xpath(…)`, auch mit `<>`. |
+| 3 | `(xpath('…')) != null` wurde **rot** („ohne Vergleich"), obwohl gültig. | Eine Prüfung, die Richtiges abweist, wird umgangen oder abgeschaltet. | Klammerpaare, die nur den Aufruf umschließen, werden abgestreift, bevor nach dem Vergleich gesucht wird — auch mehrere, auch hinter `not`, `and`, `or`. Eine Klammer hinter einem anderen Namen ist ein Funktionsaufruf und bleibt stehen. |
+
+### Vertragsänderung
+
+Punkt 3 des Nachtrags WP8.7 wird um drei Sätze ergänzt: Die Klammern des ganzen Ausdrucks
+müssen aufgehen. Der Vergleich neben `xpath(…)` darf durch Gruppierungsklammern vom Aufruf
+getrennt sein. Der tote Zweig wird in beiden Schreibrichtungen erkannt.
+
+### Gegenproben (Projektregel 5)
+
+Zwei neue, Testdaten unter `tools/check/testdaten/kette/bedingt-klammern-*/`.
+
+| Probe | erwartet | altes Skript (`f4a0476`) |
+|---|---|---|
+| Sechs gültige Formen: `(xpath(…)) != null`, `null != xpath(…)`, zwei Klammerpaare, `not (xpath(…) = null)`, zwei geklammerte Teile mit `and`, Klammer hinter `or` | Exit 0, 6 Blöcke, keine Zeile „ohne Vergleich" | Exit 1 — die geklammerten Aufrufe fälschlich rot |
+| Sechs falsche Formen: offene Klammer, eine zu viel, falsche Reihenfolge, toter Zweig mit `null` links, toter Zweig hinter Gruppierungsklammer, geklammerter Aufruf ohne Vergleich | Exit 1, 6 rot | Exit 1, aber mit anderen Zeilen: die Klammerfehler und der tote Zweig mit `null` links fehlen |
+
+Gegen das Skript des Stands `f4a0476`: **125 Gegenproben, 2 fehlgeschlagen** (diese zwei).
+Gegen den neuen Stand: **125, 0 fehlgeschlagen.**
+
+**Gegenmessung mit der `NCalc.dll` des Spiels**, unabhängig vom Skript: die sechs gültigen
+Formen werten alle zu „wahr" aus. Von den sechs falschen werfen drei eine Ausnahme (die
+Klammerfehler), zwei werten zu „falsch" aus (die toten Zweige), eine liefert Text statt
+eines Wahrheitswerts. Das ist dieselbe Einteilung, die `kette-pruefen` jetzt trifft.
+
+**`check-all.ps1` am 2026-11-22 nach der Änderung:** 6 Prüfungen, 1 rot (`recipes`, 80
+Sackgassen, unverändert); `kette-pruefen` unverändert 20 Patch-Dateien, 427 XPaths, 9
+bedingte Blöcke, 0 unaufgelöst.
+
+### Grenzen
+
+- **Abgestreift werden nur Klammern, die genau den Aufruf umschließen.** Steht in der
+  Klammer noch etwas anderes — `(xpath('a') + '') != null` —, entscheidet weiter der Text
+  direkt neben dem Aufruf, und der ist hier ein `+`. So ein Ausdruck würde fälschlich rot
+  („ohne Vergleich"). Wir schreiben keinen; wer einen braucht, muss diese Regel erweitern.
+- **Die anderen Grenzen des Nachtrags WP8.7 gelten weiter**: kein NCalc-Leser, `mod_loaded`
+  nur aufgelistet, jeder Zweig gegen Vanilla, kein Lauf im Spiel.
