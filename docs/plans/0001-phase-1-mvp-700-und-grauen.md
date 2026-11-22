@@ -2317,6 +2317,14 @@ werden:
   4. *Groß und klein bei Operationsnamen.* AGF schreibt `<insertafter>`; ob das Spiel das
      annimmt, ist nicht gelesen (der REA-Blick auf `XmlPatcher` blieb ohne Antwort). Lauf 2
      zeigt es am Protokoll (Prüfliste 24 f).
+- **Sackgassen und leere Belohnungen: der Vorschlag liegt vor, die Abnahme ist offen**
+  (2026-11-22). [`docs/balancing/0003`](../balancing/0003-sackgassen-und-belohnungen.md)
+  führt die 80 Sackgassen Rezept für Rezept (28 Kernweg, 29 Aufsätze, 5 Gerichte und Leim,
+  5 zu sperren, 13 warten auf Prüfliste 8) und die 115 Belohnungen auf leere Gruppen
+  (57 über freigegebene Bündel, 14 mit angepasstem Inhalt, 44 in Silberpfennigen). Vier
+  Grundsätze hat der Nutzer am selben Tag entschieden; sie stehen dort am Anfang.
+  **Ursache der meisten leeren Belohnungen** ist die Denylist-Zeile `questReward*Bundle`,
+  die alle 92 Belohnungsbündel sperrt, auch das Lehrblatt-Bündel. Gebaut ist nichts.
 - **Sieben Fertigkeiten tragen weiter Vanillas Namen** (vom Nutzer am 2026-11-21 im Spiel
   gesehen, eingetragen am 2026-11-22). Unter `skillGeneralPerks` — im Fertigkeitsfenster der
   Reiter mit dem Zahnrad — stehen `perkLightArmor`, `perkMediumArmor`, `perkHeavyArmor`,

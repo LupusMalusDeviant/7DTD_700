@@ -1,0 +1,242 @@
+# 0003 — Sackgassen-Rezepte und leere Auftragsbelohnungen
+
+**Stand:** 2026-11-22 · **Vorschlag, Abnahme offen** — gebaut ist nichts.
+**Gehört zu:** Plan 0001, Ziel Z3 („sackgassenfrei") und offener Punkt „erster Lauf im Spiel,
+leere Belohnungen"; F-05, F-02, F-03.
+
+Der Nutzer hat am 2026-11-22 vier Dinge entschieden (AskUserQuestion):
+
+1. **Kernweg:** erst diese Tabelle, dann der Bau.
+2. **Aufsätze für Waffen und Rüstung:** ersetzen wie den Kernweg.
+3. **Gerichte mit Mais und Kartoffel:** mit Erlaubtem kochen.
+4. **Belohnungen:** zeitgemäß füllen — Lehrblätter, Bauteile lebender Waffen, Feld und Nahrung
+   wieder als Belohnung; was rein modern war, zahlt Silberpfennige nach Auftragsstufe.
+
+Alle Zahlen sind vorläufig (WP9 zieht Balancing nach). Abgenommen wird die **Zuordnung**, nicht
+jede Menge.
+
+## Gemessen
+
+Quelle: der ConfigsDump vom 2026-11-21 (`Saves\Navezgane\DND\ConfigsDump`, Stand
+`17:11:30Z`, mit unseren Modlets geladen). Befehl:
+`mod700check recipes <Dump> --json` — 278 Rezepte, 198 erreichbar, **80 Sackgassen**, 0 Zyklen.
+
+Eine Sackgasse ist ein Rezept, das den Purge überlebt und eine gesperrte Zutat nennt. Die 80
+verteilen sich so:
+
+| Gruppe | Rezepte | Was hier steht |
+|---|---|---|
+| A — Kernweg | 28 | Tabelle 1 |
+| B — Aufsätze | 29 | Tabelle 2 |
+| C — Gerichte und Leim | 5 | Tabelle 3 |
+| D — Sperren | 5 | Tabelle 4 |
+| E — warten auf das Urteil über Bögen und Sonderpfeile | 13 | Tabelle 5, nicht Teil dieser Abnahme |
+
+Gesperrte Zutaten nach Zahl der Rezepte: Kunststoff (`resourceScrapPolymers`) 31,
+Mechanische Teile 31, Klebeband 30, Feder (`resourceSpring`) 17, legendäre Teile 11,
+Schießpulver 8, Rohr 4, Rüstungssatz 4, Mais 4, Linse 2, Öl 2, Kartoffel 2, je 1: Salpeter,
+Farbe, Chrysantheme, Supermais, Benzin.
+
+**Eine Feinheit:** Zutaten mit Menge 0 (`resourceDuctTape x0`, `resourceLegendaryParts x0`)
+kommen erst über die Qualitätsstufe dazu (`CraftingIngredientCount`). Solche Rezepte gehen
+heute bis Qualität 3 oder 5 und brechen darüber ab. Die Prüfung zählt sie als Sackgasse —
+zu Recht, der Weg zur vollen Qualität ist zu.
+
+## Die Regel
+
+Wie bei den Werkstätten in WP4 (Zimmermannsbank, Rennofen, Kalkofen):
+
+| Gesperrt | wird | Bild dahinter |
+|---|---|---|
+| Klebeband `resourceDuctTape` | Leder `resourceLeather`, 1 : 1 | Riemen |
+| Mechanische Teile `resourceMechanicalParts` | Schmiedeeisen `resourceForgedIron`, 1 : 1 | Beschläge, Niete |
+| Feder `resourceSpring` | Schmiedeeisen, 1 : 1 | Spange, Klammer |
+| Rohr `resourceMetalPipe` | je Stück: Lehm (Düse, Topf), Schmiedeeisen oder Holz | — |
+| Kunststoff `resourceScrapPolymers` | je Stück: Federn, Leder, Holz oder Nesselfaser | — |
+| legendäre Teile `resourceLegendaryParts` | entfallen, mit ihrer Qualitätszeile | wie in WP5.1 |
+| Schießpulver am Brandpfeil | Talg `resourceAnimalFat` | getränktes Tuch |
+| Öl, Benzin | Talg, Tuch | — |
+| Mais, Kartoffel | Pilze, Goldrute | — |
+
+Steht der Ersatz schon im Rezept, werden die Mengen **zusammengezählt** — ein Rezept nennt
+keine Zutat zweimal. Die Qualitätszeilen (`CraftingIngredientCount`) ziehen mit: ihre Marke
+wechselt auf den Ersatz, oder die Zeile entfällt, wenn die Zutat im Ersatz aufgeht.
+
+## Tabelle 1 — Kernweg (28)
+
+Mengen bei Qualität 1. „+" heißt: zur vorhandenen Menge gezählt.
+
+| Rezept | heute gesperrt | Vorschlag |
+|---|---|---|
+| Eisenspitzhacke `meleeToolPickT1IronPickaxe` | Klebeband 2, leg. Teile | Leder 2 + 2 = 4; leg. Teile entfallen |
+| Eisenschaufel `meleeToolShovelT1IronShovel` | Klebeband 2, leg. Teile | Leder 4; leg. Teile entfallen |
+| Klauenhammer `meleeToolRepairT1ClawHammer` | Klebeband 2, leg. Teile | Leder 4; leg. Teile entfallen |
+| Stahlspitzhacke `meleeToolPickT2SteelPickaxe` | Klebeband 3, leg. Teile | Leder 3 (neu); leg. Teile entfallen |
+| Stahlschaufel `meleeToolShovelT2SteelShovel` | Klebeband 3, leg. Teile | Leder 3 (neu); leg. Teile entfallen |
+| Helm, Kleid, Handschuhe, Stiefel `armorPrimitive*` (4) | Klebeband ab Qualität 5 | Leder ab Qualität 5, gleiche Mengen (1, 2) |
+| Holzbogen `gunBowT1WoodenBow` | Klebeband 1, leg. Teile | Leder 1 + 1 = 2; leg. Teile entfallen |
+| Brandpfeil `ammoArrowFlaming` | Kunststoff 2, Schießpulver 2 | Federn 2; Talg 1 + 2 = 3 |
+| Brandpfeil-Bündel `ammoBundleArrowFlaming` | Kunststoff 160, Schießpulver 160 | Federn 160; Talg 80 + 160 = 240 |
+| Schiene `medicalSplint` | Klebeband 1 | Leder 1 |
+| Reparatursatz `resourceRepairKit` | Klebeband 1 | Leder 1 |
+| Blasebalg `toolBellows` | Rohr 2, Klebeband 5 | Lehm 10 (Düse); Leder 20 + 5 = 25 |
+| Schmelztiegel `toolForgeCrucible` | Mech. Teile 20, Öl 20 | Schmiedeeisen 100 + 20 = 120; Holzkohle 20 |
+| Feld `farmPlotBlockVariantHelper` | Salpeter 25 | Knochen 5 (Knochenmehl) |
+| Bienenstock `cntApiary` | Klebeband 8 | Leder 8 |
+| Brutkasten `toolApiaryBroodBox` | Kunststoff 100 | Nesselfaser 50 (Strohkorb) |
+| Honigschleuder `toolApiaryExtractor` | Mech. Teile 5, Rohr 2 | Schmiedeeisen 20 + 7 = 27 |
+| Imkerpfeife `toolApiarySmoker` | Rohr 2 | Lehm 10 (Rauchtopf) |
+| Hühnerstall `cntChickenCoop` | Kunststoff 200, Klebeband 8 | Holz 100 + 200 = 300; Leder 8 |
+| Hühnerauslauf `toolChickenCoopRun` | Rohr 20 | Holz 20 + 20 = 40 |
+| Hühnerfutter `resourceChickenFeed` | Mais 1 | Pilze 1 |
+| Großer Rucksack `backpackLarge` | Kunststoff 20, leg. Teile | Leder 50 + 20 = 70 (Stufen zusammengezählt); leg. Teile entfallen |
+| Zugbrücke `metalReinforcedWoodDrawBridge` | Feder 20, Mech. Teile 20 | Schmiedeeisen 20 + 40 = 60 |
+| Dietrich `resourceLockPick` | Mech. Teile 1 | Schmiedeeisen 1 + 1 = 2 |
+| Dietrich-Bündel `resourceLockPickBundle` | Mech. Teile 40 | Schmiedeeisen 40 + 40 = 80 |
+
+## Tabelle 2 — Aufsätze (29)
+
+**Rüstung (13).** Kunststoff → Leder, Klebeband → Leder, Mechanische Teile → Schmiedeeisen,
+Feder → Schmiedeeisen; alles zusammengezählt.
+
+| Rezept | Vanilla (gesperrt fett) | Vorschlag |
+|---|---|---|
+| `modArmorStoragePocket` | **Kunststoff 10**, Leder 6, **Klebeband 1**, **Mech. 4**, Nähzeug 1 | Leder 17, Schmiedeeisen 4, Nähzeug 1 |
+| `modArmorDoubleStoragePocket` | **K 15**, Leder 8, **Kb 2**, **M 4**, Nähzeug 2 | Leder 25, Schmiedeeisen 4, Nähzeug 2 |
+| `modArmorTripleStoragePocket` | **K 20**, Leder 10, **Kb 3**, **M 4**, Nähzeug 3 | Leder 33, Schmiedeeisen 4, Nähzeug 3 |
+| `modArmorQuadStoragePocket` | **K 40**, Leder 20, **Kb 6**, Nähzeug 6, **leg. Teile 1** | Leder 66, Nähzeug 6 |
+| `modArmorBandolier` | Tuch 100, **K 2**, Leder 15, Leim 3, Nähzeug 1 | Tuch 100, Leder 17, Leim 3, Nähzeug 1 |
+| `modArmorImprovedFittings` | **K 10**, Leder 4, **Kb 1**, **M 4**, Nähzeug 1 | Leder 15, Schmiedeeisen 4, Nähzeug 1 |
+| `modArmorCustomizedFittings` | **K 20**, Leder 8, **Kb 2**, **M 8**, Nähzeug 1 | Leder 30, Schmiedeeisen 8, Nähzeug 1 |
+| `modArmorPlatingBasic` | Leder 2, **K 5**, **Kb 1**, **M 2**, Nähzeug 1 | Leder 8, Schmiedeeisen 2, Nähzeug 1 |
+| `modArmorPlatingReinforced` | Schmiedeeisen 10, **K 10**, **Kb 2**, **M 4**, Nähzeug 1 | Schmiedeeisen 14, Leder 12, Nähzeug 1 |
+| `modArmorMuffledConnectors` | Tiegelstahl 4, **K 30**, **Kb 1**, **M 4**, Nähzeug 1 | Tiegelstahl 4, Leder 31, Schmiedeeisen 4, Nähzeug 1 |
+| `modArmorAdvancedMuffledConnectors` | Tiegelstahl 5, **K 60**, **Kb 2**, **M 5**, Nähzeug 1 | Tiegelstahl 5, Leder 62, Schmiedeeisen 5, Nähzeug 1 |
+| `modArmorStealthBoots` | Tiegelstahl 5, **K 60**, **Kb 2**, **M 5**, Nähzeug 1 | Tiegelstahl 5, Leder 62, Schmiedeeisen 5, Nähzeug 1 |
+| `modArmorImpactBracing` | Tiegelstahl 5, **Kb 2**, **M 20**, **Feder 20**, Nähzeug 1 | Tiegelstahl 5, Leder 2, Schmiedeeisen 40, Nähzeug 1 |
+
+**Waffen (16).** Vierzehn haben dasselbe Muster: Metall 5, Leim 5, **Mech. Teile 5**,
+**Feder 10**. Daraus wird: Metall 5, Leim 5, **Schmiedeeisen 15** — ist das Metall selbst
+Schmiedeeisen, zusammen 20.
+
+| Muster | Rezepte |
+|---|---|
+| Tiegelstahl 5, Leim 5, Schmiedeeisen 15 | `modGunBowArrowRest`, `modGunCrippleEm`, `modMeleeClubMetalSpikes`, `modMeleeClubMetalChain`, `modMeleeErgonomicGrip`, `modMeleeFortifyingGrip`, `modMeleeIronBreaker`, `modMeleeTemperedBlade` |
+| Schmiedeeisen 20, Leim 5 | `modGunMeleeTheHunter`, `modMeleeGraveDigger`, `modMeleeSerratedBlade`, `modMeleeStructuralBrace`, `modMeleeWeightedHead`, `modMeleeWoodSplitter` |
+| Tiegelstahl 5, Leim 5, Schmiedeeisen 5, Rohdiamant 3 | `modMeleeDiamondTip` (hatte keine Feder) |
+| Tiegelstahl 5, Leim 5, **Talg 5** (statt Öl), **Tuch 10** (statt Benzin 50) | `modMeleeClubBurningShaft` |
+
+Namen und Wirkung der Aufsätze bleiben unverändert. Welche davon dem Namen nach nicht ins
+Jahr 700 passen („Customized Fittings", „Diamantspitze"), ist eine spätere Durchsicht der
+Texte, keine Frage des Rezepts.
+
+## Tabelle 3 — Gerichte und Leim (5)
+
+Frei sind an Feldfrucht und Küche: Pilze, Goldrute, Hopfen, Aloe, Honig, Ei, Fleisch.
+
+| Rezept | heute gesperrt | Vorschlag |
+|---|---|---|
+| Fleischeintopf `foodMeatStew` | Kartoffel 2, Mais 2 | Pilze 2, Goldrute 2 (Fleisch, Talg, Wasser bleiben) |
+| Gemüseeintopf `foodVegetableStew` | Kartoffel 2, Mais 2 | Pilze 2 + 2 = 4, Goldrute 2 |
+| Aschehuhn `foodAshChickenStew` | Mais 3 | Goldrute 3 (Huhn, Pilze 2, Holzkohle, Wasser bleiben) |
+| Roter Tee `drinkJarRedTea` | Chrysantheme 1 | **Rezept entfällt.** Die Chrysantheme ist absichtlich gesperrt (`denylist.txt`: „Ostasien"), kein Versehen; Goldrutentee gibt es schon. |
+| Leim aus Supermais `resourceGlue` (dritte Fassung) | Supermais 3 | **Diese Fassung entfällt.** Leim aus Knochen bleibt, an Feuerstelle und Kräuterküche. |
+
+## Tabelle 4 — Sperren (5)
+
+| Rezept | Grund |
+|---|---|
+| `biomeWeatherItem1` bis `biomeWeatherItem4` | Tragen in Vanilla keinen Namen (leere Zeile in der Sprachdatei), verlangen Rüstungssatz, Kunststoff und Linse. Rezept entfällt; die Gegenstände selbst bleiben, wie der Purge sie beurteilt. |
+| Bild `pictureVariantHelper` | Verlangt Farbe (`resourcePaint`, gesperrt). Rezept entfällt. |
+
+## Tabelle 5 — warten (13), nicht Teil dieser Abnahme
+
+Hängen an Prüfliste 8 des Plans (Urteil über sieben moderne Kennungen: Compoundbogen,
+Compound-Armbrust, Eisenarmbrust, Sprengpfeil, Stahl-AP-Pfeil …):
+
+`gunBowT3CompoundBow`, `gunBowT3CompoundCrossbow`, `gunBowT1IronCrossbow`,
+`ammoArrowExploding`, `ammoArrowSteelAP`, `ammoCrossbowBoltExploding`,
+`ammoCrossbowBoltSteelAP`, `ammoCrossbowBoltFlaming` und die fünf Bündel dazu.
+Der Brandbolzen wartet mit, weil er ohne Armbrust keinen Sinn hat. **Bis dahin bleibt
+`recipes` mit 13 Sackgassen rot.**
+
+## Belohnungen
+
+Gemessen am selben Dump: **496** Belohnungen der Art `LootItem`, **115** zeigen auf mindestens
+eine Loot-Gruppe, die nichts mehr hergibt, **66** nur auf solche. Betroffen sind 41 Gruppen.
+
+**Ursache Nummer eins ist eine Zeile in `tools/check/denylist.txt`:**
+`questReward*Bundle  # Belohnungsbuendel fuer Turm, Generator, Batterie, Solar`. Das Muster
+trifft alle 92 Belohnungsbündel, auch die harmlosen — das Lehrblatt-Bündel allein steht hinter
+48 der 115 Belohnungen. Sein Inhalt lebt vollständig: es öffnet drei Sorten Lehrblätter je
+zweimal, aus den 14 lebenden.
+
+### Wieder Belohnung — Bündel freigeben (57 Belohnungen)
+
+Freigegeben wird je Bündel mit einer Zeile `!<Name>` in der Denylist; der Purge-Patch wird
+danach neu erzeugt.
+
+| Gruppe | Belohnungen | Was geschieht |
+|---|---|---|
+| `groupQuestT1SkillMagazineBundle` | 48 | `questRewardT1SkillMagazineBundle` frei. Inhalt unverändert. |
+| `groupQuestMeleeCrafting` | 3 | Sechs von acht Bündeln frei: Eisenfaust, Sax, Keule, Speer, Hammer, Werkzeug — je Bruchstücke plus Lehrblatt. Schockstab und Motorwerkzeug bleiben gesperrt. |
+| `groupQuestRangedCrafting` | 3 | Das Bogen-Bündel frei (Bogen-Bruchstücke, Eisenpfeile, Lehrblatt). Die sechs Schusswaffen-Bündel bleiben gesperrt. |
+| `groupQuestFarmPlotsT1` bis `T3` | 3 | Bündel frei: Felder und Saat-Lehrblatt. Die Zufallspflanze wird auf Pilz und Goldrute gekürzt (vier der sechs sind gesperrt). Setzt das Feld-Rezept aus Tabelle 1 nicht voraus — das Bündel gibt fertige Felder. |
+
+### Wieder Belohnung — Inhalt anpassen (14 Belohnungen)
+
+Bündel frei, und ein Patch an `items.xml` nimmt das Gesperrte aus seiner Liste.
+
+| Gruppe | Belohnungen | Was geschieht |
+|---|---|---|
+| `groupQuestT2Food`, `T3Food`, `T4Food` | 3 | Mineralwasser → abgekochtes Wasser; die Zufallsgerichte auf die lebenden gekürzt (nach Tabelle 3 Fleisch- und Gemüseeintopf). Bleibt in einer Stufe keines, zahlt die Gruppe Silber. |
+| `groupQuestT1Books` | 1 | Zufallsliste auf Blätter der 13 lebenden Reihen gekürzt. |
+| `groupQuestT1MeleeMods`, `T2`, `T3` | 6 | T1 und T3 unverändert frei (alle Aufsätze leben); T2 ohne Stacheldraht und Bunkerbrecher. |
+| `groupQuestT1RangedMods`, `T2` | 2 | T1 gibt „Der Jäger", T2 Pfeilauflage und „Lähmschuss" — mehr lebt nicht; die Zahl der Zufallsstücke sinkt entsprechend. |
+| `groupQuestT1Traps`, `T2Traps` | 2 | Nur die Spieße bleiben (Holz bzw. Eisen), dafür zehn statt fünf. Stacheldraht, Minen und das gesperrte Lehrblatt entfallen. |
+
+### Silberpfennige — rein modern (44 Belohnungen)
+
+Die Gruppe bekommt einen Eintrag Silberpfennige (`casinoCoin`). Die Menge richtet sich nach
+der **niedrigsten** Auftragsstufe, die auf die Gruppe zeigt:
+
+| Stufe | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| Silberpfennige | 300 | 600 | 1000 | 1500 | 2000 | 3000 |
+
+*(Zum Vergleich: Vanillas eigene Münzbelohnungen liegen zwischen 100 und 4000.)*
+
+| Stufe | Gruppen (Belohnungen) |
+|---|---|
+| 1 → 300 | Fahrrad (1), Schraubenschlüssel (1), Helmlampen-Bauplan (1), Munitionsbündel (3) |
+| 2 → 600 | Minibike-Teile (1), Nagelpistole (1), Grubenhelm (1) |
+| 3 → 1000 | Generator (1), Sicherheitsanlage (1), Pfeilfalle (1), Zeitladungen (2), Motorradteile (1), Nachtsichtgerät (1), Fernkampf-Aufsätze T3 (4) |
+| 4 → 1500 | Benzin (11), Batteriebank (1), Klingenfalle (1), Geländewagenteile (1) |
+| 5 → 2000 | Selbstschussanlage (2), Schrotturm (2), Solarbank (2), Tragschrauberteile (2) |
+| 6 → 3000 | legendäre Nahkampf-Bündel (1), legendäre Fernkampf-Bündel (1) |
+
+57 + 14 + 44 = 115.
+
+**Was offen bleibt und der Bau zeigt:** ob das Anachronismus-Urteil den Inhalt eines
+freigegebenen Bündels mitprüft (`anachronisms` muss grün bleiben, sonst wird der Inhalt
+gepatcht, nicht die Prüfung); ob eine Belohnung die Menge eines Loot-Eintrags übernimmt
+(Vanilla schreibt `<item name="ammoGasCan" count="5000"/>`, das spricht dafür); und die
+Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-Bündel" werden.
+
+## Wie geprüft wird
+
+- `kette-pruefen.ps1`: jeder neue XPath trifft Vanilla, jede genannte Kennung löst sich auf.
+- `mod700check purge-patch`: die erzeugten Patches sind aktuell (nach den Denylist-Zeilen).
+- `mod700check anachronisms`: bleibt grün.
+- **`mod700check recipes` wird erst mit einem neuen ConfigsDump grün** — die Prüfung liest
+  die gemergte Config des Spiels, und die entsteht nur bei einem Spielstart mit der Mod.
+  Bis dahin rechne ich die Patches außerhalb des Repositorys auf Vanilla an und lasse
+  `recipes` über das Ergebnis laufen: ein **Vorlauf**, kein Nachweis. Er zählt erst, wenn
+  derselbe Weg am heutigen Stand die 80 Sackgassen des Dumps wiederfindet.
+- Erwartet nach dem Bau: 13 Sackgassen (Tabelle 5), 0 Belohnungen auf leere Gruppen.
+
+## Nicht entschieden
+
+- Tabelle 5 (hängt an Prüfliste 8).
+- Ob die 29 Aufsätze dem Namen nach bleiben.
+- Jede einzelne Menge — WP9.
