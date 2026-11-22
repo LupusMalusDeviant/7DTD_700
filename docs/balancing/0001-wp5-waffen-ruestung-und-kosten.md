@@ -67,6 +67,14 @@ Schleichwaffe. Beides ist Vanilla und beides steht F-02 gut.
 
 ### 2.1 Die Breitaxt ist gemessen die schwächste Waffe des Satzes — und die teuerste Axt
 
+> **Entschieden am 2026-11-22 (D88): Weg 1, der Tausch — gebaut am selben Tag.** Die Breitaxt
+> sitzt jetzt auf `meleeToolAxeT2SteelAxe` (T2, 29 Schaden, Rezept 8 Schmiedestahl,
+> Handwerksstufe 26), die Bartaxt auf `meleeToolAxeT1IronFireaxe` (T1, 15 Schaden, Rezept
+> 10 Schmiedeeisen, Handwerksstufe 11). Getauscht sind Namen und Rezepte, keine Zahl ist
+> erfunden. **Die Tabelle in §1 und der Text unten zeigen den Stand davor** und bleiben als
+> Begründung stehen: wo dort „Breitaxt" neben `…T1IronFireaxe` steht, ist seit D88 die
+> Bartaxt gemeint und umgekehrt. Im Spiel gesehen ist der Tausch nicht.
+
 F-02 nennt sie **„T3–T4, schwer, Rüstungsbrecher"**. Gemessen:
 
 | | Breitaxt | Bartaxt | Spatha | zum Vergleich |
@@ -248,8 +256,8 @@ Abbauen 22 Klumpen, 20 wären für einen ganzen Ofen weniger als ein Block gewes
 
 ## 7. Was WP5.6 nicht entscheidet
 
-- **Die Breitaxt** (§2.1) — drei Wege, Empfehlung Weg 1, Entscheidung beim Nutzer, weil D58 und
-  die F-02-Tabelle daran hängen.
+- ~~**Die Breitaxt** (§2.1) — drei Wege, Empfehlung Weg 1, Entscheidung beim Nutzer, weil D58 und
+  die F-02-Tabelle daran hängen.~~ Entschieden und gebaut am 2026-11-22 (D88, Weg 1).
 - **Die Äxte als Werkzeuge** (§2.2) — F-21 in WP7.
 - **T1 schützt wie T0** (§3) — Spieltest WP5.7, danach WP9.
 - **Garnitur billiger als Waffe** (§4) — WP9.

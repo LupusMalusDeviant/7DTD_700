@@ -550,7 +550,7 @@
 	</append>
 
 	<!-- Die acht Waffen, die auf das gesperrte Reparatur-Kit zeigen. Drei weitere erben
-	     ihr RepairTools von einer dieser acht (meleeToolAxeT2SteelAxe von der Breitaxt,
+	     ihr RepairTools von einer dieser acht (meleeToolAxeT2SteelAxe von der Feuerwehraxt,
 	     meleeWpnKnucklesT3SteelKnuckles von der Eisenfaust, meleeWpnSpearT3SteelSpear
 	     vom Ango) und folgen darum von selbst: Extends wird nach dem Patchen aufgeloest.
 	-->

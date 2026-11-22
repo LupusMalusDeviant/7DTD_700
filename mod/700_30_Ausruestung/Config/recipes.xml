@@ -38,7 +38,13 @@
 	     Zwei davon hatte WP3 gesperrt, und D58 hat sie freigegeben, weil Vanilla kein
 	     anderes Klingenmodell ueber Messerlaenge und keine zweite lange Axt hat:
 	       meleeWpnBladeT3Machete    -> Spatha
-	       meleeToolAxeT1IronFireaxe -> Breitaxt
+	       meleeToolAxeT1IronFireaxe -> Bartaxt (bis D88, 2026-11-22: Breitaxt)
+
+	     D88 TAUSCHT DIE BEIDEN AXT-BASEN. Gemessen ist die Feuerwehraxt die
+	     schwaechste Waffe ueber T0 (T1, 15 Schaden) und die Stahlaxt fast doppelt so
+	     stark (T2, 29). Die schwere Breitaxt sitzt darum jetzt auf der Stahlaxt, die
+	     Bartaxt auf der Feuerwehraxt. Getauscht sind nur die Namen und die Rezepte;
+	     Werte, Freischaltstufe (11 bzw. 26) und Fertigkeitsbindung bleiben Vanillas.
 
 	     DAS LOEST itm700_spatha AUS WP4.6 AB. Dort endete die Kette an einem eigenen
 	     Gegenstand, der vom Jagdmesser erbte - eine Spatha, die wie ein Messer
@@ -139,11 +145,11 @@
 		     T2 - Schmiedeeisen, schwer
 		     ==================================================== -->
 
-		<!-- Bartaxt. Vanilla baut die Stahlaxt aus einem Bauteil und Tiegelstahl;
-		     bei uns ist sie die EISENaxt der Stufe T2, denn die Breitaxt darunter
-		     ist die Stahlwaffe. Vanilla: AllSteelParts 1, Tiegelstahl 10, Holz 10,
-		     PANZERBAND 3. -->
-		<recipe name="meleeToolAxeT2SteelAxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+		<!-- Bartaxt. Seit D88 (2026-11-22) auf der Feuerwehraxt: die EISENaxt, die
+		     man frueh schmiedet (Handwerksstufe 11). Die Breitaxt weiter unten ist
+		     die Stahlwaffe. Vanilla baut die Feuerwehraxt aus Schmiedeeisen 20,
+		     Holz 10, Leder 2, PANZERBAND 2. -->
+		<recipe name="meleeToolAxeT1IronFireaxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
 			<ingredient name="resourceForgedIron" count="10" />
 			<ingredient name="resourceWood" count="8" />
 			<ingredient name="resourceLeather" count="2" />
@@ -172,9 +178,11 @@
 			<ingredient name="resourceLeather" count="5" />
 		</recipe>
 
-		<!-- Breitaxt. Die zweite Freigabe aus D58. Schwer, Ruestungsbrecher.
-		     Vanilla: Schmiedeeisen 20, Holz 10, Leder 2, PANZERBAND 2. -->
-		<recipe name="meleeToolAxeT1IronFireaxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
+		<!-- Breitaxt. Schwer, Ruestungsbrecher. Seit D88 (2026-11-22) auf der
+		     Stahlaxt (T2, Handwerksstufe 26) statt auf der Feuerwehraxt aus D58.
+		     Vanilla baut die Stahlaxt aus AllSteelParts 1, Tiegelstahl 10, Holz 10,
+		     PANZERBAND 3. -->
+		<recipe name="meleeToolAxeT2SteelAxe" count="1" craft_area="forge" craft_tool="toolAnvil" is_trackable="false">
 			<ingredient name="resourceForgedSteel" count="8" />
 			<ingredient name="resourceWood" count="10" />
 			<ingredient name="resourceLeather" count="3" />

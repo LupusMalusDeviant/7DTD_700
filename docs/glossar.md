@@ -103,10 +103,19 @@ eine Abweichung.
 | `meleeWpnBladeT3Machete` | Spatha | Spatha | Machete | D58 |
 | `meleeWpnSpearT1IronSpear` | Ango | Ango | Eisenspeer / Iron Spear | WP5.1 |
 | `meleeWpnSpearT3SteelSpear` | Flügellanze | Winged Lance | Stahlspeer / Steel Spear | WP5.1 |
-| `meleeToolAxeT2SteelAxe` | Bartaxt | Bearded Axe | Stahlaxt / Steel Axe | WP5.1 |
-| `meleeToolAxeT1IronFireaxe` | Breitaxt | Broad Axe | Eiserne Feueraxt / Iron Fireaxe | D58 |
+| `meleeToolAxeT2SteelAxe` | Breitaxt | Broad Axe | Stahlaxt / Steel Axe | D88 (bis 2026-11-22: Bartaxt) |
+| `meleeToolAxeT1IronFireaxe` | Bartaxt | Bearded Axe | Eiserne Feueraxt / Iron Fireaxe | D58, D88 (bis 2026-11-22: Breitaxt) |
 | `meleeWpnClubT3SteelClub` | Streitkolben | Mace | Stahlknüppel / Steel Club | WP5.1 |
 | `meleeWpnSledgeT3SteelSledgehammer` | Streithammer | War Hammer | Stahlvorschlaghammer / Steel Sledgehammer | WP5.1 |
+| `gunBowT3CompoundBow` | Langbogen | Longbow | Compoundbogen / Compound Bow | D87 |
+| `gunBowT1IronCrossbow` | Armbrust | Crossbow | Eiserne Armbrust / Iron Crossbow | D87 |
+| `gunBowT3CompoundCrossbow` | Schwere Armbrust | Heavy Crossbow | Compoundarmbrust / Compound Crossbow | D87 |
+| `ammoArrowSteelAP` | Panzerbrecherpfeil | Armour-piercer Arrow | Stahlpfeil / Steel Arrow | D87 |
+| `ammoCrossbowBoltSteelAP` | Panzerbrecherbolzen | Armour-piercer Bolt | Stahlbolzen / Steel Crossbow Bolt | D87 |
+| `ammoArrowExploding` | Feuertopfpfeil | Fire-pot Arrow | Sprengpfeil / Exploding Arrow | D87 |
+| `ammoCrossbowBoltExploding` | Feuertopfbolzen | Fire-pot Bolt | Sprengbolzen / Exploding Crossbow Bolts | D87 |
+| `tableSaw` | Schreinerbank | Joiner's Bench | Tischkreissäge / Table Saw | D87 |
+| `modArmorCoolingMesh` | Leinenfutter | Linen Lining | Kühlmaschen-Mod / Cooling Mesh Mod | D87 |
 | `itm700_schleifstein` | Schleifstein | Whetstone | (statt Reparaturkit / Repair Kit) | D60 |
 | `itm700_schmiedeflicken` | Schmiedeflicken | Forge Patch | (statt Reparaturkit / Repair Kit) | D60, D62 |
 | `meleeToolTorch` | Fackel | Torch | Fackel / Torch | WP6 |
@@ -207,8 +216,8 @@ Arbeitsvorrat im Plan (WP8.5).
 | `baumwoll` | DE | Flachs | WP4.1 |
 | `yucca` | beide | Nesselfaser / Nettle Fiber | WP4.1 |
 | `machete` | beide | Spatha | D58 |
-| `fire ?axe` | EN | Broad Axe | D58 |
-| `feueraxt` | DE | Breitaxt | D58 |
+| `fire ?axe` | EN | Bearded Axe | D58, D88 |
+| `feueraxt` | DE | Bartaxt | D58, D88 |
 | `\bpaper` | EN | Parchment | WP7.5 |
 | `papier` | DE | Pergament | WP7.5 |
 | `hunting knife` | EN | Sax | D58 |
@@ -217,8 +226,21 @@ Arbeitsvorrat im Plan (WP8.5).
 | `eisenspeer` | DE | Ango | WP5.1 |
 | `steel spear` | EN | Winged Lance | WP5.1 |
 | `stahlspeer` | DE | Flügellanze | WP5.1 |
-| `steel axe` | EN | Bearded Axe | WP5.1 |
-| `stahlaxt` | DE | Bartaxt | WP5.1 |
+| `steel axe` | EN | Broad Axe | WP5.1, D88 |
+| `stahlaxt` | DE | Breitaxt | WP5.1, D88 |
+| `compound` | beide | Langbogen / Longbow, Schwere Armbrust / Heavy Crossbow | D87 |
+| `iron crossbow` | EN | Crossbow | D87 |
+| `eiserne armbrust` | DE | Armbrust | D87 |
+| `steel arrow` | EN | Armour-piercer Arrow | D87 |
+| `stahlpfeil` | DE | Panzerbrecherpfeil | D87 |
+| `stahlbolzen` | DE | Panzerbrecherbolzen | D87 |
+| `exploding` | EN | Fire-pot Arrow, Fire-pot Bolt | D87 |
+| `sprengpfeil` | DE | Feuertopfpfeil | D87 |
+| `sprengbolzen` | DE | Feuertopfbolzen | D87 |
+| `table saw` | EN | Joiner's Bench | D87 |
+| `tischkreiss` | DE | Schreinerbank | D87 |
+| `cooling mesh` | EN | Linen Lining | D87 |
+| `kühlmaschen` | DE | Leinenfutter | D87 |
 | `steel club` | EN | Mace | WP5.1 |
 | `stahlknüppel` | DE | Streitkolben | WP5.1 |
 | `sledgehammer` | EN | Stone Maul, Iron Maul, War Hammer; die Gattung: hammer | WP5.1 |

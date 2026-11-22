@@ -540,7 +540,7 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 # Spatha vom Jagdmesser erben lassen - eine Spatha, die wie ein Messer zuschlaegt. Derselbe
 # Weg wie D54 bei den Boegen: WP5 gibt beiden Namen, Werte und Rezepte, Phase 2 das Modell.
 !meleeWpnBladeT3Machete*        # wird die Spatha (T3/T4, Allrounder)
-!meleeToolAxeT1IronFireaxe      # wird die Breitaxt (T3/T4, schwer)
+!meleeToolAxeT1IronFireaxe      # wird die Bartaxt (D88; bis 2026-11-22 die Breitaxt)
 
 # --- Nahrung und Getraenke ------------------------------------------------------
 !foodRawMeat

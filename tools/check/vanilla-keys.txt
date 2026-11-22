@@ -104,16 +104,38 @@ meleeWpnSpearT1IronSpear                  # Ango (T1)
 meleeWpnSpearT1IronSpearDesc
 meleeWpnKnucklesT1IronKnuckles            # Eisenfaust (T1)
 meleeWpnKnucklesT1IronKnucklesDesc
-meleeToolAxeT2SteelAxe                    # Bartaxt (T2)
+meleeToolAxeT2SteelAxe                    # Breitaxt (seit D88; vorher Bartaxt)
 meleeToolAxeT2SteelAxeDesc
 meleeWpnSledgeT1IronSledgehammer          # Eisenhammer (T2)
 meleeWpnSledgeT1IronSledgehammerDesc
 meleeWpnBladeT3Machete                    # Spatha (T3) - Freigabe aus D58
 meleeWpnBladeT3MacheteDesc
-meleeToolAxeT1IronFireaxe                 # Breitaxt (T3) - Freigabe aus D58
+meleeToolAxeT1IronFireaxe                 # Bartaxt (seit D88; vorher Breitaxt) - Freigabe aus D58
 meleeToolAxeT1IronFireaxeDesc
 meleeWpnClubT3SteelClub                   # Streitkolben (T3)
 meleeWpnClubT3SteelClubDesc
+# D87 (2026-11-22) - Fernkampf umgedeutet, Namen vom Nutzer am selben Tag bestaetigt.
+gunBowT3CompoundBow                       # Langbogen (T3)
+gunBowT3CompoundBowDesc
+gunBowT1IronCrossbow                      # Armbrust
+gunBowT1IronCrossbowDesc                  # gilt auch fuer die Schwere Armbrust (Vanilla teilt den Schluessel)
+gunBowT3CompoundCrossbow                  # Schwere Armbrust
+ammoArrowSteelAP                          # Panzerbrecherpfeil
+ammoArrowSteelAPDesc
+ammoCrossbowBoltSteelAP                   # Panzerbrecherbolzen
+ammoCrossbowBoltSteelAPDesc
+ammoArrowExploding                        # Feuertopfpfeil
+ammoArrowExplodingDesc                    # gilt auch fuer den Feuertopfbolzen (Vanilla teilt den Schluessel)
+ammoCrossbowBoltExploding                 # Feuertopfbolzen
+perkRangersAPAmmoDesc                     # Lehrblatt, das die Panzerbrecher freischaltet
+perkRangersAPAmmoLongDesc
+perkRangersExplodingBoltsDesc             # Lehrblatt, das die Feuertoepfe freischaltet
+perkRangersExplodingBoltsLongDesc
+# D87 - in V 3.40 fuer Spieler nicht erreichbar, trotzdem umbenannt.
+tableSaw                                  # Schreinerbank
+tableSawDesc
+modArmorCoolingMesh                       # Leinenfutter
+modArmorCoolingMeshDesc
 meleeWpnKnucklesT3SteelKnuckles           # Stahlfaust (T3)
 meleeWpnKnucklesT3SteelKnucklesDesc
 meleeWpnSpearT3SteelSpear                 # Fluegellanze (T4)

@@ -1978,8 +1978,9 @@ werden:
    (WP3.7), Durchlauf bis zur ersten Seuchennacht (WP9.3).
 7. **Release-Entscheidung** nach dem Playtest (D46, WP9.6).
 8. **Entschieden am 2026-11-22 (D87): alle sieben bleiben und werden umgedeutet**, die Drohne
-   samt `modRoboticDroneWeaponMod` bleibt bis zur Magie in Phase 2 gesperrt. Gebaut ist davon
-   noch nichts (offener Punkt „Entschieden, noch nicht gebaut"). Der Punkt lautete:
+   samt `modRoboticDroneWeaponMod` bleibt bis zur Magie in Phase 2 gesperrt. ~~Gebaut ist davon
+   noch nichts.~~ **Die Namen sind am 2026-11-22 gebaut** (D91; offene Punkte, „Gebaut am
+   2026-11-22"); offen ist das Reparaturzeug für Bögen und Armbrüste. Der Punkt lautete:
    ~~**Sieben moderne Kennungen urteilen**~~, die das Anachronismus-Urteil heute auf `erlaubt`
    stehen lässt, weil keine Regel sie dem Namen nach trifft: `gunBowT3CompoundBow`,
    `gunBowT3CompoundCrossbow`, `gunBowT1IronCrossbow`, `ammoArrowExploding`, `ammoArrowSteelAP`,
@@ -1993,8 +1994,9 @@ werden:
    WP5.5b, Räucherkammer nach F-19, Runenritzer-Bank nach F-15.
 10. **Entschieden am 2026-11-22 (D88): die beiden Vanilla-Basen werden getauscht** — Breitaxt
     auf der Stahlaxt, Bartaxt auf der Feuerwehraxt. Dazu der Grundsatz des Nutzers: die
-    Waffenliste bleibt offen für weitere Waffen und neue Waffentypen. Gebaut ist der Tausch
-    noch nicht (offener Punkt „Entschieden, noch nicht gebaut"). Der Punkt lautete:
+    Waffenliste bleibt offen für weitere Waffen und neue Waffentypen. ~~Gebaut ist der Tausch
+    noch nicht.~~ **Gebaut am 2026-11-22** (offene Punkte, „Gebaut am 2026-11-22"); im Spiel
+    nicht gesehen. Der Punkt lautete:
     ~~**Über die Breitaxt entscheiden**~~ (WP5.6, 8. November 2026). Sie soll „T3–T4, schwer,
     Rüstungsbrecher" sein und ist gemessen die schwächste Waffe über T0 — T1, 15 Schaden,
     während ihr Rezept 400 Raseneisenerz kostet und die Bartaxt bei 100 fast doppelt so hart
@@ -2368,7 +2370,36 @@ werden:
   die Suche liest den `-UserDataFolder` aus `launchersettings.json` (und `SDTD_USERDATA`),
   der jüngste Dump gewinnt — Vertrag 04 „Nachtrag Dump-Suche", Abnahme offen; vier neue
   Gegenproben, drei Verfälschungen.
-- **Entschieden, noch nicht gebaut** (2026-11-22, D87 und D88). Jeder Punkt ist
+- **Gebaut am 2026-11-22 (D87, D88, D91) — Stand der vier Punkte unten.** Im Spiel gesehen
+  ist nichts davon; ein Blick darauf gehört in die nächste Sammelrunde.
+  1. *Fernkampf-Namen:* **gebaut.** Langbogen, Armbrust, Schwere Armbrust,
+     Panzerbrecherpfeil und -bolzen, Feuertopfpfeil und -bolzen (Namen vom Nutzer bestätigt,
+     D91), je mit Beschreibung; dazu die zwei Lehrblatt-Texte, die diese Munition
+     freischalten. 16 Sprachzeilen hier und 4 unter Punkt 3 (die Sprachdatei wächst von 919
+     auf 939 Schlüssel), 9 Glossar-Begriffe, 13 verbotene Muster. **Werte sind
+     Vanillas** — ob Werkstatt, Mengen und Freischaltstufe zu den Rollen passen, bleibt WP5.2
+     und WP9.
+  2. *Tausch Breitaxt/Bartaxt:* **gebaut.** Namen und Rezepte getauscht; die
+     Freischaltstufen hängen an Vanillas Kennungen und passen jetzt von selbst (Bartaxt ab
+     11, Breitaxt ab 26), `700_50_Fortschritt/recipes.xml` ist darum unverändert.
+  3. *Schreinerbank, Leinenfutter:* **gebaut** (vier Sprachzeilen; unerreichbar in V 3.40).
+  4. *`modRoboticDroneWeaponMod`:* **nichts zu bauen, die Aussage unten war überholt.**
+     Gemessen am Dump von 22:08: der Aufsatz steht in `item_modifiers.xml` mit Vanillas
+     `CreativeMode="None"` und `missingIcon`; Rezept, Loot-Eintrag und Schaltplan sind in
+     Vanilla auskommentiert. Kein Weg führt zu ihm, darum beurteilt `anachronisms` ihn gar
+     nicht (0 Treffer in der JSON-Ausgabe, auch `ungeprueft --praefix modRoboticDrone` nennt
+     nichts). Für Spieler ist er gesperrt, ohne dass wir etwas tun.
+  **Neu und offen — Reparaturzeug für Bögen und Armbrüste** `[braucht Nutzer]` (D91):
+  Holzbogen, Langbogen und beide Armbrüste zeigen in `RepairTools` auf das gesperrte
+  `resourceRepairKit` (gemessen an Vanilla und am Dump); der einfache Bogen flickt mit Holz.
+  Der Nutzer will dafür ein eigenes Reparaturzeug. **Vorschlag zur Abnahme, nicht gebaut:**
+  Kennung `itm700_bogenzeug`, Name „Bogenzeug" / „Bowyer's Kit" (Sehne, Wachs, Leim); von
+  Hand herzustellen wie das Nähzeug, zwei auf einmal, aus Nesselfaser, Tierfett und Holz;
+  Symbol vom Nähzeug mit eigenem Farbton, kein eigenes Bild; vier `set`-Zeilen auf
+  `RepairTools`. Reparaturmenge und -zeit nach dem Muster der drei vorhandenen
+  Reparatur-Gegenstände (D60, D62) — die Zahlen sind Balancing und stehen aus.
+  Der Punkt lautete:
+  ~~**Entschieden, noch nicht gebaut**~~ (2026-11-22, D87 und D88). Jeder Punkt ist
   `[Claude-prüfbar]` und bekommt Namen in beiden Sprachen, Glossar-Einträge und Prüflauf:
   1. *WP5.2 Fernkampf ist frei.* Langbogen (`gunBowT3CompoundBow`), Armbrust
      (`gunBowT1IronCrossbow`), Schwere Armbrust (`gunBowT3CompoundCrossbow`), der

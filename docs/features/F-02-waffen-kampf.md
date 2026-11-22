@@ -14,11 +14,11 @@ Schild-Blocken, Schadensarten, Verschleiß und Wurfwaffen (D21). Nahkampf ist di
 | Waffe | Schadensart | Rolle | Vanilla-Basis |
 |---|---|---|---|
 | Knüppel / Keule | Wucht | T0, Betäubung | Club |
-| Handbeil / Bartaxt | Schnitt | T0–T2, Werkzeug + Waffe | Axe |
+| Handbeil / Bartaxt | Schnitt | T0–T2, Werkzeug + Waffe | Axe; die Bartaxt seit D88 auf der Fireaxe |
 | Sax (Kurzschwert) | Schnitt/Stich | T1–T2, schnell | Machete/Knife |
 | Speer / Ango | Stich | T1–T3, Reichweite | Spear |
 | Spatha | Schnitt | T3–T4, Allrounder | Machete (Phase 1), neues Modell (Phase 2) |
-| Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher — **widerspricht den gemessenen Zahlen, siehe unten** | Fireaxe |
+| Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher — ~~widerspricht den gemessenen Zahlen~~ seit D88 auf der stärkeren Basis, siehe unten | Steel Axe (D88; bis 2026-11-22 Fireaxe) |
 | Streitkolben / Hammer | Wucht | T3–T4, gegen Rüstung (Kultisten, Plünderer) | Sledgehammer |
 
 **Die Liste ist nicht abgeschlossen** (Grundsatz des Nutzers, 2026-11-22, D88): je Kategorie
@@ -27,9 +27,31 @@ D50); bis dahin entsteht eine weitere Waffe nur auf einer Vanilla-Basis.
 
 **Breitaxt und Bartaxt tauschen ihre Vanilla-Basis** (D88, 2026-11-22): Breitaxt auf der
 Stahlaxt (`meleeToolAxeT2SteelAxe`), Bartaxt auf der Feuerwehraxt
-(`meleeToolAxeT1IronFireaxe`). **Noch nicht gebaut** — die Tabellen hier zeigen bis dahin den
-alten Stand. **Fernkampf** (D87, 2026-11-22): Langbogen, Armbrust, Schwere Armbrust, ein
-panzerbrechender Pfeil und der Feuertopfpfeil bleiben als Umdeutungen; gebaut in WP5.2.
+(`meleeToolAxeT1IronFireaxe`). **Gebaut am 2026-11-22:** Namen und Rezepte sind getauscht,
+Werte und Freischaltstufen (Bartaxt ab Handwerksstufe 11, Breitaxt ab 26) bleiben Vanillas;
+im Spiel gesehen ist es nicht. Die Messtabelle weiter unten zeigt den Stand **vor** dem
+Tausch und bleibt als Begründung stehen.
+
+**Fernkampf** (D87 und D91, 2026-11-22) — Namen gebaut, Werte sind Vanillas:
+
+| 700-Waffe | Vanilla-Kennung | Vanilla-Name |
+|---|---|---|
+| Langbogen | `gunBowT3CompoundBow` | Compoundbogen |
+| Armbrust | `gunBowT1IronCrossbow` | Eiserne Armbrust |
+| Schwere Armbrust | `gunBowT3CompoundCrossbow` | Compoundarmbrust |
+| Panzerbrecherpfeil | `ammoArrowSteelAP` | Stahlpfeil |
+| Panzerbrecherbolzen | `ammoCrossbowBoltSteelAP` | Stahlbolzen |
+| Feuertopfpfeil | `ammoArrowExploding` | Sprengpfeil |
+| Feuertopfbolzen | `ammoCrossbowBoltExploding` | Sprengbolzen |
+
+Dazu die zwei Lehrblatt-Texte, die diese Munition freischalten (`perkRangersAPAmmo*`,
+`perkRangersExplodingBolts*`). **Offen in WP5.2:** (1) *Reparatur* — Holzbogen, Langbogen und
+beide Armbrüste verlangen das gesperrte `resourceRepairKit` und sind damit nicht zu flicken;
+der Nutzer will dafür ein eigenes Reparaturzeug für Bögen und Armbrüste, geplant, nicht gebaut
+(Plan-0001, offene Punkte). (2) *Wirkung des Feuertopfs* — Vanilla lässt den Pfeil
+explodieren; ob er stattdessen oder zusätzlich brennen soll, ist eine Balancing-Frage (WP9).
+(3) Der einfache Bogen und der Holzbogen tragen weiter Vanillas Namen; die Tabelle unten
+nennt „Selbstbogen". (4) Die Schleuder (T0) hat keine Vanilla-Grundlage.
 
 **Die Vanilla-Basen, gemessen an V 3.40 (WP5, 8. November 2026).** Die Spalte oben nennt
 Modellfamilien; das sind die wirklichen Kennungen, und zwei davon hatte WP3 gesperrt:
@@ -38,13 +60,13 @@ Modellfamilien; das sind die wirklichen Kennungen, und zwei davon hatte WP3 gesp
 |---|---|---|
 | Keule | `meleeWpnClubT0WoodenClub` | frei |
 | Streitkolben | `meleeWpnClubT3SteelClub` | frei (D55: Stahl als Werkstoff bleibt) |
-| Handbeil | `meleeToolAxeT2SteelAxe` | frei |
+| ~~Handbeil~~ **Breitaxt** (D88) | `meleeToolAxeT2SteelAxe` | frei |
 | Sax | `meleeWpnBladeT1HuntingKnife` | frei |
 | Knochenmesser (T0) | `meleeWpnBladeT0BoneKnife` | frei |
 | Speer | `meleeWpnSpearT0/T1/T3*` | frei, drei Stufen |
 | Vorschlaghammer | `meleeWpnSledgeT0/T1/T3*` | frei, drei Stufen |
 | **Spatha** | `meleeWpnBladeT3Machete*` | **war gesperrt → freigegeben (D58)** |
-| **Breitaxt** | `meleeToolAxeT1IronFireaxe` | **war gesperrt → freigegeben (D58)** |
+| ~~Breitaxt~~ **Bartaxt** (D88) | `meleeToolAxeT1IronFireaxe` | **war gesperrt → freigegeben (D58)** |
 
 **Die Zahlen dazu stehen in der Balancing-Tabelle (WP5.6, 8. November 2026):**
 [0001-wp5-waffen-ruestung-und-kosten.md](../balancing/0001-wp5-waffen-ruestung-und-kosten.md) —
