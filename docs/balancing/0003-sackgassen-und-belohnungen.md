@@ -30,7 +30,7 @@ verteilen sich so:
 | B — Aufsätze | 29 | Tabelle 2 |
 | C — Gerichte und Leim | 5 | Tabelle 3 |
 | D — Sperren | 5 | Tabelle 4 |
-| E — warten auf das Urteil über Bögen und Sonderpfeile | 13 | Tabelle 5, nicht Teil dieser Abnahme |
+| E — Langbogen, Armbrüste, Sonderpfeile | 13 | Tabelle 5 (seit D87 Teil dieser Abnahme) |
 
 Gesperrte Zutaten nach Zahl der Rezepte: Kunststoff (`resourceScrapPolymers`) 31,
 Mechanische Teile 31, Klebeband 30, Feder (`resourceSpring`) 17, legendäre Teile 11,
@@ -149,16 +149,34 @@ Frei sind an Feldfrucht und Küche: Pilze, Goldrute, Hopfen, Aloe, Honig, Ei, Fl
 | `biomeWeatherItem1` bis `biomeWeatherItem4` | Tragen in Vanilla keinen Namen (leere Zeile in der Sprachdatei), verlangen Rüstungssatz, Kunststoff und Linse. Rezept entfällt; die Gegenstände selbst bleiben, wie der Purge sie beurteilt. |
 | Bild `pictureVariantHelper` | Verlangt Farbe (`resourcePaint`, gesperrt). Rezept entfällt. |
 
-## Tabelle 5 — warten (13), nicht Teil dieser Abnahme
+## Tabelle 5 — Langbogen, Armbrüste, Sonderpfeile (13)
 
-Hängen an Prüfliste 8 des Plans (Urteil über sieben moderne Kennungen: Compoundbogen,
-Compound-Armbrust, Eisenarmbrust, Sprengpfeil, Stahl-AP-Pfeil …):
+Diese 13 hingen an Prüfliste 8 des Plans. **D87 (2026-11-22) hat sie entschieden:** alle
+bleiben und werden umgedeutet — Compoundbogen → Langbogen, die beiden Armbrüste → Armbrust
+und Schwere Armbrust, Stahlpfeil → panzerbrechender Pfeil (Namensvorschlag „Nadelpfeil"),
+Sprengpfeil → **Feuertopfpfeil** (Tontopf mit griechischem Feuer). Damit brauchen ihre
+Rezepte denselben Ersatz wie der Kernweg. Namen und Werte folgen in WP5.2; hier steht nur,
+woraus sie gebaut werden.
 
-`gunBowT3CompoundBow`, `gunBowT3CompoundCrossbow`, `gunBowT1IronCrossbow`,
-`ammoArrowExploding`, `ammoArrowSteelAP`, `ammoCrossbowBoltExploding`,
-`ammoCrossbowBoltSteelAP`, `ammoCrossbowBoltFlaming` und die fünf Bündel dazu.
-Der Brandbolzen wartet mit, weil er ohne Armbrust keinen Sinn hat. **Bis dahin bleibt
-`recipes` mit 13 Sackgassen rot.**
+| Rezept | heute gesperrt | Vorschlag |
+|---|---|---|
+| Langbogen `gunBowT3CompoundBow` | Klebeband 13, Feder 25, leg. Teile | Leder 25 + 13 = 38; **Holz 25** statt der Feder (Bogenstab — Ausnahme von der Regel, ein Langbogen hat keine Eisenspange); leg. Teile entfallen |
+| Armbrust `gunBowT1IronCrossbow` | Klebeband 7, leg. Teile | Leder 7 (neu); leg. Teile entfallen |
+| Schwere Armbrust `gunBowT3CompoundCrossbow` | Klebeband 13, leg. Teile | Leder 25 + 13 = 38; leg. Teile entfallen |
+| Nadelpfeil `ammoArrowSteelAP` | Kunststoff 2 | Federn 2 |
+| Nadelpfeil-Bündel `ammoBundleArrowSteelAP` | Kunststoff 160 | Federn 160 |
+| Nadelbolzen `ammoCrossbowBoltSteelAP` | Kunststoff 2 | Federn 2 |
+| Nadelbolzen-Bündel `ammoBundleCrossbowBoltSteelAP` | Kunststoff 160 | Federn 160 |
+| Feuertopfpfeil `ammoArrowExploding` | Kunststoff 2, Schießpulver 6 | Federn 2; Lehm 2 (Topf), Talg 4 (Brandsatz). Pergament 1 und Nesselfaser 1 bleiben. |
+| Feuertopfpfeil-Bündel `ammoBundleArrowExploding` | Kunststoff 120, Schießpulver 360 | Federn 120; Lehm 120, Talg 240 |
+| Feuertopfbolzen `ammoCrossbowBoltExploding` | Kunststoff 2, Schießpulver 8 | Federn 2; Lehm 3, Talg 5 |
+| Feuertopfbolzen-Bündel `ammoBundleCrossbowBoltExploding` | Kunststoff 120, Schießpulver 480 | Federn 120; Lehm 180, Talg 300 |
+| Brandbolzen `ammoCrossbowBoltFlaming` | Kunststoff 2, Schießpulver 2 | wie der Brandpfeil: Federn 2; Talg 1 + 2 = 3 |
+| Brandbolzen-Bündel `ammoBundleCrossbowBoltFlaming` | Kunststoff 160, Schießpulver 160 | Federn 160; Talg 80 + 160 = 240 |
+
+Die Namen in der linken Spalte sind Arbeitsnamen bis WP5.2. **Eine Frage bleibt bei den
+Feuertöpfen:** der Pfeil sprengt in Vanilla. Ob er als Feuertopf brennt statt sprengt, ist
+eine Wertefrage für WP5.2 — das Rezept hier passt zu beidem.
 
 ## Belohnungen
 
@@ -233,10 +251,11 @@ Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-
   Bis dahin rechne ich die Patches außerhalb des Repositorys auf Vanilla an und lasse
   `recipes` über das Ergebnis laufen: ein **Vorlauf**, kein Nachweis. Er zählt erst, wenn
   derselbe Weg am heutigen Stand die 80 Sackgassen des Dumps wiederfindet.
-- Erwartet nach dem Bau: 13 Sackgassen (Tabelle 5), 0 Belohnungen auf leere Gruppen.
+- Erwartet nach dem Bau: **0 Sackgassen**, 0 Belohnungen auf leere Gruppen.
 
 ## Nicht entschieden
 
-- Tabelle 5 (hängt an Prüfliste 8).
+- Namen und Werte der Stücke aus Tabelle 5 (WP5.2, nach D87), darunter „Nadelpfeil" und ob
+  der Feuertopf sprengt oder brennt.
 - Ob die 29 Aufsätze dem Namen nach bleiben.
 - Jede einzelne Menge — WP9.

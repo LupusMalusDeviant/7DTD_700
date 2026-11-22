@@ -2320,7 +2320,8 @@ werden:
 - **Sackgassen und leere Belohnungen: der Vorschlag liegt vor, die Abnahme ist offen**
   (2026-11-22). [`docs/balancing/0003`](../balancing/0003-sackgassen-und-belohnungen.md)
   führt die 80 Sackgassen Rezept für Rezept (28 Kernweg, 29 Aufsätze, 5 Gerichte und Leim,
-  5 zu sperren, 13 warten auf Prüfliste 8) und die 115 Belohnungen auf leere Gruppen
+  5 zu sperren, 13 Bögen, Armbrüste und Sonderpfeile — seit D87 mit eigenem Ersatz statt
+  wartend) und die 115 Belohnungen auf leere Gruppen
   (57 über freigegebene Bündel, 14 mit angepasstem Inhalt, 44 in Silberpfennigen). Vier
   Grundsätze hat der Nutzer am selben Tag entschieden; sie stehen dort am Anfang.
   **Ursache der meisten leeren Belohnungen** ist die Denylist-Zeile `questReward*Bundle`,
