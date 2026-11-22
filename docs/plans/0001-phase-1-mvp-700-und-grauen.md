@@ -2063,6 +2063,25 @@ werden:
   Beschreibungsschlüssel für diese zwei Arten. Für Buffs, Fertigkeiten, Aufträge und
   Anzeigen gibt es keine solche Rechnung — eine Zeile dort kann tot sein, ohne dass eine
   Prüfung es merkt.
+- **Drei Befunde am Prüfskript `sprachverweise-pruefen.ps1` bleiben stehen** (fünftes Review
+  zu WP8.8, Commit `52be401`, 2026-11-22; auf Entscheidung des Nutzers nicht behoben —
+  keiner betrifft die Mod, keiner ändert das Urteil über den echten Stand). Keiner der drei
+  ist nachgestellt; die Beschreibungen passen zum Code.
+  1. *Ein neu gesetzter leerer Gruppenschlüssel geht grün durch.* Das Skript vergleicht den
+     Wert von `defaultDescriptionKey` vor und nach den Patches, nicht, ob es das Attribut
+     gibt. Fehlt es in Vanilla und ergänzt ein Patch es leer (oder entfernt ein Patch ein
+     schon leeres), sieht das Skript keine Änderung. Voraussetzung ist ein Vanilla ohne
+     dieses Attribut; das echte trägt `creativeMenuBlockGroupDesc`.
+  2. *Bei geleerter Gruppenbeschreibung widersprechen sich zwei Meldungen.* Bekommt
+     zugleich ein Block einen Schlüssel ohne Zeile, sagt die Meldung zu seiner alten Zeile,
+     er lese diesen Schlüssel, und die Zählzeile nennt „Blöcke, die sie lesen" für eine
+     leere Gruppenbeschreibung. Der Ausgang (Exit 1) stimmt, der Text nicht.
+  3. *Keine Gegenprobe für einen ausdrücklich deklarierten Namespace.* Der Lauf `namespace`
+     deckt nur den Treffer ohne Element. Verwürfe das Skript alle Namespace-Treffer, bliebe
+     das unbemerkt.
+
+  Wer das Skript wieder anfasst, nimmt die drei mit — mit Vertragsnachtrag und Gegenproben
+  wie die Runden davor.
 
 - **Unsere drei XUi-Patches stehen ohne `conditional`-Block** (gefunden am 2026-11-20 beim
   Beheben des dritten Reviews). Vertrag 03 §5 verlangt für jeden Eingriff in `XUi_*` einen

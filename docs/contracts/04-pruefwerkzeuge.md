@@ -2926,3 +2926,20 @@ Blöcke fallen auf sie zurück; 729 Operationen angewandt, 0 ohne Treffer, 0 nic
 Fix weiter genau die sechs Bruchstück-Zeilen.
 
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
+
+### Bekannte Lücken nach dem fünften Review (Commit `52be401`, 2026-11-22) — nicht behoben
+
+Das Review dieses Stands fand einen mittleren und zwei niedrige Befunde. Der Nutzer hat am
+selben Tag entschieden, hier aufzuhören und sie als offen zu führen. Sie gelten damit als
+**bekannte Grenzen dieses Skripts**, nicht als Regelbruch:
+
+- **Geändert heißt: der Wert ist ein anderer.** Ob es das Attribut `defaultDescriptionKey`
+  gibt, vergleicht das Skript nicht. Ein in Vanilla fehlendes Attribut, das ein Patch leer
+  ergänzt, und ein schon leeres, das ein Patch entfernt, sind für das Skript keine Änderung.
+- **Die Meldungen zur Gruppenbeschreibung setzen einen befüllten Schlüssel voraus.** Ist sie
+  nach den Patches leer und hat zugleich ein Block einen Schlüssel ohne Zeile, nennt die
+  Meldung zu dessen alter Zeile seinen eigenen Schlüssel, und die Zählzeile spricht von
+  Blöcken, die eine leere Gruppenbeschreibung „lesen". Der Ausgang ist richtig.
+- **Dass ein ausdrücklich deklarierter Namespace gerechnet wird, hält keine Gegenprobe.**
+
+Keine der drei ist nachgestellt. Geführt werden sie im Plan unter „Offene Punkte".
