@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (drittes Review zu WP8.8, Befund 3): ein
+	     Vanilla-BLOCK verschwindet. Vanilla hat seine Zeile 'pruefBlockWegDesc', unsere
+	     Sprachdatei ueberschreibt sie, und niemand liest sie mehr. Kein Spielinhalt. -->
+	<remove xpath="/blocks/block[@name='pruefBlockWeg']"/>
+</config>

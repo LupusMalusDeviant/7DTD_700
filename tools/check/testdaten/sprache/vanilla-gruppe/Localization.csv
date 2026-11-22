@@ -1,0 +1,10 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruefNotiz,items,Item,,,,"Note",,"Notiz",,,,,,,,,,,
+pruefNotizDesc,items,Item,,,,"Group text of the blocks.",,"Gruppentext der Blöcke.",,,,,,,,,,,
+pruefLies,items,Item,,,,"Read it.",,"Lies es.",,,,,,,,,,,
+pruefDing,items,Item,,,,"Thing",,"Ding",,,,,,,,,,,
+pruefBlock,blocks,Block,,,,"Block",,"Block",,,,,,,,,,,
+pruefBlockText,blocks,Block,,,,"Block text.",,"Blocktext.",,,,,,,,,,,
+pruefBlockOhne,blocks,Block,,,,"Block without",,"Block ohne",,,,,,,,,,,
+pruefBlockWeg,blocks,Block,,,,"Block to go",,"Block, der geht",,,,,,,,,,,
+pruefBlockWegDesc,blocks,Block,,,,"Its own text.",,"Sein eigener Text.",,,,,,,,,,,

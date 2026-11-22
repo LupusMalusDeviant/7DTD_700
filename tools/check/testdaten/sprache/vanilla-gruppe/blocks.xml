@@ -1,0 +1,16 @@
+<blocks defaultDescriptionKey="pruefNotizDesc">
+	<!-- Die Gruppenbeschreibung heisst hier wie die Vorgabezeile des Gegenstands
+	     pruefNotiz. Kein Spielinhalt. -->
+	<!-- eigener Schluessel mit Zeile -->
+	<block name="pruefBlock">
+		<property name="DescriptionKey" value="pruefBlockText"/>
+	</block>
+	<!-- liest 'pruefBlockOhneDesc' - die Zeile gibt es nicht, also die Gruppenbeschreibung -->
+	<block name="pruefBlockOhne">
+		<property name="Material" value="pruefHolz"/>
+	</block>
+	<!-- liest 'pruefBlockWegDesc', die Zeile gibt es -->
+	<block name="pruefBlockWeg">
+		<property name="Material" value="pruefHolz"/>
+	</block>
+</blocks>

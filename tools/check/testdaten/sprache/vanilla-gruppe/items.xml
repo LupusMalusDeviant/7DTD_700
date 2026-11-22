@@ -1,0 +1,11 @@
+<items>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (drittes Review zu WP8.8): eine zweite
+	     Vanilla-Vorlage fuer den Rueckfall der Bloecke auf die Gruppenbeschreibung.
+	     Kein Spielinhalt. -->
+	<item name="pruefNotiz">
+		<property name="DescriptionKey" value="pruefLies"/>
+	</item>
+	<item name="pruefDing">
+		<property name="Stacknumber" value="1"/>
+	</item>
+</items>

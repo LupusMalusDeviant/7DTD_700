@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (drittes Review zu WP8.8, Befund 2): die
+	     Namespace-Achse liefert ein Attribut, das an keinem Element haengt. Es zu setzen
+	     aendert nichts. Kein Spielinhalt. -->
+	<set xpath="/items/namespace::xml">urn:probe</set>
+</config>

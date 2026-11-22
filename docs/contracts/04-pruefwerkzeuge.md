@@ -2773,3 +2773,83 @@ Bruchstück-Zeilen. Die Mod entfernt keine Definition (1 434 + 17 eigene = 1 451
 keiner Operation eine der roten Knotenarten.
 
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
+
+## Nachtrag drittes Review zu WP8.8, 2026-11-22 — drei Befunde behoben, **Abnahme offen**
+
+Das Review des Commits `387761b` fand einen mittleren und zwei niedrige Befunde, alle in
+`sprachverweise-pruefen.ps1` und seinen Gegenproben, keinen an den Mod-Dateien.
+
+| # | Schwere | Befund | Folge |
+|---|---|---|---|
+| 1 | mittel | die Gruppenbeschreibung der Blöcke (`<blocks defaultDescriptionKey="…">`) zählte nirgends als gelesen | eine Zeile, die ein Block über diesen Rückfall liest, konnte rot werden — falsches Rot |
+| 2 | niedrig | ein XPath auf einen Namespace-Knoten (`/items/namespace::xml`) liefert ein Attribut ohne Element; die Operation zählte als angewandt und änderte nichts | grün |
+| 3 | niedrig | keine Gegenprobe für einen entfernten Vanilla-**Block** | der Zweig konnte wegfallen, ohne dass ein Lauf rot wird |
+
+Der Befund 1 zeigt auf eine ältere Lücke: das Finding beschreibt den Rückfall auf die
+Gruppenbeschreibung seit WP8.8, das Skript rechnete ihn nie.
+
+### Geänderte Regeln
+
+- **Regel 4, dritter Schritt für Blöcke.** Hat der wirksame Beschreibungsschlüssel eines
+  Blocks im gepatchten Stand **keine Zeile** — weder in unserer Sprachdatei noch in Vanillas
+  —, liest das Spiel die Gruppenbeschreibung: den Wert von `defaultDescriptionKey` am
+  Wurzelknoten der gepatchten `blocks.xml`
+  ([Finding](../rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md), „Blöcke"). Der
+  Schlüssel gilt als **gelesen**, sobald mindestens ein Block so auf ihn zurückfällt — und nur
+  dann.
+- **Regel 1, neuer Punkt.** Trägt der Wurzelknoten der gepatchten `blocks.xml` einen anderen
+  `defaultDescriptionKey` als Vanilla, haben wir ihn gesetzt; er braucht eine Zeile.
+- **Regel 5, Ergänzung.** Ein Attributtreffer ohne Eigentümerelement (Namespace-Knoten) ist
+  für jede Operation rot.
+
+### Grenzen, neu
+
+- **„Keine Zeile" heißt hier: der Schlüssel steht in keiner der beiden Sprachdateien.** Was
+  das Spiel bei einer Zeile mit leerem Text tut, ist nicht gelesen.
+- **Die Mod setzt `defaultDescriptionKey` nicht.** Die Regel 1 dazu ist an Testdaten
+  vorgeführt, nicht am echten Stand.
+
+### Gegenproben (Projektregel 5)
+
+Sechs neue Läufe — zusammen 30 für dieses Skript. Vier davon nehmen eine zweite
+Vanilla-Vorlage (`testdaten/sprache/vanilla-gruppe/`): dort heißt die Gruppenbeschreibung der
+Blöcke wie die Vorgabezeile eines Gegenstands, und ein Block hat für seinen Schlüssel keine
+Zeile.
+
+| Befund | Lauf | Eingang | erwartet |
+|---|---|---|---|
+| 1 | `gruppe` | der Gegenstand verschwindet; seine Zeile ist die Gruppenbeschreibung, und ein Block fällt auf sie zurück | **Exit 0**; 1 Block liest die Gruppenbeschreibung |
+| 1, Gegenstück | `gruppe` + `gruppe/ungelesen` | dazu verschwindet der einzige Block, der zurückfiel | Exit 1, 1 rot; 0 Blöcke lesen sie |
+| Regel 1 | `gruppe-gesetzt`, zwei Läufe | wir setzen `defaultDescriptionKey` auf einen eigenen Schlüssel · mit Zeile · ohne Zeile | Exit 0, 1 genannt und gelesen · Exit 1, 1 rot |
+| 3 | `block-entfernt` | ein Vanilla-Block verschwindet, unsere Datei überschreibt seine Zeile | Exit 1, 1 rot |
+| 2 | `namespace` | `<set xpath="/items/namespace::xml">` | Exit 1, 1 rot; 0 angewandt, 1 nicht gerechnet |
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: **174 Gegenproben, 0
+fehlgeschlagen** (vorher 168).
+
+**Gegen die Fassung des Commits `387761b`:** 5 von 174 fehlgeschlagen, alle unter den sechs
+neuen. Drei mit dem falschen Ausgang (das falsche Rot aus Befund 1, der Namespace-Knoten,
+die gesetzte Gruppenbeschreibung ohne Zeile), einer, weil ein neuer eigener Gruppenschlüssel
+dort als ungelesen galt, und einer nur an der neuen Ausgabezeile — der Ausgang war derselbe.
+Der sechste Lauf (`block-entfernt`) ist gegen `387761b` grün: der Zweig war dort schon
+richtig, ihm fehlte die Gegenprobe. Dass sie trägt, zeigt die fünfte Verfälschung unten.
+
+**Sieben Verfälschungen der Neufassung, jede macht mindestens einen Lauf rot** (je ein voller
+Lauf der Gegenproben, das Skript danach bytegleich wiederhergestellt):
+
+| Verfälschung | fehlgeschlagen |
+|---|---|
+| Namespace-Knoten gilt nicht mehr als Hindernis | 1 (`namespace`) |
+| die Gruppenbeschreibung gilt nie als gelesen | 2 |
+| die Gruppenbeschreibung gilt immer als gelesen | 1 (Gegenstück) |
+| eine von uns gesetzte Gruppenbeschreibung wird nicht genannt | 2 |
+| der Zweig für verschwundene **Blöcke** fehlt | 1 (`block-entfernt`) |
+| der Zweig für verschwundene **Gegenstände** fehlt | 3 |
+| „keine Zeile" sieht nur in unsere Sprachdatei, nicht in Vanillas | 3 |
+
+**Am echten Stand:** die Gruppenbeschreibung heißt `creativeMenuBlockGroupDesc`, und **3 246**
+der 6 649 Blöcke fallen auf sie zurück. Sonst unverändert: 729 Operationen angewandt, 0 ohne
+Treffer, 0 nicht gerechnet; 72 genannte Schlüssel, 132 Zeilen rückwärts, 0 nicht gelesen;
+Exit 0. Gegen den Stand vor dem Fix weiter genau die sechs Bruchstück-Zeilen.
+
+`check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).

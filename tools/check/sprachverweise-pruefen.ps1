@@ -12,15 +12,16 @@
     Gegenstaende ihren Beschreibungsschluessel ueber Extends erben
     (docs/rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md).
 
-    DIE REGELN stehen in Vertrag 04, "Nachtrag WP8.8", "Nachtrag Review zu WP8.8" und
-    "Nachtrag zweites Review zu WP8.8":
+    DIE REGELN stehen in Vertrag 04, "Nachtrag WP8.8" und den Nachtraegen "Review",
+    "zweites Review" und "drittes Review zu WP8.8":
       1. Jeder genannte Schluessel hat eine Zeile (unsere Datei oder Vanilla).
       2. Jede Zeile, die Vanilla nicht hat, wird gelesen.
       3. Jede Zeile <Name>Desc eines Gegenstands oder Blocks wird gelesen - auch, wenn es
          den Gegenstand nur in Vanilla gibt und ein Patch ihn entfernt oder umbenennt.
       4. Der wirksame Beschreibungsschluessel wird am GEPATCHTEN Stand gerechnet: eigene
          Eigenschaft DescriptionKey, sonst geerbt ueber Extends (ausser param1 schliesst
-         sie aus), sonst <Name>Desc.
+         sie aus), sonst <Name>Desc. Bei einem Block, dessen Schluessel keine Zeile hat,
+         danach die Gruppenbeschreibung (defaultDescriptionKey am Wurzelknoten).
       5. Was sich nicht anwenden laesst, ist rot.
       6. Nichts gelesen ist nicht gruen (Ausgang 2).
 
@@ -248,6 +249,8 @@ foreach ($art in 'item', 'block') {
     $ziele[$art].Doc = $doc
     $ziele[$art].Vanilla = $tabelle
 }
+# Die Gruppenbeschreibung der Bloecke, wie Vanilla sie traegt - VOR den Patches.
+$gruppeVanilla = $ziele.block.Doc.get_DocumentElement().GetAttribute('defaultDescriptionKey').Trim()
 
 # ------------------------------------------------------------------ Nennungen sammeln
 $befunde = New-Object System.Collections.Generic.List[string]
@@ -426,6 +429,12 @@ function Get-Hindernis {
     foreach ($knoten in $Treffer) {
         $art = $knoten.get_NodeType()
         if ($art -eq $script:attributArt) {
+            # Die Namespace-Achse (/items/namespace::xml) liefert ein Attribut, das an
+            # keinem Element haengt. Es zu setzen aendert am Dokument nichts (drittes
+            # Review zu WP8.8, Befund 2).
+            if ($null -eq $knoten.get_OwnerElement()) {
+                return 'einen Namespace-Knoten; er gehoert zu keinem Element'
+            }
             if (Test-Gleich $Name 'remove') {
                 return 'ein Attribut; das Spiel lehnt das ab ("use removeattribute instead")'
             }
@@ -570,6 +579,23 @@ foreach ($art in 'item', 'block') {
     }
 }
 
+# Regel 4, dritter Schritt fuer Bloecke (drittes Review zu WP8.8, Befund 1): hat der
+# wirksame Schluessel eines Blocks KEINE Zeile, liest das Spiel die Gruppenbeschreibung vom
+# Wurzelknoten. Der Schluessel gilt als gelesen, sobald EIN Block so auf ihn zurueckfaellt
+# - und nur dann. Haben WIR ihn gesetzt, braucht er eine Zeile (Regel 1).
+$gruppe = $ziele.block.Doc.get_DocumentElement().GetAttribute('defaultDescriptionKey').Trim()
+$gruppeLeser = 0
+if ($gruppe) {
+    foreach ($nameDing in $tabellen.block.Keys) {
+        $schluessel = $wirksam.block[$nameDing].Schluessel
+        if (-not $unsereSchluessel.Contains($schluessel) -and -not $vanillaSchluessel.Contains($schluessel)) { $gruppeLeser++ }
+    }
+    if ($gruppeLeser -gt 0) { [void]$gelesen.Add($gruppe) }
+    if (-not (Test-Gleich $gruppe $gruppeVanilla)) {
+        Add-Genannt $gruppe 'defaultDescriptionKey an <blocks>' 'gepatchter Stand' -Einzeln -Zaehlt $false
+    }
+}
+
 # Regel 1, letzter Punkt: die Beschreibung jedes EIGENEN Gegenstands braucht eine Zeile.
 # Bei Bloecken nicht - fehlt sie, nimmt das Spiel die Gruppenbeschreibung (Finding).
 # Nur, wenn den Schluessel nicht schon etwas nennt: derselbe fehlende Schluessel soll
@@ -674,6 +700,7 @@ Write-Output ("  Patch-Dateien: {0}, davon auf items.xml und blocks.xml angewand
 Write-Output ("  Patch-Operationen angewandt: {0}, ohne Treffer: {1}, nicht gerechnet: {2}" -f $angewandt, $ohneTreffer, $nichtGerechnet)
 Write-Output ("  Definitionen: {0} Gegenstaende und {1} Bloecke in Vanilla; nach den Patches {2} und {3}, davon eigene {4} und {5}" -f $ziele.item.Vanilla.Count, $ziele.block.Vanilla.Count, $tabellen.item.Count, $tabellen.block.Count, $eigeneNamen.item.Count, $eigeneNamen.block.Count)
 Write-Output ("  Beschreibungsschluessel von uns gesetzt: {0}" -f $gesetzt)
+Write-Output ("  Gruppenbeschreibung der Bloecke: '{0}'; Bloecke ohne eigene Zeile, die sie lesen: {1}" -f $gruppe, $gruppeLeser)
 Write-Output ("  genannte Schluessel: {0} (in unserer Datei: {1}, nur in Vanilla: {2}, ohne Zeile: {3})" -f $genannt.Count, $inUnserer, $nurVanilla, $ohneZeile)
 Write-Output ("  Zeilen rueckwaerts geprueft: {0} (neu gegenueber Vanilla: {1}, Beschreibungen von Gegenstaenden und Bloecken: {2}), nicht gelesen: {3}" -f ($geprueftNeu + $geprueftBeschreibung), $geprueftNeu, $geprueftBeschreibung, $ungelesen)
 

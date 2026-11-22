@@ -1593,6 +1593,20 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Operationen, 0 ohne Treffer, 0 nicht gerechnet, Exit 0. `check-all`: 7 Prüfungen, 1 rot
    (`recipes`, unverändert).
    → Vertrag 04 „Nachtrag zweites Review zu WP8.8", Abnahme offen.
+
+   **Drittes Review zu WP8.8 (2026-11-22, Commit `387761b`): ein mittlerer, zwei niedrige
+   Befunde, alle im Skript und seinen Gegenproben.** Die Gruppenbeschreibung der Blöcke
+   (`defaultDescriptionKey`) zählte nirgends als gelesen — das Finding beschreibt den
+   Rückfall seit WP8.8, gerechnet hat ihn das Skript nie; ein Treffer auf einen
+   Namespace-Knoten zählte als angewandt; für einen entfernten Vanilla-Block fehlte die
+   Gegenprobe. *Behoben:* die Gruppenbeschreibung gilt als gelesen, sobald ein Block ohne
+   eigene Zeile auf sie zurückfällt, und braucht eine Zeile, wenn wir sie setzen; ein
+   Namespace-Knoten ist rot. Sechs neue Gegenproben (30 für das Skript); die Fassung aus
+   `387761b` scheitert an fünf davon, die sechste hält einen Zweig, der schon richtig war;
+   sieben Verfälschungen, jede wird gefangen. `gegenproben.ps1`: 174 Gegenproben, 0
+   fehlgeschlagen. Am echten Stand: 3 246 Blöcke lesen die Gruppenbeschreibung, sonst
+   unverändert Exit 0. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert).
+   → Vertrag 04 „Nachtrag drittes Review zu WP8.8", Abnahme offen.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 

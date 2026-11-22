@@ -1,0 +1,7 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (drittes Review zu WP8.8, Befund 1): der
+	     Gegenstand pruefNotiz verschwindet. Seine Vorgabezeile 'pruefNotizDesc' liest danach
+	     kein Gegenstand mehr - aber sie ist die Gruppenbeschreibung der Bloecke, und der
+	     Block pruefBlockOhne faellt auf sie zurueck. Das ist GRUEN. Kein Spielinhalt. -->
+	<remove xpath="/items/item[@name='pruefNotiz']"/>
+</config>

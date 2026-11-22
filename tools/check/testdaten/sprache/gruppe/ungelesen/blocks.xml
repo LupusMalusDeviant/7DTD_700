@@ -1,0 +1,6 @@
+<config>
+	<!-- Zusammen mit ..\items.xml: der einzige Block, der auf die Gruppenbeschreibung
+	     zurueckfiel, ist weg. Jeder verbliebene Block hat eine Zeile fuer seinen eigenen
+	     Schluessel - die Gruppenbeschreibung liest niemand mehr. Kein Spielinhalt. -->
+	<remove xpath="/blocks/block[@name='pruefBlockOhne']"/>
+</config>

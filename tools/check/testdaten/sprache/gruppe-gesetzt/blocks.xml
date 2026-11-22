@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (drittes Review zu WP8.8, Regel 1): wir
+	     setzen die Gruppenbeschreibung der Bloecke auf einen eigenen Schluessel. Er braucht
+	     eine Zeile, und der Block pruefBlockOhne liest sie. Kein Spielinhalt. -->
+	<setattribute xpath="/blocks" name="defaultDescriptionKey">pruef700_gruppe</setattribute>
+</config>

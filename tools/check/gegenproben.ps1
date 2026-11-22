@@ -1892,6 +1892,75 @@ Test-Script 'sprachverweise: Beschreibung eines entfernten oder umbenannten Gege
     'Beschreibungen von Gegenstaenden und Bloecken: 4), nicht gelesen: 2',
     '== Ergebnis: 2 rot -> RED ==') -MustNotContain @("Zeile 'pruefNotizDesc'")
 
+# --------------------------------- drittes Review zu WP8.8 (2026-11-22), drei Befunde
+# Eine zweite Vanilla-Vorlage: die Gruppenbeschreibung der Bloecke heisst dort wie die
+# Vorgabezeile eines Gegenstands, und ein Block hat keine Zeile fuer seinen Schluessel.
+$spracheGruppe = Join-Path $spracheDaten 'vanilla-gruppe'
+
+# (p) Befund 1: der Gegenstand verschwindet, seine Zeile liest weiter ein Block - als
+#     Gruppenbeschreibung. Gegen 387761b ist dieser Lauf Ausgang 1 (falsches Rot).
+Test-Script 'sprachverweise: die Gruppenbeschreibung der Bloecke zaehlt als gelesen' 0 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'gruppe\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Gruppenbeschreibung der Bloecke: 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die sie lesen: 1",
+    'Beschreibungen von Gegenstaenden und Bloecken: 1), nicht gelesen: 0',
+    '== Ergebnis: 0 rot -> GREEN ==')
+
+# (q) ... aber nur, solange ein Block auf sie zurueckfaellt. Ist der einzige solche Block
+#     weg, liest die Zeile niemand.
+Test-Script 'sprachverweise: Gruppenbeschreibung ohne einen Block, der sie liest, ist nicht gelesen' 1 @{
+    Patches     = @((Join-Path $spracheDaten 'gruppe\items.xml'), (Join-Path $spracheDaten 'gruppe\ungelesen\blocks.xml'))
+    Sprachdatei = (Join-Path $spracheDaten 'gruppe\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Gruppenbeschreibung der Bloecke: 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die sie lesen: 0",
+    "Zeile 'pruefNotizDesc' wird nicht gelesen: Gegenstand 'pruefNotiz' steht in Vanilla und nach den Patches nicht mehr",
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (r) Regel 1: setzen WIR die Gruppenbeschreibung, braucht ihr Schluessel eine Zeile - mit
+#     Zeile gruen (und gelesen), ohne Zeile rot.
+Test-Script 'sprachverweise: eine von uns gesetzte Gruppenbeschreibung mit Zeile ist gruen' 0 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe-gesetzt\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'gruppe-gesetzt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Gruppenbeschreibung der Bloecke: 'pruef700_gruppe'; Bloecke ohne eigene Zeile, die sie lesen: 1",
+    'genannte Schluessel: 1 (in unserer Datei: 1, nur in Vanilla: 0, ohne Zeile: 0)',
+    'Zeilen rueckwaerts geprueft: 1 (neu gegenueber Vanilla: 1, Beschreibungen von Gegenstaenden und Bloecken: 0), nicht gelesen: 0',
+    '== Ergebnis: 0 rot -> GREEN ==')
+
+Test-Script 'sprachverweise: eine von uns gesetzte Gruppenbeschreibung ohne Zeile ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe-gesetzt\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'block-entfernt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruef700_gruppe' hat keine Zeile, weder in unserer Sprachdatei noch in Vanilla  (defaultDescriptionKey an <blocks>, gepatchter Stand)",
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (s) Befund 3: ein entfernter Vanilla-BLOCK. Der Lauf (o) oben prueft nur Gegenstaende;
+#     der Zweig fuer Bloecke konnte wegfallen, ohne dass ein Lauf rot wurde.
+Test-Script 'sprachverweise: Beschreibung eines entfernten Blocks ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'block-entfernt\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'block-entfernt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Zeile 'pruefBlockWegDesc' wird nicht gelesen: Block 'pruefBlockWeg' steht in Vanilla und nach den Patches nicht mehr",
+    'nach den Patches 2 und 2, davon eigene 0 und 0',
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (t) Befund 2: die Namespace-Achse liefert ein Attribut ohne Element. Die Operation
+#     zaehlte als angewandt und aenderte nichts.
+Test-Script 'sprachverweise: Treffer auf einen Namespace-Knoten wird nicht gerechnet' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'namespace\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'remove-attribut\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    'Patch laesst sich nicht rechnen: <set xpath="/items/namespace::xml"> trifft einen Namespace-Knoten',
+    'Patch-Operationen angewandt: 0, ohne Treffer: 0, nicht gerechnet: 1',
+    '== Ergebnis: 1 rot -> RED ==')
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {
