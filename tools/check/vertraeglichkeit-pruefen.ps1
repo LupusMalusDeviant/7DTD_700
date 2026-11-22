@@ -664,7 +664,22 @@ function Read-Sprachschluessel {
     try { $zeilen = @(Import-Csv -LiteralPath $Pfad -Encoding UTF8) }
     catch { $script:sprachGrund = Get-Innerste $_.Exception; return $null }
     $menge = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
-    if ($zeilen.Count -eq 0) { return , $menge }
+    if ($zeilen.Count -eq 0) {
+        # Keine Datenzeile. Leer darf die Schluesselmenge nur sein, wenn die Kopfzeile da ist
+        # und die Spalte 'Key' nennt - sonst ist die Datei kaputt (etwa nur ein
+        # Anfuehrungszeichen), und "0 Schluessel, kein gemeinsamer" waere gruen ohne Grund.
+        $kopf = @()
+        try { $kopf = @(Get-Content -LiteralPath $Pfad -Encoding UTF8 -TotalCount 1) }
+        catch { $script:sprachGrund = Get-Innerste $_.Exception; return $null }
+        $hatKey = $false
+        if ($kopf.Count -gt 0 -and $kopf[0]) {
+            foreach ($feld in ([string]$kopf[0]).Split(',')) {
+                if ([string]::Equals($feld.Trim().Trim('"').Trim(), 'Key', [System.StringComparison]::OrdinalIgnoreCase)) { $hatKey = $true }
+            }
+        }
+        if (-not $hatKey) { $script:sprachGrund = "keine Datenzeile und keine Spalte 'Key' in der Kopfzeile"; return $null }
+        return , $menge
+    }
     $spalte = $null
     foreach ($eigenschaft in $zeilen[0].PSObject.Properties) {
         if ([string]::Equals($eigenschaft.Name, 'Key', [System.StringComparison]::OrdinalIgnoreCase)) { $spalte = $eigenschaft.Name }
@@ -742,6 +757,7 @@ foreach ($ordner in $fremdOrdner) {
     [void]$nurFremd.Add($fremdMod.Name)
 
     $fremdOps = 0
+    $fremdOpsKombi = 0
     $unsereOps = 0
     $fremdOhne = New-Object System.Collections.Generic.List[string]
     $unsereOhne = New-Object System.Collections.Generic.List[string]
@@ -768,8 +784,12 @@ foreach ($ordner in $fremdOrdner) {
         $standB = Invoke-Stand $rel $fremdListe $unsereMods $alleNamen $textB $reihenfolgeB
         Compare-Protokoll $fremdAllein $standB.Erste $reihenfolgeB $rel
         Compare-Protokoll $wirAllein $standB.Zweite $reihenfolgeB $rel
+        # Was von der fremden Mod erst in der Kombination laeuft (ein bedingter Block, der
+        # nach uns fragt), zaehlt mit - sonst hiesse eine Mod, die allein nichts tut,
+        # "keine einzige Patch-Operation", und die Befunde der Kombination gingen verloren.
+        $fremdOpsKombi += [math]::Max($standA.Zweite.Ops.Count, $standB.Erste.Ops.Count)
     }
-    if ($fremdOps -eq 0 -and $nichtGerechnet.Count -eq 0) {
+    if ($fremdOps -eq 0 -and $fremdOpsKombi -eq 0 -and $nichtGerechnet.Count -eq 0) {
         Stop-Unpruefbar "die fremde Mod '$($fremdMod.Name)' hat in $($mit.Count) Dateien keine einzige Patch-Operation"
     }
     foreach ($key in $nichtFolge) {
@@ -804,6 +824,9 @@ foreach ($ordner in $fremdOrdner) {
     Write-Output "  erwartete Reihenfolge: $erwartet"
     Write-Output "  Operationen der fremden Mod allein: $fremdOps, davon ohne Treffer: $($fremdOhne.Count)"
     foreach ($zeile in $fremdOhne) { Write-Output "    trifft allein nichts: $zeile" }
+    if ($fremdOps -eq 0 -and $fremdOpsKombi -gt 0) {
+        Write-Output "    allein laeuft keine Operation der fremden Mod, in der Kombination laufen $fremdOpsKombi (bedingter Block)"
+    }
     Write-Output "  unsere Operationen allein, in den gemeinsamen Dateien: $unsereOps, davon ohne Treffer: $($unsereOhne.Count)"
     foreach ($zeile in $unsereOhne) { Write-Output "    trifft allein nichts: $zeile" }
     Write-Output "  Sprachschluessel: $sprachZeile"

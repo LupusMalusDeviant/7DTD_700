@@ -1,0 +1,3 @@
+<config>
+	<csv xpath="/items/item[@name='pruefDing']/property[@name='Tags']/@value" delim=",">c</csv>
+</config>

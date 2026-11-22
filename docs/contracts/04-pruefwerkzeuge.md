@@ -7,7 +7,8 @@
   den §5-Nachträgen. Wo weiter unten „gebaut vor der Abnahme" steht, beschreibt das den Stand,
   als der Abschnitt entstand. **Nicht** Teil der Abnahme: was der Vertrag selbst als offen oder
   als Grenze nennt, und die zwei unbehobenen Befunde aus dem zweiten Review der Vorprüfung
-  (Plan-0001, offene Punkte) — das sind Fehler im Werkzeug, keine Regeln.
+  (Plan-0001, offene Punkte) — das sind Fehler im Werkzeug, keine Regeln. *(Seit dem Nachtlauf
+  vom 2026-11-22 behoben, siehe den letzten Nachtrag; dessen Abnahme ist offen.)*
 - **Datum:** 2026-11-07
 - **Gilt ab:** Phase 1 (Plan-0001 WP2)
 - **Beleg:** [WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md)
@@ -3342,3 +3343,40 @@ bisher entschuldigte, ist weg. Am Vorlauf des neuen Standes
 0 aufgeschoben, 0 verboten; 271 Rezepte, 0 Sackgassen; 626 gesperrte Kennungen, 0 davon noch
 erreichbar. Ein Vorlauf ist kein Nachweis — grün wird der Prüfbefehl erst mit dem Dump des
 nächsten Spielstarts mit diesem Stand (Plan-0001, Prüfliste).
+
+## Nachtrag zweites Review der Vorprüfung, 2026-11-22 — zwei Befunde behoben, **Abnahme offen**
+
+Die zwei Befunde, die der Statusblock oben als unbehoben nennt (Codex über
+`014528c..467646d`), sind im Nachtlauf vom 2026-11-22 auf 23 behoben — ohne Rückfrage, nach
+Claudes Empfehlung (D92). **Zu prüfen durch den Nutzer; dieser Nachtrag ist nicht
+abgenommen.** Beide betreffen nur `vertraeglichkeit-pruefen.ps1`, nicht die Mod.
+
+**Befund 1 — eine kaputte fremde Sprachdatei ging grün durch.** Liest `Import-Csv` keine
+einzige Zeile, galt die Schlüsselmenge als leer („0 Schlüssel, 0 gemeinsam"). **Regel jetzt:**
+ohne Datenzeile zählt die Datei nur dann als leer, wenn ihre erste Zeile die Spalte `Key`
+nennt (Groß- und Kleinschreibung egal). Sonst ist sie nicht lesbar — bei der fremden Mod ein
+Befund „nicht gerechnet", bei unserer eigenen Sprachdatei wie bisher ein Ausfall (Exit 2).
+
+**Befund 2 — eine fremde Mod, die allein nichts tut, war „nicht prüfbar".** Stehen alle ihre
+Operationen in einem bedingten Block, der nur mit uns zusammen läuft, lief allein keine; das
+endete mit Exit 2 („keine einzige Patch-Operation"), und die in der Kombination gerechneten
+Befunde gingen verloren. **Regel jetzt:** Operationen, die in einer gemeinsamen Datei erst in
+der Kombination laufen, zählen mit. Die Ausgabe nennt es in einer eigenen Zeile („allein
+läuft keine Operation der fremden Mod, in der Kombination laufen N").
+
+**Grenze, bewusst gelassen:** fragt die fremde Mod in einer Datei nach uns, die wir **nicht**
+anfassen, wird für diese Datei weiter keine Kombination gerechnet. Hat sie sonst keine
+Operation, bleibt es bei Exit 2 — nicht geprüft, aber auch nicht grün.
+
+**Gegenproben** (225 statt 222; `testdaten/vertraeglich/fremd-sprache-zeichen`,
+`fremd-sprache-kopf`, `fremd-nur-mit-uns`):
+
+| Lauf | Erwartet | Vor der Korrektur |
+|---|---|---|
+| fremde Sprachdatei besteht aus einem Anführungszeichen | Exit 1, „nicht gerechnet 1", kein `GREEN` | **Exit 0, grün** |
+| fremde Sprachdatei nur mit Kopfzeile `Key,…` | Exit 0, „die der fremden Mod: 0" | Exit 0 (Gegenrichtung, darf nicht kippen) |
+| alle Operationen in `<if cond="mod_loaded('700_10_Pruef')">` | Exit 1, „Zweig wechselt 2", die neue Zeile | **Exit 2, nicht geprüft** |
+
+Die erste und die dritte Gegenprobe waren am unveränderten Skript rot (225 Gegenproben,
+2 fehlgeschlagen) und sind nach der Korrektur grün (225, 0 fehlgeschlagen) — das ist der
+Nachweis, dass sie den Fehler finden.

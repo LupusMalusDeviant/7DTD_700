@@ -2447,7 +2447,14 @@ werden:
      (Vorschlag Schreinerbank, Leinenfutter). Im Spiel sieht sie heute niemand.
   4. *`modRoboticDroneWeaponMod` fällt weiter durch das Urteil.* Die Drohne bleibt gesperrt
      (D87); der Fehler sitzt in der Ableitung über Mods, nicht in der Denylist.
-- **Zweites Review der Vorprüfung, zwei Befunde, nicht behoben** (Codex über
+- **Zweites Review der Vorprüfung: beide Befunde behoben im Nachtlauf vom 2026-11-22, ZU
+  PRÜFEN durch den Nutzer** (Vertrag 04, „Nachtrag zweites Review der Vorprüfung", Abnahme
+  offen). Nachgestellt als drei Gegenproben; zwei davon waren am unveränderten Skript rot
+  (Exit 0 statt 1 bei der kaputten Sprachdatei, Exit 2 statt 1 bei der Mod, die nur mit uns
+  läuft), nach der Korrektur 225 Gegenproben, 0 fehlgeschlagen. Eine Grenze bleibt: fragt
+  die fremde Mod in einer Datei nach uns, die wir nicht anfassen, wird dort keine
+  Kombination gerechnet. Der Punkt lautete:
+  **Zweites Review der Vorprüfung, zwei Befunde, nicht behoben** (Codex über
   `014528c..467646d`, 2026-11-22; die Entscheidung des Nutzers steht aus, beide betreffen nur
   `vertraeglichkeit-pruefen.ps1`, nicht die Mod). (1) *Eine kaputte Sprachdatei der fremden
   Mod kann grün durchgehen:* liefert `Import-Csv` keine Zeile (etwa bei einer Datei, die nur

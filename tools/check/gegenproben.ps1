@@ -2266,6 +2266,42 @@ Test-Script 'vertraeglichkeit: fremde Sprachdatei ohne Schluesselspalte ist nich
     "PruefSpracheKaputt: die Sprachdatei laesst sich nicht lesen (keine Spalte 'Key'); gemeinsame Schluessel sind nicht verglichen",
     'nicht gerechnet 1, gemeinsamer Sprachschluessel 0) -> RED') -MustNotContain @('GREEN')
 
+# (i2) Zweites Review der Vorpruefung, Befund 1 (behoben im Nachtlauf vom 2026-11-22): eine
+#      fremde Sprachdatei, aus der Import-Csv keine einzige Zeile liest - hier nur ein
+#      Anfuehrungszeichen -, galt als "0 Schluessel" und ging gruen durch. Ohne Kopfzeile
+#      mit 'Key' ist sie nicht gerechnet.
+Test-Script 'vertraeglichkeit: fremde Sprachdatei aus einem Anfuehrungszeichen ist nicht gerechnet' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sprache-zeichen')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "PruefSpracheZeichen: die Sprachdatei laesst sich nicht lesen (keine Datenzeile und keine Spalte 'Key' in der Kopfzeile)",
+    'nicht gerechnet 1, gemeinsamer Sprachschluessel 0) -> RED') -MustNotContain @('GREEN')
+
+# (i3) Die Gegenrichtung: nur die Kopfzeile, mit 'Key'. Das ist eine leere, aber heile
+#      Sprachdatei - 0 Schluessel, kein Befund.
+Test-Script 'vertraeglichkeit: fremde Sprachdatei nur mit Kopfzeile ist leer und gruen' 0 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sprache-kopf')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'die der fremden Mod: 0, gemeinsam: 0',
+    '== Ergebnis: 0 Befunde -> GREEN ==') -MustNotContain @('laesst sich nicht lesen')
+
+# (i4) Zweites Review der Vorpruefung, Befund 2 (behoben im Nachtlauf vom 2026-11-22): alle
+#      Operationen der fremden Mod stehen in einem Block, der nur mit uns zusammen laeuft.
+#      Allein laeuft keine - das war "keine einzige Patch-Operation", Exit 2, und die
+#      Befunde der Kombination gingen verloren.
+Test-Script 'vertraeglichkeit: fremde Mod laeuft nur mit uns - die Befunde der Kombination bleiben' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-nur-mit-uns')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'Operationen der fremden Mod allein: 0, davon ohne Treffer: 0',
+    'allein laeuft keine Operation der fremden Mod, in der Kombination laufen 1',
+    "PruefNurMitUns <if cond=""mod_loaded('700_10_Pruef')""> mit 1 Operationen laeuft allein nicht, hier schon",
+    'Zweig wechselt 2,') -MustNotContain @('NICHT GEPRUEFT', 'GREEN')
+
 # (j) Keine gemeinsame Datei ist ein Ergebnis, kein Ausfall (Regel 7).
 Test-Script 'vertraeglichkeit: keine gemeinsame Datei ist gruen und sagt es' 0 @{
     Unsere  = $vertUnsere

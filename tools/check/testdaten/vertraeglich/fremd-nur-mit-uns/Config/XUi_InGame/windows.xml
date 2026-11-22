@@ -1,0 +1,9 @@
+<config>
+	<!-- Gegenprobe: ALLE Operationen dieser Mod stehen in einem bedingten Block, der nur
+	     laeuft, wenn unser Modlet geladen ist. Allein laeuft also keine einzige. -->
+	<conditional>
+		<if cond="mod_loaded('700_10_Pruef')">
+			<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">mit</setattribute>
+		</if>
+	</conditional>
+</config>
