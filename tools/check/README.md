@@ -399,8 +399,8 @@ Exit **0** grün, **1** Befunde, **2** nicht prüfbar. Braucht Vanillas `Localiz
 `items.xml` und `blocks.xml` (`SDTD_PATH` oder `-Vanilla`). Gemessen am 2026-11-22: 27
 Patch-Dateien, 7 davon angewandt, 729 Operationen angewandt und 0 ohne Treffer, 72 genannte
 Schlüssel (alle in unserer Datei), 132 Zeilen rückwärts geprüft, 0 nicht gelesen; gegen den
-Stand vor dem Fix 6 rot. Rot vorgeführt an `testdaten/sprache/`: 30 Gegenproben, dazu 30
-Verfälschungen des Skripts über drei Reviews — 29 machen mindestens eine Gegenprobe rot,
+Stand vor dem Fix 6 rot. Rot vorgeführt an `testdaten/sprache/`: 34 Gegenproben, dazu 35
+Verfälschungen des Skripts über vier Reviews — 34 machen mindestens eine Gegenprobe rot,
 eine (nur das Netz für unerwartete Fehler fehlt) keine; warum, steht im Vertrag.
 
 **Es wendet die Patches an, statt sie zu erkennen** (seit dem Review zu WP8.8, Vertrag 04
@@ -422,7 +422,8 @@ ist die Zeile rot.
 Spiel die Gruppenbeschreibung (`defaultDescriptionKey` am Wurzelknoten von `blocks.xml`). Das
 Skript zählt sie als gelesen, sobald ein Block so auf sie zurückfällt — am echten Stand tun
 das 3 246 Blöcke —, und verlangt eine Zeile, wenn wir sie setzen („Nachtrag drittes Review
-zu WP8.8").
+zu WP8.8"). Leert oder entfernt ein Patch sie, ist das rot („Nachtrag viertes Review zu
+WP8.8").
 
 **Es ist kein zweiter Patcher des Spiels.** `csv` und `append`/`prepend` auf ein Attribut
 sind nachgebaut, nicht am Spiel gemessen; die Reihenfolge ist die der Dateinamen.

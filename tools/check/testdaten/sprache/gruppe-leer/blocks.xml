@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (viertes Review zu WP8.8, Befund 1): die
+	     Gruppenbeschreibung der Bloecke wird ausdruecklich geleert. Das Attribut bleibt, sein
+	     Wert ist leer. Der Block pruefBlockOhne fiele auf sie zurueck. Kein Spielinhalt. -->
+	<set xpath="/blocks/@defaultDescriptionKey"></set>
+</config>

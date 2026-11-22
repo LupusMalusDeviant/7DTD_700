@@ -1,0 +1,4 @@
+<config>
+	<!-- Dasselbe ueber den anderen Weg: das Attribut wird ganz entfernt. Kein Spielinhalt. -->
+	<removeattribute xpath="/blocks" name="defaultDescriptionKey"/>
+</config>

@@ -1952,14 +1952,60 @@ Test-Script 'sprachverweise: Beschreibung eines entfernten Blocks ist rot' 1 @{
 
 # (t) Befund 2: die Namespace-Achse liefert ein Attribut ohne Element. Die Operation
 #     zaehlte als angewandt und aenderte nichts.
-Test-Script 'sprachverweise: Treffer auf einen Namespace-Knoten wird nicht gerechnet' 1 @{
+Test-Script 'sprachverweise: Attributtreffer ohne Element (Namespace-Achse) wird nicht gerechnet' 1 @{
     Patches     = @(Join-Path $spracheDaten 'namespace\items.xml')
     Sprachdatei = (Join-Path $spracheDaten 'remove-attribut\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
-    'Patch laesst sich nicht rechnen: <set xpath="/items/namespace::xml"> trifft einen Namespace-Knoten',
+    'Patch laesst sich nicht rechnen: <set xpath="/items/namespace::xml"> trifft ein Attribut, das zu keinem Element gehoert',
     'Patch-Operationen angewandt: 0, ohne Treffer: 0, nicht gerechnet: 1',
     '== Ergebnis: 1 rot -> RED ==')
+
+# --------------------------------- viertes Review zu WP8.8 (2026-11-22), vier Befunde
+
+# (u) Befund 1: die Gruppenbeschreibung wird geleert - einmal bleibt das Attribut leer
+#     stehen, einmal wird es entfernt. Gegen c353996 sind beide Laeufe Ausgang 0: die
+#     Pruefung dazu hing an "Wert nicht leer".
+Test-Script 'sprachverweise: eine geleerte Gruppenbeschreibung ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe-leer\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'block-entfernt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "die Gruppenbeschreibung der Bloecke (defaultDescriptionKey an <blocks>) ist nach den Patches leer, in Vanilla heisst sie 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die auf sie zurueckfielen: 1",
+    '== Ergebnis: 1 rot -> RED ==')
+
+Test-Script 'sprachverweise: eine entfernte Gruppenbeschreibung ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe-leer\entfernt\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'block-entfernt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "ist nach den Patches leer, in Vanilla heisst sie 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die auf sie zurueckfielen: 1",
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (v) Befund 3: eine Blockzeile, die nur UNSERE Sprachdatei hat. Der Block faellt dann
+#     nicht auf die Gruppenbeschreibung zurueck, und deren Zeile liest niemand. Ohne die
+#     Abfrage unserer Datei blieben vorher alle Gegenproben gruen.
+Test-Script 'sprachverweise: eine Blockzeile nur in unserer Datei verhindert den Rueckfall' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'gruppe\eigene-zeile\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Gruppenbeschreibung der Bloecke: 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die sie lesen: 0",
+    "Zeile 'pruefNotizDesc' wird nicht gelesen",
+    'Beschreibungen von Gegenstaenden und Bloecken: 2), nicht gelesen: 1',
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (w) Befund 2: die Meldung zu einer ungelesenen Blockzeile nennt, was der Block wirklich
+#     liest - die Gruppenbeschreibung, wenn sein Schluessel keine Zeile hat.
+Test-Script 'sprachverweise: die Meldung nennt die Gruppenbeschreibung, wenn der Block auf sie zurueckfaellt' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'gruppe-meldung\blocks.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'block-entfernt\Localization.csv')
+    Vanilla     = $spracheGruppe
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruef700_fehlt' hat keine Zeile",
+    "Zeile 'pruefBlockWegDesc' wird nicht gelesen: Block 'pruefBlockWeg' liest die Gruppenbeschreibung 'pruefNotizDesc' - sein Schluessel 'pruef700_fehlt' (eigene Eigenschaft) hat keine Zeile",
+    "Gruppenbeschreibung der Bloecke: 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die sie lesen: 2",
+    '== Ergebnis: 2 rot -> RED ==')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

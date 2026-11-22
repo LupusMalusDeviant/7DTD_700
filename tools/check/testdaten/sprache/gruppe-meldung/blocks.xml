@@ -1,0 +1,7 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (viertes Review zu WP8.8, Befund 2): der
+	     Block pruefBlockWeg bekommt einen Beschreibungsschluessel, der keine Zeile hat. Er
+	     liest danach die Gruppenbeschreibung - und seine alte Zeile 'pruefBlockWegDesc' liest
+	     niemand. Die Meldung dazu soll die Gruppenbeschreibung nennen. Kein Spielinhalt. -->
+	<append xpath="/blocks/block[@name='pruefBlockWeg']"><property name="DescriptionKey" value="pruef700_fehlt"/></append>
+</config>

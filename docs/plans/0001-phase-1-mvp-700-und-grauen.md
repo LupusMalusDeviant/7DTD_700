@@ -1601,12 +1601,25 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Namespace-Knoten zählte als angewandt; für einen entfernten Vanilla-Block fehlte die
    Gegenprobe. *Behoben:* die Gruppenbeschreibung gilt als gelesen, sobald ein Block ohne
    eigene Zeile auf sie zurückfällt, und braucht eine Zeile, wenn wir sie setzen; ein
-   Namespace-Knoten ist rot. Sechs neue Gegenproben (30 für das Skript); die Fassung aus
+   Attributtreffer, der zu keinem Element gehört (so liefert ihn die Namespace-Achse für
+   `xml`), ist rot. Sechs neue Gegenproben (30 für das Skript); die Fassung aus
    `387761b` scheitert an fünf davon, die sechste hält einen Zweig, der schon richtig war;
    sieben Verfälschungen, jede wird gefangen. `gegenproben.ps1`: 174 Gegenproben, 0
    fehlgeschlagen. Am echten Stand: 3 246 Blöcke lesen die Gruppenbeschreibung, sonst
    unverändert Exit 0. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert).
    → Vertrag 04 „Nachtrag drittes Review zu WP8.8", Abnahme offen.
+
+   **Viertes Review zu WP8.8 (2026-11-22, Commit `c353996`): ein mittlerer, drei niedrige
+   Befunde.** Eine geleerte oder entfernte Gruppenbeschreibung ging grün durch; die Meldung
+   zu einer ungelesenen Blockzeile nannte den falschen Schlüssel; für eine Blockzeile nur in
+   unserer Sprachdatei fehlte die Gegenprobe; und der Absatz oben sagte über den
+   Namespace-Knoten mehr als der Vertrag (berichtigt). Die Befunde 1 und 3 sind vor dem
+   Beheben nachgestellt worden. *Behoben:* eine geänderte Gruppenbeschreibung ohne Wert ist
+   rot; die Meldung nennt, was der Block wirklich liest. Vier neue Gegenproben (34 für das
+   Skript); die Fassung aus `c353996` scheitert an 4 von 178; fünf Verfälschungen, jede wird
+   gefangen. `gegenproben.ps1`: 178 Gegenproben, 0 fehlgeschlagen. Am echten Stand
+   unverändert Exit 0. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert).
+   → Vertrag 04 „Nachtrag viertes Review zu WP8.8", Abnahme offen.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 

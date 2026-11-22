@@ -429,11 +429,12 @@ function Get-Hindernis {
     foreach ($knoten in $Treffer) {
         $art = $knoten.get_NodeType()
         if ($art -eq $script:attributArt) {
-            # Die Namespace-Achse (/items/namespace::xml) liefert ein Attribut, das an
-            # keinem Element haengt. Es zu setzen aendert am Dokument nichts (drittes
-            # Review zu WP8.8, Befund 2).
+            # Die Namespace-Achse (/items/namespace::xml) liefert fuer den Namespace 'xml'
+            # ein Attribut, das an keinem Element haengt. Es zu setzen aendert am Dokument
+            # nichts (drittes Review zu WP8.8, Befund 2). Ein ausdruecklich deklarierter
+            # Namespace ist ein gewoehnliches Attribut und kommt hier nicht an.
             if ($null -eq $knoten.get_OwnerElement()) {
-                return 'einen Namespace-Knoten; er gehoert zu keinem Element'
+                return 'ein Attribut, das zu keinem Element gehoert (Namespace-Achse)'
             }
             if (Test-Gleich $Name 'remove') {
                 return 'ein Attribut; das Spiel lehnt das ab ("use removeattribute instead")'
@@ -583,17 +584,31 @@ foreach ($art in 'item', 'block') {
 # wirksame Schluessel eines Blocks KEINE Zeile, liest das Spiel die Gruppenbeschreibung vom
 # Wurzelknoten. Der Schluessel gilt als gelesen, sobald EIN Block so auf ihn zurueckfaellt
 # - und nur dann. Haben WIR ihn gesetzt, braucht er eine Zeile (Regel 1).
+function Test-HatZeile {
+    # Im Spiel liegen Vanillas Zeilen und unsere zusammen: eine Zeile "gibt es", wenn der
+    # Schluessel in EINER der beiden Dateien steht.
+    param([string]$Schluessel)
+    if ($script:unsereSchluessel.Contains($Schluessel)) { return $true }
+    return $script:vanillaSchluessel.Contains($Schluessel)
+}
+
 $gruppe = $ziele.block.Doc.get_DocumentElement().GetAttribute('defaultDescriptionKey').Trim()
+# Wie viele Bloecke zurueckfallen, wird IMMER gezaehlt - auch, wenn die Gruppenbeschreibung
+# nach den Patches leer ist: genau dann ist die Zahl die Auskunft (viertes Review, Befund 1).
 $gruppeLeser = 0
+foreach ($nameDing in $tabellen.block.Keys) {
+    if (-not (Test-HatZeile $wirksam.block[$nameDing].Schluessel)) { $gruppeLeser++ }
+}
 if ($gruppe) {
-    foreach ($nameDing in $tabellen.block.Keys) {
-        $schluessel = $wirksam.block[$nameDing].Schluessel
-        if (-not $unsereSchluessel.Contains($schluessel) -and -not $vanillaSchluessel.Contains($schluessel)) { $gruppeLeser++ }
-    }
     if ($gruppeLeser -gt 0) { [void]$gelesen.Add($gruppe) }
     if (-not (Test-Gleich $gruppe $gruppeVanilla)) {
         Add-Genannt $gruppe 'defaultDescriptionKey an <blocks>' 'gepatchter Stand' -Einzeln -Zaehlt $false
     }
+}
+elseif (-not (Test-Gleich $gruppe $gruppeVanilla)) {
+    # Geleert oder entfernt: auch das haben WIR geaendert, und ein leerer Schluessel hat
+    # keine Zeile. Vorher uebersprang das Skript hier alles und meldete gruen.
+    $befunde.Add("die Gruppenbeschreibung der Bloecke (defaultDescriptionKey an <blocks>) ist nach den Patches leer, in Vanilla heisst sie '$gruppeVanilla'; Bloecke ohne eigene Zeile, die auf sie zurueckfielen: $gruppeLeser")
 }
 
 # Regel 1, letzter Punkt: die Beschreibung jedes EIGENEN Gegenstands braucht eine Zeile.
@@ -681,7 +696,13 @@ foreach ($k in $unsereListe) {
     }
     elseif ($null -ne $ding) {
         $w = $wirksam[$artDing][$ding]
-        $befunde.Add("Zeile '$k' wird nicht gelesen: $($wort[$artDing]) '$ding' liest '$($w.Schluessel)' ($($w.Woher))")
+        $liest = "liest '$($w.Schluessel)' ($($w.Woher))"
+        # Ein Block, dessen Schluessel keine Zeile hat, liest die Gruppenbeschreibung - die
+        # Meldung soll sagen, was er wirklich liest (viertes Review, Befund 2).
+        if ((Test-Gleich $artDing 'block') -and $gruppe -and -not (Test-HatZeile $w.Schluessel)) {
+            $liest = "liest die Gruppenbeschreibung '$gruppe' - sein Schluessel '$($w.Schluessel)' ($($w.Woher)) hat keine Zeile"
+        }
+        $befunde.Add("Zeile '$k' wird nicht gelesen: $($wort[$artDing]) '$ding' $liest")
     }
     else {
         $befunde.Add("Zeile '$k' wird nicht gelesen: Vanilla hat den Schluessel nicht, und nichts im gepatchten Stand oder in einer anderen Datei nennt ihn")

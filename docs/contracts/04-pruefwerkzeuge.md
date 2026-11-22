@@ -2853,3 +2853,76 @@ Treffer, 0 nicht gerechnet; 72 genannte Schlüssel, 132 Zeilen rückwärts, 0 ni
 Exit 0. Gegen den Stand vor dem Fix weiter genau die sechs Bruchstück-Zeilen.
 
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
+
+## Nachtrag viertes Review zu WP8.8, 2026-11-22 — vier Befunde behoben, **Abnahme offen**
+
+Das Review des Commits `c353996` fand einen mittleren und drei niedrige Befunde: zwei im
+Skript, einen an den Gegenproben, einen am Wortlaut des Plans. Keinen an den Mod-Dateien.
+Die Befunde 1 und 3 sind vor dem Beheben am Stand `c353996` nachgestellt worden.
+
+| # | Schwere | Befund | Folge |
+|---|---|---|---|
+| 1 | mittel | leert oder entfernt ein Patch `defaultDescriptionKey`, übersprang das Skript die ganze Prüfung dazu | nachgestellt: Exit 0, obwohl ein Block auf die Gruppenbeschreibung zurückfiele und der geänderte Wert keine Zeile hat |
+| 2 | niedrig | fällt ein Block auf die Gruppenbeschreibung zurück, nannte die Meldung zu seiner ungelesenen Zeile weiter seinen eigenen Schlüssel | richtiger Ausgang, falscher Text |
+| 3 | niedrig | keine Gegenprobe für eine Blockzeile, die nur **unsere** Sprachdatei hat | nachgestellt: ohne die Abfrage unserer Datei blieben alle 174 Gegenproben grün |
+| 4 | niedrig | der Plan sagte „ein Namespace-Knoten ist rot" | der Vertrag sagt es enger: rot ist ein Attributtreffer **ohne Eigentümerelement** |
+
+### Geänderte Regeln
+
+- **Regel 1, Gruppenbeschreibung, genauer.** Trägt der Wurzelknoten der gepatchten
+  `blocks.xml` einen anderen `defaultDescriptionKey` als Vanilla, haben wir ihn geändert. Ist
+  der neue Wert ein Schlüssel, braucht er eine Zeile. **Ist er leer oder fehlt das Attribut,
+  ist das rot** — ein leerer Schlüssel hat keine Zeile. Die Meldung nennt, wie viele Blöcke
+  ohne eigene Zeile auf die Gruppenbeschreibung zurückfielen.
+- **Meldung zu einer ungelesenen Blockzeile.** Hat der wirksame Schlüssel des Blocks keine
+  Zeile, nennt die Meldung die Gruppenbeschreibung als das, was der Block liest, und seinen
+  eigenen Schlüssel als den, dem die Zeile fehlt.
+- **Regel 5, Wortlaut.** Rot ist ein Attributtreffer, der zu keinem Element gehört. So liefert
+  die Namespace-Achse den Namespace `xml` (`/items/namespace::xml`). Ein ausdrücklich
+  deklarierter Namespace (`xmlns:p="…"`) ist ein gewöhnliches Attribut seines Elements und
+  wird gerechnet wie jedes andere.
+
+### Grenzen, neu
+
+- **Was das Spiel bei einer leeren Gruppenbeschreibung anzeigt, ist nicht gelesen.** Rot heißt
+  hier: wir haben den Schlüssel geändert, und er hat keine Zeile.
+
+### Gegenproben (Projektregel 5)
+
+Vier neue Läufe — zusammen 34 für dieses Skript —, alle gegen die Vorlage
+`testdaten/sprache/vanilla-gruppe/`. Der Lauf zum Namespace-Knoten erwartet den neuen
+Wortlaut der Meldung.
+
+| Befund | Lauf | Eingang | erwartet |
+|---|---|---|---|
+| 1 | `gruppe-leer` | `<set>` leert `defaultDescriptionKey` | Exit 1, 1 rot; die Meldung nennt Vanillas Schlüssel und 1 Block, der zurückfiele |
+| 1 | `gruppe-leer/entfernt` | `<removeattribute>` nimmt das Attribut weg | dasselbe |
+| 3 | `gruppe` + `gruppe/eigene-zeile` | die Zeile des Blocks, der zurückfiel, steht nur in **unserer** Sprachdatei | Exit 1, 1 rot; 0 Blöcke lesen die Gruppenbeschreibung, ihre Zeile ist ungelesen |
+| 2 | `gruppe-meldung` | ein Block bekommt einen Schlüssel ohne Zeile; seine alte Zeile bleibt in unserer Datei | Exit 1, 2 rot; die Meldung zur alten Zeile nennt die Gruppenbeschreibung und den Schlüssel, dem die Zeile fehlt |
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: **178 Gegenproben, 0
+fehlgeschlagen** (vorher 174).
+
+**Gegen die Fassung des Commits `c353996`:** 4 von 178 fehlgeschlagen. Zwei mit dem falschen
+Ausgang (geleert, entfernt: Exit 0 statt 1), zwei am Wortlaut (die Meldung zur Blockzeile,
+die Meldung zum Namespace-Knoten). Der Lauf zum Befund 3 ist gegen `c353996` grün — dort
+rechnete das Skript richtig, ihm fehlte die Gegenprobe. Dass sie trägt, zeigt die zweite
+Verfälschung unten; es ist dieselbe, die vor dem Beheben alle 174 Läufe grün ließ.
+
+**Fünf Verfälschungen der Neufassung, jede macht mindestens einen Lauf rot** (je ein voller
+Lauf der Gegenproben, das Skript danach bytegleich wiederhergestellt):
+
+| Verfälschung | fehlgeschlagen |
+|---|---|
+| eine geleerte Gruppenbeschreibung ist kein Befund | 2 |
+| „hat eine Zeile" sieht nicht in unsere Sprachdatei | 1 (Befund 3) |
+| „hat eine Zeile" sieht nicht in Vanillas Sprachdatei | 8 |
+| die Meldung nennt wieder den eigenen Schlüssel des Blocks | 1 |
+| Blöcke ohne Zeile werden nur gezählt, wenn die Gruppenbeschreibung nicht leer ist | 2 |
+
+**Am echten Stand unverändert:** Gruppenbeschreibung `creativeMenuBlockGroupDesc`, 3 246
+Blöcke fallen auf sie zurück; 729 Operationen angewandt, 0 ohne Treffer, 0 nicht gerechnet;
+72 genannte Schlüssel, 132 Zeilen rückwärts, 0 nicht gelesen; Exit 0. Gegen den Stand vor dem
+Fix weiter genau die sechs Bruchstück-Zeilen.
+
+`check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
