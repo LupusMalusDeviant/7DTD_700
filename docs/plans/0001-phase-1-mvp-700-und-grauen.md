@@ -1109,6 +1109,9 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    lassen. Deshalb bodenständige Lichtquellen zuerst; die Wandfackel ist eine Nutzer-Frage.
    Zu bestimmen bleibt die Zahl.
 6. **WP6.6** `[braucht Nutzer]` Lasttest: 200 Fackeln, keine messbaren Server-Frame-Einbrüche.
+   **Stand 2026-11-22:** (b) und (c) sind beantwortet — die Öllampe leuchtet sofort, und
+   `GrowthRate` zählt echte Minuten; (a) und der Lasttest stehen aus. Einzelheiten unter den
+   offenen Punkten, „Lichtquellen im Spiel, erster Blick".
    **Dazu drei Dinge, die nur dieser Test beantworten kann:** (a) eine Wandfackel in einem
    **geschlossenen** Raum abbrennen lassen und nachsehen, ob ein Halter hängt oder Luft ist
    (Prüfliste 11); (b) eine **Öllampe unmittelbar nach dem Setzen** ansehen — leuchtet sie?;
@@ -2007,7 +2010,9 @@ werden:
     **Luft unter sich**. Der Test muss darum ausdrücklich eine Wandfackel **in einem
     geschlossenen Raum** stehen lassen, bis die Brenndauer abgelaufen ist, und danach nachsehen,
     ob dort ein erloschener Halter hängt oder nichts. Eine im Freien beweist es nicht.
-    → gehört in den Lasttest WP6.6.
+    → gehört in den Lasttest WP6.6. **Stand 2026-11-22:** versucht und vor dem Abbrennen
+    abgebrochen (offene Punkte, „Lichtquellen im Spiel, erster Blick"). Beim nächsten Mal mit
+    kurzem Test-Timer und gesammelt mit anderen Punkten, nicht in Echtzeit.
 12. **Entscheiden, ob Fackeln weiter Schreier anziehen dürfen** (WP6.4, 8. November 2026).
     Gemessen nach D64: `wallTorchLightPlayer` trägt schon `Class="TorchHeatMap"`, und ein Block
     hat genau **eine** Klasse. `PlantGrowing` ersetzt die ganze Kette
@@ -2283,7 +2288,13 @@ werden:
     `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/vertraeglichkeit-pruefen.ps1`.
 25. **Sackgassen und Belohnungen im Spiel ansehen** (D89, Balancing 0003, 22. November 2026).
     Braucht einen Spielstart mit der Mod; dabei legt das Spiel einen neuen ConfigsDump an.
-    a) Danach `check-all.ps1` laufen lassen: `recipes` meldet **0 Sackgassen** (bis dahin 80,
+    **a) ist erledigt am 2026-11-22:** Lauf von 22:07 bis 22:40 ohne EAC (Stand `4ff2001`),
+    Dump von 22:08 unter `C:\Users\Anwender\Saves\Pregen06k01\Z\ConfigsDump`, die Zeile
+    `Quelle:` nennt diesen Ordner. `check-all.ps1 -Source <dieser Ordner>`: **214 Gegenproben,
+    0 fehlgeschlagen; 7 Prüfungen, 0 rot, Exit 0** — zum ersten Mal alles grün. `recipes`:
+    271 Rezepte, 271 erreichbar, **0 Sackgassen**; `anachronisms`: 543 Kennungen, 0 verboten
+    erreichbar, 40 Hinweise. b) bis d) hat im Spiel niemand angesehen.
+    ~~a) Danach `check-all.ps1` laufen lassen:~~ `recipes` meldet **0 Sackgassen** (bis dahin 80,
     weil es den Dump vom 21. November liest) — das ist der Nachweis, der Vorlauf war keiner.
     **Mit `-Source <Ordner des neuen ConfigsDump>` aufrufen**, wenn das Spiel mit
     `-UserDataFolder` lief: von selbst sucht das Skript nur unter
@@ -2309,6 +2320,32 @@ werden:
 
 ## Offene Punkte
 
+- **Lichtquellen im Spiel, erster Blick** (2026-11-22, 22:07 bis 22:40, ohne EAC, Stand
+  `4ff2001`, Protokoll `output_log_client__2026-11-22__22-07-19.txt`: acht Modlets geladen,
+  0 EXC, 2 fremde ERR — Discord beim Start, Xbox Live beim Beenden —, 18 WRN, keine zu XML
+  oder Patches). Der Nutzer hat den Test nach
+  einer halben Stunde abgebrochen; was er gesehen hat:
+  1. *Öllampe (WP6.6 b):* **leuchtet sofort nach dem Setzen.** Beantwortet.
+  2. *Einheit von `GrowthRate` (WP6.6 c):* **echte Minuten, nicht Spielminuten.** Die
+     Wandkerze (15) ging gegen 22:28 aus; gesetzt wurde sie zwischen 22:09 und 22:17, der
+     Zeitpunkt ist nicht notiert und steht nicht im Protokoll — also 11 bis 19 echte
+     Minuten. Bei 60 Minuten Taglänge wären 15 Spielminuten keine 40 Sekunden gewesen. Wie
+     stark `CropGrowthModifier` eingreift, ist damit nicht gemessen.
+  3. *Kerzenstumpf:* hängt nach dem Abbrennen sichtbar da (dasselbe Modell wie die Kerze).
+     Beim Ansehen erscheint **kein Name und kein Hinweis**, E nimmt ihn nicht auf, ein Schlag
+     zerstört ihn, es gibt nichts — alles so gebaut, aber der Nutzer hat es als unklar
+     gemeldet: der Stumpf sagt nicht, was er ist und wie man ihn wieder anzündet. **Offen,
+     Entscheidung des Nutzers.** Das Wiederanzünden (Kerze im Inventar, Werkzeug) hat niemand
+     probiert.
+  4. *Wandfackel im geschlossenen Raum (WP6.6 a, Prüfliste 11):* **nicht beantwortet** — sie
+     brannte um 22:38 noch, der Test endete davor. Halter oder Luft ist weiter offen. Ein
+     Hinweis, kein Beleg: die **Wandkerze** hing im selben Raum, hat ebenfalls Luft unter
+     sich und wurde zum Stumpf, nicht zu Luft.
+  **Vorgabe des Nutzers für solche Tests** (2026-11-22): nicht mehr in Echtzeit auf eine
+  Brenndauer warten. Zeitabhängiges wird mit einem kurzen Test-Timer geprüft (zum Beispiel
+  eine Minute) und gesammelt in einem Start mit anderen Punkten. Für Punkt 4 und das
+  Wiederanzünden heißt das: eine Testfassung mit kurzer `GrowthRate` vorbereiten, die nicht
+  ins Paket gehört — wie, ist nicht entworfen.
 - **Zweiter Lauf im Spiel, wieder mit EAC** (2026-11-22, 20:45 bis 20:49, Protokoll
   `output_log_client__2026-11-22__20-45-14.txt`). Der Stand vom selben Abend war installiert
   (8 Modlets, DLL signiert). Geladen: die sieben XML-Modlets „Loaded Mod … (0.1.0)";
@@ -2377,8 +2414,12 @@ werden:
   einzeln freigegeben (Denylist), 10 davon im Inhalt gekürzt, 26 Gruppen zahlen
   Silberpfennige. **Gerechnet, nicht gesehen:** ein Vorlauf außerhalb des Repositorys
   (alle Modlets auf Vanilla angerechnet) meldet 0 Sackgassen und 0 Belohnungen auf leere
-  Gruppen; am Stand davor trifft er die Zahlen des ConfigsDumps (80, 115). `recipes` in
-  `check-all.ps1` bleibt rot, bis ein neuer Dump vorliegt (Prüfliste 25).
+  Gruppen; am Stand davor trifft er die Zahlen des ConfigsDumps (80, 115). ~~`recipes` in
+  `check-all.ps1` bleibt rot, bis ein neuer Dump vorliegt (Prüfliste 25).~~ **Belegt am
+  2026-11-22 am Dump des Spiels von 22:08: `recipes` 0 Sackgassen, alle 7 Prüfungen grün**
+  (Prüfliste 25 a). Ohne `-Source` liest `check-all.ps1` weiter den alten Dump und bleibt
+  rot, solange die Dump-Suche `-UserDataFolder` nicht kennt. Die 0 leeren Belohnungen sind
+  weiter nur gerechnet, im Spiel sind Rezepte und Belohnungen nicht angesehen (25 b bis d).
   **Folgearbeit — eine Lücke der Prüfung:** `mod700check` kennt den Inhalt eines Bündels
   (`Create_item`, `Random_item`) nicht als Weg zu einem Gegenstand. Ein freigegebenes Bündel
   mit Gesperrtem darin bliebe grün. Für die 20 Bündel ist es von Hand nachgezählt; als
@@ -2388,9 +2429,10 @@ werden:
 - **Entschieden und gebaut am 2026-11-22 (D90): nur das Moderne unter dem Zahnrad ist
   geändert.** „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück, der
   Einkaufswagen ist gegen den Beutesack getauscht; die fünf anderen behalten Vanillas Namen,
-  und Z6 verlangt nur noch, dass kein *moderner* Name sichtbar ist. **Offen bleibt:** der
-  Blick ins Spiel (steht das neue Symbol wirklich da?) und die Balancing-Frage, ob die
-  sieben in einen Baum wandern (WP9). Der Punkt lautete:
+  und Z6 verlangt nur noch, dass kein *moderner* Name sichtbar ist. **Im Spiel gesehen am
+  2026-11-22** (Lauf 22:07, Nutzer): beide neuen Namen stehen da, der Beutesack auch.
+  **Offen bleibt** die Balancing-Frage, ob die sieben in einen Baum wandern (WP9). Der Punkt
+  lautete:
   ~~**Sieben Fertigkeiten tragen weiter Vanillas Namen**~~ (vom Nutzer am 2026-11-21 im Spiel
   gesehen, eingetragen am 2026-11-22). Unter `skillGeneralPerks` — im Fertigkeitsfenster der
   Reiter mit dem Zahnrad — stehen `perkLightArmor`, `perkMediumArmor`, `perkHeavyArmor`,
