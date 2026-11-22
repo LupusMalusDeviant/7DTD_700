@@ -1,0 +1,11 @@
+<config>
+	<!-- Eine Bedingung VOR dem Entfernen: sie laesst den Stand einmal fuer xpath() lesen. Wer
+	     diesen gelesenen Stand danach weiterbenutzt, sieht den entfernten Eintrag noch. -->
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;pruefGibtEsNicht&quot;]') != null">
+			<remove xpath="/styles/global/style_entry[@name='pruefFarbeZwei']" />
+		</if>
+	</conditional>
+	<!-- Nimmt den Stil-Eintrag weg, nach dem die Bedingung unseres Modlets fragt. -->
+	<remove xpath="/styles/global/style_entry[@name='pruefFarbeEins']" />
+</config>

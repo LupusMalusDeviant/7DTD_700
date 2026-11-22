@@ -2943,3 +2943,220 @@ selben Tag entschieden, hier aufzuhören und sie als offen zu führen. Sie gelte
 - **Dass ein ausdrücklich deklarierter Namespace gerechnet wird, hält keine Gegenprobe.**
 
 Keine der drei ist nachgestellt. Geführt werden sie im Plan unter „Offene Punkte".
+
+## Nachtrag WP8.9, 2026-11-22 — Vorprüfung der Verträglichkeit mit einer fremden Mod, **Abnahme offen**
+
+### Anlass
+
+D86 nennt zwei Referenz-UI-Mods, ihre Dateien liegen seit dem 22. November 2026 unter
+`GameRefs/ui-mods/`. Die Testmatrix (Prüfliste 24 des Plans) braucht drei Läufe im Spiel. Was
+sich **ohne** Spiel sagen lässt, sagt bisher nur eine Textsuche — und die sieht nicht, ob die
+fremde Mod einen Elternknoten unserer Ziele entfernt oder einen Wert überschreibt, den wir
+gesetzt haben. Diese Prüfung rechnet es aus, statt es am Text zu erkennen. **Sie ersetzt
+keinen Lauf**: sie sagt, wo ein Lauf hinsehen muss.
+
+### Das Werkzeug
+
+`tools/check/vertraeglichkeit-pruefen.ps1`. Parameter:
+
+- `-Fremd` — ein oder mehrere Ordner fremder Mods, jeder mit `ModInfo.xml` und `Config\`
+  direkt darin. Ohne Angabe jeder solche Ordner unmittelbar unter `GameRefs\ui-mods\`.
+- `-Unsere` — unsere Modlet-Ordner. Ohne Angabe jeder Ordner unter `mod\` mit `ModInfo.xml`.
+- `-Vanilla` — ohne Angabe `<SDTD_PATH>\Data\Config`.
+- `-NCalc` — die `NCalc.dll` des Spiels, wie bei `kette-pruefen.ps1`; gebraucht, sobald eine
+  gerechnete Datei einen bedingten Block hat.
+
+Jede fremde Mod wird **für sich** gegen unsere Modlets gerechnet, nie zwei fremde zusammen
+(so fährt auch die Matrix). Ausgänge wie überall: 0 grün, 1 Befund, 2 nicht prüfbar; bei
+mehreren fremden Mods gilt der schlechteste.
+
+**Die neun Patch-Operationen liegen jetzt in einer Datei**, `tools/check/patch-operationen.ps1`,
+die `sprachverweise-pruefen.ps1` und das neue Skript beide einlesen. Es ist derselbe Code,
+der vorher in `sprachverweise-pruefen.ps1` stand (Nachträge „Review" bis „viertes Review zu
+WP8.8"), an der Regel ändert sich dort nichts. Fehlt die Datei, endet jedes der beiden
+Skripte mit Ausgang 2.
+
+**Nicht in `check-all.ps1`.** Die Eingabe dieser Prüfung liegt außerhalb des Repositorys, und
+ihr Ergebnis sagt etwas über fremde Dateien, nicht über unseren Stand: ein roter Lauf hier
+ist eine Frage an die Matrix, kein Fehler in der Mod, und er dürfte `check-all` nicht auf
+Dauer rot halten. Ihre Gegenproben laufen in `gegenproben.ps1` und damit in jedem
+`check-all`. *(Die Alternative — achte Prüfung in `check-all`, ohne Dateien Ausgang 2 — ist
+möglich; sie wartet auf die Abnahme.)*
+
+### Die Regeln
+
+1. **Geladen wird wie im Spiel.** Je Mod höchstens eine Patch-Datei je Vanilla-Datei, gesucht
+   unter demselben Pfad relativ zu `Config\` (D53). Unsere Modlets in der Reihenfolge ihrer
+   Ordnernamen. Eine XML-Datei ohne Vanilla-Gegenstück lädt das Spiel nicht; sie wird
+   genannt und nicht gerechnet.
+2. **Vier Stände je gemeinsamer Datei.** Gemeinsam ist eine XML-Datei, die die fremde Mod
+   **und** mindestens eines unserer Modlets patcht. Für sie wird, jeweils von der
+   unveränderten Vanilla-Datei aus, gerechnet: wir allein · die fremde Mod allein · wir,
+   dann die fremde · die fremde, dann wir. Jede Operation läuft gegen den Stand, den die
+   Operationen davor hinterlassen haben. Dateien, die nur die fremde Mod patcht, werden
+   allein gerechnet (Regel 5); Dateien, die nur wir patchen, prüft `kette-pruefen.ps1`.
+3. **Beide Reihenfolgen, eine davon erwartet.** Erwartet ist die, die die Ordnernamen
+   ergeben (der Lader sortiert sie, Finding WP1 §1). Sortieren der zeichenweise und der
+   sprachabhängige Vergleich verschieden, ist keine erwartet. Befunde aus beiden
+   Reihenfolgen zählen; jede Zeile nennt ihre.
+4. **Befund ist** (jeder zählt, Ausgang 1):
+   - **Ziel verloren** — eine Operation, die allein mindestens einen Knoten trifft, läuft in
+     der Kombination und trifft nichts. Das Spiel schriebe dafür eine Warnung ins Protokoll.
+   - **Zweig wechselt** — eine Operation in einem bedingten Block läuft allein und in der
+     Kombination nicht, oder umgekehrt, weil die Bedingung anders ausfällt.
+   - **Wirkung verändert** — was die zuerst geladene Seite geschrieben hat, ist nach der
+     zweiten entfernt oder anders. Verfolgt wird: der Wert eines Attributs, das `set`,
+     `setattribute`, `csv`, `append` oder `prepend` geschrieben hat; ein Element, das
+     `append`, `prepend`, `insertAfter` oder `insertBefore` eingefügt hat, mit allem
+     darunter; der Text, den `set` an einem Element gesetzt hat. Die Zeile nennt die
+     Operation der zweiten Seite, nach der es zuerst anders war.
+   - **Nicht gerechnet** — in irgendeinem der vier Stände: eine Operation, die
+     `patch-operationen.ps1` an ihren Treffern nicht rechnet, eine unbekannte Operation,
+     `<include>`, ein ungültiger XPath, ein bedingter Block mit falschem Aufbau, eine
+     Bedingung, die NCalc nicht liest, die keinen Wahrheitswert liefert oder die eine andere
+     Funktion als `mod_loaded` und `xpath` ruft. Der Stand danach wäre geraten.
+   - **Gemeinsamer Sprachschlüssel** — ein Schlüssel, der in einer `Config\Localization.csv`
+     von uns und in der der fremden Mod steht. Welcher Text gilt, hängt an der Reihenfolge.
+     Eine Sprachdatei, die sich nicht lesen lässt, ist „nicht gerechnet".
+5. **Kein Befund, aber gezählt und einzeln genannt:** Operationen der fremden Mod, die schon
+   **allein** nichts treffen — das sagt etwas über die fremde Mod und die Spielfassung,
+   nichts über uns; unsere Operationen, die allein nichts treffen (das ist Sache von
+   `kette-pruefen.ps1` und `sprachverweise-pruefen.ps1`); Dateien ohne Vanilla-Gegenstück.
+6. **Bedingungen** werden mit der `NCalc.dll` des Spiels ausgewertet, mit denselben Optionen
+   wie in `kette-pruefen.ps1`. `mod_loaded('X')` ist wahr, wenn `X` der `Name` aus der
+   `ModInfo.xml` einer Mod ist, die in diesem Stand geladen ist — allein also nur die der
+   eigenen Seite. `xpath('…')` läuft gegen die Zieldatei **im Stand vor dieser Operation**
+   (Finding WP1 §4) und liefert, was das Spiel liefert. Es gewinnt das erste `<if>`, dessen
+   Bedingung wahr ist, sonst `<else>`; die Kinder des Zweigs laufen wie die oberste Ebene.
+7. **Nichts gerechnet ist nicht grün.** Ausgang 2: kein Vanilla-Ordner; kein fremder Ordner
+   oder einer ohne `ModInfo.xml`; eine Seite ohne eine einzige XML-Patch-Datei mit
+   Vanilla-Gegenstück; eine Datei, die sich nicht als XML lesen lässt; ein bedingter Block
+   ohne `NCalc.dll`; `patch-operationen.ps1` fehlt. Gibt es beides, aber **keine gemeinsame
+   Datei**, ist das ein Ergebnis und kein Ausfall: Ausgang 0, mit einer Zeile, die es sagt.
+8. **Fremde Dateien sind Daten.** XML wird ohne DTD und ohne Auflösen fremder Verweise
+   gelesen; eine Datei mit `<!DOCTYPE` gilt als nicht lesbar. Ausgeführt wird aus dem
+   fremden Ordner nichts, geladen keine DLL. Nichts aus ihm wird ins Repository geschrieben.
+
+Der Aufbau eines XML-Knotens wird über Methoden gelesen (Nachtrag viertes Review zu WP8.7).
+Namen und Werte werden Zeichen für Zeichen verglichen.
+
+### Grenzen
+
+- **Nur XML.** Was eine DLL der fremden Mod zur Laufzeit an Fenstern ändert, sieht keine
+  XML-Prüfung. Für E C H O (zwei DLLs) ist das die größere Hälfte.
+- **Nur dieselbe Datei.** Ein Fenster, das auf einen Stil, eine Vorlage oder ein
+  Steuerelement in einer **anderen** Datei zeigt, die die fremde Mod ändert, bleibt
+  ungesehen. Ebenso, ob zwei Fenster einander auf dem Bildschirm verdecken.
+- **Kein zweiter Patcher des Spiels.** Es gelten die Grenzen von `patch-operationen.ps1`
+  (Nachtrag Review zu WP8.8): die Operationen sind nachgebaut, nicht im Spiel gemessen; das
+  Spiel rechnet über `XDocument`, dieses Skript über `XmlDocument`.
+- **Entfernen wird nicht verfolgt.** Was `remove` oder `removeattribute` weggenommen hat und
+  die zweite Seite wieder einfügt, ist kein Befund.
+- **Werte werden als Text verglichen.** `255,0,0` und `255, 0, 0` sind verschieden.
+- **`mod_loaded` vergleicht mit dem `Name` aus `ModInfo.xml`, genau.** Ob das Spiel diesen
+  Namen meint und ob Groß/Klein zählt, ist nicht gelesen (Finding WP1 §4).
+- **Die erwartete Reihenfolge ist abgeleitet, nicht gesehen.** Darum laufen beide.
+- **„Allein ohne Treffer" bei der fremden Mod ist kein Urteil über sie.** Es kann ein
+  Fehler der fremden Mod sein, eine andere Spielfassung — oder eine Stelle, die dieses
+  Skript anders rechnet als das Spiel.
+- **Geprüft ist das Paar, nicht die Matrix.** Zwei fremde Mods zugleich rechnet niemand.
+
+Vier weitere Grenzen hat erst der Bau gezeigt (alle am echten Stand der zwei Referenz-Mods
+aufgefallen, keine ändert eine Regel):
+
+- **Operationsnamen werden Zeichen für Zeichen verglichen.** AGF schreibt in `items.xml`
+  `<insertafter>` klein; das ist hier eine unbekannte Operation und damit „nicht gerechnet".
+  Ob das Spiel die Schreibweise annimmt, ist **nicht gelesen** — der Blick auf `XmlPatcher`
+  überstieg am 22. November 2026 die Darstellung des REA-Werkzeugs und blieb ohne Antwort.
+- **`game_version()` und `version()` rechnet diese Prüfung nicht** (Regel 4, „eine andere
+  Funktion als `mod_loaded` und `xpath`"). Der ganze bedingte Block entfällt dann in diesem
+  Stand, und alles Weitere läuft auf einem Stand **ohne** ihn. Steht `mod_loaded(…)` davor
+  und ist falsch, wertet NCalc den Rest nicht aus — dann ist der Block gerechnet.
+- **Ein `<conditional>` in eingefügtem Inhalt ist ein gewöhnliches Element.** AGF hängt
+  Fenster an, in denen `<conditional evaluator="client">` steht. Ausgewertet werden hier nur
+  bedingte Blöcke auf der Ebene der Operationen (Finding WP1 §4); was das Spiel mit denen im
+  Inhalt beim Laden der Datei tut, sieht diese Prüfung nicht.
+- **`xpath('…')` mit mehreren Treffern** liefert, was `kette-pruefen.ps1` dafür liefert
+  („More than one match"). Eine eigene Gegenprobe dafür gibt es hier nicht.
+
+### Gegenproben (Projektregel 5)
+
+Gemessen am 2026-11-22, am Stand, der committet wird. Alle Namen in
+`tools/check/testdaten/vertraeglich/` sind erfunden (58 Dateien: ein Vanilla-Satz mit drei
+Dateien, vier Sätze eigener Prüf-Modlets mit zusammen fünf Modlets, 19 fremde Prüf-Mods).
+
+**31 neue Läufe in `gegenproben.ps1`, Abschnitt „vertraeglichkeit-pruefen.ps1 (WP8.9)".**
+Befehl: `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/gegenproben.ps1` —
+**209 Gegenproben, 0 fehlgeschlagen** (vorher 178).
+
+| Was der Lauf zeigt | Läufe | Ausgang |
+|---|---|---|
+| dieselben Dateien, andere Knoten; keine gemeinsame Datei; „allein ohne Treffer" und „ohne Gegenstück" genannt, kein Befund; ohne Parameter aus `mod\` und `GameRefs\ui-mods\` | 4 | 0 |
+| Ziel verloren, in beiden Richtungen (wir nehmen es der fremden Mod, sie nimmt es uns) | 2 | 1 |
+| Wirkung verändert: derselbe Wert; ein breiter Pfad, der unser eingefügtes Element mittrifft; jede verfolgte Schreibart einmal (11 Befunde in einem Lauf) | 2 | 1 |
+| Zweig wechselt: `mod_loaded` und `xpath()` fallen in der Kombination anders aus; das erste wahre `<if>` gewinnt, sonst `<else>` | 1 | 1 |
+| zehn Stellen „nicht gerechnet" in einer Datei | 1 | 1 |
+| gemeinsamer Sprachschlüssel (Kopfzeile `KEY` groß geschrieben); fremde Sprachdatei ohne Schlüsselspalte | 2 | 1 |
+| Reihenfolge: Ordner sortiert vor unseren; zwischen unseren; Zeichen- und Sprachvergleich uneins | 3 | 1 |
+| zwei fremde Mods in einem Aufruf, jede für sich, schlechtester Ausgang | 1 | 1 |
+| nicht prüfbar: ohne `ModInfo.xml`, ohne Namen, nur Dateien ohne Gegenstück, kein XML, `<!DOCTYPE`, keine einzige Operation, fremder Ordner fehlt, unsere Seite ohne Datei, Vanilla fehlt, kein Spielpfad, `NCalc.dll` fehlt (angegeben und über den Spielpfad), ohne `GameRefs\ui-mods\`, `patch-operationen.ps1` fehlt (für beide Skripte je ein Lauf) | 15 | 2 |
+
+**38 Verfälschungen, jede macht mindestens eine Gegenprobe rot.** 34 am Skript, vier an
+`patch-operationen.ps1`. Gefahren mit einem Teil-Läufer, der nur die Hilfsfunktionen von
+`gegenproben.ps1` und diesen Abschnitt enthält (31 Läufe, unverändert 0 rot); nach jedem
+Lauf wurde die Datei zurückkopiert, am Ende sind beide byte-gleich mit dem Stand davor.
+Verfälscht wurde je eine Stelle:
+
+- *die Befundklassen:* „Ziel verloren" aus (3 rot); „Zweig wechselt" aus (1); der Wächter
+  für „Wirkung verändert" aus (9); die Spur für eingefügte Elemente (3), für Attribute (1),
+  für Text (1), für `setattribute` (9) aus; der Wert wird nicht verglichen (6); die Regel
+  „die letzte Schreibende gilt" aus (1); selbst Entferntes zählt (1); „hängt noch am
+  Dokument" immer wahr (3); der Vergleich in der umgekehrten Reihenfolge fehlt (3);
+- *Bedingungen:* `mod_loaded` immer falsch (2); geladen ist nur die fremde Mod (1); der
+  Stand für `xpath()` veraltet (1); `<else>` gewinnt nie (1); nicht das erste wahre `<if>`
+  gewinnt (2);
+- *„nicht gerechnet":* die Meldung bleibt still (1); `Get-Hindernis` wird nicht gefragt (1);
+- *Lesen:* DTD erlaubt (1); Name, Knotenart und Kinder über Eigenschaften statt Methoden
+  (4, 2, 4) — dafür trägt die saubere Prüf-Mod Attribute namens `LocalName`, `NodeType`
+  und `ChildNodes`;
+- *Sprache und Reihenfolge:* Sprachvergleich aus (1); Schlüsselspalte nur in genauer
+  Schreibweise (1); Sprachdatei ohne Schlüsselspalte gilt als leer (1); nur der
+  Zeichenvergleich entscheidet die Reihenfolge (1);
+- *Ausfälle und Ausgang:* jede Datei hat angeblich ein Vanilla-Gegenstück (3); die Zeile
+  „ohne Gegenstück" fehlt (1); eine Mod ohne Operation ist grün (1); die fehlende
+  `patch-operationen.ps1` wird nicht geprüft (1); der Abbruchgrund geht verloren (2);
+  Ausgang 0 statt 1 (12); nur die letzte fremde Mod zählt (1);
+- *`patch-operationen.ps1`:* `append`, `prepend`, `insertBefore`, `insertAfter` melden
+  nicht, was sie einfügen (2, 1, 1, 1).
+
+**Am echten Stand, an `sprachverweise-pruefen.ps1`:** nach dem Auslagern der Operationen
+unverändert 729 Operationen angewandt, 0 ohne Treffer, Ausgang 0.
+
+**Was der Bau geändert hat, das oben nicht steht.** Ein Abbruch (Regel 7) schreibt seine
+Meldung nicht mehr an der Stelle, an der er entsteht: er wirft, und die eine Fangstelle des
+Skripts schreibt den Grund und endet mit Ausgang 2. Vorher ging die Meldung verloren, wenn
+der Abbruch in einer Funktion entstand, deren Ausgabe gesammelt wird (der Lauf „ohne
+`GameRefs\ui-mods\`" hatte Ausgang 2 und keinen Text).
+
+### Lauf gegen die zwei Referenz-Mods, 2026-11-22
+
+Befehl: `powershell -NoProfile -ExecutionPolicy Bypass -File
+tools/check/vertraeglichkeit-pruefen.ps1` (ohne Parameter, 10 Sekunden). **Ausgang 1,
+11 Befunde** — unsere 8 Modlets gegen jede der beiden. Vanilla ist V 3.40.
+
+| | AGF-1HUDPlus 6.6.2 | EchoHybridUI 1.6 |
+|---|---|---|
+| XML-Dateien unter `Config\` (mit / ohne Vanilla-Gegenstück) | 5 (5 / 0) | 19 (14 / 5) |
+| gemeinsame Dateien | 4 | 8 |
+| erwartete Reihenfolge | wir, dann sie | wir, dann sie |
+| ihre Operationen allein (davon ohne Treffer) | 84 (0) | 703 (7) |
+| unsere Operationen in den gemeinsamen Dateien (ohne Treffer) | 556 (0) | 621 (0) |
+| Sprachschlüssel: unsere / ihre / gemeinsam | 887 / 147 / 0 | 887 / 48 / 1 |
+| Ziel verloren | 0 | 0 |
+| Zweig wechselt | 0 | 0 |
+| Wirkung verändert | 0 | 6 |
+| nicht gerechnet | 3 | 1 |
+| gemeinsamer Sprachschlüssel | 0 | 1 |
+
+Was die Zeilen im Einzelnen sagen, steht im Plan unter WP8.9. Die Ausgabe selbst liegt
+nicht im Repository: sie nennt Pfade und Werte aus fremden Dateien.

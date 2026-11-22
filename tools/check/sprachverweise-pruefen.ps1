@@ -73,17 +73,13 @@ trap {
     exit 2
 }
 
-function Test-Gleich {
-    # Zeichen fuer Zeichen. -eq und -ceq vergleichen nach Kulturregeln.
-    param([string]$Links, [string]$Rechts)
-    return [string]::Equals($Links, $Rechts, [System.StringComparison]::Ordinal)
-}
-
-function Test-In {
-    param([string]$Wert, [string[]]$Menge)
-    foreach ($m in $Menge) { if (Test-Gleich $Wert $m) { return $true } }
-    return $false
-}
+# Die neun Patch-Operationen, Test-Gleich und Test-In liegen seit WP8.9 in einer eigenen
+# Datei, die auch vertraeglichkeit-pruefen.ps1 einliest. Fehlt sie, ist nichts gerechnet.
+$bibliothek = Join-Path $here 'patch-operationen.ps1'
+$bibliothekDa = $false
+try { $bibliothekDa = [bool](Test-Path -LiteralPath $bibliothek -PathType Leaf) } catch { $bibliothekDa = $false }
+if (-not $bibliothekDa) { Stop-Unpruefbar "patch-operationen.ps1 fehlt neben dem Skript ($bibliothek)" }
+. $bibliothek
 
 function Get-Innerste {
     param($Ausnahme)
@@ -190,9 +186,6 @@ function Read-Xml {
     catch { Stop-Unpruefbar "$Rolle '$Pfad' laesst sich nicht als XML lesen ($(Get-Innerste $_.Exception))" }
     return $doc
 }
-
-$element = [System.Xml.XmlNodeType]::Element
-$attributArt = [System.Xml.XmlNodeType]::Attribute
 
 function Get-Tabelle {
     # Je <item> oder <block> unmittelbar unter der Wurzel: was es ueber seine Beschreibung
@@ -341,119 +334,6 @@ $angewandt = 0
 $ohneTreffer = 0
 $nichtGerechnet = 0
 $angewandteDateien = 0
-
-function Get-Kinder {
-    # Die Kindelemente einer Operation, fuer das Zieldokument uebernommen.
-    param($Operation, $ZielDoc)
-    $kinder = New-Object System.Collections.Generic.List[object]
-    foreach ($kind in $Operation.get_ChildNodes()) {
-        if ($kind.get_NodeType() -ne $element) { continue }
-        $kinder.Add($ZielDoc.ImportNode($kind, $true))
-    }
-    return , $kinder
-}
-
-function Invoke-Operation {
-    # EINE Operation auf EINEN getroffenen Knoten. So, wie Vertrag 03 und das Finding WP1
-    # die neun Operationen beschreiben.
-    param([string]$Name, $Operation, $Treffer, $ZielDoc)
-    $text = $Operation.get_InnerText().Trim()
-    $istAttribut = ($Treffer.get_NodeType() -eq $attributArt)
-
-    if (Test-Gleich $Name 'set') {
-        if ($istAttribut) { $Treffer.set_Value($text) } else { $Treffer.set_InnerText($text) }
-        return
-    }
-    # Welche Paare aus Operation und Knotenart hier ankommen, entscheidet Get-Hindernis:
-    # setattribute, removeattribute, remove, insertAfter und insertBefore nur mit einem
-    # Element, csv nur mit einem Attribut. Darum steht unten kein stilles "sonst nichts".
-    if (Test-Gleich $Name 'setattribute') {
-        $Treffer.SetAttribute($Operation.GetAttribute('name'), $text)
-        return
-    }
-    if (Test-Gleich $Name 'removeattribute') {
-        $Treffer.RemoveAttribute($Operation.GetAttribute('name'))
-        return
-    }
-    if (Test-Gleich $Name 'remove') {
-        [void]$Treffer.get_ParentNode().RemoveChild($Treffer)
-        return
-    }
-    if (Test-Gleich $Name 'csv') {
-        $trenner = $Operation.GetAttribute('delim')
-        if (-not $trenner) { $trenner = ',' }
-        $liste = New-Object System.Collections.Generic.List[string]
-        foreach ($teil in $Treffer.get_Value().Split(@($trenner), [System.StringSplitOptions]::None)) { $liste.Add($teil) }
-        $weg = Test-Gleich $Operation.GetAttribute('op') 'remove'
-        foreach ($teil in $text.Split(@($trenner), [System.StringSplitOptions]::None)) {
-            if ($weg) { [void]$liste.Remove($teil) }
-            elseif (-not $liste.Contains($teil)) { $liste.Add($teil) }
-        }
-        $Treffer.set_Value(($liste -join $trenner))
-        return
-    }
-    if (Test-Gleich $Name 'append') {
-        if ($istAttribut) { $Treffer.set_Value($Treffer.get_Value() + $text); return }
-        foreach ($neu in (Get-Kinder $Operation $ZielDoc)) { [void]$Treffer.AppendChild($neu) }
-        return
-    }
-    if (Test-Gleich $Name 'prepend') {
-        if ($istAttribut) { $Treffer.set_Value($text + $Treffer.get_Value()); return }
-        $erstes = $Treffer.get_FirstChild()
-        foreach ($neu in (Get-Kinder $Operation $ZielDoc)) {
-            if ($null -eq $erstes) { [void]$Treffer.AppendChild($neu) } else { [void]$Treffer.InsertBefore($neu, $erstes) }
-        }
-        return
-    }
-    $eltern = $Treffer.get_ParentNode()
-    if (Test-Gleich $Name 'insertBefore') {
-        foreach ($neu in (Get-Kinder $Operation $ZielDoc)) { [void]$eltern.InsertBefore($neu, $Treffer) }
-        return
-    }
-    # insertAfter: der Reihe nach, jedes hinter das vorige.
-    $hinter = $Treffer
-    foreach ($neu in (Get-Kinder $Operation $ZielDoc)) {
-        [void]$eltern.InsertAfter($neu, $hinter)
-        $hinter = $neu
-    }
-}
-
-$nurElement = @('setattribute', 'removeattribute', 'insertAfter', 'insertBefore')
-
-function Get-Hindernis {
-    # Warum sich eine Operation an ihren Treffern NICHT rechnen laesst - oder $null.
-    # Vorher tat das Skript an diesen Stellen nichts und zaehlte die Operation als
-    # angewandt; ein <remove> auf ein Attribut entfernte es sogar, obwohl das Spiel genau
-    # das ablehnt (zweites Review zu WP8.8, Befund 1; Vertrag 03, Abschnitt 2).
-    param([string]$Name, $Treffer)
-    foreach ($knoten in $Treffer) {
-        $art = $knoten.get_NodeType()
-        if ($art -eq $script:attributArt) {
-            # Die Namespace-Achse (/items/namespace::xml) liefert fuer den Namespace 'xml'
-            # ein Attribut, das an keinem Element haengt. Es zu setzen aendert am Dokument
-            # nichts (drittes Review zu WP8.8, Befund 2). Ein ausdruecklich deklarierter
-            # Namespace ist ein gewoehnliches Attribut und kommt hier nicht an.
-            if ($null -eq $knoten.get_OwnerElement()) {
-                return 'ein Attribut, das zu keinem Element gehoert (Namespace-Achse)'
-            }
-            if (Test-Gleich $Name 'remove') {
-                return 'ein Attribut; das Spiel lehnt das ab ("use removeattribute instead")'
-            }
-            if (Test-In $Name $script:nurElement) {
-                return "ein Attribut; <$Name> rechnet diese Pruefung nur auf einem Element"
-            }
-        }
-        elseif ($art -eq $script:element) {
-            if (Test-Gleich $Name 'csv') {
-                return 'ein Element; <csv> rechnet diese Pruefung nur auf einem Attribut'
-            }
-        }
-        else {
-            return "einen Knoten der Art $art; gerechnet werden nur Elemente und Attribute"
-        }
-    }
-    return $null
-}
 
 function Invoke-Patchdatei {
     # Wendet eine Patch-Datei auf das Zieldokument an, Operation fuer Operation, jeden

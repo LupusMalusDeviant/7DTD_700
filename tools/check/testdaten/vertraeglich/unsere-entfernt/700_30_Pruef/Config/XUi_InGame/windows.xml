@@ -1,0 +1,3 @@
+<config>
+	<remove xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" />
+</config>

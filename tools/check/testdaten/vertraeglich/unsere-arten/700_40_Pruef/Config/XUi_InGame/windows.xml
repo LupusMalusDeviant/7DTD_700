@@ -1,0 +1,23 @@
+<config>
+	<!-- Jede Art, etwas zu schreiben, die verfolgt wird. -->
+	<!-- Dieselbe Stelle zweimal: es gilt die letzte Operation. -->
+	<set xpath="/windows/window[@name='pruefFensterD']/@pos">erst</set>
+	<set xpath="/windows/window[@name='pruefFensterD']/@pos">7,7</set>
+	<csv xpath="/windows/window[@name='pruefFensterD']/@tags" delim=",">c</csv>
+	<append xpath="/windows/window[@name='pruefFensterD']/@art">Zusatz</append>
+	<set xpath="/windows/window[@name='pruefFensterD']/note[@name='hinweis']">unser Text</set>
+	<prepend xpath="/windows/window[@name='pruefFensterD']">
+		<label name="700_pruefVorn" text="v" />
+	</prepend>
+	<insertAfter xpath="/windows/window[@name='pruefFensterD']/note[@name='hinweis']">
+		<label name="700_pruefDanach" text="d" />
+	</insertAfter>
+	<insertBefore xpath="/windows/window[@name='pruefFensterD']/note[@name='hinweis']">
+		<label name="700_pruefDavor" text="d" />
+	</insertBefore>
+	<!-- Was wir selbst wieder entfernen, ist keine Spur. -->
+	<append xpath="/windows/window[@name='pruefFensterD']">
+		<label name="700_pruefWegwerf" text="w" />
+	</append>
+	<remove xpath="/windows/window[@name='pruefFensterD']/label[@name='700_pruefWegwerf']" />
+</config>

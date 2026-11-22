@@ -1,0 +1,3 @@
+<config>
+	<setattribute xpath="/windows/window[@name='pruefFensterC']" name="pos">1,1</setattribute>
+</config>

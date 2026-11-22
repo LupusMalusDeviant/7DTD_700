@@ -1,0 +1,6 @@
+<config>
+	<setattribute xpath="/windows/window[@name='pruefFensterA']/rect[@name='content']/grid[@name='inventory']" name="cols">5</setattribute>
+	<append xpath="/windows/window[@name='pruefFensterB']">
+		<label name="700_pruefZusatz" text="x" color="[white]" />
+	</append>
+</config>

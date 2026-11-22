@@ -1,0 +1,4 @@
+<config>
+	<!-- Nimmt das Fenster weg, an dem unser Modlet ein Attribut setzt. -->
+	<remove xpath="/windows/window[@name='pruefFensterA']" />
+</config>

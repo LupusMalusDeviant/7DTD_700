@@ -1,0 +1,3 @@
+<Pruef>
+	<setattribute xpath="/styles/global/style_entry[@name='pruefFarbeZwei']" name="value">8,8,8</setattribute>
+</Pruef>

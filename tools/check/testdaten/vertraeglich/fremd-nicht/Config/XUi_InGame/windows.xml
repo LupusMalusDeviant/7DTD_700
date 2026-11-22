@@ -1,0 +1,35 @@
+<config>
+	<!-- Zehn Stellen, die die Pruefung nicht rechnet. Keine davon darf etwas am Stand aendern. -->
+	<remove xpath="/windows/window[@name='pruefFensterC']/label/@text" />
+	<sett xpath="/windows/window[@name='pruefFensterC']">x</sett>
+	<include filename="anderes.xml" />
+	<set xpath="/windows/window[">x</set>
+	<set>ohne Pfad</set>
+	<conditional>
+		<if cond="game_version() != null">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFensterC&quot;]/label/@text')">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<conditional>
+		<elseif cond="mod_loaded('PruefNichtDa')">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</elseif>
+	</conditional>
+	<conditional>
+		<if>
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('PruefNichtDa') and">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<!-- Die eine Operation, die laeuft - und nur trifft, wenn oben nichts entfernt wurde. -->
+	<setattribute xpath="/windows/window[@name='pruefFensterC']/label" name="text">bleibt</setattribute>
+</config>

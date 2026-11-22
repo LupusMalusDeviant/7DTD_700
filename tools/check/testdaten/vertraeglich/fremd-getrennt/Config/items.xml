@@ -1,0 +1,4 @@
+<config>
+	<!-- Patcht nur eine Datei, die unsere Test-Modlets nicht anfassen. -->
+	<csv xpath="/items/item[@name='pruefDing']/property[@name='Tags']/@value" delim=",">c</csv>
+</config>

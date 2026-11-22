@@ -1,0 +1,4 @@
+<config>
+	<!-- Ein breiter Pfad: trifft Vanillas Etikett und, nach uns geladen, auch das von uns eingefuegte. -->
+	<setattribute xpath="//window[@name='pruefFensterB']//label[@color='[white]']" name="color">9,9,9</setattribute>
+</config>

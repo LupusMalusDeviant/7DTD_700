@@ -1,0 +1,6 @@
+<styles>
+	<global>
+		<style_entry name="pruefFarbeEins" value="1,1,1" />
+		<style_entry name="pruefFarbeZwei" value="2,2,2" />
+	</global>
+</styles>

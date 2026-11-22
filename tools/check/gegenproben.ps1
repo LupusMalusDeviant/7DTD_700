@@ -2007,6 +2007,325 @@ Test-Script 'sprachverweise: die Meldung nennt die Gruppenbeschreibung, wenn der
     "Gruppenbeschreibung der Bloecke: 'pruefNotizDesc'; Bloecke ohne eigene Zeile, die sie lesen: 2",
     '== Ergebnis: 2 rot -> RED ==')
 
+# ------------------------------------------ vertraeglichkeit-pruefen.ps1 (WP8.9, 2026-11-22)
+# Rechnet unsere Modlets und EINE fremde Mod in vier Staenden durch (wir allein, die fremde
+# allein, wir dann fremd, fremd dann wir) und meldet, wo sie einander in derselben Datei
+# treffen. Jede Befundklasse aus Vertrag 04 "Nachtrag WP8.9" hat hier ihren Eingang, und
+# jeder Ausfall seinen. Die Testdaten sind erfundene Fenster und erfundene Mods.
+# -Vanilla kommt aus den Testdaten; die Laeufe mit einem bedingten Block brauchen die
+# NCalc.dll des Spiels und damit SDTD_PATH - wie die bedingten Laeufe von kette-pruefen.
+Write-Output ""
+Write-Output "== Gegenproben: vertraeglichkeit-pruefen rechnet unsere Modlets gegen eine fremde Mod =="
+$vertDaten = Join-Path $data 'vertraeglich'
+$vertVanilla = Join-Path $vertDaten 'vanilla'
+$vertUnsere = @((Join-Path $vertDaten 'unsere\700_10_Pruef'), (Join-Path $vertDaten 'unsere\700_20_Pruef'))
+$vertSkript = 'vertraeglichkeit-pruefen.ps1'
+
+# (a) Der saubere Satz: dieselben zwei Dateien, andere Knoten. Die fremde Datei traegt einen
+#     anderen Wurzelknoten als <config>, Attribute, die wie Eigenschaften des XML-Adapters
+#     heissen, und einen Zweig, dessen Bedingung falsch ist - nichts davon ist ein Befund.
+Test-Script 'vertraeglichkeit: dieselben Dateien, andere Knoten - gruen' 0 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "unsere 2 Modlets und 'PruefSauber' (Ordner fremd-sauber)",
+    'XML-Dateien der fremden Mod unter Config: 2 (mit Vanilla-Gegenstueck: 2, ohne: 0)',
+    'gemeinsame Dateien: 2',
+    'erwartete Reihenfolge: wir, dann die fremde Mod',
+    'Operationen der fremden Mod allein: 2, davon ohne Treffer: 0',
+    'unsere Operationen allein, in den gemeinsamen Dateien: 3, davon ohne Treffer: 0',
+    'unsere Schluessel: 2 aus 1 Dateien, die der fremden Mod: 1, gemeinsam: 0',
+    "'PruefSauber': 0 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 0, gemeinsamer Sprachschluessel 0) -> GREEN",
+    '== Ergebnis: 0 Befunde -> GREEN ==')
+
+# (b) Ziel verloren, erwartete Reihenfolge: unser Modlet entfernt das Etikett, das die
+#     fremde Mod danach setzen will. Umgekehrt ist es dieselbe Stelle als veraenderte Wirkung.
+Test-Script 'vertraeglichkeit: wir nehmen der fremden Mod ihr Ziel' 1 @{
+    Unsere  = @((Join-Path $vertDaten 'unsere\700_10_Pruef'), (Join-Path $vertDaten 'unsere-entfernt\700_30_Pruef'))
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "[wir, dann die fremde Mod, erwartet] PruefSauber <setattribute xpath=""/windows/window[@name='pruefFensterC']/label[@name='titel']"" name=""text""> trifft allein 1 Knoten, hier keinen  (XUi_InGame\windows.xml)",
+    "[die fremde Mod, dann wir, umgekehrt] PruefSauber <setattribute",
+    "Attribut 'text' an <label name=""titel""> ist entfernt - zuerst nach 700_30_Pruef <remove xpath=""/windows/window[@name='pruefFensterC']/label[@name='titel']"">",
+    'Ziel verloren 1, Zweig wechselt 0, Wirkung veraendert 1, nicht gerechnet 0',
+    '== Ergebnis: 2 Befunde -> RED ==')
+
+# (c) Dasselbe von der anderen Seite: die fremde Mod entfernt das Fenster, an dem wir ein
+#     Attribut setzen. Erwartet: unsere Wirkung ist weg. Umgekehrt: unser Patch trifft nichts.
+Test-Script 'vertraeglichkeit: die fremde Mod nimmt uns das Ziel' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-ziel')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "[die fremde Mod, dann wir, umgekehrt] 700_10_Pruef <setattribute xpath=""/windows/window[@name='pruefFensterA']/rect[@name='content']/grid[@name='inventory']"" name=""cols""> trifft allein 1 Knoten, hier keinen",
+    "[wir, dann die fremde Mod, erwartet] 700_10_Pruef <setattribute",
+    "Attribut 'cols' an <grid name=""inventory""> ist entfernt - zuerst nach PruefZiel <remove xpath=""/windows/window[@name='pruefFensterA']"">",
+    'Ziel verloren 1, Zweig wechselt 0, Wirkung veraendert 1, nicht gerechnet 0',
+    '== Ergebnis: 2 Befunde -> RED ==')
+
+# (d) Wirkung veraendert: derselbe Stil-Eintrag (beide Reihenfolgen) und ein breiter Pfad,
+#     der auch das von uns eingefuegte Element trifft (nur, wenn die fremde Mod nach uns laedt).
+Test-Script 'vertraeglichkeit: derselbe Wert und ein Pfad, der unser Element mittrifft' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-wert')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "[wir, dann die fremde Mod, erwartet] 700_20_Pruef <setattribute xpath=""/styles/global/style_entry[@name='pruefFarbeEins']"" name=""value"">: Attribut 'value' an <style_entry name=""pruefFarbeEins"">: gesetzt '7,7,7', jetzt '9,9,9' - zuerst nach PruefWert",
+    "[die fremde Mod, dann wir, umgekehrt] PruefWert <setattribute xpath=""/styles/global/style_entry[@name='pruefFarbeEins']"" name=""value"">: Attribut 'value' an <style_entry name=""pruefFarbeEins"">: gesetzt '9,9,9', jetzt '7,7,7' - zuerst nach 700_20_Pruef",
+    "[wir, dann die fremde Mod, erwartet] 700_10_Pruef <append xpath=""/windows/window[@name='pruefFensterB']"">: eingefuegtes Element <label name=""700_pruefZusatz""> ist geaendert - zuerst nach PruefWert <setattribute xpath=""//window[@name='pruefFensterB']//label[@color='[white]']"" name=""color"">",
+    'Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 3, nicht gerechnet 0',
+    '== Ergebnis: 3 Befunde -> RED ==')
+
+# (e) Zweig wechselt: die fremde Mod fragt mod_loaded nach unserem Modlet (beide Zweige
+#     wechseln, in beiden Reihenfolgen), und sie entfernt den Eintrag, nach dem unsere
+#     Bedingung mit xpath(...) fragt (unser Zweig laeuft dann nicht mehr).
+Test-Script 'vertraeglichkeit: Bedingungen fallen in der Kombination anders aus' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-zweig')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "[die fremde Mod, dann wir, umgekehrt] 700_20_Pruef <if cond=""xpath('/styles/global/style_entry[@name=""pruefFarbeEins""]') != null""> mit 1 Operationen laeuft allein, hier nicht  (XUi_Common\styles.xml)",
+    "[wir, dann die fremde Mod, erwartet] PruefZweig <if cond=""mod_loaded('700_10_Pruef')""> mit 1 Operationen laeuft allein nicht, hier schon",
+    "[wir, dann die fremde Mod, erwartet] PruefZweig <else> mit 1 Operationen laeuft allein, hier nicht",
+    "[die fremde Mod, dann wir, umgekehrt] PruefZweig <else> mit 1 Operationen laeuft allein, hier nicht",
+    "Attribut 'value' an <style_entry name=""pruefFarbeEins""> ist entfernt - zuerst nach PruefZweig <remove",
+    'Ziel verloren 0, Zweig wechselt 5, Wirkung veraendert 1, nicht gerechnet 0',
+    '== Ergebnis: 6 Befunde -> RED ==')
+
+# (f) Nicht gerechnet: zehn Stellen, jede einmal gemeldet, mit den drei Staenden, in denen
+#     die fremde Datei laeuft. Keine der zehn darf den Stand aendern - die letzte Operation
+#     der Datei trifft nur, wenn das Fenster noch da ist.
+Test-Script 'vertraeglichkeit: zehn Stellen, die nicht gerechnet werden' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-nicht')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'trifft ein Attribut; das Spiel lehnt das ab ("use removeattribute instead")',
+    'unbekannte Patch-Operation <sett>',
+    '<include> wird nicht gerechnet',
+    'XPath laesst sich nicht auswerten: <set xpath="/windows/window[">',
+    '<set> ohne xpath',
+    'Bedingung "game_version() != null": sie laesst sich nicht auswerten',
+    'sie liefert keinen Wahrheitswert, sondern String',
+    'bedingter Block mit dem Kind <elseif>; erlaubt sind <if cond=...> und <else>',
+    "bedingter Block mit einem <if> ohne 'cond'",
+    "Bedingung ""mod_loaded('PruefNichtDa') and"": NCalc kann sie nicht lesen",
+    'Stand: die fremde Mod allein; wir, dann die fremde Mod; die fremde Mod, dann wir',
+    'Operationen der fremden Mod allein: 1, davon ohne Treffer: 0',
+    'Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 10, gemeinsamer Sprachschluessel 0',
+    '== Ergebnis: 10 Befunde -> RED ==') -MustNotContain @('GREEN')
+
+# (g) Kein Befund, aber genannt: eine Datei ohne Vanilla-Gegenstueck und eine Operation, die
+#     schon allein nichts trifft. Von zwei wahren <if> gewinnt das erste.
+Test-Script 'vertraeglichkeit: allein ohne Treffer und ohne Gegenstueck ist genannt, kein Befund' 0 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-ohne')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'XML-Dateien der fremden Mod unter Config: 2 (mit Vanilla-Gegenstueck: 1, ohne: 1)',
+    'ohne Vanilla-Gegenstueck, das Spiel laedt daraus nichts: XUi\windows.xml',
+    'Operationen der fremden Mod allein: 3, davon ohne Treffer: 2',
+    "trifft allein nichts: <setattribute xpath=""/windows/window[@name='pruefGibtEsAuchNicht']"" name=""pos"">  (XUi_InGame\windows.xml)",
+    "trifft allein nichts: <setattribute xpath=""/windows/window[@name='pruefGibtEsNicht']"" name=""pos"">  (XUi_InGame\windows.xml)",
+    '== Ergebnis: 0 Befunde -> GREEN ==')
+
+# (h) Gemeinsamer Sprachschluessel - und keine gemeinsame XML-Datei. Die Spalte heisst in der
+#     fremden Datei 'KEY'.
+Test-Script 'vertraeglichkeit: ein Sprachschluessel steht in beiden Sprachdateien' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sprache')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'gemeinsame Dateien: 0',
+    'unsere Schluessel: 2 aus 1 Dateien, die der fremden Mod: 2, gemeinsam: 1',
+    'Keine gemeinsame XML-Datei',
+    "'pruefGemeinsam' steht in unserer Sprachdatei und in der von PruefSprache",
+    'nicht gerechnet 0, gemeinsamer Sprachschluessel 1) -> RED',
+    '== Ergebnis: 1 Befunde -> RED ==') -MustNotContain @("'pruefNurFremd' steht")
+
+# (i) Eine fremde Sprachdatei ohne Spalte 'Key' ist "nicht gerechnet", nicht "kein gemeinsamer".
+Test-Script 'vertraeglichkeit: fremde Sprachdatei ohne Schluesselspalte ist nicht gerechnet' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sprache-kaputt')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "PruefSpracheKaputt: die Sprachdatei laesst sich nicht lesen (keine Spalte 'Key'); gemeinsame Schluessel sind nicht verglichen",
+    'nicht gerechnet 1, gemeinsamer Sprachschluessel 0) -> RED') -MustNotContain @('GREEN')
+
+# (j) Keine gemeinsame Datei ist ein Ergebnis, kein Ausfall (Regel 7).
+Test-Script 'vertraeglichkeit: keine gemeinsame Datei ist gruen und sagt es' 0 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-getrennt')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'gemeinsame Dateien: 0',
+    'Keine gemeinsame XML-Datei: die Patches der beiden Seiten koennen einander in keiner Datei treffen.',
+    'die fremde Mod hat keine Config\Localization.csv',
+    '== Ergebnis: 0 Befunde -> GREEN ==')
+
+# (k) bis (m) Regel 3: die erwartete Reihenfolge kommt aus den Ordnernamen.
+Test-Script 'vertraeglichkeit: ein Ordner, der vor unseren sortiert, laedt zuerst' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten '000_fremd-davor')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'erwartete Reihenfolge: die fremde Mod, dann wir',
+    '[die fremde Mod, dann wir, erwartet] PruefDavor <setattribute',
+    '[wir, dann die fremde Mod, umgekehrt] 700_20_Pruef <setattribute',
+    '== Ergebnis: 2 Befunde -> RED ==')
+
+Test-Script 'vertraeglichkeit: ein Ordner zwischen unseren Modlets - keine Reihenfolge erwartet' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten '700_15_fremd-zwischen')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'erwartete Reihenfolge: keine - die fremde Mod laege zwischen unseren Modlets',
+    '[wir, dann die fremde Mod] 700_20_Pruef <setattribute',
+    '[die fremde Mod, dann wir] PruefZwischen <setattribute') -MustNotContain @('erwartet]', 'umgekehrt]')
+
+Test-Script 'vertraeglichkeit: Zeichen- und Sprachvergleich sortieren verschieden - keine Reihenfolge erwartet' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten '_fremd-unklar')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'erwartete Reihenfolge: keine - die Ordnernamen sortieren nicht eindeutig',
+    '[wir, dann die fremde Mod] 700_20_Pruef <setattribute') -MustNotContain @('erwartet]', 'umgekehrt]')
+
+# (n) Zwei fremde Mods in einem Aufruf: jede fuer sich gerechnet, der schlechteste Ausgang gilt.
+Test-Script 'vertraeglichkeit: zwei fremde Mods, jede fuer sich' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @((Join-Path $vertDaten 'fremd-wert'), (Join-Path $vertDaten 'fremd-sauber'))
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    "'PruefSauber': 0 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 0, gemeinsamer Sprachschluessel 0) -> GREEN",
+    "'PruefWert': 3 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 3, nicht gerechnet 0, gemeinsamer Sprachschluessel 0) -> RED",
+    '== Ergebnis: 3 Befunde -> RED ==')
+
+# (n2) Jede Schreibart, die verfolgt wird: set und append auf ein Attribut, csv, set auf den
+#      Text eines Elements, prepend, insertAfter, insertBefore. Dieselbe Stelle zweimal
+#      geschrieben zaehlt einmal, mit der letzten Operation; was wir selbst wieder entfernen,
+#      ist keine Spur. Der breite Pfad der fremden Mod trifft allein nichts - das ist genannt
+#      und kein "Ziel verloren". Umgekehrt nimmt ihr removeattribute unserem append das Ziel.
+Test-Script 'vertraeglichkeit: jede verfolgte Schreibart, jede einmal veraendert' 1 @{
+    Unsere  = @((Join-Path $vertDaten 'unsere\700_10_Pruef'), (Join-Path $vertDaten 'unsere-arten\700_40_Pruef'))
+    Fremd   = @(Join-Path $vertDaten 'fremd-arten')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'Operationen der fremden Mod allein: 5, davon ohne Treffer: 1',
+    'unsere Operationen allein, in den gemeinsamen Dateien: 12, davon ohne Treffer: 0',
+    "[wir, dann die fremde Mod, erwartet] 700_40_Pruef <set xpath=""/windows/window[@name='pruefFensterD']/@pos"">: Attribut 'pos' an <window name=""pruefFensterD"">: gesetzt '7,7', jetzt '9,9' - zuerst nach PruefArten <setattribute",
+    "700_40_Pruef <csv xpath=""/windows/window[@name='pruefFensterD']/@tags"">: Attribut 'tags' an <window name=""pruefFensterD"">: gesetzt 'a,b,c', jetzt 'a,b'",
+    "700_40_Pruef <append xpath=""/windows/window[@name='pruefFensterD']/@art"">: Attribut 'art' an <window name=""pruefFensterD""> ist entfernt - zuerst nach PruefArten <removeattribute",
+    "700_40_Pruef <set xpath=""/windows/window[@name='pruefFensterD']/note[@name='hinweis']"">: Text von <note name=""hinweis"">: gesetzt 'unser Text', jetzt 'fremder Text'",
+    "700_40_Pruef <prepend xpath=""/windows/window[@name='pruefFensterD']"">: eingefuegtes Element <label name=""700_pruefVorn""> ist geaendert",
+    "eingefuegtes Element <label name=""700_pruefDanach""> ist geaendert",
+    "eingefuegtes Element <label name=""700_pruefDavor""> ist geaendert",
+    "[die fremde Mod, dann wir, umgekehrt] PruefArten <setattribute xpath=""/windows/window[@name='pruefFensterD']"" name=""pos"">: Attribut 'pos' an <window name=""pruefFensterD"">: gesetzt '9,9', jetzt 'erst' - zuerst nach 700_40_Pruef <set",
+    "[die fremde Mod, dann wir, umgekehrt] 700_40_Pruef <append xpath=""/windows/window[@name='pruefFensterD']/@art""> trifft allein 1 Knoten, hier keinen",
+    'Ziel verloren 1, Zweig wechselt 0, Wirkung veraendert 10, nicht gerechnet 0',
+    '== Ergebnis: 11 Befunde -> RED ==') -MustNotContain @('700_pruefWegwerf')
+
+# (o) Regel 7 und 8: nichts gerechnet ist nicht gruen. Zwoelf Ausfaelle, jeder Ausgang 2.
+$vertAusfaelle = @(
+    @{ Name = 'fremder Ordner ohne ModInfo.xml'; Fremd = 'fremd-ohne-modinfo'; Text = 'hat keine ModInfo.xml direkt im Ordner' },
+    @{ Name = 'ModInfo.xml ohne Namen'; Fremd = 'fremd-ohne-name'; Text = 'nennt keinen Namen (<Name value=...>)' },
+    @{ Name = 'fremde Mod nur mit Dateien ohne Vanilla-Gegenstueck'; Fremd = 'fremd-leer'; Text = "die fremde Mod 'PruefLeer'" },
+    @{ Name = 'fremde Patch-Datei ist kein XML'; Fremd = 'fremd-kaputt'; Text = 'laesst sich nicht als XML lesen' },
+    @{ Name = 'fremde Patch-Datei mit DOCTYPE'; Fremd = 'fremd-doctype'; Text = 'laesst sich nicht als XML lesen' },
+    @{ Name = 'fremde Mod ohne eine einzige Operation'; Fremd = 'fremd-ohne-operation'; Text = 'hat in 1 Dateien keine einzige Patch-Operation' },
+    @{ Name = 'fremder Ordner fehlt'; Fremd = 'gibt-es-nicht'; Text = 'ist kein Ordner' })
+foreach ($ausfall in $vertAusfaelle) {
+    Test-Script "vertraeglichkeit: $($ausfall.Name) - nicht pruefbar" 2 @{
+        Unsere  = $vertUnsere
+        Fremd   = @(Join-Path $vertDaten $ausfall.Fremd)
+        Vanilla = $vertVanilla
+    } -Skript $vertSkript -MustContain @($ausfall.Text, 'NICHT GEPRUEFT', '== Ergebnis: nicht pruefbar -> RED ==') -MustNotContain @('GREEN')
+}
+
+Test-Script 'vertraeglichkeit: unsere Seite ohne Datei mit Vanilla-Gegenstueck - nicht pruefbar' 2 @{
+    Unsere  = @(Join-Path $vertDaten 'unsere-ohne\700_10_Pruef')
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @('unsere Modlets haben keine einzige XML-Patch-Datei mit Vanilla-Gegenstueck', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'vertraeglichkeit: Vanilla-Ordner fehlt - nicht pruefbar' 2 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = (Join-Path $vertDaten 'gibt-es-nicht')
+} -Skript $vertSkript -MustContain @('den Vanilla-Ordner', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'vertraeglichkeit: kein Spielpfad und kein -Vanilla - nicht pruefbar' 2 @{
+    Unsere = $vertUnsere
+    Fremd  = @(Join-Path $vertDaten 'fremd-sauber')
+} -Skript $vertSkript -OhneSpielpfad -MustContain @('vertraeglichkeit-pruefen: SDTD_PATH ist nicht gesetzt und -Vanilla nicht angegeben', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'vertraeglichkeit: bedingter Block, die angegebene NCalc.dll fehlt - nicht pruefbar' 2 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = $vertVanilla
+    NCalc   = (Join-Path $vertDaten 'gibt-es-nicht.dll')
+} -Skript $vertSkript -MustContain @('eine Patch-Datei hat einen bedingten Block, aber die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'vertraeglichkeit: bedingter Block ohne Spielpfad - nicht pruefbar' 2 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-sauber')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -OhneSpielpfad -MustContain @('eine Patch-Datei hat einen bedingten Block, und SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (p) Ohne Parameter sucht das Skript unsere Modlets unter mod\ und die fremden Mods unter
+#     GameRefs\ui-mods, beides neben tools\check. Das laesst sich nur in einem nachgebauten
+#     Baum pruefen: einmal vollstaendig (muss gruen sein und die Ordner ohne ModInfo.xml
+#     uebergehen), einmal ohne GameRefs, einmal ohne patch-operationen.ps1. Im dritten Baum
+#     liegt auch sprachverweise-pruefen.ps1: es liest dieselbe Datei ein.
+$vertBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-vertraeglichprobe-' + [Guid]::NewGuid().ToString('N'))
+try {
+    foreach ($vertFall in 'ganz', 'ohne-fremd', 'ohne-bibliothek') {
+        $vertWurzel = Join-Path $vertBaum $vertFall
+        New-Item -ItemType Directory -Force -Path (Join-Path $vertWurzel 'tools\check') | Out-Null
+        New-Item -ItemType Directory -Force -Path (Join-Path $vertWurzel 'mod') | Out-Null
+        Copy-Item -LiteralPath (Join-Path $here 'vertraeglichkeit-pruefen.ps1') -Destination (Join-Path $vertWurzel 'tools\check')
+        Copy-Item -LiteralPath (Join-Path $here 'sprachverweise-pruefen.ps1') -Destination (Join-Path $vertWurzel 'tools\check')
+        if ($vertFall -ne 'ohne-bibliothek') {
+            Copy-Item -LiteralPath (Join-Path $here 'patch-operationen.ps1') -Destination (Join-Path $vertWurzel 'tools\check')
+        }
+        Copy-Item -LiteralPath (Join-Path $vertDaten 'unsere\700_10_Pruef') -Destination (Join-Path $vertWurzel 'mod') -Recurse
+        Copy-Item -LiteralPath (Join-Path $vertDaten 'unsere\700_20_Pruef') -Destination (Join-Path $vertWurzel 'mod') -Recurse
+        if ($vertFall -ne 'ohne-fremd') {
+            New-Item -ItemType Directory -Force -Path (Join-Path $vertWurzel 'GameRefs\ui-mods\_zip') | Out-Null
+            Copy-Item -LiteralPath (Join-Path $vertDaten 'fremd-sauber') -Destination (Join-Path $vertWurzel 'GameRefs\ui-mods') -Recurse
+        }
+    }
+
+    Test-Script 'vertraeglichkeit: ohne Parameter - Modlets unter mod, fremde Mods unter GameRefs\ui-mods' 0 @{
+        Vanilla = $vertVanilla
+    } -FremdesSkript (Join-Path $vertBaum 'ganz\tools\check\vertraeglichkeit-pruefen.ps1') -MustContain @(
+        "unsere 2 Modlets und 'PruefSauber' (Ordner fremd-sauber)",
+        'gemeinsame Dateien: 2',
+        '== Ergebnis: 0 Befunde -> GREEN ==')
+
+    Test-Script 'vertraeglichkeit: ohne Parameter und ohne GameRefs\ui-mods - nicht pruefbar' 2 @{
+        Vanilla = $vertVanilla
+    } -FremdesSkript (Join-Path $vertBaum 'ohne-fremd\tools\check\vertraeglichkeit-pruefen.ps1') -MustContain @(
+        'GameRefs\ui-mods', 'gibt es nicht', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    Test-Script 'vertraeglichkeit: patch-operationen.ps1 fehlt - nicht pruefbar' 2 @{
+        Vanilla = $vertVanilla
+    } -FremdesSkript (Join-Path $vertBaum 'ohne-bibliothek\tools\check\vertraeglichkeit-pruefen.ps1') -MustContain @(
+        'vertraeglichkeit-pruefen: patch-operationen.ps1 fehlt neben dem Skript', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    Test-Script 'sprachverweise: patch-operationen.ps1 fehlt - nicht pruefbar' 2 @{
+        Patches     = $spracheGutPatches
+        Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
+        Vanilla     = $spracheVanilla
+    } -FremdesSkript (Join-Path $vertBaum 'ohne-bibliothek\tools\check\sprachverweise-pruefen.ps1') -MustContain @(
+        'sprachverweise-pruefen: patch-operationen.ps1 fehlt neben dem Skript', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+}
+finally {
+    if (Test-Path -LiteralPath $vertBaum) { Remove-Item -LiteralPath $vertBaum -Recurse -Force }
+}
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {

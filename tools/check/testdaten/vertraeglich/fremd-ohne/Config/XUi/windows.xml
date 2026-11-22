@@ -1,0 +1,4 @@
+<config>
+	<!-- Der Ordner XUi hat in den Testdaten kein Vanilla-Gegenstueck: das Spiel laedt daraus nichts. -->
+	<remove xpath="/windows/window[@name='pruefFensterA']" />
+</config>

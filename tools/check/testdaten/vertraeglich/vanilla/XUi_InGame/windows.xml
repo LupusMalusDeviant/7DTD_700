@@ -1,0 +1,18 @@
+<windows>
+	<!-- Erfundene Fenster fuer die Gegenproben von vertraeglichkeit-pruefen.ps1. Kein Spielinhalt. -->
+	<window name="pruefFensterA">
+		<rect name="content">
+			<grid name="inventory" cols="3" />
+			<label name="titel" text="A" />
+		</rect>
+	</window>
+	<window name="pruefFensterB">
+		<label name="titel" text="B" color="[white]" />
+	</window>
+	<window name="pruefFensterC">
+		<label name="titel" text="C" />
+	</window>
+	<window name="pruefFensterD" pos="0,0" tags="a,b" art="Grund">
+		<note name="hinweis">alt</note>
+	</window>
+</windows>

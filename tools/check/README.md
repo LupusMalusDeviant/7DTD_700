@@ -432,6 +432,52 @@ sind nachgebaut, nicht am Spiel gemessen; die Reihenfolge ist die der Dateinamen
 überschriebene Vanilla-Zeile, die weder Gegenstand noch Block beschreibt, noch gelesen wird,
 prüft niemand.
 
+Die neun Patch-Operationen stehen seit dem 2026-11-22 in `patch-operationen.ps1`; dieses
+Skript und `vertraeglichkeit-pruefen.ps1` lesen die Datei ein. Fehlt sie, endet jedes der
+beiden mit Exit 2.
+
+### `vertraeglichkeit-pruefen.ps1` — unsere Modlets gegen eine fremde Mod (WP8.9)
+
+**Läuft nicht in `check-all.ps1`:** die Eingabe liegt außerhalb des Repositorys, und ein
+Befund hier ist eine Frage an die Testmatrix, kein Fehler in der Mod (Vertrag 04, „Nachtrag
+WP8.9", Abnahme offen). Die Gegenproben laufen in `gegenproben.ps1` wie alle anderen.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/vertraeglichkeit-pruefen.ps1
+```
+
+Ohne Parameter: unsere Modlets aus `mod\`, jede fremde Mod unmittelbar unter
+`GameRefs\ui-mods\` (ein Ordner mit `ModInfo.xml` und `Config\`), Vanilla aus `SDTD_PATH`.
+Mit `-Fremd`, `-Unsere`, `-Vanilla`, `-NCalc` lässt sich jede Seite angeben. Exit **0** grün,
+**1** Befunde, **2** nicht prüfbar.
+
+Je fremder Mod und je XML-Datei, die beide Seiten patchen, rechnet es vier Stände aus der
+unveränderten Vanilla-Datei — wir allein, die fremde Mod allein, wir dann sie, sie dann wir —
+und meldet:
+
+- **Ziel verloren:** eine Operation trifft allein etwas und in der Kombination nichts.
+- **Zweig wechselt:** eine Bedingung fällt in der Kombination anders aus.
+- **Wirkung verändert:** was die zuerst geladene Seite geschrieben hat, ist nach der zweiten
+  entfernt oder anders.
+- **Nicht gerechnet:** eine Stelle, an der der Stand danach geraten wäre.
+- **Gemeinsamer Sprachschlüssel.**
+
+Beide Reihenfolgen laufen; welche erwartet ist, ergeben die Ordnernamen. Operationen der
+fremden Mod, die schon allein nichts treffen, und Dateien ohne Vanilla-Gegenstück werden
+genannt, sind aber kein Befund.
+
+Gemessen am 2026-11-22 gegen die zwei Referenz-Mods aus D86 (10 Sekunden, Exit 1,
+11 Befunde): AGF-1HUDPlus 3 „nicht gerechnet"; EchoHybridUI 6 „Wirkung verändert" (drei
+Stil-Einträge, in beiden Reihenfolgen), 1 „nicht gerechnet", 1 gemeinsamer Sprachschlüssel.
+**Kein verlorenes Ziel, kein gewechselter Zweig.** Rot vorgeführt an
+`testdaten/vertraeglich/`: 31 Gegenproben, dazu 38 Verfälschungen des Skripts und der
+gemeinsamen Datei — jede macht mindestens eine Gegenprobe rot.
+
+**Es ersetzt keinen Lauf.** Es sieht nur XML (keine DLL der fremden Mod), nur dieselbe Datei
+(kein Stil, keine Vorlage aus einer anderen), nichts am Bildschirm; `game_version()` rechnet
+es nicht, Operationsnamen vergleicht es Zeichen für Zeichen. Fremde Dateien sind Daten: XML
+ohne DTD, nichts wird ausgeführt, nichts ins Repository geschrieben.
+
 ## Grenzen
 
 Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtigsten:
@@ -477,6 +523,8 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |
 | `world-roots.txt` | Wurzeln, die das XML nicht ausdrückt |
 | `sprachverweise-pruefen.ps1` | genannte Sprachschlüssel haben eine Zeile, geschriebene Zeilen werden gelesen (WP8.8) |
+| `patch-operationen.ps1` | die neun Patch-Operationen, eingelesen von den zwei Skripten darüber und darunter |
+| `vertraeglichkeit-pruefen.ps1` | unsere Modlets gegen eine fremde Mod, vier Stände je gemeinsamer Datei (WP8.9); nicht in `check-all.ps1` |
 | `gegenproben.ps1` | der Nachweis nach Projektregel 5 |
 | `check-all.ps1` | der Prüfbefehl des Projekts |
 | `testdaten/` | erfundene Prüfdaten, ein sauberer und ein roter Satz |

@@ -1635,7 +1635,8 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    - `[Claude-prüfbar]`, sobald sie da sind: **Vorprüfung ohne Spiel** — unsere XUi-XPaths
      gegen Vanillas XUi-Dateien, auf die zuvor die Patches der Referenz-Mod angewandt sind,
      und umgekehrt. Sie sagt, welcher unserer Patches sein Ziel verliert, bevor ein Lauf es
-     zeigt. Braucht einen Nachtrag in Vertrag 04 und Gegenproben wie jede neue Prüfung;
+     zeigt. Braucht einen Nachtrag in Vertrag 04 und Gegenproben wie jede neue Prüfung.
+     **Gebaut und gelaufen am 2026-11-22 — siehe „Zweiter Nachtrag" unten;**
    - `[braucht Nutzer]` die drei Läufe im Spiel und der Blick auf die Fenster (Prüfliste
      24 b bis e). Hängt an der installierten Mod und an Prüfliste 22. **Ein Lauf zählt nur,
      wenn die Referenz-Mod in ihm nachweislich geladen ist** (24 e, ergänzt nach dem Review
@@ -1701,6 +1702,63 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      `mod_loaded` stünden die Namen jetzt fest: `AGF-1HUDPlus` und `EchoHybridUI`.
 
    Gebaut ist in diesem Schritt nichts, an der Mod ist nichts geändert.
+
+   **Zweiter Nachtrag vom selben Tag: die Vorprüfung ohne Spiel ist gebaut und gelaufen.**
+   `tools/check/vertraeglichkeit-pruefen.ps1` rechnet je fremder Mod und je gemeinsamer
+   XML-Datei vier Stände aus der unveränderten Vanilla-Datei — wir allein, die fremde Mod
+   allein, wir dann sie, sie dann wir — und vergleicht sie. Regeln, Grenzen und Gegenproben:
+   [Vertrag 04](../contracts/04-pruefwerkzeuge.md) „Nachtrag WP8.9", **Abnahme offen** — auch
+   die Entscheidung, dass die Prüfung **nicht** in `check-all.ps1` läuft (ihre Eingabe liegt
+   außerhalb des Repositorys). Die neun Patch-Operationen liegen dafür jetzt in
+   `tools/check/patch-operationen.ps1`, die `sprachverweise-pruefen.ps1` mitliest (am echten
+   Stand unverändert 729 Operationen, 0 ohne Treffer). *Nachweis:* 31 neue Gegenproben
+   (`gegenproben.ps1`: 209, 0 fehlgeschlagen; vorher 178), 38 Verfälschungen, jede macht
+   mindestens eine rot. An der Mod ist nichts geändert.
+
+   *Lauf gegen beide Referenz-Mods* (ohne Parameter, Vanilla V 3.40): **Ausgang 1,
+   11 Befunde.** Kein einziger ist ein verlorenes Ziel — in keiner der beiden Reihenfolgen
+   trifft eine unserer Operationen oder eine der fremden Mod in der Kombination nichts, was
+   sie allein trifft, und keine Bedingung fällt anders aus.
+   - *AGF-1HUDPlus — 3 Befunde, alle „nicht gerechnet", kein gerechneter Konflikt.* 4
+     gemeinsame Dateien (`items.xml`, `XUi_Common\styles.xml`, `XUi_InGame\windows.xml`,
+     `XUi_InGame\xui.xml`), AGF allein 84 Operationen, alle treffen; kein gemeinsamer
+     Sprachschlüssel (887 gegen 147). Ungerechnet: (1) `<insertafter>` in `items.xml`, klein
+     geschrieben — diese Prüfung kennt nur `insertAfter`; ob das Spiel die Schreibweise
+     annimmt, ist nicht gelesen. (2) und (3) zwei bedingte Blöcke, die `game_version()`
+     fragen: einer in `XUi_InGame\windows.xml` (Rucksack-, Plünder- und Lagerfenster — dem
+     Namen nach keines unserer Ziele), einer in `templates.xml`, die nur AGF patcht. Beide
+     Blöcke fehlen im gerechneten Stand.
+   - *EchoHybridUI — 8 Befunde.* 8 gemeinsame Dateien (`buffs`, `entityclasses`, `items`,
+     `quests`, `XUi_Common\styles`, `XUi_InGame\windows`, `XUi_InGame\xui`,
+     `XUi_Menu\windows`), E C H O allein 703 Operationen.
+     **Sechs „Wirkung verändert"** sind dreimal dasselbe in beiden Reihenfolgen: die
+     Stil-Einträge `disabledColor`, `disabledLabelColor` und `hoverColor`. In der erwarteten
+     Reihenfolge (wir, dann E C H O) gilt ihr Wert — der erste Blick oben ist damit
+     gerechnet, nicht mehr nur gesucht. Die anderen fünf Einträge von `700_90_Sprache`
+     bleiben, ebenso unser Anhang an `mainMenuVersion` und das Attribut am Raster der
+     Feuerstelle.
+     **Ein gemeinsamer Sprachschlüssel: `quest_clear_response`.** Unsere Zeile nennt dort
+     die Seuchentoten; lädt E C H O nach uns, steht in Lauf 3 ihr Text. Das ist der einzige
+     Schlüssel von 48, und er ist am Bildschirm zu sehen (der Text der Räumungs-Aufträge).
+     **Ein „nicht gerechnet":** ein `<removeattribute>`, dessen Pfad auf das Attribut selbst
+     zeigt (`XUi_InGame\windows.xml`) — das rechnet `patch-operationen.ps1` nur auf einem
+     Element.
+     *Kein Befund, aber genannt:* **sieben Operationen von E C H O treffen schon allein
+     nichts** auf V 3.40 (Rollbalken-Vorlagen, das Ausrüstungsraster, drei am Plünderfenster)
+     — in Lauf 3 wären das Warnungen im Protokoll, die nichts mit uns zu tun haben. Und
+     **fünf ihrer XML-Dateien haben kein Vanilla-Gegenstück** (`XUi\controls.xml`,
+     `XUi\windows.xml`, `XUi\xui.xml`, `XUi_Common\controls.xml`, `EchoHybridUI.xml`); den
+     Ordner `XUi` gibt es in V 3.40 nicht, daraus lädt das Spiel nichts. Beides passt dazu,
+     dass E C H O für 3.1 und 3.2 ausgewiesen ist.
+   - *Was daraus folgt, ohne dass etwas entschieden ist:* (a) Für eine
+     `mod_loaded`-Bedingung gibt es weiter keinen Anlass — kein Ziel geht verloren. (b) Mit
+     E C H O gelten drei unserer acht Farbtöne und ein Auftragstext nicht; ob das ein
+     Mangel ist oder das, was eine vollständige UI-Überarbeitung eben tut, entscheidet der
+     Nutzer nach Lauf 3. (c) **Prüfliste 24 e braucht eine Antwort, bevor Lauf 3 gewertet
+     wird:** zählt eine Warnung über einen Patch von E C H O, der nichts trifft, als
+     „XML-Fehlerzeile, die eine ihrer Dateien nennt"? Dann zählte Lauf 3 voraussichtlich
+     nie. (d) Was die Prüfung nicht sieht, bleibt Sache der Läufe: die zwei DLLs von
+     E C H O, alles, was über Dateigrenzen hinweg zusammenhängt, und der Bildschirm.
 
 **Ergebnis:** Dunklere, nebligere Nächte; vollständige DE/EN-Texte; UI im Setting-Ton.
 
@@ -2168,9 +2226,34 @@ werden:
     2026-11-21.)*
     *(Ein Konflikt hier ist der einzige Anlass für eine `mod_loaded`-Bedingung, Vertrag 03
     §5 Nachtrag WP8.9.)*
+    f) **Wohin die Vorprüfung zeigt** (ergänzt am 22. November 2026, WP8.9 „Zweiter
+    Nachtrag"; gerechnet, nicht gesehen). *Lauf 2 (AGF):* sind die Buch-Symbole im Inventar
+    eingefärbt (ihr `<insertafter>` in `items.xml`), und steht dazu eine Zeile im Protokoll?
+    Rucksack- und Plünderfenster öffnen — die zwei Blöcke mit `game_version()` hat die
+    Vorprüfung nicht gerechnet. *Lauf 3 (E C H O):* erwartet sind **ihre** Werte für
+    ausgegraute und überfahrene Schaltflächen (`disabledColor`, `disabledLabelColor`,
+    `hoverColor`) und **ihr** Text am Räumungs-Auftrag (`quest_clear_response`) statt
+    „Seuchentote"; erwartet sind außerdem bis zu sieben Warnungen über Patches von
+    E C H O, die nichts treffen. **Vor dem Werten von Lauf 3 klären:** gelten diese
+    Warnungen als Fehlerzeile nach e)? *(Offener Punkt „Vorprüfung WP8.9".)*
+    Die Vorprüfung selbst wiederholt sich mit
+    `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/vertraeglichkeit-pruefen.ps1`.
 
 ## Offene Punkte
 
+- **Vorprüfung WP8.9: vier Dinge sind offen** (2026-11-22, `vertraeglichkeit-pruefen.ps1`).
+  1. *Abnahme.* Vertrag 04 „Nachtrag WP8.9" — mit der Entscheidung, dass die Prüfung nicht
+     in `check-all.ps1` läuft.
+  2. *Prüfliste 24 e gegen sieben erwartete Warnungen.* E C H O hat auf V 3.40 schon allein
+     sieben Operationen ohne Treffer. Zählt eine solche Warnung als Fehlerzeile, die den
+     Lauf entwertet, zählt Lauf 3 voraussichtlich nie; zählt sie nicht, muss 24 e das
+     sagen. Entscheidet der Nutzer, 24 e ist bis dahin unverändert.
+  3. *`game_version()` wird nicht gerechnet.* Zwei bedingte Blöcke von AGF fehlen darum im
+     gerechneten Stand. Nachziehen hieße: belegen, was `game_version()` und `version(…)`
+     auf V 3.40 liefern (Finding), dann Vertragsnachtrag und Gegenproben.
+  4. *Groß und klein bei Operationsnamen.* AGF schreibt `<insertafter>`; ob das Spiel das
+     annimmt, ist nicht gelesen (der REA-Blick auf `XmlPatcher` blieb ohne Antwort). Lauf 2
+     zeigt es am Protokoll (Prüfliste 24 f).
 - **Zwei freie Gegenstände lesen weiter Vanillas Bauteil-Beschreibung** (gefunden in WP8.8,
   2026-11-22). `gunPartsGroupDesc` („Zerlege fortgeschrittene Waffen und Werkzeuge, um diese
   Gegenstände zu erhalten …") erben 15 Gegenstände. Sechs haben jetzt ihren eigenen

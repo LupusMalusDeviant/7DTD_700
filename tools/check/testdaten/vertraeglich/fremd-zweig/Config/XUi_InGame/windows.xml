@@ -1,0 +1,11 @@
+<config>
+	<!-- Reagiert darauf, ob unser Modlet geladen ist. -->
+	<conditional>
+		<if cond="mod_loaded('700_10_Pruef')">
+			<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">mit</setattribute>
+		</if>
+		<else>
+			<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">ohne</setattribute>
+		</else>
+	</conditional>
+</config>

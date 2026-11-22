@@ -1,0 +1,14 @@
+<config>
+	<!-- Trifft schon allein nichts: das sagt etwas ueber die fremde Mod, nichts ueber uns. -->
+	<setattribute xpath="/windows/window[@name='pruefGibtEsNicht']" name="pos">1,1</setattribute>
+	<setattribute xpath="/windows/window[@name='pruefFensterC']" name="pos">1,1</setattribute>
+	<!-- Zwei wahre <if>: das ERSTE gewinnt. Seine Operation trifft nichts, die des zweiten traefe. -->
+	<conditional>
+		<if cond="mod_loaded('PruefOhne')">
+			<setattribute xpath="/windows/window[@name='pruefGibtEsAuchNicht']" name="pos">2,2</setattribute>
+		</if>
+		<if cond="mod_loaded('PruefOhne')">
+			<setattribute xpath="/windows/window[@name='pruefFensterC']" name="pos">3,3</setattribute>
+		</if>
+	</conditional>
+</config>

@@ -1,0 +1,4 @@
+<config>
+	<!-- Setzt denselben Stil-Eintrag wie unser Modlet. -->
+	<setattribute xpath="/styles/global/style_entry[@name='pruefFarbeEins']" name="value">9,9,9</setattribute>
+</config>

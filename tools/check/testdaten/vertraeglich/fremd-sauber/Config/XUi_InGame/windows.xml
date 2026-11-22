@@ -1,0 +1,12 @@
+<Pruef ChildNodes="x">
+	<!-- Der Wurzelknoten heisst nicht <config>: fremde Mods nennen ihn, wie sie wollen. -->
+	<!-- Attribute, die wie Eigenschaften des XML-Adapters heissen: gelesen wird ueber Methoden.
+	     Ueber Eigenschaften gelesen hiesse die Operation "sett", waere ein Kommentar, und der
+	     Wurzelknoten haette statt seiner Kinder den Text "x". -->
+	<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text" LocalName="sett" NodeType="Comment">Q</setattribute>
+	<conditional>
+		<if cond="mod_loaded('PruefNichtDa')">
+			<remove xpath="/windows/window[@name='pruefFensterA']" />
+		</if>
+	</conditional>
+</Pruef>
