@@ -1,0 +1,23 @@
+<config>
+	<!-- mod_loaded und xpath bekommen im Spiel genau ein Argument. Drei Bedingungen mit einer
+	     anderen Zahl: jede ist "nicht gerechnet", und keiner der Zweige darf laufen. Wer nur
+	     das erste Argument liest, haelt die erste und die zweite fuer wahr und entfernt das
+	     Fenster. -->
+	<conditional>
+		<if cond="not mod_loaded('PruefNichtDa', 'zuviel')">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFensterC&quot;]', 'zuviel') != null">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="not mod_loaded()">
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<!-- Die eine Operation, die laeuft - und nur trifft, wenn oben nichts entfernt wurde. -->
+	<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">bleibt</setattribute>
+</config>

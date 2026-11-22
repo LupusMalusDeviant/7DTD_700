@@ -2274,6 +2274,68 @@ Test-Script 'vertraeglichkeit: bedingter Block ohne Spielpfad - nicht pruefbar' 
     Vanilla = $vertVanilla
 } -Skript $vertSkript -OhneSpielpfad -MustContain @('eine Patch-Datei hat einen bedingten Block, und SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
+# (o2) Review zu WP8.9 (Vertrag 04, "Nachtrag Review zu WP8.9"), drei Befunde.
+#      Unsere Seite ist in den Laeufen zur Bibliothek NUR das Modlet ohne bedingten Block:
+#      mit dem zweiten lueden unsere eigenen Bedingungen die Bibliothek, und der Lauf waere
+#      auch ohne den Fix rot.
+$vertNurFenster = @(Join-Path $vertDaten 'unsere\700_10_Pruef')
+
+#      Regel 1: die NCalc.dll wird fuer JEDEN bedingten Block gebraucht. Ein Block nur mit
+#      <else> lief ohne sie gruen durch, ein <if> ohne cond endete mit Ausgang 1.
+Test-Script 'vertraeglichkeit: Block nur mit <else>, die NCalc.dll fehlt - nicht pruefbar' 2 @{
+    Unsere  = $vertNurFenster
+    Fremd   = @(Join-Path $vertDaten 'fremd-nur-else')
+    Vanilla = $vertVanilla
+    NCalc   = (Join-Path $vertDaten 'gibt-es-nicht.dll')
+} -Skript $vertSkript -MustContain @('eine Patch-Datei hat einen bedingten Block, aber die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'Befunde')
+
+Test-Script 'vertraeglichkeit: <if> ohne cond, die NCalc.dll fehlt - nicht pruefbar' 2 @{
+    Unsere  = $vertNurFenster
+    Fremd   = @(Join-Path $vertDaten 'fremd-if-ohne-cond')
+    Vanilla = $vertVanilla
+    NCalc   = (Join-Path $vertDaten 'gibt-es-nicht.dll')
+} -Skript $vertSkript -MustContain @('eine Patch-Datei hat einen bedingten Block, aber die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'Befunde')
+
+#      Dieselbe Mod MIT der Bibliothek: der <else>-Zweig laeuft, nichts ist rot. Damit ist
+#      der Ausgang 2 oben die fehlende Bibliothek und nicht die Pruef-Mod.
+Test-Script 'vertraeglichkeit: Block nur mit <else>, mit der NCalc.dll - gruen' 0 @{
+    Unsere  = $vertNurFenster
+    Fremd   = @(Join-Path $vertDaten 'fremd-nur-else')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'Operationen der fremden Mod allein: 1, davon ohne Treffer: 0',
+    "'PruefNurElse': 0 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 0, gemeinsamer Sprachschluessel 0) -> GREEN",
+    '== Ergebnis: 0 Befunde -> GREEN ==')
+
+#      Regel 2: mod_loaded und xpath bekommen genau ein Argument. Zwei und keines sind
+#      "nicht gerechnet", kein Zweig laeuft - die eine Operation danach trifft ihr Fenster
+#      noch. Wer nur das erste Argument liest, entfernt es.
+Test-Script 'vertraeglichkeit: mod_loaded und xpath mit falscher Argumentzahl sind nicht gerechnet' 1 @{
+    Unsere  = $vertNurFenster
+    Fremd   = @(Join-Path $vertDaten 'fremd-argumente')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    'Operationen der fremden Mod allein: 1, davon ohne Treffer: 0',
+    '-- nicht gerechnet (3) --',
+    "Bedingung ""not mod_loaded('PruefNichtDa', 'zuviel')"": sie laesst sich nicht auswerten (mod_loaded(...) bekommt 2 Argumente, das Spiel verlangt genau eines)",
+    'sie laesst sich nicht auswerten (xpath(...) bekommt 2 Argumente, das Spiel verlangt genau eines)',
+    'Bedingung "not mod_loaded()": sie laesst sich nicht auswerten (mod_loaded(...) bekommt 0 Argumente, das Spiel verlangt genau eines)',
+    "'PruefArgumente': 3 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 3, gemeinsamer Sprachschluessel 0) -> RED",
+    '== Ergebnis: 3 Befunde -> RED ==') -MustNotContain @('trifft allein nichts', 'GREEN')
+
+#      Regel 3: eine Zeile je Stelle, und die Datei gehoert zur Stelle. Dieselbe unbekannte
+#      Operation am selben Platz zweier Dateien sind zwei Zeilen.
+Test-Script 'vertraeglichkeit: dieselbe Meldung in zwei Dateien sind zwei Stellen' 1 @{
+    Unsere  = $vertUnsere
+    Fremd   = @(Join-Path $vertDaten 'fremd-zwei-dateien')
+    Vanilla = $vertVanilla
+} -Skript $vertSkript -MustContain @(
+    '-- nicht gerechnet (2) --',
+    'PruefZweiDateien: unbekannte Patch-Operation <pruefunbekannt>  (XUi_Common\styles.xml) - Stand: die fremde Mod allein; wir, dann die fremde Mod; die fremde Mod, dann wir',
+    'PruefZweiDateien: unbekannte Patch-Operation <pruefunbekannt>  (XUi_InGame\windows.xml) - Stand: die fremde Mod allein; wir, dann die fremde Mod; die fremde Mod, dann wir',
+    "'PruefZweiDateien': 2 Befunde (Ziel verloren 0, Zweig wechselt 0, Wirkung veraendert 0, nicht gerechnet 2, gemeinsamer Sprachschluessel 0) -> RED",
+    '== Ergebnis: 2 Befunde -> RED ==')
+
 # (p) Ohne Parameter sucht das Skript unsere Modlets unter mod\ und die fremden Mods unter
 #     GameRefs\ui-mods, beides neben tools\check. Das laesst sich nur in einem nachgebauten
 #     Baum pruefen: einmal vollstaendig (muss gruen sein und die Ordner ohne ModInfo.xml

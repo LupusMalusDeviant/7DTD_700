@@ -1,0 +1,10 @@
+<config>
+	<!-- Ein bedingter Block nur mit <else>: sein Zweig laeuft immer, eine Bedingung gibt es
+	     nicht. Die Bibliothek des Spiels braucht die Pruefung trotzdem, bevor sie den Block
+	     ansieht - ohne sie ist das nicht pruefbar, nicht gruen. -->
+	<conditional>
+		<else>
+			<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">sonst</setattribute>
+		</else>
+	</conditional>
+</config>

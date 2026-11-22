@@ -249,7 +249,8 @@ $ncalcHandler = $null
 
 function Initialize-NCalc {
     # Wie in kette-pruefen.ps1: die Bibliothek des Spiels, mit den Optionen des Spiels
-    # (1542). Geladen wird sie erst, wenn eine gerechnete Datei einen bedingten Block hat.
+    # (1542). Geladen wird sie erst, wenn eine gerechnete Datei einen bedingten Block hat -
+    # dann aber fuer JEDEN Block, bevor er angesehen wird (Invoke-Bedingt).
     if ($script:ncalcGeladen) { return }
     $pfad = $NCalc
     if (-not $pfad) {
@@ -269,13 +270,21 @@ function Initialize-NCalc {
         # mod_loaded und xpath werden nachgestellt. Jede andere Funktion bekommt kein
         # Ergebnis - NCalc wirft dann "Function not found", und die Bedingung gilt als
         # nicht gerechnet.
+        # Beide bekommen GENAU EIN Argument, wie das Spiel es verlangt (Vertrag 04, Nachtrag
+        # Review zu WP8.9, Regel 2). Vorher wurde nur das erste gelesen, und
+        # mod_loaded('X', 'zuviel') galt als gerechnet. Wer hier wirft, macht die Bedingung
+        # "nicht gerechnet" (Get-Bedingung faengt es).
         $script:ncalcHandler = [NCalc.EvaluateFunctionHandler] {
             param($name, $fa)
             if ([string]::Equals([string]$name, 'mod_loaded', [System.StringComparison]::OrdinalIgnoreCase)) {
+                $zahl = @($fa.Parameters).Count
+                if ($zahl -ne 1) { throw "mod_loaded(...) bekommt $zahl Argumente, das Spiel verlangt genau eines" }
                 $modName = ([string]$fa.Parameters[0].Evaluate()).Trim()
                 $fa.Result = [bool]$script:geladen.Contains($modName)
             }
             elseif ([string]::Equals([string]$name, 'xpath', [System.StringComparison]::OrdinalIgnoreCase)) {
+                $zahl = @($fa.Parameters).Count
+                if ($zahl -ne 1) { throw "xpath(...) bekommt $zahl Argumente, das Spiel verlangt genau eines" }
                 $pfadText = [string]$fa.Parameters[0].Evaluate()
                 $roh = [System.Xml.XPath.Extensions]::XPathEvaluate($script:zustandX, $pfadText)
                 if ($roh -is [string] -or $roh -is [double] -or $roh -is [bool]) {
@@ -319,8 +328,11 @@ function Add-Befund {
 function Add-Nicht {
     # "Nicht gerechnet" - dieselbe Stelle taucht in bis zu vier Staenden auf und wird
     # einmal gemeldet, mit den Staenden dahinter.
+    # Eine Stelle ist Mod, Datei, Position und Text. Der Mod-Name steckt in $Id; die Datei
+    # muss dazu, sonst fallen gleiche Meldungen am selben Platz zweier Dateien zusammen
+    # (Vertrag 04, Nachtrag Review zu WP8.9, Regel 3).
     param([string]$Id, [string]$Text)
-    $key = "$Id|$Text"
+    $key = "$($script:aktDatei)|$Id|$Text"
     if (-not $script:nichtGerechnet.ContainsKey($key)) {
         $script:nichtGerechnet[$key] = @{
             Text    = "$($script:aktMod): $Text  ($($script:aktDatei))"
@@ -477,6 +489,10 @@ function Invoke-Bedingt {
     # Ein falscher Aufbau oder eine Bedingung, die sich nicht rechnen laesst, macht den
     # ganzen Block "nicht gerechnet" - es laeuft dann kein Zweig.
     param($Block, [string]$Id)
+    # Die Bibliothek des Spiels zuerst, fuer JEDEN Block - auch einen nur mit <else> und
+    # einen falsch gebauten (Vertrag 04, Nachtrag Review zu WP8.9, Regel 1). Vorher lud erst
+    # das Auswerten eines <if> sie, und ein Block ohne auswertbares <if> lief ohne sie durch.
+    Initialize-NCalc
     $zweige = New-Object System.Collections.Generic.List[object]
     $j = -1
     foreach ($kind in $Block.get_ChildNodes()) {

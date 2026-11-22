@@ -1,0 +1,5 @@
+<config>
+	<!-- Dieselbe unbekannte Operation am selben Platz wie in windows.xml. -->
+	<pruefunbekannt xpath="/irgendwo">x</pruefunbekannt>
+	<setattribute xpath="/styles/global/style_entry[@name='pruefFarbeZwei']" name="value">8,8,8</setattribute>
+</config>

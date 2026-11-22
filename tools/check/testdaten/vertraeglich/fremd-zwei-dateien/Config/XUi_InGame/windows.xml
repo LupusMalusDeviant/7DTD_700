@@ -1,0 +1,6 @@
+<config>
+	<!-- Dieselbe unbekannte Operation am selben Platz wie in styles.xml: zwei Stellen, zwei
+	     Zeilen. Wer die Datei nicht mitzaehlt, meldet eine. -->
+	<pruefunbekannt xpath="/irgendwo">x</pruefunbekannt>
+	<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">Z</setattribute>
+</config>

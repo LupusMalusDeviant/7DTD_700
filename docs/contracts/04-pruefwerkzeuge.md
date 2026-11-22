@@ -3160,3 +3160,73 @@ tools/check/vertraeglichkeit-pruefen.ps1` (ohne Parameter, 10 Sekunden). **Ausga
 
 Was die Zeilen im Einzelnen sagen, steht im Plan unter WP8.9. Die Ausgabe selbst liegt
 nicht im Repository: sie nennt Pfade und Werte aus fremden Dateien.
+
+## Nachtrag Review zu WP8.9, 2026-11-22 — drei Befunde an `vertraeglichkeit-pruefen.ps1`, **Abnahme offen**
+
+### Anlass
+
+Das Review von Commit `7fe07c7` fand drei Stellen, an denen das Skript dem „Nachtrag WP8.9"
+nicht folgte oder ihn zu eng las. Keine betrifft die Mod. Dieser Nachtrag stellt die drei
+Regeln klar; der „Nachtrag WP8.9" bleibt stehen, wie er ist.
+
+### Die Regeln
+
+1. **Zu Regel 7 — die `NCalc.dll` wird für JEDEN bedingten Block gebraucht.** Sobald eine
+   gerechnete Datei auf der Ebene der Operationen ein `<conditional>` hat, muss die
+   Bibliothek des Spiels geladen sein, **bevor** der Block angesehen wird — auch wenn er nur
+   ein `<else>` hat, auch wenn er falsch gebaut ist. Fehlt sie, ist das Ausgang 2.
+   *Vorher* lud das Skript sie erst beim Auswerten eines `<if cond=…>`: ein Block nur mit
+   `<else>` lief ohne Bibliothek durch (Ausgang 0), ein `<if>` ohne `cond` war „nicht
+   gerechnet" (Ausgang 1). Beides sagte etwas über einen Stand, den das Skript ohne die
+   Bibliothek nicht rechnen darf.
+2. **Zu Regel 6 — `mod_loaded` und `xpath` bekommen genau ein Argument.** So verlangt es
+   das Spiel (Nachtrag drittes Review zu WP8.7; `kette-pruefen.ps1` führt dieselben Zahlen).
+   Jede andere Zahl — keines, zwei, mehr — macht die Bedingung „nicht gerechnet"; die
+   Meldung nennt die Funktion und die Zahl. *Vorher* las das Skript nur das erste Argument:
+   `not mod_loaded('X', 'zuviel')` galt als wahr, obwohl das Spiel die Bedingung ablehnt.
+   **Grenze, unverändert wie bei `kette-pruefen.ps1`:** die Art der Argumente wird nicht
+   geprüft.
+3. **Zu Regel 4 — „nicht gerechnet" ist eine Zeile je Stelle.** Eine Stelle ist: die Mod,
+   die Datei, die Position der Operation in ihr und der Text der Meldung. Dieselbe Stelle
+   in mehreren der vier Stände wird einmal gemeldet, mit den Ständen dahinter. *Vorher*
+   fehlte die Datei: begannen zwei Dateien einer Mod mit derselben nicht gerechneten
+   Operation, blieb eine Zeile, und die zweite Stelle fehlte im Bericht und in der Zahl.
+
+**Grenze zu Regel 2, wie schon bei `game_version()`:** geprüft wird die Zahl der Argumente
+dort, wo NCalc die Funktion aufruft. Einen Aufruf, den NCalc nicht auswertet, weil der Teil
+davor das Ergebnis schon festlegt (`mod_loaded('X') and mod_loaded('Y', 'zuviel')` mit
+falschem ersten Teil), sieht diese Prüfung nicht.
+
+### Gegenproben (Projektregel 5)
+
+Gemessen am 2026-11-22, am Stand, der committet wird. Vier neue erfundene Prüf-Mods unter
+`tools/check/testdaten/vertraeglich/` (`fremd-nur-else`, `fremd-if-ohne-cond`,
+`fremd-argumente`, `fremd-zwei-dateien`; 9 Dateien).
+
+**Fünf neue Läufe in `gegenproben.ps1`** (Abschnitt „vertraeglichkeit-pruefen.ps1 (WP8.9)",
+Teil o2) — **214 Gegenproben, 0 fehlgeschlagen** (vorher 209):
+
+| Regel | Was der Lauf zeigt | Ausgang |
+|---|---|---|
+| 1 | Block nur mit `<else>`, die angegebene `NCalc.dll` fehlt | 2 |
+| 1 | `<if>` ohne `cond`, die angegebene `NCalc.dll` fehlt | 2 |
+| 1 | derselbe Block nur mit `<else>`, mit der Bibliothek: der Zweig läuft, 0 Befunde | 0 |
+| 2 | `mod_loaded` mit zwei und mit keinem Argument, `xpath` mit zwei: drei Zeilen „nicht gerechnet", kein Zweig läuft, die Operation danach trifft ihr Fenster noch | 1 |
+| 3 | dieselbe unbekannte Operation am Anfang von `styles.xml` und `windows.xml`: zwei Zeilen, jede nennt ihre Datei | 1 |
+
+In den drei Läufen zu Regel 1 und im Lauf zu Regel 2 ist unsere Seite nur das Prüf-Modlet
+ohne bedingten Block — mit dem zweiten lüden unsere eigenen Bedingungen die Bibliothek,
+und die Läufe zu Regel 1 wären auch ohne die Änderung rot.
+
+**Vier neue Verfälschungen, jede nimmt eine der Änderungen zurück, jede macht mindestens
+eine Gegenprobe rot:** die Bibliothek wird erst beim Auswerten eines `<if>` geladen (2 rot);
+die Argumentzahl von `mod_loaded` wird nicht geprüft (1); die von `xpath` nicht (1); die
+Stelle zählt ohne Datei (1). Zusammen mit den 38 aus dem „Nachtrag WP8.9" sind es **42**;
+alle 42 sind am neuen Stand wiederholt (Teil-Läufer mit 36 Läufen, unverändert 0 rot),
+jede macht mindestens eine Gegenprobe rot, und Skript und gemeinsame Datei sind danach
+byte-gleich mit dem Stand davor.
+
+**Der Lauf gegen die zwei Referenz-Mods ist unverändert:** derselbe Befehl, Ausgang 1,
+11 Befunde, die Ausgabe Zeile für Zeile gleich mit der vor der Änderung. Die Tabelle im
+„Nachtrag WP8.9" gilt weiter; insbesondere hat Regel 3 dort keine verschluckte Stelle
+aufgedeckt.

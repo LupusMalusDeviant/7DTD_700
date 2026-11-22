@@ -1714,6 +1714,15 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Stand unverändert 729 Operationen, 0 ohne Treffer). *Nachweis:* 31 neue Gegenproben
    (`gegenproben.ps1`: 209, 0 fehlgeschlagen; vorher 178), 38 Verfälschungen, jede macht
    mindestens eine rot. An der Mod ist nichts geändert.
+   *Review von `7fe07c7`, am selben Tag behoben:* drei Befunde am Skript, keiner an der Mod
+   — ein bedingter Block nur mit `<else>` lief ohne die `NCalc.dll` grün durch; `mod_loaded`
+   und `xpath` lasen nur ihr erstes Argument; gleiche „nicht gerechnet"-Meldungen aus zwei
+   Dateien fielen zu einer Zeile zusammen. Jetzt: die Bibliothek wird für jeden bedingten
+   Block verlangt, beide Funktionen bekommen genau ein Argument, und die Datei gehört zur
+   Stelle (Vertrag 04 „Nachtrag Review zu WP8.9", Abnahme offen). **Stand danach:**
+   `gegenproben.ps1` 214 Gegenproben, 0 fehlgeschlagen (5 neue); 42 Verfälschungen (4 neue),
+   jede macht mindestens eine rot. Der Lauf gegen die zwei Referenz-Mods unten ist davon
+   unberührt — die Ausgabe ist Zeile für Zeile dieselbe.
 
    *Lauf gegen beide Referenz-Mods* (ohne Parameter, Vanilla V 3.40): **Ausgang 1,
    11 Befunde.** Kein einziger ist ein verlorenes Ziel — in keiner der beiden Reihenfolgen
@@ -2254,6 +2263,19 @@ werden:
   4. *Groß und klein bei Operationsnamen.* AGF schreibt `<insertafter>`; ob das Spiel das
      annimmt, ist nicht gelesen (der REA-Blick auf `XmlPatcher` blieb ohne Antwort). Lauf 2
      zeigt es am Protokoll (Prüfliste 24 f).
+- **Sieben Fertigkeiten tragen weiter Vanillas Namen** (vom Nutzer am 2026-11-21 im Spiel
+  gesehen, eingetragen am 2026-11-22). Unter `skillGeneralPerks` — im Fertigkeitsfenster der
+  Reiter mit dem Zahnrad — stehen `perkLightArmor`, `perkMediumArmor`, `perkHeavyArmor`,
+  `perkMasterChef`, `perkLivingOffTheLand`, `perkLockPicking` und `perkLuckyLooter` mit
+  Vanillas Wortlaut („Leichte Rüstung", „Mittlere Rüstung", „Schwere Rüstung", „Vom Land
+  leben" …). WP7.2 hat sie ausdrücklich nicht angefasst: sie haben gemessen keine
+  `level_requirements`, hängen also am Spielerrang und an keinem der fünf Bäume. **Das
+  Erfolgskriterium „kein Vanilla-Attribut- oder Perkname sichtbar" (Z6) ist damit offen.**
+  Zwei Wege, verschieden teuer: *umbenennen* geht allein über die Sprachdatei (Name und
+  Beschreibung je Fertigkeit, Rang-Texte nach D81); *umhängen* in die Bäume braucht je
+  Fertigkeit erfundene Freischaltstufen und ist eine Balancing-Entscheidung des Nutzers.
+  `perkLockPicking` hängt zudem am Dietrich, dessen Rezept eine der 80 Sackgassen ist.
+  Nicht entschieden, nichts gebaut.
 - **Zwei freie Gegenstände lesen weiter Vanillas Bauteil-Beschreibung** (gefunden in WP8.8,
   2026-11-22). `gunPartsGroupDesc` („Zerlege fortgeschrittene Waffen und Werkzeuge, um diese
   Gegenstände zu erhalten …") erben 15 Gegenstände. Sechs haben jetzt ihren eigenen

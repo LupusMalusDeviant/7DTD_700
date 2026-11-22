@@ -470,8 +470,11 @@ Gemessen am 2026-11-22 gegen die zwei Referenz-Mods aus D86 (10 Sekunden, Exit 1
 11 Befunde): AGF-1HUDPlus 3 „nicht gerechnet"; EchoHybridUI 6 „Wirkung verändert" (drei
 Stil-Einträge, in beiden Reihenfolgen), 1 „nicht gerechnet", 1 gemeinsamer Sprachschlüssel.
 **Kein verlorenes Ziel, kein gewechselter Zweig.** Rot vorgeführt an
-`testdaten/vertraeglich/`: 31 Gegenproben, dazu 38 Verfälschungen des Skripts und der
-gemeinsamen Datei — jede macht mindestens eine Gegenprobe rot.
+`testdaten/vertraeglich/`: 36 Gegenproben, dazu 42 Verfälschungen des Skripts und der
+gemeinsamen Datei — jede macht mindestens eine Gegenprobe rot. (Fünf der Gegenproben und
+vier der Verfälschungen stammen aus dem Review vom selben Tag: die `NCalc.dll` wird für
+jeden bedingten Block verlangt, `mod_loaded` und `xpath` bekommen genau ein Argument, und
+eine nicht gerechnete Stelle zählt je Datei — Vertrag 04, „Nachtrag Review zu WP8.9".)
 
 **Es ersetzt keinen Lauf.** Es sieht nur XML (keine DLL der fremden Mod), nur dieselbe Datei
 (kein Stil, keine Vorlage aus einer anderen), nichts am Bildschirm; `game_version()` rechnet

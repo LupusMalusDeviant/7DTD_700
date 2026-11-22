@@ -1,0 +1,10 @@
+<config>
+	<!-- Ein falsch gebauter Block: <if> ohne cond. Mit der Bibliothek des Spiels ist das
+	     "nicht gerechnet"; ohne sie ist der ganze Lauf nicht pruefbar. -->
+	<conditional>
+		<if>
+			<remove xpath="/windows/window[@name='pruefFensterC']" />
+		</if>
+	</conditional>
+	<setattribute xpath="/windows/window[@name='pruefFensterC']/label[@name='titel']" name="text">bleibt</setattribute>
+</config>
