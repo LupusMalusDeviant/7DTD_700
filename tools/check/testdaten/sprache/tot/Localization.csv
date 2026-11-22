@@ -1,0 +1,9 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruef700_ding,items,Item,,,,"Own thing",,"Eigenes Ding",,,,,,,,,,,
+pruef700_dingText,items,Item,,,,"Text of the own thing.",,"Text des eigenen Dings.",,,,,,,,,,,
+pruef700_dingDesc,items,Item,,,,"Dead: the item names another key.",,"Tot: der Gegenstand nennt einen anderen Schlüssel.",,,,,,,,,,,
+pruefTeilDesc,items,Item,,,,"Dead: the item inherits its key.",,"Tot: der Gegenstand erbt seinen Schlüssel.",,,,,,,,,,,
+pruefBlockKindDesc,blocks,Block,,,,"Dead: the block inherits its key.",,"Tot: der Block erbt seinen Schlüssel.",,,,,,,,,,,
+pruefNirgendsName,progression,Perk,,,,"Dead: nothing names it.",,"Tot: nichts nennt ihn.",,,,,,,,,,,
+pruefNotizDesc,items,Item,,,,"Alive: read through another property.",,"Lebt: gelesen über eine andere Eigenschaft.",,,,,,,,,,,
+pruefDingDesc,items,Item,,,,"Alive: the default key.",,"Lebt: der Vorgabeschlüssel.",,,,,,,,,,,

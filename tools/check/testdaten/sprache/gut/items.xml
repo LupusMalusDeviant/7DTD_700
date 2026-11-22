@@ -1,0 +1,21 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): jeder Verweis hat eine Zeile,
+	     jede Zeile wird gelesen. Kein Spielinhalt. -->
+	<append xpath="/items">
+		<!-- eigener Gegenstand mit eigener Eigenschaft DescriptionKey -->
+		<item name="pruef700_ding">
+			<property name="DescriptionKey" value="pruef700_dingText"/>
+		</item>
+		<!-- eigener Gegenstand ohne: das Spiel liest '<Name>Desc' -->
+		<item name="pruef700_roh">
+			<property name="Stacknumber" value="10"/>
+		</item>
+		<!-- eigener Gegenstand, der den Schluessel ERBT: die Zeile steht in Vanilla -->
+		<item name="pruef700_erbe">
+			<property name="Extends" value="pruefTeilEltern"/>
+		</item>
+	</append>
+	<!-- Die eigene Eigenschaft geht der geerbten vor: damit wird 'pruefTeilDesc' gelesen. -->
+	<append xpath="/items/item[@name='pruefTeil']"><property name="DescriptionKey" value="pruefTeilDesc"/></append>
+	<set xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value">pruef700_lies</set>
+</config>

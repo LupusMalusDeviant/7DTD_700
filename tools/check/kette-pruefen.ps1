@@ -400,7 +400,7 @@ foreach ($path in @($Gegenstaende) + @($Bloecke)) {
 #
 # Wieder eine ABGEZAEHLTE Liste von Stellen. Nicht dabei und mit Absicht: ActiveRadiusEffects
 # und BuffsWhenWalkedOn (Buffs, stehen in buffs.xml), DescriptionKey und CustomIcon
-# (Sprachschluessel und Symbole, pruefen 'localization' und das Auge), Material (materials.xml),
+# (Sprachschluessel: sprachverweise-pruefen.ps1 seit WP8.8; Symbole: das Auge), Material (materials.xml),
 # Model (ein Prefab-Pfad, den nur das Spiel aufloesen kann), TraderStageTemplate.
 $ownRefs = 0
 $ownPaths = @(

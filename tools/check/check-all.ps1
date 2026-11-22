@@ -279,6 +279,28 @@ else {
     Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
+# ---------------------------------------------------- Sprachschluessel (Verweise)
+# 'localization' oben prueft die FORM der Sprachdatei. Ob ein Schluessel, den eine XML-Datei
+# nennt, eine Zeile hat, und ob eine Zeile ueberhaupt gelesen wird, prueft seit WP8.8
+# sprachverweise-pruefen.ps1 (Vertrag 04, "Nachtrag WP8.8"). Braucht Vanillas
+# Localization.csv, items.xml und blocks.xml; ohne SDTD_PATH ist das Ausgang 2 und rot.
+$spracheSkript = Join-Path $here 'sprachverweise-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Sprachschluessel (Verweise) ----"
+if (Test-Path $spracheSkript) {
+    Invoke-Pruefskript $spracheSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  sprachverweise-pruefen.ps1 fehlt: $spracheSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
 Write-Output ""
 Write-Output "==== Ergebnis: $ran Pruefungen, $red rot ===="
 if ($red -gt 0) {

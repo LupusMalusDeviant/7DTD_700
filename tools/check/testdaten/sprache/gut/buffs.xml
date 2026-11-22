@@ -1,0 +1,11 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8). Kein Spielinhalt. -->
+	<append xpath="/buffs">
+		<!-- nennt keinen Schluessel -->
+		<buff name="pruef700_still" hidden="true"/>
+		<!-- ein leeres Attribut nennt keinen Schluessel -->
+		<buff name="pruef700_buff" name_key="pruef700_buffName" description_key="pruef700_buffDesc" tooltip_key=""/>
+	</append>
+	<set xpath="/buffs/buff[@name='pruefVanillaBuff']/@name_key">pruefVanillaName</set>
+	<setattribute xpath="/buffs/buff[@name='pruefVanillaBuff']" name="tooltip_key">pruef700_tipp</setattribute>
+</config>

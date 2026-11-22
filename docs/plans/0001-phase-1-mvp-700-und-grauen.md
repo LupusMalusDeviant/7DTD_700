@@ -1539,6 +1539,29 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    (`recipes`, unverändert); 9 Bedingungen gelesen, alle wahr.
    → Vertrag 04 „Nachtrag viertes Review zu WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
+
+   **Erledigt am 2026-11-22 — und mehr gefunden, als der Punkt verlangt.** *Gemessen:*
+   `mod700check localization` über `700_90_Sprache`: 887 Zeilen, 887 Schlüssel, 0 rot, 0
+   Hinweise, 825 bewusste Vanilla-Überschreibungen, keine ohne Zeile. Das war schon vor
+   diesem Schritt so. *Der Haken:* dieser Befehl prüft die **Form** der Datei. Ob ein
+   Schlüssel, den eine XML-Datei nennt, eine Zeile hat, und ob eine Zeile je gelesen wird,
+   prüfte niemand — und das Ergebnis von WP8 heißt „vollständige DE/EN-Texte".
+   *Nachgemessen:* vorwärts haben alle Schlüssel, die unsere XML-Dateien nennen, eine Zeile.
+   **Rückwärts las das Spiel sechs unserer Zeilen nie:** die Beschreibungen der Bruchstücke
+   aus dem Zerlegen (`meleeWpnBladeT3MachetePartsDesc` und fünf Geschwister, geschrieben in
+   WP5). Die sechs Gegenstände erben über `Extends` den Schlüssel `gunPartsGroupDesc`; unter
+   „Klingenbruchstücke" stand Vanillas Satz über fortgeschrittene Waffen
+   ([Finding](../rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md)).
+   *Behoben:* sechs `<append>` in `700_30_Ausruestung/Config/items.xml` hängen den Gegenständen
+   ihren eigenen `DescriptionKey` an. *Gebaut, damit es nicht wieder still passiert:*
+   `tools/check/sprachverweise-pruefen.ps1`, siebte Prüfung in `check-all.ps1` — vorwärts
+   und rückwärts, mit dem Schlüssel, den das Spiel je Gegenstand und Block wirklich liest.
+   Gegen den Stand vor dem Fix Exit 1 und genau diese 6; jetzt Exit 0 (69 genannte Schlüssel,
+   132 Zeilen rückwärts, 0 nicht gelesen). Zwölf Gegenproben, sieben Verfälschungen des
+   Skripts, jede macht mindestens eine rot. `gegenproben.ps1`: 156 Gegenproben, 0
+   fehlgeschlagen. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert); `kette-pruefen`
+   427 → 433 XPaths. **Im Spiel ungesehen** → Prüfliste 23.
+   → Vertrag 04 „Nachtrag WP8.8", Abnahme offen.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 
@@ -1960,8 +1983,28 @@ werden:
     d) **Feuerstelle, Kalkofen, Webstuhl** öffnen: zwei Werkzeugslots, Brennstoffkammer,
     Webstuhl-Fenster wie zuvor? *(Diese drei Patches sind unverändert; der Blick ist die
     Ausgangslage für ihre spätere Umstellung.)*
+23. **Ein Bruchstück ansehen** (WP8.8, 22. November 2026). Im Kreativmenü oder per Zerlegen
+    einer Stahlwaffe eines der sechs Bruchstücke holen (Klingen-, Werkzeug-, Kolben-, Lanzen-,
+    Hammerbruchstücke, Eisenbeschläge) und die Beschreibung lesen. **Steht dort unser Text**
+    („Zerbrochener Klingenstahl aus den Ruinen …") **oder Vanillas** („Zerlege
+    fortgeschrittene Waffen und Werkzeuge …")? *(Vanillas Satz hieße: ein angehängter
+    `DescriptionKey` gilt nicht vor dem geerbten — das ist der eine Punkt, den das Finding
+    nicht aus dem Code belegt.)* Braucht die installierte Mod.
 
 ## Offene Punkte
+
+- **Zwei freie Gegenstände lesen weiter Vanillas Bauteil-Beschreibung** (gefunden in WP8.8,
+  2026-11-22). `gunPartsGroupDesc` („Zerlege fortgeschrittene Waffen und Werkzeuge, um diese
+  Gegenstände zu erhalten …") erben 15 Gegenstände. Sechs haben jetzt ihren eigenen
+  Schlüssel, sieben sperrt der Purge. Übrig sind `armorParts` (in der Denylist ausdrücklich
+  freigegeben, „abstrakter Werkstoff") und `gunBowT1WoodenBowParts` (hängt am Urteil über die
+  Bögen, WP5.2). Beide tragen bei uns weder Namen noch Beschreibung; der Satz selbst nennt
+  nichts Modernes. Kein Fehler, aber eine Stelle, an der der Spieler Vanilla liest.
+- **Welche überschriebenen Vanilla-Zeilen noch gelesen werden, ist nur für Gegenstände und
+  Blöcke geprüft** (WP8.8). `sprachverweise-pruefen.ps1` rechnet den wirksamen
+  Beschreibungsschlüssel für diese zwei Arten. Für Buffs, Fertigkeiten, Aufträge und
+  Anzeigen gibt es keine solche Rechnung — eine Zeile dort kann tot sein, ohne dass eine
+  Prüfung es merkt.
 
 - **Unsere drei XUi-Patches stehen ohne `conditional`-Block** (gefunden am 2026-11-20 beim
   Beheben des dritten Reviews). Vertrag 03 §5 verlangt für jeden Eingriff in `XUi_*` einen

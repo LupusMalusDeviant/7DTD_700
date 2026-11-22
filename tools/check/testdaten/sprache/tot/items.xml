@@ -1,0 +1,10 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): vier Zeilen, die niemand liest.
+	     Hier fehlt genau der <append>, der in gut\items.xml 'pruefTeilDesc' lebendig macht.
+	     Kein Spielinhalt. -->
+	<append xpath="/items">
+		<item name="pruef700_ding">
+			<property name="DescriptionKey" value="pruef700_dingText"/>
+		</item>
+	</append>
+</config>

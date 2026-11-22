@@ -1,0 +1,10 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruef700_roh,items,Item,,,,"Raw thing",,"Rohes Ding",,,,,,,,,,,
+pruef700_erbe,items,Item,,,,"Heir",,"Erbe",,,,,,,,,,,
+pruefTeil,items,Item,,,,"Shard",,"Bruchstück",,,,,,,,,,,
+pruefTeilDesc,items,Item,,,,"Read since the patch sets the key.",,"Gelesen, seit der Patch den Schlüssel setzt.",,,,,,,,,,,
+pruefNotizDesc,items,Item,,,,"Read through another property.",,"Gelesen über eine andere Eigenschaft.",,,,,,,,,,,
+pruefTeilOhneDesc,items,Item,,,,"New key, read by default.",,"Neuer Schlüssel, gelesen als Vorgabe.",,,,,,,,,,,
+pruefDingDesc,items,Item,,,,"Overrides the default key.",,"Überschreibt den Vorgabeschlüssel.",,,,,,,,,,,
+pruef700_buffDesc,buffs,Buff,,,,"Buff text.",,"Wirkungstext.",,,,,,,,,,,
+pruef700_titel,UI,XUI,,,,"Title",,"Titel",,,,,,,,,,,

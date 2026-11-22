@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): kein gueltiges XML. -->
+	<append xpath="/items">
+		<item name="pruef700_ding">
+	</append>
+</config>

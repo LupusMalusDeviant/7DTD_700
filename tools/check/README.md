@@ -376,6 +376,39 @@ Kopfzeile davor ist Exit 2.
 **Es liest nur, was wir schreiben.** Vanilla-Zeilen, die wir nicht überschreiben, sieht es
 nicht — auch wenn der Spieler sie liest.
 
+### `sprachverweise-pruefen.ps1` — XML gegen Sprachdatei (WP8.8)
+
+`mod700check localization` prüft die **Form** der Sprachdatei. Dieses Skript prüft, was
+zwischen XML und Sprachdatei liegt, in beide Richtungen (Vertrag 04, „Nachtrag WP8.8"):
+
+- **Vorwärts:** jeder Schlüssel, den eine unserer XML-Dateien nennt (`…_key`-Attribute,
+  `DescriptionKey`, die Namen eigener Gegenstände und Blöcke, die Beschreibung eigener
+  Gegenstände), hat eine Zeile — bei uns oder in Vanilla.
+- **Rückwärts:** jede Zeile, die Vanilla nicht hat, und jede Zeile `<Name>Desc` eines
+  Gegenstands oder Blocks wird von etwas gelesen. Dazu rechnet das Skript je Gegenstand und
+  Block den Schlüssel aus, den das Spiel wirklich liest: eigene Eigenschaft `DescriptionKey`,
+  sonst geerbt über `Extends`, sonst `<Name>Desc`
+  ([Finding](../../docs/rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md)).
+
+**Warum es das gibt:** sechs Beschreibungen der Bruchstücke aus dem Zerlegen standen seit WP5
+in der Sprachdatei, und das Spiel las statt ihrer den geerbten Schlüssel `gunPartsGroupDesc`.
+`localization` war grün.
+
+Exit **0** grün, **1** Befunde, **2** nicht prüfbar. Braucht Vanillas `Localization.csv`,
+`items.xml` und `blocks.xml` (`SDTD_PATH` oder `-Vanilla`). Gemessen am 2026-11-22: 27
+Patch-Dateien, 69 genannte Schlüssel (alle in unserer Datei), 14 `DescriptionKey`-Patches,
+132 Zeilen rückwärts geprüft, 0 nicht gelesen; gegen den Stand vor dem Fix Exit 1, 6 rot.
+Rot vorgeführt an `testdaten/sprache/`: zwölf Gegenproben, dazu sieben Verfälschungen des
+Skripts, von denen jede mindestens eine Gegenprobe rot macht.
+
+**Ein Patch an `DescriptionKey` in einer anderen Form als den zwei gelesenen ist rot** —
+`<append xpath="/items/item[@name='X']">` mit der Eigenschaft als Kind und `<set>` auf deren
+`@value` (ebenso `/blocks/block`). Wer eine dritte Form braucht, bringt sie dem Skript bei.
+
+**Es sieht nur XML.** Schlüssel, die der Spielcode zusammensetzt, kennt es nicht; und ob eine
+überschriebene Vanilla-Zeile, die weder Gegenstand noch Block beschreibt, noch gelesen wird,
+prüft niemand.
+
 ## Grenzen
 
 Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtigsten:
@@ -420,6 +453,7 @@ Jede Ausgabe trägt ihre Grenzen selbst mit (`limitations` im JSON). Die wichtig
 | `Mod700.Check/RecipeCheck.cs` | Rezeptgraph, Sackgassen, Zyklen |
 | `denylist.txt` | verbotene Muster; Freigaben nur für Vanilla-Namen, die kein Anachronismus sind (D54–D56) |
 | `world-roots.txt` | Wurzeln, die das XML nicht ausdrückt |
+| `sprachverweise-pruefen.ps1` | genannte Sprachschlüssel haben eine Zeile, geschriebene Zeilen werden gelesen (WP8.8) |
 | `gegenproben.ps1` | der Nachweis nach Projektregel 5 |
 | `check-all.ps1` | der Prüfbefehl des Projekts |
 | `testdaten/` | erfundene Prüfdaten, ein sauberer und ein roter Satz |

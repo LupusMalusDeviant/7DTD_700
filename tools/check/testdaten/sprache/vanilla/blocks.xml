@@ -1,0 +1,9 @@
+<blocks defaultDescriptionKey="pruefBlockGruppeDesc">
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8). Kein Spielinhalt. -->
+	<block name="pruefBlock">
+		<property name="DescriptionKey" value="pruefBlockAltDesc"/>
+	</block>
+	<block name="pruefBlockKind">
+		<property name="Extends" value="pruefBlock"/>
+	</block>
+</blocks>

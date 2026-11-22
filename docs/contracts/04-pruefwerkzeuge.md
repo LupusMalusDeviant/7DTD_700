@@ -1240,7 +1240,9 @@ Datei ist für die XPath-Prüfung einwandfrei und für diese rot.
 
 - Geprüft werden nur `@parent` und `@progression_name`. `name_key`, `desc_key`, `icon` und
   die Werte in `display_entry`/`unlock_entry` stehen ungeprüft; die Sprachschlüssel prüft
-  `mod700check localization`, die Symbole niemand.
+  `mod700check localization`, die Symbole niemand. *(Berichtigt am 2026-11-22: `localization`
+  prüft nur die Form der Datei. Ob ein genannter Schlüssel eine Zeile hat, prüft seit WP8.8
+  `sprachverweise-pruefen.ps1`, siehe „Nachtrag WP8.8".)*
 - Der Vorrat kommt aus **Vanilla** plus unseren eigenen Knoten in derselben Datei. Ein
   Verweis auf einen Knoten, den ein **anderes** Modlet anlegt, gilt als rot — das Projekt
   hat bisher nur eine `progression.xml`.
@@ -2410,4 +2412,137 @@ wahr.
   dort nur, was den Aufbau liest (Elternknoten, Name, Text), und das ohne eigene Gegenprobe:
   die fünf Stellen sind mechanisch ersetzt, die bestehenden Läufe bleiben grün.
 - **Von den Skripten unter `tools/check` liest heute nur `kette-pruefen.ps1` XML**; die
-  Regel trifft also nur dieses eine.
+  Regel trifft also nur dieses eine. *(Seit WP8.8 liest auch `sprachverweise-pruefen.ps1`
+  XML, nach derselben Regel.)*
+
+## Nachtrag WP8.8, 2026-11-22 — Sprachschlüssel-Verweise, **Abnahme offen**
+
+### Anlass
+
+WP8.8 verlangt „`mod700check localization` grün". Das war es schon — und es prüft die
+**Form** der Datei, nicht, ob eine Zeile gelesen wird oder ein genannter Schlüssel eine Zeile
+hat. Zwei Stellen dieses Vertrags behaupten mehr, als gebaut ist: „die Sprachschlüssel prüft
+`mod700check localization`" (Nachtrag WP7.2, Grenzen) und der Kommentar in
+`kette-pruefen.ps1` zu `name_key`/`DescriptionKey`. Gemessen am 2026-11-22 mit einem
+Wegwerf-Skript:
+
+- **Vorwärts:** unsere XML-Dateien nennen 61 Sprachschlüssel; alle 61 haben eine Zeile.
+- **Rückwärts:** sechs unserer Zeilen liest das Spiel nie. `meleeWpnBladeT3MachetePartsDesc`
+  und seine fünf Geschwister beschreiben die Bruchstücke aus dem Zerlegen. Die sechs
+  Gegenstände erben aber über `Extends` den `DescriptionKey` `gunPartsGroupDesc`
+  ([Finding](../rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md)); der Spieler liest
+  unter „Klingenbruchstücke" Vanillas Text über fortgeschrittene Waffen. `localization` war
+  dabei grün, weil die sechs Schlüssel in `vanilla-keys.txt` stehen — als Überschreibung von
+  etwas, das Vanilla gar nicht hat.
+
+### Das Werkzeug
+
+`tools/check/sprachverweise-pruefen.ps1`, siebte Prüfung in `check-all.ps1`. Parameter
+`-Patches` (unsere XML-Dateien; ohne Angabe alle unter `mod/` außer `ModInfo.xml`),
+`-Sprachdatei` (ohne Angabe die des Sprach-Modlets), `-Vanilla` (ohne Angabe
+`<SDTD_PATH>\Data\Config`; gebraucht werden `Localization.csv`, `items.xml`, `blocks.xml`).
+Ausgänge wie überall: 0 grün, 1 Befund, 2 nicht prüfbar.
+
+### Die Regeln
+
+1. **Jeder genannte Schlüssel hat eine Zeile** — in unserer Datei oder in Vanillas. Als
+   genannt gilt:
+   - der Wert jedes Attributs, dessen Name auf `_key` endet (`name_key`, `desc_key`,
+     `description_key`, `tooltip_key`, `text_key` …), an einem Element, das keine
+     Patch-Operation ist; eine Kommaliste zählt je Teil;
+   - der Text eines `<set>`, dessen XPath auf `/@…_key` endet, und eines
+     `<setattribute name="…_key">`;
+   - der Wert jeder Eigenschaft `DescriptionKey` und der Text eines `<set>` auf deren `@value`;
+   - der Name jedes eigenen Gegenstands und Blocks (ein `<item>` oder `<block>` mit `name`
+     und mindestens einem `<property>`-Kind) und, **bei Gegenständen**, der Schlüssel, den
+     das Spiel als Beschreibung liest. Bei Blöcken nicht: fehlt die Zeile, nimmt das Spiel
+     die Gruppenbeschreibung (Finding).
+2. **Jede Zeile, die Vanilla nicht hat, wird gelesen.** Eine Zeile, deren Schlüssel in
+   Vanillas Sprachdatei fehlt, überschreibt nichts; sie muss also von etwas gelesen werden,
+   das diese Prüfung sieht: genannt nach Regel 1, der wirksame Beschreibungsschlüssel eines
+   Gegenstands oder Blocks, oder der Wert irgendeiner Eigenschaft in `items.xml`/`blocks.xml`
+   (Vanilla oder unsere).
+3. **Jede Beschreibungszeile wird gelesen.** Für eine Zeile `<Name>Desc`, deren `<Name>` ein
+   Gegenstand oder Block ist, gilt dasselbe auch dann, wenn Vanilla den Schlüssel hat.
+4. **Der wirksame Beschreibungsschlüssel** eines Gegenstands oder Blocks ist: die eigene
+   Eigenschaft `DescriptionKey`; sonst die des nächsten Elternteils über `Extends`, sofern
+   `param1` sie nicht ausschließt; sonst `<Name>Desc`. Gerechnet wird über Vanilla, unsere
+   eigenen Definitionen und **zwei Patch-Formen**: `<append xpath="/items/item[@name='X']">`
+   mit einem Kind `DescriptionKey` und `<set xpath="/items/item[@name='X']/property[@name='DescriptionKey']/@value">`
+   (ebenso `/blocks/block`).
+5. **Eine andere Patch-Form an `DescriptionKey` ist rot** — nicht, weil sie falsch wäre,
+   sondern weil Regel 4 sie nicht lesen kann und das Ergebnis sonst geraten wäre.
+6. **Nichts gelesen ist nicht grün.** Fehlt eine Eingabe, hat eine Sprachdatei keine Spalte
+   `Key` oder keinen Schlüssel, oder nennt keine Patch-Datei einen Schlüssel und trifft keine
+   Zeile Regel 2 oder 3, endet der Lauf mit Exit 2.
+
+Der Aufbau eines XML-Knotens wird über Methoden gelesen (Nachtrag viertes Review zu WP8.7).
+Schlüssel werden Zeichen für Zeichen verglichen, mit Groß- und Kleinschreibung.
+
+### Grenzen
+
+- **Gelesen wird, was in XML steht.** Schlüssel, die der Spielcode zusammensetzt oder fest
+  nennt (`lblQuality…`, Ladebildschirm, Tagebuch), sieht die Prüfung nicht. Eine neue Zeile
+  für einen solchen Schlüssel wäre nach Regel 2 rot; bisher gibt es keine.
+- **Regel 3 gilt nur für Gegenstände und Blöcke.** Ob eine überschriebene Vanilla-Zeile
+  anderer Art (Buff, Fertigkeit, Auftrag, Anzeige) noch gelesen wird, prüft niemand.
+- **Ein Patch in einem bedingten Block gilt als angewandt.**
+- **`Extends` wird über die unveränderte Elternkette gerechnet.** Ein Patch, der `Extends`
+  selbst umsetzt, bleibt ungesehen.
+- **Die Form der Sprachdatei prüft weiter `mod700check localization`.** Dieses Skript liest
+  sie mit `Import-Csv` und nimmt, was es bekommt.
+- **Dass ein Schlüssel eine Zeile hat, heißt nicht, dass der Text passt.**
+- **`vanilla-keys.txt` führt die sechs Bruchstück-Schlüssel weiter**, obwohl Vanilla sie
+  nicht hat: `localization` kennt nur „Präfix oder Liste", und ein drittes Fach „neuer
+  Schlüssel an einem Vanilla-Gegenstand" gibt es dort nicht. Dass eine solche Zeile gelesen
+  wird, prüft jetzt Regel 2.
+
+### Gegenproben (Projektregel 5)
+
+Zwölf neue Läufe über Testdaten unter `tools/check/testdaten/sprache/`; alle nehmen
+`-Vanilla` aus den Testdaten und brauchen keine Spielinstallation.
+
+| Lauf | Eingang | erwartet |
+|---|---|---|
+| sauberer Satz | eigene Eigenschaft, Vorgabe `<Name>Desc`, geerbter Schlüssel, Patch setzt den Schlüssel um, Zeile wird über `PromptDescription` gelesen, leeres Attribut, Kommaliste, bedingter Block | Exit 0; 15 genannt (12 in unserer Datei, 3 nur in Vanilla), 15 Zeilen rückwärts, 0 nicht gelesen |
+| Regel 1 | dieselben Patch-Dateien, sieben Zeilen weniger — je eine für jede Art, einen Schlüssel zu nennen | Exit 1, 7 rot, jeder einzeln; der Schlüssel, den nur Vanilla hat, nicht |
+| Regeln 2 bis 4 | vier tote Zeilen: anderer eigener Schlüssel, **geerbter** Schlüssel (der Fall der Bruchstücke), geerbter an einem Block, neuer Schlüssel ohne Nennung | Exit 1, 4 rot; die über `PromptDescription` gelesene und die Vorgabezeile nicht |
+| Regel 5 | fünf Patches an `DescriptionKey` in anderer Form (`starts-with`, `or`, `remove`, `setattribute`, `insertAfter`) | Exit 1, 5 rot |
+| XML-Adapter | Attribute und Kinder namens `NodeType`, `LocalName`, `ChildNodes`, `Attributes`, `InnerText` | Exit 1, 3 rot, 1 eigene Definition, 1 Patch gelesen |
+| Regel 6, sieben Läufe | Sprachdatei ohne Spalte `Key` · nichts zu prüfen · Patch-Datei kein XML · Vanilla-Ordner ohne `Localization.csv` · Sprachdatei fehlt · Patch-Datei fehlt · kein Spielpfad | je Exit 2, nie `GREEN` |
+
+Dazu ziehen fünf ältere Läufe von `check-all.ps1` nach: ohne Spielpfad heißt die
+Ergebniszeile jetzt „7 Prüfungen, 4 rot" (vorher 6 und 3), ohne jede Quelle „7 Prüfungen,
+5 rot"; der erste nennt die neue Prüfung als nicht geprüft.
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: **156 Gegenproben, 0
+fehlgeschlagen** (vorher 144).
+
+**Am echten Stand:** gegen `700_30_Ausruestung/Config/items.xml` des Commits `3633948` meldet
+das Skript **Exit 1, 6 rot** — genau die sechs Bruchstück-Zeilen, jede mit „liest
+`gunPartsGroupDesc` (geerbt von `gunMGT1AK47Parts`)"; 63 genannte Schlüssel, 132 Zeilen
+rückwärts. Mit den sechs `<append>`: **Exit 0**, 69 genannte Schlüssel, alle in unserer Datei,
+14 `DescriptionKey`-Patches gelesen, 132 Zeilen rückwärts, 0 nicht gelesen.
+
+**Sieben Verfälschungen des Skripts, jede macht mindestens einen Lauf rot** (je ein voller
+Lauf der Gegenproben, das Skript danach bytegleich wiederhergestellt):
+
+| Verfälschung | fehlgeschlagen |
+|---|---|
+| Knotenart über die Eigenschaft `NodeType` statt über die Methode | 1 (XML-Adapter) |
+| `param1` schließt `DescriptionKey` nicht mehr aus | 2 |
+| Werte anderer Eigenschaften zählen nicht als gelesen | 3 |
+| Regel 6 abgeschaltet | 1 (nichts zu prüfen) |
+| Kommaliste wird nicht geteilt | 2 |
+| Regel 5 für `<set>` abgeschaltet | 1 |
+| Regel 3 abgeschaltet (nur neue Schlüssel rückwärts) | 2 |
+
+`check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert);
+`kette-pruefen` über die Mod: 20 Patch-Dateien, 433 XPaths (420 in Vanilla, 13 auf eigene
+Knoten), 9 bedingte Blöcke.
+
+### Berichtigt an älteren Stellen dieses Vertrags
+
+- Nachtrag WP7.2, Grenzen: „die Sprachschlüssel prüft `mod700check localization`" stimmte
+  nur für die Form. Ob `name_key` und `desc_key` eine Zeile haben, prüft seit WP8.8
+  `sprachverweise-pruefen.ps1`; die Symbole weiter niemand.

@@ -1,0 +1,7 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): ein Patch, der keinen
+	     Schluessel nennt. Zusammen mit adapter\Localization.csv (eine Zeile, die Vanilla
+	     ueberschreibt und keine Beschreibung ist) gibt es nichts zu pruefen - das ist
+	     Ausgang 2, nicht gruen. Kein Spielinhalt. -->
+	<set xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']/@value">5</set>
+</config>

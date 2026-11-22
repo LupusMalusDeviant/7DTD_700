@@ -564,6 +564,33 @@
 	<set xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammer']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
 
 	<!-- ===========================================================================
+	     DIE BRUCHSTUECKE BEKOMMEN IHRE EIGENE BESCHREIBUNG (WP8.8, 22. November 2026)
+	     ===========================================================================
+
+	     Die sechs Bauteile aus dem Zerlegen heissen bei uns Klingenbruchstuecke,
+	     Werkzeugbruchstuecke und so fort, und 700_90_Sprache traegt seit WP5 je eine
+	     Beschreibung dazu ('<Name>Desc'). GELESEN HAT DAS SPIEL SIE NIE: alle sechs
+	     erben ueber Extends von gunMGT1AK47Parts, und der setzt DescriptionKey auf
+	     'gunPartsGroupDesc'. Ein geerbter DescriptionKey geht der Vorgabe '<Name>Desc'
+	     vor (docs/rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md) - unter
+	     "Klingenbruchstuecke" stand Vanillas Satz ueber fortgeschrittene Waffen.
+
+	     <append> und kein <set>: die sechs haben in Vanilla KEINE eigene Eigenschaft
+	     DescriptionKey, ein <set> traefe nichts (derselbe Fall wie die Oellampen 02
+	     bis 04 in 700_40_Bauen). Die eigene Eigenschaft geht der geerbten vor.
+
+	     'gunPartsGroupDesc' selbst bleibt Vanilla. GEZAEHLT: gunMGT1AK47Parts hat
+	     15 Erben; von den neun uebrigen sperrt der Purge sieben, armorParts und gunBowT1WoodenBowParts sind
+	     frei, tragen bei uns keinen eigenen Namen und lesen weiter Vanillas Satz
+	     (Plan-0001, Offene Punkte). -->
+	<append xpath="/items/item[@name='meleeWpnBladeT3MacheteParts']"><property name="DescriptionKey" value="meleeWpnBladeT3MachetePartsDesc" /></append>
+	<append xpath="/items/item[@name='meleeToolAllSteelParts']"><property name="DescriptionKey" value="meleeToolAllSteelPartsDesc" /></append>
+	<append xpath="/items/item[@name='meleeWpnClubT3SteelClubParts']"><property name="DescriptionKey" value="meleeWpnClubT3SteelClubPartsDesc" /></append>
+	<append xpath="/items/item[@name='meleeWpnSpearT3SteelSpearParts']"><property name="DescriptionKey" value="meleeWpnSpearT3SteelSpearPartsDesc" /></append>
+	<append xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammerParts']"><property name="DescriptionKey" value="meleeWpnSledgeT3SteelSledgehammerPartsDesc" /></append>
+	<append xpath="/items/item[@name='meleeWpnKnucklesT3SteelKnucklesParts']"><property name="DescriptionKey" value="meleeWpnKnucklesT3SteelKnucklesPartsDesc" /></append>
+
+	<!-- ===========================================================================
 	     DAS NAEHZEUG FLICKT, WAS NICHT AUS EISEN IST (D62, 8. November 2026)
 	     ===========================================================================
 

@@ -1,0 +1,12 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): Schluessel in einem bedingten
+	     Block und in einer Kommaliste. Kein Spielinhalt. -->
+	<conditional>
+		<if cond="xpath('/windows') != null">
+			<append xpath="/windows">
+				<label name="pruef700_lbl" text_key="pruef700_titel"/>
+				<entry name_key="pruefVanillaName, pruef700_stufe"/>
+			</append>
+		</if>
+	</conditional>
+</config>

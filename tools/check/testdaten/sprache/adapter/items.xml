@@ -1,0 +1,14 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP8.8): Attribute und Kindelemente, die
+	     in Windows PowerShell 5.1 Eigenschaften des Knotens verdecken (NodeType, LocalName,
+	     ChildNodes, Attributes, InnerText). Wer den Aufbau ueber Eigenschaften liest,
+	     ueberspringt hier alles und meldet gruen. Kein Spielinhalt. -->
+	<append xpath="/items" NodeType="skip" LocalName="nix" ChildNodes="x">
+		<item name="pruef700_adapter" InnerText="x" NodeType="Comment">
+			<property name="DescriptionKey" value="pruef700_adapterText" LocalName="nix"/>
+			<ChildNodes/>
+			<Attributes/>
+		</item>
+	</append>
+	<set xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value" InnerText="falsch" LocalName="nix">pruef700_adapterLies</set>
+</config>
