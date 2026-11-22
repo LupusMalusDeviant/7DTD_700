@@ -2290,8 +2290,10 @@ werden:
     Leder 4 bzw. 2, kein Klebeband); *Blasebalg, ein Aufsatz* (Zutat per `append` angehängt:
     Lehm bzw. Schmiedeeisen); **Stahlspitzhacke** (Zutat per `insertAfter` vor
     `<effect_group>` eingefügt: Leder 3 steht in der Liste, und seine Menge steigt mit der
-    Qualitätsstufe wie die der anderen Zutaten). Ohne die Stahlspitzhacke bliebe ein
-    gebrochenes `insertAfter` unbemerkt.
+    Qualitätsstufe wie die der anderen Zutaten); **Feld** (ebenfalls `insertAfter`: 5 Knochen
+    stehen in der Liste, kein Salpeter — und ein Feld bauen und setzen). Stahlspitzhacke und
+    Feld sind die zwei Rezepte dieser Liste, an denen ein gebrochenes `insertAfter` auffiele;
+    die anderen drei Arten zeigen es nicht.
     c) Einen Auftrag der Stufe 1 abschließen: unter den Belohnungen steht das
     „Lehrblatt-Bündel"; geöffnet gibt es drei Sorten Lehrblätter.
     d) Eine Belohnung, die früher modern war (Abschluss der Stufe 1: das Fahrrad), zeigt
@@ -2460,15 +2462,16 @@ werden:
   gehören zu Vanillas Biom-Gefahren (Rauch, Hitze, Kälte, Strahlung), und alle vier Mittel
   dagegen — die vier „Smoothies" und die Ausrüstungs-Zutaten — sind gesperrt. Ob die
   Gefahren in Phase 1 an sind und was dann gegen sie hilft, steht in keinem Dokument.
-- **Felder lassen sich nicht bauen** (gefunden ebenda). Vanillas Rezept für das Feld
+- **Felder ~~lassen~~ ließen sich nicht bauen** (gefunden ebenda) — **behoben am 2026-11-22
+  (D89), im Spiel nicht gesehen.** Vanillas Rezept für das Feld
   (`farmPlotBlockVariantHelper`) verlangt 25 `resourcePotassiumNitratePowder`, und das ist
-  gesperrt; ~~keines unserer Modlets schreibt das Rezept um.~~ Es ist eines der Rezepte, die
-  `purge-patch` als „überlebt, aber nicht herstellbar" zählt — nur stand dort nie, dass es
-  **der Ackerbau** ist. Ob sich die drei Anbau-Ziele, die der Purge übrig lässt, dann noch
-  aus Wildwuchs erfüllen lassen, ist ungeprüft.
-  **Behoben am 2026-11-22 (D89), im Spiel nicht gesehen:** `700_40_Bauen/Config/recipes.xml`
-  nimmt den Salpeter heraus und setzt 5 Knochen ein; die Qualitätszeile nennt den Knochen.
-  Ob sich ein Feld damit bauen lässt, zeigt Prüfliste 25.
+  gesperrt; ~~keines unserer Modlets schreibt das Rezept um.~~ Es war eines der Rezepte, die
+  `purge-patch` als „überlebt, aber nicht herstellbar" zählt (die Zahl dort rechnet gegen
+  Vanilla und führt es darum weiter) — nur stand dort nie, dass es **der Ackerbau** ist.
+  Seit D89 nimmt `700_40_Bauen/Config/recipes.xml` den Salpeter heraus und setzt 5 Knochen
+  ein; die Qualitätszeile nennt den Knochen. Ob sich ein Feld damit bauen lässt, zeigt
+  Prüfliste 25 b. ~~Ob sich die drei Anbau-Ziele, die der Purge übrig lässt, dann noch aus
+  Wildwuchs erfüllen lassen, ist ungeprüft.~~ Die Frage stellt sich nur, wenn 25 b scheitert.
 - **Die Händler bieten weiter Stromaufträge an** (gefunden ebenda). `tier2_restore_power`
   bis `tier4_restore_power` stehen in allen fünf Händlerlisten von Vanillas `quests.xml`
   (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und

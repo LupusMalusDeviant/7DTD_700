@@ -200,7 +200,7 @@ danach neu erzeugt.
 | Gruppe | Belohnungen | Was geschieht |
 |---|---|---|
 | `groupQuestT1SkillMagazineBundle` | 48 | `questRewardT1SkillMagazineBundle` frei. Inhalt unverändert. |
-| `groupQuestMeleeCrafting` | 3 | Sechs von acht Bündeln frei: Eisenfaust, Sax, Keule, Speer, Hammer, Werkzeug — je Bruchstücke plus Lehrblatt. Schockstab und Motorwerkzeug bleiben gesperrt. |
+| `groupQuestMeleeCrafting` | 3 | Sechs von acht Bündeln frei: ~~Eisenfaust, Sax, Keule, Speer, Hammer~~ Stahlfaust, Spatha, Streitkolben, Flügellanze, Streithammer, Werkzeug — je Bruchstücke plus Lehrblatt. Schockstab und Motorwerkzeug bleiben gesperrt. *(Namen berichtigt am 2026-11-22: die Gruppe enthält nur die Bündel der Stahlstufe; gemeint und freigegeben waren immer diese sechs, siehe „Stand des Baus".)* |
 | `groupQuestRangedCrafting` | 3 | Das Bogen-Bündel frei (Bogen-Bruchstücke, Eisenpfeile, Lehrblatt). Die sechs Schusswaffen-Bündel bleiben gesperrt. |
 | `groupQuestFarmPlotsT1` bis `T3` | 3 | Bündel frei: Felder und Saat-Lehrblatt. Die Zufallspflanze wird auf Pilz und Goldrute gekürzt (vier der sechs sind gesperrt). Setzt das Feld-Rezept aus Tabelle 1 nicht voraus — das Bündel gibt fertige Felder. |
 
@@ -285,6 +285,13 @@ der Liste der leeren Gruppen geschrieben, der Bau hat jedes Bündel gelesen:
    (Feldbündel 1), Aloe (2) und Hopfen (3). Jedes Bündel gibt weiter drei Setzlinge.
 3. **Abschriften:** von den 126 Blättern des Bündels leben 78, nicht „13 Reihen".
 
+**Und ein Fehler in den Namen, nicht im Bau:** die Tabelle nannte die sechs Werkbündel
+„Eisenfaust, Sax, Keule, Speer, Hammer, Werkzeug". `groupQuestMeleeCrafting` enthält aber nur
+die Bündel der Stahlstufe (`questRewardSteelKnuckleCraftingBundle`, `…Machete…`,
+`…SteelClub…`, `…SteelSpear…`, `…SteelSledgehammer…`, `…SteelTools…`) — bei uns Stahlfaust,
+Spatha, Streitkolben, Flügellanze, Streithammer und Werkzeug. Freigegeben sind diese sechs;
+die Zeile oben und die Kommentare in `denylist.txt` sind berichtigt.
+
 **Die Prüfwerkzeuge sehen den Inhalt eines Bündels nicht.** Die offene Frage von oben ist
 beantwortet: `mod700check` kennt als Weg zu einem Gegenstand Rezept, Loot, Händler,
 Auftragsbelohnung, Block-Abwurf und Startausrüstung — nicht `Create_item` und `Random_item`.
@@ -296,8 +303,18 @@ Repositorys:
 |---|---|---|
 | nach dem Bau | 20 | **2** — beide an `questRewardVehiclePartsBundle`, das ich nicht freigegeben habe und das nur in den gesperrten Fahrzeugbündeln steckt |
 | Gegenprobe: derselbe Purge, Inhalts-Patches fehlen | 20 | **93** |
+| Gegenprobe: ein Tippfehler in einer Liste (`plantedAloee1` im Feldbündel 2) | 20 | **3** — die zwei von oben und `UNBEKANNT: questRewardFarmT2Bundle nennt in Random_item 'plantedAloee1'` |
 
-Dieselbe Zählung über alle 434 nicht gesperrten Bündel meldet 1362 Befunde an rund 220
+Die Zählung meldet drei Arten von Befund: eine **gesperrte** Kennung, eine **unbekannte** (in
+`items.xml`, `blocks.xml` und `item_modifiers.xml` des Vorlaufs steht kein Knoten dieses
+Namens) und **zu viele** (ohne Wiederholung wird öfter gewürfelt, als die Liste Einträge
+hat). Nach dem Bau: 2 gesperrt, **0 unbekannt, 0 zu viele**. Die 20 geprüften sind die 19
+freigegebenen Bündel mit eigener Liste und `questRewardVehiclePartsBundle`; das
+Lehrblatt-Bündel nennt keine Liste, es öffnet eine Loot-Gruppe, und die sieht `mod700check`.
+
+Dieselbe Zählung über alle 434 nicht gesperrten Bündel meldet 1362 Befunde (1358 gesperrt,
+4 unbekannt — alle vier an `levelDesignToolsAdmin`, das Blockformen als `woodShapes:cube`
+schreibt, eine Schreibweise, die die Zählung nicht auflöst) an rund 220
 Bündeln (`tier0*`, `admin*`, `note*Admin`); stichprobenweise nachgesehen, stehen sie in
 keiner Loot-Gruppe, keinem Auftrag, keiner Händlerliste und keinem Rezept — Vanillas
 Testbündel. **Das ist eine Lücke der Prüfung, kein Befund am Spiel**, und sie steht als

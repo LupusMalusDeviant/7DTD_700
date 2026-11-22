@@ -714,11 +714,11 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 #
 # Inhalt unveraendert - alles darin lebt:
 !questRewardT1SkillMagazineBundle           # drei Sorten Lehrblaetter je zweimal
-!questRewardSteelKnuckleCraftingBundle      # Bruchstuecke der Eisenfaust und Lehrblatt
+!questRewardSteelKnuckleCraftingBundle      # Bruchstuecke der Stahlfaust und Lehrblatt
 !questRewardMacheteCraftingBundle           # Spatha (D58)
-!questRewardSteelClubCraftingBundle         # Keule
-!questRewardSteelSpearCraftingBundle        # Speer
-!questRewardSteelSledgehammerCraftingBundle # Hammer
+!questRewardSteelClubCraftingBundle         # Streitkolben
+!questRewardSteelSpearCraftingBundle        # Fluegellanze
+!questRewardSteelSledgehammerCraftingBundle # Streithammer
 !questRewardSteelToolsCraftingBundle        # Werkzeug
 !questRewardBowCraftingBundle               # Bogen-Bruchstuecke, Eisenpfeile, Lehrblatt
 !questRewardT1MeleeModsBundle               # sechs Aufsaetze, alle leben
