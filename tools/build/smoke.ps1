@@ -33,7 +33,10 @@
 [CmdletBinding()]
 param(
     [string]$LogPath,
-    [switch]$SkipLog
+    [switch]$SkipLog,
+    # Die Test-Ueberlagerung 700_99_Test ist fuer diesen Lauf erwartet (installiert mit
+    # 'build.ps1 -Install -MitTest'). Ohne den Schalter ist sie ein eigener roter Punkt.
+    [switch]$MitTest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -80,7 +83,17 @@ foreach ($name in $expected) {
     Test-Item "$name installiert" ($installed -contains $name)
 }
 
-$extra = @($installed | Where-Object { $expected -notcontains $_ })
+# Die Test-Ueberlagerung (Vertrag 01, Nachtrag "Test-Ueberlagerung") hat ihre eigene Zeile:
+# wer sie liegen laesst, soll lesen, WAS da liegt, und nicht "unbekanntes Modlet".
+$testInstalliert = @($installed | Where-Object { $_ -like '700_99_*' })
+if ($MitTest) {
+    Test-Item 'Test-Ueberlagerung installiert (-MitTest)' ($testInstalliert.Count -gt 0) 'kein 700_99_* in Mods'
+}
+else {
+    Test-Item 'keine Test-Ueberlagerung installiert (kurze Uhren)' ($testInstalliert.Count -eq 0) ("gefunden: " + ($testInstalliert -join ', ') + " - mit 'build.ps1 -Install' entfernen oder smoke.ps1 -MitTest")
+}
+
+$extra = @($installed | Where-Object { $expected -notcontains $_ -and $_ -notlike '700_99_*' })
 Test-Item 'keine unbekannten 700er-Modlets' ($extra.Count -eq 0) ("gefunden: " + ($extra -join ', '))
 
 # Die alte Ein-Modlet-Installation darf nicht daneben liegenbleiben.

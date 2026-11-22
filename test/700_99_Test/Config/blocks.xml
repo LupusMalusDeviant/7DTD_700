@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  TEST-UEBERLAGERUNG: Brenndauern (F-08, D64) auf 2 statt 15 bis 60.
+
+  WARUM 2. Vanilla schreibt an cropsGrowingMaster zu GrowthRate: "should be set no lower
+  than 2". Kleiner wird hier nicht gesetzt, damit der Test nicht an einer Untergrenze des
+  Spiels haengt statt an unserer Mod.
+
+  WAS DER TEST DAMIT BEANTWORTET (S-06, N-03, Q33):
+    1. Geht jede der acht Lichtquellen im geschlossenen Raum aus - und wird sie zu ihrem
+       Ausgebrannt-Zustand, statt zu verschwinden?
+    2. In welcher Einheit rechnet GrowthRate? Bei 2 erwartet: rund 2 Minuten echte Zeit
+       (bei 60 Minuten je Spieltag). Die Stoppuhr vom Setzen bis zum Erloeschen beantwortet
+       es; aus dem Verhaeltnis folgt die echte Brenndauer der Werte 15, 30, 45, 60.
+    3. Was zeigt der Kerzenstumpf danach (Name, Aufnehmen, Abschlagen)?
+
+  NUR <set>, NUR auf Knoten, die 700_40_Bauen angelegt hat. Trifft ein XPath nichts, meldet
+  tools/check/testueberlagerung-pruefen.ps1 das rot - im Spiel staende es nur im Protokoll.
+-->
+<config>
+	<set xpath="/blocks/block[@name='wallTorchLightPlayer']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='candleWallLightPlayer']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='candleTableLightPlayer']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='lanternOld_01_Player']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='lanternOld_02_Player']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='lanternOld_03_Player']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='lanternOld_04_Player']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+	<set xpath="/blocks/block[@name='blk700_holzfeuer']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value">2</set>
+</config>

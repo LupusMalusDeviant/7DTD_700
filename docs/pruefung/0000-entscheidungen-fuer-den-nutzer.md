@@ -14,8 +14,9 @@ Marken: **[E]** Entscheidung · **[A]** Abnahme eines Vertrags · **[S]** nur im
 **Stand 2026-11-23, früh:** Phase 1 ist gebaut, aber **nicht abgenommen**; Phase 2 läuft im Loop (Plan-0002,
 Entwurf); nichts ist gepusht (HEAD lokal vor `origin`), die Mod liegt **nicht** im Spielordner.
 
-Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **252 Gegenproben, 0 fehlgeschlagen;
-9 Prüfungen, 1 rot (Exit 1)** — zwei Prüfungen sind neu (*Symbole*, *Asset-Register*, N-18). Rot ist `erreichbarer-anachronismus: resourceRepairKit`: der Spiel-Dump von
+Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **270 Gegenproben, 0 fehlgeschlagen;
+10 Prüfungen, 1 rot (Exit 1)** — drei Prüfungen sind neu (*Symbole*, *Asset-Register*, *Test-Überlagerung*;
+N-18, N-19). Rot ist `erreichbarer-anachronismus: resourceRepairKit`: der Spiel-Dump von
 22:08 stammt aus einem Start **vor** der Sperre des Reparatur-Kits. Am Vorlauf des neuen Standes sind alle
 sieben Prüfungen grün; ein Vorlauf ist kein Nachweis. **Grün wird der Prüfbefehl erst mit einem Spielstart
 mit dem neuen Stand** (N-01).
@@ -55,6 +56,8 @@ Die fünf Punkte, die am meisten bewegen:
 | N-16 | [A] | Vertrag 04, **Nachtrag Leermeldung** (`=kein-aufschub` in `aufschub.txt`). |
 | N-17 | [A] | Vertrag 04, **Nachtrag zweites Review der Vorprüfung** (zwei Befunde an `vertraeglichkeit-pruefen.ps1` behoben). |
 | N-18 | [A] | Vertrag 04, **Nachtrag Prüfungen der Phase 2, Teil 1** (*Symbole* und *Asset-Register*: Regeln, Grenzen, 27 Gegenproben) — gebaut am 2026-11-23. Dazu gehört **Vertrag 05** (Asset-Pipeline, N-71), am selben Tag in drei Punkten präzisiert: eine Münze darf ein Punktmuster tragen; Zuschnitt ab Alpha 8, nie vergrößern; Quelle `eigen:blender` als eigener Rang. |
+
+| N-19 | [A] | Vertrag 01, **Nachtrag Phase 2, Teil 1** — (A) ein Modlet darf Symbole unter `UIAtlases/ItemIconAtlas` tragen (das stand bisher als „keine Datei außerhalb von `Config/`"; die ersten vier Symbole lagen schon dort, bevor der Nachtrag geschrieben war — beim Schreiben aufgefallen). (B) die **Test-Überlagerung** `test/700_99_Test`: liegt außerhalb von `mod/`, nie im Paket, nur mit `build.ps1 -Install -MitTest` installiert, ein gewöhnliches `-Install` entfernt sie, `smoke.ps1` meldet sie rot; sie darf nur `<set>`. Dazu die zehnte Prüfung. |
 
 Verträge für Phase 2 kommen dazu, sobald sie geschrieben sind (Plan-0002).
 
@@ -105,7 +108,7 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-03 | Bogenzeug herstellen, einen beschädigten Bogen flicken (N-20); eine Spitzhacke mit Schleifstein flicken (N-21). | 5 min |
 | S-04 | Reparatur-Kit: weder im Kreativmenü-Filter „Spieler" herstellbar noch beim Händler (N-22). | 2 min |
 | S-05 | Biom-Fortschritt (N-02): neue Welt mit Option „Aus" **oder** fünf Minuten im Brandwald mit „An" — Zähler, Text, Schaden ansehen. | 5 min |
-| S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** (Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt) (N-03). | 5 min |
+| S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** ~~(Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt)~~ (N-03). **Vorbereitet am 2026-11-23:** `tools\build\build.ps1 -Install -MitTest` legt die Test-Überlagerung dazu — alle acht Lichtquellen brennen dann rund 2 Minuten. Ablauf in sechs Schritten: [`test/README.md`](../../test/README.md). Bitte die Zeit vom Setzen bis zum Erlöschen notieren (daraus folgt die echte Brenndauer). Danach `build.ps1 -Install` ohne den Schalter. | 5 min |
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
 | S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
 | S-09 | **Eigenes Bild im Beutel** (N-28, N-29, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes; dazu Schmiedeeisen, Tiegelstahl, Klinge, Schmiedeflicken. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |

@@ -42,7 +42,11 @@ param(
     [string]$Configuration = 'Release',
     [switch]$Install,
     [switch]$Clean,
-    [switch]$NoSign
+    [switch]$NoSign,
+    # Legt beim Installieren zusaetzlich die Test-Ueberlagerung test\700_99_Test neben die
+    # Mod (Vertrag 01, Nachtrag "Test-Ueberlagerung"). Sie kommt NIE nach dist\. Ohne diesen
+    # Schalter entfernt -Install eine liegengebliebene Ueberlagerung.
+    [switch]$MitTest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -135,6 +139,17 @@ if ($strays) {
     throw "Fremde DLLs im Paket, das darf nicht ausgeliefert werden: $($strays.Name -join ', ')"
 }
 
+# Kontrolle: keine Test-Ueberlagerung im Paket (Vertrag 01, Nachtrag "Test-Ueberlagerung").
+# Sie liegt unter test\ und kann von hier aus gar nicht ins Paket geraten - ausser jemand
+# legt einen Ordner 700_99_* unter mod\ an. Genau den Fall faengt diese Zeile.
+$testImPaket = @(Get-ChildItem $package -Directory | Where-Object { $_.Name -like '700_99*' })
+if ($testImPaket.Count -gt 0) {
+    throw "Test-Ueberlagerung im Paket: $($testImPaket.Name -join ', '). Sie gehoert nach test\, nicht nach mod\."
+}
+if ($MitTest -and -not $Install) {
+    throw "-MitTest gilt nur zusammen mit -Install: die Test-Ueberlagerung wird installiert, nie gepackt."
+}
+
 # Kontrolle: genau eine DLL, und die liegt im Kern-Modlet.
 $dlls = Get-ChildItem $package -Recurse -File -Include *.dll
 if ($dlls.Count -ne 1) {
@@ -188,10 +203,35 @@ if ($Install) {
         Copy-Item (Join-Path (Join-Path $package $modlet.Name) '*') $target -Recurse -Force
     }
 
+    # Test-Ueberlagerung (Vertrag 01, Nachtrag "Test-Ueberlagerung"): mit -MitTest direkt
+    # aus test\ neben die Mod gelegt, ohne den Schalter entfernt. So ist eine gewoehnliche
+    # Installation nie versehentlich eine mit kurzen Uhren.
+    $testQuelle = Join-Path $repoRoot 'test'
+    $testNamen = @()
+    if (Test-Path $testQuelle) {
+        $testNamen = @(Get-ChildItem $testQuelle -Directory | Where-Object { $_.Name -like '700_99_*' } | ForEach-Object { $_.Name })
+    }
+    foreach ($alt in @(Get-ChildItem $modsRoot -Directory | Where-Object { $_.Name -like '700_99_*' })) {
+        Write-Output "Entferne die Test-Ueberlagerung: $($alt.FullName)"
+        Remove-Item $alt.FullName -Recurse -Force
+    }
+    if ($MitTest) {
+        if ($testNamen.Count -eq 0) { throw "-MitTest: unter $testQuelle liegt keine Ueberlagerung 700_99_*." }
+        foreach ($testName in $testNamen) {
+            $target = Join-Path $modsRoot $testName
+            New-Item -ItemType Directory -Force -Path $target | Out-Null
+            Copy-Item (Join-Path (Join-Path $testQuelle $testName) '*') $target -Recurse -Force
+            $infoPath = Join-Path $target 'ModInfo.xml'
+            $info = [IO.File]::ReadAllText($infoPath, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText($infoPath, $info.Replace('__VERSION__', $modVersion), [Text.UTF8Encoding]::new($false))
+            Write-Warning "TEST-UEBERLAGERUNG INSTALLIERT: $testName - kurze Uhren. Nicht fuer einen Spielstand, der bleiben soll."
+        }
+    }
+
     # Fremde 700er-Modlets, die wir nicht gerade geschrieben haben: Reste einer
     # frueheren Aufteilung. Nur melden, nicht loeschen.
     $orphans = Get-ChildItem $modsRoot -Directory |
-        Where-Object { $_.Name -like '700_*' -and $modlets.Name -notcontains $_.Name }
+        Where-Object { $_.Name -like '700_*' -and $modlets.Name -notcontains $_.Name -and $_.Name -notlike '700_99_*' }
     foreach ($orphan in $orphans) {
         Write-Warning "Unbekanntes 700er-Modlet in Mods\: $($orphan.Name) - von Hand pruefen."
     }

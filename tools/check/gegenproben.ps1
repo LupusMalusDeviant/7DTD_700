@@ -797,7 +797,7 @@ Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 
     'kette-pruefen: SDTD_PATH ist nicht gesetzt',
     'sprachverweise-pruefen: SDTD_PATH ist nicht gesetzt',
     '-> nicht geprueft, zaehlt als rot',
-    '9 Pruefungen, 5 rot')
+    '10 Pruefungen, 6 rot')
 
 # Der Nachbarfall aus dem zweiten Review (2026-11-20): SDTD_PATH ist GESETZT, zeigt aber auf
 # einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
@@ -812,7 +812,7 @@ Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Ab
 } -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
     'den Vanilla-Ordner',
     '-> nicht geprueft, zaehlt als rot',
-    '9 Pruefungen, 5 rot')
+    '10 Pruefungen, 6 rot')
 
 # Und der Fall, der seit WP8.1 nur aufgeschrieben war (Vertrag 04): ein GENANNTER Pfad,
 # den es nicht gibt, meldete "0 XPaths, GREEN".
@@ -917,7 +917,7 @@ else {
         'purge-patch (sind die Patches aktuell?)',
         'den Vanilla-Ordner',
         '-> nicht geprueft, zaehlt als rot',
-        '9 Pruefungen, 5 rot')
+        '10 Pruefungen, 6 rot')
 }
 
 # ------------------------------------------------- Viertes Review (2026-11-21)
@@ -1451,7 +1451,7 @@ Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile'
     Configuration   = $Configuration
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -MustContain @(
     '-> nicht geprueft, zaehlt als rot',
-    '9 Pruefungen, 5 rot')
+    '10 Pruefungen, 6 rot')
 
 # (6) Dasselbe OHNE -Source und ohne ConfigsDump: %APPDATA% zeigt fuer diesen Lauf auf einen
 #     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
@@ -1468,7 +1468,7 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $glossarDaten -MustContain @(
     'Quelle: KEINE',
     'NICHT GEPRUEFT: keine Quelle',
-    '9 Pruefungen, 6 rot')
+    '10 Pruefungen, 7 rot')
 
 # ------------------------------------------------- Dump-Suche kennt -UserDataFolder (2026-11-22)
 # Mit '-UserDataFolder=<Ordner>' legt das Spiel Spielstaende unter <Ordner>\Saves ab, nicht
@@ -1513,7 +1513,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $aAppdata -MustContain @(
         "Quelle: $aDump",
-        '9 Pruefungen, 5 rot') -MustNotContain @('Quelle: KEINE')
+        '10 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
 
     # (b) Zwei Dumps, der unter %APPDATA% ist JUENGER: er gewinnt, nicht der Ort.
     $bAppdata = Join-Path $dumpBaum 'b\appdata'
@@ -1526,7 +1526,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $bAppdata -MustContain @(
         "Quelle: $bDumpAppdata",
-        '9 Pruefungen, 5 rot') -MustNotContain @("Quelle: $bDumpNutzer")
+        '10 Pruefungen, 6 rot') -MustNotContain @("Quelle: $bDumpNutzer")
 
     # (c) launchersettings.json ist kaputt: Hinweis, kein Abbruch, und ohne anderen Dump
     #     bleibt es bei "keine Quelle" mit Ergebniszeile.
@@ -1538,7 +1538,7 @@ try {
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $cAppdata -MustContain @(
         'launchersettings.json ist nicht lesbar',
         'Quelle: KEINE',
-        '9 Pruefungen, 6 rot')
+        '10 Pruefungen, 7 rot')
 
     # (d) Kein Startprogramm, aber SDTD_USERDATA zeigt auf den Ordner.
     $dAppdata = Join-Path $dumpBaum 'd\appdata'
@@ -1551,7 +1551,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $dAppdata -MustContain @(
         "Quelle: $dDump",
-        '9 Pruefungen, 5 rot') -MustNotContain @('Quelle: KEINE')
+        '10 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
 }
 finally {
     if ($userdataVorher) { $env:SDTD_USERDATA = $userdataVorher }
@@ -2770,6 +2770,145 @@ try {
 }
 finally {
     if (Test-Path -LiteralPath $symBaum) { Remove-Item -LiteralPath $symBaum -Recurse -Force }
+}
+
+# ------------------------------------------ Test-Ueberlagerung (2026-11-23)
+# test\700_99_Test verkuerzt Uhren fuer einen Spieltest (Vertrag 01, Nachtrag
+# "Test-Ueberlagerung"). Zwei Dinge koennen schiefgehen, und beide sieht man im Spiel erst
+# nach einer halben Stunde: eine Zeile trifft nichts (der Test laeuft mit langen Uhren), oder
+# die Ueberlagerung bleibt liegen bzw. geraet ins Paket (die Mod laeuft mit kurzen).
+Write-Output ""
+Write-Output "== Gegenproben: Test-Ueberlagerung - trifft sie, und bleibt sie draussen? =="
+$ueberSkript = Join-Path $here 'testueberlagerung-pruefen.ps1'
+$smokeSkript = Join-Path $repoRoot 'tools\build\smoke.ps1'
+$ueberBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-ueberlagerungsprobe-' + [Guid]::NewGuid().ToString('N'))
+$ueberXPath = "/blocks/block[@name='pruefLicht']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value"
+
+function Write-Pruefdatei {
+    param([string]$Pfad, [string[]]$Zeilen)
+    [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($Pfad))
+    [IO.File]::WriteAllLines($Pfad, [string[]]$Zeilen, [Text.UTF8Encoding]::new($false))
+}
+
+function New-UeberBaum {
+    # Vanilla mit einem Block, ein Modlet, das ihm eine Uhr gibt (30), eine Ueberlagerung.
+    # -Zeilen: die Patch-Zeilen der Ueberlagerung. -Ordner: wie die Ueberlagerung heisst.
+    param([string]$Name, [string[]]$Zeilen = @("  <set xpath=""$ueberXPath"">2</set>"), [string]$Ordner = '700_99_Test', [switch]$OhneModInfo)
+    $wurzel = Join-Path $ueberBaum $Name
+    Write-Pruefdatei (Join-Path $wurzel 'vanilla\blocks.xml') @(
+        '<blocks>', '  <block name="pruefLicht"><property name="Class" value="PruefKlasse" /></block>', '</blocks>')
+    Write-Pruefdatei (Join-Path $wurzel 'mod\700_40_Pruef\Config\blocks.xml') @(
+        '<config>',
+        '  <append xpath="/blocks/block[@name=''pruefLicht'']">',
+        '    <property class="PlantGrowing"><property name="GrowthRate" value="30" /></property>',
+        '  </append>',
+        '</config>')
+    if (-not $OhneModInfo) {
+        Write-Pruefdatei (Join-Path $wurzel "test\$Ordner\ModInfo.xml") @('<xml>', "  <Name value=""$Ordner"" />", '</xml>')
+    }
+    Write-Pruefdatei (Join-Path $wurzel "test\$Ordner\Config\blocks.xml") ([string[]](@('<config>') + $Zeilen + @('</config>')))
+    return $wurzel
+}
+
+function Get-UeberParameter {
+    param([string]$Wurzel)
+    return @{ ModOrdner = (Join-Path $Wurzel 'mod'); TestOrdner = (Join-Path $Wurzel 'test'); Vanilla = (Join-Path $Wurzel 'vanilla') }
+}
+
+try {
+    $w = New-UeberBaum 'gut'
+    Test-Script 'testueberlagerung: die Zeile trifft den Knoten des Modlets und aendert ihn' 0 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('Ueberlagerungen: 1; Dateien: 1; Zeilen: 1; geaenderte Werte: 1', "30 -> 2   $ueberXPath", '0 Befunde -> GREEN')
+
+    $w = New-UeberBaum 'trifft-nichts' -Zeilen @("  <set xpath=""/blocks/block[@name='pruefAnderes']/property[@class='PlantGrowing']/property[@name='GrowthRate']/@value"">2</set>")
+    Test-Script 'testueberlagerung: eine Zeile trifft nichts' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('<set> trifft nichts am Stand nach unseren Modlets', "pruefAnderes", '1 Befunde -> RED') -MustNotContain @('GREEN')
+
+    # Der Knoten, den NUR das Modlet anlegt: ohne das Modlet darf dieselbe Zeile nicht treffen.
+    # Das ist der Nachweis, dass wirklich am Stand NACH den Modlets gerechnet wird.
+    $w = New-UeberBaum 'ohne-modlet'
+    Remove-Item -LiteralPath (Join-Path $w 'mod\700_40_Pruef') -Recurse -Force
+    Test-Script 'testueberlagerung: ohne das Modlet trifft dieselbe Zeile nichts' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('<set> trifft nichts am Stand nach unseren Modlets') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'kein-set' -Zeilen @(
+        '  <append xpath="/blocks/block[@name=''pruefLicht'']"><property name="Neu" value="1" /></append>',
+        '  <remove xpath="/blocks/block[@name=''pruefLicht'']/property[@name=''Class'']" />')
+    Test-Script 'testueberlagerung: <append> und <remove> sind nicht erlaubt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('<append> - eine Ueberlagerung benutzt nur <set>', '<remove> - eine Ueberlagerung benutzt nur <set>', '2 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'gleicher-wert' -Zeilen @("  <set xpath=""$ueberXPath"">30</set>")
+    Test-Script 'testueberlagerung: eine Zeile, die nichts aendert, ist ueberholt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("<set> aendert nichts, der Wert ist schon '30'") -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'unter-mod'
+    Write-Pruefdatei (Join-Path $w 'mod\700_99_Test\ModInfo.xml') @('<xml />')
+    Test-Script 'testueberlagerung: ein Ordner 700_99_* unter mod landet im Paket' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("unter dem Modlet-Ordner liegt '700_99_Test'", 'sonst landet sie im Paket') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'fremde-datei'
+    Write-Pruefdatei (Join-Path $w 'test\700_99_Test\Pruef.dll') @('kein Code')
+    Write-Pruefdatei (Join-Path $w 'test\700_99_Test\Config\notiz.txt') @('keine Patch-Datei')
+    Test-Script 'testueberlagerung: DLL und Textdatei in der Ueberlagerung' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @(
+        '700_99_Test\Pruef.dll: eine Ueberlagerung traegt nur ModInfo.xml und XML unter Config',
+        '700_99_Test\Config\notiz.txt: eine Ueberlagerung traegt nur ModInfo.xml und XML unter Config',
+        '2 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'name-und-modinfo' -Ordner '700_50_Test' -OhneModInfo
+    Test-Script 'testueberlagerung: falscher Ordnername, ModInfo.xml fehlt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('700_50_Test: eine Ueberlagerung heisst 700_99_<Wort>', '700_50_Test: ModInfo.xml fehlt') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'datei-ohne-vanilla'
+    Write-Pruefdatei (Join-Path $w 'test\700_99_Test\Config\gibtesnicht.xml') @('<config>', '  <set xpath="/a/@b">1</set>', '</config>')
+    Test-Script 'testueberlagerung: Datei, die es in Vanilla nicht gibt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('gibtesnicht.xml: Vanilla hat keine Datei dieses Namens') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'leer' -Zeilen @()
+    Test-Script 'testueberlagerung: Ueberlagerung ohne Zeile - nicht pruefbar' 2 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('traegt eine Patch-Zeile', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'keine-ueberlagerung'
+    Remove-Item -LiteralPath (Join-Path $w 'test\700_99_Test') -Recurse -Force
+    Test-Script 'testueberlagerung: Test-Ordner ohne Ueberlagerung - nicht pruefbar' 2 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('liegt keine Ueberlagerung', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'ohne-vanilla'
+    $p = Get-UeberParameter $w
+    $p.Vanilla = (Join-Path $w 'gibt-es-nicht')
+    Test-Script 'testueberlagerung: Vanilla-Ordner fehlt - nicht pruefbar' 2 $p `
+        -FremdesSkript $ueberSkript -MustContain @('Vanillas Config-Ordner fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $p = Get-UeberParameter $w
+    $p.Remove('Vanilla')
+    Test-Script 'testueberlagerung: ohne Spielpfad und ohne -Vanilla - nicht pruefbar' 2 $p `
+        -FremdesSkript $ueberSkript -OhneSpielpfad -MustContain @('SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'xml-kaputt' -Zeilen @('  <set xpath="/blocks">')
+    Test-Script 'testueberlagerung: kaputtes XML in der Ueberlagerung - nicht pruefbar' 2 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('laesst sich nicht als XML lesen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    # smoke.ps1 gegen einen nachgebauten Spielordner. Der Lauf ist in jedem Fall rot (es
+    # fehlen DLL und Modlets) - geprueft wird die EINE Zeile zur Ueberlagerung.
+    $spielMit = Join-Path $ueberBaum 'spiel-mit'
+    Write-Pruefdatei (Join-Path $spielMit 'Mods\700_99_Test\ModInfo.xml') @('<xml />')
+    $spielOhne = Join-Path $ueberBaum 'spiel-ohne'
+    Write-Pruefdatei (Join-Path $spielOhne 'Mods\700_60_Welt\ModInfo.xml') @('<xml />')
+
+    Test-Script 'smoke: liegengebliebene Test-Ueberlagerung ist ein eigener roter Punkt' 1 @{ SkipLog = $true } `
+        -FremdesSkript $smokeSkript -Spielpfad $spielMit -MustContain @(
+        '[ROT]  keine Test-Ueberlagerung installiert (kurze Uhren)  -> gefunden: 700_99_Test',
+        '[ok]   keine unbekannten 700er-Modlets')
+    Test-Script 'smoke -MitTest: die Ueberlagerung ist erwartet' 1 @{ SkipLog = $true; MitTest = $true } `
+        -FremdesSkript $smokeSkript -Spielpfad $spielMit -MustContain @('[ok]   Test-Ueberlagerung installiert (-MitTest)') `
+        -MustNotContain @('keine Test-Ueberlagerung installiert (kurze Uhren)')
+    Test-Script 'smoke: ohne Ueberlagerung ist der Punkt gruen' 1 @{ SkipLog = $true } `
+        -FremdesSkript $smokeSkript -Spielpfad $spielOhne -MustContain @('[ok]   keine Test-Ueberlagerung installiert (kurze Uhren)')
+    Test-Script 'smoke -MitTest: fehlt die Ueberlagerung, ist das rot' 1 @{ SkipLog = $true; MitTest = $true } `
+        -FremdesSkript $smokeSkript -Spielpfad $spielOhne -MustContain @('[ROT]  Test-Ueberlagerung installiert (-MitTest)')
+}
+finally {
+    if (Test-Path -LiteralPath $ueberBaum) { Remove-Item -LiteralPath $ueberBaum -Recurse -Force }
 }
 
 Write-Output ""

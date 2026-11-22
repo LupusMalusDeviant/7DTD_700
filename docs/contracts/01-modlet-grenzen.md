@@ -136,3 +136,79 @@ dafür eine Warnung.
 - ~~**Acht statt sechs Modlets** — Abweichung vom Plan, hier erstmals festgelegt. Abnahme nötig.~~ Abgenommen am 2026-11-22.
 - Ob die reinen XML-Modlets mit aktivem EAC laden, ist Folgerung, nicht Nachweis (§4).
 - Der Umgang mit dem alten `Mods/7DTD_700/` beim Aktualisieren ist noch nicht im Build-Skript.
+
+## Nachtrag Phase 2, Teil 1 — Symbole im Modlet und die Test-Überlagerung, 2026-11-23, **Abnahme offen**
+
+Geschrieben und gebaut im autonomen Lauf (Plan-0002 WP1.2, WP1.3, WP3.4), nach Claudes
+Empfehlung; **zu prüfen durch den Nutzer** (N-19). Der abgenommene Text oben bleibt unverändert;
+dieser Nachtrag ändert zwei seiner Sätze. Die übrigen Fragen der Phase 2 (wohin Wesen, Welt,
+Händler, Magie gehören; wo Bundles liegen, wenn das Kern-Modlet mit EAC nicht lädt) folgen in
+Teil 2 (Plan-0002 WP2.3).
+
+### A. Ein Modlet darf Symbole tragen (ändert §5 Nr. 2)
+
+§5 Nr. 2 sagt: „Keine Datei außerhalb von `Config/` (bis Phase 2 Assets dazukommen, und das
+ändert dann diesen Vertrag)." **Neu:** ein Modlet darf zusätzlich
+`UIAtlases/ItemIconAtlas/<Name>.png` tragen — eigene Symbole nach
+[Vertrag 05](05-asset-pipeline.md), Teil A. Sonst weiter nichts außerhalb von `Config/`; die
+Prüfung *Symbole* macht jede andere Datei unter `UIAtlases` rot.
+
+**Reihenfolge, ehrlich:** die ersten vier Symbole liegen seit dem 2026-11-23 in
+`700_20_Material` (Commits `f174d69`, `b98221c`) — gebaut auf Vertrag 05 (Entwurf), **bevor**
+dieser Nachtrag geschrieben war. Der Widerspruch zu §5 Nr. 2 ist beim Schreiben dieses Nachtrags
+aufgefallen, nicht vorher.
+
+### B. Die Test-Überlagerung (ergänzt §2 und §6)
+
+**Anlass.** Ein Spieltest, der eine halbe Stunde auf eine Fackel wartet, kostet mehr, als er
+bringt (Vorgabe des Nutzers vom 2026-11-22: kurze Timer, gesammelt testen). Plan-0001 nannte die
+Vorrichtung dafür „nicht entworfen".
+
+**Was sie ist.** Ein neuntes Modlet `700_99_Test`, das **nur Zahlen verkürzt** — Brenndauern,
+später Verderb, Odem, Grauen. Es gehört **nicht zur Mod**:
+
+| | Mod (acht Modlets) | Test-Überlagerung |
+|---|---|---|
+| Ort im Repository | `mod/` | `test/700_99_Test/` |
+| Im Paket `dist/Mods/` | ja | **nie** — `build.ps1` packt nur `mod/` und bricht ab, wenn ein Ordner `700_99*` im Paket liegt |
+| Installation | `build.ps1 -Install` | nur `build.ps1 -Install -MitTest`; ein `-Install` **ohne** den Schalter entfernt sie |
+| `smoke.ps1` | erwartet | eigener roter Punkt, wenn sie installiert ist; mit `smoke.ps1 -MitTest` erwartet |
+| Ladereihenfolge | 00 bis 90 | 99 — zuletzt, damit sie jeden Wert der Mod überschreibt |
+
+**Was sie darf.** Nur `ModInfo.xml` und XML unter `Config/`. Nur `<set>` — sie legt nichts an und
+nimmt nichts weg; ohne sie fehlt der Mod nichts, mit ihr hat die Mod nichts, was sie sonst nicht
+hätte. Jedes `<set>` muss einen Knoten treffen, den unsere Modlets hinterlassen, und seinen Wert
+ändern. `-MitTest` ohne `-Install` ist ein Fehler.
+
+**Die Prüfung** `tools/check/testueberlagerung-pruefen.ps1` (zehnte Prüfung in `check-all.ps1`;
+Ausgänge 0 grün, 1 Befund, 2 nicht prüfbar) rechnet Vanillas Datei, darauf der Reihe nach die
+gleichnamige Datei jedes Modlets, und wendet dann die Überlagerung an. Rot ist: eine Zeile trifft
+nichts; eine Zeile ändert nichts; eine andere Operation als `<set>`; eine fremde Datei; ein Ordner
+`700_99*` unter `mod/`; falscher Name oder fehlende `ModInfo.xml`. `kette-pruefen.ps1` kann das
+nicht: es prüft XPaths gegen Vanilla, und die Ziele der Überlagerung legt erst die Mod an.
+
+**Erste Fassung** (`test/700_99_Test/Config/blocks.xml`): die acht Lichtquellen aus F-08 brennen
+`GrowthRate` 2 statt 30 (Wandfackel), 15 (Unschlittkerze Wand und Tisch), 60 (vier Öllampen), 45
+(Holzfeuer). 2 ist Vanillas eigene Untergrenze („should be set no lower than 2"). Der Test
+beantwortet damit drei Fragen in wenigen Minuten: geht jede Lichtquelle aus und wird zu ihrem
+Ausgebrannt-Zustand; in welcher Einheit rechnet `GrowthRate`; was zeigt der Kerzenstumpf (N-03).
+
+**Grenzen.**
+- Ob ein Block, der unter der Überlagerung gesetzt wurde, seine kurze Uhr behält, wenn die
+  Überlagerung wieder weg ist, ist **nicht gelesen**. Darum: nur für Test-Spielstände, nicht für
+  einen, der bleiben soll.
+- Die Prüfung rechnet bedingte Blöcke der Modlets nicht (heute betrifft das keine der Dateien, die
+  die Überlagerung berührt: 0 übergangene Operationen).
+- Im Spiel ist die Überlagerung nicht gelaufen. Dass ein neuntes Modlet mit `<set>` auf Knoten
+  eines früheren greift, folgt aus der Ladereihenfolge (§2, Finding WP1) und ist dort belegt, aber
+  für dieses Modlet nicht gesehen.
+
+**Gegenproben** (Projektregel 5): 18 in `gegenproben.ps1`, Abschnitt „Test-Überlagerung" — 14
+gegen die Prüfung (darunter: dieselbe Zeile trifft **ohne** das Modlet nichts — der Nachweis, dass
+am Stand *nach* den Modlets gerechnet wird), 4 gegen `smoke.ps1` an einem nachgebauten
+Spielordner. Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **270
+Gegenproben, 0 fehlgeschlagen; 10 Prüfungen, 1 rot** (rot bleibt `resourceRepairKit` am Dump vom
+22.11., N-01). `tools\build\build.ps1` ohne `-Install`: 8 Modlets, 42 Dateien, kein `700_99*` im
+Paket, Signatur `Valid`; `build.ps1 -MitTest` ohne `-Install` bricht ab. **Nicht gelaufen:**
+`-Install` und `-Install -MitTest` (keine Installation ohne Freigabe, N-11) — der
+Installationszweig ist gelesen, nicht ausgeführt.

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_99_Test — die TEST-UEBERLAGERUNG (Vertrag 01, Nachtrag "Test-Ueberlagerung").
+
+  KEIN TEIL DER MOD. Dieses Modlet verkuerzt Uhren, damit ein Spieltest Minuten dauert
+  statt Stunden. Es liegt ausserhalb von mod/, kommt nie nach dist/ und wird nur mit
+  'build.ps1 -Install -MitTest' neben die Mod gelegt. Eine gewoehnliche Installation
+  ('build.ps1 -Install') entfernt es wieder.
+
+  Es setzt nur Zahlen an Knoten, die die Mod schon angelegt hat (ausschliesslich <set>),
+  und laedt als letztes (99), damit es jeden Wert der Mod ueberschreibt.
+-->
+<xml>
+	<Name value="700_99_Test" />
+	<DisplayName value="700 — TEST: kurze Uhren (nicht ausliefern)" />
+	<Description value="Nur zum Testen: verkuerzt Brenndauern auf wenige Minuten. Gehoert nicht zur Mod und darf in keinem Paket liegen." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

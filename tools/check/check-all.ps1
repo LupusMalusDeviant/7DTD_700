@@ -366,6 +366,28 @@ else {
     Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
+# ---------------------------------------------------- Test-Ueberlagerung
+# test\700_99_Test verkuerzt Uhren fuer einen Spieltest und liegt nie im Paket (Vertrag 01,
+# Nachtrag "Test-Ueberlagerung"). Ihre XPaths zeigen auf Knoten, die erst unsere Modlets
+# anlegen - kette-pruefen prueft gegen Vanilla und sieht sie nicht. Diese Pruefung rechnet
+# am Stand nach unseren Modlets. Ohne SDTD_PATH ist das Ausgang 2 und rot.
+$ueberSkript = Join-Path $here 'testueberlagerung-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Test-Ueberlagerung ----"
+if (Test-Path $ueberSkript) {
+    Invoke-Pruefskript $ueberSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  testueberlagerung-pruefen.ps1 fehlt: $ueberSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
 # ---------------------------------------------------- Asset-Register
 # Jedes ausgelieferte Stueck hat eine Zeile in assets/ASSETS.md, und jedes fertige Bild ist
 # das, was aus seinem Quellbild entsteht (Vertrag 05 Abschnitte 4 und 5). Das Werkzeug, das
