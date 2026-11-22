@@ -1,6 +1,6 @@
 # Vertrag 03 — XPath-Regeln
 
-- **Status:** Entwurf, wartet auf Abnahme
+- **Status:** **Abgenommen vom Nutzer am 2026-11-22** (Entwurf vom 2026-11-07)
 - **Datum:** 2026-11-07
 - **Gilt ab:** Phase 1 (Plan-0001 WP1)
 - **Belege:** [WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md) ·
@@ -166,7 +166,7 @@ ein Element ändert, das eine andere Mod entfernt hat, bricht sonst die ganze Da
 Die Funktionsnamen sind belegt, **die genaue Schreibweise der Ausdrücke nicht**. Der erste
 `conditional`-Block in Phase 1 bestätigt sie.
 
-### Nachtrag WP8.7 (2026-11-22): Schreibweise belegt, Regel für XUi — **Abnahme offen**
+### Nachtrag WP8.7 (2026-11-22): Schreibweise belegt, Regel für XUi — **abgenommen am 2026-11-22**
 
 Die Schreibweise ist jetzt aus dem Code gelesen und gegen die NCalc-Bibliothek des Spiels
 gemessen ([Finding WP1 §4, Nachtrag](../rea/findings/WP1-modlet-lader-und-xml-patcher.md)).
@@ -213,7 +213,7 @@ Schreibweise gemessen, nicht gesehen, und ein Fehler darin nähme dem Webstuhl s
 und der Feuerstelle ihre Slots. Die Theming-Patches aus WP8.7 sind die ersten Blöcke; an
 ihnen kostet ein Fehler nur eine Farbe. → Prüfliste 22.
 
-### Nachtrag WP8.9 (2026-11-22): die Referenz-UI-Mods sind benannt — **Abnahme offen**
+### Nachtrag WP8.9 (2026-11-22): die Referenz-UI-Mods sind benannt — **abgenommen am 2026-11-22**
 
 Q8 ist entschieden (D86): **„AGF HUDPlus"** und **„E C H O // Hybrid UI"**. Damit gibt es die
 Liste, die die Regel oben voraussetzt. An der Form der Patches ändert das heute nichts:

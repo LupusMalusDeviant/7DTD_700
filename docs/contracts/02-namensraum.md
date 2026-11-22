@@ -1,6 +1,6 @@
 # Vertrag 02 — Namensraum und Kennungen
 
-- **Status:** Entwurf, wartet auf Abnahme
+- **Status:** **Abgenommen vom Nutzer am 2026-11-22** (Entwurf vom 2026-11-07)
 - **Datum:** 2026-11-07
 - **Gilt ab:** Phase 1 (Plan-0001 WP1)
 - **Belege:** [F-00-modloader-events-version.md](../rea/findings/F-00-modloader-events-version.md) ·
@@ -102,7 +102,7 @@ polish,brazilian,russian,turkish,schinese,tchinese
 
 ### Schlüssel-Aufbau
 
-> **BERICHTIGT am 8. November 2026 in WP4.6 — Abnahme offen.** Der Aufbau unten war
+> **BERICHTIGT am 8. November 2026 in WP4.6 — abgenommen am 2026-11-22.** Der Aufbau unten war
 > **falsch und nicht umsetzbar.** Er stand da, bevor ein eigener Gegenstand existierte; beim
 > ersten (`itm700_luppe`) ist er aufgefallen. Der neue Aufbau steht darunter.
 >

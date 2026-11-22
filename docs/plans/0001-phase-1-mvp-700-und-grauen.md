@@ -764,6 +764,9 @@ in WP7.
 
 **Stand WP5.2 und WP5.5 (8. November 2026): beide nicht angefangen, beide mit Grund.**
 
+**Stand 2026-11-22: die Frage ist beantwortet (D87) — alle fünf bleiben und werden
+umgedeutet, gebaut ist noch nichts.** Was am 8. November dazu stand:
+
 **WP5.2 (Fernkampf) hängt an einer offenen Frage des Nutzers.** Die Kennungen, die dort
 umgedeutet werden sollen, stehen gleichzeitig auf der Liste der sieben modernen Kennungen, die
 das Urteil durchlässt: `gunBowT3CompoundBow`, `gunBowT3CompoundCrossbow`,
@@ -1931,6 +1934,12 @@ werden:
 2. **Dedicated Server** installieren — oder entscheiden, dass Z7 gestrichen wird. *(Blockiert
    WP9.2 und drei F-00-Kriterien. Aufgabe liegt offen.)*
 3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
+   **Stand 2026-11-22: Verträge 01, 02 und 03 sind abgenommen** — einzeln vorgelegt, mit
+   Vertrag 02 §5 (der Sprachschlüssel ist die Kennung) und den Nachträgen WP8.7 und WP8.9 von
+   Vertrag 03; in Vertrag 01 ist dabei „sechs Fertigkeitsbäume" auf fünf berichtigt (D66).
+   **Offen bleibt Vertrag 04** mit allen Nachträgen: vereinbart ist die Abnahme als Block,
+   nachdem Claude eine Kurzübersicht der Regeln geschrieben hat, die Entscheidungen des
+   Nutzers sind. Was unten zu Vertrag 04 steht, gilt weiter.
    Dazu sind inzwischen drei **Berichtigungen** gekommen, die je eine eigene Abnahme brauchen:
    Vertrag 04 §3a (Erreichbarkeit), Vertrag 04 §3d samt den §5-Nachträgen (der sechste Weg,
    `vanilla-keys.txt`, `--prefix` als Liste, `kette-pruefen.ps1` — jetzt auch mit §5b
@@ -1947,7 +1956,10 @@ werden:
    Fackel-Last (WP6.6), T3-Basis gegen Seuchennacht (WP6.7), drei Tage ohne Anachronismus
    (WP3.7), Durchlauf bis zur ersten Seuchennacht (WP9.3).
 7. **Release-Entscheidung** nach dem Playtest (D46, WP9.6).
-8. **Sieben moderne Kennungen urteilen**, die das Anachronismus-Urteil heute auf `erlaubt`
+8. **Entschieden am 2026-11-22 (D87): alle sieben bleiben und werden umgedeutet**, die Drohne
+   samt `modRoboticDroneWeaponMod` bleibt bis zur Magie in Phase 2 gesperrt. Gebaut ist davon
+   noch nichts (offener Punkt „Entschieden, noch nicht gebaut"). Der Punkt lautete:
+   ~~**Sieben moderne Kennungen urteilen**~~, die das Anachronismus-Urteil heute auf `erlaubt`
    stehen lässt, weil keine Regel sie dem Namen nach trifft: `gunBowT3CompoundBow`,
    `gunBowT3CompoundCrossbow`, `gunBowT1IronCrossbow`, `ammoArrowExploding`, `ammoArrowSteelAP`,
    `modArmorCoolingMesh`, `tableSaw` (dazu `modRoboticDroneWeaponMod`, das trotz der Regel
@@ -1958,7 +1970,11 @@ werden:
 9. ~~**WP4.4 entscheiden**: die drei Werkstatt-Klone jetzt leer bauen, verschieben (Empfehlung)
    oder D50 beugen.~~ **Entschieden am 8. November 2026: verschieben** (D57). Webstuhl nach
    WP5.5b, Räucherkammer nach F-19, Runenritzer-Bank nach F-15.
-10. **Über die Breitaxt entscheiden** (WP5.6, 8. November 2026). Sie soll „T3–T4, schwer,
+10. **Entschieden am 2026-11-22 (D88): die beiden Vanilla-Basen werden getauscht** — Breitaxt
+    auf der Stahlaxt, Bartaxt auf der Feuerwehraxt. Dazu der Grundsatz des Nutzers: die
+    Waffenliste bleibt offen für weitere Waffen und neue Waffentypen. Gebaut ist der Tausch
+    noch nicht (offener Punkt „Entschieden, noch nicht gebaut"). Der Punkt lautete:
+    ~~**Über die Breitaxt entscheiden**~~ (WP5.6, 8. November 2026). Sie soll „T3–T4, schwer,
     Rüstungsbrecher" sein und ist gemessen die schwächste Waffe über T0 — T1, 15 Schaden,
     während ihr Rezept 400 Raseneisenerz kostet und die Bartaxt bei 100 fast doppelt so hart
     schlägt. Drei Wege in der Balancing-Tabelle §2.1: **Tausch der beiden Vanilla-Basen**
@@ -2250,6 +2266,44 @@ werden:
 
 ## Offene Punkte
 
+- **Zweiter Lauf im Spiel, wieder mit EAC** (2026-11-22, 20:45 bis 20:49, Protokoll
+  `output_log_client__2026-11-22__20-45-14.txt`). Der Stand vom selben Abend war installiert
+  (8 Modlets, DLL signiert). Geladen: die sieben XML-Modlets „Loaded Mod … (0.1.0)";
+  `700_00_Core` und `0_TFP_Harmony` übersprungen („AntiCheat enabled, mod skipped"). Neue
+  Welt `Pregen06k01`, Spielstand `Z`, Spieler erzeugt, normal beendet: **0 `EXC`, 1 fremde
+  `ERR` (Xbox Live), 17 `WRN`, keine davon zu einem XML-Patch.** Gegen den ConfigsDump
+  dieses Laufs (`check-all.ps1 -Source C:\Users\Anwender\Saves\Pregen06k01\Z\ConfigsDump`):
+  214 Gegenproben, 0 fehlgeschlagen; `anachronisms` grün (523 Kennungen, 0 verboten
+  erreichbar, 40 Hinweise); `recipes` rot, 80 Sackgassen — dieselben Zahlen wie am Dump vom
+  21. November, jetzt mit den Patches bis WP8.8. **Zwei Dinge daraus:** (1) Prüfliste 1
+  und der Kern bleiben offen — ein Lauf **ohne** EAC fehlt weiter. (2) **`check-all.ps1`
+  findet diesen Dump nicht von selbst:** das Spiel lief mit `-UserDataFolder=C:\Users\…`,
+  die Spielstände liegen damit nicht unter `%APPDATA%\7DaysToDie\Saves`, wo das Skript
+  sucht; ohne `-Source` las es weiter den Dump vom 21. November.
+- **Entschieden, noch nicht gebaut** (2026-11-22, D87 und D88). Jeder Punkt ist
+  `[Claude-prüfbar]` und bekommt Namen in beiden Sprachen, Glossar-Einträge und Prüflauf:
+  1. *WP5.2 Fernkampf ist frei.* Langbogen (`gunBowT3CompoundBow`), Armbrust
+     (`gunBowT1IronCrossbow`), Schwere Armbrust (`gunBowT3CompoundCrossbow`), der
+     panzerbrechende Pfeil (`ammoArrowSteelAP`, Name offen) und der Feuertopfpfeil
+     (`ammoArrowExploding`) brauchen Namen, Werte und Rezepte. Vier der Bögen und Armbrüste
+     stehen heute unter den 80 Sackgassen. Die Schleuder (T0) hat weiter keine
+     Vanilla-Grundlage; über sie ist nicht entschieden.
+  2. *Der Tausch von Breitaxt und Bartaxt* (D88): Rezepte, Sprachzeilen, Freischaltstufen
+     (D70: heute Breitaxt ab 11, Bartaxt ab 26), Denylist-Kommentar, Balancing-Tabelle §2.1
+     und die F-02-Tabelle.
+  3. *Zwei Sprachzeilen für Unerreichbares:* `tableSaw` und `modArmorCoolingMesh`
+     (Vorschlag Schreinerbank, Leinenfutter). Im Spiel sieht sie heute niemand.
+  4. *`modRoboticDroneWeaponMod` fällt weiter durch das Urteil.* Die Drohne bleibt gesperrt
+     (D87); der Fehler sitzt in der Ableitung über Mods, nicht in der Denylist.
+- **Zweites Review der Vorprüfung, zwei Befunde, nicht behoben** (Codex über
+  `014528c..467646d`, 2026-11-22; die Entscheidung des Nutzers steht aus, beide betreffen nur
+  `vertraeglichkeit-pruefen.ps1`, nicht die Mod). (1) *Eine kaputte Sprachdatei der fremden
+  Mod kann grün durchgehen:* liefert `Import-Csv` keine Zeile (etwa bei einer Datei, die nur
+  aus einem Anführungszeichen besteht), gilt die Schlüsselmenge als leer und die Spalte
+  `Key` wird nicht verlangt. (2) *Eine fremde Mod, deren Operationen alle in einem bedingten
+  Block stehen, der nur mit uns zusammen läuft,* endet mit Ausgang 2 („keine einzige
+  Patch-Operation"), obwohl in der Kombination Befunde gerechnet sind; sie gehen verloren.
+  Keiner der zwei ist nachgestellt; beide Beschreibungen passen zum Code.
 - **Vorprüfung WP8.9: vier Dinge sind offen** (2026-11-22, `vertraeglichkeit-pruefen.ps1`).
   1. *Abnahme.* Vertrag 04 „Nachtrag WP8.9" — mit der Entscheidung, dass die Prüfung nicht
      in `check-all.ps1` läuft.

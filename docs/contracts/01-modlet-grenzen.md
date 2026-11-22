@@ -1,6 +1,6 @@
 # Vertrag 01 — Modlet-Grenzen und Ladereihenfolge
 
-- **Status:** Entwurf, wartet auf Abnahme
+- **Status:** **Abgenommen vom Nutzer am 2026-11-22** (Entwurf vom 2026-11-07)
 - **Datum:** 2026-11-07
 - **Gilt ab:** Phase 1 (Plan-0001 WP1)
 - **Entscheidung:** D53
@@ -30,7 +30,7 @@ damit auch auf dem Linux-Server.
 | `700_20_Material` | F-05, F-04 | Ressourcen, Rohstoffketten, Werkstätten, Brennstoff | nein |
 | `700_30_Ausruestung` | F-02, F-03 | Waffen, Rüstung, Qualitätsachsen, Verschleiß | nein |
 | `700_40_Bauen` | F-18, F-08 | Bauteile, Befestigung, Lichtquellen, Fallen | nein |
-| `700_50_Fortschritt` | F-21 | Die sechs Fertigkeitsbäume, Perks, Abschriften | nein |
+| `700_50_Fortschritt` | F-21 | Die ~~sechs~~ **fünf** Fertigkeitsbäume (D66, berichtigt bei der Abnahme am 2026-11-22), Perks, Abschriften | nein |
 | `700_60_Welt` | F-17 | Nachtwerte, Nebel, sichere Orte, Klangzuordnung | nein |
 | `700_90_Sprache` | F-12 | `Localization.csv`, XUi-Theming | nein |
 
@@ -133,6 +133,6 @@ dafür eine Warnung.
 
 ## 7. Offene Punkte dieses Vertrags
 
-- **Acht statt sechs Modlets** — Abweichung vom Plan, hier erstmals festgelegt. Abnahme nötig.
+- ~~**Acht statt sechs Modlets** — Abweichung vom Plan, hier erstmals festgelegt. Abnahme nötig.~~ Abgenommen am 2026-11-22.
 - Ob die reinen XML-Modlets mit aktivem EAC laden, ist Folgerung, nicht Nachweis (§4).
 - Der Umgang mit dem alten `Mods/7DTD_700/` beim Aktualisieren ist noch nicht im Build-Skript.

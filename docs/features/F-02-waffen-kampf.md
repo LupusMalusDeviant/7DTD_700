@@ -21,6 +21,16 @@ Schild-Blocken, Schadensarten, Verschleiß und Wurfwaffen (D21). Nahkampf ist di
 | Breitaxt | Schnitt/Wucht | T3–T4, schwer, Rüstungsbrecher — **widerspricht den gemessenen Zahlen, siehe unten** | Fireaxe |
 | Streitkolben / Hammer | Wucht | T3–T4, gegen Rüstung (Kultisten, Plünderer) | Sledgehammer |
 
+**Die Liste ist nicht abgeschlossen** (Grundsatz des Nutzers, 2026-11-22, D88): je Kategorie
+können weitere Waffen dazukommen, auch ganz neue Waffentypen. Neue Modelle sind Phase 2 (D3,
+D50); bis dahin entsteht eine weitere Waffe nur auf einer Vanilla-Basis.
+
+**Breitaxt und Bartaxt tauschen ihre Vanilla-Basis** (D88, 2026-11-22): Breitaxt auf der
+Stahlaxt (`meleeToolAxeT2SteelAxe`), Bartaxt auf der Feuerwehraxt
+(`meleeToolAxeT1IronFireaxe`). **Noch nicht gebaut** — die Tabellen hier zeigen bis dahin den
+alten Stand. **Fernkampf** (D87, 2026-11-22): Langbogen, Armbrust, Schwere Armbrust, ein
+panzerbrechender Pfeil und der Feuertopfpfeil bleiben als Umdeutungen; gebaut in WP5.2.
+
 **Die Vanilla-Basen, gemessen an V 3.40 (WP5, 8. November 2026).** Die Spalte oben nennt
 Modellfamilien; das sind die wirklichen Kennungen, und zwei davon hatte WP3 gesperrt:
 

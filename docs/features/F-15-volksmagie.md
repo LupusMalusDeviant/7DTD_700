@@ -110,5 +110,13 @@ Tränke und Zauber.
 - [ ] Alle Effekte sind dezent (Review gegen D10: keine Explosion, kein Blitz, kein Leuchtstrahl)
 - [ ] Runensteine und Zauber funktionieren auf dem Dedicated Server mit 2 Clients (Projektile und Effekte synchron)
 
+## Notizen für diese Phase (nicht vorziehen, D50)
+- **Die Drohne als kleiner dienstbarer Geist** (Idee des Nutzers, 2026-11-22, D87: „Die Drohne
+  könnte ein Mini-Dämon sein"). Vanillas Robotik-Drohne und ihre Mods (`modRoboticDrone*`)
+  sind in Phase 1 gesperrt. Statt sie gesperrt zu lassen, bekäme sie hier eine magische
+  Deutung als Begleiter. Offen: was sie kann, was sie kostet, wie sie zu den Leitplanken oben
+  passt (dezente Volksmagie). Grundsatz des Nutzers dazu: für alles Moderne wird eine
+  mittelalterliche Deutung gesucht, bevor es gesperrt bleibt — Magie ist dafür eine Option.
+
 ## Offene Fragen
 - Gibt es in V 3.40 einen Accessoire-Slot für Amulette, oder laufen sie über Rüstungs-Mods?
