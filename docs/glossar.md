@@ -118,6 +118,7 @@ eine Abweichung.
 | `modArmorCoolingMesh` | Leinenfutter | Linen Lining | Kühlmaschen-Mod / Cooling Mesh Mod | D87 |
 | `itm700_schleifstein` | Schleifstein | Whetstone | (statt Reparaturkit / Repair Kit) | D60 |
 | `itm700_schmiedeflicken` | Schmiedeflicken | Forge Patch | (statt Reparaturkit / Repair Kit) | D60, D62 |
+| `itm700_bogenzeug` | Bogenzeug | Bowyer's Kit | (statt Reparaturkit / Repair Kit, für Bögen und Armbrüste) | D91 — Name zu prüfen |
 | `meleeToolTorch` | Fackel | Torch | Fackel / Torch | WP6 |
 
 ## 6. Rüstung

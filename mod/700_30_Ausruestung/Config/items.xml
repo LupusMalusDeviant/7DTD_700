@@ -86,6 +86,31 @@
 			<property name="Group" value="Resources" />
 		</item>
 
+		<!-- Bogenzeug (D91, 22. November 2026) - ZU PRUEFEN DURCH DEN NUTZER.
+		     Sehne, Wachs und Leim: das Reparaturzeug fuer Boegen und Armbrueste. Der
+		     Nutzer hat ein eigenes Reparaturzeug verlangt; Name, Rezept und Zahlen
+		     sind Claudes Vorschlag und im Nachtlauf ohne Rueckfrage gebaut.
+
+		     Erbt von der Nesselfaser (resourceYuccaFibers): ein erlaubter Werkstoff
+		     ohne Aktion - das Naehzeug dagegen ist in Vanilla ein Verband, und ein
+		     Erbe davon liesse sich auf Wunden legen. Das Symbol ist das des Naehzeugs
+		     mit eigenem Farbton, kein eigenes Bild (Phase 1).
+
+		     RepairAmount 32000 und RepairTime 4 sind die Zahlen des Naehzeugs (D62):
+		     Holz und Sehne richtet man ganz, dafuer braucht es kein Feuer. Dass die
+		     Armbrust mit Buegel und Abzug aus Eisen damit ebenfalls ganz wird, ist
+		     eine Vereinfachung. -->
+		<item name="itm700_bogenzeug">
+			<property name="Extends" value="resourceYuccaFibers" />
+			<property name="CustomIcon" value="resourceSewingKit" />
+			<property name="CustomIconTint" value="c8b27a" />
+			<property name="Stacknumber" value="50" />
+			<property name="EconomicValue" value="40" />
+			<property name="RepairAmount" value="32000" />
+			<property name="RepairTime" value="4" />
+			<property name="Group" value="Resources" />
+		</item>
+
 		<!-- Steppbahn: zwei Lagen Tuch mit Werg dazwischen, vernaeht - das
 		     Zwischenprodukt, aus dem die vier Gambeson-Teile entstehen und das dem
 		     Webstuhl seinen Zweck gibt (D57). Erbt vom Tuch, damit Werkstoff, Gewicht
@@ -631,9 +656,19 @@
 	<set xpath="/items/item[@name='armorHeavyMaster']/property[@name='RepairTools']/@value">itm700_schmiedeflicken</set>
 	<set xpath="/items/item[@name='armorDLCMaster']/property[@name='RepairTools']/@value">resourceSewingKit</set>
 
-	<!-- NOCH OFFEN, UND ZWAR GEZAEHLT: nach diesem Schritt zeigen noch zehn erlaubte
-	     Gegenstaende auf resourceRepairKit - vier Boegen (WP5.2, haengt am Urteil ueber
-	     die modernen Kennungen), fuenf Werkzeuge (Spitzhacke, Schaufel, Klauenhammer je
+	<!-- Die vier Boegen und Armbrueste, die auf das gesperrte Reparatur-Kit zeigten
+	     (D91, 22. November 2026 - zu pruefen durch den Nutzer). Gemessen an Vanilla
+	     und am Dump vom selben Abend: jede der vier traegt RepairTools selbst, keine
+	     erbt es. Der einfache Bogen (gunBowT0PrimitiveBow) flickt mit Holz und bleibt
+	     so. -->
+	<set xpath="/items/item[@name='gunBowT1WoodenBow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
+	<set xpath="/items/item[@name='gunBowT3CompoundBow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
+	<set xpath="/items/item[@name='gunBowT1IronCrossbow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
+	<set xpath="/items/item[@name='gunBowT3CompoundCrossbow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
+
+	<!-- NOCH OFFEN, UND ZWAR GEZAEHLT: nach diesem Schritt zeigen noch SECHS erlaubte
+	     Gegenstaende auf resourceRepairKit (bis D91 zehn; die vier Boegen stehen jetzt
+	     oben) - fuenf Werkzeuge (Spitzhacke, Schaufel, Klauenhammer je
 	     Stufe) und partsMaster. Die Werkzeuge gehoeren zu F-05 und keinem Paket der
 	     Phase 1, also bleibt der Aufschub in aufschub.txt stehen. Eine Pruefung, die
 	     "erlaubter Gegenstand repariert mit gesperrtem Werkzeug" von selbst findet,

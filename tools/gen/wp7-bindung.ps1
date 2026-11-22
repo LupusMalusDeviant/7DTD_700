@@ -122,6 +122,7 @@ $offen = [ordered]@{
     'itm700_schleifstein'    = 'D60: ueberall herstellbar; Vanillas resourceRepairKit ist nicht learnable'
     'itm700_schmiedeflicken' = 'D60: die Schranke ist die Esse; Vanillas resourceRepairKit ist nicht learnable'
     'resourceSewingKit'      = 'Werkstoff ohne Vanilla-Rezept'
+    'itm700_bogenzeug'       = 'D91: ueberall herstellbar wie das Naehzeug; Vanillas resourceRepairKit ist nicht learnable'
     'itm700_steppbahn'       = 'Zwischenstueck; die Schranke ist der Webstuhl'
     'blk700_holzfeuer'       = 'T0-Feuerstelle; Vanillas campfire ist nicht learnable'
     'logWallLeft'            = 'Bauteil; Vanilla bindet keine Bauteile, und eine Stufe fuers Bauen gibt es nicht'

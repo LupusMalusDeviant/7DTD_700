@@ -47,8 +47,9 @@ Tausch und bleibt als Begründung stehen.
 Dazu die zwei Lehrblatt-Texte, die diese Munition freischalten (`perkRangersAPAmmo*`,
 `perkRangersExplodingBolts*`). **Offen in WP5.2:** (1) *Reparatur* — Holzbogen, Langbogen und
 beide Armbrüste verlangen das gesperrte `resourceRepairKit` und sind damit nicht zu flicken;
-der Nutzer will dafür ein eigenes Reparaturzeug für Bögen und Armbrüste, geplant, nicht gebaut
-(Plan-0001, offene Punkte). (2) *Wirkung des Feuertopfs* — Vanilla lässt den Pfeil
+der Nutzer will dafür ein eigenes Reparaturzeug für Bögen und Armbrüste. **Gebaut im
+Nachtlauf vom 2026-11-22 als „Bogenzeug" (`itm700_bogenzeug`), Name, Rezept und Zahlen zu
+prüfen durch den Nutzer** (Plan-0001, offene Punkte). (2) *Wirkung des Feuertopfs* — Vanilla lässt den Pfeil
 explodieren; ob er stattdessen oder zusätzlich brennen soll, ist eine Balancing-Frage (WP9).
 (3) Der einfache Bogen und der Holzbogen tragen weiter Vanillas Namen; die Tabelle unten
 nennt „Selbstbogen". (4) Die Schleuder (T0) hat keine Vanilla-Grundlage.

@@ -15,7 +15,7 @@
 	     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind
 	     alle Rezepte offen - nichts bricht.
 
-	     24 gebunden, 18 bewusst offen (Liste und Gruende im Erzeuger). -->
+	     24 gebunden, 19 bewusst offen (Liste und Gruende im Erzeuger). -->
 
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_armschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_beinschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->

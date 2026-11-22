@@ -2389,6 +2389,15 @@ werden:
      Vanilla auskommentiert. Kein Weg führt zu ihm, darum beurteilt `anachronisms` ihn gar
      nicht (0 Treffer in der JSON-Ausgabe, auch `ungeprueft --praefix modRoboticDrone` nennt
      nichts). Für Spieler ist er gesperrt, ohne dass wir etwas tun.
+  **Gebaut im Nachtlauf vom 2026-11-22 auf 23, ZU PRÜFEN durch den Nutzer:** das Bogenzeug
+  wie unten vorgeschlagen — `itm700_bogenzeug` (erbt von der Nesselfaser, Symbol des
+  Nähzeugs mit eigenem Farbton), Rezept von Hand: 10 Nesselfaser, 1 Tierfett, 2 Holz ergeben
+  zwei; `RepairAmount` 32000 und `RepairTime` 4 wie das Nähzeug; vier `set`-Zeilen auf
+  `RepairTools` (Holzbogen, Langbogen, Armbrust, Schwere Armbrust). Name, Mengen und Zahlen
+  sind Claudes Vorschlag. Nachweis: `kette-pruefen` 754 XPaths, 0 ohne Treffer; der Erzeuger
+  `wp7-bindung.ps1` führt das Rezept unter „bewusst offen" (19 statt 18). Im Spiel nicht
+  gesehen. Damit zeigen noch **sechs** erlaubte Gegenstände auf das gesperrte Reparatur-Kit
+  (fünf Werkzeuge und `partsMaster`), nicht mehr zehn. Der Vorschlag lautete:
   **Neu und offen — Reparaturzeug für Bögen und Armbrüste** `[braucht Nutzer]` (D91):
   Holzbogen, Langbogen und beide Armbrüste zeigen in `RepairTools` auf das gesperrte
   `resourceRepairKit` (gemessen an Vanilla und am Dump); der einfache Bogen flickt mit Holz.

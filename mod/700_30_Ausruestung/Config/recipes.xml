@@ -258,6 +258,15 @@
 			<ingredient name="resourceYuccaFibers" count="10" />
 		</recipe>
 
+		<!-- Bogenzeug (D91) - ZU PRUEFEN DURCH DEN NUTZER, Mengen sind Vorschlag.
+		     Sehne aus Nesselfaser, Tierfett als Wachs, ein Span Holz zum Richten.
+		     Zwei auf einmal und ueberall, nach dem Muster des Naehzeugs. -->
+		<recipe name="itm700_bogenzeug" count="2" is_trackable="false">
+			<ingredient name="resourceYuccaFibers" count="10" />
+			<ingredient name="resourceAnimalFat" count="1" />
+			<ingredient name="resourceWood" count="2" />
+		</recipe>
+
 		<!-- ====================================================
 		     WP5.5 - die zwoelf Ruestungsteile (D59, D61)
 		     ====================================================
