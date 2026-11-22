@@ -1,0 +1,27 @@
+<config>
+	<!-- Testdatei viertes Review zu WP8.7: Attribute und Kindelemente, deren Name eine
+	     Eigenschaft des Knotens verdeckt (XML-Adapter von PowerShell). Alle vier waren GRUEN.
+	       1. <ChildNodes/> als Kind eines Zweigs  - verdeckte dessen Kinderliste; die
+	          Operation dahinter (Ziel fehlt) blieb ungelesen
+	       2. Operation mit NodeType="skip"         - uebersprungen, ihr Ziel fehlt
+	       3. <if NodeType="skip" cond="event()">   - uebersprungen, die Bedingung ist falsch
+	     Erwartet: Exit 1, 4 rot (zu 1. zwei Zeilen: das unbekannte Kind und das Ziel). -->
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+		<else>
+			<ChildNodes />
+			<setattribute name="depth" xpath="/windows/window[@name='pruefGibtEsNichtA']">2</setattribute>
+		</else>
+	</conditional>
+	<setattribute NodeType="skip" name="depth" xpath="/windows/window[@name='pruefGibtEsNichtB']">2</setattribute>
+	<conditional>
+		<if NodeType="skip" cond="event()">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

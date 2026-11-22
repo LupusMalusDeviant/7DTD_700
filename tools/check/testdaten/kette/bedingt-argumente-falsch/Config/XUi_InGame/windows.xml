@@ -1,0 +1,61 @@
+<config>
+	<!-- Testdatei viertes Review zu WP8.7: JEDE der elf Funktionen des Spiels mit einer
+	     FALSCHEN Zahl von Argumenten. Ein falscher Eintrag in der Tabelle der Argumentzahlen
+	     laesst eine dieser Zeilen gruen.
+	     Erwartet: Exit 1, 11 rot. -->
+	<conditional>
+		<if cond="mod_loaded()">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window', '/windows') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_version() != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="game_version(1) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="version() != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="serverinfo() != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="gamepref('pruefName', 'pruefZwei') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="event('pruefName', 'pruefZwei')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="time_minutes(1) > 0">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="game_loaded(1)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="has_entitlement()">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

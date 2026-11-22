@@ -309,10 +309,10 @@ foreach ($path in $Rezepte) {
     # Der Lauf war gruen.
     $appended = 0
     foreach ($ingredient in $xml.SelectNodes('//ingredient')) {
-        if ($ingredient.ParentNode.LocalName -eq 'recipe') { continue }
+        if ($ingredient.get_ParentNode().get_LocalName() -eq 'recipe') { continue }
         $appended++
-        $target = $ingredient.ParentNode.GetAttribute('xpath')
-        if (-not $target) { $target = $ingredient.ParentNode.LocalName }
+        $target = $ingredient.get_ParentNode().GetAttribute('xpath')
+        if (-not $target) { $target = $ingredient.get_ParentNode().get_LocalName() }
         $where = "$([IO.Path]::GetFileName($path)) / $target"
         if (-not $defined.ContainsKey($ingredient.name)) {
             $unresolved += "Eingehaengte Zutat '$($ingredient.name)' ist nirgends definiert  ($where)"
@@ -334,7 +334,7 @@ foreach ($path in $Gegenstaende) {
     foreach ($node in $xml.SelectNodes('//set')) {
         $xpath = $node.GetAttribute('xpath')
         if ($xpath -notmatch "RepairTools'\]/@value$") { continue }
-        foreach ($name in ($node.InnerText -split ',')) {
+        foreach ($name in ($node.get_InnerText() -split ',')) {
             $name = $name.Trim()
             if ($name.Length -eq 0) { continue }
             $repairRefs++
@@ -379,7 +379,7 @@ foreach ($path in @($Gegenstaende) + @($Bloecke)) {
         elseif ($xpath -match "RepairItems'\].*/@name$")          { $kind = 'Reparaturstoff' }
         elseif ($xpath -match "/drop\[.*\]/@name$")               { $kind = 'Abwurf' }
         if (-not $kind) { continue }
-        $name = $node.InnerText.Trim()
+        $name = $node.get_InnerText().Trim()
         if ($name.Length -eq 0) { continue }
         $rewiredRefs++
         if (-not $defined.ContainsKey($name)) {
@@ -521,9 +521,11 @@ $genannteMods = @()
 #     keinen Wahrheitswert liefert - in IRGENDEINER Belegung der genannten Mods;
 #   - xpath(...) laeuft gegen Vanilla und liefert, was das Spiel liefert: null ohne Treffer,
 #     "More than one match" bei mehreren, sonst den Text des Treffers;
-#   - jeder XPath in einer Bedingung muss in Vanilla etwas treffen (oder nur eigene
-#     Kennungen nennen). Das ersetzt den "toten Zweig": ob ein Zweig laeuft, haengt an
-#     Mods, die hier niemand kennt, aber ein Ziel, das es nicht gibt, ist ein Tippfehler.
+#   - jeder XPath in einer Bedingung muss in Vanilla etwas treffen - OHNE Ausnahme fuer
+#     eigene Kennungen (gestrichen im dritten Review; die Ausnahme gilt nur noch fuer die
+#     XPaths der Patch-Operationen selbst, siehe Test-PatchEbene). Das ersetzt den "toten
+#     Zweig": ob ein Zweig laeuft, haengt an Mods, die hier niemand kennt, aber ein Ziel,
+#     das es nicht gibt, ist ein Tippfehler.
 $ncalcGeladen = $false
 $ncalcOpt = $null
 $ncalcHandler = $null
@@ -668,6 +670,15 @@ function Test-Bedingung {
         if (-not $xpaths.Contains($text)) { [void]$xpaths.Add($text) }
     }
 
+    # Die Grenze von acht Mods gilt HIER, sobald die Aufrufe gelesen sind - vor jeder
+    # Rueckkehr wegen eines Befunds (geaendert 2026-11-22, viertes Review zu WP8.7). Sie
+    # stand erst vor dem Auswerten: neun Mods neben "event()" endeten mit dem Befund zur
+    # Argumentzahl (Exit 1), und die Bedingung, die niemand durchrechnen kann, sah aus wie
+    # eine, die bis auf einen Fehler geprueft ist. "Nicht pruefbar" geht vor "Befund".
+    if ($mods.Count -gt 8) {
+        Stop-Unpruefbar "eine Bedingung nennt $($mods.Count) Mods; durchgerechnet werden hoechstens acht (256 Belegungen): $Ausdruck  ($Datei)"
+    }
+
     # 3. Jeder XPath gegen Vanilla, mit dem Ergebnis, das das Spiel daraus macht.
     $script:ncalcXPath = New-Object System.Collections.Hashtable ([System.StringComparer]::Ordinal)
     $xdoc = Get-VanillaXDoc $Datei
@@ -703,11 +714,7 @@ function Test-Bedingung {
     }
     if (-not $inOrdnung) { return }
 
-    # 4. Auswerten. Die Grenze von acht Mods gilt ZUERST - vorher umging sie jede Bedingung,
-    #    die nebenbei eine Funktion des laufenden Spiels nannte.
-    if ($mods.Count -gt 8) {
-        Stop-Unpruefbar "eine Bedingung nennt $($mods.Count) Mods; durchgerechnet werden hoechstens acht (256 Belegungen): $Ausdruck  ($Datei)"
-    }
+    # 4. Auswerten.
     #    Andere Funktionen als mod_loaded und xpath kennt nur das laufende Spiel. Gelesen und
     #    auf Namen und Argumentzahl geprueft sind sie; ausgewertet werden sie nicht.
     if ($andereFunktion) { $script:bedingungenOffen++; return }
@@ -755,8 +762,8 @@ function Test-Bedingt {
     $ifs = 0
     $nachElse = $false
     $operationen = 0
-    foreach ($kind in $Block.ChildNodes) {
-        if ($kind.NodeType -ne 'Element') { continue }
+    foreach ($kind in $Block.get_ChildNodes()) {
+        if ($kind.get_NodeType() -ne 'Element') { continue }
         $art = $kind.get_Name()
         if ($art -cne 'if' -and $art -cne 'else') {
             $script:unresolved += "unerwartetes Kind <$art> in <conditional>: erlaubt sind <if cond=...> und <else>  ($Datei)"
@@ -780,7 +787,7 @@ function Test-Bedingt {
                 $script:unresolved += "<else> traegt 'cond': das Spiel liest es nicht, der Zweig gilt immer  ($Datei)"
             }
         }
-        $operationen += @($kind.ChildNodes | Where-Object { $_.NodeType -eq 'Element' }).Count
+        $operationen += @($kind.get_ChildNodes() | Where-Object { $_.get_NodeType() -eq 'Element' }).Count
         Test-PatchEbene $kind $Datei $VanillaDoc ($Tiefe + 1)
     }
     if ($ifs -eq 0) {
@@ -794,8 +801,14 @@ function Test-Bedingt {
 function Test-PatchEbene {
     # Die Kinder von <config> und, seit WP8.7, die Kinder eines <if> oder <else>.
     param($Behaelter, [string]$Datei, $VanillaDoc, [int]$Tiefe)
-    foreach ($node in $Behaelter.ChildNodes) {
-        if ($node.NodeType -ne 'Element') { continue }
+    # DER AUFBAU EINES KNOTENS WIRD UEBER METHODEN GELESEN, NIE UEBER EIGENSCHAFTEN
+    # (im ganzen Skript, seit dem vierten Review zu WP8.7, 2026-11-22). Der XML-Adapter
+    # legt Attribute UND Kindelemente als Eigenschaften ueber den Knoten. Ein Attribut
+    # NodeType="skip" machte aus einem <conditional> etwas, das wie ein Kommentar
+    # uebersprungen wurde; ein Kind <ChildNodes/> in einem Zweig verdeckte dessen
+    # Kinderliste, und der Rest des Zweigs blieb ungelesen. Beides war GRUEN.
+    foreach ($node in $Behaelter.get_ChildNodes()) {
+        if ($node.get_NodeType() -ne 'Element') { continue }
         # get_Name() UND NICHT .Name. PowerShells XML-Adapter legt die XML-Attribute als
         # Eigenschaften ueber das Objekt, und ein Attribut 'name' ueberdeckt dabei die
         # Eigenschaft 'Name' des Elements. Bei <setattribute name="hidden" xpath="...">
@@ -872,17 +885,17 @@ foreach ($path in $Patches) {
     if ($gelesen.Unlesbar) { Stop-Unpruefbar $gelesen.Unlesbar }
     $xml = $gelesen.Doc
     if ($null -eq $xml) { continue }
-    if ($null -eq $xml.DocumentElement -or $xml.DocumentElement.get_Name() -cne 'config') {
-        $wurzel = if ($null -eq $xml.DocumentElement) { '(keiner)' } else { $xml.DocumentElement.get_Name() }
+    if ($null -eq $xml.get_DocumentElement() -or $xml.get_DocumentElement().get_Name() -cne 'config') {
+        $wurzel = if ($null -eq $xml.get_DocumentElement()) { '(keiner)' } else { $xml.get_DocumentElement().get_Name() }
         $unresolved += "Patch-Datei hat den Wurzelknoten <$wurzel> statt <config>: $name"
         continue
     }
-    $elemente = @($xml.DocumentElement.ChildNodes | Where-Object { $_.NodeType -eq 'Element' })
+    $elemente = @($xml.get_DocumentElement().get_ChildNodes() | Where-Object { $_.get_NodeType() -eq 'Element' })
     if ($elemente.Count -eq 0) {
         $unresolved += "Patch-Datei ohne eine einzige Operation: $name"
         continue
     }
-    Test-PatchEbene $xml.DocumentElement $name $vdoc 0
+    Test-PatchEbene $xml.get_DocumentElement() $name $vdoc 0
 }
 
 # FORTSCHRITTS-VERWEISE (ergaenzt 2026-11-08, WP7.2). Die XPath-Pruefung oben sagt, ob ein
@@ -916,15 +929,15 @@ if (Test-Path $progVanillaPfad) {
             $nm = $n.GetAttribute('name')
             if ($nm) { $progPool[$nm] = 'unser' }
         }
-        foreach ($node in $xml.DocumentElement.ChildNodes) {
-            if ($node.NodeType -ne 'Element') { continue }
+        foreach ($node in $xml.get_DocumentElement().get_ChildNodes()) {
+            if ($node.get_NodeType() -ne 'Element') { continue }
             if ($node.get_Name() -ne 'set') { continue }
             $xp = $node.GetAttribute('xpath')
             $art = $null
             if ($xp -match '/@parent$')           { $art = 'Baum-Zuordnung' }
             elseif ($xp -match '/@progression_name$') { $art = 'Stufenbedingung' }
             if (-not $art) { continue }
-            $wert = $node.InnerText.Trim()
+            $wert = $node.get_InnerText().Trim()
             if ($wert.Length -eq 0) { continue }
             $progRefs++
             if (-not $progPool.ContainsKey($wert)) {
@@ -958,14 +971,15 @@ Write-Output '    - XPaths werden gegen die Vanilla-Datei gleichen Pfads unter C
 Write-Output '      den fertig gepatchten Stand. Ein XPath, der NUR auf einen Knoten eines'
 Write-Output '      FRUEHEREN eigenen Modlets zeigt, gilt als gruen, sobald jede Kennung darin'
 Write-Output '      von uns definiert ist - dass das frueher laedt, prueft die Ladereihenfolge,'
-Write-Output '      nicht dieses Skript.'
+Write-Output '      nicht dieses Skript. Das gilt NUR fuer das xpath einer Patch-Operation, NICHT'
+Write-Output '      fuer xpath(...) in der Bedingung eines <conditional>.'
 Write-Output '    - Ein <conditional> wird in JEDEM Zweig geprueft, als waere er der aktive. Die'
 Write-Output '      Bedingung liest die NCalc.dll des Spiels; xpath laeuft gegen Vanilla, und fuer'
 Write-Output '      mod_loaded wird jede Belegung durchgerechnet. Ob es eine genannte Mod gibt,'
 Write-Output '      prueft niemand. Bedingungen mit anderen Funktionen (version, gamepref, event'
 Write-Output '      ...) werden gelesen, aber nicht ausgewertet. Ein XPath in einer Bedingung, der'
-Write-Output '      auf das Element einer ANDEREN Mod zielt, ist rot - das Ziel muss in Vanilla'
-Write-Output '      stehen.'
+Write-Output '      auf das Element einer ANDEREN Mod oder eines frueheren EIGENEN Modlets zielt,'
+Write-Output '      ist rot - das Ziel muss in Vanilla stehen.'
 Write-Output '    - Fortschritts-Verweise (parent, progression_name) werden nur auf der obersten'
 Write-Output '      Ebene gelesen, nicht in einem <conditional>. <include> wird nur gezaehlt.'
 Write-Output '    - Gelesen werden XML-Dateien. Localization.csv prueft mod700check localization.'

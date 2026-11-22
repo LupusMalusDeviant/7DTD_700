@@ -1523,6 +1523,21 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    `check-all`: 6 Prüfungen, 1 rot (`recipes`, unverändert); 9 Bedingungen gelesen, alle
    wahr. Nicht geprüft bleibt die Art der Argumente (`event(1)` ist grün).
    → Vertrag 04 „Nachtrag drittes Review zu WP8.7", Abnahme offen.
+
+   **Viertes Review zu WP8.7 (2026-11-22): vier Befunde, einer davon ein Durchlass.** Das
+   Review zu `75a10dd` fand: ein Attribut `NodeType` an einem `<conditional>` verdeckte in
+   Windows PowerShell 5.1 die gleichnamige Eigenschaft, der Block wurde übersprungen und der
+   Lauf war grün (mittel); neun Mods neben einem zweiten Fehler endeten mit Exit 1 statt 2;
+   die Gegenproben deckten nur drei der elf Argumentzahlen; ein Kommentar nannte noch die
+   gestrichene Ausnahme. Behoben: der Aufbau eines Knotens wird im ganzen Skript über
+   Methoden gelesen (auch die Kinderliste, der Text und die Fortschritts-Verweise — dieselbe
+   Bauart ließ dort ebenfalls Zeilen durch); die Acht-Mods-Grenze gilt vor jeder Rückkehr
+   wegen eines Befunds; zwei Testdateien rufen jede der elf Funktionen richtig und falsch
+   auf. Sieben neue Gegenproben über sechs Testdateien; gegen das Skript des Stands `75a10dd`
+   144 Gegenproben, 5 fehlgeschlagen, gegen das neue 144, 0; gegen eine absichtlich
+   verfälschte Tabelle der Argumentzahlen 144, 6. `check-all`: 6 Prüfungen, 1 rot
+   (`recipes`, unverändert); 9 Bedingungen gelesen, alle wahr.
+   → Vertrag 04 „Nachtrag viertes Review zu WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.

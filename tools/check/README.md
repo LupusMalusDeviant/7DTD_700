@@ -313,6 +313,14 @@ genannte Mods sind immer „nicht geprüft". Ein XPath in einer Bedingung muss i
 treffen — **ohne** die Ausnahme für eigene Kennungen, die bei den XPaths der Patches selbst
 weiter gilt. Fehlt die Bibliothek, ist schon das erste `<conditional>` „nicht geprüft".
 
+Seit dem vierten Review (2026-11-22): **der Aufbau eines XML-Knotens wird nur über Methoden
+gelesen** (`get_NodeType()`, `get_ChildNodes()`, `get_InnerText()` …), nie über Eigenschaften.
+PowerShells XML-Adapter legt Attribute und Kindelemente als Eigenschaften über den Knoten;
+`<conditional NodeType="skip">` wurde sonst übersprungen wie ein Kommentar, und der Lauf war
+grün. Wer das Skript erweitert: `$knoten.NodeType`, `.ChildNodes`, `.InnerText`, `.Name`,
+`.ParentNode` sind dort Fallen. Mehr als acht genannte Mods sind Exit 2, auch wenn dieselbe
+Bedingung einen zweiten Fehler trägt.
+
 **Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
 ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei
 mit falschem Wurzelknoten oder einem Tippfehler wie `<sett>` als „geprüft, 0 XPaths, GREEN".)*

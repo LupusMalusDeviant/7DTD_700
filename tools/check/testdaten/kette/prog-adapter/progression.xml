@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten viertes Review zu WP8.7: zwei vertippte Fortschritts-Verweise, die ein
+     Attribut vor der Pruefung versteckte. Beide XPaths TREFFEN. Erfundene Kennungen.
+       1. NodeType="skip"       - die Zeile wurde uebersprungen wie ein Kommentar
+       2. InnerText="pruefAttB" - gelesen wurde das Attribut (ein gueltiger Knoten) statt
+                                  des Textes, den das Spiel schreibt
+     Erwartet: Exit 1, 2 rot, Fortschritts-Verweise: 2. Vorher: Exit 0. -->
+<config>
+	<set NodeType="skip" xpath="/progression/skills/skill[@name='pruefBereichA']/@parent">pruefAttGibtesnicht</set>
+	<set InnerText="pruefAttB" xpath="/progression/perks/perk[@name='pruefPerkA']/level_requirements[@level='1']/requirement[@name='ProgressionLevel']/@progression_name">pruefAttAuchnicht</set>
+</config>

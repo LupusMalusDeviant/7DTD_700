@@ -1,0 +1,11 @@
+<config>
+	<!-- Testdatei viertes Review zu WP8.7: NEUN Mods und in derselben Bedingung ein zweiter
+	     Fehler (event() ohne Argument). Die Pruefung kehrte mit dem Befund zur Argumentzahl
+	     zurueck, bevor sie die Grenze von acht Mods erreichte: Exit 1 statt Exit 2.
+	     Erwartet: Exit 2, nicht pruefbar. -->
+	<conditional>
+		<if cond="event() and not (mod_loaded('pruefMod1') or mod_loaded('pruefMod2') or mod_loaded('pruefMod3') or mod_loaded('pruefMod4') or mod_loaded('pruefMod5') or mod_loaded('pruefMod6') or mod_loaded('pruefMod7') or mod_loaded('pruefMod8') or mod_loaded('pruefMod9'))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

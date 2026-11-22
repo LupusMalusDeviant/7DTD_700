@@ -1,0 +1,13 @@
+<config>
+	<!-- Testdatei viertes Review zu WP8.7: ein bedingter Block, der ein Attribut namens
+	     NodeType traegt. In Windows PowerShell 5.1 verdeckt das Attribut die gleichnamige
+	     Eigenschaft des Knotens; der Block wurde uebersprungen wie ein Kommentar. Das <if>
+	     darin hat kein 'cond'. Vorher: 0 bedingte Bloecke, Exit 0 - mit und ohne Bibliothek.
+	     Erwartet: mit der Bibliothek Exit 1 (1 rot), ohne sie Exit 2. -->
+	<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+	<conditional NodeType="skip">
+		<if>
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

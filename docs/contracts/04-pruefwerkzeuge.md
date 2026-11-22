@@ -2350,3 +2350,64 @@ gegen das neue **137 Gegenproben, 0 fehlgeschlagen**. `check-all.ps1`: 6 Prüfun
   arguments") und bleiben hier grün und „nicht ausgewertet".
 - **Ob es das Ereignis, die Einstellung, das Besitzrecht gibt**, das eine solche Funktion
   nennt, weiß nur das laufende Spiel.
+
+## Nachtrag viertes Review zu WP8.7, 2026-11-22 — vier Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `75a10dd` hat Codex (`gpt-6.2-sol`) vier Befunde gemeldet: einen mittel,
+drei niedrig. Keiner trifft die Mod-Dateien.
+
+| # | Befund | jetzt |
+|---|---|---|
+| 1 *(mittel)* | In Windows PowerShell 5.1 legt der XML-Adapter Attribute **und Kindelemente** als Eigenschaften über den Knoten. Ein Attribut `NodeType` verdeckte die gleichnamige Eigenschaft: `<conditional NodeType="skip">` wurde wie ein Kommentar übersprungen, der Lauf war grün, und die fehlende Bibliothek fiel nicht auf. Dieselbe Bauart: ein Kind `<ChildNodes/>` in einem Zweig verdeckte dessen Kinderliste, und der Rest des Zweigs blieb ungelesen. | **Der Aufbau eines Knotens wird nur noch über Methoden gelesen** (`get_NodeType()`, `get_ChildNodes()`, `get_InnerText()`, `get_DocumentElement()`, `get_ParentNode()`, `get_LocalName()`, wie seit WP7.1 schon `get_Name()`) — im ganzen Skript, nicht nur an der gemeldeten Stelle. Ein Methodenaufruf geht am Adapter vorbei. |
+| 2 *(niedrig)* | Neun Mods **und** ein zweiter Fehler in derselben Bedingung (`event()` ohne Argument): die Prüfung kehrte mit dem Befund zurück, bevor sie die Grenze von acht Mods erreichte — Exit 1 statt Exit 2. | Die Grenze wird geprüft, sobald die Funktionsaufrufe gelesen sind, **vor** jeder Rückkehr wegen eines Befunds. „Nicht prüfbar" geht vor „Befund". |
+| 3 *(niedrig)* | Die Gegenproben deckten nur drei der elf Argumentzahlen ab. Ein falscher Eintrag in der Tabelle (etwa `mod_version` = 0) wäre nicht aufgefallen. | Zwei neue Testdateien rufen **jede der elf Funktionen** einmal richtig und einmal falsch auf, `version` dazu mit mehr als zwei Argumenten. Bewiesen wird an einer absichtlich verfälschten Tabelle (siehe Gegenproben). |
+| 4 *(niedrig)* | Ein Kommentar im Skript nannte für Bedingungen noch die gestrichene Ausnahme „oder nur eigene Kennungen"; die Ausgabe „Grenzen dieser Prüfung" sagte nicht, dass die Ausnahme nur für Patch-Operationen gilt. | Kommentar berichtigt; die Ausgabe sagt es ausdrücklich. |
+
+### Vertragsänderungen
+
+- **Neue Regel für alle Skripte unter `tools/check`, die XML lesen:** der Aufbau eines
+  Knotens (Art, Name, Kinder, Elternknoten, Text) wird über Methoden gelesen, nie über
+  Eigenschaften.
+- **Zu Regel 4 des Nachtrags „zweites Review zu WP8.7":** mehr als acht genannte Mods in
+  einer Bedingung sind Exit 2, gleich welche Befunde dieselbe Bedingung sonst trägt.
+
+### Gegenproben (Projektregel 5)
+
+Sieben neue Läufe über sechs Testdateien unter `tools/check/testdaten/kette/`:
+
+| Testdatei | Lauf | Stand `75a10dd` | jetzt |
+|---|---|---|---|
+| `bedingt-nodetype` | `<conditional NodeType="skip">`, `<if>` ohne `cond`; mit Bibliothek | Exit 0, 0 Blöcke | Exit 1, 1 rot |
+| `bedingt-nodetype` | dasselbe, `-NCalc` zeigt ins Leere | Exit 0 | Exit 2, nicht geprüft |
+| `bedingt-adapter-falsch` | Kind `<ChildNodes/>` im Zweig, Operation und `<if>` mit `NodeType` | Exit 0 | Exit 1, 4 rot |
+| `prog-adapter` | Fortschritts-Verweise hinter `NodeType` und `InnerText` | Exit 0 | Exit 1, 2 rot |
+| `bedingt-neun-mods-und-fehler` | neun Mods neben `event()` | Exit 1 | Exit 2, nicht geprüft |
+| `bedingt-argumente-gut` | jede der elf Funktionen richtig, `version` mit vier Argumenten | Exit 0 | Exit 0; gelesen 12, wahr 1, falsch 1, nicht ausgewertet 10 |
+| `bedingt-argumente-falsch` | jede der elf Funktionen mit falscher Zahl | Exit 1, 11 rot | Exit 1, 11 rot |
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: gegen das Skript des Stands
+`75a10dd` **144 Gegenproben, 5 fehlgeschlagen** (die fünf Läufe zu den Befunden 1 und 2),
+gegen das neue **144 Gegenproben, 0 fehlgeschlagen**.
+
+**Die zwei Läufe zu Befund 3 sind gegen `75a10dd` grün — die Tabelle stimmte.** Ihr Nachweis
+ist eine absichtlich verfälschte Tabelle im neuen Skript (`mod_version` 0, `game_version` 1,
+`version` mindestens 3, `serverinfo` 0, `gamepref` 2, `event` 2, `time_minutes` 1,
+`game_loaded` 1, `has_entitlement` 0): **144 Gegenproben, 6 fehlgeschlagen**, darunter beide
+neuen Läufe; im Lauf „falsche Zahl" fehlt jede der neun Zeilen einzeln. Eine zweite
+Verfälschung (`version` genau 2 statt mindestens 2) macht `bedingt-argumente-gut` rot
+(Exit 1, `version(1, 2, 3, 4)`). Die Zahl bei `mod_loaded` und `xpath` prüft nicht die
+Tabelle, sondern die Regel „genau ein fester Text"; ihre beiden Zeilen stehen im selben Lauf.
+
+`check-all.ps1`: 6 Prüfungen, 1 rot (`recipes`, 80 Sackgassen, unverändert); `kette-pruefen`
+über die Mod: 20 Patch-Dateien, 427 XPaths, 9 bedingte Blöcke, 9 Bedingungen gelesen, alle
+wahr.
+
+### Grenzen
+
+- **Im Teil, der unsere eigenen Rezepte, Gegenstände und Blöcke auflöst**, werden
+  Attributwerte weiter als Eigenschaft gelesen (`$zutat.name`). Ein Kindelement gleichen
+  Namens würde den Wert dort verändern; solche Dateien schreiben wir nicht. Umgestellt ist
+  dort nur, was den Aufbau liest (Elternknoten, Name, Text), und das ohne eigene Gegenprobe:
+  die fünf Stellen sind mechanisch ersetzt, die bestehenden Läufe bleiben grün.
+- **Von den Skripten unter `tools/check` liest heute nur `kette-pruefen.ps1` XML**; die
+  Regel trifft also nur dieses eine.

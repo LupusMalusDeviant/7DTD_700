@@ -1202,6 +1202,102 @@ Test-Script 'kette-pruefen: Block ohne cond ist ohne NCalc nicht geprueft' 2 @{
     NCalc        = (Join-Path $data 'kette\gibtesnicht\NCalc.dll')
 } -MustContain @('die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', "<if> ohne 'cond'")
 
+# Viertes Review zu WP8.7 (2026-11-22): vier Befunde.
+#
+# (p) DER XML-ADAPTER VERDECKT EIGENSCHAFTEN. In Windows PowerShell 5.1 liefert
+#     $knoten.NodeType den Wert eines ATTRIBUTS namens NodeType, wenn der Knoten eines
+#     traegt. <conditional NodeType="skip"> wurde uebersprungen wie ein Kommentar: 0 bedingte
+#     Bloecke, GRUEN - mit und ohne Bibliothek. Gelesen wird der Aufbau jetzt ueber Methoden.
+Test-Script 'kette-pruefen: ein Block mit Attribut NodeType wird gelesen' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-nodetype\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('bedingte Bloecke: 1 (', "<if> ohne 'cond' in <conditional>", '1 rot')
+
+Test-Script 'kette-pruefen: ein Block mit Attribut NodeType ist ohne NCalc nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-nodetype\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    NCalc        = (Join-Path $data 'kette\gibtesnicht\NCalc.dll')
+} -MustContain @('die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (q) Dieselbe Bauart an drei anderen Stellen: ein Kind <ChildNodes/> verdeckt die
+#     Kinderliste eines Zweigs, eine Operation und ein <if> tragen NodeType. Alles GRUEN.
+Test-Script 'kette-pruefen: verdeckte Kinderliste, Operation und <if> mit NodeType werden gelesen' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-adapter-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'unbekannte Patch-Operation <ChildNodes>',
+    "XPath trifft nichts: /windows/window[@name='pruefGibtEsNichtA']",
+    "XPath trifft nichts: /windows/window[@name='pruefGibtEsNichtB']",
+    'event(...) bekommt 0 Argumente, das Spiel verlangt genau 1',
+    '4 rot')
+
+# (r) Und bei den Fortschritts-Verweisen: NodeType versteckte die Zeile, ein Attribut
+#     InnerText ihren Text (gelesen wurde das Attribut, ein gueltiger Knoten).
+Test-Script 'kette-pruefen: Fortschritts-Verweise hinter NodeType und InnerText werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-adapter\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Fortschritts-Verweise: 2',
+    "Baum-Zuordnung 'pruefAttGibtesnicht' ist kein Fortschritts-Knoten",
+    "Stufenbedingung 'pruefAttAuchnicht' ist kein Fortschritts-Knoten",
+    '2 rot')
+
+# (s) Neun Mods UND ein zweiter Fehler in derselben Bedingung: der Befund zur Argumentzahl
+#     kam der Grenze von acht Mods zuvor. Exit 1 statt Exit 2.
+Test-Script 'kette-pruefen: neun Mods sind nicht pruefbar, auch neben einem zweiten Fehler' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-neun-mods-und-fehler\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('eine Bedingung nennt 9 Mods', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'bekommt 0 Argumente')
+
+# (t) DIE TABELLE DER ARGUMENTZAHLEN, alle elf Funktionen. Diese zwei Laeufe sind gegen das
+#     Skript des Stands 75a10dd GRUEN - die Tabelle stimmte. Bewiesen sind sie an einer
+#     absichtlich verfaelschten Tabelle (Vertrag 04, Nachtrag viertes Review zu WP8.7):
+#     dort scheitern beide, und jede Zeile unten fehlt einzeln in der Ausgabe.
+Test-Script 'kette-pruefen: jede der elf Funktionen ist mit richtiger Argumentzahl gruen' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-argumente-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Bedingungen mit NCalc gelesen: 12 (ohne genannte Mods wahr: 1, falsch: 1, nicht ausgewertet: 10)',
+    'in Bedingungen genannte Mods: pruefUiMod')
+
+Test-Script 'kette-pruefen: jede der elf Funktionen ist mit falscher Argumentzahl rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-argumente-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'mod_loaded(...) erwartet genau EINEN festen Text',
+    'xpath(...) erwartet genau EINEN festen Text',
+    'mod_version(...) bekommt 0 Argumente, das Spiel verlangt genau 1',
+    'game_version(...) bekommt 1 Argumente, das Spiel verlangt genau 0',
+    'version(...) bekommt 0 Argumente, das Spiel verlangt mindestens 2',
+    'serverinfo(...) bekommt 0 Argumente, das Spiel verlangt genau 1',
+    'gamepref(...) bekommt 2 Argumente, das Spiel verlangt genau 1',
+    'event(...) bekommt 2 Argumente, das Spiel verlangt genau 1',
+    'time_minutes(...) bekommt 1 Argumente, das Spiel verlangt genau 0',
+    'game_loaded(...) bekommt 1 Argumente, das Spiel verlangt genau 0',
+    'has_entitlement(...) bekommt 0 Argumente, das Spiel verlangt genau 1',
+    '11 rot')
+
 # (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
 #     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.
 Test-Script 'kette-pruefen: eine Datei, die kein Patch ist, wird rot' 1 @{
