@@ -1,0 +1,41 @@
+<config>
+	<!-- Testdatei drittes Review zu WP8.7: Funktionen und Ziele, die falsch sind. Je Block
+	     ein Fehler; die Patches darin stimmen.
+	       1. event()                      - kein Argument, das Spiel verlangt eines; war gruen
+	       2. game_version('a') != null    - ein Argument, das Spiel verlangt keines
+	       3. version(1) != null           - ein Argument, das Spiel verlangt mindestens zwei
+	       4. mod_lo[U+00AD]aded('...')    - weiches Trennzeichen im Funktionsnamen; war gruen
+	       5. Ziel mit fremdem Fenster und eigenem Namen im zweiten Praedikat; war gruen
+	       6. Ziel, das nur einen eigenen Namen nennt; galt als Treffer
+	     Erwartet: Exit 1, 6 rot. -->
+	<conditional>
+		<if cond="event()">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="game_version('a') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="version(1) != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="[mod_lo&#173;aded]('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name = &quot;pruefFremd&quot;]/label[@name=&quot;pruefBlockEigen&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefBlockEigen&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

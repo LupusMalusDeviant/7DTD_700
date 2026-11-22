@@ -480,6 +480,24 @@ if (-not $PSBoundParameters.ContainsKey('Patches')) {
 # und so gewollt: ob eine Bedingung wahr wird, weiss diese Pruefung nicht.
 $bekannteFunktionen = @('mod_loaded', 'mod_version', 'game_version', 'version', 'serverinfo', 'gamepref',
                         'event', 'time_minutes', 'game_loaded', 'xpath', 'has_entitlement')
+# WIE VIELE ARGUMENTE JEDE FUNKTION VERLANGT (ergaenzt 2026-11-22, drittes Review zu WP8.7),
+# gelesen aus XmlPatchConditionEvaluator: jede prueft die Zahl als Erstes und wirft sonst
+# "Calling function ... with invalid number of arguments". Ein negativer Wert heisst
+# "mindestens so viele" (version). Das Verzeichnis vergleicht ORDINAL ohne Gross/Klein, wie
+# das Spiel (EqualsCaseInsensitive) - PowerShells -contains vergleicht nach Kultur und
+# uebergeht dabei ein weiches Trennzeichen im Namen.
+$funktionsArgumente = New-Object System.Collections.Hashtable ([System.StringComparer]::OrdinalIgnoreCase)
+$funktionsArgumente['mod_loaded'] = 1
+$funktionsArgumente['mod_version'] = 1
+$funktionsArgumente['game_version'] = 0
+$funktionsArgumente['version'] = -2
+$funktionsArgumente['serverinfo'] = 1
+$funktionsArgumente['gamepref'] = 1
+$funktionsArgumente['event'] = 1
+$funktionsArgumente['time_minutes'] = 0
+$funktionsArgumente['game_loaded'] = 0
+$funktionsArgumente['xpath'] = 1
+$funktionsArgumente['has_entitlement'] = 1
 $bedingteBloecke = 0
 $zweige = 0
 $bedingteXPaths = 0
@@ -541,11 +559,11 @@ function Initialize-NCalc {
         # Ergebnis - NCalc wirft dann "Function not found", genau wie im Spiel.
         $script:ncalcHandler = [NCalc.EvaluateFunctionHandler] {
             param($name, $fa, $ignoreCase)
-            if ($name -eq 'mod_loaded') {
+            if ([string]::Equals([string]$name, 'mod_loaded', [System.StringComparison]::OrdinalIgnoreCase)) {
                 $modName = ([string]$fa.Parameters[0].Evaluate()).Trim()
                 $fa.Result = [bool]$script:ncalcBelegung[$modName]
             }
-            elseif ($name -eq 'xpath') {
+            elseif ([string]::Equals([string]$name, 'xpath', [System.StringComparison]::OrdinalIgnoreCase)) {
                 $fa.Result = $script:ncalcXPath[[string]$fa.Parameters[0].Evaluate()]
             }
         }
@@ -616,20 +634,32 @@ function Test-Bedingung {
     foreach ($k in $knoten) {
         if ($k.GetType().Name -cne 'Function') { continue }
         $fn = [string]$k.Identifier.Name
-        if ($bekannteFunktionen -notcontains $fn) {
+        if (-not $funktionsArgumente.ContainsKey($fn)) {
             $script:unresolved += "Bedingung ruft '$fn(' auf; das Spiel kennt: $($bekannteFunktionen -join ', ')  ($Datei)"
             $inOrdnung = $false
             continue
         }
-        if ($fn -ne 'mod_loaded' -and $fn -ne 'xpath') { $andereFunktion = $true; continue }
+        # Die Zahl der Argumente gilt fuer ALLE elf, auch fuer die, die hier niemand
+        # auswerten kann: "event()" war gruen und waere im Spiel eine Ausnahme.
         $argumente = @($k.Expressions)
+        $verlangt = [int]$funktionsArgumente[$fn]
+        $zahlStimmt = if ($verlangt -lt 0) { $argumente.Count -ge (-$verlangt) } else { $argumente.Count -eq $verlangt }
+        $istMod = [string]::Equals($fn, 'mod_loaded', [System.StringComparison]::OrdinalIgnoreCase)
+        $istXPath = [string]::Equals($fn, 'xpath', [System.StringComparison]::OrdinalIgnoreCase)
+        if (-not $zahlStimmt -and -not $istMod -and -not $istXPath) {
+            $soll = if ($verlangt -lt 0) { "mindestens $(-$verlangt)" } else { "genau $verlangt" }
+            $script:unresolved += "Bedingung: $fn(...) bekommt $($argumente.Count) Argumente, das Spiel verlangt $soll`: $Ausdruck  ($Datei)"
+            $inOrdnung = $false
+            continue
+        }
+        if (-not $istMod -and -not $istXPath) { $andereFunktion = $true; continue }
         if ($argumente.Count -ne 1 -or $argumente[0].GetType().Name -cne 'ValueExpression' -or $argumente[0].Value -isnot [string]) {
             $script:unresolved += "Bedingung: $fn(...) erwartet genau EINEN festen Text in einfachen Anfuehrungszeichen: $Ausdruck  ($Datei)"
             $inOrdnung = $false
             continue
         }
         $text = [string]$argumente[0].Value
-        if ($fn -eq 'mod_loaded') {
+        if ($istMod) {
             $script:genannteMods += $text.Trim()
             if (-not $mods.Contains($text.Trim())) { [void]$mods.Add($text.Trim()) }
             continue
@@ -658,13 +688,12 @@ function Test-Bedingung {
             continue
         }
         if ($liste.Count -eq 0) {
-            $ownNames = @([regex]::Matches($text, "@name=['""]([^'""]+)['""]") | ForEach-Object { $_.Groups[1].Value })
-            $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
-            if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) {
-                # Ein Knoten aus einem frueheren eigenen Modlet: im Spiel ein Treffer.
-                $script:ncalcXPath[$text] = 'eigener Knoten'
-                continue
-            }
+            # OHNE AUSNAHME (geaendert 2026-11-22, drittes Review zu WP8.7). Hier stand die
+            # Regel "nennt der XPath nur eigene Kennungen, gilt er als Treffer" - ein
+            # Textmuster ueber @name=..., das ein fremdes Ziel durchliess, sobald ein zweites
+            # Praedikat einen eigenen Namen trug, und ein echtes eigenes abwies. Das Ziel
+            # einer Bedingung muss in Vanilla stehen; Eigenes an der Wurzel braucht nach
+            # Vertrag 03 Abschnitt 5 keinen Block.
             $script:unresolved += "Bedingung nennt ein Ziel, das es in Vanilla nicht gibt: $text  ($Datei)"
             $inOrdnung = $false
             continue
@@ -674,11 +703,14 @@ function Test-Bedingung {
     }
     if (-not $inOrdnung) { return }
 
-    # 4. Auswerten. Andere Funktionen als mod_loaded und xpath kennt nur das laufende Spiel.
-    if ($andereFunktion) { $script:bedingungenOffen++; return }
+    # 4. Auswerten. Die Grenze von acht Mods gilt ZUERST - vorher umging sie jede Bedingung,
+    #    die nebenbei eine Funktion des laufenden Spiels nannte.
     if ($mods.Count -gt 8) {
         Stop-Unpruefbar "eine Bedingung nennt $($mods.Count) Mods; durchgerechnet werden hoechstens acht (256 Belegungen): $Ausdruck  ($Datei)"
     }
+    #    Andere Funktionen als mod_loaded und xpath kennt nur das laufende Spiel. Gelesen und
+    #    auf Namen und Argumentzahl geprueft sind sie; ausgewertet werden sie nicht.
+    if ($andereFunktion) { $script:bedingungenOffen++; return }
     $belegungen = [int][math]::Pow(2, $mods.Count)
     $ohneMods = $false
     for ($b = 0; $b -lt $belegungen; $b++) {
@@ -687,6 +719,9 @@ function Test-Bedingung {
         $ergebnis = $null
         try {
             $lauf = New-Object NCalc.Expression -ArgumentList $Ausdruck, $script:ncalcOpt
+            # Das Spiel gibt jeder Bedingung die Zieldatei unter dem Namen 'xml' mit
+            # (Evaluate: Parameters["xml"]); "xml != null" ist dort wahr.
+            $lauf.Parameters['xml'] = $xdoc
             $lauf.add_EvaluateFunction($script:ncalcHandler)
             $ergebnis = $lauf.Evaluate()
         }
@@ -709,6 +744,10 @@ function Test-Bedingung {
 
 function Test-Bedingt {
     param($Block, [string]$Datei, $VanillaDoc, [int]$Tiefe)
+    # Die Bibliothek wird gesucht, sobald ein Block GELESEN wird - nicht erst bei seiner
+    # ersten Bedingung. Ein Block, dessen <if> kein 'cond' traegt, endete sonst bei
+    # fehlender Bibliothek mit einem Befund (Exit 1) statt mit "nicht geprueft" (Exit 2).
+    Initialize-NCalc
     $script:bedingteBloecke++
     if ($Block.HasAttribute('evaluator')) {
         $script:unresolved += "<conditional> traegt 'evaluator': in einem Patch ignoriert das Spiel das Attribut mit einer Warnung  ($Datei)"

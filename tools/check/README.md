@@ -306,6 +306,13 @@ fehlt die Bibliothek, ist der Lauf **nicht geprüft** (Exit 2). Ausgabe:
 ausgewertet: N)` — heute 9, alle wahr. Die Gegenproben zu bedingten Blöcken brauchen damit
 die Spielinstallation.
 
+Seit dem dritten Review (2026-11-22): die **Zahl der Argumente** wird für alle elf Funktionen
+des Spiels geprüft, auch in Bedingungen, die sonst nur das laufende Spiel auswerten kann
+(`event()` ist rot); die Art der Argumente nicht (`event(1)` bleibt grün). Mehr als acht
+genannte Mods sind immer „nicht geprüft". Ein XPath in einer Bedingung muss in Vanilla
+treffen — **ohne** die Ausnahme für eigene Kennungen, die bei den XPaths der Patches selbst
+weiter gilt. Fehlt die Bibliothek, ist schon das erste `<conditional>` „nicht geprüft".
+
 **Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
 ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei
 mit falschem Wurzelknoten oder einem Tippfehler wie `<sett>` als „geprüft, 0 XPaths, GREEN".)*

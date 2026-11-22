@@ -2295,3 +2295,58 @@ ausgewertet**; 0 unaufgelöst.
   im Spiel; ein Vergleich damit (`xpath(…) = '<label …/>'`) ist trotzdem ungesehen — wir
   vergleichen nur mit `null`.
 - **Kein Lauf im Spiel** (Plan-0001, Prüfliste 22).
+
+## Nachtrag drittes Review zu WP8.7, 2026-11-22 — fünf Befunde behoben, **Abnahme offen**
+
+Vor dem Push von `20ea35e` hat Codex (`gpt-6.2-sol`) fünf Befunde an der neuen Auswertung
+gemeldet: zwei mittel, drei niedrig. Keiner trifft die Mod-Dateien; die neun echten
+Bedingungen ergeben weiter „wahr".
+
+| # | Befund | jetzt |
+|---|---|---|
+| 1 *(mittel)* | Nannte eine Bedingung eine Funktion, die nur das laufende Spiel auswerten kann, entfiel mit der Auswertung auch, was ohne Spiel prüfbar ist: `event()` ohne Argument war grün (im Spiel eine Ausnahme), und die Grenze von acht Mods griff nicht. | **Die Zahl der Argumente wird für alle elf Funktionen geprüft**, gelesen aus dem Code: `game_version`, `time_minutes`, `game_loaded` nehmen keines; `mod_loaded`, `mod_version`, `gamepref`, `event`, `serverinfo`, `xpath`, `has_entitlement` genau eines; `version` mindestens zwei. Die Grenze von acht Mods gilt vor dem Überspringen. |
+| 2 *(mittel)* | Die Ausnahme „der XPath nennt nur eigene Kennungen" suchte Namen per Textmuster. Sie ließ ein fremdes Ziel durch (ein zweites Prädikat mit einem eigenen Namen genügte) und wies ein echtes eigenes ab (die Fenstergruppe des Webstuhls steht nicht im Verzeichnis der Gegenstände und Blöcke). | **Die Ausnahme ist für Bedingungen gestrichen.** Das Ziel einer Bedingung muss in Vanilla stehen — ohne Wenn. Kein Raten am Text mehr an dieser Stelle. |
+| 3 *(niedrig)* | Funktionsnamen wurden mit PowerShells Kulturvergleich verglichen: ein weiches Trennzeichen (U+00AD) im Namen blieb grün, das Spiel fände die Funktion nicht. | Verglichen wird ordinal ohne Groß/Klein, in der Liste der elf wie in der nachgestellten Auswertung. |
+| 4 *(niedrig)* | Das Spiel gibt jeder Bedingung den Namen `xml` mit (die Zieldatei); die Prüfung kannte ihn nicht, `xml != null` wurde rot. | Der Name ist bei der Auswertung belegt. |
+| 5 *(niedrig)* | Ein Block, dessen einziges `<if>` kein `cond` trägt, endete bei fehlender Bibliothek mit Exit 1 statt Exit 2 — die Bibliothek wurde erst beim Lesen einer Bedingung gesucht. | Sie wird gesucht, sobald ein `<conditional>` gelesen wird. |
+
+### Vertragsänderungen am Nachtrag „zweites Review zu WP8.7"
+
+- **Zu Regel 4:** die Klammer „(oder nur eigene Kennungen nennen)" entfällt. Ein XPath in
+  einer Bedingung, der auf einen Knoten zielt, den ein früheres eigenes Modlet anlegt, ist
+  damit **rot**. Vertrag 03 §5 braucht so eine Bedingung nicht: Eigenes an der Wurzel
+  steht ohne Block. Braucht ein späteres Paket sie doch, muss die Prüfung unsere eigenen
+  Patches in Ladereihenfolge auf Vanilla anwenden — das ist ein eigenes Vorhaben, kein
+  Textmuster. *(Die Ausnahme gleicher Bauart bei den XPaths der Patches selbst bleibt, wie
+  sie seit WP7.1 dokumentiert ist; heute 13 XPaths.)*
+- **Zu Regel 5:** nicht ausgewertet heißt nicht ungeprüft — Funktionsname, Zahl der
+  Argumente, fester Text bei `mod_loaded` und `xpath`, Ziel in Vanilla und die Grenze von
+  acht Mods gelten auch für diese Bedingungen.
+- **Zu Regel 6:** „enthält einen bedingten Block" heißt: sobald die Prüfung ein
+  `<conditional>` liest, gleich wie es gebaut ist.
+
+### Gegenproben (Projektregel 5)
+
+Fünf neue Läufe über vier Testdateien unter `tools/check/testdaten/kette/`:
+
+| Testdatei | Lauf | Stand `20ea35e` | jetzt |
+|---|---|---|---|
+| `bedingt-funktion-falsch` | `event()`, `game_version('a')`, `version(1)`, weiches Trennzeichen in `mod_loaded`, zwei Ziele mit eigenem Namen | Exit 0 | Exit 1, 6 rot |
+| `bedingt-funktion-gut` | `xml != null`, `event('christmas')`, `game_loaded()`, `MOD_LOADED(…) or XPATH(…) != null` | Exit 1 | Exit 0; gelesen 4, wahr 2, nicht ausgewertet 2 |
+| `bedingt-neun-mods` | neun Mods neben `event('christmas')` | Exit 0 | Exit 2, nicht geprüft |
+| `bedingt-ohne-cond` | mit Bibliothek | Exit 1 | Exit 1 *(Kontrolle, unverändert)* |
+| `bedingt-ohne-cond` | `-NCalc` zeigt ins Leere | Exit 1 | Exit 2, nicht geprüft |
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: gegen das Skript des Stands
+`20ea35e` **137 Gegenproben, 4 fehlgeschlagen** (die vier Läufe, die einen Befund treffen),
+gegen das neue **137 Gegenproben, 0 fehlgeschlagen**. `check-all.ps1`: 6 Prüfungen, 1 rot
+(`recipes`, 80 Sackgassen, unverändert); `kette-pruefen` über die Mod: 20 Patch-Dateien,
+427 XPaths, 9 bedingte Blöcke, 9 Bedingungen gelesen, alle wahr.
+
+### Grenzen
+
+- **Die Art der Argumente wird nicht geprüft**, nur ihre Zahl. `event(1)` oder
+  `version('a', 'b')` scheitern im Spiel („Expected string argument", „Expected int
+  arguments") und bleiben hier grün und „nicht ausgewertet".
+- **Ob es das Ereignis, die Einstellung, das Besitzrecht gibt**, das eine solche Funktion
+  nennt, weiß nur das laufende Spiel.

@@ -1137,6 +1137,71 @@ Test-Script 'kette-pruefen: ohne bedingten Block wird NCalc nicht gebraucht' 0 @
     'geprueefte XPaths: 3 (3 in Vanilla, 0 auf eigene Knoten)',
     'Bedingungen mit NCalc gelesen: 0 (ohne genannte Mods wahr: 0, falsch: 0, nicht ausgewertet: 0)')
 
+# Drittes Review zu WP8.7 (2026-11-22): fuenf Befunde an der Auswertung mit NCalc.
+#
+# (l) Funktionen und Ziele, die GRUEN waren: event() ohne Argument (im Spiel eine
+#     Ausnahme), ein weiches Trennzeichen im Funktionsnamen (PowerShells -contains
+#     vergleicht nach Kultur), und zwei Ziele, die die Ausnahme "nur eigene Kennungen"
+#     durchliess - eines davon ein FREMDES Fenster mit einem eigenen Namen im zweiten
+#     Praedikat. Die Ausnahme ist fuer Bedingungen gestrichen.
+Test-Script 'kette-pruefen: falsche Argumentzahl, Trennzeichen im Namen und Ziele mit eigenem Namen werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-funktion-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'event(...) bekommt 0 Argumente, das Spiel verlangt genau 1',
+    'game_version(...) bekommt 1 Argumente, das Spiel verlangt genau 0',
+    'version(...) bekommt 1 Argumente, das Spiel verlangt mindestens 2',
+    "Bedingung ruft 'mod_lo",
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name = "pruefFremd"]/label[@name="pruefBlockEigen"]',
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefBlockEigen"]',
+    '6 rot')
+
+# (m) Die Kehrseite: 'xml' ist im Spiel ein belegter Name (war rot), Funktionen des
+#     laufenden Spiels mit richtiger Argumentzahl werden gelesen und nicht ausgewertet,
+#     und Funktionsnamen gelten ohne Gross/Klein wie im Spiel.
+Test-Script 'kette-pruefen: xml ist belegt, richtige Argumentzahl ist gruen, Namen ohne Gross/Klein' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-funktion-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Bedingungen mit NCalc gelesen: 4 (ohne genannte Mods wahr: 2, falsch: 0, nicht ausgewertet: 2)',
+    'in Bedingungen genannte Mods: pruefUiMod')
+
+# (n) Neun Mods UND eine Funktion des laufenden Spiels: die Grenze von acht Mods griff
+#     nicht, weil die Bedingung vorher als "nicht ausgewertet" uebersprungen wurde. Exit 0.
+Test-Script 'kette-pruefen: neun Mods sind nicht pruefbar, auch neben einer Spiel-Funktion' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-neun-mods\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('eine Bedingung nennt 9 Mods', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (o) Ein Block, dessen <if> kein 'cond' traegt: mit der Bibliothek ein Befund, OHNE sie
+#     "nicht geprueft". Vorher wurde die Bibliothek erst bei der ersten Bedingung gesucht -
+#     ohne Bedingung fiel ihr Fehlen nicht auf, und es blieb bei Exit 1.
+Test-Script 'kette-pruefen: Block ohne cond ist mit NCalc ein Befund' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-ohne-cond\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("<if> ohne 'cond' in <conditional>", '1 rot')
+
+Test-Script 'kette-pruefen: Block ohne cond ist ohne NCalc nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-ohne-cond\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    NCalc        = (Join-Path $data 'kette\gibtesnicht\NCalc.dll')
+} -MustContain @('die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN', "<if> ohne 'cond'")
+
 # (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
 #     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.
 Test-Script 'kette-pruefen: eine Datei, die kein Patch ist, wird rot' 1 @{

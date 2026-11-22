@@ -1,0 +1,28 @@
+<config>
+	<!-- Testdatei drittes Review zu WP8.7: Funktionen und Namen, an denen nichts falsch ist.
+	       1. xml != null                  - 'xml' ist im Spiel die Zieldatei; war rot
+	       2. event('christmas')           - ein Argument: gelesen, nicht ausgewertet
+	       3. game_loaded()                - kein Argument: gelesen, nicht ausgewertet
+	       4. MOD_LOADED(...) or XPATH(...) != null - das Spiel vergleicht ohne Gross/Klein
+	     Erwartet: Exit 0; gelesen 4, wahr 2, falsch 0, nicht ausgewertet 2. -->
+	<conditional>
+		<if cond="xml != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="event('christmas')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="game_loaded()">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="MOD_LOADED('pruefUiMod') or XPATH('/windows/window[@name=&quot;pruefFenster&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

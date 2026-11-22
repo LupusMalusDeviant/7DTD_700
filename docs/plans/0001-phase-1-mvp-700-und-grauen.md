@@ -1510,6 +1510,19 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Stands `049280e` 132 Gegenproben, 10 fehlgeschlagen, gegen das neue 132, 0. `check-all`:
    6 Prüfungen, 1 rot (`recipes`, unverändert); 9 Bedingungen gelesen, alle wahr.
    → Vertrag 04 „Nachtrag zweites Review zu WP8.7", Abnahme offen.
+
+   **Drittes Review zu WP8.7 (2026-11-22): fünf Befunde an der Auswertung.** Das Review zu
+   `20ea35e` fand zwei mittlere und drei niedrige Lücken, keine an den Mod-Dateien. Behoben:
+   die Zahl der Argumente wird für alle elf Funktionen geprüft (aus dem Code gelesen), auch
+   wenn die Bedingung sonst nur im laufenden Spiel auswertbar ist; die Grenze von acht Mods
+   greift vor dem Überspringen; die Ausnahme „nur eigene Kennungen" ist für Bedingungen
+   gestrichen — das Ziel einer Bedingung muss in Vanilla stehen; Funktionsnamen werden
+   ordinal verglichen; `xml` ist als Name belegt; die Bibliothek wird gesucht, sobald ein
+   `<conditional>` gelesen wird. Fünf neue Gegenproben über vier Testdateien; gegen das
+   Skript des Stands `20ea35e` 137 Gegenproben, 4 fehlgeschlagen, gegen das neue 137, 0.
+   `check-all`: 6 Prüfungen, 1 rot (`recipes`, unverändert); 9 Bedingungen gelesen, alle
+   wahr. Nicht geprüft bleibt die Art der Argumente (`event(1)` ist grün).
+   → Vertrag 04 „Nachtrag drittes Review zu WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.

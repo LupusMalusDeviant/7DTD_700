@@ -1,0 +1,11 @@
+<config>
+	<!-- Testdatei drittes Review zu WP8.7: ein bedingter Block, dessen einziges <if> kein
+	     'cond' traegt. Mit der Bibliothek ist das ein Befund (Exit 1). OHNE die Bibliothek
+	     muss es "nicht geprueft" sein (Exit 2) - vorher wurde sie erst beim Lesen einer
+	     Bedingung gesucht, und ohne Bedingung fiel ihr Fehlen nicht auf. -->
+	<conditional>
+		<if>
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>
