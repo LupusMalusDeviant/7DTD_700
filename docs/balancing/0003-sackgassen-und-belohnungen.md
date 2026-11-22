@@ -246,7 +246,12 @@ Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-
 
 ## Wie geprüft wird
 
-- `kette-pruefen.ps1`: jeder neue XPath trifft Vanilla, jede genannte Kennung löst sich auf.
+- `kette-pruefen.ps1`: jeder neue XPath trifft Vanilla, und die Verweise, die das Skript
+  kennt (Zutaten und Werkstätten eigener Rezepte, eigene Gegenstände und Blöcke), lösen sich
+  auf. **Nicht dazu gehört der Wert einer Bündelliste:** ein Tippfehler in `Random_item`
+  oder `Create_item` ließe den XPath gültig und fiele hier nicht auf. Den Inhalt der Bündel
+  zählt die eigene Zählung am Vorlauf nach („Stand des Baus"), sie meldet auch unbekannte
+  Kennungen.
 - `mod700check purge-patch`: die erzeugten Patches sind aktuell (nach den Denylist-Zeilen).
 - `mod700check anachronisms`: bleibt grün.
 - **`mod700check recipes` wird erst mit einem neuen ConfigsDump grün** — die Prüfung liest
@@ -264,7 +269,7 @@ Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-
 |---|---|---|
 | Bündel einzeln freigegeben (`!<Name>`) | `tools/check/denylist.txt`, neuer Abschnitt am Ende | 20 |
 | Purge-Patch neu erzeugt (`mod700check purge-patch`) | `mod/700_10_Purge/Config/items.xml`, `loot.xml` | je 20 Zeilen weniger; 1931 Patchzeilen |
-| Inhalt gekürzt | `mod/700_20_Material/Config/items.xml` | 11 Bündel, 28 Operationen |
+| Inhalt gekürzt | `mod/700_20_Material/Config/items.xml` | 10 Bündel, 26 Operationen (die anderen 10 freigegebenen bleiben, wie Vanilla sie schreibt) |
 | Silber | `mod/700_20_Material/Config/loot.xml` (neu) | 26 Gruppen |
 | Namen und Beschreibungen | `mod/700_90_Sprache/Config/Localization.csv`, `tools/check/vanilla-keys.txt` | 30 Zeilen |
 

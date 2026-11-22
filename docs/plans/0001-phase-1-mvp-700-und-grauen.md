@@ -2280,10 +2280,18 @@ werden:
     Braucht einen Spielstart mit der Mod; dabei legt das Spiel einen neuen ConfigsDump an.
     a) Danach `check-all.ps1` laufen lassen: `recipes` meldet **0 Sackgassen** (bis dahin 80,
     weil es den Dump vom 21. November liest) — das ist der Nachweis, der Vorlauf war keiner.
-    b) Im Handwerksfenster Eisenspitzhacke, Holzbogen, Blasebalg und einen Aufsatz ansehen:
-    Leder bzw. Schmiedeeisen statt Klebeband und Mechanikteilen, keine graue Zutat. Steht
-    die neue Zutat in der Liste (sie ist per `insertAfter` eingefügt), und steigt ihre Menge
-    mit der Qualitätsstufe?
+    **Mit `-Source <Ordner des neuen ConfigsDump>` aufrufen**, wenn das Spiel mit
+    `-UserDataFolder` lief: von selbst sucht das Skript nur unter
+    `%APPDATA%\7DaysToDie\Saves` und läse sonst weiter den alten Dump — 80 Sackgassen, obwohl
+    alles stimmt. Vor dem Werten die Zeile `Quelle:` lesen (die erste unter
+    „Inhaltspruefungen", nach den Gegenproben): sie muss den neuen Ordner nennen.
+    b) Im Handwerksfenster ansehen — keine graue Zutat, und je Rezept, was die Patch-Operation
+    dahinter zeigt: *Eisenspitzhacke, Holzbogen* (Menge einer vorhandenen Zutat geändert:
+    Leder 4 bzw. 2, kein Klebeband); *Blasebalg, ein Aufsatz* (Zutat per `append` angehängt:
+    Lehm bzw. Schmiedeeisen); **Stahlspitzhacke** (Zutat per `insertAfter` vor
+    `<effect_group>` eingefügt: Leder 3 steht in der Liste, und seine Menge steigt mit der
+    Qualitätsstufe wie die der anderen Zutaten). Ohne die Stahlspitzhacke bliebe ein
+    gebrochenes `insertAfter` unbemerkt.
     c) Einen Auftrag der Stufe 1 abschließen: unter den Belohnungen steht das
     „Lehrblatt-Bündel"; geöffnet gibt es drei Sorten Lehrblätter.
     d) Eine Belohnung, die früher modern war (Abschluss der Stufe 1: das Fahrrad), zeigt
@@ -2318,9 +2326,12 @@ werden:
   1. *WP5.2 Fernkampf ist frei.* Langbogen (`gunBowT3CompoundBow`), Armbrust
      (`gunBowT1IronCrossbow`), Schwere Armbrust (`gunBowT3CompoundCrossbow`), der
      panzerbrechende Pfeil (`ammoArrowSteelAP`, Name offen) und der Feuertopfpfeil
-     (`ammoArrowExploding`) brauchen Namen, Werte und Rezepte. Vier der Bögen und Armbrüste
-     stehen heute unter den 80 Sackgassen. Die Schleuder (T0) hat weiter keine
-     Vanilla-Grundlage; über sie ist nicht entschieden.
+     (`ammoArrowExploding`) brauchen Namen und Werte. ~~… und Rezepte. Vier der Bögen und
+     Armbrüste stehen heute unter den 80 Sackgassen.~~ **Die Zutaten ihrer Rezepte sind seit
+     dem 2026-11-22 ersetzt (D89, Balancing 0003 Tabelle 5; `700_30_Ausruestung`, Abschnitt
+     3.3 und 3.4) — gerechnet, im Spiel nicht gesehen.** Offen bleibt in WP5.2, ob Werkstatt,
+     Mengen und Freischaltstufe zu den neuen Rollen passen. Die Schleuder (T0) hat weiter
+     keine Vanilla-Grundlage; über sie ist nicht entschieden.
   2. *Der Tausch von Breitaxt und Bartaxt* (D88): Rezepte, Sprachzeilen, Freischaltstufen
      (D70: heute Breitaxt ab 11, Bartaxt ab 26), Denylist-Kommentar, Balancing-Tabelle §2.1
      und die F-02-Tabelle.
@@ -2356,7 +2367,7 @@ werden:
   Abschnitt „Stand des Baus" dort nennt Dateien, Zahlen und die drei Stellen, an denen der
   Bau genauer wurde als die Tabelle. **Rezepte:** 264 Operationen in `700_20`, `700_30` und
   `700_40`; 73 Rezepte bekommen zeitgemäße Zutaten, 7 entfallen. **Belohnungen:** 20 Bündel
-  einzeln freigegeben (Denylist), 11 davon im Inhalt gekürzt, 26 Gruppen zahlen
+  einzeln freigegeben (Denylist), 10 davon im Inhalt gekürzt, 26 Gruppen zahlen
   Silberpfennige. **Gerechnet, nicht gesehen:** ein Vorlauf außerhalb des Repositorys
   (alle Modlets auf Vanilla angerechnet) meldet 0 Sackgassen und 0 Belohnungen auf leere
   Gruppen; am Stand davor trifft er die Zahlen des ConfigsDumps (80, 115). `recipes` in
@@ -2451,10 +2462,13 @@ werden:
   Gefahren in Phase 1 an sind und was dann gegen sie hilft, steht in keinem Dokument.
 - **Felder lassen sich nicht bauen** (gefunden ebenda). Vanillas Rezept für das Feld
   (`farmPlotBlockVariantHelper`) verlangt 25 `resourcePotassiumNitratePowder`, und das ist
-  gesperrt; keines unserer Modlets schreibt das Rezept um. Es ist eines der Rezepte, die
+  gesperrt; ~~keines unserer Modlets schreibt das Rezept um.~~ Es ist eines der Rezepte, die
   `purge-patch` als „überlebt, aber nicht herstellbar" zählt — nur stand dort nie, dass es
   **der Ackerbau** ist. Ob sich die drei Anbau-Ziele, die der Purge übrig lässt, dann noch
   aus Wildwuchs erfüllen lassen, ist ungeprüft.
+  **Behoben am 2026-11-22 (D89), im Spiel nicht gesehen:** `700_40_Bauen/Config/recipes.xml`
+  nimmt den Salpeter heraus und setzt 5 Knochen ein; die Qualitätszeile nennt den Knochen.
+  Ob sich ein Feld damit bauen lässt, zeigt Prüfliste 25.
 - **Die Händler bieten weiter Stromaufträge an** (gefunden ebenda). `tier2_restore_power`
   bis `tier4_restore_power` stehen in allen fünf Händlerlisten von Vanillas `quests.xml`
   (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und

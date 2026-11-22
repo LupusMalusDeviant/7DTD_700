@@ -62,15 +62,15 @@
 	</append>
 
 	<!-- ===================================================================
-	     BELOHNUNGSBUENDEL: ELF BUENDEL BEKOMMEN EINEN INHALT, DER LEBT
+	     BELOHNUNGSBUENDEL: ZEHN BUENDEL BEKOMMEN EINEN INHALT, DER LEBT
 	     ===================================================================
 	     Balancing 0003 (docs/balancing/0003-sackgassen-und-belohnungen.md), vom
 	     Nutzer am 22. November 2026 abgenommen (D89).
 
 	     Der Purge sperrte alle 92 Belohnungsbuendel ueber EIN Namensmuster
 	     (denylist.txt: questReward*Bundle). 20 davon sind seit D89 einzeln
-	     freigegeben. Neun tragen nur Lebendes und bleiben, wie Vanilla sie schreibt.
-	     Die elf hier nennen neben Lebendem auch Gesperrtes - und DAS SIEHT KEINE
+	     freigegeben. Zehn tragen nur Lebendes und bleiben, wie Vanilla sie schreibt.
+	     Die zehn hier nennen neben Lebendem auch Gesperrtes - und DAS SIEHT KEINE
 	     PRUEFUNG: mod700check kennt als Weg zu einem Gegenstand Rezept, Loot,
 	     Haendler, Auftragsbelohnung, Block-Abwurf und Startausruestung, nicht den
 	     Inhalt eines Buendels (Create_item, Random_item). Ein freigegebenes Buendel
