@@ -1448,12 +1448,43 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    grün; der Schlüssel wurde ohne Groß/Klein gesucht; ein doppelter Schlüssel mit anderem
    Titel und ein unsichtbares Zeichen im Namen fielen nicht auf; F-12 beschrieb zwei Regeln.
    Jetzt ist `700_modName` gegen das echte Glossar Pflicht (Exit 2, wenn die Zeile fehlt),
-   der Schlüssel wird zeichengenau gesucht und gezählt, Texte werden ordinal verglichen —
-   die letzten beiden auch beim Festbegriff, der denselben Fehler hatte. Elf neue
+   der Schlüssel wird zeichengenau gesucht und gezählt, Texte werden ordinal verglichen.
+   Zeichengenaue Schlüsselsuche und ordinaler Textvergleich gelten auch beim Festbegriff,
+   der dieselben beiden Fehler hatte; **gezählt** wird der Schlüssel nur beim Alleinnamen
+   *(Satz berichtigt am 2026-11-22 nach dem dritten Review, das ihn als mehrdeutig
+   meldete)*. Elf neue
    Gegenproben; gegen das Skript des Stands `be1e58b` 119 Gegenproben, 9 fehlgeschlagen,
    gegen das neue 119, 0. → Vertrag 04 „Nachtrag zweites Review zu WP8.6", Abnahme offen.
-7. **WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
-   Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).
+7. ~~**WP8.7** `[Claude-prüfbar]` XUi-Theming additiv: Farben, Rahmen, Schriften aus vorhandenen
+   Atlas-Sprites, Präfix `700_`, kein Layout-Umbau (D5).~~
+   **Gebaut am 2026-11-22 (D85), im Spiel ungesehen — und kleiner als der Satz oben.**
+   *Erst gelesen:* die Schreibweise der bedingten Blöcke, die Vertrag 03 §5 für jeden
+   XUi-Eingriff verlangt und die bis dahin unbelegt war. Aus dem Code: Kinder sind
+   `<if cond="…">` und `<else>`, kein `<elseif>`; die Bedingung muss einen Wahrheitswert
+   liefern, und **`xpath(…)` liefert keinen** — allein geschrieben wäre es im Spiel eine
+   Ausnahme. Geschrieben wird `xpath('…') != null`. Die Ausdrücke sind gegen die
+   `NCalc.dll` des Spiels gemessen (27 Proben); unser eigenes Finding nannte die Funktion
+   `eventActive`, sie heißt `event`. Die elf Tag-Namen sind jetzt aus den Attributen belegt.
+   *Farben:* `700_90_Sprache/Config/XUi_Common/styles.xml` tönt Vanillas fünf Grautöne warm
+   (gleiche Helligkeit, 634 Stellen lesen sie), dazu die zwei Farben für Ausgegrautes und
+   die Hover-Farbe — acht Zeilen, jede in einem eigenen Block.
+   *Etikett:* `XUi_Menu/windows.xml` hängt im Hauptmenü ein Etikett über die Versionszeile,
+   das `700_modName` liest — der Schlüssel aus WP8.6 hat damit seinen ersten Leser.
+   *Nicht gebaut:* **Schriften** (das Spiel führt genau eine, eine zweite wäre ein Asset →
+   Phase 2), **Rahmen und Sprites** (welche Sprites der Atlas führt, ist ungelesen; Vanillas
+   Rahmenfarbe ist Schwarz und bleibt), Vanillas Rot (steht wörtlich in den Fenstern, nicht
+   als benannte Farbe).
+   *Prüfung:* `kette-pruefen` sieht jetzt in bedingte Blöcke (vorher zählte es sie nur);
+   vier neue Gegenproben, eine angepasst — gegen das alte Skript 123 Gegenproben, 5
+   fehlgeschlagen, gegen das neue 123, 0. Die neun Bedingungen unserer zwei Dateien werten
+   mit der Bibliothek des Spiels gegen Vanilla alle zu „wahr" aus. `check-all.ps1`:
+   6 Prüfungen, 1 rot (`recipes`, 80 Sackgassen, unverändert); 20 Patch-Dateien, 427
+   XPaths, 9 bedingte Blöcke.
+   *Offen:* die drei XUi-Patches in `700_40_Bauen` stehen weiter ohne Block — sie werden
+   erst umgestellt, wenn ein Block von uns im Spiel gelaufen ist (Vertrag 03 §5, Nachtrag);
+   die `mod_loaded`-Teile hängen an Q8 (WP8.9). → Prüfliste 22,
+   [Vertrag 03](../contracts/03-xpath-regeln.md) und
+   [Vertrag 04](../contracts/04-pruefwerkzeuge.md) je „Nachtrag WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
@@ -1859,6 +1890,23 @@ werden:
     Namen der Abschrift? Und beim Durchblättern der Fertigkeiten: **fällt ein Rang-Text
     auf, der noch nach Neuzeit klingt?** Die 354 übrigen Rang-Zeilen sind gefiltert, nicht
     gelesen; jede Fundstelle ist eine Zeile mehr.
+22. **Das Hauptmenü ansehen und das Protokoll lesen** (WP8.7/D85, 22. November 2026). Die
+    ersten bedingten Blöcke des Projekts — ihre Schreibweise ist gelesen und gemessen,
+    gelaufen ist keiner. Braucht die installierte Mod und einen Start **ohne EAC**.
+    a) **Protokoll:** stehen dort Zeilen mit `Conditional`, `did not apply` oder
+    `Error evaluating conditional expression`? Erwartet sind neunmal drei unauffällige
+    Zeilen: „Xpath conditional on file: …", „Xpath matches: 1", „Match: …". *(Eine Fehlzeile hier heißt: die
+    Schreibweise stimmt nicht, und die Patches in `700_40_Bauen` bleiben ohne Block.)*
+    b) **Hauptmenü unten links:** steht über der Versionszeile „7DTD_700"? Oder der
+    nackte Schlüssel `700_modName` (dann ist die Sprachzeile der Mod im Hauptmenü noch
+    nicht geladen), oder nichts, oder an der falschen Stelle?
+    c) **Farben:** wirken Fensterflächen und Rahmen warm statt neutralgrau — und ist
+    alles noch lesbar, auch Ausgegrautes? Gefällt die Tönung, ist sie zu schwach oder zu
+    braun? *(Alt und neu stehen als Tabelle im Kopf von
+    `mod/700_90_Sprache/Config/XUi_Common/styles.xml`.)*
+    d) **Feuerstelle, Kalkofen, Webstuhl** öffnen: zwei Werkzeugslots, Brennstoffkammer,
+    Webstuhl-Fenster wie zuvor? *(Diese drei Patches sind unverändert; der Blick ist die
+    Ausgangslage für ihre spätere Umstellung.)*
 
 ## Offene Punkte
 
@@ -1871,6 +1919,11 @@ werden:
   mit `conditional` fallen die drei XPaths wieder aus der Zählung, wenn das Skript nicht
   zugleich hineinsieht. → WP8.7/WP8.9, [Vertrag 04](../contracts/04-pruefwerkzeuge.md)
   „Nachtrag drittes Review".
+  **Stand 2026-11-22 (WP8.7):** die Schreibweise ist belegt und gemessen, `kette-pruefen`
+  sieht in die Blöcke hinein — die Kehrseite ist damit weg. Die drei Patches stehen
+  **trotzdem weiter ohne Block**: umgestellt wird, wenn ein Block von uns im Spiel gelaufen
+  ist (Prüfliste 22 a), weil ein Fehler in der Schreibweise sonst Webstuhl-Fenster und
+  Feuerstellen-Slots kostet. Die Liste der UI-Mods fehlt weiter (Q8).
 - **35 Herausforderungen sind unerfüllbar, und der Purge sieht sie nicht** (gezählt in
   WP8.5, vierte Scheibe, 2026-11-21). `challenges.xml` steht in keiner unserer Dateien und
   nicht in der Erreichbarkeitsprüfung. 41 der 148 sichtbaren Herausforderungen nennen eine

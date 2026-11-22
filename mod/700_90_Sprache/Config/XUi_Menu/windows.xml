@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_90_Sprache / XUi_Menu/windows.xml
+	     F-12 Lokalisierung und UI-Theming, Plan-0001 WP8.7
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     DAS ERSTE ETIKETT, DAS DEN MOD-NAMEN ZEIGT. Seit WP8.6 steht der Name in genau
+	     einer Sprachzeile, '700_modName' (D6, D83), und wurde von nichts gelesen. Hier
+	     liest ihn ein Etikett im Hauptmenue: unten links, eine Zeile ueber der
+	     Versionsangabe des Spiels, in derselben Schriftgroesse.
+
+	     WARUM DORT. Das Fenster 'mainMenuVersion' zeigt schon, WAS laeuft; der Name der
+	     Mod gehoert daneben. Es ist ein angehaengtes Kind, kein Umbau: das Fenster behaelt
+	     Lage und Groesse, sein eigenes Etikett bleibt unberuehrt (D5).
+
+	     DER NAME STEHT NICHT HIER. 'text_key' nennt den Schluessel, der Text kommt aus
+	     700_90_Sprache/Config/Localization.csv. Wer den Namen aendert, aendert eine
+	     Zeile - und das Glossar prueft, dass es bei der einen bleibt (Alleinname).
+
+	     'pos="0,30"': dreissig Einheiten ueber der Versionszeile (im Spiel zaehlt y nach
+	     oben; Vanillas Knopfreihe darueber steht bei '0,-450', also tiefer). Die Zahl ist
+	     gelesen, nicht gesehen.
+
+	     IM SPIEL UNGESEHEN. Offen ist vor allem, ob die Sprachzeile einer Mod im Hauptmenue
+	     schon geladen ist (ihre Spalte 'UsedInMainMenu' traegt ein x, wie Vanillas
+	     Menue-Zeilen) und ob das Etikett an der Stelle sitzt (Pruefliste 22). -->
+
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;mainMenuVersion&quot;]') != null">
+			<append xpath="/windows/window[@name='mainMenuVersion']">
+				<label depth="2" name="700_lblModName" pos="0,30" text_key="700_modName" font_size="22" pivot="left" color="[beige]" />
+			</append>
+		</if>
+	</conditional>
+</config>

@@ -16,8 +16,10 @@ anfasst, überlebt beides.
 
 ## 2. Die elf Operationen
 
-Belegt sind die Methoden in `XmlPatchMethods`; die XML-Tag-Namen sind daraus **abgeleitet** und
-beim ersten Modlet zu bestätigen (ein falscher Tag-Name erzeugt sofort eine Protokollzeile).
+Belegt sind die Methoden in `XmlPatchMethods`; ~~die XML-Tag-Namen sind daraus **abgeleitet** und
+beim ersten Modlet zu bestätigen (ein falscher Tag-Name erzeugt sofort eine Protokollzeile).~~
+**Seit dem 2026-11-22 sind auch die Tag-Namen belegt** — gelesen aus den Attributen der elf
+Methoden (Finding WP1 §4, Nachtrag). Sie stimmen mit der Tabelle überein.
 
 | Tag | Methode | Was es tut | Wann wir es nehmen |
 |---|---|---|---|
@@ -151,7 +153,7 @@ steht darum je Teil eine eigene Begründung und die Zahl „n Zeilen aus 2 Teile
 | `game_version`, `version` | Spielfassung prüfen — ein Build-Guard in XML |
 | `xpath` | **nur ändern, wenn das Ziel existiert** |
 | `gamepref`, `serverinfo` | Server- und Spieleinstellungen |
-| `eventActive`, `time_minutes`, `game_loaded` | Laufzeitzustand |
+| ~~`eventActive`~~ `event`, `time_minutes`, `game_loaded` | Laufzeitzustand *(Name berichtigt 2026-11-22)* |
 | `has_entitlement` | Besitzrechte |
 
 **Verbindlich für XUi-Patches (D5):** Jeder Eingriff in `XUi_*` wird in einen `conditional`-Block
@@ -163,6 +165,52 @@ ein Element ändert, das eine andere Mod entfernt hat, bricht sonst die ganze Da
 
 Die Funktionsnamen sind belegt, **die genaue Schreibweise der Ausdrücke nicht**. Der erste
 `conditional`-Block in Phase 1 bestätigt sie.
+
+### Nachtrag WP8.7 (2026-11-22): Schreibweise belegt, Regel für XUi — **Abnahme offen**
+
+Die Schreibweise ist jetzt aus dem Code gelesen und gegen die NCalc-Bibliothek des Spiels
+gemessen ([Finding WP1 §4, Nachtrag](../rea/findings/WP1-modlet-lader-und-xml-patcher.md)).
+Im Spiel hat noch kein bedingter Block von uns geladen.
+
+**So wird ein bedingter Block geschrieben:**
+
+```xml
+<conditional>
+  <if cond="xpath('/styles/global/style_entry[@name=&quot;darkGrey&quot;]') != null">
+    <setattribute name="value" xpath="/styles/global/style_entry[@name='darkGrey']">70,62,52,255</setattribute>
+  </if>
+</conditional>
+```
+
+1. Kinder von `<conditional>` sind nur `<if cond="…">` und `<else>`, klein geschrieben. Kein
+   `<elseif>` (mehrere `<if>` tun dasselbe), kein `<if>` hinter `<else>`, kein `evaluator`.
+2. **Die Bedingung muss einen Wahrheitswert liefern.** `mod_loaded('Name')` tut das.
+   **`xpath('…')` tut es nicht** — es liefert den Treffer oder `null`; allein als Bedingung
+   wirft es eine Ausnahme. Geschrieben wird `xpath('…') != null`.
+3. Der XPath in der Bedingung steht in einfachen Anführungszeichen, seine eigenen in `&quot;`.
+4. Verknüpft wird mit `and`, `or`, `not`.
+5. Die Funktion für Ereignisse heißt **`event`**, nicht `eventActive` (so heißt nur die Methode).
+   Die Tabelle oben ist an dieser Stelle falsch.
+
+**Was die Regel „jeder Eingriff in `XUi_*` in einen `conditional`-Block mit `mod_loaded`" heute
+heißt.** Sie setzt eine Liste bekannter UI-Mods voraus, und die gibt es nicht: Q8 ist offen
+(Plan-0001 WP8.9). Bis der Nutzer sie nennt, gilt:
+
+| Eingriff | Form |
+|---|---|
+| ändert ein Vanilla-Element oder hängt etwas **an** eines (`setattribute`, `set`, `append` auf ein Fenster, `insertBefore` …) | `<conditional><if cond="xpath('<dasselbe Ziel>') != null">` — der Patch läuft nur, wenn das Ziel noch da ist, und hinterlässt sonst keine Warnung im Protokoll |
+| legt etwas Eigenes an der Wurzel an (`append xpath="/xui"`, `/windows`, `/styles`) | ohne Block — es gibt nichts, was eine andere Mod weggenommen haben könnte |
+
+Die `mod_loaded`-Teile kommen mit WP8.9 dazu, **wo die Testmatrix einen Konflikt zeigt**, nicht
+auf Vorrat (§7.4). Das ist enger als der Satz oben und ersetzt ihn, sobald es abgenommen ist.
+
+**Eine bekannte Abweichung bleibt stehen:** die drei XUi-Patches in `700_40_Bauen`
+(Werkzeugslots der Feuerstelle, Brennstoffkammer des Kalkofens, Fenstergruppe des Webstuhls)
+stehen weiter ohne Block. Zwei davon müssten nach der Tabelle einen tragen. Sie werden erst
+umgestellt, **wenn ein bedingter Block von uns im Spiel gelaufen ist** — bis dahin ist die
+Schreibweise gemessen, nicht gesehen, und ein Fehler darin nähme dem Webstuhl sein Fenster
+und der Feuerstelle ihre Slots. Die Theming-Patches aus WP8.7 sind die ersten Blöcke; an
+ihnen kostet ein Fehler nur eine Farbe. → Prüfliste 22.
 
 ## 6. `include` zerlegt Dateien, ersetzt aber keine Modlets
 
@@ -212,9 +260,12 @@ Jede Patch-Datei beginnt mit einem Kopf, der sagt, wohin sie gehört und warum:
 
 ## 9. Offene Punkte dieses Vertrags
 
-- **Die XML-Tag-Namen der elf Operationen sind abgeleitet**, nicht belegt (nur `removeattribute`
-  wörtlich). Bestätigung mit dem ersten Modlet.
-- **Die Ausdruckssyntax der `conditional`-Bedingungen** ist nicht belegt.
+- ~~**Die XML-Tag-Namen der elf Operationen sind abgeleitet**, nicht belegt (nur `removeattribute`
+  wörtlich). Bestätigung mit dem ersten Modlet.~~ Belegt seit dem 2026-11-22 (§2).
+- ~~**Die Ausdruckssyntax der `conditional`-Bedingungen** ist nicht belegt.~~ Gelesen und
+  gemessen seit dem 2026-11-22 (§5, Nachtrag WP8.7). **Offen bleibt der Lauf im Spiel**
+  (Prüfliste 22) und was `mod_loaded` als Namen erwartet — den `Name` aus `ModInfo.xml` oder
+  den Ordnernamen, mit oder ohne Groß/Klein.
 - **Welche UI-Mods** in den `mod_loaded`-Bedingungen stehen, hängt an der offenen Frage Q8 —
   der Nutzer benennt die Referenz-UI-Mods (Plan-0001 WP8.9).
 - Ob ein Modlet eine Datei patchen kann, die **nicht** in der Liste der 52 steht (etwa eine von

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_90_Sprache / XUi_Common/styles.xml
+	     F-12 Lokalisierung und UI-Theming, Plan-0001 WP8.7
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     WAS HIER GESCHIEHT. Vanillas Oberflaeche ist aus fuenf neutralen Grautoenen gebaut,
+	     die als benannte Farben in dieser Datei stehen und von dort ueber [Name] in
+	     Fenstern und Vorlagen gelesen werden (zusammen 634 Stellen). Diese Datei toent die
+	     fuenf Grautoene warm - Holz und Leder statt Blech - und nimmt der Hover-Farbe den
+	     gruenen Stich. Dazu die beiden Farben fuer Ausgegrautes, die denselben Wert wie
+	     das hellste Grau tragen.
+
+	     WAS NICHT GESCHIEHT. Kein Fenster wird verschoben, kein Element entfernt, kein
+	     Sprite getauscht (D5, Vertrag 03 Abschnitt 8.3). Schriften bleiben: das Spiel
+	     fuehrt genau eine ('ReferenceFont'), eine andere waere ein Asset und damit
+	     Phase 2. Vanillas Rot (228,18,21) steht nicht als benannte Farbe hier, sondern
+	     woertlich in den Fenstern - es bleibt.
+
+	     DIE HELLIGKEIT BLEIBT. Jeder neue Grauwert hat dieselbe Helligkeit wie der alte
+	     (0,299 R + 0,587 G + 0,114 B, auf eine Stufe genau), nur der Farbton wandert. Was
+	     vorher lesbar war, ist es danach auch. Die eine Ausnahme ist hoverColor: sie wird
+	     etwas dunkler (243 auf 234), weil ein Strohton bei gleicher Helligkeit fast weiss
+	     waere.
+
+	         Name                 Vanilla            700
+	         darkestGrey          32,32,32           36,31,25
+	         darkGrey             64,64,64           70,62,52
+	         mediumGrey           96,96,96           104,94,80
+	         lightGrey            128,128,128        137,126,108
+	         lightestGrey         160,160,160        170,158,137
+	         disabledColor        160,160,160        170,158,137
+	         disabledLabelColor   160,160,160        170,158,137
+	         hoverColor           250,255,163        255,236,170
+
+	     JEDE ZEILE IN EINEM EIGENEN BEDINGTEN BLOCK (Vertrag 03 Abschnitt 5, Nachtrag
+	     WP8.7). Die Bedingung fragt, ob die benannte Farbe noch da ist. Hat eine UI-Mod
+	     sie entfernt oder umbenannt, laeuft diese eine Zeile nicht - ohne Warnung im
+	     Protokoll, und die anderen sieben laufen weiter. Geschrieben wird
+	     "xpath('...') != null": xpath allein liefert keinen Wahrheitswert und waere im
+	     Spiel eine Ausnahme (Finding WP1 Abschnitt 4, Nachtrag 2026-11-22).
+
+	     IM SPIEL UNGESEHEN. Das sind die ersten bedingten Bloecke dieses Projekts. Ihre
+	     Schreibweise ist aus dem Code gelesen und gegen die NCalc-Bibliothek des Spiels
+	     gemessen, gelaufen ist noch keiner. Ob die Toenung gefaellt, entscheidet der
+	     Nutzer am Bildschirm (Pruefliste 22). -->
+
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;darkestGrey&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='darkestGrey']">36,31,25,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;darkGrey&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='darkGrey']">70,62,52,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;mediumGrey&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='mediumGrey']">104,94,80,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;lightGrey&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='lightGrey']">137,126,108,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;lightestGrey&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='lightestGrey']">170,158,137,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;disabledColor&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='disabledColor']">170,158,137,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;disabledLabelColor&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='disabledLabelColor']">170,158,137,255</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/styles/global/style_entry[@name=&quot;hoverColor&quot;]') != null">
+			<setattribute name="value" xpath="/styles/global/style_entry[@name='hoverColor']">255,236,170,255</setattribute>
+		</if>
+	</conditional>
+</config>

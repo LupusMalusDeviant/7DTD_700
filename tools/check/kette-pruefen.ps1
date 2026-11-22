@@ -456,6 +456,198 @@ if (-not $PSBoundParameters.ContainsKey('Patches')) {
         Where-Object { $_.FullName -match '\\Config\\' -and $_.FullName -notmatch '700_10_Purge' } |
         Select-Object -ExpandProperty FullName)
 }
+# BEDINGTE BLOECKE (ergaenzt 2026-11-22, WP8.7). Bis dahin wurde <conditional> gezaehlt und
+# nicht angesehen: jeder Patch darin war fuer diese Pruefung unsichtbar. Vertrag 03 §5
+# verlangt aber gerade fuer XUi-Eingriffe einen solchen Block - die Pruefung haette also
+# genau die Dateien verloren, fuer die sie zuletzt erweitert wurde.
+#
+# Was das Spiel tut, ist aus dem Code gelesen (V 3.4.0 b10, Finding WP1 §4):
+#   - XmlPatchMethods::Conditional nimmt die Kinder des Blocks der Reihe nach. Das erste
+#     <if>, dessen 'cond' wahr ist, gewinnt; ein <else> gewinnt, sobald es erreicht wird.
+#     Jedes andere Kind ist eine Ausnahme ("Unexpected child element").
+#   - Die Kinder des gewinnenden Zweigs laufen durch XmlPatcher::PatchXml, also durch
+#     dieselbe Verarbeitung wie die oberste Ebene - auch ein weiterer <conditional>.
+#   - 'cond' wird von NCalc ausgewertet und MUSS einen Wahrheitswert liefern. xpath(...)
+#     liefert keinen (null, den Treffertext oder "More than one match"): allein als
+#     Bedingung ist es eine Ausnahme, gebraucht wird ein Vergleich wie "!= null".
+#   - Ein Attribut 'evaluator' am <conditional> eines Patches wird mit Warnung ignoriert.
+#
+# Geprueft wird JEDER Zweig, als waere er der gewinnende. Das ist strenger als das Spiel
+# und so gewollt: ob eine Bedingung wahr wird, weiss diese Pruefung nicht.
+$bekannteFunktionen = @('mod_loaded', 'mod_version', 'game_version', 'version', 'serverinfo', 'gamepref',
+                        'event', 'time_minutes', 'game_loaded', 'xpath', 'has_entitlement')
+$bedingteBloecke = 0
+$zweige = 0
+$bedingteXPaths = 0
+$bedingungsXPaths = 0
+$genannteMods = @()
+
+function Test-Bedingung {
+    # Zerlegt den Ausdruck GROB: Texte in einfachen Anfuehrungszeichen werden maskiert, dann
+    # werden die Funktionsaufrufe gesucht. Das ist kein NCalc-Leser - es faengt die Fehler,
+    # die beim Schreiben wirklich passieren: vertippter Funktionsname, xpath ohne Vergleich,
+    # ein XPath, der in Vanilla nichts trifft.
+    param([string]$Ausdruck, $VanillaDoc, [string]$Datei)
+    $maske = New-Object System.Text.StringBuilder
+    $inText = $false
+    $i = 0
+    while ($i -lt $Ausdruck.Length) {
+        $z = [string]$Ausdruck[$i]
+        if ($inText) {
+            if ($z -ceq '\' -and ($i + 1) -lt $Ausdruck.Length) { [void]$maske.Append('__'); $i += 2; continue }
+            if ($z -ceq "'") { $inText = $false; [void]$maske.Append("'"); $i++; continue }
+            [void]$maske.Append('_'); $i++; continue
+        }
+        if ($z -ceq "'") { $inText = $true }
+        [void]$maske.Append($z); $i++
+    }
+    if ($inText) {
+        $script:unresolved += "Bedingung mit offenem Anfuehrungszeichen: $Ausdruck  ($Datei)"
+        return
+    }
+    $m = $maske.ToString()
+    foreach ($treffer in [regex]::Matches($m, '([A-Za-z_][A-Za-z0-9_]*)\s*\(')) {
+        $fn = $treffer.Groups[1].Value
+        if (@('not', 'and', 'or') -ccontains $fn) { continue }
+        if ($bekannteFunktionen -cnotcontains $fn) {
+            $script:unresolved += "Bedingung ruft '$fn(' auf; das Spiel kennt: $($bekannteFunktionen -join ', ')  ($Datei)"
+            continue
+        }
+        $auf = $treffer.Index + $treffer.Length - 1
+        $tiefe = 0
+        $zu = -1
+        for ($k = $auf; $k -lt $m.Length; $k++) {
+            $c = [string]$m[$k]
+            if ($c -ceq '(') { $tiefe++ }
+            elseif ($c -ceq ')') { $tiefe--; if ($tiefe -eq 0) { $zu = $k; break } }
+        }
+        if ($zu -lt 0) {
+            $script:unresolved += "Bedingung: die Klammer von '$fn(' wird nicht geschlossen: $Ausdruck  ($Datei)"
+            continue
+        }
+        if ($fn -cne 'mod_loaded' -and $fn -cne 'xpath') { continue }
+        $argument = $Ausdruck.Substring($auf + 1, $zu - $auf - 1).Trim()
+        $argMaske = $m.Substring($auf + 1, $zu - $auf - 1).Trim()
+        if ($argMaske -notmatch "^'_*'$") {
+            $script:unresolved += "Bedingung: $fn(...) erwartet EINEN Text in einfachen Anfuehrungszeichen, gefunden: $argument  ($Datei)"
+            continue
+        }
+        $text = [regex]::Replace($argument.Substring(1, $argument.Length - 2), '\\(.)', '$1')
+        if ($fn -ceq 'mod_loaded') {
+            $script:genannteMods += $text.Trim()
+            continue
+        }
+        $script:bedingungsXPaths++
+        $hits = 0
+        try { $hits = @($VanillaDoc.SelectNodes($text)).Count }
+        catch {
+            $script:unresolved += "XPath in der Bedingung ist kein gueltiger Ausdruck: $text  ($Datei)"
+            continue
+        }
+        $danach = $m.Substring($zu + 1).TrimStart()
+        $davor = $m.Substring(0, $treffer.Index).TrimEnd()
+        if ($danach -notmatch '^(!=|==|=|<>)' -and $davor -notmatch '(!=|==|=|<>)$') {
+            $script:unresolved += "Bedingung: xpath(...) steht ohne Vergleich. Das Spiel verlangt einen Wahrheitswert, xpath liefert keinen (gebraucht: xpath('...') != null): $Ausdruck  ($Datei)"
+            continue
+        }
+        if ($danach -match '^(!=|<>)\s*null\b' -and $hits -eq 0) {
+            $ownNames = @([regex]::Matches($text, "@name=['""]([^'""]+)['""]") | ForEach-Object { $_.Groups[1].Value })
+            $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
+            if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { continue }
+            $script:unresolved += "Bedingung trifft in Vanilla nichts, der Zweig ist toter Text: $text  ($Datei)"
+        }
+    }
+}
+
+function Test-Bedingt {
+    param($Block, [string]$Datei, $VanillaDoc, [int]$Tiefe)
+    $script:bedingteBloecke++
+    if ($Block.HasAttribute('evaluator')) {
+        $script:unresolved += "<conditional> traegt 'evaluator': in einem Patch ignoriert das Spiel das Attribut mit einer Warnung  ($Datei)"
+    }
+    $ifs = 0
+    $nachElse = $false
+    $operationen = 0
+    foreach ($kind in $Block.ChildNodes) {
+        if ($kind.NodeType -ne 'Element') { continue }
+        $art = $kind.get_Name()
+        if ($art -cne 'if' -and $art -cne 'else') {
+            $script:unresolved += "unerwartetes Kind <$art> in <conditional>: erlaubt sind <if cond=...> und <else>  ($Datei)"
+            continue
+        }
+        if ($nachElse) {
+            $script:unresolved += "<$art> steht hinter <else> und wird nie erreicht  ($Datei)"
+        }
+        $script:zweige++
+        if ($art -ceq 'if') {
+            $ifs++
+            $cond = $kind.GetAttribute('cond')
+            if (-not $cond -or $cond.Trim().Length -eq 0) {
+                $script:unresolved += "<if> ohne 'cond' in <conditional>  ($Datei)"
+            }
+            else { Test-Bedingung $cond $VanillaDoc $Datei }
+        }
+        else {
+            $nachElse = $true
+            if ($kind.HasAttribute('cond')) {
+                $script:unresolved += "<else> traegt 'cond': das Spiel liest es nicht, der Zweig gilt immer  ($Datei)"
+            }
+        }
+        $operationen += @($kind.ChildNodes | Where-Object { $_.NodeType -eq 'Element' }).Count
+        Test-PatchEbene $kind $Datei $VanillaDoc ($Tiefe + 1)
+    }
+    if ($ifs -eq 0) {
+        $script:unresolved += "<conditional> ohne ein einziges <if>  ($Datei)"
+    }
+    if ($operationen -eq 0) {
+        $script:unresolved += "<conditional> ohne eine einzige Operation in seinen Zweigen  ($Datei)"
+    }
+}
+
+function Test-PatchEbene {
+    # Die Kinder von <config> und, seit WP8.7, die Kinder eines <if> oder <else>.
+    param($Behaelter, [string]$Datei, $VanillaDoc, [int]$Tiefe)
+    foreach ($node in $Behaelter.ChildNodes) {
+        if ($node.NodeType -ne 'Element') { continue }
+        # get_Name() UND NICHT .Name. PowerShells XML-Adapter legt die XML-Attribute als
+        # Eigenschaften ueber das Objekt, und ein Attribut 'name' ueberdeckt dabei die
+        # Eigenschaft 'Name' des Elements. Bei <setattribute name="hidden" xpath="...">
+        # liefert $node.Name darum "hidden" statt "setattribute" - der Patch faellt durch
+        # die Verb-Liste und die ganze Datei bleibt ungeprueft, ohne eine Zeile Ausgabe.
+        # Genau so ist mod/700_50_Fortschritt/Config/progression.xml beim ersten Lauf mit
+        # ihren 20 Patches unbemerkt uebersprungen worden (WP7.1). Ein Methodenaufruf geht
+        # am Adapter vorbei.
+        $verb = $node.get_Name()
+        # <include> sieht diese Pruefung nicht von innen an (unter 'Grenzen' genannt). Es
+        # wird gezaehlt, damit die Grenze eine Zahl hat und nicht nur ein Satz ist.
+        if ($verb -ceq 'include') { $script:ungeprueftEbene++; continue }
+        if ($verb -ceq 'conditional') { Test-Bedingt $node $Datei $VanillaDoc $Tiefe; continue }
+        if ($patchVerbs -cnotcontains $verb) {
+            $script:unresolved += "unbekannte Patch-Operation <$verb>: $Datei  (bekannt: $($patchVerbs -join ', '), conditional, include)"
+            continue
+        }
+        $xp = $node.GetAttribute('xpath')
+        if (-not $xp) {
+            $script:unresolved += "Patch-Operation <$verb> ohne xpath: $Datei"
+            continue
+        }
+        $script:xpathChecked++
+        if ($Tiefe -gt 0) { $script:bedingteXPaths++ }
+        $hits = 0
+        try { $hits = @($VanillaDoc.SelectNodes($xp)).Count }
+        catch {
+            $script:unresolved += "XPath ist kein gueltiger Ausdruck: $xp  ($Datei)"
+            continue
+        }
+        if ($hits -gt 0) { $script:xpathVanilla++; continue }
+        # Kein Treffer in Vanilla: stammt das Ziel aus einem eigenen Modlet?
+        $ownNames = @([regex]::Matches($xp, "@name='([^']+)'") | ForEach-Object { $_.Groups[1].Value })
+        $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
+        if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { $script:xpathOwn++; continue }
+        $script:unresolved += "XPath trifft nichts: $xp  ($Datei)"
+    }
+}
+
 foreach ($path in $Patches) {
     if (-not $path -or -not (Test-Path $path)) { continue }
     # Das Gegenstueck liegt in Vanilla unter DEMSELBEN PFAD RELATIV ZU Config\ - nicht nur
@@ -503,44 +695,7 @@ foreach ($path in $Patches) {
         $unresolved += "Patch-Datei ohne eine einzige Operation: $name"
         continue
     }
-    foreach ($node in $xml.DocumentElement.ChildNodes) {
-        if ($node.NodeType -ne 'Element') { continue }
-        # get_Name() UND NICHT .Name. PowerShells XML-Adapter legt die XML-Attribute als
-        # Eigenschaften ueber das Objekt, und ein Attribut 'name' ueberdeckt dabei die
-        # Eigenschaft 'Name' des Elements. Bei <setattribute name="hidden" xpath="...">
-        # liefert $node.Name darum "hidden" statt "setattribute" - der Patch faellt durch
-        # die Verb-Liste und die ganze Datei bleibt ungeprueft, ohne eine Zeile Ausgabe.
-        # Genau so ist mod/700_50_Fortschritt/Config/progression.xml beim ersten Lauf mit
-        # ihren 20 Patches unbemerkt uebersprungen worden (WP7.1). Ein Methodenaufruf geht
-        # am Adapter vorbei.
-        $verb = $node.get_Name()
-        # <conditional> und <include> sind Operationen des Spiels, die diese Pruefung nicht
-        # von innen ansieht (unter 'Grenzen' genannt). Sie werden gezaehlt, damit die Grenze
-        # eine Zahl hat und nicht nur ein Satz ist.
-        if ($verb -ceq 'conditional' -or $verb -ceq 'include') { $ungeprueftEbene++; continue }
-        if ($patchVerbs -cnotcontains $verb) {
-            $unresolved += "unbekannte Patch-Operation <$verb>: $name  (bekannt: $($patchVerbs -join ', '), conditional, include)"
-            continue
-        }
-        $xp = $node.GetAttribute('xpath')
-        if (-not $xp) {
-            $unresolved += "Patch-Operation <$verb> ohne xpath: $name"
-            continue
-        }
-        $xpathChecked++
-        $hits = 0
-        try { $hits = @($vdoc.SelectNodes($xp)).Count }
-        catch {
-            $unresolved += "XPath ist kein gueltiger Ausdruck: $xp  ($name)"
-            continue
-        }
-        if ($hits -gt 0) { $xpathVanilla++; continue }
-        # Kein Treffer in Vanilla: stammt das Ziel aus einem eigenen Modlet?
-        $ownNames = @([regex]::Matches($xp, "@name='([^']+)'") | ForEach-Object { $_.Groups[1].Value })
-        $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
-        if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { $xpathOwn++; continue }
-        $unresolved += "XPath trifft nichts: $xp  ($name)"
-    }
+    Test-PatchEbene $xml.DocumentElement $name $vdoc 0
 }
 
 # FORTSCHRITTS-VERWEISE (ergaenzt 2026-11-08, WP7.2). Die XPath-Pruefung oben sagt, ob ein
@@ -597,7 +752,10 @@ Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene 
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  Patch-Dateien: {0} mit Vanilla-Gegenstueck, {1} ohne" -f $patchDateien, $ohneGegenstueck)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
-Write-Output ("  nicht von innen geprueft (conditional, include): {0}" -f $ungeprueftEbene)
+Write-Output ("  bedingte Bloecke: {0} (Zweige: {1}, XPaths darin: {2}, xpath-Bedingungen: {3})" -f $bedingteBloecke, $zweige, $bedingteXPaths, $bedingungsXPaths)
+$modListe = @($genannteMods | Sort-Object -Unique)
+Write-Output ("  in Bedingungen genannte Mods: {0}" -f $(if ($modListe.Count -gt 0) { $modListe -join ', ' } else { 'keine' }))
+Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
@@ -613,9 +771,12 @@ Write-Output '      den fertig gepatchten Stand. Ein XPath, der NUR auf einen Kn
 Write-Output '      FRUEHEREN eigenen Modlets zeigt, gilt als gruen, sobald jede Kennung darin'
 Write-Output '      von uns definiert ist - dass das frueher laedt, prueft die Ladereihenfolge,'
 Write-Output '      nicht dieses Skript.'
-Write-Output '    - Geprueft wird der ERSTE Knoten unter <config>. Patches, die in einem'
-Write-Output '      <conditional> stecken, sieht diese Pruefung nicht; das Projekt benutzt'
-Write-Output '      bisher keines.'
+Write-Output '    - Ein <conditional> wird in JEDEM Zweig geprueft, als waere er der aktive. Ob'
+Write-Output '      eine Bedingung im Spiel wahr wird, prueft niemand: mod_loaded-Namen werden nur'
+Write-Output '      aufgelistet, und die Bedingung wird grob zerlegt (Funktionsname, xpath-Text,'
+Write-Output '      Vergleich dahinter), nicht von NCalc gelesen.'
+Write-Output '    - Fortschritts-Verweise (parent, progression_name) werden nur auf der obersten'
+Write-Output '      Ebene gelesen, nicht in einem <conditional>. <include> wird nur gezaehlt.'
 Write-Output '    - Gelesen werden XML-Dateien. Localization.csv prueft mod700check localization.'
 
 if ($unresolved.Count -gt 0) {

@@ -1,0 +1,55 @@
+<config>
+	<!-- Testdatei WP8.7: der AUFBAU des Blocks stimmt nicht. Je Block ein Fehler.
+	       1. Attribut 'evaluator'   - nur in Vanillas eigenen Dateien gueltig, im Patch Warnung
+	       2. Kind <elseif>          - im Spiel eine Ausnahme
+	       3. <if> ohne cond         - im Spiel eine Ausnahme
+	       4. <if> hinter <else>     - wird nie erreicht
+	       5. <else> mit cond        - wird nicht gelesen
+	       6. kein <if>
+	       7. keine Operation in den Zweigen -->
+	<conditional evaluator="client">
+		<if cond="mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+		<elseif cond="mod_loaded('pruefZweiteMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">3</setattribute>
+		</elseif>
+	</conditional>
+	<conditional>
+		<if>
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+		<else>
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">3</setattribute>
+		</else>
+		<if cond="mod_loaded('pruefZweiteMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">4</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+		<else cond="mod_loaded('pruefZweiteMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">3</setattribute>
+		</else>
+	</conditional>
+	<conditional>
+		<else>
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</else>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod')" />
+	</conditional>
+</config>

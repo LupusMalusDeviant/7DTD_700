@@ -915,8 +915,10 @@ Test-Script 'kette-pruefen: falscher Wurzelknoten wird rot' 1 @{
 } -MustContain @('Wurzelknoten <configs> statt <config>')
 
 # (2) Ein Tippfehler im Namen der Operation (<sett>) und eine Operation ohne xpath wurden
-#     uebersprungen: "1 Patch-Datei, 0 XPaths, GREEN". <conditional> bleibt eine Grenze,
-#     wird aber gezaehlt statt verschwiegen.
+#     uebersprungen: "1 Patch-Datei, 0 XPaths, GREEN". <conditional> blieb damals eine
+#     Grenze und wurde nur gezaehlt ("nicht von innen geprueft (conditional, include): 1").
+#     Seit WP8.7 (2026-11-22) wird hineingesehen: der Patch IM Block dieser Testdatei
+#     trifft nichts und ist jetzt die dritte rote Zeile.
 Test-Script 'kette-pruefen: unbekannte Operation und fehlender xpath werden rot' 1 @{
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
@@ -926,7 +928,81 @@ Test-Script 'kette-pruefen: unbekannte Operation und fehlender xpath werden rot'
 } -MustContain @(
     'unbekannte Patch-Operation <sett>',
     'Patch-Operation <set> ohne xpath',
-    'nicht von innen geprueft (conditional, include): 1')
+    'bedingte Bloecke: 1 (Zweige: 1, XPaths darin: 1, xpath-Bedingungen: 0)',
+    "XPath trifft nichts: /blocks/block[@name='pruefGibtesnicht']/@name",
+    'nicht von innen geprueft (include): 0')
+
+# WP8.7 (2026-11-22): BEDINGTE BLOECKE. Vertrag 03 §5 verlangt sie fuer XUi-Eingriffe, und
+# bis hierher war jeder Patch in einem <conditional> fuer kette-pruefen unsichtbar - die
+# Pruefung haette also gerade die Dateien verloren, die als naechste entstehen. Was das
+# Spiel mit dem Block tut, ist aus dem Code gelesen (Finding WP1 §4, Nachtrag 2026-11-22).
+#
+# (a) An diesen Bloecken ist nichts falsch: xpath(...) != null mit &quot; und mit \',
+#     mod_loaded, <else>, ein Block im Block. Vorher: "0 XPaths", und trotzdem GREEN.
+Test-Script 'kette-pruefen: Patches in bedingten Bloecken werden geprueft und gezaehlt' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'geprueefte XPaths: 4 (4 in Vanilla, 0 auf eigene Knoten)',
+    'bedingte Bloecke: 3 (Zweige: 4, XPaths darin: 4, xpath-Bedingungen: 3)',
+    'in Bedingungen genannte Mods: pruefUiMod')
+
+# (b) Die Bedingungen stimmen, die Patches darin nicht - im <if>, im <else> und im inneren
+#     Block je einer. Vorher: GREEN.
+Test-Script 'kette-pruefen: falsche Patches in bedingten Bloecken werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-innen-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "XPath trifft nichts: /windows/window[@name='pruefGibtesnicht']",
+    'Patch-Operation <set> ohne xpath',
+    'unbekannte Patch-Operation <sett>',
+    'in Bedingungen genannte Mods: pruefUiMod, pruefZweiteMod',
+    '3 rot')
+
+# (c) Die Patches stimmen, die Bedingungen nicht. Der erste Fall ist der, den ich selbst
+#     geschrieben haette: xpath(...) allein. Das Spiel verlangt einen Wahrheitswert und
+#     xpath liefert keinen - die Datei wuerde mit einer Ausnahme nicht angewandt. Der
+#     zweite stand so in unserem eigenen Finding (eventActive heisst die Methode, die
+#     Funktion heisst event).
+Test-Script 'kette-pruefen: falsche Bedingungen werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-bedingung-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'xpath(...) steht ohne Vergleich',
+    "Bedingung ruft 'eventActive(' auf",
+    'Bedingung trifft in Vanilla nichts, der Zweig ist toter Text: /windows/window[@name="pruefGibtesnicht"]',
+    'Bedingung mit offenem Anfuehrungszeichen',
+    'XPath in der Bedingung ist kein gueltiger Ausdruck',
+    'mod_loaded(...) erwartet EINEN Text',
+    '6 rot')
+
+# (d) Der Aufbau des Blocks: evaluator, <elseif>, <if> ohne cond, <if> hinter <else>,
+#     <else> mit cond, kein <if>, keine Operation. Zwei davon sind im Spiel Ausnahmen, eine
+#     ist eine Warnung, vier sind stiller toter Text.
+Test-Script 'kette-pruefen: falsch gebaute bedingte Bloecke werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-aufbau-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "<conditional> traegt 'evaluator'",
+    'unerwartetes Kind <elseif> in <conditional>',
+    "<if> ohne 'cond' in <conditional>",
+    '<if> steht hinter <else> und wird nie erreicht',
+    "<else> traegt 'cond'",
+    '<conditional> ohne ein einziges <if>',
+    '<conditional> ohne eine einzige Operation',
+    '7 rot')
 
 # (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
 #     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.

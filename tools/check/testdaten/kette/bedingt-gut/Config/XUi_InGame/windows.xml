@@ -1,0 +1,27 @@
+<config>
+	<!-- Testdatei WP8.7: bedingte Bloecke, an denen nichts falsch ist.
+	       1. <if> mit xpath(...) != null und mod_loaded, dazu ein <else>
+	       2. derselbe XPath mit \' statt &quot;
+	       3. ein <conditional> IN einem <if>
+	     Erwartet: Exit 0, 3 Bloecke, 4 Zweige, 4 XPaths darin, 3 xpath-Bedingungen. -->
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]/rect[@name=&quot;content&quot;]') != null and not mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']/rect[@name='content']">2</setattribute>
+		</if>
+		<else>
+			<append xpath="/windows/window[@name='pruefFenster']">
+				<label name="pruefEtikett" />
+			</append>
+		</else>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=\'pruefFenster\']') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">3</setattribute>
+			<conditional>
+				<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]/rect') != null">
+					<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']/rect[@name='content']">4</setattribute>
+				</if>
+			</conditional>
+		</if>
+	</conditional>
+</config>

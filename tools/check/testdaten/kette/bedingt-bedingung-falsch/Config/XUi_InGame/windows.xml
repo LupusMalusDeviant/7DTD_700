@@ -1,0 +1,39 @@
+<config>
+	<!-- Testdatei WP8.7: die Patches stimmen, die BEDINGUNGEN nicht. Je Block ein Fehler.
+	       1. xpath(...) ohne Vergleich        - im Spiel eine Ausnahme: kein Wahrheitswert
+	       2. eventActive(...)                 - so heisst die Methode, die Funktion heisst event
+	       3. xpath(...) != null, trifft nichts - der Zweig waere toter Text
+	       4. offenes Anfuehrungszeichen
+	       5. xpath mit einem XPath, der keiner ist
+	       6. mod_loaded ohne Text -->
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="eventActive('christmas')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefGibtesnicht&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded(pruefUiMod)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

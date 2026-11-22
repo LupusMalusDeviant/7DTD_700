@@ -121,6 +121,31 @@ Reviews haben daraus die Alleinnamen-Regel in ihrer heutigen Form gemacht — Ve
 die beiden Nachträge zu WP8.6.)* **Offen:** die
 Händlernamen (F-10) und ob der sichtbare Arbeitstitel „7DTD_700" oder „700" heißt.
 
+## Stand 2026-11-22 — WP8.7: Theming (D85)
+
+**Gebaut, im Spiel ungesehen.** Zwei Dateien in `700_90_Sprache`:
+
+- `Config/XUi_Common/styles.xml` — acht benannte Farben. Die fünf Grautöne, aus denen
+  Vanillas Oberfläche gebaut ist, sind warm getönt bei gleicher Helligkeit; die beiden
+  Farben für Ausgegrautes folgen dem hellsten Grau; die Hover-Farbe ist ein Strohton statt
+  Gelbgrün. Die Tabelle alt/neu steht im Kopf der Datei.
+- `Config/XUi_Menu/windows.xml` — ein Etikett im Hauptmenü über der Versionszeile, das
+  `700_modName` liest. Der Schlüssel aus WP8.6 hat damit seinen ersten Leser.
+
+Jede der neun Zeilen steckt in einem bedingten Block (`<conditional><if cond="xpath('…') !=
+null">`), der fragt, ob sein Ziel noch da ist — fehlt es, weil eine UI-Mod es entfernt hat,
+läuft die Zeile nicht und hinterlässt keine Warnung. Die Schreibweise ist aus dem Code
+gelesen und gegen die NCalc-Bibliothek des Spiels gemessen (Vertrag 03 §5, Nachtrag WP8.7).
+
+**Vom Umfang oben nicht gebaut:** *Schriften* — das Spiel führt genau eine
+(`ReferenceFont`), eine zweite wäre ein Asset (Phase 2, F-16). *Rahmen und Sprites* —
+welche Sprites der Atlas führt, ist ungelesen. *Kompass- und HUD-Begriffe* sind Text und
+gehören zu den Scheiben von WP8.5.
+
+**Zur UI-Kompatibilität (D5):** die `mod_loaded`-Bedingungen fehlen, solange Q8 offen ist;
+die drei älteren XUi-Patches in `700_40_Bauen` stehen noch ohne Block. Beides steht im
+Plan-0001 (WP8.7, Offene Punkte) und in Prüfliste 22.
+
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die
 zwei Sandbox-Vorlagen, und die Abnahme im Spiel — vor allem, ob das Menü die längeren

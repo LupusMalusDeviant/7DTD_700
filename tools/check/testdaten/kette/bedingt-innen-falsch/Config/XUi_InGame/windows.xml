@@ -1,0 +1,20 @@
+<config>
+	<!-- Testdatei WP8.7: die Bedingungen stimmen, die Patches DARIN nicht.
+	       1. im <if>:   XPath trifft nichts
+	       2. im <else>: unbekannte Operation <sett>
+	       3. im inneren <conditional>: Operation ohne xpath
+	     Vor WP8.7: "nicht von innen geprueft: 1", GREEN. -->
+	<conditional>
+		<if cond="not mod_loaded('pruefUiMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefGibtesnicht']">2</setattribute>
+			<conditional>
+				<if cond="mod_loaded('pruefZweiteMod')">
+					<set>ohne Ziel</set>
+				</if>
+			</conditional>
+		</if>
+		<else>
+			<sett xpath="/windows/window[@name='pruefFenster']/@name">X</sett>
+		</else>
+	</conditional>
+</config>

@@ -281,15 +281,25 @@ jeder Ausgabe: Erreichbarkeit von T0 und Zyklen.
 `Data/Config/XUi_InGame/windows.xml`. *(Bis zum 2026-11-20 zählte nur der Dateiname im
 obersten Ordner; Patches in Unterordnern wurden still übersprungen.)* Eine XML-Patch-Datei
 ohne Vanilla-Gegenstück ist **rot**, ein mit `-Patches` genannter Ordner Exit 2. Gemessen am
-2026-11-20: 18 Patch-Dateien, 418 XPaths (405 in Vanilla, 13 auf eigene Knoten), 0
-unaufgelöst. Grenzen: geprüft wird gegen Vanilla, nicht gegen den gepatchten Stand, und nur
-die erste Ebene unter `<config>` — Patches in einem `<conditional>` sieht es nicht.
+2026-11-22: 20 Patch-Dateien, 427 XPaths (414 in Vanilla, 13 auf eigene Knoten), 0
+unaufgelöst. Grenze: geprüft wird gegen Vanilla, nicht gegen den gepatchten Stand.
+
+**Bedingte Blöcke (seit 2026-11-22, WP8.7).** Ein `<conditional>` wird von innen gelesen:
+jeder Zweig (`<if cond="…">`, `<else>`) wird geprüft, als wäre er der aktive, auch ein Block
+im Block. Rot sind ein falsch gebauter Block (`<elseif>`, `<if>` ohne `cond`, `evaluator`,
+ein Zweig hinter `<else>`, kein `<if>`, keine Operation) und eine falsche Bedingung
+(unbekannte Funktion, offenes Anführungszeichen, **`xpath(…)` ohne Vergleich** — das Spiel
+verlangt einen Wahrheitswert und `xpath` liefert keinen —, ein XPath, der in Vanilla nichts
+trifft). Ausgabe: `bedingte Bloecke: N (Zweige: N, XPaths darin: N, xpath-Bedingungen: N)`
+und `in Bedingungen genannte Mods: …`; heute 9 Blöcke, keine genannte Mod. Ob eine Bedingung
+im Spiel wahr wird, prüft das Skript nicht.
 
 **Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
 ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei
 mit falschem Wurzelknoten oder einem Tippfehler wie `<sett>` als „geprüft, 0 XPaths, GREEN".)*
-`<conditional>` und `<include>` bleiben ungeprüft, werden aber gezählt:
-`nicht von innen geprueft (conditional, include): N` — heute 0. Ein `SDTD_PATH`, der kein
+`<include>` bleibt ungeprüft, wird aber gezählt:
+`nicht von innen geprueft (include): N` — heute 0 *(bis zum 2026-11-22 stand `<conditional>`
+in derselben Zeile)*. Ein `SDTD_PATH`, der kein
 gültiger Pfad ist (wörtliche Anführungszeichen), ist Exit 2 statt einer Ausnahme.
 
 **Lesen ist nicht Zerlegen (seit dem fünften Review, 2026-11-21).** Jede XML-Datei geht durch

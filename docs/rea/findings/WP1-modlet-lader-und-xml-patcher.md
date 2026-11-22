@@ -112,14 +112,79 @@ Funktionen bereit:
 | `version` | Fassungsvergleich |
 | `gamepref` | Spieleinstellung |
 | `serverinfo` | Server-Angabe |
-| `eventActive` | läuft ein Ereignis |
+| ~~`eventActive`~~ **`event`** | läuft ein Ereignis *(berichtigt 2026-11-22: `eventActive` heißt die Methode, die Funktion im Ausdruck heißt `event`)* |
 | `time_minutes` | Zeit |
 | `game_loaded` | Spielstand geladen |
-| `xpath` | **existiert ein XPath-Treffer?** |
+| `xpath` | ~~**existiert ein XPath-Treffer?**~~ **liefert den Treffer, keinen Wahrheitswert** *(berichtigt 2026-11-22, siehe Nachtrag unten)* |
 | `has_entitlement` | Besitzrecht |
 
 Dazu `FindActiveConditionalBranchElement` und `XmlPatcher::ApplyConditionalXmlBlocks`, also
 Verzweigungen im XML selbst.
+
+### Nachtrag 2026-11-22 (WP8.7): die Schreibweise ist gelesen und gemessen
+
+Bis hierher waren die Funktionsnamen belegt und die Schreibweise nicht. Für WP8.7 ist sie aus
+dem Code gelesen (V 3.4.0 b10, `Assembly-CSharp.dll`, SHA-256 `cb54022c…`) und die Ausdrücke
+sind gegen die `NCalc.dll` des Spiels ausgewertet. **Statisch und am Rechner — im Spiel hat
+noch kein bedingter Block von uns geladen.**
+
+**Form im Patch** (`XmlPatchMethods::Conditional`, `FindActiveConditionalBranchElement`):
+
+```xml
+<conditional>
+  <if cond="…"> …Patches… </if>
+  <if cond="…"> …Patches… </if>
+  <else> …Patches… </else>
+</conditional>
+```
+
+- Die Kinder werden der Reihe nach gelesen. Das erste `<if>`, dessen `cond` wahr ist, gewinnt;
+  ein `<else>` gewinnt, sobald es erreicht wird. Gewinnt keines, passiert nichts.
+- Jedes andere Kind wirft *„Unexpected child element '…' in conditional patch block"*; ein
+  `<if>` ohne `cond` wirft *„Patch child 'if'-element does not have an 'cond' attribute"*.
+  Ein `<elseif>` gibt es nicht — mehrere `<if>` hintereinander tun dasselbe.
+- Die Kinder des gewinnenden Zweigs laufen durch `XmlPatcher::PatchXml`, also durch dieselbe
+  Verarbeitung wie die oberste Ebene. Ein `<conditional>` im Zweig ist damit erlaubt.
+- `conditional` braucht **kein** `xpath`-Attribut: `XmlPatchMethodAttribute` trägt bei
+  `conditional` und `include` `RequiresXpath = false`, bei den neun anderen `true`.
+- Ein Attribut `evaluator` wird im Patch mit einer Warnung ignoriert (*„Conditional patch
+  element ignores 'evaluator' attribute!"*). Vanilla benutzt es in den eigenen Dateien
+  (`loot.xml`, 14-mal: `<conditional evaluator="client"><if cond="event('christmas')">`) —
+  das ist ein anderer Weg, `ApplyConditionalXmlBlocks`, und nicht unserer.
+
+**Die Bedingung** (`XmlPatchConditionEvaluator::Evaluate`): NCalc mit den Optionen 1542 =
+`IgnoreCase, NoCache, UseDoubleForAbsFunction, AllowNullParameter`. Das Ergebnis **muss** ein
+Wahrheitswert sein, sonst *„Conditional expression did not evaluate to a boolean value"*.
+
+| Funktion | liefert | gelesen aus |
+|---|---|---|
+| `mod_loaded('Name')` | wahr/falsch | `ModManager::ModLoaded(name.Trim())` → `loadedMods.dict.ContainsKey` — der Schlüssel des Wörterbuchs der geladenen Mods. **Ob das der `Name` aus `ModInfo.xml` ist und ob Groß/Klein zählt, ist nicht gelesen.** |
+| `xpath('…')` | `null` ohne Treffer, den Text `More than one match` bei mehreren, sonst `ToString()` des einen Treffers | `XmlPatchConditionEvaluator::xpath`; ausgewertet gegen die **Zieldatei** im Stand vor diesem Patch, nicht gegen die Patch-Datei |
+
+**`xpath(…)` allein ist also keine gültige Bedingung** — sie würfe die Ausnahme oben, und die
+Patch-Datei bliebe an dieser Stelle unangewandt. Gebraucht wird ein Vergleich. Gemessen gegen
+die `NCalc.dll` des Spiels (Funktionen nachgestellt, 27 Ausdrücke):
+
+| Ausdruck | Ergebnis |
+|---|---|
+| `mod_loaded('X')`, `not mod_loaded('X')`, `!mod_loaded('X')` | Wahrheitswert |
+| `… and …`, `… && …`, `… or …` | Wahrheitswert |
+| `xpath('/a[@name="x"]') != null` (Treffer) | wahr |
+| `xpath('/a/fehlt') != null` | falsch |
+| `xpath('/a/fehlt') == null`, `= null` | wahr |
+| `xpath('…')` allein | **kein** Wahrheitswert (Text oder `null`) |
+| `"` im einfach angeführten Text, ebenso `\'` | beide kommen unverändert im XPath an |
+
+Im XML-Attribut steht `"` als `&quot;`. Die Funktionsnamen vergleicht das Spiel ohne Groß/Klein
+(`EqualsCaseInsensitive`); geschrieben werden sie klein.
+
+**Die Tag-Namen der elf Operationen sind jetzt belegt**, nicht mehr abgeleitet — gelesen aus den
+Attribut-Blobs: `append`, `prepend`, `insertAfter`, `insertBefore`, `remove`, `set`,
+`setattribute`, `removeattribute`, `csv`, `conditional`, `include`.
+
+**Nicht belegt bleibt:** dass ein bedingter Block von uns im Spiel lädt und wirkt
+(Projektregel 5: erst der Lauf zählt), und was `ToString()` des Treffers bei einem
+Attribut-XPath genau liefert — deshalb vergleichen unsere Bedingungen nur mit `null`.
 
 **Das verändert zwei Dinge im Plan:**
 

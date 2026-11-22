@@ -2087,3 +2087,81 @@ Plan-0001 unter den offenen Punkten.
 - **Die beiden Proben am nachgebauten Baum hängen an den echten Dateien.** Ist das echte
   Glossar oder die echte Sprachdatei aus einem anderen Grund rot, fällt die erste der
   beiden mit — dann ist `check-all` aber ohnehin rot.
+
+## Nachtrag WP8.7, 2026-11-22 — `kette-pruefen` sieht in bedingte Blöcke, **Abnahme offen**
+
+Vertrag 03 §5 verlangt für XUi-Eingriffe einen `<conditional>`-Block. Bis hierher zählte
+`kette-pruefen` solche Blöcke nur („nicht von innen geprueft (conditional, include): N");
+jeder Patch darin war unsichtbar. Mit den ersten echten Blöcken (WP8.7) hätte die Prüfung
+genau die Dateien verloren, die neu entstehen. Die Grenze stand seit dem dritten Review als
+„gehört zusammen gelöst" in diesem Vertrag.
+
+Was das Spiel mit dem Block tut, ist aus dem Code gelesen:
+[Finding WP1 §4, Nachtrag 2026-11-22](../rea/findings/WP1-modlet-lader-und-xml-patcher.md).
+
+### Vertragsänderungen
+
+1. **Jeder Zweig wird geprüft, als wäre er der aktive.** Die Kinder eines `<if>` und eines
+   `<else>` laufen durch dieselbe Prüfung wie die Kinder von `<config>`: bekannte Operation,
+   `xpath` vorhanden, Treffer in Vanilla oder auf einen eigenen Knoten. Ein `<conditional>`
+   im Zweig wird ebenso gelesen.
+2. **Der Aufbau des Blocks wird geprüft.** Rot sind: ein Kind, das weder `<if>` noch `<else>`
+   heißt (im Spiel eine Ausnahme); ein `<if>` ohne `cond` (Ausnahme); ein Attribut
+   `evaluator` (im Spiel eine Warnung); ein Zweig hinter `<else>` (nie erreicht); ein `<else>`
+   mit `cond` (wird nicht gelesen); ein Block ohne `<if>`; ein Block ohne eine einzige
+   Operation in seinen Zweigen.
+3. **Die Bedingung wird grob zerlegt.** Texte in einfachen Anführungszeichen werden maskiert,
+   dann die Funktionsaufrufe gesucht. Rot sind: ein Funktionsname, den das Spiel nicht kennt
+   (die elf aus dem Finding, klein geschrieben; `not`, `and`, `or` sind keine Funktionen);
+   ein offenes Anführungszeichen; eine nicht geschlossene Klammer; `mod_loaded` oder `xpath`
+   mit etwas anderem als genau einem Text; ein XPath in `xpath(…)`, der kein gültiger
+   Ausdruck ist; **`xpath(…)` ohne Vergleich davor oder dahinter** (das Spiel verlangt einen
+   Wahrheitswert); `xpath('…') != null`, dessen XPath in Vanilla nichts trifft und nicht nur
+   eigene Kennungen nennt (toter Zweig).
+4. **Neue Ausgabezeilen**, die alte entfällt:
+   `bedingte Bloecke: N (Zweige: N, XPaths darin: N, xpath-Bedingungen: N)`,
+   `in Bedingungen genannte Mods: …` und `nicht von innen geprueft (include): N`.
+   `<include>` bleibt ungeprüft und gezählt.
+
+### Gegenproben (Projektregel 5)
+
+Vier neue, eine angepasste. Testdaten unter `tools/check/testdaten/kette/bedingt-*/`.
+
+| Probe | erwartet | altes Skript |
+|---|---|---|
+| Patches in bedingten Blöcken werden geprüft und gezählt (`xpath … != null` mit `&quot;` und mit `\'`, `mod_loaded`, `<else>`, Block im Block) | Exit 0, „4 XPaths", „3 Bloecke" | Exit 0 mit „0 XPaths" — rot an den Zahlen |
+| Falsche Patches im `<if>`, im `<else>` und im inneren Block | Exit 1, 3 rot | Exit 0, grün |
+| Sechs falsche Bedingungen (`xpath` ohne Vergleich, `eventActive`, toter Zweig, offenes Anführungszeichen, ungültiger XPath, `mod_loaded` ohne Text) | Exit 1, 6 rot | Exit 0, grün |
+| Sieben falsch gebaute Blöcke | Exit 1, 7 rot | Exit 0, grün |
+| *(angepasst)* unbekannte Operation und fehlender `xpath`: der Patch **im** Block der Testdatei trifft nichts | Exit 1, dritte rote Zeile | Exit 1, aber mit der alten Zählzeile |
+
+Gegen `kette-pruefen.ps1` des Stands `6bd1eaa`: **123 Gegenproben, 5 fehlgeschlagen** (genau
+diese fünf). Gegen den neuen Stand: **123, 0 fehlgeschlagen.**
+
+**Eine zweite Messung, unabhängig von diesem Skript:** die sechs falschen Bedingungen der
+Testdatei sind auch mit der `NCalc.dll` des Spiels ausgewertet worden (`xpath` und
+`mod_loaded` nachgestellt). Fünf scheitern dort — eine liefert Text statt eines
+Wahrheitswerts, vier werfen eine Ausnahme —, die sechste (toter Zweig) wertet zu „falsch"
+aus. Das ist dieselbe Einteilung, die `kette-pruefen` trifft. Die neun Bedingungen unserer
+beiden echten Dateien werten gegen Vanilla alle zu „wahr" aus.
+
+**`check-all.ps1` am 2026-11-22 nach der Änderung:** 6 Prüfungen, 1 rot (`recipes`, 80
+Sackgassen, unverändert). `kette-pruefen`: 20 Patch-Dateien (vorher 18), 427 XPaths (414 in
+Vanilla, 13 auf eigene Knoten), 9 bedingte Blöcke mit 9 Zweigen, 9 XPaths darin und 9
+`xpath`-Bedingungen, keine genannte Mod, 0 unaufgelöst.
+
+### Grenzen
+
+- **Ob eine Bedingung im Spiel wahr wird, prüft niemand.** `mod_loaded`-Namen werden
+  aufgelistet, nicht geprüft — ob es eine Mod dieses Namens gibt und ob das Spiel den `Name`
+  aus `ModInfo.xml` oder den Ordnernamen vergleicht, ist ungelesen.
+- **Die Zerlegung ist kein NCalc-Leser.** Ein Ausdruck, der die groben Regeln besteht und
+  trotzdem keinen Wahrheitswert liefert (`mod_loaded('A') + 1`), fällt nicht auf. NCalcs
+  eigene Funktionen (`if(…)`, `Max(…)`) gelten hier als unbekannt und wären rot.
+- **Jeder Zweig wird gegen Vanilla gehalten.** Ein `<else>`, das auf Elemente einer anderen
+  Mod zielt, wäre rot. Heute gibt es keinen; braucht WP8.9 einen, muss diese Regel zuerst
+  geändert werden.
+- **Fortschritts-Verweise** (`parent`, `progression_name`) werden weiter nur auf der obersten
+  Ebene gelesen, nicht in einem Block.
+- **Kein Lauf im Spiel.** Dass ein bedingter Block von uns lädt, zeigt erst das Protokoll
+  (Plan-0001, Prüfliste 22).
