@@ -149,7 +149,7 @@ Frei sind an Feldfrucht und Küche: Pilze, Goldrute, Hopfen, Aloe, Honig, Ei, Fl
 
 | Rezept | Grund |
 |---|---|
-| `biomeWeatherItem1` bis `biomeWeatherItem4` | Tragen in Vanilla keinen Namen (leere Zeile in der Sprachdatei), verlangen Rüstungssatz, Kunststoff und Linse. Rezept entfällt; die Gegenstände selbst bleiben, wie der Purge sie beurteilt. |
+| `biomeWeatherItem1` bis `biomeWeatherItem4` | ~~Tragen in Vanilla keinen Namen (leere Zeile in der Sprachdatei)~~ **Berichtigt am 2026-11-22:** Vanilla nennt sie Rauch-, Wüsten-, Schnee- und Strahlungsausrüstung; die Angabe war ein Lesefehler (Spaltenversatz, [`konzept/biome.md`](../konzept/biome.md) §1.11). Es sind die Schutzstücke des Biom-Fortschritts, und ohne sie ist der nicht lösbar (D128). Sie verlangen Rüstungssatz, Kunststoff und Linse. Rezept entfällt; die Gegenstände selbst bleiben, wie der Purge sie beurteilt. |
 | Bild `pictureVariantHelper` | Verlangt Farbe (`resourcePaint`, gesperrt). Rezept entfällt. |
 
 ## Tabelle 5 — Langbogen, Armbrüste, Sonderpfeile (13)

@@ -838,8 +838,10 @@
 	<!-- ====================================================
 	     3.8 Vier Rezepte fallen (Tabelle 4)
 	     ====================================================
-	     biomeWeatherItem1 bis 4 tragen in Vanilla keinen Namen (leere Zeile in der
-	     Sprachdatei) und verlangen Ruestungssatz, Kunststoff und Linse. Das REZEPT
+	     biomeWeatherItem1 bis 4 verlangen Ruestungssatz, Kunststoff und Linse.
+	     BERICHTIGT am 2026-11-22: hier stand, sie truegen in Vanilla keinen Namen. Das
+	     war falsch gelesen (Spaltenversatz) - Vanilla nennt sie Rauch-, Wuesten-,
+	     Schnee- und Strahlungsausruestung (docs/konzept/biome.md 1.11). Das REZEPT
 	     faellt - ein Weg, kein Gegenstand (Vertrag 03 Abschnitt 4). Die Gegenstaende
 	     selbst bleiben, wie der Purge sie beurteilt. -->
 	<remove xpath="/recipes/recipe[@name='biomeWeatherItem1']" />
