@@ -87,7 +87,7 @@ Belege zu diesem Abschnitt:
 | Werkzeug | Unity-Editor in **exakt der Unity-Version des Spiels** Unity **2022.3.62f2**, belegt in der Baseline; Bundles per Editor-Skript bauen |
 | Referenzierung | In XML über `#@modfolder:Resources/<bundle>.unity3d?<asset>` [verifizieren: Syntax in V 3.40] |
 | Shader | Nur Shader, die im Spiel vorhanden sind bzw. mit dem Bundle kompatibel sind; Test im Dedicated-Client |
-| Quellen & Lizenz | Jedes Asset steht in `assets/ASSETS.md` mit Quelle, Autor, Lizenz und Änderungen. **Keine** Assets aus anderen Spielen oder Mods ohne ausdrückliche Lizenz (Q9) |
+| Quellen & Lizenz | Jedes Asset steht in `assets/ASSETS.md` mit Quelle, Autor, Lizenz und Änderungen. **Keine** Assets aus anderen Spielen oder Mods ohne ausdrückliche Lizenz. Woher die Stücke kommen, regelt D84 (vormals Q9) |
 | Repo | Quell-Assets (`.blend`, `.psd`, Texturen) über **Git LFS** in `assets/`; gebaute Bundles nur im Release-Paket |
 | Budget | Texturen max. 2048², Standard 1024²; LODs für alles, was in Mengen spawnt (Gegner, Blöcke) |
 | Netz | Assets müssen auf **Clients** liegen. Ein Server mit Asset-Mod erfordert die Mod beim Client (wie die C#-DLL). |

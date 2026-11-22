@@ -45,5 +45,22 @@ Sound ist für den Grusel wichtiger als jedes Modell. Deshalb bekommt Klang eine
 - [ ] Bundle-Build ist ein einziger Befehl und reproduzierbar
 - [ ] Jedes Asset im Spiel steht im Asset-Register mit geklärter Lizenz
 
+## Asset-Quellen (D84, 2026-11-22)
+
+| Art des Stücks | Quelle |
+|---|---|
+| Einfache harte Formen: Rundschild, Sax, Spatha, Runenstein | selbst in Blender |
+| Requisiten: Rennofen, Schrein, Webstuhl, Helm | Meshy, Nacharbeit in Blender |
+| Block-Texturen: Lehm, Reet, Bruchstein, Holz | CC0-Bibliotheken (Poly Haven, ambientCG) |
+| Klang | CC0 (Freesound nur CC0-Dateien, Sonniss-Pakete), eigene Aufnahmen |
+| Gekaufte Packs | **nicht** — die Weitergabe in einer frei verteilten Mod ist oft verboten |
+
+Die Lizenz wird je Datei gelesen und im Asset-Register eingetragen, nicht je Quelle angenommen.
+
 ## Offene Fragen
-- Q9: Asset-Quellen (selbst / beauftragt / lizenzierte Packs)?
+- ~~Q9: Asset-Quellen (selbst / beauftragt / lizenzierte Packs)?~~ Entschieden mit D84.
+- **Lizenz der Meshy-Ergebnisse:** hängt nach Claudes Stand vom Tarif ab, ungelesen. Vor dem
+  ersten Stück klären und im Register festhalten.
+- **Was „Retextur" heißen darf:** nicht veränderte Vanilla-Texturen ausliefern (Spec 01 §6),
+  sondern eine eigene Textur auf dem Vanilla-Modell. Ob das per XML geht oder ein eigenes
+  Modell ins Bundle muss, ist die erste Frage an den Durchstich (Umfang, Punkt 3).
