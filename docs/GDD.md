@@ -394,7 +394,7 @@ Entscheidung als zu prüfen durch mich"). D92 hält fest, was dabei **gebaut** w
 [`docs/pruefung/0003-gdd-setting.md`](pruefung/0003-gdd-setting.md) (dort mit Befund, Fundstelle und
 vollem Wortlaut); gebaut ist davon nichts. D126 bis D128 verweisen auf die drei Konzeptpapiere. Nimmt
 der Nutzer eine Zeile an, fällt die Marke; lehnt er sie ab, wird sie durchgestrichen. Die Prüfliste
-dazu steht in [`docs/pruefung/0000-nachtlauf-2026-11-22.md`](pruefung/0000-nachtlauf-2026-11-22.md).
+dazu steht in [`docs/pruefung/0000-entscheidungen-fuer-den-nutzer.md`](pruefung/0000-entscheidungen-fuer-den-nutzer.md).
 
 | ID | Datum | Frage | Entscheidung | Wirkt auf |
 |---|---|---|---|---|
