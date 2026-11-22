@@ -1,0 +1,9 @@
+<config>
+	<!-- Dasselbe in einer Datei, die das Skript nicht anwendet: dort zaehlt die Nennung,
+	     und auch sie ist EIN Schluessel. Kein Spielinhalt. -->
+	<append xpath="/item_modifiers">
+		<item_modifier name="pruef700_mod">
+			<property name="DescriptionKey" value="pruefLies,pruefDingDesc"/>
+		</item_modifier>
+	</append>
+</config>

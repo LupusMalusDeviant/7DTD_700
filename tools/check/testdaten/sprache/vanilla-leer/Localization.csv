@@ -1,0 +1,18 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruefTeilEltern,items,Item,,,,"Parent part",,"Elternteil",,,,,,,,,,,
+pruefTeil,items,Item,,,,"Part",,"Teil",,,,,,,,,,,
+pruefTeilDesc,items,Item,,,,"A row nothing reads, as vanilla has them.",,"Eine Zeile, die niemand liest, wie Vanilla sie hat.",,,,,,,,,,,
+pruefTeilOhne,items,Item,,,,"Part without",,"Teil ohne",,,,,,,,,,,
+pruefGruppeDesc,items,Item,,,,"Group text, with a comma.",,"Gruppentext, mit Komma.",,,,,,,,,,,
+pruefNotiz,items,Item,,,,"Note",,"Notiz",,,,,,,,,,,
+pruefNotizDesc,items,Item,,,,"The text of the note.
+It has two lines.",,"Der Text der Notiz.
+Er hat zwei Zeilen.",,,,,,,,,,,
+pruefLies,items,Item,,,,"Read it.",,"Lies es.",,,,,,,,,,,
+pruefDing,items,Item,,,,"Thing",,"Ding",,,,,,,,,,,
+pruefDingDesc,items,Item,,,,"A thing.",,"Ein Ding.",,,,,,,,,,,
+pruefBlock,blocks,Block,,,,"Block",,"Block",,,,,,,,,,,
+pruefBlockAltDesc,blocks,Block,,,,"Old block text.",,"Alter Blocktext.",,,,,,,,,,,
+pruefBlockKind,blocks,Block,,,,"Child block",,"Kindblock",,,,,,,,,,,
+pruefBlockGruppeDesc,blocks,Block,,,,"Block group text.",,"Blockgruppentext.",,,,,,,,,,,
+pruefVanillaName,progression,Perk,,,,"Vanilla name",,"Vanilla-Name",,,,,,,,,,,

@@ -2546,3 +2546,140 @@ Knoten), 9 bedingte Blöcke.
 - Nachtrag WP7.2, Grenzen: „die Sprachschlüssel prüft `mod700check localization`" stimmte
   nur für die Form. Ob `name_key` und `desc_key` eine Zeile haben, prüft seit WP8.8
   `sprachverweise-pruefen.ps1`; die Symbole weiter niemand.
+
+## Nachtrag Review zu WP8.8, 2026-11-22 — sechs Befunde behoben, **Abnahme offen**
+
+Das Review des Commits `723e23c` fand fünf mittlere und einen niedrigen Befund, alle in
+`sprachverweise-pruefen.ps1`, keinen an den Mod-Dateien.
+
+| # | Befund | Folge |
+|---|---|---|
+| 1 | `<prepend>` kannte das Skript nicht; ein `<remove>`, dessen XPath das Wort `DescriptionKey` nicht trägt, sah es nicht | eine Änderung am Beschreibungsschlüssel ging ungesehen durch, grün |
+| 2 | ein `<set>` auf `DescriptionKey/@value` galt als angewandt, auch wenn das Ziel die Eigenschaft nicht selbst trägt | der gesetzte Schlüssel galt als gelesen; im Spiel trifft der XPath nichts |
+| 3 | jeder von einem Patch **genannte** Schlüssel galt als gelesen, auch ein später überschriebener; dazu zählte jeder Eigenschaftswert in **jeder** unserer Dateien | tote Zeile grün |
+| 4 | der Wert eines `DescriptionKey` wurde an Kommas geteilt | `a,b` grün, wenn `a` und `b` Zeilen haben; das Spiel liest `a,b` als einen Schlüssel |
+| 5 | geprüft wurde nur die Summe aus Gegenständen und Blöcken | eine leere `blocks.xml` in Vanilla: grün statt nicht prüfbar |
+| 6 | ein Pfad mit unzulässigen Zeichen bei `-Sprachdatei` oder `-Patches` warf | Exit 1 statt 2 |
+
+Die Befunde 1 bis 3 haben eine Ursache: das Skript **erkannte** zwei Patch-Formen am Text,
+statt die Patches anzuwenden. Der Umbau nimmt die Ursache weg.
+
+### Geänderte Regeln (ersetzen die Regeln 4 und 5 des Nachtrags WP8.8)
+
+4. **Der wirksame Beschreibungsschlüssel wird am gepatchten Stand gerechnet.** Das Skript
+   wendet jede Patch-Datei, die `items.xml` oder `blocks.xml` heißt, in der Reihenfolge der
+   Dateien auf Vanillas Datei an — alle neun Operationen des Spiels (`set`, `setattribute`,
+   `append`, `prepend`, `insertAfter`, `insertBefore`, `remove`, `removeattribute`, `csv`),
+   jeder XPath gegen den Stand ausgewertet, den die Operationen davor hinterlassen haben.
+   Am Ergebnis gilt wie bisher: eigene Eigenschaft `DescriptionKey`, sonst geerbt über
+   `Extends` (außer `param1` schließt sie aus), sonst `<Name>Desc`. Eigene Gegenstände und
+   Blöcke sind die, die nach den Patches da sind und in Vanilla nicht.
+5. **Was sich nicht anwenden lässt, ist rot** — der gerechnete Stand wäre sonst geraten:
+   - eine Operation in einer dieser Dateien, deren XPath **nichts trifft** oder sich nicht
+     auswerten lässt;
+   - ein bedingter Block in einer dieser Dateien (das Skript rechnet keine Bedingung);
+   - ein unbekanntes Element auf der ersten Ebene einer dieser Dateien;
+   - ein Gegenstand oder Block, der nach den Patches **zwei** eigene Eigenschaften
+     `DescriptionKey` trägt und in Vanilla nicht: welche gilt, ist nicht gelesen.
+
+### Geänderte Regeln 1 bis 3
+
+- **Regel 1, `DescriptionKey`:** in `items.xml` und `blocks.xml` zählt nicht mehr, was ein
+  Patch nennt, sondern was nach den Patches dasteht — jede eigene Eigenschaft
+  `DescriptionKey`, die Vanilla an dieser Stelle nicht oder anders hat, braucht eine Zeile.
+  In allen anderen Dateien zählt weiter die Nennung. **Der Wert ist ein Schlüssel und wird
+  nicht geteilt**; geteilt werden nur Attribute auf `_key`.
+- **Regeln 2 und 3, „gelesen":** der Name eines Gegenstands oder Blocks im gepatchten Stand,
+  sein wirksamer Beschreibungsschlüssel, der Wert einer Eigenschaft und eines Attributs auf
+  `_key` **im gepatchten Stand** von `items.xml`/`blocks.xml`, und eine Nennung in einer
+  **anderen** Datei. Eine Nennung in einem Patch für `items.xml`/`blocks.xml` zählt nicht
+  mehr — nur, was davon übrig ist.
+- **Regel 6:** jede der beiden Vanilla-Dateien muss die erwartete Wurzel (`items`, `blocks`)
+  und mindestens eine benannte Definition tragen, sonst Exit 2. Ein Pfad, der sich nicht
+  prüfen oder auflösen lässt, ist Exit 2; ebenso jeder unerwartete Fehler des Skripts.
+
+### Grenzen, neu oder geändert
+
+- **Das Skript ist kein zweiter Patcher des Spiels.** Es wendet die neun Operationen so an,
+  wie Vertrag 03 und das Finding WP1 sie beschreiben; `csv` und `append`/`prepend` auf ein
+  Attribut sind nachgebaut, nicht am Spiel gemessen. Für `DescriptionKey` benutzt das
+  Projekt sie nicht.
+- **Die Reihenfolge ist die der Dateinamen** (bei `-Patches` die genannte). Dass das Spiel
+  die Modlets in dieser Reihenfolge lädt, sagt D53, nicht dieses Skript.
+- **„Ein Patch in einem bedingten Block gilt als angewandt"** gilt nur noch für die Nennung
+  in anderen Dateien. In `items.xml`/`blocks.xml` ist ein bedingter Block rot.
+- **„Patch trifft nichts" meldet jetzt auch dieses Skript**, für `items.xml` und
+  `blocks.xml` und gegen den Stand zur Zeit der Operation. `kette-pruefen` prüft dasselbe
+  für alle Dateien gegen Vanilla; die beiden Meldungen können dieselbe Zeile treffen.
+- **Das Netz hinter den Pfadprüfungen hat keine eigene Gegenprobe.** Jeder unerwartete
+  Fehler endet über einen `trap` mit Exit 2. Kein Eingang der Testdaten erreicht ihn, solange
+  die Pfadprüfungen selbst abfangen; dass er trägt, zeigt nur die Verfälschung unten, die
+  das Abfangen wegnimmt.
+
+### Gegenproben (Projektregel 5)
+
+Neun neue Läufe, einer ersetzt, drei mit neuen Erwartungen — zusammen 21 Läufe für dieses
+Skript (vorher 12). Testdaten unter `tools/check/testdaten/sprache/`.
+
+| Befund | Lauf | Eingang | erwartet |
+|---|---|---|---|
+| 1 | `verben` | ein `<prepend>` hängt einem Vanilla-Gegenstand den Schlüssel an; ein `<remove>`, dessen XPath das Wort `DescriptionKey` nicht trägt, nimmt dem Elternteil die Eigenschaft | Exit 1, **1 rot**: die Vorgabezeile des eigenen Erben fehlt; die Zeile hinter dem `<prepend>` ist **nicht** rot; 3 Operationen angewandt |
+| 2 | `set-ohne-treffer` | `<set>` auf `DescriptionKey/@value` an einem Gegenstand, der die Eigenschaft nur erbt | Exit 1, 2 rot: „Patch trifft nichts", und die Zeile wird nicht gelesen |
+| 3 | `ueberschrieben` | zwei `<set>` nacheinander auf denselben Schlüssel; in `buffs.xml` eine Eigenschaft, die zufällig `pruefTeilDesc` als Wert trägt | Exit 1, 2 rot: beide Zeilen werden nicht gelesen |
+| 4 | `komma` | `DescriptionKey` mit dem Wert `a,b`, einmal im gepatchten Stand, einmal in einer Datei, in der die Nennung zählt; `a` und `b` haben je eine Zeile | Exit 1, 2 rot: `a,b` hat keine Zeile |
+| 5 | `vanilla-leer`, `vanilla-falsch` | Vanillas `blocks.xml` ohne Block · mit der Wurzel `<items>`; dazu der saubere Satz | je Exit 2, nie `GREEN` |
+| 6 | drei Läufe | `C:\invalid<file>` als `-Sprachdatei` · als `-Patches` · `C:\invalid<ordner>` als `-Vanilla` | je Exit 2 mit der Meldung der Stelle, die den Pfad prüft; nie „unerwarteter Fehler" |
+| Regel 5 | `nicht-anwendbar` (ersetzt den Lauf „Regel 5" des Nachtrags WP8.8) | bedingter Block · unbekanntes Element · XPath, der sich nicht auswerten lässt · XPath ohne Treffer · zwei Eigenschaften `DescriptionKey` nach den Patches | Exit 1, 5 rot |
+
+Die Läufe „sauberer Satz", „Regel 1" und „XML-Adapter" behalten ihre Eingänge und ihre
+Ergebnisse (Exit 0 · 7 rot · 3 rot); sie erwarten jetzt die neuen Zählzeilen („Patch-Operationen
+angewandt", „nach den Patches … davon eigene …", „Beschreibungsschlüssel von uns gesetzt").
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: **165 Gegenproben, 0
+fehlgeschlagen** (vorher 156).
+
+**Gegen die Fassung des Commits `723e23c`** (das Skript an Ort und Stelle getauscht, die
+Gegenproben unverändert): **11 von 165 fehlgeschlagen.** Acht davon sind neue Läufe — jeder
+der Befunde 1 bis 5 und zwei der drei Pfadläufe. Der dritte Pfadlauf (`-Vanilla`) war schon
+gegen die erste Fassung Exit 2; er hält den Stand und beweist am Befund 6 nichts. Die übrigen
+drei scheitern an den neuen Zählzeilen und am ersetzten Lauf, nicht an einem Befund.
+
+**Fünfzehn Verfälschungen der Neufassung** (je ein voller Lauf der Gegenproben, das Skript
+danach bytegleich wiederhergestellt):
+
+| Verfälschung | fehlgeschlagen |
+|---|---|
+| `prepend` aus der Liste der Operationen genommen | 1 (`verben`) |
+| `<remove>` entfernt nichts | 1 (`verben`) |
+| „Patch trifft nichts" wird nicht gemeldet | 2 |
+| eine Nennung in `items.xml`/`blocks.xml` zählt wieder als gelesen | 6 |
+| jede Eigenschaft einer anderen Datei zählt als `DescriptionKey` | 1 (`ueberschrieben`) |
+| `DescriptionKey` wird an Kommas geteilt | 1 (`komma`) |
+| leere Vanilla-Tabelle ist kein Abbruch | 1 (`vanilla-leer`) |
+| Wurzel der Vanilla-Datei wird nicht geprüft | 1 (`vanilla-falsch`) |
+| Pfadprüfungen fangen nicht mehr selbst ab | 3 (die drei Pfadläufe) |
+| Pfadprüfungen fangen nicht ab **und** der `trap` fehlt | 3 |
+| zwei Eigenschaften `DescriptionKey` werden nicht gemeldet | 1 (`nicht-anwendbar`) |
+| bedingter Block wird nicht gemeldet | 1 (`nicht-anwendbar`) |
+| unauswertbarer XPath wird nicht gemeldet | 1 (`nicht-anwendbar`) |
+| Regel 1 am gepatchten Stand abgeschaltet | 4 |
+| **nur der `trap` fehlt** | **0** — siehe Grenzen |
+
+Die Zeile „Pfadprüfungen fangen nicht mehr selbst ab" hat eine Vorgeschichte: im ersten Durchgang verlangten die drei
+Pfadläufe nur Exit 2, und die Verfälschung „fangen nicht mehr selbst ab" machte **keinen** rot
+— der `trap` gab denselben Ausgang. Die Läufe verlangen seither die Meldung der Stelle.
+
+**Am echten Stand** (`sprachverweise-pruefen.ps1` ohne Parameter): 27 Patch-Dateien, 7 davon
+auf `items.xml` und `blocks.xml` angewandt, **729 Operationen angewandt, 0 ohne Treffer**;
+1 434 Gegenstände und 6 643 Blöcke in Vanilla, nach den Patches 1 451 und 6 649, davon
+eigene 17 und 6; 32 Beschreibungsschlüssel von uns gesetzt; 72 genannte Schlüssel, alle in
+unserer Datei; 132 Zeilen rückwärts, 0 nicht gelesen; **Exit 0**. Die Zahlen 1 451 und 6 649
+sind dieselben, die der ConfigsDump des Spiels für den gepatchten Stand trägt.
+
+**Gegen den Stand vor dem Fix** (dieselbe Dateiliste, nur `700_30_Ausruestung/Config/items.xml`
+aus dem Commit `3633948`): 723 Operationen, **6 rot** — wieder genau die sechs Bruchstück-Zeilen,
+jede mit „liest `gunPartsGroupDesc` (geerbt von `gunMGT1AK47Parts`)".
+
+`check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert);
+`kette-pruefen` unverändert 433 XPaths (420 in Vanilla, 13 auf eigene Knoten), 9 bedingte
+Blöcke.

@@ -1,0 +1,12 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 2): ein <set>
+	     auf DescriptionKey/@value an einem Gegenstand, der die Eigenschaft nicht selbst
+	     traegt - er erbt sie. Im Spiel trifft der XPath nichts, und 'pruef700_lies' liest
+	     niemand. Kein Spielinhalt. -->
+	<append xpath="/items">
+		<item name="pruef700_erbe">
+			<property name="Extends" value="pruefTeilEltern"/>
+		</item>
+	</append>
+	<set xpath="/items/item[@name='pruef700_erbe']/property[@name='DescriptionKey']/@value">pruef700_lies</set>
+</config>

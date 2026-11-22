@@ -1635,8 +1635,10 @@ Test-Script 'sprachverweise: jeder Verweis hat eine Zeile, jede Zeile wird geles
     Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
-    'Definitionen: 5 Gegenstaende und 2 Bloecke aus Vanilla, 3 und 0 eigene',
-    'DescriptionKey-Patches gelesen: 2 (davon auf ein bekanntes Ziel: 2)',
+    'Patch-Dateien: 3, davon auf items.xml und blocks.xml angewandt: 1',
+    'Patch-Operationen angewandt: 3, ohne Treffer: 0',
+    'Definitionen: 5 Gegenstaende und 2 Bloecke in Vanilla; nach den Patches 8 und 2, davon eigene 3 und 0',
+    'Beschreibungsschluessel von uns gesetzt: 3',
     'genannte Schluessel: 15 (in unserer Datei: 12, nur in Vanilla: 3, ohne Zeile: 0)',
     'Zeilen rueckwaerts geprueft: 15 (neu gegenueber Vanilla: 10, Beschreibungen von Gegenstaenden und Bloecken: 5), nicht gelesen: 0',
     'GREEN')
@@ -1675,19 +1677,21 @@ Test-Script 'sprachverweise: vier Zeilen, die niemand liest - geerbter Schluesse
     'nicht gelesen: 4',
     '== Ergebnis: 4 rot -> RED ==') -MustNotContain @("Zeile 'pruefNotizDesc'", "Zeile 'pruefDingDesc'")
 
-# (d) Regel 5. Fuenf Patches an DescriptionKey, die Regel 4 nicht lesen kann. Ohne diese
-#     Regel rechnete die Pruefung mit dem alten Schluessel weiter und meldete gruen oder
-#     rot nach Zufall.
-Test-Script 'sprachverweise: DescriptionKey-Patch in unlesbarer Form ist rot' 1 @{
-    Patches     = @(Join-Path $spracheDaten 'form\items.xml')
-    Sprachdatei = (Join-Path $spracheDaten 'form\Localization.csv')
+# (d) Regel 5 (seit dem Review zu WP8.8): was sich nicht anwenden laesst, ist rot. Ein
+#     bedingter Block, ein unbekanntes Element, ein XPath, der sich nicht auswerten laesst,
+#     einer, der nichts trifft, und ein Gegenstand, der danach zwei Eigenschaften
+#     DescriptionKey traegt. Ohne diese Regel waere der gerechnete Stand geraten.
+Test-Script 'sprachverweise: was sich nicht anwenden laesst, ist rot - fuenf Faelle' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'nicht-anwendbar\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
-    "<set xpath=""/items/item[starts-with(@name,'pruefTeil')]",
-    "<append xpath=""/items/item[@name='pruefTeil' or @name='pruefDing']""> mit einem Kind DescriptionKey",
-    '<remove xpath=',
-    '<setattribute xpath=',
-    "<insertAfter xpath=""/items/item[@name='pruefDing']/property[@name='Stacknumber']""> mit einem Kind DescriptionKey",
+    'bedingter Block in einer Datei, die diese Pruefung anwendet: <conditional>',
+    'unbekannte Patch-Operation <verschiebe>',
+    "XPath laesst sich nicht auswerten: <set xpath=""/items/item[@name='pruefDing'/property"">",
+    "Patch trifft nichts: <setattribute xpath=""/items/item[@name='pruefGibtEsNicht']"">",
+    "Gegenstand 'pruefNotiz' traegt nach den Patches 2 Eigenschaften DescriptionKey",
+    'Patch-Operationen angewandt: 2, ohne Treffer: 1',
     '== Ergebnis: 5 rot -> RED ==')
 
 # (e) Der XML-Adapter (Vertrag 04, viertes Review zu WP8.7). Attribute und Kindelemente
@@ -1698,8 +1702,9 @@ Test-Script 'sprachverweise: Attribute und Kinder, die Knoten-Eigenschaften verd
     Sprachdatei = (Join-Path $spracheDaten 'adapter\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
-    'Definitionen: 5 Gegenstaende und 2 Bloecke aus Vanilla, 1 und 0 eigene',
-    'DescriptionKey-Patches gelesen: 1 (davon auf ein bekanntes Ziel: 1)',
+    'Patch-Operationen angewandt: 2, ohne Treffer: 0',
+    'Definitionen: 5 Gegenstaende und 2 Bloecke in Vanilla; nach den Patches 6 und 2, davon eigene 1 und 0',
+    'Beschreibungsschluessel von uns gesetzt: 2',
     "Schluessel 'pruef700_adapter' hat keine Zeile",
     "Schluessel 'pruef700_adapterText' hat keine Zeile",
     "Schluessel 'pruef700_adapterLies' hat keine Zeile",
@@ -1707,7 +1712,7 @@ Test-Script 'sprachverweise: Attribute und Kinder, die Knoten-Eigenschaften verd
 
 # (f) Regel 6: nichts gelesen ist nicht gruen. Sieben Eingaenge, jeder Ausgang 2.
 Test-Script 'sprachverweise: Sprachdatei ohne Spalte Key ist nicht pruefbar' 2 @{
-    Patches     = @(Join-Path $spracheDaten 'form\items.xml')
+    Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
     Sprachdatei = (Join-Path $spracheDaten 'ohne-key\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @("hat keine Spalte 'Key'", 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
@@ -1720,32 +1725,124 @@ Test-Script 'sprachverweise: kein Schluessel genannt, keine Zeile unter den Rege
 
 Test-Script 'sprachverweise: Patch-Datei mit kaputtem XML ist nicht pruefbar' 2 @{
     Patches     = @(Join-Path $spracheDaten 'kaputt\items.xml')
-    Sprachdatei = (Join-Path $spracheDaten 'form\Localization.csv')
+    Sprachdatei = (Join-Path $spracheDaten 'nicht-anwendbar\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @('laesst sich nicht als XML lesen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Test-Script 'sprachverweise: Vanilla-Ordner ohne Localization.csv ist nicht pruefbar' 2 @{
-    Patches     = @(Join-Path $spracheDaten 'form\items.xml')
-    Sprachdatei = (Join-Path $spracheDaten 'form\Localization.csv')
+    Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'nicht-anwendbar\Localization.csv')
     Vanilla     = (Join-Path $data 'kette\vanilla')
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @('Localization.csv fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Test-Script 'sprachverweise: genannte Sprachdatei fehlt - nicht pruefbar' 2 @{
-    Patches     = @(Join-Path $spracheDaten 'form\items.xml')
+    Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
     Sprachdatei = (Join-Path $spracheDaten 'gibtesnicht.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @('gibt es nicht', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Test-Script 'sprachverweise: genannte Patch-Datei fehlt - nicht pruefbar' 2 @{
     Patches     = @(Join-Path $spracheDaten 'gibtesnicht.xml')
-    Sprachdatei = (Join-Path $spracheDaten 'form\Localization.csv')
+    Sprachdatei = (Join-Path $spracheDaten 'nicht-anwendbar\Localization.csv')
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @('das ist keine Datei', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
 
 Test-Script 'sprachverweise: ohne Spielpfad und ohne -Vanilla nicht pruefbar' 2 @{
-    Patches     = @(Join-Path $spracheDaten 'form\items.xml')
-    Sprachdatei = (Join-Path $spracheDaten 'form\Localization.csv')
+    Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'nicht-anwendbar\Localization.csv')
 } -Skript 'sprachverweise-pruefen.ps1' -OhneSpielpfad -MustContain @('SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# ------------------------------------------ Review zu WP8.8 (2026-11-22), sechs Befunde
+# Die erste Fassung ERKANNTE zwei Patch-Formen an ihrem Text; jetzt wendet das Skript die
+# Patches fuer items.xml und blocks.xml an und liest das Ergebnis. Jeder der sechs Befunde
+# hat hier seinen Eingang, und jeder war gegen die erste Fassung gruen oder Ausgang 1.
+
+# (g) Befund 1: <prepend> und ein <remove>, dessen XPath das Wort DescriptionKey nicht
+#     traegt. Der Prepend macht 'pruefTeilDesc' lebendig (darf nicht rot sein), der Remove
+#     nimmt dem eigenen Erben die geerbte Beschreibung - seine Vorgabezeile fehlt.
+Test-Script 'sprachverweise: prepend und remove ohne das Wort DescriptionKey werden gerechnet' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'verben\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'verben\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    'Patch-Operationen angewandt: 3, ohne Treffer: 0',
+    "Schluessel 'pruef700_erbeDesc' hat keine Zeile",
+    "Beschreibung des eigenen Gegenstands 'pruef700_erbe'",
+    'nicht gelesen: 0',
+    '== Ergebnis: 1 rot -> RED ==') -MustNotContain @("Zeile 'pruefTeilDesc'")
+
+# (h) Befund 2: ein <set> auf DescriptionKey/@value an einem Gegenstand, der die
+#     Eigenschaft nur ERBT. Der XPath trifft nichts, und die Zeile liest niemand.
+Test-Script 'sprachverweise: set auf einen geerbten DescriptionKey trifft nichts' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'set-ohne-treffer\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'set-ohne-treffer\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Patch trifft nichts: <set xpath=""/items/item[@name='pruef700_erbe']/property[@name='DescriptionKey']/@value"">",
+    "Zeile 'pruef700_lies' wird nicht gelesen",
+    'Beschreibungsschluessel von uns gesetzt: 0',
+    '== Ergebnis: 2 rot -> RED ==')
+
+# (i) Befund 3: ein Schluessel, den ein Patch nennt und der naechste ueberschreibt, und eine
+#     Eigenschaft gleichen Werts in einer ANDEREN Datei. Beides liest nichts.
+Test-Script 'sprachverweise: genannt ist nicht gelesen - ueberschrieben, und fremde Eigenschaft' 1 @{
+    Patches     = @((Join-Path $spracheDaten 'ueberschrieben\items.xml'), (Join-Path $spracheDaten 'ueberschrieben\buffs.xml'))
+    Sprachdatei = (Join-Path $spracheDaten 'ueberschrieben\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Zeile 'pruef700_lies' wird nicht gelesen: Vanilla hat den Schluessel nicht",
+    "Zeile 'pruefTeilDesc' wird nicht gelesen: Gegenstand 'pruefTeil' liest 'pruefGruppeDesc' (geerbt von 'pruefTeilEltern')",
+    'Patch-Operationen angewandt: 2, ohne Treffer: 0',
+    '== Ergebnis: 2 rot -> RED ==')
+
+# (j) Befund 4: der Wert eines DescriptionKey ist EIN Schluessel - im gepatchten Stand und
+#     in einer Datei, in der die Nennung zaehlt. Beide Teile haben je eine Zeile in Vanilla.
+Test-Script 'sprachverweise: DescriptionKey mit Komma ist ein Schluessel, nicht zwei' 1 @{
+    Patches     = @((Join-Path $spracheDaten 'komma\items.xml'), (Join-Path $spracheDaten 'komma\buffs.xml'))
+    Sprachdatei = (Join-Path $spracheDaten 'adapter\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruefLies,pruefGruppeDesc' hat keine Zeile",
+    "Schluessel 'pruefLies,pruefDingDesc' hat keine Zeile",
+    '== Ergebnis: 2 rot -> RED ==')
+
+# (k) Befund 5: jede Vanilla-Datei fuer sich. Eine leere blocks.xml und eine mit falscher
+#     Wurzel - mit dem sauberen Satz, der gegen die echte Testvorlage gruen ist.
+Test-Script 'sprachverweise: Vanillas blocks.xml ohne Block ist nicht pruefbar' 2 @{
+    Patches     = $spracheGutPatches
+    Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
+    Vanilla     = (Join-Path $spracheDaten 'vanilla-leer')
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @('steht kein einziges <block> mit Namen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'sprachverweise: Vanillas blocks.xml mit falscher Wurzel ist nicht pruefbar' 2 @{
+    Patches     = $spracheGutPatches
+    Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
+    Vanilla     = (Join-Path $spracheDaten 'vanilla-falsch')
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @('hat die Wurzel <items>, erwartet ist <blocks>', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (l) Befund 6: ein Pfad mit Zeichen, die kein Pfad haben darf. Test-Path wirft dabei; das
+#     ist "gibt es nicht" und Ausgang 2, nicht Ausgang 1. Die Laeufe verlangen die Meldung
+#     der Stelle, die den Pfad prueft: Ausgang 2 allein gaebe auch das Netz dahinter (der
+#     trap fuer jeden unerwarteten Fehler), und dann stuende in der Ausgabe eine Ausnahme
+#     statt des Pfads. Der Vanilla-Lauf war schon gegen die erste Fassung Ausgang 2; er
+#     haelt den Stand.
+Test-Script 'sprachverweise: Sprachdatei-Pfad mit unzulaessigem Zeichen ist nicht pruefbar' 2 @{
+    Patches     = $spracheGutPatches
+    Sprachdatei = 'C:\invalid<file>'
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @("die Sprachdatei 'C:\invalid<file>' gibt es nicht", 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'unerwarteter Fehler')
+
+Test-Script 'sprachverweise: Patch-Pfad mit unzulaessigem Zeichen ist nicht pruefbar' 2 @{
+    Patches     = @('C:\invalid<file>')
+    Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @("-Patches nennt 'C:\invalid<file>', und das ist keine Datei", 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'unerwarteter Fehler')
+
+Test-Script 'sprachverweise: Vanilla-Pfad mit unzulaessigem Zeichen ist nicht pruefbar' 2 @{
+    Patches     = $spracheGutPatches
+    Sprachdatei = (Join-Path $spracheDaten 'gut\Localization.csv')
+    Vanilla     = 'C:\invalid<ordner>'
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @("den Vanilla-Ordner 'C:\invalid<ordner>' gibt es nicht", 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'unerwarteter Fehler')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

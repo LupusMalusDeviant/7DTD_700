@@ -1,0 +1,7 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 3): der zweite
+	     <set> nimmt zurueck, was der erste gesetzt hat. 'pruef700_lies' wird genannt und
+	     nie gelesen. Kein Spielinhalt. -->
+	<set xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value">pruef700_lies</set>
+	<set xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value">pruefLies</set>
+</config>

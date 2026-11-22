@@ -1,0 +1,11 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 3, zweiter
+	     Teil): eine Eigenschaft in einer ANDEREN Datei traegt zufaellig den Wert
+	     'pruefTeilDesc'. Sie liest nichts - der Gegenstand pruefTeil erbt seinen
+	     Schluessel. Kein Spielinhalt. -->
+	<append xpath="/buffs">
+		<buff name="pruef700_still" hidden="true">
+			<property name="Irgendwas" value="pruefTeilDesc"/>
+		</buff>
+	</append>
+</config>

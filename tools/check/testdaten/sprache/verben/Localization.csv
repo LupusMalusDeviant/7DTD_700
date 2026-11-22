@@ -1,0 +1,3 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruef700_erbe,items,Item,,,,"Heir",,"Erbe",,,,,,,,,,,
+pruefTeilDesc,items,Item,,,,"Read since the prepend sets the key.",,"Gelesen, seit der Prepend den Schlüssel setzt.",,,,,,,,,,,

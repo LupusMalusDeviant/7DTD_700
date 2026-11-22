@@ -1,0 +1,24 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Regel 5): fuenf Dinge,
+	     die sich nicht anwenden lassen oder deren Ergebnis nicht gelesen ist. Jedes ist
+	     rot, weil der gerechnete Stand sonst geraten waere. Kein Spielinhalt. -->
+	<append xpath="/items">
+		<item name="pruef700_ding">
+			<property name="DescriptionKey" value="pruef700_dingText"/>
+		</item>
+	</append>
+	<!-- 1: ein bedingter Block; das Skript rechnet keine Bedingung -->
+	<conditional>
+		<if cond="1 == 1">
+			<append xpath="/items/item[@name='pruefDing']"><property name="DescriptionKey" value="pruefGruppeDesc"/></append>
+		</if>
+	</conditional>
+	<!-- 2: keine Operation des Spiels -->
+	<verschiebe xpath="/items/item[@name='pruefDing']"/>
+	<!-- 3: der XPath laesst sich nicht auswerten -->
+	<set xpath="/items/item[@name='pruefDing'/property">x</set>
+	<!-- 4: der XPath trifft nichts -->
+	<setattribute xpath="/items/item[@name='pruefGibtEsNicht']" name="value">x</setattribute>
+	<!-- 5: pruefNotiz traegt schon eine eigene Eigenschaft DescriptionKey; danach zwei -->
+	<append xpath="/items/item[@name='pruefNotiz']"><property name="DescriptionKey" value="pruefGruppeDesc"/></append>
+</config>

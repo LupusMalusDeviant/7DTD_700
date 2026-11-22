@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 4): der Wert
+	     eines DescriptionKey ist EIN Schluessel. 'pruefLies' und 'pruefGruppeDesc' haben
+	     je eine Zeile, 'pruefLies,pruefGruppeDesc' hat keine. Kein Spielinhalt. -->
+	<set xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value">pruefLies,pruefGruppeDesc</set>
+</config>

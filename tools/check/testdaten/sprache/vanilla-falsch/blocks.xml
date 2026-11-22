@@ -1,0 +1,7 @@
+<items>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 5): eine
+	     blocks.xml mit der falschen Wurzel. Kein Spielinhalt. -->
+	<item name="pruefFalsch">
+		<property name="Stacknumber" value="1"/>
+	</item>
+</items>

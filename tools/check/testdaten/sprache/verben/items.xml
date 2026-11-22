@@ -1,0 +1,16 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (Review zu WP8.8, Befund 1): zwei
+	     Aenderungen am Beschreibungsschluessel, die die erste Fassung nicht sah.
+	     Kein Spielinhalt. -->
+	<append xpath="/items">
+		<!-- erbt 'pruefGruppeDesc' von pruefTeilEltern - bis der <remove> unten es nimmt -->
+		<item name="pruef700_erbe">
+			<property name="Extends" value="pruefTeilEltern"/>
+		</item>
+	</append>
+	<!-- <prepend> statt <append>: 'pruefTeilDesc' wird damit gelesen -->
+	<prepend xpath="/items/item[@name='pruefTeil']"><property name="DescriptionKey" value="pruefTeilDesc"/></prepend>
+	<!-- Der XPath nennt das Wort DescriptionKey nicht und nimmt die Eigenschaft trotzdem
+	     weg. Danach liest pruef700_erbe 'pruef700_erbeDesc', und die Zeile fehlt. -->
+	<remove xpath="/items/item[@name='pruefTeilEltern']/property[@value='pruefGruppeDesc']"/>
+</config>

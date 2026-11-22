@@ -1562,6 +1562,23 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    fehlgeschlagen. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert); `kette-pruefen`
    427 → 433 XPaths. **Im Spiel ungesehen** → Prüfliste 23.
    → Vertrag 04 „Nachtrag WP8.8", Abnahme offen.
+
+   **Review zu WP8.8 (2026-11-22, Commit `723e23c`): fünf mittlere, ein niedriger Befund,
+   alle im neuen Skript, keiner an der Mod.** Das Skript *erkannte* zwei Patch-Formen am
+   Text; ein `<prepend>`, ein `<remove>` ohne das Wort `DescriptionKey`, ein `<set>` ohne
+   Treffer und ein später überschriebener Schlüssel gingen grün durch. *Behoben durch
+   Umbau:* es wendet die Patches für `items.xml` und `blocks.xml` jetzt an (alle neun
+   Operationen) und rechnet am Ergebnis; was sich nicht anwenden lässt, ist rot. Dazu: der
+   Wert eines `DescriptionKey` wird nicht mehr an Kommas geteilt, jede Vanilla-Datei wird
+   für sich geprüft, ein unzulässiger Pfad ist Exit 2. *Gemessen:* 729 Operationen angewandt,
+   0 ohne Treffer; nach den Patches 1 451 Gegenstände und 6 649 Blöcke — dieselben Zahlen wie
+   im ConfigsDump des Spiels; 72 genannte Schlüssel, 132 Zeilen rückwärts, 0 nicht gelesen,
+   Exit 0; gegen den Stand vor dem Fix wieder genau die 6. Neun neue Gegenproben, 21 für das
+   Skript; die Fassung aus `723e23c` scheitert an 11 von 165, darunter acht der neun neuen.
+   Fünfzehn Verfälschungen, vierzehn werden gefangen — die fünfzehnte nimmt nur das Netz
+   für unerwartete Fehler weg, das kein Eingang erreicht. `gegenproben.ps1`: 165
+   Gegenproben, 0 fehlgeschlagen. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert).
+   → Vertrag 04 „Nachtrag Review zu WP8.8", Abnahme offen.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 

@@ -1,0 +1,3 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruef700_lies,items,Item,,,,"Named by a patch, overwritten by the next.",,"Von einem Patch genannt, vom nächsten überschrieben.",,,,,,,,,,,
+pruefTeilDesc,items,Item,,,,"Dead: the item inherits its key.",,"Tot: der Gegenstand erbt seinen Schlüssel.",,,,,,,,,,,

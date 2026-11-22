@@ -379,7 +379,8 @@ nicht — auch wenn der Spieler sie liest.
 ### `sprachverweise-pruefen.ps1` — XML gegen Sprachdatei (WP8.8)
 
 `mod700check localization` prüft die **Form** der Sprachdatei. Dieses Skript prüft, was
-zwischen XML und Sprachdatei liegt, in beide Richtungen (Vertrag 04, „Nachtrag WP8.8"):
+zwischen XML und Sprachdatei liegt, in beide Richtungen (Vertrag 04, „Nachtrag WP8.8" und
+„Nachtrag Review zu WP8.8"):
 
 - **Vorwärts:** jeder Schlüssel, den eine unserer XML-Dateien nennt (`…_key`-Attribute,
   `DescriptionKey`, die Namen eigener Gegenstände und Blöcke, die Beschreibung eigener
@@ -396,14 +397,23 @@ in der Sprachdatei, und das Spiel las statt ihrer den geerbten Schlüssel `gunPa
 
 Exit **0** grün, **1** Befunde, **2** nicht prüfbar. Braucht Vanillas `Localization.csv`,
 `items.xml` und `blocks.xml` (`SDTD_PATH` oder `-Vanilla`). Gemessen am 2026-11-22: 27
-Patch-Dateien, 69 genannte Schlüssel (alle in unserer Datei), 14 `DescriptionKey`-Patches,
-132 Zeilen rückwärts geprüft, 0 nicht gelesen; gegen den Stand vor dem Fix Exit 1, 6 rot.
-Rot vorgeführt an `testdaten/sprache/`: zwölf Gegenproben, dazu sieben Verfälschungen des
-Skripts, von denen jede mindestens eine Gegenprobe rot macht.
+Patch-Dateien, 7 davon angewandt, 729 Operationen angewandt und 0 ohne Treffer, 72 genannte
+Schlüssel (alle in unserer Datei), 132 Zeilen rückwärts geprüft, 0 nicht gelesen; gegen den
+Stand vor dem Fix 6 rot. Rot vorgeführt an `testdaten/sprache/`: 21 Gegenproben, dazu
+fünfzehn Verfälschungen des Skripts — vierzehn machen mindestens eine Gegenprobe rot, die
+fünfzehnte (nur das Netz für unerwartete Fehler fehlt) keine; warum, steht im Vertrag.
 
-**Ein Patch an `DescriptionKey` in einer anderen Form als den zwei gelesenen ist rot** —
-`<append xpath="/items/item[@name='X']">` mit der Eigenschaft als Kind und `<set>` auf deren
-`@value` (ebenso `/blocks/block`). Wer eine dritte Form braucht, bringt sie dem Skript bei.
+**Es wendet die Patches an, statt sie zu erkennen** (seit dem Review zu WP8.8, Vertrag 04
+„Nachtrag Review zu WP8.8"). Jede Patch-Datei, die `items.xml` oder `blocks.xml` heißt, wird
+in der Reihenfolge der Dateien auf Vanillas Datei angewandt, mit allen neun Operationen des
+Spiels; der Beschreibungsschlüssel wird am Ergebnis gerechnet. **Was sich nicht anwenden
+lässt, ist rot:** ein XPath, der nichts trifft oder sich nicht auswerten lässt, ein bedingter
+Block oder ein unbekanntes Element in einer dieser Dateien, und ein Gegenstand, der danach
+zwei Eigenschaften `DescriptionKey` trägt. In allen anderen Dateien zählt weiter, was die
+Datei nennt.
+
+**Es ist kein zweiter Patcher des Spiels.** `csv` und `append`/`prepend` auf ein Attribut
+sind nachgebaut, nicht am Spiel gemessen; die Reihenfolge ist die der Dateinamen.
 
 **Es sieht nur XML.** Schlüssel, die der Spielcode zusammensetzt, kennt es nicht; und ob eine
 überschriebene Vanilla-Zeile, die weder Gegenstand noch Block beschreibt, noch gelesen wird,
