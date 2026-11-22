@@ -67,7 +67,7 @@ Marke; sonst wird es zurückgebaut.
 | N-23 | [E] [S] | **Acht Bilder im Beutel** umgebogen: Silberpfennig (Casino-Jeton → Silberbrocken), Raseneisenerz und Luppe (Schrott → Erzbrocken), Leim, Nähzeug, Erste-Hilfe-Verband, Pergamentfetzen, Bogenzeug. | `4506690`, D130 | jedes Bild im Spiel ansehen; der Silberpfennig sieht dem Silberbrocken ähnlich |
 | N-24 | [E] | **Leermeldung** und **zwei Review-Korrekturen** an den Prüfwerkzeugen. | `18ad647`, `608b5fa` | siehe N-16, N-17 |
 | N-25 | [E] | **Nachgezogene Widersprüche** in GDD und Features (fünf statt sechs Bäume, Blockschaden bleibt Vanilla, Karte in Phase 4 …) — nur Stand schon getroffener Entscheidungen, alter Wortlaut durchgestrichen. | `457a379` | Stichprobe |
-| N-26 | [E] | **Texte für Lücken** (Unterkleidung, Aufsätze, Bögen T0/T1, Geschosse, Sturmtexte …) | folgt, D129 | Namen einzeln |
+| N-26 | [E] [S] | **241 Sprachzeilen für Lücken**, darunter **102 neue Namen** (Sprachdatei 941 → 1182 Schlüssel): Startquest („Der Weg zum Händler"), Salbenverband, Steinpfeil / Eisenpfeil / Brandpfeil und die Bolzen, Haselbogen, Jagdbogen, 15 Waffen-Aufsätze (Pechwicklung, Stahlschneide, Spaltkeil …), zwölf Stücke Unterkleidung (Leinenhemd, Gewalkte Socken …), 22 Rüstungs-Aufsätze (Wollfutter, Gürteltasche, Köcherriemen, Eberzier …), Stürme (Fauler Wind, Aschesturm). Jeder Name steht im Glossar mit „Name zu prüfen". | D129; Liste aller Namen im Glossar §2, §3, §5, §6, §8 | Namen einzeln; zwei deutsche Formen für die Reparaturangabe („zu flicken" / „ausbessern") angleichen? |
 | N-27 | [E] | Berichtigung: die Biom-Ausrüstung trägt in Vanilla Namen (Lesefehler in Balancing 0003). | `037110f` | — |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut

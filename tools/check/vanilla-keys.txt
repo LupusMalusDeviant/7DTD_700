@@ -1090,3 +1090,270 @@ questRewardT1TrapsBundle                  # Fallenbuendel 1 und 2
 questRewardT2TrapsBundle
 questRewardT1TrapsBundleDesc
 questRewardT2TrapsBundleDesc
+
+# --- Nachtlauf 2026-11-22: Textluecken (docs/pruefung/0001-textluecken.md) ---------
+# 241 Zeilen, ALLE ZU PRUEFEN DURCH DEN NUTZER. Dinge, die ein Spieler in Phase 1 sieht
+# und die bis hierher Vanillas modernen Namen oder Text trugen ("Erste-Hilfe-Verband",
+# "ThermaCore-Kampfschicht", "Radioaktiver Sturm", "Patronengurt-Mod"). Der Nutzer war
+# nicht erreichbar und hat verfuegt: nach Empfehlung handeln, alles als zu pruefen
+# markieren. Jeder NAME traegt daneben seinen deutschen Text und steht im Glossar mit
+# dem Vermerk "Nachtlauf 2026-11-22 - Name zu pruefen". NICHT hier: was die Konzepte nur
+# als Umbenennung empfehlen (E-01 bis E-07) und was aus biome.md 3.4 und 3.6 kaeme.
+
+# Quelle A: docs/pruefung/0001-textentwurf.csv, 133 Zeilen, vollstaendig uebernommen.
+# Sechs Beschreibungen tragen zusaetzlich die Reparaturangabe (Schleifstein oder
+# Schmiedeflicken; beim Bogen das Bogenzeug).
+quest_WhiteRiverCitizen                   # Der Weg zum Haendler
+quest_WhiteRiverCitizen1
+quest_WhiteRiverCitizen1_description_title
+quest_WhiteRiverCitizen1_description
+quest_white_river_completion
+drinkJarBoiledWaterDesc
+medicalFirstAidBandage                    # Salbenverband
+medicalFirstAidBandageDesc
+medicalAloeCreamDesc
+challengeRedeemChallenge                  # Erste Herausforderung
+challengeRedeemChallengeShort
+challengeGatherResourcesDesc
+challengeCraftClothesShort
+challengeCraftClothesHint1
+challengeWearClothesShort
+challengeWearClothesHint1
+challengeWearClothesDesc
+challengeCraftWoodClubDesc
+challengeCraftArrowsDesc
+challengeCraftBedrollShort
+challengePlaceCampfire
+challengePlaceCampfireShort
+challengePlaceCampfireHint1
+challengePlaceCampfireHint2
+challengePlaceCampfireDesc
+challengePlaceSpikeTrapShort
+challengePlaceSpikeTrapDesc
+challengeCraftLandclaimDesc
+challengeCraftCharredMeatDesc
+challengeDrinkWaterSourceDesc
+challengeEatCharredMeatDesc
+challengeReadMagazines
+challengeReadMagazinesShort
+challengeReadMagazinesHint1
+challengeReadMagazinesDesc
+xuiMagazine
+challengeCraftFarmPlotDesc
+challengePlaceWorkbench
+challengePlaceWorkbenchShort
+challengePlaceWorkbenchDesc
+challengePlaceCementMixer
+challengePlaceCementMixerShort
+challengePlaceCementMixerDesc
+challengePlaceChemistryStation
+challengePlaceChemistryStationShort
+challengePlaceChemistryStationDesc
+challengeCraftForgedIron
+challengeCraftForgedIronShort
+challengeCraftForgedIronDesc
+challengeCraftConcreteMix
+challengeCraftConcreteMixShort
+lblCategoryAmmoWeapons                    # Geschosse/Waffen
+lblCategoryCementMixer
+lblCategoryChemicals                      # Gebraeue
+xuiAmmo                                   # Geschosse
+ttScrapMetalIron
+lanternOldBlockVariantHelper
+buffElementColdDesc
+buffElementColdTooltip
+buffElementFreezingDesc
+buffElementFreezingTooltip
+buffInfection01UntreatedDesc
+buffInfection01UntreatedTooltip
+buffInfection01GetBetterDesc
+buffInfection02UntreatedDesc
+buffInfection02GetBetterDesc
+buffInfection03UntreatedDesc
+buffInfectionCureDisplayName              # Heilmittel wirkt
+buffInfectionCureDisplayDesc
+buffInfectionImmunityDesc
+buffInjuryAbrasionDesc
+buffInjuryBleedingDesc
+buffInjuryConcussionDesc
+buffLacerationDesc
+buffFatiguedDesc
+buffChickenFullStress_EnrageName          # Aufgescheuchte Seuchentote
+buffChickenFullStress_EnrageNameDesc
+buffChickenFullStress_ZombieHordeName     # Rotte Seuchentoter
+buffChickenFullStress_ZombieHordeNameDesc
+buffPerkBookwormDesc
+buffPackMuleDisplayName                   # Saumlast-Schutz
+buffPerkPummelPeteName
+buffPerkPummelPeteBonusName
+buffHeadShotsOnlyDesc
+ammoArrowStone                            # Steinpfeil
+ammoArrowStoneDesc
+ammoArrowIron                             # Eisenpfeil
+ammoArrowIronDesc
+ammoArrowFlaming                          # Brandpfeil
+ammoArrowFlamingDesc
+ammoCrossbowBoltStone                     # Steinbolzen
+ammoCrossbowBoltStoneDesc
+ammoCrossbowBoltIron                      # Eisenbolzen
+ammoCrossbowBoltIronDesc
+ammoCrossbowBoltFlaming                   # Brandbolzen
+ammoCrossbowBoltFlamingDesc
+ammoDartIron                              # Eisendorn
+ammoBundleArrowSteelAP                    # Panzerbrecherpfeil-Buendel (100)
+ammoBundleArrowExploding                  # Feuertopfpfeil-Buendel (75)
+ammoBundleCrossbowBoltIron                # Eisenbolzen-Buendel (100)
+ammoBundleCrossbowBoltSteelAP             # Panzerbrecherbolzen-Buendel (100)
+ammoBundleCrossbowBoltExploding           # Feuertopfbolzen-Buendel (75)
+ammoBundleGroupDesc
+resourceArrowHeadSteelAP                  # Panzerbrecherspitze
+gunBowT0PrimitiveBowDesc
+gunBowT1WoodenBowDesc
+meleeToolPickT1IronPickaxeDesc
+meleeToolPickT2SteelPickaxeDesc
+meleeToolRepairT1ClawHammerDesc
+meleeToolShovelT1IronShovelDesc
+meleeToolShovelT2SteelShovelDesc
+drinkJarRiverWaterDesc
+foodCropMushroomsDesc
+foodEggDesc
+foodRawMeatDesc
+toolCookingPotDesc
+toolCookingGrillDesc
+toolForgeCrucibleDesc
+resourceNailDesc
+resourceBrokenGlassDesc
+backpackSmallDesc
+backpackMediumDesc
+backpackLargeDesc
+modMeleeWeightedHeadDesc
+woodLogPillar100Desc
+cellarDoorDoubleIronDesc
+ironDoorBlockVariantHelperDesc
+ironDoorDoubleBlockVariantHelperDesc
+ironHatchBlockVariantHelperDesc
+cntWoodWritableCrateDesc
+cntIronWritableCrateDesc
+cntApiaryDesc
+cntChickenCoopDesc
+
+# Quelle B: docs/konzept/waffen.md (S-07, S-26, S-27, S-32, 2.8), 33 Zeilen. Die Namen der
+# zwei Boegen und der Bogenteile, der Text der Steinaxt, die fuenfzehn Aufsaetze fuer
+# Waffen mit Namen und (bis auf den Beschwerten Kopf, den Quelle A liefert) Beschreibung.
+gunBowT0PrimitiveBow                      # Haselbogen
+gunBowT1WoodenBow                         # Jagdbogen
+gunBowT1WoodenBowParts                    # Bogenteile
+meleeToolRepairT0StoneAxeDesc
+modMeleeClubBurningShaft                  # Pechwicklung
+modMeleeClubBurningShaftDesc
+modMeleeClubMetalChain                    # Kettenwicklung
+modMeleeClubMetalChainDesc
+modMeleeClubMetalSpikes                   # Nagelbeschlag
+modMeleeClubMetalSpikesDesc
+modMeleeDiamondTip                        # Stahlschneide
+modMeleeDiamondTipDesc
+modMeleeTemperedBlade                     # Gehaertete Klinge
+modMeleeTemperedBladeDesc
+modMeleeSerratedBlade                     # Gezaehnte Schneide
+modMeleeSerratedBladeDesc
+modMeleeErgonomicGrip                     # Geschnitzter Griff
+modMeleeErgonomicGripDesc
+modMeleeFortifyingGrip                    # Lederwicklung
+modMeleeFortifyingGripDesc
+modMeleeStructuralBrace                   # Eisenband
+modMeleeStructuralBraceDesc
+modMeleeWeightedHead                      # Bleifuellung
+modMeleeWoodSplitter                      # Spaltkeil
+modMeleeWoodSplitterDesc
+modMeleeIronBreaker                       # Eisenbrecher
+modMeleeIronBreakerDesc
+modMeleeGraveDigger                       # Totengraeber
+modMeleeGraveDiggerDesc
+modGunMeleeTheHunter                      # Jaegerschliff
+modGunMeleeTheHunterDesc
+modGunBowArrowRest                        # Pfeilkerbe
+modGunBowArrowRestDesc
+
+# Quelle C: docs/konzept/ruestung.md (2.5 und 4.2), 58 Zeilen. Zwoelf Stuecke
+# Unterkleidung mit drei Beschreibungen (eine je Stufe, wie in Vanilla), 22 Aufsaetze
+# fuer Ruestung mit 21 Beschreibungen (Schuppen- und Lamellenbesatz teilen sich eine:
+# Vanilla setzt bei modArmorPlatingReinforced DescriptionKey=modArmorPlatingBasicDesc).
+clothingHeadT1                            # Zerschlissene Unterhaube
+clothingHeadT2                            # Leinene Unterhaube
+clothingHeadT3                            # Gewalkte Unterhaube
+clothingOutfitT1                          # Zerschlissenes Hemd
+clothingOutfitT2                          # Leinenhemd
+clothingOutfitT3                          # Gewalktes Wollhemd
+clothingHandsT1                           # Zerschlissene Unterhandschuhe
+clothingHandsT2                           # Leinene Unterhandschuhe
+clothingHandsT3                           # Gewalkte Unterhandschuhe
+clothingFeetT1                            # Zerschlissene Fusslappen
+clothingFeetT2                            # Leinene Fusslappen
+clothingFeetT3                            # Gewalkte Socken
+clothingT1Desc
+clothingT2Desc
+clothingT3Desc
+modArmorInsulatedLinerT1                  # Wergfutter
+modArmorInsulatedLinerT1Desc
+modArmorInsulatedLinerT2                  # Wollfutter
+modArmorInsulatedLinerT2Desc
+modArmorInsulatedLinerT3                  # Pelzfutter
+modArmorInsulatedLinerT3Desc
+modArmorStoragePocket                     # Guerteltasche
+modArmorStoragePocketDesc
+modArmorDoubleStoragePocket               # Umhaengetasche
+modArmorDoubleStoragePocketDesc
+modArmorTripleStoragePocket               # Tragriemen
+modArmorTripleStoragePocketDesc
+modArmorQuadStoragePocket                 # Rueckentrage
+modArmorQuadStoragePocketDesc
+modArmorBandolier                         # Koecherriemen
+modArmorBandolierDesc
+modArmorImprovedFittings                  # Angepasste Riemen
+modArmorImprovedFittingsDesc
+modArmorCustomizedFittings                # Massriemen
+modArmorCustomizedFittingsDesc
+modArmorPlatingBasic                      # Schuppenbesatz
+modArmorPlatingBasicDesc
+modArmorPlatingReinforced                 # Lamellenbesatz
+modArmorMuffledConnectors                 # Filzunterlage
+modArmorMuffledConnectorsDesc
+modArmorAdvancedMuffledConnectors         # Doppelte Filzunterlage
+modArmorAdvancedMuffledConnectorsDesc
+modArmorImpactBracing                     # Fersenpolster
+modArmorImpactBracingDesc
+modArmorStealthBoots                      # Filzsohlen
+modArmorStealthBootsDesc
+modArmorFortitude                         # Eberzier
+modArmorFortitudeDesc
+modArmorAgility                           # Jagdfeder
+modArmorAgilityDesc
+modArmorStrength                          # Stirnriemen
+modArmorStrengthDesc
+modArmorIntellect                         # Rautenzweig
+modArmorIntellectDesc
+modArmorPerception                        # Krempe
+modArmorPerceptionDesc
+modArmorTreasureHunter                    # Glueckspfennig
+modArmorTreasureHunterDesc
+
+# Quelle D: docs/konzept/biome.md 3.5 (Stuerme, "gilt in jedem Fall"), 17 Zeilen. Der
+# Sturm des Oedlands heisst Fauler Wind; die Stufen aller vier Stuerme heissen Anfang,
+# Hoehe, Abklingen statt "Stadium 1", "Stadium 2", "Erholung".
+buffWasteland_StormName                   # Fauler Wind
+buffWasteland_StormDesc
+buffWasteland_Storm_Stage01Desc
+buffWasteland_Storm_Stage02Desc
+buffWasteland_Storm_Recover01Desc
+buffWasteland_Storm_Stage01Name           # Fauler Wind: Anfang
+buffWasteland_Storm_Stage02Name           # Fauler Wind: Hoehe
+buffWasteland_Storm_Recover01Name         # Fauler Wind: Abklingen
+buffBurnt_Storm_Stage01Name               # Aschesturm: Anfang
+buffBurnt_Storm_Stage02Name               # Aschesturm: Hoehe
+buffBurnt_Storm_Recover01Name             # Aschesturm: Abklingen
+buffDesert_Storm_Stage01Name              # Sandsturm: Anfang
+buffDesert_Storm_Stage02Name              # Sandsturm: Hoehe
+buffDesert_Storm_Recover01Name            # Sandsturm: Abklingen
+buffSnow_Storm_Stage01Name                # Schneesturm: Anfang
+buffSnow_Storm_Stage02Name                # Schneesturm: Hoehe
+buffSnow_Storm_Recover01Name              # Schneesturm: Abklingen

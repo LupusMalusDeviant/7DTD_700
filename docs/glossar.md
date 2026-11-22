@@ -62,6 +62,11 @@ eine Abweichung.
 | — | Wanderhändler, Klostermarkt, Fürstenhof | *offen* | Trader | GDD 2.3, F-10 (Phase 2) |
 | — | das Grauen | *offen* | — | F-17 (B3, Phase 2) |
 | `casinoCoin` | Silberpfennig | Silver Penny | Jeton aus Dukes Kasino / Duke's Casino Token; als Währung: Dukes | D30, WP4.2 |
+| `quest_WhiteRiverCitizen` | Der Weg zum Händler | The Way to the Trader | Bürger von White River / White River Citizen | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffChickenFullStress_EnrageName` | Aufgescheuchte Seuchentote | Roused Plague-dead | Wütende Zombies / Enraged Zombies | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffChickenFullStress_ZombieHordeName` | Rotte Seuchentoter | Pack of the Plague-dead | Zombiehorde / Zombie Horde | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffWasteland_StormName` | Fauler Wind | Foul Wind | Radioaktiver Sturm / Radiation Storm | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
+| — | Anfang, Höhe, Abklingen (die Stufen eines Sturms, hinter seinem Namen: „Fauler Wind: Anfang“; zwölf Zeilen `buff…_Storm_…Name`) | Onset, Height, Easing | Stadium 1, Stadium 2, Erholung / Stage 1, Stage 2, Recovery | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
 
 ## 3. Stoffe
 
@@ -81,6 +86,7 @@ eine Abweichung.
 | `resourcePaper` | Pergament | Parchment | Papier / Paper | WP7.5 |
 | `resourceSewingKit` | Nähzeug | Sewing Kit | Nähset / Sewing Kit | WP5.5 |
 | `resourceGlue` | Leim | Glue | Kleber / Glue | D78 |
+| `medicalFirstAidBandage` | Salbenverband | Salved Bandage | Erste-Hilfe-Verband / First Aid Bandage | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 
 ## 4. Werkstätten und Feuer
 
@@ -120,6 +126,37 @@ eine Abweichung.
 | `itm700_schmiedeflicken` | Schmiedeflicken | Forge Patch | (statt Reparaturkit / Repair Kit) | D60, D62 |
 | `itm700_bogenzeug` | Bogenzeug | Bowyer's Kit | (statt Reparaturkit / Repair Kit, für Bögen und Armbrüste) | D91 — Name zu prüfen |
 | `meleeToolTorch` | Fackel | Torch | Fackel / Torch | WP6 |
+| `ammoArrowStone` | Steinpfeil | Stone Arrow | Steinpfeil (Munition) / Stone Arrow (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoArrowIron` | Eisenpfeil | Iron Arrow | Eisenpfeil (Munition) / Iron Arrow (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoArrowFlaming` | Brandpfeil | Flaming Arrow | Feuerpfeil (Munition) / Flaming Arrow (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoCrossbowBoltStone` | Steinbolzen | Stone Bolt | Steinbolzen für Armbrüste (Munition) / Stone Crossbow Bolt (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoCrossbowBoltIron` | Eisenbolzen | Iron Bolt | Eisenbolzen für Armbrüste (Munition) / Iron Crossbow Bolt (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoCrossbowBoltFlaming` | Brandbolzen | Flaming Bolt | Feuerbolzen für Armbrüste (Munition) / Flaming Crossbow Bolt (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoDartIron` | Eisendorn | Iron Dart | Eisendart (Munition) / Iron Dart (Ammo) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoBundleArrowSteelAP` | Panzerbrecherpfeil-Bündel (100) | Bundle of Armour-piercer Arrows (100) | Kiste mit Stahlpfeilen (100) / Box of Steel Arrows (100) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoBundleArrowExploding` | Feuertopfpfeil-Bündel (75) | Bundle of Fire-pot Arrows (75) | Kiste mit Sprengpfeilen (75) / Box of Exploding Arrows (75) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoBundleCrossbowBoltIron` | Eisenbolzen-Bündel (100) | Bundle of Iron Bolts (100) | Kiste mit Eisenbolzen für Armbrüste (100) / Box of Iron Crossbow Bolts (100) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoBundleCrossbowBoltSteelAP` | Panzerbrecherbolzen-Bündel (100) | Bundle of Armour-piercer Bolts (100) | Kiste mit Stahlbolzen für Armbrüste (100) / Box of Steel Crossbow Bolts (100) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `ammoBundleCrossbowBoltExploding` | Feuertopfbolzen-Bündel (75) | Bundle of Fire-pot Bolts (75) | Kiste mit Sprengbolzen für Armbrüste (75) / Box of Exploding Crossbow Bolts (75) | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `resourceArrowHeadSteelAP` | Panzerbrecherspitze | Armour-piercer Head | Pfeilspitze aus Stahl / Steel Arrowhead | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `gunBowT0PrimitiveBow` | Haselbogen | Hazel Bow | Primitiver Bogen / Primitive Bow | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `gunBowT1WoodenBow` | Jagdbogen | Hunting Bow | Holzbogen / Wooden Bow | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `gunBowT1WoodenBowParts` | Bogenteile | Bow Parts | Bogen-/Armbrustteile / Bow / Crossbow Parts | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeClubBurningShaft` | Pechwicklung | Pitch Wrapping | Brennender-Schaft-Mod / Burning Shaft Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeClubMetalChain` | Kettenwicklung | Chain Wrapping | Metallketten-Mod / Metal Chain Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeClubMetalSpikes` | Nagelbeschlag | Nail Studding | Metallstachel-Mod / Metal Spikes Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeDiamondTip` | Stahlschneide | Steel Edge | Diamantenspitzenklinge-Mod / Diamond Blade Tip Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeTemperedBlade` | Gehärtete Klinge | Hardened Blade | Temperierte-Klinge-Mod / Tempered Blade Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeSerratedBlade` | Gezähnte Schneide | Toothed Edge | Gezähnte-Klinge-Mod / Serrated Blade Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeErgonomicGrip` | Geschnitzter Griff | Carved Grip | Ergonomischer-Griff-Mod / Ergonomic Grip Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeFortifyingGrip` | Lederwicklung | Leather Binding | Bekräftigender-Griff-Mod / Fortifying Grip Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeStructuralBrace` | Eisenband | Iron Band | Strukturelle-Klammer-Mod / Structural Brace Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeWeightedHead` | Bleifüllung | Lead Filling | Beschwerter-Kopf-Mod / Weighted Head Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeWoodSplitter` | Spaltkeil | Splitting Wedge | Holzsplitter-Mod / Wood Splitter Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeIronBreaker` | Eisenbrecher | Iron Breaker | Eisenbrecher-Mod / Iron Breaker Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modMeleeGraveDigger` | Totengräber | Grave Digger | Totengräber-Mod / Grave Digger Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modGunMeleeTheHunter` | Jägerschliff | Hunter's Edge | Die Jäger-Mod / The Hunter Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
+| `modGunBowArrowRest` | Pfeilkerbe | Arrow Notch | Pfeilauflage-Mod / Arrow Rest Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Waffen) |
 
 ## 6. Rüstung
 
@@ -132,6 +169,40 @@ eine Abweichung.
 | `itm700_gambeson` | Gambeson | Gambeson | — | WP5.5 |
 | `itm700_kettenhemd` | Kettenhemd | Mail Shirt | — | WP5.5 |
 | `itm700_spangenhelm` | Spangenhelm | Spangenhelm | — | WP5.5 |
+| `clothingHeadT1` | Zerschlissene Unterhaube | Threadbare Under-cap | Zerfleddertes Mützenfutter / Tattered Cap Liner | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingHeadT2` | Leinene Unterhaube | Linen Under-cap | Patchwork-Mützenfutter / Patchwork Cap Liner | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingHeadT3` | Gewalkte Unterhaube | Fulled Under-cap | ThermaCore-Mützenfutter / ThermaCore Cap Liner | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingOutfitT1` | Zerschlissenes Hemd | Threadbare Shirt | Zerfledderte Unterwäsche / Tattered Undergarments | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingOutfitT2` | Leinenhemd | Linen Shirt | Lange Patchwork-Unterwäsche / Patchwork Long Underwear | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingOutfitT3` | Gewalktes Wollhemd | Fulled Wool Shirt | ThermaCore-Kampfschicht / ThermaCore Combat Layer | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingHandsT1` | Zerschlissene Unterhandschuhe | Threadbare Under-gloves | Zerfleddertes Handschuhfutter / Tattered Glove Liners | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingHandsT2` | Leinene Unterhandschuhe | Linen Under-gloves | Patchwork-Handschuhfutter / Patchwork Glove Liners | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingHandsT3` | Gewalkte Unterhandschuhe | Fulled Under-gloves | ThermaCore-Handschuhfutter / ThermaCore Glove Liners | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingFeetT1` | Zerschlissene Fußlappen | Threadbare Foot-wraps | Zerfledderte Socken / Tattered Socks | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingFeetT2` | Leinene Fußlappen | Linen Foot-wraps | Patchwork-Socken / Patchwork Socks | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `clothingFeetT3` | Gewalkte Socken | Fulled Socks | ThermaCore-Socken / ThermaCore Socks | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorInsulatedLinerT1` | Wergfutter | Tow Lining | Zerfledderte isolierende Rüstungs-Mod / Tattered Insulated Armor Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorInsulatedLinerT2` | Wollfutter | Wool Lining | Isolierende Patchwork-Rüstungs-Mod / Patchwork Insulated Armor Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorInsulatedLinerT3` | Pelzfutter | Fur Lining | Isolierende ThermaCore-Rüstungs-Mod / ThermaCore Insulated Armor Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorStoragePocket` | Gürteltasche | Belt Pouch | Taschen-Mod für Rüstung / Armor Pocket Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorDoubleStoragePocket` | Umhängetasche | Shoulder Bag | Doppeltaschen-Mod für Rüstung / Armor Double Pocket Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorTripleStoragePocket` | Tragriemen | Carrying Straps | Dreifachtaschen-Mod für Rüstung / Armor Triple Pocket Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorQuadStoragePocket` | Rückentrage | Back Frame | Vierfachtaschen-Mod für Rüstung / Armor Quad Pocket Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorBandolier` | Köcherriemen | Quiver Strap | Patronengurt-Mod / Bandolier Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorImprovedFittings` | Angepasste Riemen | Fitted Straps | Rüstung-Fittings-Mod / Armor Fittings Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorCustomizedFittings` | Maßriemen | Tailored Straps | Fortgeschrittene Rüstung-Fittings-Mod / Advanced Armor Fittings Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorPlatingBasic` | Schuppenbesatz | Scale Facing | Panzerplatten-Mod / Armor Plating Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorPlatingReinforced` | Lamellenbesatz | Lamellar Facing | Fortgeschrittene Panzerplatten-Mod / Advanced Armor Plating Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorMuffledConnectors` | Filzunterlage | Felt Padding | Gedämpfte Verbindungs-Mod / Muffled Connectors Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorAdvancedMuffledConnectors` | Doppelte Filzunterlage | Double Felt Padding | Fortgeschrittene gedämpfte Verbindungs-Mod / Advanced Muffled Connectors Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorImpactBracing` | Fersenpolster | Heel Padding | Schlag-Abwehr-Mod / Impact Bracing Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorStealthBoots` | Filzsohlen | Felt Soles | Tarnstiefel-Mod / Stealth Boots Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorFortitude` | Eberzier | Boar Crest | Standhaftigkeit-Mod / Fortitude Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorAgility` | Jagdfeder | Hunter's Feather | Beweglichkeit-Mod / Agility Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorStrength` | Stirnriemen | Brow Band | Stärke-Mod / Strength Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorIntellect` | Rautenzweig | Sprig of Rue | Intelligenz-Mod / Intellect Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorPerception` | Krempe | Hat Brim | Wahrnehmung-Mod / Perception Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
+| `modArmorTreasureHunter` | Glückspfennig | Lucky Penny | Schatzsucher-Mod / Treasure Hunter's Mod | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Rüstung) |
 
 ## 7. Bauen und Licht
 
@@ -158,6 +229,9 @@ eine Abweichung.
 | — | Lehrblatt | Lesson | Magazin / Magazine | D70 |
 | — | Blatt (einer Abschrift) | leaf | Buch / Book | D69 |
 | — | Abschrift | transcript | Buchreihe | D24, D69 |
+| `challengeRedeemChallenge` | Erste Herausforderung | First Challenge | Tutorial-Herausforderung / Tutorial Challenge | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffInfectionCureDisplayName` | Heilmittel wirkt | Remedy at Work | Antibiotische Medizin / Antibiotic Medicine | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffPackMuleDisplayName` | Saumlast-Schutz | Pack-load Protection | Packesel-Schutz / Pack Mule Protection | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 
 ### Wörter der Spielmechanik
 
@@ -169,6 +243,9 @@ englisches Spielwort aus. Das bleibt so.
 | — | Stufe | level (einer Fertigkeit), tier (eines Dings), rank (eines Perks) | Level, Stufe, Rang | WP7 |
 | — | Fertigkeit | skill | Skill, Perk, Fertigkeit | WP7 |
 | — | Ausdauer | stamina | Ausdauer | D73 |
+| `lblCategoryAmmoWeapons` | Geschosse/Waffen | Missiles/Weapons | Munition/Waffen / Ammo/Weapons | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `lblCategoryChemicals` | Gebräue | Brews | Chemikalien / Chemicals | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `xuiAmmo` | Geschosse | Missiles | Munition / Ammo | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 
 ## 9. Verbotene Begriffe
 
@@ -278,6 +355,10 @@ als Lücke fand). Nicht jeder Vanilla-Name aus den Tabellen oben lässt sich ver
   es), Leichte/Mittlere/Schwere Rüstung, Feral („wild"), Buch / Book, und die fünf
   Attributnamen (Stärke, Standhaftigkeit, Beweglichkeit, Intelligenz, Wahrnehmung).
 - *Der englische Ersatz ist noch offen:* Trader.
+- *Der neue Name ist noch nicht abgenommen:* alle Zeilen mit dem Vermerk „Nachtlauf
+  2026-11-22 — Name zu prüfen" (Verband, Geschosse, Bögen, Aufsätze, Unterkleidung, der
+  Sturm des Ödlands). Ihre Vanilla-Namen tragen noch kein Verbot; das Verbot kommt mit der
+  Abnahme des Namens, nicht vorher.
 
 Wer einen Festbegriff mit einem neuen Vanilla-Namen einträgt, trägt das Verbot dazu ein —
 oder den Grund hier.
