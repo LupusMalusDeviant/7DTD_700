@@ -102,7 +102,9 @@
 		     eine Vereinfachung. -->
 		<item name="itm700_bogenzeug">
 			<property name="Extends" value="resourceYuccaFibers" />
-			<property name="CustomIcon" value="resourceSewingKit" />
+			<!-- Bild: das Faserbuendel, sehnenfarben getoent. Das zuerst gewaehlte Bild des
+			     Naehzeugs zeigt eine Garnspule mit Massband (Pruefung 0002) - zu pruefen. -->
+			<property name="CustomIcon" value="resourceYuccaFibers" />
 			<property name="CustomIconTint" value="c8b27a" />
 			<property name="Stacknumber" value="50" />
 			<property name="EconomicValue" value="40" />

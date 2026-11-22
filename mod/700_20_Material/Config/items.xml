@@ -27,8 +27,10 @@
 		     derselben Stufe steht: etwas, das erst ausgeschmiedet werden muss. -->
 		<item name="itm700_luppe">
 			<property name="Extends" value="resourceScrapIron" />
-			<property name="CustomIcon" value="resourceScrapIron" />
-			<property name="CustomIconTint" value="8a7a66" />
+			<!-- Bild: der Erzbrocken, grau getoent - bis zum 2026-11-22 Vanillas Schrottbild
+			     (Blech und Schrauben). Zu pruefen durch den Nutzer, siehe unten "Bilder im Beutel". -->
+			<property name="CustomIcon" value="oreIronBoulder" />
+			<property name="CustomIconTint" value="9aa3a8" />
 			<property name="EconomicValue" value="24" />
 			<property name="EconomicBundleSize" value="1" />
 			<property name="Stacknumber" value="500" />
@@ -137,4 +139,37 @@
 	<set xpath="/items/item[@name='questRewardT1TrapsBundle']/property[@class='Action0']/property[@name='Create_item_count']/@value">10</set>
 	<set xpath="/items/item[@name='questRewardT2TrapsBundle']/property[@class='Action0']/property[@name='Create_item']/@value">trapSpikesIronDmg0</set>
 	<set xpath="/items/item[@name='questRewardT2TrapsBundle']/property[@class='Action0']/property[@name='Create_item_count']/@value">10</set>
+
+	<!-- ====================================================================================
+	     Bilder im Beutel (Nachtlauf 2026-11-22, ZU PRUEFEN DURCH DEN NUTZER; D92, D130).
+	     Pruefung 0002 (docs/pruefung/0002-erscheinung.md, 4.3 und 8 Nr. 1): sechs Gegenstaende
+	     der Kernwirtschaft tragen unseren Namen und zeigen ein Bild von heute - der
+	     Silberpfennig einen Casino-Jeton mit Umschrift, das Raseneisenerz Blech und Schrauben,
+	     der Leim eine Plastikflasche, das Naehzeug eine Garnspule mit Massband, der
+	     Erste-Hilfe-Verband ein Kreuzzeichen, der Pergamentfetzen einen linierten Zettel.
+	     CustomIcon nennt ein vorhandenes Bild aus Vanillas Data\ItemIcons (alle acht Dateien
+	     am 2026-11-22 dort gesehen). Es aendert NUR das Bild im Beutel, nicht das Modell in
+	     der Hand oder am Boden. Im Spiel hat es niemand gesehen.
+	     Keinen brauchbaren Ersatz gibt es fuer Schmiedeeisen, Tiegelstahl und das Trinkglas -
+	     die bleiben bis Phase 2 (F-16).
+	     ==================================================================================== -->
+	<append xpath="/items/item[@name='casinoCoin']">
+		<property name="CustomIcon" value="resourceSilverNugget" />
+		<property name="CustomIconTint" value="e6dfc4" />
+	</append>
+	<append xpath="/items/item[@name='resourceScrapIron']">
+		<property name="CustomIcon" value="oreIronBoulder" />
+	</append>
+	<append xpath="/items/item[@name='resourceGlue']">
+		<property name="CustomIcon" value="resourceAnimalFat" />
+		<property name="CustomIconTint" value="b98a4a" />
+	</append>
+	<append xpath="/items/item[@name='resourceSewingKit']">
+		<property name="CustomIcon" value="resourceCloth" />
+		<property name="CustomIconTint" value="c9d2e0" />
+	</append>
+	<append xpath="/items/item[@name='medicalFirstAidBandage']">
+		<property name="CustomIcon" value="medicalBandage" />
+	</append>
+	<set xpath="/items/item[@name='noteDuke01']/property[@name='CustomIcon']/@value">resourcePaper</set>
 </config>
