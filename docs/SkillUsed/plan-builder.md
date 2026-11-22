@@ -2,6 +2,35 @@
 
 Jüngster Lauf zuerst.
 
+## 2026-11-22 23:50 — Run
+
+**Aufgabe:** Umsetzungsplan für Phase 2 („Leben in der Welt") schreiben, im autonomen Lauf ohne
+Rückfragen: der Nutzer ist nicht erreichbar, Entscheidungen werden gesammelt statt gestellt.
+Grundlage: GDD §4, §5, §7, §8, elf Feature-Dokumente, Prüfungen 0002 und 0003, drei Konzeptpapiere.
+
+**Entscheidungen:**
+- Modus: **Standalone** — `docs/prd/` existiert nicht; keine Modus-Frage (AskUserQuestion entfällt,
+  Nutzer nicht erreichbar).
+- Nummerierung und Slug: `0002-phase-2-leben-in-der-welt` (Name der Phase aus GDD §5).
+- Arbeitspakete: **vierzehn** statt 3–12, begründet mit elf Features; dafür Teilung in 2a (sieben
+  Pakete, kein Harmony-Patch) und 2b (fünf Pakete, erste Patches) nach dem Vorschlag D119, mit
+  einem Vertragspaket am Anfang jedes Teils. 115 Schritte, 185 Arbeitstage, mit Puffer und
+  Risikozuschlag 246.
+- Meilensteine **ohne Kalenderdaten** (Abweichung vom Template): jeder hängt an einem Testlauf, den
+  nur der Nutzer ansetzt, und die Durchsatz-Annahme aus Plan-0001 ist nie bestätigt worden.
+- Asset-Arbeit nach vier Messwerten vom selben Tag geordnet: Symbole ohne Unity zuerst (WP3),
+  Modelle hinter der Installation des Unity-Editors (WP4, WP7).
+- 26 Entscheidungen für den Nutzer als `P2-E01 …`, je mit Empfehlung, nach der gebaut wird.
+- Der Index `docs/plans/README.md` ist **nicht** ergänzt — der Auftrag erlaubte nur den Plan und
+  diesen Eintrag.
+
+**Artefakte:**
+- `docs/plans/0002-phase-2-leben-in-der-welt.md`
+
+**Status:** abgeschlossen
+
+---
+
 ## 2026-11-07 14:45 — Run
 
 **Aufgabe:** Phase-1-Plan („MVP 700 & Grauen") für 7DTD_700 erstellen, nachdem der Kurz-Check der

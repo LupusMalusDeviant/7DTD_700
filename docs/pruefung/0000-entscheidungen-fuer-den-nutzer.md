@@ -107,3 +107,59 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 
 Der Plan für Phase 2 ([`docs/plans/`](../plans/), Plan-0002) führt seine Entscheidungen als `P2-E01 …`. Sie
 werden hier mit Nummer N-60 ff. gespiegelt, sobald der Plan steht, und bei jedem Arbeitsschritt ergänzt.
+
+**Gemessen am 2026-11-22 für die Asset-Arbeit** (Befehle: `UnityPlayer.dll` ProductVersion; Deinstallationsliste
+und Programmordner; Zeichenketten in `Assembly-CSharp.dll`):
+
+- Das Spiel läuft auf **Unity 2022.3.62f2**.
+- **Kein Unity-Editor ist installiert.** Blender ist da (Steam, `X:\SteamLibrary\steamapps\common\Blender`).
+- Vanillas Symbole sind lose PNG-Dateien, **160×160, 32 Bit mit Alpha**. Der Spielcode nennt für Mods die
+  Ordner `UIAtlases` („Creating new atlas … for mod") und `ItemIcons`; ob ein eigenes PNG unter
+  `UIAtlases/ItemIconAtlas/` unseres Modlets im Beutel erscheint, ist **im Spiel nicht gesehen**.
+
+| Nr. | Art | Was | Empfehlung / wonach gebaut wird |
+|---|---|---|---|
+| N-60 | [E] [P] | **Unity-Editor 2022.3.62f2 installieren** (Download, Lizenz-Anmeldung — kann nur der Nutzer). Ohne ihn gibt es kein Asset-Bundle und damit **kein eigenes 3D-Modell im Spiel**. | Bis dahin baut der Loop alles, was ohne Editor geht: eigene **Symbole** (PNG), Quell-Modelle aus Meshy, Texte, XML, REA-Befunde. Modelle liegen dann fertig als Quelle bereit, aber nicht im Spiel. |
+| N-61 | [E] | **Python-Ausnahme für Blender-Skripte?** Ein Render- oder Export-Skript für Blender ist Python; im Projekt gilt das Python-Verbot. | Ohne dein Ja liegt kein Blender-Skript im Repository. Symbole entstehen dann ohne Blender (Bild aus Meshy, Zuschnitt mit PowerShell/.NET). |
+| N-62 | [S] | **Eigenes Symbol im Beutel:** ein Test-PNG unseres Modlets ansehen (Teil des gesammelten Spieltests, S-09). | Gebaut wird nach der Annahme `UIAtlases/ItemIconAtlas/<Name>.png`; stimmt sie nicht, zeigt der Gegenstand kein Bild — sofort sichtbar. |
+| N-63 | — | **Meshy:** freigegeben am 2026-11-22 („so viel wie du brauchst"). Je Stück werden Modell, Zweck und Credits im Asset-Register festgehalten. | — |
+
+### 7.1 Die 26 Entscheidungen des Phase-2-Plans
+
+[Plan-0002](../plans/0002-phase-2-leben-in-der-welt.md), Abschnitt „Entscheidungen für den Nutzer", nennt je
+Frage, was daran hängt. Hier die Kurzform; **gebaut wird nach der Empfehlung**, jeder Bau trägt „zu prüfen".
+Baustopp-Regel des Plans: ein Schritt, an dem zwei oder mehr offene Entscheidungen hohen Gewichts hängen,
+wird nur bis zum Dokument oder Vertragsentwurf geführt.
+
+| Nr. | Plan | Frage | Empfehlung, nach der gebaut wird |
+|---|---|---|---|
+| N-70 | P2-E01 | Phase 2 beginnen, bevor Phase 1 im Spiel abgenommen ist (D50)? | Ja für Papier und alles Unabhängige; der Sammellauf T0 holt den Nachweis nach. |
+| N-71 | P2-E02 | Auf Vertragsentwürfen bauen? | Ja, mit Marke „Abnahme offen"; nichts wird gepusht oder installiert. |
+| N-72 | P2-E03 | Teilung in 2a und 2b, „Phase 2 fertig heißt …" | Wie im Plan; als Vorschlagszeile ins GDD. |
+| N-73 | P2-E04 | Vier Lücken aus Phase 1 jetzt bauen: Wasser (D98), Infektion (D99), Stromaufträge (D103), Herausforderungen (D104)? | Ja, soweit reines XML; je eigener Commit. |
+| N-74 | P2-E05 | Unity-Editor installieren; darf Claude ihn per Skript starten? | Du installierst und meldest an; Claude startet nur den Bundle-Bau. (= N-60) |
+| N-75 | P2-E06 | Meshy-Tarif und Lizenz der Ergebnisse (Q31) | Claude liest die Bedingungen und hält sie im Register fest; welcher Tarif gebucht ist, bestimmt, was ausgeliefert werden darf. |
+| N-76 | P2-E07 | Was darf „Retextur" heißen (D84 b)? | Nur ohne Vanilla-Datei im Bundle; sonst eigenes Modell oder es bleibt Vanilla. |
+| N-77 | P2-E08 | Blender-Skripte (Python) im Repository? | Nein; Blender bleibt Claudes Werkzeug außerhalb. (= N-61) |
+| N-78 | P2-E09 | CC0-Downloads (Texturen, Klänge) | Sammelfreigabe je Quelle nötig; bis dahin kein Download. |
+| N-79 | P2-E10 | Asset-Schnittlinie; Quelle für Kleidung am Körper | Rang 1 fest, Rang 2 bei Restbudget. |
+| N-80 | P2-E11 | Umbenennungen aus D123, D126, D127 | Kein gebauter Name wird geändert; Vorschläge bleiben ein Entwurfsstapel. |
+| N-81 | P2-E12 | Gegner: Stufennamen, Sprenger, Tiere, 17 neuzeitliche Klassen | Nach D100, D101, D109; die 17 aus den Biom-Gruppen nehmen, Rollenträger bleiben. |
+| N-82 | P2-E13 | Landschaften abweichend von D43 | Nach `konzept/biome.md` §2.2; technische Kennungen bleiben. |
+| N-83 | P2-E14 | Welt von 2a, Zahl der Orte, wer baut, Fertigkarten | Keine Vanilla-Gebäude; Zahl aus der Bedarfsrechnung, mindestens 10; Fertigkarten nicht unterstützt. |
+| N-84 | P2-E15 | Händler: Zuordnung, Namen, Stimmen | Nach D102, D103; Stimmen über die Voreinstellung aus. |
+| N-85 | P2-E16 | Runenkundiger als sechstes Attribut; Amulett-Platz (Q32) | Sechstes Attribut, wenn das Fenster es trägt; Amulette als Aufsatz. |
+| N-86 | P2-E17 | Kraftlinien: Stromnetz aus der Sperre holen | Nach D37, Freigabe je Kennung; der Name bleibt Vorschlag. |
+| N-87 | P2-E18 | Umfang von Learning by Doing (Q21) | Nur Handwerks-Stufen; das Lehrblatt bleibt ein Sprung; ein Server-Patch. |
+| N-88 | P2-E19 | Grauen: grob per XML oder Lichtabfrage in C#? | Erst XML; C# nur für Kleines; im Einzelspiel zählt „allein" nicht; die Karte bleibt. |
+| N-89 | P2-E20 | Härtere Todesfolgen (Q17) | In Phase 2 nicht bauen. |
+| N-90 | P2-E21 | Seuchennacht: Deutung, Vorboten | Nach D107; Vorboten zuerst über vorhandene Bedingungen. |
+| N-91 | P2-E22 | Schild in Phase 2 oder 3; Werfen, Maximal-Haltbarkeit, Wurfmesser | Das GDD gilt (Phase 2); Werfen und Maximal-Haltbarkeit sind die ersten Streichposten; das Wurfmesser entfällt. |
+| N-92 | P2-E23 | Ansteckung zwischen Spielern (Q10) | Nein. |
+| N-93 | P2-E24 | Verderb ohne Vanilla-Verfallssystem | Nur bei kleinem Patch ohne eigene Netzpakete; sonst rutscht er nach Phase 3. |
+| N-94 | P2-E25 | „Host + 1 Mitspieler" statt „Dedicated + 2 Clients" (D113) | Ja, so markiert; Dedicated bleibt Bedingung für einen öffentlichen Release. |
+| N-95 | P2-E26 | Voreinstellung „700" und Musik | Dokument sofort, Datei nach kopiertem Optionscode; Vanilla-Musik aus, keine eigene Musik in Phase 2. |
+
+**Was ohne dich steht** (Plan-0002, Risiko R3 und R5): jedes eigene 3D-Modell im Spiel (Unity, N-60), jeder
+Nachweis im Spiel (fünf gebündelte Testläufe T0 bis T4), CC0-Downloads (N-78) und womöglich der Bau eigener
+Orte, falls er nur im Editor des Spiels geht.
