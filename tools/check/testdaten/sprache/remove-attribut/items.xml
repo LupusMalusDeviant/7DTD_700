@@ -1,0 +1,6 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (zweites Review zu WP8.8, Befund 1): ein
+	     <remove>, dessen XPath ein ATTRIBUT trifft. Das Spiel lehnt das ab ("use
+	     removeattribute instead"); die Eigenschaft bleibt, wie sie ist. Kein Spielinhalt. -->
+	<remove xpath="/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value"/>
+</config>

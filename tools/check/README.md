@@ -399,18 +399,24 @@ Exit **0** grün, **1** Befunde, **2** nicht prüfbar. Braucht Vanillas `Localiz
 `items.xml` und `blocks.xml` (`SDTD_PATH` oder `-Vanilla`). Gemessen am 2026-11-22: 27
 Patch-Dateien, 7 davon angewandt, 729 Operationen angewandt und 0 ohne Treffer, 72 genannte
 Schlüssel (alle in unserer Datei), 132 Zeilen rückwärts geprüft, 0 nicht gelesen; gegen den
-Stand vor dem Fix 6 rot. Rot vorgeführt an `testdaten/sprache/`: 21 Gegenproben, dazu
-fünfzehn Verfälschungen des Skripts — vierzehn machen mindestens eine Gegenprobe rot, die
-fünfzehnte (nur das Netz für unerwartete Fehler fehlt) keine; warum, steht im Vertrag.
+Stand vor dem Fix 6 rot. Rot vorgeführt an `testdaten/sprache/`: 24 Gegenproben, dazu 23
+Verfälschungen des Skripts über zwei Reviews — 22 machen mindestens eine Gegenprobe rot,
+eine (nur das Netz für unerwartete Fehler fehlt) keine; warum, steht im Vertrag.
 
 **Es wendet die Patches an, statt sie zu erkennen** (seit dem Review zu WP8.8, Vertrag 04
 „Nachtrag Review zu WP8.8"). Jede Patch-Datei, die `items.xml` oder `blocks.xml` heißt, wird
 in der Reihenfolge der Dateien auf Vanillas Datei angewandt, mit allen neun Operationen des
 Spiels; der Beschreibungsschlüssel wird am Ergebnis gerechnet. **Was sich nicht anwenden
 lässt, ist rot:** ein XPath, der nichts trifft oder sich nicht auswerten lässt, ein bedingter
-Block oder ein unbekanntes Element in einer dieser Dateien, und ein Gegenstand, der danach
-zwei Eigenschaften `DescriptionKey` trägt. In allen anderen Dateien zählt weiter, was die
-Datei nennt.
+Block oder ein unbekanntes Element in einer dieser Dateien, ein Gegenstand, der danach
+zwei Eigenschaften `DescriptionKey` trägt, und eine Operation, deren Treffer eine Knotenart
+hat, die das Skript für sie nicht rechnet — allen voran `<remove>` auf ein Attribut, das
+auch das Spiel ablehnt („Nachtrag zweites Review zu WP8.8"). In allen anderen Dateien zählt
+weiter, was die Datei nennt.
+
+**Eine Zeile `<Name>Desc` wird auch geprüft, wenn es `<Name>` nur in Vanilla gibt.** Entfernt
+oder benennt ein Patch den Gegenstand um und liest nichts im gepatchten Stand den Schlüssel,
+ist die Zeile rot.
 
 **Es ist kein zweiter Patcher des Spiels.** `csv` und `append`/`prepend` auf ein Attribut
 sind nachgebaut, nicht am Spiel gemessen; die Reihenfolge ist die der Dateinamen.

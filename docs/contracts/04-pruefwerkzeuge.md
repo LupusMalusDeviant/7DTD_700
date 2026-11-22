@@ -2683,3 +2683,93 @@ jede mit „liest `gunPartsGroupDesc` (geerbt von `gunMGT1AK47Parts`)".
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert);
 `kette-pruefen` unverändert 433 XPaths (420 in Vanilla, 13 auf eigene Knoten), 9 bedingte
 Blöcke.
+
+## Nachtrag zweites Review zu WP8.8, 2026-11-22 — zwei Befunde behoben, **Abnahme offen**
+
+Das Review des Commits `a60fe9b` fand zwei mittlere Befunde, beide in
+`sprachverweise-pruefen.ps1`, keinen an den Mod-Dateien. Beide Lücken hat der Umbau des
+ersten Reviews geöffnet: die Fassung davor war in diesen Fällen rot.
+
+| # | Befund | Folge |
+|---|---|---|
+| 1 | ein `<remove>`, dessen XPath ein **Attribut** trifft, entfernte das Attribut und zählte als angewandt | das Spiel lehnt genau das ab (Vertrag 03 §2: *„use removeattribute instead"*); gerechnet wurde ein Stand, den das Spiel nicht erzeugt — grün |
+| 2 | entfernt oder benennt ein Patch einen Vanilla-Gegenstand um, galt dessen Zeile `<Name>Desc` nicht mehr als Beschreibung und wurde übersprungen | tote Zeile grün |
+
+Der Befund 1 ist ein Fall einer Klasse: an fünf weiteren Stellen tat das Skript bei einem
+Treffer der falschen Knotenart **nichts** und zählte die Operation als angewandt. Die Regel
+unten nimmt die Klasse.
+
+### Geänderte Regeln
+
+- **Regel 5, neuer Punkt — eine Operation, die das Skript an ihrem Treffer nicht rechnet, ist
+  rot und wird nicht angewandt.** Gerechnet wird:
+
+  | Operation | auf einem Element | auf einem Attribut |
+  |---|---|---|
+  | `set` | ja | ja |
+  | `append`, `prepend` | ja (Kinder) | ja (Text anhängen, nachgebaut) |
+  | `setattribute`, `removeattribute`, `insertAfter`, `insertBefore` | ja | **rot** |
+  | `remove` | ja | **rot** — das Spiel lehnt es ab |
+  | `csv` | **rot** | ja (nachgebaut) |
+
+  Ein Treffer, der weder Element noch Attribut ist (Kommentar, Text), ist für jede Operation
+  rot. Trifft ein XPath mehrere Knoten und einer davon ist rot, wird die ganze Operation nicht
+  angewandt.
+- **Regel 3, erweitert — „Beschreibung eines Gegenstands oder Blocks" heißt: in Vanilla
+  *oder* im gepatchten Stand.** Eine Zeile `<Name>Desc` fällt unter die Rückwärtsprüfung, wenn
+  `<Name>` in Vanilla oder nach den Patches ein Gegenstand oder Block ist. Wer sie **liest**,
+  wird weiter allein am gepatchten Stand geprüft. Ist `<Name>` nach den Patches nicht mehr da
+  (entfernt oder umbenannt) und liest nichts im gepatchten Stand den Schlüssel, ist die Zeile
+  rot.
+
+### Grenzen, neu
+
+- **Was das Spiel bei den roten Paaren tut, ist nur für `remove` auf ein Attribut gelesen.**
+  Für die übrigen (`setattribute`, `removeattribute`, `insertAfter`, `insertBefore` auf ein
+  Attribut; `csv` auf ein Element; Treffer auf Kommentar oder Text) heißt rot: *diese Prüfung
+  rechnet es nicht* — nicht: das Spiel lehnt es ab. Die Mod benutzt keines dieser Paare.
+- **Eine umbenannte Definition ist für das Skript eine entfernte und eine eigene.** Es folgt
+  dem Namen nicht.
+
+### Gegenproben (Projektregel 5)
+
+Drei neue Läufe — zusammen 24 für dieses Skript. Testdaten unter
+`tools/check/testdaten/sprache/`.
+
+| Befund | Lauf | Eingang | erwartet |
+|---|---|---|---|
+| 1 | `remove-attribut` | ein `<remove>` auf `…/property[@name='DescriptionKey']/@value` | Exit 1, 1 rot; 0 Operationen angewandt, 1 nicht gerechnet |
+| 1, Klasse | `knotenart` | `setattribute`, `removeattribute`, `insertAfter`, `insertBefore` auf ein Attribut · `csv` auf ein Element · `set` auf einen Kommentar · ein `<remove>` mit zwei Treffern, erst Element, dann Attribut | Exit 1, 7 rot; 0 angewandt, 7 nicht gerechnet; **5 Gegenstände nach den Patches** — der erste Treffer des letzten Falls ist nicht entfernt |
+| 2 | `entfernt` | drei Vanilla-Gegenstände verschwinden: entfernt · umbenannt · entfernt, aber ein eigener Gegenstand nimmt die Zeile als Beschreibungsschlüssel | Exit 1, 2 rot; die dritte Zeile ist **nicht** rot |
+
+Gemessen am 2026-11-22 mit `tools/check/gegenproben.ps1`: **168 Gegenproben, 0
+fehlgeschlagen** (vorher 165).
+
+**Gegen die Fassung des Commits `a60fe9b`:** 3 von 168 fehlgeschlagen — genau die drei neuen.
+
+**Acht Verfälschungen der Neufassung, jede macht mindestens einen Lauf rot** (je ein voller
+Lauf der Gegenproben, das Skript danach bytegleich wiederhergestellt):
+
+| Verfälschung | fehlgeschlagen |
+|---|---|
+| `remove` auf ein Attribut gilt nicht mehr als Hindernis | 2 |
+| die Liste „nur auf einem Element" ist leer | 1 (`knotenart`) |
+| `csv` auf ein Element gilt nicht mehr als Hindernis | 1 (`knotenart`) |
+| Treffer anderer Knotenarten gelten nicht mehr als Hindernis | 1 (`knotenart`) |
+| Beschreibungszeilen werden wieder nur am gepatchten Stand erkannt | 1 (`entfernt`) |
+| eine Zeile zu einem verschwundenen Gegenstand ist immer rot, ohne nach Lesern zu sehen | 1 (`entfernt`) |
+| geprüft wird nur der erste Treffer einer Operation | 1 (`knotenart`) |
+| das Verhalten von `a60fe9b` für `remove` auf ein Attribut | 2 |
+
+Bei vier dieser Verfälschungen scheitert der Lauf nicht an einem falschen Grün, sondern an
+Exit 2: die Operation erreicht dann einen Knoten, an dem sie eine Ausnahme wirft, und das Netz
+für unerwartete Fehler greift. Das ist gewollt — im Skript steht an diesen Stellen kein stilles
+„sonst nichts" mehr.
+
+**Am echten Stand unverändert:** 729 Operationen angewandt, 0 ohne Treffer, **0 nicht
+gerechnet**; 1 451 Gegenstände und 6 649 Blöcke nach den Patches; 72 genannte Schlüssel, 132
+Zeilen rückwärts, 0 nicht gelesen; Exit 0. Gegen den Stand vor dem Fix weiter genau die sechs
+Bruchstück-Zeilen. Die Mod entfernt keine Definition (1 434 + 17 eigene = 1 451) und trifft mit
+keiner Operation eine der roten Knotenarten.
+
+`check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).

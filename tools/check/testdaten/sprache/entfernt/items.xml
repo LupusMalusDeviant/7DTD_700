@@ -1,0 +1,20 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (zweites Review zu WP8.8, Befund 2): drei
+	     Vanilla-Gegenstaende verschwinden aus dem gepatchten Stand. Vanilla hat zu jedem die
+	     Zeile <Name>Desc, und unsere Sprachdatei ueberschreibt alle drei. Kein Spielinhalt. -->
+
+	<!-- 1. entfernt: 'pruefTeilDesc' liest danach niemand -->
+	<remove xpath="/items/item[@name='pruefTeil']"/>
+
+	<!-- 2. umbenannt: der neue Name liest 'pruef700_umbenanntDesc', 'pruefDingDesc' niemand -->
+	<set xpath="/items/item[@name='pruefDing']/@name">pruef700_umbenannt</set>
+
+	<!-- 3. entfernt, aber die Zeile wird weiter gelesen: ein eigener Gegenstand nimmt
+	     'pruefNotizDesc' als Beschreibungsschluessel. Das darf NICHT rot sein. -->
+	<remove xpath="/items/item[@name='pruefNotiz']"/>
+	<append xpath="/items">
+		<item name="pruef700_leser">
+			<property name="DescriptionKey" value="pruefNotizDesc"/>
+		</item>
+	</append>
+</config>

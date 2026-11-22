@@ -1579,6 +1579,20 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    für unerwartete Fehler weg, das kein Eingang erreicht. `gegenproben.ps1`: 165
    Gegenproben, 0 fehlgeschlagen. `check-all`: 7 Prüfungen, 1 rot (`recipes`, unverändert).
    → Vertrag 04 „Nachtrag Review zu WP8.8", Abnahme offen.
+
+   **Zweites Review zu WP8.8 (2026-11-22, Commit `a60fe9b`): zwei mittlere Befunde, beide
+   im Skript, beide vom Umbau geöffnet.** Ein `<remove>` auf ein Attribut wurde gerechnet,
+   obwohl das Spiel es ablehnt (Vertrag 03 §2); und die Zeile `<Name>Desc` eines
+   Vanilla-Gegenstands, den ein Patch entfernt oder umbenennt, fiel aus der Prüfung.
+   *Behoben:* eine Operation, deren Treffer eine Knotenart hat, die das Skript für sie nicht
+   rechnet, ist rot und wird nicht angewandt (die ganze Klasse, nicht nur `remove`);
+   Beschreibungszeilen werden an Vanilla **oder** am gepatchten Stand erkannt, ihre Leser
+   weiter nur am gepatchten Stand. Drei neue Gegenproben (24 für das Skript); die Fassung
+   aus `a60fe9b` scheitert an genau diesen drei; acht Verfälschungen, jede wird gefangen.
+   `gegenproben.ps1`: 168 Gegenproben, 0 fehlgeschlagen. Am echten Stand unverändert: 729
+   Operationen, 0 ohne Treffer, 0 nicht gerechnet, Exit 0. `check-all`: 7 Prüfungen, 1 rot
+   (`recipes`, unverändert).
+   → Vertrag 04 „Nachtrag zweites Review zu WP8.8", Abnahme offen.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 

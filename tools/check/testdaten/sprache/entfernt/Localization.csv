@@ -1,0 +1,7 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english,Context / Alternate Text,german,spanish,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese
+pruefTeilDesc,items,Item,,,,"Text of a removed part.",,"Text eines entfernten Teils.",,,,,,,,,,,
+pruefDingDesc,items,Item,,,,"Text of a renamed thing.",,"Text eines umbenannten Dings.",,,,,,,,,,,
+pruefNotizDesc,items,Item,,,,"Still read by another item.",,"Weiter gelesen von einem anderen Gegenstand.",,,,,,,,,,,
+pruef700_umbenannt,items,Item,,,,"Renamed thing",,"Umbenanntes Ding",,,,,,,,,,,
+pruef700_umbenanntDesc,items,Item,,,,"Read by default.",,"Gelesen als Vorgabe.",,,,,,,,,,,
+pruef700_leser,items,Item,,,,"Reader",,"Leser",,,,,,,,,,,

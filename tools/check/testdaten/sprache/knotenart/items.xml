@@ -1,0 +1,15 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (zweites Review zu WP8.8): sieben
+	     Operationen, deren Treffer eine Knotenart hat, die das Skript fuer diese Operation
+	     nicht rechnet. Vorher tat es an jeder dieser Stellen nichts und zaehlte die
+	     Operation als angewandt. Kein Spielinhalt. -->
+	<setattribute xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']/@value" name="wert">2</setattribute>
+	<removeattribute xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']/@value" name="wert"/>
+	<insertAfter xpath="/items/item[@name='pruefDing']/@name"><property name="Gewicht" value="1"/></insertAfter>
+	<insertBefore xpath="/items/item[@name='pruefDing']/@name"><property name="Gewicht" value="1"/></insertBefore>
+	<csv xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']" delim=",">a</csv>
+	<set xpath="/items/comment()">ein anderer Kommentar</set>
+	<!-- Zwei Treffer, der erste ein Element, der zweite ein Attribut: die GANZE Operation
+	     bleibt weg. Halb angewandt fehlte danach der Gegenstand pruefTeil. -->
+	<remove xpath="/items/item[@name='pruefTeil'] | /items/item[@name='pruefDing']/@name"/>
+</config>

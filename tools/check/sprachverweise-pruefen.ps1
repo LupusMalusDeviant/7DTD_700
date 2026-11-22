@@ -12,10 +12,12 @@
     Gegenstaende ihren Beschreibungsschluessel ueber Extends erben
     (docs/rea/findings/WP8-beschreibungsschluessel-wird-vererbt.md).
 
-    DIE REGELN stehen in Vertrag 04, "Nachtrag WP8.8" und "Nachtrag Review zu WP8.8":
+    DIE REGELN stehen in Vertrag 04, "Nachtrag WP8.8", "Nachtrag Review zu WP8.8" und
+    "Nachtrag zweites Review zu WP8.8":
       1. Jeder genannte Schluessel hat eine Zeile (unsere Datei oder Vanilla).
       2. Jede Zeile, die Vanilla nicht hat, wird gelesen.
-      3. Jede Zeile <Name>Desc eines Gegenstands oder Blocks wird gelesen.
+      3. Jede Zeile <Name>Desc eines Gegenstands oder Blocks wird gelesen - auch, wenn es
+         den Gegenstand nur in Vanilla gibt und ein Patch ihn entfernt oder umbenennt.
       4. Der wirksame Beschreibungsschluessel wird am GEPATCHTEN Stand gerechnet: eigene
          Eigenschaft DescriptionKey, sonst geerbt ueber Extends (ausser param1 schliesst
          sie aus), sonst <Name>Desc.
@@ -334,6 +336,7 @@ function Read-Knoten {
 # ------------------------------------------------------------------ Patches anwenden
 $angewandt = 0
 $ohneTreffer = 0
+$nichtGerechnet = 0
 $angewandteDateien = 0
 
 function Get-Kinder {
@@ -358,21 +361,22 @@ function Invoke-Operation {
         if ($istAttribut) { $Treffer.set_Value($text) } else { $Treffer.set_InnerText($text) }
         return
     }
+    # Welche Paare aus Operation und Knotenart hier ankommen, entscheidet Get-Hindernis:
+    # setattribute, removeattribute, remove, insertAfter und insertBefore nur mit einem
+    # Element, csv nur mit einem Attribut. Darum steht unten kein stilles "sonst nichts".
     if (Test-Gleich $Name 'setattribute') {
-        if (-not $istAttribut) { $Treffer.SetAttribute($Operation.GetAttribute('name'), $text) }
+        $Treffer.SetAttribute($Operation.GetAttribute('name'), $text)
         return
     }
     if (Test-Gleich $Name 'removeattribute') {
-        if (-not $istAttribut) { $Treffer.RemoveAttribute($Operation.GetAttribute('name')) }
+        $Treffer.RemoveAttribute($Operation.GetAttribute('name'))
         return
     }
     if (Test-Gleich $Name 'remove') {
-        if ($istAttribut) { [void]$Treffer.get_OwnerElement().RemoveAttributeNode($Treffer) }
-        else { [void]$Treffer.get_ParentNode().RemoveChild($Treffer) }
+        [void]$Treffer.get_ParentNode().RemoveChild($Treffer)
         return
     }
     if (Test-Gleich $Name 'csv') {
-        if (-not $istAttribut) { return }
         $trenner = $Operation.GetAttribute('delim')
         if (-not $trenner) { $trenner = ',' }
         $liste = New-Object System.Collections.Generic.List[string]
@@ -398,7 +402,6 @@ function Invoke-Operation {
         }
         return
     }
-    if ($istAttribut) { return }
     $eltern = $Treffer.get_ParentNode()
     if (Test-Gleich $Name 'insertBefore') {
         foreach ($neu in (Get-Kinder $Operation $ZielDoc)) { [void]$eltern.InsertBefore($neu, $Treffer) }
@@ -410,6 +413,36 @@ function Invoke-Operation {
         [void]$eltern.InsertAfter($neu, $hinter)
         $hinter = $neu
     }
+}
+
+$nurElement = @('setattribute', 'removeattribute', 'insertAfter', 'insertBefore')
+
+function Get-Hindernis {
+    # Warum sich eine Operation an ihren Treffern NICHT rechnen laesst - oder $null.
+    # Vorher tat das Skript an diesen Stellen nichts und zaehlte die Operation als
+    # angewandt; ein <remove> auf ein Attribut entfernte es sogar, obwohl das Spiel genau
+    # das ablehnt (zweites Review zu WP8.8, Befund 1; Vertrag 03, Abschnitt 2).
+    param([string]$Name, $Treffer)
+    foreach ($knoten in $Treffer) {
+        $art = $knoten.get_NodeType()
+        if ($art -eq $script:attributArt) {
+            if (Test-Gleich $Name 'remove') {
+                return 'ein Attribut; das Spiel lehnt das ab ("use removeattribute instead")'
+            }
+            if (Test-In $Name $script:nurElement) {
+                return "ein Attribut; <$Name> rechnet diese Pruefung nur auf einem Element"
+            }
+        }
+        elseif ($art -eq $script:element) {
+            if (Test-Gleich $Name 'csv') {
+                return 'ein Element; <csv> rechnet diese Pruefung nur auf einem Attribut'
+            }
+        }
+        else {
+            return "einen Knoten der Art $art; gerechnet werden nur Elemente und Attribute"
+        }
+    }
+    return $null
 }
 
 function Invoke-Patchdatei {
@@ -442,6 +475,14 @@ function Invoke-Patchdatei {
         if ($treffer.Count -eq 0) {
             $script:ohneTreffer++
             $script:befunde.Add("Patch trifft nichts: <$name xpath=""$xpath"">  ($Datei)")
+            continue
+        }
+        # Erst pruefen, dann aendern: ist EIN Treffer nicht rechenbar, bleibt die ganze
+        # Operation weg - halb angewandt waere der Stand wieder geraten.
+        $hindernis = Get-Hindernis $name $treffer
+        if ($null -ne $hindernis) {
+            $script:nichtGerechnet++
+            $script:befunde.Add("Patch laesst sich nicht rechnen: <$name xpath=""$xpath""> trifft $hindernis  ($Datei)")
             continue
         }
         foreach ($knoten in $treffer) { Invoke-Operation $name $operation $knoten $ZielDoc }
@@ -589,10 +630,17 @@ $ungelesen = 0
 foreach ($k in $unsereListe) {
     $ding = $null
     $artDing = $null
+    $weg = $false
     if ($k.EndsWith('Desc', [System.StringComparison]::Ordinal) -and $k.Length -gt 4) {
         $stamm = $k.Substring(0, $k.Length - 4)
         if ($tabellen.item.ContainsKey($stamm)) { $ding = $stamm; $artDing = 'item' }
         elseif ($tabellen.block.ContainsKey($stamm)) { $ding = $stamm; $artDing = 'block' }
+        # Auch, was es nur in VANILLA gibt (zweites Review zu WP8.8, Befund 2): entfernt
+        # oder benennt ein Patch den Gegenstand um, fiel seine Zeile vorher aus der Pruefung
+        # - Vanilla hat den Schluessel, und im gepatchten Stand stand der Name nicht mehr.
+        # WER die Zeile liest, entscheidet weiter allein der gepatchte Stand.
+        elseif ($ziele.item.Vanilla.ContainsKey($stamm)) { $ding = $stamm; $artDing = 'item'; $weg = $true }
+        elseif ($ziele.block.Vanilla.ContainsKey($stamm)) { $ding = $stamm; $artDing = 'block'; $weg = $true }
     }
     $neu = -not $vanillaSchluessel.Contains($k)
     if (-not $neu -and $null -eq $ding) { continue }
@@ -602,7 +650,10 @@ foreach ($k in $unsereListe) {
     if (Test-AlsWertGelesen $k) { continue }
 
     $ungelesen++
-    if ($null -ne $ding) {
+    if ($weg) {
+        $befunde.Add("Zeile '$k' wird nicht gelesen: $($wort[$artDing]) '$ding' steht in Vanilla und nach den Patches nicht mehr (entfernt oder umbenannt), und nichts im gepatchten Stand liest den Schluessel")
+    }
+    elseif ($null -ne $ding) {
         $w = $wirksam[$artDing][$ding]
         $befunde.Add("Zeile '$k' wird nicht gelesen: $($wort[$artDing]) '$ding' liest '$($w.Schluessel)' ($($w.Woher))")
     }
@@ -620,7 +671,7 @@ Write-Output '== sprachverweise-pruefen =='
 Write-Output "  Vanilla: $Vanilla"
 Write-Output ("  Sprachdatei: {0} Schluessel; Vanillas Sprachdatei: {1}" -f $unsereSchluessel.Count, $vanillaSchluessel.Count)
 Write-Output ("  Patch-Dateien: {0}, davon auf items.xml und blocks.xml angewandt: {1}" -f @($Patches).Count, $angewandteDateien)
-Write-Output ("  Patch-Operationen angewandt: {0}, ohne Treffer: {1}" -f $angewandt, $ohneTreffer)
+Write-Output ("  Patch-Operationen angewandt: {0}, ohne Treffer: {1}, nicht gerechnet: {2}" -f $angewandt, $ohneTreffer, $nichtGerechnet)
 Write-Output ("  Definitionen: {0} Gegenstaende und {1} Bloecke in Vanilla; nach den Patches {2} und {3}, davon eigene {4} und {5}" -f $ziele.item.Vanilla.Count, $ziele.block.Vanilla.Count, $tabellen.item.Count, $tabellen.block.Count, $eigeneNamen.item.Count, $eigeneNamen.block.Count)
 Write-Output ("  Beschreibungsschluessel von uns gesetzt: {0}" -f $gesetzt)
 Write-Output ("  genannte Schluessel: {0} (in unserer Datei: {1}, nur in Vanilla: {2}, ohne Zeile: {3})" -f $genannt.Count, $inUnserer, $nurVanilla, $ohneZeile)

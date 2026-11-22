@@ -1844,6 +1844,54 @@ Test-Script 'sprachverweise: Vanilla-Pfad mit unzulaessigem Zeichen ist nicht pr
     Vanilla     = 'C:\invalid<ordner>'
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @("den Vanilla-Ordner 'C:\invalid<ordner>' gibt es nicht", 'NICHT GEPRUEFT') -MustNotContain @('GREEN', 'unerwarteter Fehler')
 
+# --------------------------------- zweites Review zu WP8.8 (2026-11-22), zwei Befunde
+# Beide Luecken hat der Umbau oben geoeffnet; gegen a60fe9b sind alle drei Laeufe gruen.
+
+# (m) Befund 1: ein <remove>, dessen XPath ein Attribut trifft. Das Spiel lehnt das ab; das
+#     Skript entfernte das Attribut und zaehlte die Operation als angewandt.
+Test-Script 'sprachverweise: remove auf ein Attribut wird nicht gerechnet' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'remove-attribut\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'remove-attribut\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Patch laesst sich nicht rechnen: <remove xpath=""/items/item[@name='pruefNotiz']/property[@name='DescriptionKey']/@value""> trifft ein Attribut; das Spiel lehnt das ab",
+    'Patch-Operationen angewandt: 0, ohne Treffer: 0, nicht gerechnet: 1',
+    '== Ergebnis: 1 rot -> RED ==')
+
+# (n) Dieselbe Klasse: fuenf weitere Paare aus Operation und Knotenart, an denen das Skript
+#     nichts tat und "angewandt" zaehlte, ein Treffer auf einen Kommentar, und ein XPath
+#     mit zwei Treffern, von denen nur der zweite nicht rechenbar ist: die ganze Operation
+#     bleibt weg, der Gegenstand pruefTeil also da (5 Gegenstaende nach den Patches).
+Test-Script 'sprachverweise: Treffer der falschen Knotenart sind rot - sieben Faelle' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'knotenart\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'remove-attribut\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    '<setattribute> rechnet diese Pruefung nur auf einem Element',
+    '<removeattribute> rechnet diese Pruefung nur auf einem Element',
+    '<insertAfter> rechnet diese Pruefung nur auf einem Element',
+    '<insertBefore> rechnet diese Pruefung nur auf einem Element',
+    '<csv> rechnet diese Pruefung nur auf einem Attribut',
+    'trifft einen Knoten der Art Comment',
+    "<remove xpath=""/items/item[@name='pruefTeil'] | /items/item[@name='pruefDing']/@name""> trifft ein Attribut",
+    'nach den Patches 5 und 2, davon eigene 0 und 0',
+    'Patch-Operationen angewandt: 0, ohne Treffer: 0, nicht gerechnet: 7',
+    '== Ergebnis: 7 rot -> RED ==')
+
+# (o) Befund 2: drei Vanilla-Gegenstaende verschwinden - entfernt, umbenannt, und entfernt
+#     mit einem anderen Leser. Die ersten zwei Zeilen <Name>Desc sind tot; die dritte liest
+#     ein eigener Gegenstand und darf nicht rot sein.
+Test-Script 'sprachverweise: Beschreibung eines entfernten oder umbenannten Gegenstands ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'entfernt\items.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'entfernt\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Zeile 'pruefTeilDesc' wird nicht gelesen: Gegenstand 'pruefTeil' steht in Vanilla und nach den Patches nicht mehr",
+    "Zeile 'pruefDingDesc' wird nicht gelesen: Gegenstand 'pruefDing' steht in Vanilla und nach den Patches nicht mehr",
+    'nach den Patches 4 und 2, davon eigene 2 und 0',
+    'Beschreibungen von Gegenstaenden und Bloecken: 4), nicht gelesen: 2',
+    '== Ergebnis: 2 rot -> RED ==') -MustNotContain @("Zeile 'pruefNotizDesc'")
+
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")
 if ($failed -gt 0) {
