@@ -1637,7 +1637,9 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      und umgekehrt. Sie sagt, welcher unserer Patches sein Ziel verliert, bevor ein Lauf es
      zeigt. Braucht einen Nachtrag in Vertrag 04 und Gegenproben wie jede neue Prüfung;
    - `[braucht Nutzer]` die drei Läufe im Spiel und der Blick auf die Fenster (Prüfliste
-     24 b bis d). Hängt an der installierten Mod und an Prüfliste 22.
+     24 b bis e). Hängt an der installierten Mod und an Prüfliste 22. **Ein Lauf zählt nur,
+     wenn die Referenz-Mod in ihm nachweislich geladen ist** (24 e, ergänzt nach dem Review
+     von `ecffb1e`).
 
    Gebaut ist in diesem Schritt nichts, an der Mod ist nichts geändert.
 
@@ -2086,6 +2088,20 @@ werden:
     d) **Im Protokoll** (liest Claude, wenn die drei Dateien genannt sind): keine Zeile mit
     `ERR` oder `XML` zu einem unserer Modlets oder zu einer XUi-Datei; die Ladereihenfolge
     der Mods — erwartet stehen unsere `700_`-Ordner vor der UI-Mod.
+    e) **Die Referenz-Mod muss in ihrem Lauf wirklich geladen sein** (ergänzt am
+    22. November 2026 nach dem Review von `ecffb1e`): ein Lauf, in dem sie fehlt oder halb
+    arbeitet, beweist nichts über die Verträglichkeit mit ihr. In den Läufen 2 und 3 muss
+    das Protokoll zeigen: die Zeile „Loaded Mod" mit dem Namen der Referenz-Mod; bringt sie
+    eine DLL mit, dazu `Initialized code in mod '<Name>'`. **Der Lauf zählt nicht**, wenn
+    für die Referenz-Mod eine dieser Zeilen steht: `Failed initializing ModAPI instance on
+    mod '<Name>'`, `No ModAPI found in mod DLLs`, `AntiCheat enabled, mod skipped because it
+    is set not to load` — oder irgendeine `ERR`-, `EXC`- oder XML-Fehlerzeile, die ihren
+    Namen oder eine ihrer Dateien nennt. Ein solcher Lauf ist weder bestanden noch ein
+    Konflikt mit uns: er wird wiederholt, wenn die Ursache weg ist, oder die Mod trägt
+    V 3.40 nicht (dann D86 neu). In Lauf 1 darf keine der beiden geladen sein.
+    *(Die Zeichenketten stehen wörtlich im
+    [Finding F-00](../rea/findings/F-00-modloader-events-version.md) §1 und im Protokoll vom
+    2026-11-21.)*
     *(Ein Konflikt hier ist der einzige Anlass für eine `mod_loaded`-Bedingung, Vertrag 03
     §5 Nachtrag WP8.9.)*
 

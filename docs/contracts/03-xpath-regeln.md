@@ -231,6 +231,12 @@ Liste, die die Regel oben voraussetzt. An der Form der Patches ändert das heute
 4. **Erwartete Ladereihenfolge:** unsere Ordner beginnen mit `700_` und stehen damit vor
    Ordnern, die mit einem Buchstaben beginnen — eine UI-Mod lädt nach uns (Spec 01 §4.1
    Punkt 5). Das ist aus den Namen geschlossen, nicht im Protokoll gesehen.
+5. **Ein Lauf der Matrix zählt nur, wenn die Referenz-Mod in ihm geladen ist** (ergänzt am
+   2026-11-22 nach dem Review von `ecffb1e`). Das Protokoll muss sie als geladen ausweisen
+   und, wenn sie Code mitbringt, als initialisiert; ein Lade-, Initialisierungs- oder
+   Laufzeitfehler der Referenz-Mod macht den Lauf ungültig — nicht bestanden und kein
+   Konflikt. Ohne das gälte „keine Fehler zu unseren Modlets" auch dann als Verträglichkeit,
+   wenn die andere Mod gar nicht lief. Die Zeilen dazu stehen in Plan-0001, Prüfliste 24 e.
 
 ## 6. `include` zerlegt Dateien, ersetzt aber keine Modlets
 
