@@ -143,6 +143,8 @@ eine Abweichung.
 | `attintellect` | Heiler | Healer | Intelligenz / Intellect | D66, WP7 |
 | `attperception` | Fuhrmann | Carter | Wahrnehmung / Perception | D66, WP7 |
 | `buffPerkTheDentistName` | Totenpfennig | Dead Man's Penny | Der Zahnarzt / The Dentist | D77 |
+| `perkMasterChefName` | Herdmeister | Hearth-master | Chefkoch / Master Chef | D90 |
+| `perkLuckyLooterName` | Finderglück | Finder's Luck | Der glückliche Sammler / Lucky Looter | D90 |
 | — | Lehrblatt | Lesson | Magazin / Magazine | D70 |
 | — | Blatt (einer Abschrift) | leaf | Buch / Book | D69 |
 | — | Abschrift | transcript | Buchreihe | D24, D69 |

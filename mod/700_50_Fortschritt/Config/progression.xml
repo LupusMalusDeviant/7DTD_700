@@ -462,4 +462,11 @@
 	</append>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT1-1,workstationsT1-2,workstationsT1-3,workstationsT1-4,workstationsT1-5,workstationsT1-6']/@icon">forge,cntChickenCoop,toolBellows,workbench,resourceLockPick,workbench</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT1-1,workstationsT1-2,workstationsT1-3,workstationsT1-4,workstationsT1-5,workstationsT1-6']/unlock_entry[@unlock_tier='6']/@item">blk700_webstuhl</set>
+
+	<!-- ===== Symbol von Finderglueck (D90, 2026-11-22) - von Hand, nicht erzeugt =====
+	     F-21, Plan-0001 WP7. Vanillas Perk perkLuckyLooter traegt einen Einkaufswagen
+	     (ui_game_symbol_shopping_cart). Getauscht gegen ein vorhandenes Symbol des Spiels,
+	     den Beutesack - kein eigenes Bild. Der Name ("Finderglueck") steht in
+	     700_90_Sprache/Config/Localization.csv. Der Perk selbst bleibt, wo er ist. -->
+	<setattribute name="icon" xpath="/progression/perks/perk[@name='perkLuckyLooter']">ui_game_symbol_loot_sack</setattribute>
 </config>

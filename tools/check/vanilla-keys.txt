@@ -930,6 +930,8 @@ perkLightArmorDesc
 perkMediumArmorDesc
 perkLivingOffTheLandDesc
 perkMasterChefDesc
+perkMasterChefName
+perkLuckyLooterName
 perkMasterChefRank1LongDesc
 perkMasterChefRank2LongDesc
 perkMasterChefRank3LongDesc

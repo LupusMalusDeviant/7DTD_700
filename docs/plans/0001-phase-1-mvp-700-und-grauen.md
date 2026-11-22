@@ -1890,7 +1890,8 @@ belegt sind — nicht mit einer Statusmeldung:
   Absturz *(Z1)*
 - Nächte sind **messbar dunkler** als Vanilla (Werte in `worldglobal.xml` dokumentiert) und eine
   Fackel erlischt nach der gesetzten Zeit *(Z5)*
-- **Sechs Bäume** vollständig, kein Vanilla-Attribut- oder Perkname sichtbar *(Z6)*
+- ~~**Sechs Bäume** vollständig, kein Vanilla-Attribut- oder Perkname sichtbar~~ **Fünf Bäume**
+  (D66) vollständig, kein **moderner** Attribut- oder Perkname sichtbar (D90, 2026-11-22) *(Z6)*
 - Dedicated Server **und** zweiter Client laden die Mod, beide protokollieren die Version *(Z7,
   hängt an R3)*
 - Jedes Pflichtdokument ist mitgezogen: Verträge in `docs/contracts/`, Balancing in
@@ -2359,7 +2360,13 @@ werden:
   Prüfung gehört es in Vertrag 04 und ins Werkzeug.
   **Folgearbeit — Namen:** Langbogen, Armbrust, Schwere Armbrust, Nadelpfeil und
   Feuertopfpfeil tragen weiter Vanillas Namen und Werte (WP5.2, D87).
-- **Sieben Fertigkeiten tragen weiter Vanillas Namen** (vom Nutzer am 2026-11-21 im Spiel
+- **Entschieden und gebaut am 2026-11-22 (D90): nur das Moderne unter dem Zahnrad ist
+  geändert.** „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück, der
+  Einkaufswagen ist gegen den Beutesack getauscht; die fünf anderen behalten Vanillas Namen,
+  und Z6 verlangt nur noch, dass kein *moderner* Name sichtbar ist. **Offen bleibt:** der
+  Blick ins Spiel (steht das neue Symbol wirklich da?) und die Balancing-Frage, ob die
+  sieben in einen Baum wandern (WP9). Der Punkt lautete:
+  ~~**Sieben Fertigkeiten tragen weiter Vanillas Namen**~~ (vom Nutzer am 2026-11-21 im Spiel
   gesehen, eingetragen am 2026-11-22). Unter `skillGeneralPerks` — im Fertigkeitsfenster der
   Reiter mit dem Zahnrad — stehen `perkLightArmor`, `perkMediumArmor`, `perkHeavyArmor`,
   `perkMasterChef`, `perkLivingOffTheLand`, `perkLockPicking` und `perkLuckyLooter` mit
