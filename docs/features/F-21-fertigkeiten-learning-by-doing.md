@@ -47,7 +47,7 @@ Materialverbrauch.
 REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 
 ## Akzeptanzkriterien
-- [ ] **Fünf** Bäume vollständig, keine Vanilla-Attribut- bzw. -Perknamen sichtbar (der sechste in Phase 2, D66)
+- [ ] **Fünf** Bäume vollständig, ~~keine Vanilla-Attribut- bzw. -Perknamen sichtbar~~ kein **moderner** Attribut- oder Perkname sichtbar (der sechste Baum in Phase 2, D66). *Geändert am 2026-11-22 (D90):* unter dem Zahnrad behalten „Leichte Rüstung", „Mittlere Rüstung", „Schwere Rüstung", „Vom Land leben" und „Schlösserknacken" Vanillas Namen; „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück.
 - [ ] Ohne Grundfähigkeit ist ein Rezept gesperrt; mit Grundfähigkeit steigt die Qualität durch wiederholtes Herstellen
 - [ ] Learning-by-Doing-Fortschritt bleibt nach Server-Neustart erhalten
 - [ ] Jeder Baum bietet einen tragfähigen Build bis T4

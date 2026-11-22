@@ -50,8 +50,12 @@ Messbar, abgeleitet aus der MVP-Definition im GDD §5:
 - **Z4** Jeder sichtbare Text liegt auf **Deutsch und Englisch** vor; keine Pflichtspalte ist leer.
 - **Z5** Nächte sind spürbar dunkler und nebliger als Vanilla; Feuer ist der Grund, eines zu
   machen (Licht als Ressource, Säule P4).
-- **Z6** Sechs eigene Fertigkeitsbäume ersetzen das Vanilla-Attributsystem; kein
-  Vanilla-Attribut- oder Perkname ist sichtbar.
+- **Z6** ~~Sechs eigene Fertigkeitsbäume ersetzen das Vanilla-Attributsystem; kein
+  Vanilla-Attribut- oder Perkname ist sichtbar.~~ **Fünf** eigene Fertigkeitsbäume deuten das
+  Vanilla-Attributsystem um (D66; der sechste, der Runenkundige, kommt in Phase 2); kein
+  **moderner** Attribut- oder Perkname ist sichtbar (D90, 2026-11-22: fünf Fertigkeiten unter
+  dem Zahnrad behalten Vanillas Namen, weil sie nichts Modernes nennen). Die messbare
+  Fassung steht unter „Erfolgskriterien".
 - **Z7** Die Mod läuft auf **SP, Dedicated Server und einem zweiten Client** identisch.
 
 ## Arbeitspakete (Workstreams)
@@ -106,7 +110,7 @@ Nutzer-Abnahme.
 |---|---|
 | WP1.1–WP1.4 | Vier Verträge in [`docs/contracts/`](../contracts/README.md). **Acht Modlets statt sechs** (D53) — Bauen und Fortschritt bekamen eigene Schichten. |
 | WP1.5 | `mod/` in acht Modlet-Ordner umgebaut, `build.ps1` und `smoke.ps1` darauf umgestellt, eine Fassung für alle acht aus `Directory.Build.props`. **104 geprüft, 0 rot.** |
-| WP1.5b | offen, braucht einen Spielstart |
+| WP1.5b | ~~offen, braucht einen Spielstart~~ **erledigt am 2026-11-22, 21:05** — nicht am leeren Gerüst, sondern am Stand mit Inhalt: Start mit `-noeac`, acht Modlets und der Kern geladen, 0 `EXC`; `smoke.ps1` gegen das Protokoll 123 geprüft, 0 rot, Exit 0 (Prüfliste 1) |
 | WP1.6 | ~~offen, braucht die Abnahme~~ **erledigt am 2026-11-22:** alle vier Verträge sind abgenommen (01 bis 03 einzeln, 04 als Block) |
 
 Dabei kamen vier Dinge heraus, die dieser Plan vorher nicht wusste — sie stehen im Finding
@@ -1843,7 +1847,7 @@ und die Rezept-Bindung erst in WP7.5 nach WP4 passiert.
 | # | Risiko | Wahrscheinlichkeit | Impact | Mitigation |
 |---|---|---|---|---|
 | **R1** | **Phase 1 ist zu groß.** Zehn Features, 100 Arbeitstage. Die Phase bläht sich auf, statt zu enden. | hoch | hoch | Zwei Schnitte sind **schon gemacht**: B2-Stille-Logik und F-02-Schadensarten gehen nach Phase 2. Nach M2 den MVP-Schnitt erneut prüfen; was nicht trägt, rutscht ehrlich weiter (GDD §5). Harte Regel: kein Feature aus Phase 2 kommt herein (D50). |
-| **R2** | **Kein Spielstart mit dieser Mod.** EAC verhindert das Laden von Code-Mods — belegt, und auf diesem Rechner im Juli-Protokoll schon einmal eingetreten (`AntiCheat enabled, mod skipped…` für TFPs eigenes Harmony-Modlet). Ohne Start gibt es keine Laufzeitbestätigung. | hoch | hoch | Nutzeraufgabe, offen. **Blockiert M1 und WP1.5b.** Teilausweg: nur `700_00_Core` trägt eine DLL, die reinen XML-Modlets sollten mit aktivem EAC laden — Folgerung, beim ersten Start mitzuprüfen. *(Berichtigt: „es gibt kein Protokoll" war falsch. Zwölf Protokolle liegen unter `%APPDATA%\7DaysToDie\logs\`, die neueste vom 30. Juli 2026 mit V 3.1.0. Ich hatte unter `LocalLow` gesucht, wo das Spiel nichts ablegt; `smoke.ps1` hatte denselben Fehler und ist behoben.)* |
+| **R2** | **Kein Spielstart mit dieser Mod.** EAC verhindert das Laden von Code-Mods — belegt, und auf diesem Rechner im Juli-Protokoll schon einmal eingetreten (`AntiCheat enabled, mod skipped…` für TFPs eigenes Harmony-Modlet). Ohne Start gibt es keine Laufzeitbestätigung. | hoch | hoch | ~~Nutzeraufgabe, offen. **Blockiert M1 und WP1.5b.**~~ **Für den Einzelspieler gelöst am 2026-11-22:** Start mit `-noeac` um 21:05, acht Modlets und der Kern geladen, `smoke.ps1` Exit 0 (Prüfliste 1) — WP1.5b und die Messgröße von M1 sind damit erfüllt. **Es bleibt:** jeder Lauf mit dem Kern braucht abgeschaltetes EAC; Dedicated Server und zweiter Client sind nicht gelaufen (R3, Prüfliste 2). Teilausweg: nur `700_00_Core` trägt eine DLL, die reinen XML-Modlets sollten mit aktivem EAC laden — ~~Folgerung, beim ersten Start mitzuprüfen~~ bestätigt im Lauf mit EAC am 2026-11-22, 20:45: sieben XML-Modlets geladen, `700_00_Core` übersprungen (Offene Punkte, „Zweiter Lauf im Spiel"). *(Berichtigt: „es gibt kein Protokoll" war falsch. Zwölf Protokolle liegen unter `%APPDATA%\7DaysToDie\logs\`, die neueste vom 30. Juli 2026 mit V 3.1.0. Ich hatte unter `LocalLow` gesucht, wo das Spiel nichts ablegt; `smoke.ps1` hatte denselben Fehler und ist behoben.)* |
 | **R3** | **Kein Dedicated Server auf diesem Rechner.** Die S/C-Zuordnung aller Befunde bleibt Indiz statt Nachweis (Projektregel 5); Z7 ist nicht prüfbar. | hoch | hoch | Nutzeraufgabe, offen. Falls kein Server kommt: Z7 streichen und das im Plan vermerken, statt es unbewiesen als erfüllt zu führen. |
 | **R4** | **TFP liefert ein Spiel-Update.** Signaturen oder Config-Schlüssel ändern sich mitten in Phase 1. | mittel | mittel | Der Build-Guard meldet die Abweichung beim Start; `mod700meta verify` gegen `tools/meta/expect/` zeigt gebrochene Signaturen. Da Phase 1 **keinen** Patch enthält, ist die Angriffsfläche klein — XML-Schlüssel sind stabiler als Methodensignaturen. |
 | **R5** | **Löschen bricht Referenzen.** Ein entferntes Item steckt noch in einem POI oder einer Quest. | hoch | mittel | Grundsatz „sperren statt löschen" (WP3.2). Protokolllauf in WP3.6 deckt auf, was trotzdem bricht. |
@@ -1865,7 +1869,8 @@ Nutzer korrigiert**, sie ist die wackeligste Zahl im Plan (R12).
 - **M1 (2026-12-05) — Fundament bestätigt.** Verträge abgenommen (WP1.6), Modlet-Gerüst lädt,
   drei Prüfwerkzeuge je einmal nachweislich rot und dann grün (WP2). **Und:** die Mod ist
   einmal im Spiel gelaufen, mit Protokoll (löst R2). Messbar: `smoke.ps1` ohne `-SkipLog`
-  endet mit Exit 0.
+  endet mit Exit 0. *(Dieser Teil ist erfüllt seit dem 2026-11-22, Prüfliste 1; WP1.6 ebenso.
+  Ob M1 damit ganz steht, hängt an WP2.)*
 - **M2 (2027-02-13) — Die Welt ist von 700.** Purge durch (WP3), Ressourcen, Währung und
   Werkstätten stehen (WP4). Messbar: `check-anachronisms` 0 Treffer, `check-recipes` grün für
   T0→T4. **Hier wird der MVP-Schnitt überprüft** (R1) und die Schätzung neu gerechnet (R12).
