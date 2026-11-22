@@ -354,4 +354,480 @@
 
 	</append>
 
+	<!-- ===================================================================
+	     3. SACKGASSEN: 55 VANILLA-REZEPTE BEKOMMEN ZEITGEMAESSE ZUTATEN, 4 FALLEN
+	     ===================================================================
+	     Balancing 0003 (docs/balancing/0003-sackgassen-und-belohnungen.md), vom
+	     Nutzer am 22. November 2026 abgenommen (D89). Tabellen 1, 2, 4 und 5.
+
+	     Gemessen am ConfigsDump vom 21. November: 80 Rezepte ueberleben den Purge
+	     und nennen eine gesperrte Zutat. 59 davon sind Ausruestung und stehen hier,
+	     12 in 700_20_Material, 9 in 700_40_Bauen.
+
+	     ANDERS ALS ABSCHNITT 1 WIRD HIER NICHTS ERSETZT. Die Rezepte oben sind neu
+	     geschrieben, weil die Waffe umgedeutet ist und eine eigene Kette bekommt.
+	     Hier bleibt Vanillas Rezept stehen - samt tags, Werkstatt und Zeit -, und nur
+	     die gesperrte Zutat geht. Derselbe Griff wie bei den Werkstaetten in
+	     700_40_Bauen. Darum steht in diesem Abschnitt kein <recipe> und kein
+	     tags-Attribut an einem Rezept; die Bindung in 700_50 bleibt unberuehrt.
+
+	     DIE REGEL: Klebeband -> Leder. Mechanikteile und Feder -> Schmiedeeisen.
+	     Kunststoff -> Leder (Ruestung, Rucksack) oder Federn (Pfeile). Legendaere
+	     Teile entfallen mit ihrer Qualitaetszeile, wie in Abschnitt 1. Steht der
+	     Ersatz schon im Rezept, wird zusammengezaehlt - ein Rezept nennt keine Zutat
+	     zweimal.
+
+	     DIE QUALITAETSZEILEN ZIEHEN MIT. Vanilla hebt die Mengen je Qualitaetsstufe
+	     per passive_effect 'CraftingIngredientCount', und die Zeile findet ihre Zutat
+	     ueber 'tags'. Eine Zeile, die noch 'resourceDuctTape' nennt, griffe ins Leere;
+	     darum wird jede solche Marke umgeschrieben oder die Zeile entfernt.
+
+	     EINE NEUE ZUTAT KOMMT VOR <effect_group>, wo das Rezept eine hat: per
+	     insertAfter hinter eine Zutat, die bleibt. Ohne effect_group per append.
+
+	     Alle Mengen sind Setzungen fuer WP9. Namen und Werte der umgedeuteten
+	     Stuecke (Langbogen, Armbrust, Nadelpfeil, Feuertopfpfeil - D87) folgen in
+	     WP5.2; hier steht nur, woraus sie gebaut werden.
+	-->
+
+	<!-- ====================================================
+	     3.1 Werkzeug
+	     ==================================================== -->
+
+	<!-- Eisenspitzhacke. Vanilla: Schmiedeeisen 20, Holz 10, Leder 2, KLEBEBAND 2. -->
+	<set xpath="/recipes/recipe[@name='meleeToolPickT1IronPickaxe']/ingredient[@name='resourceLeather']/@count">4</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT1IronPickaxe']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT1IronPickaxe']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='meleeToolPickT1IronPickaxe']/effect_group/passive_effect[@operation='perc_add']/@tags">resourceForgedIron,resourceWood,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT1IronPickaxe']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Eisenschaufel. Vanilla: Schmiedeeisen 16, Holz 10, Leder 2, KLEBEBAND 2. -->
+	<set xpath="/recipes/recipe[@name='meleeToolShovelT1IronShovel']/ingredient[@name='resourceLeather']/@count">4</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT1IronShovel']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT1IronShovel']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='meleeToolShovelT1IronShovel']/effect_group/passive_effect[@operation='perc_add']/@tags">resourceForgedIron,resourceWood,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT1IronShovel']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Klauenhammer. Vanilla: Schmiedeeisen 12, Holz 6, Leder 2, KLEBEBAND 2. -->
+	<set xpath="/recipes/recipe[@name='meleeToolRepairT1ClawHammer']/ingredient[@name='resourceLeather']/@count">4</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolRepairT1ClawHammer']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolRepairT1ClawHammer']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='meleeToolRepairT1ClawHammer']/effect_group/passive_effect[@operation='perc_add']/@tags">resourceForgedIron,resourceWood,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolRepairT1ClawHammer']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Stahlspitzhacke. Vanilla: Bauteil 1, Tiegelstahl 10, Holz 10, KLEBEBAND 3. Leder
+	     stand nicht im Rezept und kommt neu dazu. -->
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT2SteelPickaxe']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT2SteelPickaxe']/ingredient[@name='resourceLegendaryParts']" />
+	<insertAfter xpath="/recipes/recipe[@name='meleeToolPickT2SteelPickaxe']/ingredient[@name='resourceWood']">
+		<ingredient name="resourceLeather" count="3" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='meleeToolPickT2SteelPickaxe']/effect_group/passive_effect[@operation='perc_add']/@tags">meleeToolAllSteelParts,resourceForgedSteel,resourceWood,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolPickT2SteelPickaxe']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Stahlschaufel. Vanilla: Bauteil 1, Tiegelstahl 10, Holz 10, KLEBEBAND 3. -->
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT2SteelShovel']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT2SteelShovel']/ingredient[@name='resourceLegendaryParts']" />
+	<insertAfter xpath="/recipes/recipe[@name='meleeToolShovelT2SteelShovel']/ingredient[@name='resourceWood']">
+		<ingredient name="resourceLeather" count="3" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='meleeToolShovelT2SteelShovel']/effect_group/passive_effect[@operation='perc_add']/@tags">meleeToolAllSteelParts,resourceForgedSteel,resourceWood,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='meleeToolShovelT2SteelShovel']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- ====================================================
+	     3.2 Die einfache Kleidung (armorPrimitive*)
+	     ====================================================
+	     Bis Qualitaet 4 ging sie schon: Vanilla nennt das Klebeband mit count="0"
+	     und hebt es erst ab Qualitaet 5 auf 1, bei 6 auf 2. Leder uebernimmt genau
+	     diese Zeile. -->
+	<remove xpath="/recipes/recipe[@name='armorPrimitiveHelmet']/ingredient[@name='resourceDuctTape']" />
+	<insertAfter xpath="/recipes/recipe[@name='armorPrimitiveHelmet']/ingredient[@name='resourceCloth']">
+		<ingredient name="resourceLeather" count="0" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='armorPrimitiveHelmet']/effect_group/passive_effect[@tags='resourceDuctTape']/@tags">resourceLeather</set>
+
+	<remove xpath="/recipes/recipe[@name='armorPrimitiveOutfit']/ingredient[@name='resourceDuctTape']" />
+	<insertAfter xpath="/recipes/recipe[@name='armorPrimitiveOutfit']/ingredient[@name='resourceCloth']">
+		<ingredient name="resourceLeather" count="0" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='armorPrimitiveOutfit']/effect_group/passive_effect[@tags='resourceDuctTape']/@tags">resourceLeather</set>
+
+	<remove xpath="/recipes/recipe[@name='armorPrimitiveGloves']/ingredient[@name='resourceDuctTape']" />
+	<insertAfter xpath="/recipes/recipe[@name='armorPrimitiveGloves']/ingredient[@name='resourceCloth']">
+		<ingredient name="resourceLeather" count="0" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='armorPrimitiveGloves']/effect_group/passive_effect[@tags='resourceDuctTape']/@tags">resourceLeather</set>
+
+	<remove xpath="/recipes/recipe[@name='armorPrimitiveBoots']/ingredient[@name='resourceDuctTape']" />
+	<insertAfter xpath="/recipes/recipe[@name='armorPrimitiveBoots']/ingredient[@name='resourceCloth']">
+		<ingredient name="resourceLeather" count="0" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='armorPrimitiveBoots']/effect_group/passive_effect[@tags='resourceDuctTape']/@tags">resourceLeather</set>
+
+	<!-- ====================================================
+	     3.3 Boegen und Armbrueste (D54, D87)
+	     ====================================================
+	     Vanilla hebt Bauteil UND Klebeband in einer Zeile (je Stufe +1 bis +5). Wo
+	     das Klebeband im Leder aufgeht, traegt die Leder-Zeile die Summe: aus
+	     "2,10" wird "3,15". -->
+
+	<!-- Holzbogen. Vanilla: Bauteil 1, Holz 5, Leder 1, KLEBEBAND 1. -->
+	<set xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/ingredient[@name='resourceLeather']/@count">2</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/effect_group/passive_effect[@tags='gunBowT1WoodenBowParts,resourceDuctTape']/@tags">gunBowT1WoodenBowParts</set>
+	<set xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/effect_group/passive_effect[@tags='resourceLeather']/@value">3,15</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT1WoodenBow']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Langbogen (Vanillas Compoundbogen, D87). Vanilla: Bauteil 13, Leder 25,
+	     KLEBEBAND 13, FEDER 25. AUSNAHME VON DER REGEL: die Feder wird hier zu Holz
+	     und nicht zu Schmiedeeisen - ein Langbogen ist ein Bogenstab und hat keine
+	     Eisenspange. -->
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/ingredient[@name='resourceLeather']/@count">38</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/ingredient[@name='resourceSpring']" />
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/ingredient[@name='resourceLegendaryParts']" />
+	<insertAfter xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/ingredient[@name='resourceLeather']">
+		<ingredient name="resourceWood" count="25" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/effect_group/passive_effect[@tags='gunBowT1WoodenBowParts,resourceDuctTape']/@tags">gunBowT1WoodenBowParts</set>
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/effect_group/passive_effect[@tags='resourceLeather']/@value">3,15</set>
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/effect_group/passive_effect[@tags='resourceSpring']/@tags">resourceWood</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundBow']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Armbrust (Vanillas eiserne Armbrust, D87). Vanilla: Bauteil 7, Schmiedeeisen
+	     35, KLEBEBAND 7, Holz 35. Leder kommt neu dazu und uebernimmt die Zeile des
+	     Klebebands. -->
+	<remove xpath="/recipes/recipe[@name='gunBowT1IronCrossbow']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='gunBowT1IronCrossbow']/ingredient[@name='resourceLegendaryParts']" />
+	<insertAfter xpath="/recipes/recipe[@name='gunBowT1IronCrossbow']/ingredient[@name='resourceWood']">
+		<ingredient name="resourceLeather" count="7" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='gunBowT1IronCrossbow']/effect_group/passive_effect[@tags='gunBowT1WoodenBowParts,resourceDuctTape']/@tags">gunBowT1WoodenBowParts,resourceLeather</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT1IronCrossbow']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- Schwere Armbrust (Vanillas Compoundarmbrust, D87). Vanilla: Bauteil 13,
+	     Tiegelstahl 100, KLEBEBAND 13, Leder 25. -->
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/ingredient[@name='resourceLeather']/@count">38</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/effect_group/passive_effect[@tags='gunBowT1WoodenBowParts,resourceDuctTape']/@tags">gunBowT1WoodenBowParts</set>
+	<set xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/effect_group/passive_effect[@tags='resourceLeather']/@value">3,15</set>
+	<remove xpath="/recipes/recipe[@name='gunBowT3CompoundCrossbow']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- ====================================================
+	     3.4 Pfeile und Bolzen
+	     ====================================================
+	     Vanilla befiedert mit Kunststoff. Federn sind die Befiederung. Am Brandpfeil
+	     faellt das Schiesspulver, der Talg im Tuch traegt die Flamme. Am Feuertopf
+	     (Vanillas Sprengpfeil, D87) wird es zu Lehm fuer den Topf und Talg fuer den
+	     Brandsatz. Die Buendel sind Vanillas Vielfache: 80 Stueck, am Feuertopf 60. -->
+
+	<!-- Brandpfeil. Vanilla: Spitze 1, KUNSTSTOFF 2, SCHIESSPULVER 2, Tuch 5, Talg 1. -->
+	<remove xpath="/recipes/recipe[@name='ammoArrowFlaming']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoArrowFlaming']/ingredient[@name='resourceGunPowder']" />
+	<set xpath="/recipes/recipe[@name='ammoArrowFlaming']/ingredient[@name='resourceAnimalFat']/@count">3</set>
+	<append xpath="/recipes/recipe[@name='ammoArrowFlaming']">
+		<ingredient name="resourceFeather" count="2" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleArrowFlaming']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoBundleArrowFlaming']/ingredient[@name='resourceGunPowder']" />
+	<set xpath="/recipes/recipe[@name='ammoBundleArrowFlaming']/ingredient[@name='resourceAnimalFat']/@count">240</set>
+	<append xpath="/recipes/recipe[@name='ammoBundleArrowFlaming']">
+		<ingredient name="resourceFeather" count="160" />
+	</append>
+
+	<!-- Brandbolzen: wie der Brandpfeil. -->
+	<remove xpath="/recipes/recipe[@name='ammoCrossbowBoltFlaming']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoCrossbowBoltFlaming']/ingredient[@name='resourceGunPowder']" />
+	<set xpath="/recipes/recipe[@name='ammoCrossbowBoltFlaming']/ingredient[@name='resourceAnimalFat']/@count">3</set>
+	<append xpath="/recipes/recipe[@name='ammoCrossbowBoltFlaming']">
+		<ingredient name="resourceFeather" count="2" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltFlaming']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltFlaming']/ingredient[@name='resourceGunPowder']" />
+	<set xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltFlaming']/ingredient[@name='resourceAnimalFat']/@count">240</set>
+	<append xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltFlaming']">
+		<ingredient name="resourceFeather" count="160" />
+	</append>
+
+	<!-- Panzerbrechender Pfeil und Bolzen (Arbeitsname Nadelpfeil, D87). Vanilla:
+	     Spitze 1, KUNSTSTOFF 2. -->
+	<remove xpath="/recipes/recipe[@name='ammoArrowSteelAP']/ingredient[@name='resourceScrapPolymers']" />
+	<append xpath="/recipes/recipe[@name='ammoArrowSteelAP']">
+		<ingredient name="resourceFeather" count="2" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleArrowSteelAP']/ingredient[@name='resourceScrapPolymers']" />
+	<append xpath="/recipes/recipe[@name='ammoBundleArrowSteelAP']">
+		<ingredient name="resourceFeather" count="160" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoCrossbowBoltSteelAP']/ingredient[@name='resourceScrapPolymers']" />
+	<append xpath="/recipes/recipe[@name='ammoCrossbowBoltSteelAP']">
+		<ingredient name="resourceFeather" count="2" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltSteelAP']/ingredient[@name='resourceScrapPolymers']" />
+	<append xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltSteelAP']">
+		<ingredient name="resourceFeather" count="160" />
+	</append>
+
+	<!-- Feuertopfpfeil (Vanillas Sprengpfeil, D87). Vanilla: Spitze 1, KUNSTSTOFF 2,
+	     SCHIESSPULVER 6, Pergament 1, Nesselfaser 1. -->
+	<remove xpath="/recipes/recipe[@name='ammoArrowExploding']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoArrowExploding']/ingredient[@name='resourceGunPowder']" />
+	<append xpath="/recipes/recipe[@name='ammoArrowExploding']">
+		<ingredient name="resourceFeather" count="2" />
+		<ingredient name="resourceClayLump" count="2" />
+		<ingredient name="resourceAnimalFat" count="4" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleArrowExploding']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoBundleArrowExploding']/ingredient[@name='resourceGunPowder']" />
+	<append xpath="/recipes/recipe[@name='ammoBundleArrowExploding']">
+		<ingredient name="resourceFeather" count="120" />
+		<ingredient name="resourceClayLump" count="120" />
+		<ingredient name="resourceAnimalFat" count="240" />
+	</append>
+
+	<!-- Feuertopfbolzen. Vanilla: Spitze 1, KUNSTSTOFF 2, SCHIESSPULVER 8, Pergament
+	     1, Nesselfaser 1. -->
+	<remove xpath="/recipes/recipe[@name='ammoCrossbowBoltExploding']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoCrossbowBoltExploding']/ingredient[@name='resourceGunPowder']" />
+	<append xpath="/recipes/recipe[@name='ammoCrossbowBoltExploding']">
+		<ingredient name="resourceFeather" count="2" />
+		<ingredient name="resourceClayLump" count="3" />
+		<ingredient name="resourceAnimalFat" count="5" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltExploding']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltExploding']/ingredient[@name='resourceGunPowder']" />
+	<append xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltExploding']">
+		<ingredient name="resourceFeather" count="120" />
+		<ingredient name="resourceClayLump" count="180" />
+		<ingredient name="resourceAnimalFat" count="300" />
+	</append>
+
+	<!-- ====================================================
+	     3.5 Grosser Rucksack
+	     ====================================================
+	     Vanilla: Naehzeug 13, Leder 50, KUNSTSTOFF 20, Tiegelstahl 5. Der Kunststoff
+	     geht im Leder auf, samt seiner Qualitaetszeile: "5,10,15,20,25" und
+	     "15,30,45,60,75" werden "20,40,60,80,100". -->
+	<set xpath="/recipes/recipe[@name='backpackLarge']/ingredient[@name='resourceLeather']/@count">70</set>
+	<remove xpath="/recipes/recipe[@name='backpackLarge']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='backpackLarge']/ingredient[@name='resourceLegendaryParts']" />
+	<set xpath="/recipes/recipe[@name='backpackLarge']/effect_group/passive_effect[@tags='resourceLeather']/@value">20,40,60,80,100</set>
+	<remove xpath="/recipes/recipe[@name='backpackLarge']/effect_group/passive_effect[@tags='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='backpackLarge']/effect_group/passive_effect[@tags='resourceLegendaryParts']" />
+
+	<!-- ====================================================
+	     3.6 Aufsaetze fuer die Ruestung (13)
+	     ====================================================
+	     Kunststoff und Klebeband -> Leder, Mechanikteile und Feder ->
+	     Schmiedeeisen, alles zusammengezaehlt. Diese Rezepte haben keine
+	     Qualitaetszeilen. Namen und Wirkung der Aufsaetze bleiben Vanilla. -->
+
+	<!-- Vanilla: KUNSTSTOFF 10, Leder 6, KLEBEBAND 1, MECHANIK 4, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorStoragePocket']/ingredient[@name='resourceLeather']/@count">17</set>
+	<remove xpath="/recipes/recipe[@name='modArmorStoragePocket']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorStoragePocket']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorStoragePocket']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorStoragePocket']">
+		<ingredient name="resourceForgedIron" count="4" />
+	</append>
+
+	<!-- Vanilla: KUNSTSTOFF 15, Leder 8, KLEBEBAND 2, MECHANIK 4, Naehzeug 2. -->
+	<set xpath="/recipes/recipe[@name='modArmorDoubleStoragePocket']/ingredient[@name='resourceLeather']/@count">25</set>
+	<remove xpath="/recipes/recipe[@name='modArmorDoubleStoragePocket']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorDoubleStoragePocket']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorDoubleStoragePocket']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorDoubleStoragePocket']">
+		<ingredient name="resourceForgedIron" count="4" />
+	</append>
+
+	<!-- Vanilla: KUNSTSTOFF 20, Leder 10, KLEBEBAND 3, MECHANIK 4, Naehzeug 3. -->
+	<set xpath="/recipes/recipe[@name='modArmorTripleStoragePocket']/ingredient[@name='resourceLeather']/@count">33</set>
+	<remove xpath="/recipes/recipe[@name='modArmorTripleStoragePocket']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorTripleStoragePocket']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorTripleStoragePocket']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorTripleStoragePocket']">
+		<ingredient name="resourceForgedIron" count="4" />
+	</append>
+
+	<!-- Vanilla: KUNSTSTOFF 40, Leder 20, KLEBEBAND 6, Naehzeug 6, LEGENDAERES TEIL 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorQuadStoragePocket']/ingredient[@name='resourceLeather']/@count">66</set>
+	<remove xpath="/recipes/recipe[@name='modArmorQuadStoragePocket']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorQuadStoragePocket']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorQuadStoragePocket']/ingredient[@name='resourceLegendaryParts']" />
+
+	<!-- Vanilla: Tuch 100, KUNSTSTOFF 2, Leder 15, Leim 3, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorBandolier']/ingredient[@name='resourceLeather']/@count">17</set>
+	<remove xpath="/recipes/recipe[@name='modArmorBandolier']/ingredient[@name='resourceScrapPolymers']" />
+
+	<!-- Vanilla: KUNSTSTOFF 10, Leder 4, KLEBEBAND 1, MECHANIK 4, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorImprovedFittings']/ingredient[@name='resourceLeather']/@count">15</set>
+	<remove xpath="/recipes/recipe[@name='modArmorImprovedFittings']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorImprovedFittings']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorImprovedFittings']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorImprovedFittings']">
+		<ingredient name="resourceForgedIron" count="4" />
+	</append>
+
+	<!-- Vanilla: KUNSTSTOFF 20, Leder 8, KLEBEBAND 2, MECHANIK 8, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorCustomizedFittings']/ingredient[@name='resourceLeather']/@count">30</set>
+	<remove xpath="/recipes/recipe[@name='modArmorCustomizedFittings']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorCustomizedFittings']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorCustomizedFittings']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorCustomizedFittings']">
+		<ingredient name="resourceForgedIron" count="8" />
+	</append>
+
+	<!-- Vanilla: Leder 2, KUNSTSTOFF 5, KLEBEBAND 1, MECHANIK 2, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorPlatingBasic']/ingredient[@name='resourceLeather']/@count">8</set>
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingBasic']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingBasic']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingBasic']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorPlatingBasic']">
+		<ingredient name="resourceForgedIron" count="2" />
+	</append>
+
+	<!-- Vanilla: Schmiedeeisen 10, KUNSTSTOFF 10, KLEBEBAND 2, MECHANIK 4, Naehzeug 1. -->
+	<set xpath="/recipes/recipe[@name='modArmorPlatingReinforced']/ingredient[@name='resourceForgedIron']/@count">14</set>
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingReinforced']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingReinforced']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorPlatingReinforced']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorPlatingReinforced']">
+		<ingredient name="resourceLeather" count="12" />
+	</append>
+
+	<!-- Vanilla: Tiegelstahl 4, KUNSTSTOFF 30, KLEBEBAND 1, MECHANIK 4, Naehzeug 1. -->
+	<remove xpath="/recipes/recipe[@name='modArmorMuffledConnectors']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorMuffledConnectors']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorMuffledConnectors']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorMuffledConnectors']">
+		<ingredient name="resourceLeather" count="31" />
+		<ingredient name="resourceForgedIron" count="4" />
+	</append>
+
+	<!-- Vanilla: Tiegelstahl 5, KUNSTSTOFF 60, KLEBEBAND 2, MECHANIK 5, Naehzeug 1. -->
+	<remove xpath="/recipes/recipe[@name='modArmorAdvancedMuffledConnectors']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorAdvancedMuffledConnectors']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorAdvancedMuffledConnectors']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorAdvancedMuffledConnectors']">
+		<ingredient name="resourceLeather" count="62" />
+		<ingredient name="resourceForgedIron" count="5" />
+	</append>
+
+	<!-- Vanilla: Tiegelstahl 5, KUNSTSTOFF 60, KLEBEBAND 2, MECHANIK 5, Naehzeug 1. -->
+	<remove xpath="/recipes/recipe[@name='modArmorStealthBoots']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='modArmorStealthBoots']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorStealthBoots']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modArmorStealthBoots']">
+		<ingredient name="resourceLeather" count="62" />
+		<ingredient name="resourceForgedIron" count="5" />
+	</append>
+
+	<!-- Vanilla: Tiegelstahl 5, KLEBEBAND 2, MECHANIK 20, FEDER 20, Naehzeug 1. -->
+	<remove xpath="/recipes/recipe[@name='modArmorImpactBracing']/ingredient[@name='resourceDuctTape']" />
+	<remove xpath="/recipes/recipe[@name='modArmorImpactBracing']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modArmorImpactBracing']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modArmorImpactBracing']">
+		<ingredient name="resourceLeather" count="2" />
+		<ingredient name="resourceForgedIron" count="40" />
+	</append>
+
+	<!-- ====================================================
+	     3.7 Aufsaetze fuer Waffen (16)
+	     ====================================================
+	     Vierzehn haben in Vanilla dasselbe Muster: Metall 5, Leim 5, MECHANIK 5,
+	     FEDER 10. Daraus wird Metall 5, Leim 5, Schmiedeeisen 15 - und wo das Metall
+	     selbst Schmiedeeisen ist, zusammen 20. -->
+
+	<!-- Acht auf Tiegelstahl: Schmiedeeisen 15 kommt dazu. -->
+	<remove xpath="/recipes/recipe[@name='modGunBowArrowRest']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modGunBowArrowRest']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modGunBowArrowRest']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modGunCrippleEm']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modGunCrippleEm']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modGunCrippleEm']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeClubMetalSpikes']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeClubMetalSpikes']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeClubMetalSpikes']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeClubMetalChain']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeClubMetalChain']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeClubMetalChain']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeErgonomicGrip']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeErgonomicGrip']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeErgonomicGrip']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeFortifyingGrip']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeFortifyingGrip']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeFortifyingGrip']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeIronBreaker']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeIronBreaker']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeIronBreaker']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+	<remove xpath="/recipes/recipe[@name='modMeleeTemperedBlade']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeTemperedBlade']/ingredient[@name='resourceSpring']" />
+	<append xpath="/recipes/recipe[@name='modMeleeTemperedBlade']">
+		<ingredient name="resourceForgedIron" count="15" />
+	</append>
+
+	<!-- Sechs auf Schmiedeeisen: 5 + 15 = 20. -->
+	<set xpath="/recipes/recipe[@name='modGunMeleeTheHunter']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modGunMeleeTheHunter']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modGunMeleeTheHunter']/ingredient[@name='resourceSpring']" />
+	<set xpath="/recipes/recipe[@name='modMeleeGraveDigger']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modMeleeGraveDigger']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeGraveDigger']/ingredient[@name='resourceSpring']" />
+	<set xpath="/recipes/recipe[@name='modMeleeSerratedBlade']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modMeleeSerratedBlade']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeSerratedBlade']/ingredient[@name='resourceSpring']" />
+	<set xpath="/recipes/recipe[@name='modMeleeStructuralBrace']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modMeleeStructuralBrace']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeStructuralBrace']/ingredient[@name='resourceSpring']" />
+	<set xpath="/recipes/recipe[@name='modMeleeWeightedHead']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modMeleeWeightedHead']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeWeightedHead']/ingredient[@name='resourceSpring']" />
+	<set xpath="/recipes/recipe[@name='modMeleeWoodSplitter']/ingredient[@name='resourceForgedIron']/@count">20</set>
+	<remove xpath="/recipes/recipe[@name='modMeleeWoodSplitter']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeWoodSplitter']/ingredient[@name='resourceSpring']" />
+
+	<!-- Diamantspitze. Vanilla: Tiegelstahl 5, Leim 5, MECHANIK 5, Rohdiamant 3 - sie
+	     hatte keine Feder. -->
+	<remove xpath="/recipes/recipe[@name='modMeleeDiamondTip']/ingredient[@name='resourceMechanicalParts']" />
+	<append xpath="/recipes/recipe[@name='modMeleeDiamondTip']">
+		<ingredient name="resourceForgedIron" count="5" />
+	</append>
+
+	<!-- Brennender Schaft. Vanilla: Tiegelstahl 5, Leim 5, OEL 5, BENZIN 50. Talg im
+	     Tuch brennt auch. -->
+	<remove xpath="/recipes/recipe[@name='modMeleeClubBurningShaft']/ingredient[@name='resourceOil']" />
+	<remove xpath="/recipes/recipe[@name='modMeleeClubBurningShaft']/ingredient[@name='ammoGasCan']" />
+	<append xpath="/recipes/recipe[@name='modMeleeClubBurningShaft']">
+		<ingredient name="resourceAnimalFat" count="5" />
+		<ingredient name="resourceCloth" count="10" />
+	</append>
+
+	<!-- ====================================================
+	     3.8 Vier Rezepte fallen (Tabelle 4)
+	     ====================================================
+	     biomeWeatherItem1 bis 4 tragen in Vanilla keinen Namen (leere Zeile in der
+	     Sprachdatei) und verlangen Ruestungssatz, Kunststoff und Linse. Das REZEPT
+	     faellt - ein Weg, kein Gegenstand (Vertrag 03 Abschnitt 4). Die Gegenstaende
+	     selbst bleiben, wie der Purge sie beurteilt. -->
+	<remove xpath="/recipes/recipe[@name='biomeWeatherItem1']" />
+	<remove xpath="/recipes/recipe[@name='biomeWeatherItem2']" />
+	<remove xpath="/recipes/recipe[@name='biomeWeatherItem3']" />
+	<remove xpath="/recipes/recipe[@name='biomeWeatherItem4']" />
+
 </config>

@@ -186,4 +186,80 @@
 
 	</append>
 
+	<!-- ===================================================================
+	     SACKGASSEN: 8 VANILLA-REZEPTE BEKOMMEN ZEITGEMAESSE ZUTATEN, 1 FAELLT
+	     ===================================================================
+	     Balancing 0003 (docs/balancing/0003-sackgassen-und-belohnungen.md), vom
+	     Nutzer am 22. November 2026 abgenommen (D89). Tabellen 1 und 4.
+
+	     Gemessen am ConfigsDump vom 21. November: 80 Rezepte ueberleben den Purge
+	     und nennen eine gesperrte Zutat. Hier stehen die 9 zu Feld, Stall, Imkerei
+	     und Wehrbau; 59 stehen in 700_30_Ausruestung, 12 in 700_20_Material.
+
+	     Derselbe Griff wie oben bei den Werkstaetten: die gesperrte Zutat faellt,
+	     eine zeitgemaesse kommt dazu oder geht in einer vorhandenen auf, der Rest
+	     der Vanilla-Zeile bleibt samt ihren tags. Alle Mengen sind Setzungen fuer
+	     WP9. -->
+
+	<!-- Feld. Vanilla: Holz 4, verdorbenes Fleisch 10, SALPETER 25, Lehm 100. Gemahlene
+	     Knochen duengen. Die neue Zutat steht VOR <effect_group>, und die
+	     Qualitaetszeile (sie senkt die Mengen mit 'Vom Landleben') nennt den Knochen
+	     statt des Salpeters. -->
+	<remove xpath="/recipes/recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='resourcePotassiumNitratePowder']" />
+	<insertAfter xpath="/recipes/recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='foodRottingFlesh']">
+		<ingredient name="resourceBone" count="5" />
+	</insertAfter>
+	<set xpath="/recipes/recipe[@name='farmPlotBlockVariantHelper']/effect_group/passive_effect[@operation='perc_add']/@tags">foodRottingFlesh,resourceBone,resourceClayLump</set>
+
+	<!-- Bienenstock. Vanilla: Wachs 5, Holz 100, Naegel 50, Schmiedeeisen 10,
+	     KLEBEBAND 8. -->
+	<remove xpath="/recipes/recipe[@name='cntApiary']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='cntApiary']">
+		<ingredient name="resourceLeather" count="8" />
+	</append>
+
+	<!-- Brutkasten. Vanilla: Holz 200, KUNSTSTOFF 100, Naegel 50, Leim 5. Ein
+	     Bienenkorb ist geflochten: Nesselfaser. -->
+	<remove xpath="/recipes/recipe[@name='toolApiaryBroodBox']/ingredient[@name='resourceScrapPolymers']" />
+	<append xpath="/recipes/recipe[@name='toolApiaryBroodBox']">
+		<ingredient name="resourceYuccaFibers" count="50" />
+	</append>
+
+	<!-- Honigschleuder. Vanilla: Schmiedeeisen 20, Holz 100, MECHANIK 5, Naegel 5,
+	     ROHR 2. Beides geht im Schmiedeeisen auf (20 + 5 + 2 = 27). -->
+	<set xpath="/recipes/recipe[@name='toolApiaryExtractor']/ingredient[@name='resourceForgedIron']/@count">27</set>
+	<remove xpath="/recipes/recipe[@name='toolApiaryExtractor']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='toolApiaryExtractor']/ingredient[@name='resourceMetalPipe']" />
+
+	<!-- Imkerpfeife. Vanilla: Tiegelstahl 10, Leder 20, Holz 20, Naegel 5, ROHR 2. Der
+	     Rauchtopf ist aus Lehm. -->
+	<remove xpath="/recipes/recipe[@name='toolApiarySmoker']/ingredient[@name='resourceMetalPipe']" />
+	<append xpath="/recipes/recipe[@name='toolApiarySmoker']">
+		<ingredient name="resourceClayLump" count="10" />
+	</append>
+
+	<!-- Huehnerstall. Vanilla: KUNSTSTOFF 200, Holz 100, Naegel 50, Schmiedeeisen 10,
+	     KLEBEBAND 8. Der Kunststoff geht im Holz auf (100 + 200 = 300). -->
+	<set xpath="/recipes/recipe[@name='cntChickenCoop']/ingredient[@name='resourceWood']/@count">300</set>
+	<remove xpath="/recipes/recipe[@name='cntChickenCoop']/ingredient[@name='resourceScrapPolymers']" />
+	<remove xpath="/recipes/recipe[@name='cntChickenCoop']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='cntChickenCoop']">
+		<ingredient name="resourceLeather" count="8" />
+	</append>
+
+	<!-- Huehnerauslauf. Vanilla: Tiegelstahl 10, Holz 20, Naegel 50, ROHR 20. Ein
+	     Auslauf ist ein Zaun (20 + 20 = 40 Holz). -->
+	<set xpath="/recipes/recipe[@name='toolChickenCoopRun']/ingredient[@name='resourceWood']/@count">40</set>
+	<remove xpath="/recipes/recipe[@name='toolChickenCoopRun']/ingredient[@name='resourceMetalPipe']" />
+
+	<!-- Zugbruecke. Vanilla: Schmiedeeisen 20, Holz 20, FEDER 20, MECHANIK 20. Ketten
+	     und Beschlaege sind Schmiedeeisen (20 + 20 + 20 = 60). -->
+	<set xpath="/recipes/recipe[@name='metalReinforcedWoodDrawBridge']/ingredient[@name='resourceForgedIron']/@count">60</set>
+	<remove xpath="/recipes/recipe[@name='metalReinforcedWoodDrawBridge']/ingredient[@name='resourceSpring']" />
+	<remove xpath="/recipes/recipe[@name='metalReinforcedWoodDrawBridge']/ingredient[@name='resourceMechanicalParts']" />
+
+	<!-- Das Bild FAELLT. Es verlangt Farbe (resourcePaint, gesperrt). Ein Rezept ist
+	     ein Weg, kein Gegenstand (Vertrag 03 Abschnitt 4). -->
+	<remove xpath="/recipes/recipe[@name='pictureVariantHelper']" />
+
 </config>

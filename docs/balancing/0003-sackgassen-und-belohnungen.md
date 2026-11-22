@@ -1,6 +1,8 @@
 # 0003 — Sackgassen-Rezepte und leere Auftragsbelohnungen
 
-**Stand:** 2026-11-22 · **Vorschlag, Abnahme offen** — gebaut ist nichts.
+**Stand:** 2026-11-22 · **Vom Nutzer abgenommen am 2026-11-22** („Abnehmen und bauen", D89).
+**Gebaut:** die Rezepte (Tabellen 1 bis 5) — siehe „Stand des Baus" am Ende. Die Belohnungen
+folgen im nächsten Schritt.
 **Gehört zu:** Plan 0001, Ziel Z3 („sackgassenfrei") und offener Punkt „erster Lauf im Spiel,
 leere Belohnungen"; F-05, F-02, F-03.
 
@@ -252,6 +254,46 @@ Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-
   `recipes` über das Ergebnis laufen: ein **Vorlauf**, kein Nachweis. Er zählt erst, wenn
   derselbe Weg am heutigen Stand die 80 Sackgassen des Dumps wiederfindet.
 - Erwartet nach dem Bau: **0 Sackgassen**, 0 Belohnungen auf leere Gruppen.
+
+## Stand des Baus
+
+### Rezepte — gebaut am 2026-11-22
+
+264 Patch-Operationen in drei Dateien, von Hand geschrieben (D53):
+
+| Datei | Rezepte | davon entfallen |
+|---|---|---|
+| `mod/700_30_Ausruestung/Config/recipes.xml`, Abschnitt 3 | 59 | 4 (Wettergegenstände) |
+| `mod/700_20_Material/Config/recipes.xml` | 12 | 2 (Roter Tee, Leim aus Supermais) |
+| `mod/700_40_Bauen/Config/recipes.xml` | 9 | 1 (Bild) |
+
+Kein Rezept ist neu geschrieben: Vanillas Zeile bleibt samt `tags`, Werkstatt und Zeit, nur
+die gesperrte Zutat geht — derselbe Griff wie bei den Werkstätten in WP4.3. Eine neue Zutat
+steht vor `<effect_group>`, wo das Rezept eine hat (`insertAfter`), sonst am Ende (`append`).
+
+**Der Vorlauf** (außerhalb des Repositorys: alle Modlets in Ladereihenfolge auf eine Kopie
+von Vanillas `Data/Config` angerechnet, mit den Operationen aus `patch-operationen.ps1`,
+danach `mod700check recipes` über das Ergebnis):
+
+| Stand | Operationen | ohne Treffer | Rezepte | erreichbar | Sackgassen |
+|---|---|---|---|---|---|
+| vor dem Bau | 2392 | 0 | 278 | 198 | **80** |
+| ConfigsDump des Spiels, 2026-11-21 | — | — | 278 | 198 | **80** |
+| nach dem Bau | 2656 | 0 | 271 | 271 | **0** |
+
+Der Vorlauf zählt, weil er am Stand vor dem Bau genau die Zahlen des Dumps trifft (auch
+8100 bekannte Kennungen, 345 Wurzeln, 496 / 115 / 66 Belohnungen). Sieben Rezepte weniger:
+die sieben, die entfallen. **Ein Nachweis ist er nicht** — den gibt erst ein neuer
+ConfigsDump nach einem Spielstart mit der Mod. Bis dahin bleibt `recipes` in `check-all.ps1`
+mit 80 rot, weil es den alten Dump liest.
+
+**Form der 271 Rezepte** (auch am Vorlauf gemessen): keine Zutat doppelt, keine Zutat hinter
+`<effect_group>`, jede Marke einer `CraftingIngredientCount`-Zeile nennt eine Zutat ihres
+Rezepts — bis auf eine Zeile, die schon Vanilla so führt (`toolCookingPot` nennt
+`unit_iron`). Die Prüfung findet etwas: an Vanilla meldet sie zwei solche Zeilen.
+
+**Nicht gesehen:** ob das Spiel eine per `insertAfter` eingefügte Zutat und die geänderten
+Qualitätszeilen so liest wie erwartet — das zeigt das Handwerksfenster (Prüfliste).
 
 ## Nicht entschieden
 

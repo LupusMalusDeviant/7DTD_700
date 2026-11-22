@@ -88,4 +88,101 @@
 		        hier, F-02/F-03 in 700_30). Die Kette endet darum an der Klinge. -->
 
 	</append>
+
+	<!-- ===================================================================
+	     SACKGASSEN: 10 VANILLA-REZEPTE BEKOMMEN ZEITGEMAESSE ZUTATEN, 2 FALLEN
+	     ===================================================================
+	     Balancing 0003 (docs/balancing/0003-sackgassen-und-belohnungen.md), vom
+	     Nutzer am 22. November 2026 abgenommen (D89). Tabellen 1 und 3.
+
+	     Gemessen am ConfigsDump vom 21. November: 80 Rezepte ueberleben den Purge
+	     und nennen eine gesperrte Zutat. Hier stehen die 12 zu Werkstoff, Werkzeug
+	     im Ofen und Kueche; 59 stehen in 700_30_Ausruestung, 9 in 700_40_Bauen.
+
+	     Vanillas Rezept bleibt stehen - samt tags, Werkstatt und Zeit -, nur die
+	     gesperrte Zutat geht. Derselbe Griff wie bei den Werkstaetten in
+	     700_40_Bauen. Kein <recipe> und kein tags-Attribut an einem Rezept: die
+	     Bindung in 700_50 bleibt unberuehrt.
+
+	     DIE REGEL: Klebeband -> Leder, Mechanikteile -> Schmiedeeisen, Rohr -> Lehm,
+	     Oel -> Holzkohle, Mais und Kartoffel -> Pilze und Goldrute. Steht der Ersatz
+	     schon im Rezept, wird zusammengezaehlt. Alle Mengen sind Setzungen fuer WP9. -->
+
+	<!-- Schiene. Vanilla: Tuch 10, Holz 2, KLEBEBAND 1. Ein Riemen haelt sie. -->
+	<remove xpath="/recipes/recipe[@name='medicalSplint']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='medicalSplint']">
+		<ingredient name="resourceLeather" count="1" />
+	</append>
+
+	<!-- Reparatursatz. Vanilla: Schmiedeeisen 1, KLEBEBAND 1. -->
+	<remove xpath="/recipes/recipe[@name='resourceRepairKit']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='resourceRepairKit']">
+		<ingredient name="resourceLeather" count="1" />
+	</append>
+
+	<!-- Blasebalg. Vanilla: Holz 6, Leder 20, ROHR 2, KLEBEBAND 5, Naegel 5. Die Duese
+	     eines Blasebalgs am Rennofen ist aus Lehm; das Klebeband geht im Leder auf. -->
+	<set xpath="/recipes/recipe[@name='toolBellows']/ingredient[@name='resourceLeather']/@count">25</set>
+	<remove xpath="/recipes/recipe[@name='toolBellows']/ingredient[@name='resourceMetalPipe']" />
+	<remove xpath="/recipes/recipe[@name='toolBellows']/ingredient[@name='resourceDuctTape']" />
+	<append xpath="/recipes/recipe[@name='toolBellows']">
+		<ingredient name="resourceClayLump" count="10" />
+	</append>
+
+	<!-- Schmelztiegel. Vanilla: Schmiedeeisen 100, MECHANIK 20, Bruchstein 1200, OEL
+	     20, Lehm 900. Die Mechanikteile gehen im Schmiedeeisen auf; statt Oel brennt
+	     Holzkohle den Tiegel. -->
+	<set xpath="/recipes/recipe[@name='toolForgeCrucible']/ingredient[@name='resourceForgedIron']/@count">120</set>
+	<remove xpath="/recipes/recipe[@name='toolForgeCrucible']/ingredient[@name='resourceMechanicalParts']" />
+	<remove xpath="/recipes/recipe[@name='toolForgeCrucible']/ingredient[@name='resourceOil']" />
+	<append xpath="/recipes/recipe[@name='toolForgeCrucible']">
+		<ingredient name="resourceCoal" count="20" />
+	</append>
+
+	<!-- Dietrich und sein Buendel. Vanilla: Schmiedeeisen 1, MECHANIK 1 (Buendel: je
+	     40). Ein Dietrich ist ein gebogener Eisenstift. -->
+	<set xpath="/recipes/recipe[@name='resourceLockPick']/ingredient[@name='resourceForgedIron']/@count">2</set>
+	<remove xpath="/recipes/recipe[@name='resourceLockPick']/ingredient[@name='resourceMechanicalParts']" />
+	<set xpath="/recipes/recipe[@name='resourceLockPickBundle']/ingredient[@name='resourceForgedIron']/@count">80</set>
+	<remove xpath="/recipes/recipe[@name='resourceLockPickBundle']/ingredient[@name='resourceMechanicalParts']" />
+
+	<!-- Huehnerfutter. Vanilla: MAIS 1, verdorbenes Fleisch 1. -->
+	<remove xpath="/recipes/recipe[@name='resourceChickenFeed']/ingredient[@name='foodCropCorn']" />
+	<append xpath="/recipes/recipe[@name='resourceChickenFeed']">
+		<ingredient name="foodCropMushrooms" count="1" />
+	</append>
+
+	<!-- Fleischeintopf. Vanilla: Bratfleisch 1, KARTOFFEL 2, MAIS 2, Talg 1, Wasser 1.
+	     Kartoffel und Mais kommen aus Amerika; Pilze und Goldrute wachsen hier. -->
+	<remove xpath="/recipes/recipe[@name='foodMeatStew']/ingredient[@name='foodCropPotato']" />
+	<remove xpath="/recipes/recipe[@name='foodMeatStew']/ingredient[@name='foodCropCorn']" />
+	<append xpath="/recipes/recipe[@name='foodMeatStew']">
+		<ingredient name="foodCropMushrooms" count="2" />
+		<ingredient name="resourceCropGoldenrodPlant" count="2" />
+	</append>
+
+	<!-- Gemueseeintopf. Vanilla: KARTOFFEL 2, MAIS 2, Pilze 2, Wasser 1. Die Kartoffel
+	     geht in den Pilzen auf (2 + 2 = 4). -->
+	<set xpath="/recipes/recipe[@name='foodVegetableStew']/ingredient[@name='foodCropMushrooms']/@count">4</set>
+	<remove xpath="/recipes/recipe[@name='foodVegetableStew']/ingredient[@name='foodCropPotato']" />
+	<remove xpath="/recipes/recipe[@name='foodVegetableStew']/ingredient[@name='foodCropCorn']" />
+	<append xpath="/recipes/recipe[@name='foodVegetableStew']">
+		<ingredient name="resourceCropGoldenrodPlant" count="2" />
+	</append>
+
+	<!-- Aschehuhn. Vanilla: Huhn 1, Pilze 2, MAIS 3, Holzkohle 1, Wasser 1. -->
+	<remove xpath="/recipes/recipe[@name='foodAshChickenStew']/ingredient[@name='foodCropCorn']" />
+	<append xpath="/recipes/recipe[@name='foodAshChickenStew']">
+		<ingredient name="resourceCropGoldenrodPlant" count="3" />
+	</append>
+
+	<!-- Roter Tee FAELLT. Er verlangt die Chrysantheme, und die ist absichtlich
+	     gesperrt (denylist.txt: Ostasien), kein Versehen. Goldrutentee gibt es schon.
+	     Ein Rezept ist ein Weg, kein Gegenstand (Vertrag 03 Abschnitt 4). -->
+	<remove xpath="/recipes/recipe[@name='drinkJarRedTea']" />
+
+	<!-- Leim aus Supermais FAELLT - nur diese eine von Vanillas drei Fassungen. Das
+	     Praedikat trifft die Fassung ueber ihre Zutat; Leim aus Knochen bleibt, an
+	     Feuerstelle und Kraeuterkueche. -->
+	<remove xpath="/recipes/recipe[@name='resourceGlue'][ingredient/@name='foodCropGraceCorn']" />
 </config>
