@@ -172,6 +172,14 @@
 	<append xpath="/items/item[@name='resourceForgedSteel']">
 		<property name="CustomIcon" value="ico700_tiegelstahl" />
 	</append>
+	<!-- Kraeutersud (D99/D133): Vanillas Bild zeigt zwei Tabletten. Umgebogen auf den
+	     Goldrutentee, gruen getoent - ein Sud im Gefaess. In der Hand bleibt Vanillas
+	     Tablettenroehrchen, und beim Trinken klingt es nach Tabletten (nur mit eigenem
+	     Modell und Klang zu aendern, F-16). Im Spiel nicht gesehen. -->
+	<append xpath="/items/item[@name='drugHerbalAntibiotics']">
+		<property name="CustomIcon" value="drinkJarGoldenRodTea" />
+		<property name="CustomIconTint" value="9fbf6a" />
+	</append>
 	<append xpath="/items/item[@name='resourceScrapIron']">
 		<property name="CustomIcon" value="oreIronBoulder" />
 	</append>

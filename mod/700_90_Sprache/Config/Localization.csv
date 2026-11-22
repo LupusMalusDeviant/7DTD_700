@@ -1181,3 +1181,6 @@ buffDesert_Storm_Recover01Name,buffs,Buff,,,,"Sand Storm: Easing",,"Sandsturm: A
 buffSnow_Storm_Stage01Name,buffs,Buff,,,,"Snow Storm: Onset",,"Schneesturm: Anfang",,,,,,,,,,,
 buffSnow_Storm_Stage02Name,buffs,Buff,,,,"Snow Storm: Height",,"Schneesturm: Höhe",,,,,,,,,,,
 buffSnow_Storm_Recover01Name,buffs,Buff,,,,"Snow Storm: Easing",,"Schneesturm: Abklingen",,,,,,,,,,,
+drugHerbalAntibiotics,items,Medical,,,,"Herb Decoction",,"Kräutersud",,,,,,,,,,,
+drugHerbalAntibioticsDesc,items,Medical,,,,"Mushrooms, goldenrod and the thick leaves that go into salve, boiled down in clean water until the brew is bitter. Every draught drives a festering wound back a little – it takes more than one.\nBrewed in a pot at the Hearth or in the Herbalist's Kitchen.",,"Pilze, Goldrute und die dicken Blätter, aus denen auch die Salbe gepresst wird, in sauberem Wasser eingekocht, bis der Sud bitter ist. Jeder Schluck drängt eine schwärende Wunde ein Stück zurück – einer allein reicht nicht.\nGebraut im Topf an der Feuerstelle oder in der Kräuterküche.",,,,,,,,,,,
+medicalT2-2,progression,Attribute,,,,"Tier 2: Herb Decoction",,"Stufe 2: Kräutersud",,,,,,,,,,,

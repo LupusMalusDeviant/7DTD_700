@@ -110,10 +110,11 @@
 	<setattribute name="hidden" xpath="/progression/crafting_skills/crafting_skill[@name='craftingVehicles']">true</setattribute>
 
 	<!-- NICHT verborgen, obwohl es naheliegt — jedes Mal mit Zahl:
-	       craftingMedical        1 von 8 bleibt (medicalFirstAidBandage). Die Stufe des
-	                              Heilers in WP7.5. drugHerbalAntibiotics ist gesperrt und
-	                              wäre ein Umdeutungs-Kandidat, gehört aber zu F-11,
-	                              Phase 2 (D50).
+	       craftingMedical        2 von 8 bleiben (medicalFirstAidBandage auf Stufe 5,
+	                              drugHerbalAntibiotics auf Stufe 30). Die Stufe des
+	                              Heilers in WP7.5. drugHerbalAntibiotics war bis zum
+	                              2026-11-23 gesperrt und ist seither der Kräutersud
+	                              (D99/D133, zu prüfen); F-11 in Phase 2 baut darauf.
 	       craftingWorkstations  15 von 20 bleiben. Die Stufe des Handwerkers.
 	       craftingArmor          8 von 68 bleiben, weil unsere Rüstung eigene
 	                              Gegenstände sind (27 Rezepte in 700_30).

@@ -87,6 +87,7 @@ eine Abweichung.
 | `resourceSewingKit` | Nähzeug | Sewing Kit | Nähset / Sewing Kit | WP5.5 |
 | `resourceGlue` | Leim | Glue | Kleber / Glue | D78 |
 | `medicalFirstAidBandage` | Salbenverband | Salved Bandage | Erste-Hilfe-Verband / First Aid Bandage | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `drugHerbalAntibiotics` | Kräutersud | Herb Decoction | Natürliche Antibiotika / Herbal Antibiotics | Loop 2026-11-23 — Name zu prüfen (D99, D133) |
 
 ## 4. Werkstätten und Feuer
 

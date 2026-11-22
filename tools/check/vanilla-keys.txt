@@ -1357,3 +1357,6 @@ buffDesert_Storm_Recover01Name            # Sandsturm: Abklingen
 buffSnow_Storm_Stage01Name                # Schneesturm: Anfang
 buffSnow_Storm_Stage02Name                # Schneesturm: Hoehe
 buffSnow_Storm_Recover01Name              # Schneesturm: Abklingen
+drugHerbalAntibiotics                     # Kraeutersud (D99/D133)
+drugHerbalAntibioticsDesc
+medicalT2-2                               # Stufe 2: Kraeutersud

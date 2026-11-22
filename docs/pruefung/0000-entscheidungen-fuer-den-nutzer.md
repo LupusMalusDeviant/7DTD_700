@@ -78,6 +78,7 @@ Marke; sonst wird es zurückgebaut.
 | N-27 | [E] | Berichtigung: die Biom-Ausrüstung trägt in Vanilla Namen (Lesefehler in Balancing 0003). | `037110f` | — |
 | N-28 | [E] [S] | **Erstes eigenes Bild:** der Silberpfennig zeigt `ico700_silberpfennig` — drei gehämmerte Silberscheiben mit Perlkreis, in Blender gebaut — statt des umgebogenen Silberbrockens (N-23). Dazu das Werkzeug `tools/assets/symbole.ps1`, das Register `assets/ASSETS.md` und zwei Prüfungen. Quellbild: `assets/quelle/symbole/ico700_silberpfennig.png`. | D131, Plan-0002 WP3.4 | ob dir das Bild gefällt; ob es im Beutel erscheint (S-09). Bleibt das Feld leer, ist es eine Zeile zurück auf den Silberbrocken. |
 | N-29 | [E] [S] | **Drei weitere eigene Bilder** statt Vanillas Barren mit dem Stempel „Fe 26": **Schmiedeeisen** (auch Schmiedeflicken, getönt), **Tiegelstahl**, **Klinge**. Alle aus Blender, alle im Register. Quellbilder unter `assets/quelle/symbole/`. | D132, Plan-0002 WP3.6 | die Bilder selbst (einfach gehalten — Stäbe und eine rohe Klinge); im Spiel S-09. |
+| N-30 | [E] [S] | **Kräutersud** gegen Infektion: `drugHerbalAntibiotics` ist von der Denylist genommen (die Denylist ist deine Sache — darum ausdrücklich hier), heißt „Kräutersud / Herb Decoction" und hat ein Rezept ohne Chrysantheme, Salpeter und Blaubeeren: Pilze 3, Goldrute 3, Aloe-Blatt 2, abgekochtes Wasser 1, an der Feuerstelle mit Topf. Freischaltung über Wundversorgung 30 wie in Vanilla; er liegt auch wieder in der Beute. Vorher gab es gegen eine Infektion nur Honig. | D133 | Freigabe der Kennung; Name; Rezept und Mengen; ob Aloe als Zutat passt. Im Spiel: S-10. |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut
 
@@ -85,7 +86,7 @@ Marke; sonst wird es zurückgebaut.
 |---|---|---|---|
 | N-40 | [E] | **Sechs Kernfragen:** Spielziel (D106), Tod und Wiederkehr (D105), Deutung der Seuchennacht (D107), Leitplanke für Religion (D108), Frauen- und Männerfiguren (D109), Schwierigkeit und empfohlene Voreinstellung (D112). | GDD 7.8 |
 | N-41 | [E] | **Was darf in Phase 1 modern bleiben?** Geschlossene Liste getragener Lücken (D93) — sonst ist das MVP-Ziel „ohne Anachronismus in Texten" nie erfüllbar. | GDD 7.8 |
-| N-42 | [E] | **Wasser** (D98: Tausammler als Regentonne), **Infektion** (D99: Kräutersud), **Luftabwurf** (D95: aus), **Stürme** (D97), **Karte und Kompass** (D96), **Musik** (D114). | GDD 7.8 |
+| N-42 | [E] | ~~**Wasser** (D98: Tausammler als Regentonne), **Infektion** (D99: Kräutersud),~~ *Stand 2026-11-23: Wasser ist gemessen und erreichbar — ein leeres Gefäß füllt sich in V 3.40 am Gewässer, nichts zu bauen, die Regentonne ist Kür (D134); der Kräutersud ist gebaut (N-30). Offen bleibt daraus nur der Name „Tonkrug" für das Schraubglas.* Weiter offen: **Luftabwurf** (D95: aus), **Stürme** (D97), **Karte und Kompass** (D96), **Musik** (D114). | GDD 7.8 |
 | N-43 | [E] | **Gegner:** vier Stufennamen, Sprenger als platzende Fäulnis (D100); vollständige Zuordnungstabelle (D101). | GDD 7.8, F-06 |
 | N-44 | [E] | **Händler:** Zuordnung, Namen, Stimmen stumm (D102); Stromaufträge heraus (D103); 35 unerfüllbare Herausforderungen (D104). | GDD 7.8 |
 | N-45 | [E] | **Begriffe, die später als 700 sind** (D123): Tiegelstahl, Motte, Geselle, Destillierhelm, Weberschiffchen, Tee, Hexenbesen, Kraftlinien, Damast; Heidelbeere freigeben. | GDD 7.8, Prüfung 0003 §5 |
@@ -111,6 +112,7 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** ~~(Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt)~~ (N-03). **Vorbereitet am 2026-11-23:** `tools\build\build.ps1 -Install -MitTest` legt die Test-Überlagerung dazu — alle acht Lichtquellen brennen dann rund 2 Minuten. Ablauf in sechs Schritten: [`test/README.md`](../../test/README.md). Bitte die Zeit vom Setzen bis zum Erlöschen notieren (daraus folgt die echte Brenndauer). Danach `build.ps1 -Install` ohne den Schalter. | 5 min |
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
 | S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
+| S-10 | **Wasser und Sud:** ein leeres Gefäß am Fluss oder Tümpel benutzen — wird es zu trübem Wasser (D134)? Kräutersud im Kreativmenü ansehen (Name, Bild) und an der Feuerstelle mit Topf suchen (N-30). | 3 min |
 | S-09 | **Eigenes Bild im Beutel** (N-28, N-29, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes; dazu Schmiedeeisen, Tiegelstahl, Klinge, Schmiedeflicken. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
 
 ## 7. Phase 2 — Entscheidungen aus dem Loop

@@ -114,6 +114,29 @@
 		<ingredient name="resourceLeather" count="1" />
 	</append>
 
+	<!-- Kraeutersud (drugHerbalAntibiotics), D99/D133, Loop 2026-11-23, zu pruefen.
+	     Gemessen: nach dem Purge gab es gegen eine Infektion nur Honig. Vanillas zwei
+	     Rezepte (Feuerstelle mit Topf; Kraeuterkueche) nennen Chrysantheme (Ostasien),
+	     Salpeter und Blaubeeren - alle drei gesperrt (denylist.txt). Sie gehen. Goldrute
+	     kommt in der Menge der Chrysantheme (3 am Feuer, 1 in der Kraeuterkueche), das
+	     Aloe-Blatt der Kraeutersalbe fuer die Blaubeeren (2 statt 5 am Feuer, 1 statt 2
+	     in der Kraeuterkueche - Aloe ist seltener); der Salpeter wird nicht ersetzt.
+	     Pilze und abgekochtes Wasser bleiben. Am Feuer also: Pilze 3, Goldrute 3, Aloe 2,
+	     Wasser 1. Freischaltung wie in Vanilla ueber craftingMedical 30 - die Rezepte
+	     behalten ihre tags. Die Wirkung (10 von 100 je Gabe) ist Vanillas Zahl und bleibt.
+	     Alle Mengen sind Setzungen fuer WP9. -->
+	<remove xpath="/recipes/recipe[@name='drugHerbalAntibiotics']/ingredient[@name='resourceCropChrysanthemumPlant']" />
+	<remove xpath="/recipes/recipe[@name='drugHerbalAntibiotics']/ingredient[@name='resourcePotassiumNitratePowder']" />
+	<remove xpath="/recipes/recipe[@name='drugHerbalAntibiotics']/ingredient[@name='foodCropBlueberries']" />
+	<append xpath="/recipes/recipe[@name='drugHerbalAntibiotics'][@craft_area='campfire']">
+		<ingredient name="resourceCropGoldenrodPlant" count="3" />
+		<ingredient name="resourceCropAloeLeaf" count="2" />
+	</append>
+	<append xpath="/recipes/recipe[@name='drugHerbalAntibiotics'][@craft_area='chemistryStation']">
+		<ingredient name="resourceCropGoldenrodPlant" count="1" />
+		<ingredient name="resourceCropAloeLeaf" count="1" />
+	</append>
+
 	<!-- Reparatursatz: ENTFAELLT seit dem Nachtlauf vom 22./23. November 2026 (zu
 	     pruefen durch den Nutzer). Hier stand der Ersatz seiner Zutat (Klebeband ->
 	     Leder, D89). Seit kein erlaubter Gegenstand mehr mit dem Reparatur-Kit flickt,

@@ -438,6 +438,10 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 !medicalFirstAidBandage    # D56 -> gute Wundauflage
 !medicalSplint             # D56 -> Schiene
 !medicalAloeCream          # D56 -> Kraeutersalbe
+!drugHerbalAntibiotics     # D99/D133 -> Kraeutersud (Loop 2026-11-23, zu pruefen): das einzige
+                           # Mittel gegen eine Infektion neben Honig. Rezept ohne Chrysantheme
+                           # und Salpeter in 700_20_Material; freigeschaltet wie in Vanilla
+                           # ueber craftingMedical (Lehrblatt: Wundversorgung), Stufe 30.
 # NICHT freigegeben und damit weiter gesperrt: medicalFirstAidKit (Verbandskasten),
 # medicalBloodBag (Blutkonserve), medicalPlasterCast (Gipsverband - Gipsschienen sind
 # erst ab dem 10. Jahrhundert belegt, die Schiene oben deckt dieselbe Funktion ab),
