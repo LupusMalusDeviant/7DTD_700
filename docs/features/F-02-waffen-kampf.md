@@ -143,7 +143,11 @@ Alle drei ersetzen `resourceRepairKit`, das genau dafür zu WP5 aufgeschoben war
 das Kit, 13 sind umgehängt (8 Waffen in WP5.4, 5 Rüstungsklassen in WP5.5), **10 sind offen** —
 vier Bögen (WP5.2), fünf Werkzeuge (F-05, kein Paket der Phase 1) und `partsMaster` (WP7). Eine
 Prüfung, die „erlaubter Gegenstand repariert mit gesperrtem Werkzeug" selbst findet, gibt es
-**nicht**; die zehn sind von Hand gezählt und als offener Punkt in Vertrag 04 vermerkt. Der Verlust an Maximal-Haltbarkeit wandert nach **Phase 2** und
+**nicht**; die zehn sind von Hand gezählt und als offener Punkt in Vertrag 04 vermerkt.
+**Stand nach dem Nachtlauf vom 2026-11-22 (zu prüfen durch den Nutzer): 23 von 23.** Die vier
+Bögen flicken mit dem Bogenzeug, die fünf Werkzeuge mit Schleifstein oder Schmiedeflicken,
+`partsMaster` mit dem Schmiedeflicken; das Reparatur-Kit selbst ist damit vom Purge gesperrt
+(Plan-0001, offene Punkte; Vertrag 04, Nachtrag Leermeldung). Der Verlust an Maximal-Haltbarkeit wandert nach **Phase 2** und
 bekommt dort Finding und Eintrag im Patch-Manifest; D21 bleibt gültig, D60 verfeinert es nur.
 
 **Die Handwerksqualität ist eine Sprachdatei-Arbeit, kein Patch.** Vanilla liest die sieben

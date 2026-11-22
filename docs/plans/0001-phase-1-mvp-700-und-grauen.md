@@ -2396,8 +2396,29 @@ werden:
   `RepairTools` (Holzbogen, Langbogen, Armbrust, Schwere Armbrust). Name, Mengen und Zahlen
   sind Claudes Vorschlag. Nachweis: `kette-pruefen` 754 XPaths, 0 ohne Treffer; der Erzeuger
   `wp7-bindung.ps1` führt das Rezept unter „bewusst offen" (19 statt 18). Im Spiel nicht
-  gesehen. Damit zeigen noch **sechs** erlaubte Gegenstände auf das gesperrte Reparatur-Kit
-  (fünf Werkzeuge und `partsMaster`), nicht mehr zehn. Der Vorschlag lautete:
+  gesehen. Damit zeigten noch **sechs** erlaubte Gegenstände auf das gesperrte Reparatur-Kit
+  (fünf Werkzeuge und `partsMaster`), nicht mehr zehn.
+  **Ebenfalls im Nachtlauf gebaut, ZU PRÜFEN durch den Nutzer — das Reparatur-Kit ist
+  gesperrt, der letzte Aufschub eingelöst (23 von 23):** (a) sechs `set`-Zeilen in
+  `700_30_Ausruestung/Config/items.xml`: Zimmermannshammer, beide Spitzhacken und beide
+  Schaufeln flicken mit **Schleifstein oder Schmiedeflicken** wie die Äxte, `partsMaster` mit
+  dem Schmiedeflicken. Das ist F-05-Gebiet und kein Paket der Phase 1 — gebaut ist nur der
+  Zeiger, damit erlaubtes Werkzeug nicht unreparierbar bleibt; neue Gegenstände oder Zahlen
+  gibt es keine. (b) Die Zeile `resourceRepairKit` ist aus `aufschub.txt` heraus, an ihrer
+  Stelle steht die Leermeldung `=kein-aufschub` (Vertrag 04, Nachtrag Leermeldung, **Abnahme
+  offen**). (c) Der Purge ist neu erzeugt: 626 gesperrte Kennungen (vorher 625), 1935
+  Patchzeilen, 0 ohne Treffer; die D89-Ersetzung am Rezept des Kits (Klebeband → Leder) ist
+  entfallen, weil es das Rezept nicht mehr gibt. **Gemessen am Vorlauf:** 2681 Operationen,
+  0 ohne Treffer; 271 Rezepte (vorher 272), alle erreichbar, 0 Sackgassen; 543 Kennungen,
+  0 aufgeschoben, 0 verboten; 30 Gegenstände tragen den Zeiger auf das Kit noch, **keiner
+  davon ist erreichbar** (27 nennt der Purge als gesperrt — Feuerwaffen, Motorwerkzeug,
+  Baseballschläger, `smallEngine` —, die übrigen 3 nennt außerhalb von `items.xml` keine der
+  44 anderen Dateien); 0 Belohnungen auf
+  leeren Gruppen; drei Loot-Gruppen sind neu leer (`groupCarWeaponsTools`,
+  `twitch_repairkits`, `twitch_tool3`). **Der Prüfbefehl ist bis zum nächsten Spielstart
+  rot — 7 Prüfungen, 1 rot:** der Dump von 22:08 kennt das Kit noch. Am Vorlauf: 7 Prüfungen,
+  0 rot. Grün wird es erst mit einem neuen Dump (Prüfliste, gesammelter Spieltest).
+  Der Vorschlag zum Bogenzeug lautete:
   **Neu und offen — Reparaturzeug für Bögen und Armbrüste** `[braucht Nutzer]` (D91):
   Holzbogen, Langbogen und beide Armbrüste zeigen in `RepairTools` auf das gesperrte
   `resourceRepairKit` (gemessen an Vanilla und am Dump); der einfache Bogen flickt mit Holz.

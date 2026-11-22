@@ -666,13 +666,29 @@
 	<set xpath="/items/item[@name='gunBowT1IronCrossbow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
 	<set xpath="/items/item[@name='gunBowT3CompoundCrossbow']/property[@name='RepairTools']/@value">itm700_bogenzeug</set>
 
-	<!-- NOCH OFFEN, UND ZWAR GEZAEHLT: nach diesem Schritt zeigen noch SECHS erlaubte
-	     Gegenstaende auf resourceRepairKit (bis D91 zehn; die vier Boegen stehen jetzt
-	     oben) - fuenf Werkzeuge (Spitzhacke, Schaufel, Klauenhammer je
-	     Stufe) und partsMaster. Die Werkzeuge gehoeren zu F-05 und keinem Paket der
-	     Phase 1, also bleibt der Aufschub in aufschub.txt stehen. Eine Pruefung, die
-	     "erlaubter Gegenstand repariert mit gesperrtem Werkzeug" von selbst findet,
-	     gibt es bisher NICHT - diese zehn sind von Hand gezaehlt. Vermerkt in
-	     Vertrag 04 als offener Punkt. -->
+	<!-- Die fuenf Werkzeuge und partsMaster (Nachtlauf 22./23. November 2026 - ZU
+	     PRUEFEN DURCH DEN NUTZER). Gemessen am Dump vom 22. November: Spitzhacke und
+	     Schaufel je in Eisen und Stahl und der Klauenhammer zeigten als letzte
+	     erreichbare Gegenstaende auf das Reparatur-Kit - jeder traegt RepairTools
+	     selbst. Sie flicken jetzt wie die Waffen (D60): Schleifstein teilweise,
+	     Schmiedeflicken ganz. partsMaster ist nicht erreichbar (CreativeMode None),
+	     aber ein Zeiger auf einen gesperrten Gegenstand ist ein offener Faden.
+
+	     DAMIT ZEIGT KEIN ERLAUBTER GEGENSTAND MEHR AUF resourceRepairKit (23 von 23),
+	     und der Aufschub in tools/check/aufschub.txt ist eingeloest: das Reparatur-Kit
+	     faellt mit dem Purge. -->
+	<set xpath="/items/item[@name='meleeToolRepairT1ClawHammer']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeToolPickT1IronPickaxe']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeToolPickT2SteelPickaxe']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeToolShovelT1IronShovel']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='meleeToolShovelT2SteelShovel']/property[@name='RepairTools']/@value">itm700_schleifstein,itm700_schmiedeflicken</set>
+	<set xpath="/items/item[@name='partsMaster']/property[@name='RepairTools']/@value">itm700_schmiedeflicken</set>
+
+	<!-- STAND DAVOR, als Verlauf: nach WP5.5 zeigten noch zehn erlaubte Gegenstaende
+	     auf resourceRepairKit (vier Boegen, fuenf Werkzeuge, partsMaster), und der
+	     Aufschub blieb stehen. Eine Pruefung, die "erlaubter Gegenstand repariert mit
+	     gesperrtem Werkzeug" von selbst findet, gibt es weiter NICHT - gezaehlt ist am
+	     Dump, mit einer Auswertung ausserhalb des Repositorys. Vermerkt in Vertrag 04
+	     als offener Punkt. -->
 
 </config>

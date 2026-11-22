@@ -1,0 +1,2 @@
+# Gegenprobe: die Leermeldung ohne Grund dahinter - Exit 2.
+=kein-aufschub

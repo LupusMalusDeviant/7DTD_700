@@ -114,11 +114,11 @@
 		<ingredient name="resourceLeather" count="1" />
 	</append>
 
-	<!-- Reparatursatz. Vanilla: Schmiedeeisen 1, KLEBEBAND 1. -->
-	<remove xpath="/recipes/recipe[@name='resourceRepairKit']/ingredient[@name='resourceDuctTape']" />
-	<append xpath="/recipes/recipe[@name='resourceRepairKit']">
-		<ingredient name="resourceLeather" count="1" />
-	</append>
+	<!-- Reparatursatz: ENTFAELLT seit dem Nachtlauf vom 22./23. November 2026 (zu
+	     pruefen durch den Nutzer). Hier stand der Ersatz seiner Zutat (Klebeband ->
+	     Leder, D89). Seit kein erlaubter Gegenstand mehr mit dem Reparatur-Kit flickt,
+	     ist der Aufschub eingeloest und 700_10_Purge entfernt das Rezept ganz; eine
+	     Operation darauf traefe nichts mehr. -->
 
 	<!-- Blasebalg. Vanilla: Holz 6, Leder 20, ROHR 2, KLEBEBAND 5, Naegel 5. Die Duese
 	     eines Blasebalgs am Rennofen ist aus Lehm; das Klebeband geht im Leder auf. -->

@@ -236,6 +236,12 @@ unter dem Flicken — „teilweise" heißt bei einer Waffe mit 1000 Haltbarkeit 
 `resourceRepairKit` — vier Bögen (WP5.2), fünf Werkzeuge (F-05) und `partsMaster` (WP7). Von
 Hand gezählt; eine Prüfung dafür gibt es nicht (Vertrag 04, offene Punkte).
 
+**Nachtrag 2026-11-22 (Nachtlauf, zu prüfen durch den Nutzer):** alle zehn sind umgehängt —
+die Bögen auf das Bogenzeug (D91), die fünf Werkzeuge auf Schleifstein oder Schmiedeflicken,
+`partsMaster` auf den Schmiedeflicken. Neue Zahlen gibt es dabei keine: die Werkzeuge erben
+die Reparaturmengen der beiden vorhandenen Gegenstände (400 und 32000). Das Reparatur-Kit ist
+gesperrt.
+
 ---
 
 ## 6. Nebenbei in WP5 geändert, und darum hier

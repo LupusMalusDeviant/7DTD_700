@@ -3289,3 +3289,56 @@ aufsteigend (Lauf 2 rot). Das Skript ist danach byte-gleich mit dem Stand davor.
 **Am echten Rechner:** `check-all.ps1` ohne Zusatz nennt
 `Gesucht unter: …\AppData\Roaming\7DaysToDie\Saves; C:\Users\Anwender\Saves`, liest den Dump
 von 22:08 und endet mit 218 Gegenproben, 0 fehlgeschlagen; 7 Prüfungen, 0 rot, Exit 0.
+
+## Nachtrag Leermeldung, 2026-11-22 — `=kein-aufschub` in `aufschub.txt`, **Abnahme offen**
+
+Gebaut im Nachtlauf vom 2026-11-22 auf 23 ohne Rückfrage (Auftrag des Nutzers: „agiere nach
+deinen Empfehlungen, aber markiere die Entscheidung als zu prüfen durch mich", D92). **Zu
+prüfen durch den Nutzer; dieser Nachtrag ist nicht abgenommen.**
+
+**Der Anlass.** Mit dem Reparatur-Kit ist der letzte Aufschub eingelöst (23 von 23 Zeigern
+umgehängt). Eine `aufschub.txt` ohne Regel ist aber nach dem Abschnitt „Aufschub: eine
+Umbuchung, kein Bestanden" ein Benutzungsfehler (Exit 2) — zu Recht, denn eine versehentlich
+geleerte Datei darf nicht wie „nichts aufgeschoben" aussehen. Die Datei wegzulassen ginge
+auch nicht: `check-all.ps1`, `purge-patch` und die Gegenproben reichen sie fest durch, und
+mit ihr ginge die Geschichte der eingelösten Aufschübe verloren.
+
+**Die Regel.** Eine Zeile `=kein-aufschub  # <Grund>` sagt ausdrücklich: nichts ist
+aufgeschoben.
+
+| Inhalt der Datei | Ergebnis |
+|---|---|
+| mindestens eine Regel, keine Leermeldung | wie bisher |
+| nur die Leermeldung, mit Grund | gültig, 0 Aufschubregeln; jede verbotene Kennung ist ein Fehler |
+| Leermeldung **ohne** Grund hinter `#` | Benutzungsfehler, Exit 2 |
+| Leermeldung **und** eine Regel | Benutzungsfehler, Exit 2 („Widerspruch") |
+| weder Regel noch Leermeldung | Benutzungsfehler, Exit 2, wie bisher |
+
+Das Gleichheitszeichen kommt in keiner Kennung vor; die Zeile ist mit keiner Regel zu
+verwechseln. Wer wieder etwas aufschiebt, ersetzt die Leermeldung durch die neue Regel.
+
+**Gegenproben** (222 statt 218; `tools/check/testdaten/aufschub-leer*.txt`,
+`aufschub-leermeldung*.txt`):
+
+| Lauf | Erwartet |
+|---|---|
+| nur Leermeldung, im Baum eine verbotene Kennung | Exit 1, `erreichbarer-anachronismus`, kein `aufgeschobener-anachronismus` |
+| Datei nur mit Kommentar | Exit 2 |
+| Leermeldung neben einer Regel | Exit 2 |
+| Leermeldung ohne Grund | Exit 2 |
+
+**Drei Verfälschungen, jede macht ihre Gegenprobe rot:** der Widerspruch wird nicht geprüft
+(Lauf 3 rot, Exit 1 statt 2); der Grund wird nicht verlangt (Lauf 4 rot, Exit 1 statt 2); die
+Leermeldung zählt nicht als Inhalt (Lauf 1 rot, dazu 30 weitere, weil die echte
+`aufschub.txt` dann selbst abgelehnt wird). `Deferrals.cs` ist danach byte-gleich mit dem
+Stand davor (SHA-256 verglichen), das Werkzeug neu gebaut und signiert.
+
+**Stand der Prüfung, ehrlich:** `check-all.ps1` ohne Zusatz ist mit diesem Stand **rot**:
+222 Gegenproben, 0 fehlgeschlagen; 7 Prüfungen, **1 rot** — `erreichbarer-anachronismus:
+resourceRepairKit`. Das ist das Signal, das es geben muss: der Dump von 22:08 stammt aus
+einem Spielstart **vor** der Sperre, dort gibt es das Kit noch, und der Aufschub, der es
+bisher entschuldigte, ist weg. Am Vorlauf des neuen Standes
+(`check-all.ps1 -Source <Vorlauf> -SkipGegenproben`): 7 Prüfungen, 0 rot; 543 Kennungen,
+0 aufgeschoben, 0 verboten; 271 Rezepte, 0 Sackgassen; 626 gesperrte Kennungen, 0 davon noch
+erreichbar. Ein Vorlauf ist kein Nachweis — grün wird der Prüfbefehl erst mit dem Dump des
+nächsten Spielstarts mit diesem Stand (Plan-0001, Prüfliste).

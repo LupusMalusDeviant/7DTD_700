@@ -12,7 +12,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     472 Zeilen. -->
+	     473 Zeilen. -->
 
 	<set xpath="/items/item[@name='TEST_ITEM_00']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:253 -->
 	<set xpath="/items/item[@name='TEST_ITEM_01']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:253 -->
@@ -437,6 +437,7 @@
 	<append xpath="/items/item[@name='resourcePotassiumNitratePowder']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:58 -->
 	<append xpath="/items/item[@name='resourcePotassiumNitratePowderBundle']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:58 -->
 	<append xpath="/items/item[@name='resourceRadiator']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:32 -->
+	<append xpath="/items/item[@name='resourceRepairKit']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:345 -->
 	<append xpath="/items/item[@name='resourceRocketCasing']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:62 -->
 	<append xpath="/items/item[@name='resourceRocketTip']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:63 -->
 	<append xpath="/items/item[@name='resourceScopeLens']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach name: denylist.txt:64 -->

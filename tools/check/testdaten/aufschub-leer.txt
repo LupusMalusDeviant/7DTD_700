@@ -1,0 +1,2 @@
+# Gegenprobe: eine Aufschub-Datei ohne jede Zeile - nur dieser Kommentar. Sie koennte
+# versehentlich geleert sein und muss darum ein Benutzungsfehler bleiben (Exit 2).

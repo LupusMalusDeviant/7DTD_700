@@ -23,6 +23,13 @@ internal sealed class Deferrals
 
     public int Rules => _rules.Count;
 
+    /// <summary>
+    /// Die Zeile, die sagt: nichts ist aufgeschoben. Kein gueltiger Kennungsname (das
+    /// Gleichheitszeichen kommt in keiner Kennung vor), also nicht mit einer Regel zu
+    /// verwechseln.
+    /// </summary>
+    public const string EmptyMarker = "=kein-aufschub";
+
     public static Deferrals Empty() => new();
 
     public static Deferrals Load(string path)
@@ -34,6 +41,7 @@ internal sealed class Deferrals
 
         var list = new Deferrals();
         string[] lines = File.ReadAllLines(path);
+        int emptyMarkerLine = 0;
 
         for (int i = 0; i < lines.Length; i++)
         {
@@ -43,6 +51,24 @@ internal sealed class Deferrals
 
             if (rule.Length == 0)
             {
+                continue;
+            }
+
+            // Die ausdrueckliche Leermeldung (seit dem 2026-11-22): sind alle Aufschuebe
+            // eingeloest, steht in der Datei genau diese eine Zeile, mit einem Grund. Eine
+            // Datei ganz ohne Zeile bleibt ein Benutzungsfehler - sie koennte auch
+            // versehentlich geleert sein, und dann fiele niemandem auf, dass nichts mehr
+            // aufgeschoben ist.
+            if (rule == EmptyMarker)
+            {
+                if (reason.Length == 0)
+                {
+                    throw new UsageException(
+                        $"{path}:{i + 1}: '{EmptyMarker}' braucht einen Grund hinter '#', etwa "
+                        + "'# alle Aufschuebe eingeloest am 2026-11-22'.");
+                }
+
+                emptyMarkerLine = i + 1;
                 continue;
             }
 
@@ -61,11 +87,20 @@ internal sealed class Deferrals
                 package.Value, reason));
         }
 
-        if (list._rules.Count == 0)
+        if (emptyMarkerLine > 0 && list._rules.Count > 0)
+        {
+            throw new UsageException(
+                $"{path}:{emptyMarkerLine}: '{EmptyMarker}' steht neben {list._rules.Count} "
+                + "Aufschub-Zeile(n). Entweder ist etwas aufgeschoben oder nichts - beides "
+                + "zugleich ist ein Widerspruch.");
+        }
+
+        if (list._rules.Count == 0 && emptyMarkerLine == 0)
         {
             throw new UsageException(
                 $"{path} enthaelt keine einzige Zeile. Eine leere Aufschub-Datei ist kein "
-                + "Aufschub - dann die Option weglassen.");
+                + $"Aufschub - dann die Option weglassen, oder '{EmptyMarker}  # Grund' "
+                + "eintragen, wenn alle Aufschuebe eingeloest sind.");
         }
 
         return list;

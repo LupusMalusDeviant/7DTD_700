@@ -1,0 +1,3 @@
+# Gegenprobe: Leermeldung UND eine Regel - ein Widerspruch, Exit 2.
+=kein-aufschub   # angeblich alles eingeloest
+pruefFeuerrohr   # WP9: und doch steht hier ein Aufschub

@@ -68,7 +68,24 @@
 # Die zehn sind VON HAND gezaehlt. Eine Pruefung, die "erlaubter Gegenstand repariert mit
 # gesperrtem Werkzeug" selbst findet, gibt es nicht - vermerkt als offener Punkt in
 # Vertrag 04. Teilweise eingeloest ist nicht eingeloest, auch bei 13 von 23.
-resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.4 und WP5.5 haben 13 von 23, die Boegen fehlen (WP5.2)
+#
+# EINGELOEST IM NACHTLAUF VOM 22./23. NOVEMBER 2026 (zu pruefen durch den Nutzer) - die
+# Zeile 'resourceRepairKit' steht darum nicht mehr hier:
+#
+#   erledigt  4 Boegen              -> Bogenzeug (D91)
+#   erledigt  5 Werkzeuge           -> Schleifstein und Schmiedeflicken, wie die Waffen (D60)
+#   erledigt  1 partsMaster         -> Schmiedeflicken (nicht erreichbar, nur der Zeiger)
+#
+# 23 von 23. Gezaehlt am ConfigsDump vom 22. November (67 Gegenstaende tragen den Zeiger,
+# 9 davon waren erreichbar: die vier Boegen und die fuenf Werkzeuge) und am Vorlauf danach.
+# Das Reparatur-Kit selbst faellt damit unter die Verbotsregel und wird vom Purge gesperrt.
+# Die Zeile lautete:
+#   resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.4 und WP5.5 haben 13 von 23, die Boegen fehlen (WP5.2)
+#
+# DAMIT IST NICHTS MEHR AUFGESCHOBEN. Die Zeile unten sagt das ausdruecklich; ohne sie
+# waere eine Datei ohne Regel ein Benutzungsfehler (sie koennte versehentlich geleert sein).
+# Wer wieder etwas aufschiebt, ersetzt diese Zeile durch die neue Regel.
+=kein-aufschub        # alle Aufschuebe eingeloest am 2026-11-22 (zuletzt resourceRepairKit, Nachtlauf)
 # resourceArmorCraftingKit ist mit WP5.5 EINGELOEST und steht darum nicht mehr hier.
 # Gemessen: nach dem Purge verlangen ihn nur noch vier Rezepte, die Biom-Abzeichen
 # biomeWeatherItem1 bis 4 - und die sind ueber resourceScrapPolymers ohnehin schon tot.

@@ -81,7 +81,7 @@ Mengen bei Qualität 1. „+" heißt: zur vorhandenen Menge gezählt.
 | Brandpfeil `ammoArrowFlaming` | Kunststoff 2, Schießpulver 2 | Federn 2; Talg 1 + 2 = 3 |
 | Brandpfeil-Bündel `ammoBundleArrowFlaming` | Kunststoff 160, Schießpulver 160 | Federn 160; Talg 80 + 160 = 240 |
 | Schiene `medicalSplint` | Klebeband 1 | Leder 1 |
-| Reparatursatz `resourceRepairKit` | Klebeband 1 | Leder 1 |
+| ~~Reparatursatz `resourceRepairKit`~~ | ~~Klebeband 1~~ | ~~Leder 1~~ — **entfallen am 2026-11-22:** das Kit ist gesperrt, das Rezept gibt es nicht mehr (Plan-0001, Nachtlauf; zu prüfen) |
 | Blasebalg `toolBellows` | Rohr 2, Klebeband 5 | Lehm 10 (Düse); Leder 20 + 5 = 25 |
 | Schmelztiegel `toolForgeCrucible` | Mech. Teile 20, Öl 20 | Schmiedeeisen 100 + 20 = 120; Holzkohle 20 |
 | Feld `farmPlotBlockVariantHelper` | Salpeter 25 | Knochen 5 (Knochenmehl) |

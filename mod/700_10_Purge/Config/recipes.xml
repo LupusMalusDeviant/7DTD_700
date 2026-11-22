@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     361 Zeilen. -->
+	     362 Zeilen. -->
 
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletAP']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletBall']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -315,6 +315,7 @@
 	<remove xpath="/recipes/recipe[@name='resourceOilShaleBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourcePaint']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourcePotassiumNitratePowderBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
+	<remove xpath="/recipes/recipe[@name='resourceRepairKit']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceRocketCasing']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceRocketTip']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='resourceScopeLens']" />  <!-- Weg zu einer gesperrten Kennung -->

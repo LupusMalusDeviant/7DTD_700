@@ -394,6 +394,24 @@ Test-Output 'ohne Aufschub ist sie wieder ein Fehler' 1 `
 Test-Case 'Aufschub ohne Arbeitspaket wird abgelehnt' 2 @(
     'anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-ohne-wp.txt'))
 
+# Die Leermeldung (2026-11-22). Sind alle Aufschuebe eingeloest, steht in aufschub.txt die
+# Zeile '=kein-aufschub  # Grund'. Vier Gegenproben: (1) mit ihr laeuft die Pruefung, und
+# die Kennung ist wieder ein Fehler - genau wie mit --ohne-aufschub; (2) eine Datei ganz
+# ohne Zeile bleibt ein Benutzungsfehler, sie koennte versehentlich geleert sein; (3) die
+# Leermeldung neben einer Regel ist ein Widerspruch; (4) ohne Grund wird sie abgelehnt.
+Test-Output 'Leermeldung: nichts aufgeschoben, die Kennung ist ein Fehler' 1 `
+    @('anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-leermeldung.txt')) `
+    -MustContain @('erreichbarer-anachronismus: pruefFeuerrohr') `
+    -MustNotContain @('aufgeschobener-anachronismus')
+# Die drei Ablehnungen pruefen nur den Ausgang: die Meldung eines Benutzungsfehlers geht
+# auf die Fehlerausgabe, und die liest Test-Output nicht mit.
+Test-Case 'Aufschub-Datei ohne jede Zeile bleibt ein Benutzungsfehler' 2 @(
+    'anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-leer.txt'))
+Test-Case 'Leermeldung neben einer Regel ist ein Widerspruch' 2 @(
+    'anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-leermeldung-und-regel.txt'))
+Test-Case 'Leermeldung ohne Grund wird abgelehnt' 2 @(
+    'anachronisms', $eig, '--aufschub', (Join-Path $data 'aufschub-leermeldung-ohne-grund.txt'))
+
 Write-Output ""
 Write-Output "== Gegenprobe: eine Verbotsregel ohne Treffer faellt auf =="
 Test-Output 'Regel ohne Treffer wird genannt' 1 `

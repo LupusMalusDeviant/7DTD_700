@@ -1,0 +1,2 @@
+# Gegenprobe: die ausdrueckliche Leermeldung. Nichts ist aufgeschoben, und die Datei sagt es.
+=kein-aufschub   # Gegenprobe: alle Aufschuebe eingeloest
