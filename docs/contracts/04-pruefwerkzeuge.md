@@ -1,6 +1,13 @@
 # Vertrag 04 — Prüfwerkzeuge
 
-- **Status:** Entwurf, wartet auf Abnahme
+- **Status:** **Abgenommen vom Nutzer am 2026-11-22** (Entwurf vom 2026-11-07) — als Block, mit
+  allen Abschnitten und Nachträgen bis einschließlich „Nachtrag Review zu WP8.9". Grundlage
+  war eine Kurzübersicht der Regeln, die Entscheidungen des Nutzers sind. Darin enthalten sind
+  die zwei Berichtigungen, die eine eigene Abnahme brauchten: §3a (Erreichbarkeit) und §3d samt
+  den §5-Nachträgen. Wo weiter unten „gebaut vor der Abnahme" steht, beschreibt das den Stand,
+  als der Abschnitt entstand. **Nicht** Teil der Abnahme: was der Vertrag selbst als offen oder
+  als Grenze nennt, und die zwei unbehobenen Befunde aus dem zweiten Review der Vorprüfung
+  (Plan-0001, offene Punkte) — das sind Fehler im Werkzeug, keine Regeln.
 - **Datum:** 2026-11-07
 - **Gilt ab:** Phase 1 (Plan-0001 WP2)
 - **Beleg:** [WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md)
@@ -277,9 +284,12 @@ Eigenschaften sind kein Verständnis, nur ein besseres Signal als Namen. `cement
 Werkstätten bleiben darum eine kurze Liste von Hand. **Der Nachweis bleibt in jedem Fall der
 `ConfigsDump`-Lauf nach einem Spielstart mit den Modlets, nicht der Vorlauf gegen Vanilla.**
 
-## 3b. Jede Kennung bekommt ein Urteil (Nachtrag WP3.1c) — **Abnahme offen**
+## 3b. Jede Kennung bekommt ein Urteil (Nachtrag WP3.1c) — **abgenommen 2026-11-22**
 
-> **Status:** gebaut und gemessen, aber **nicht abgenommen.** §3a hat der Nutzer am
+> **Abgenommen:** vom Nutzer am 2026-11-07 (Plan-0001 WP3, samt den drei Sichtungsgruppen),
+> bestätigt mit der Block-Abnahme vom 2026-11-22. Der Vermerk aus der Zeit davor lautete:
+>
+> **Status:** gebaut und gemessen, aber ~~**nicht abgenommen.**~~ §3a hat der Nutzer am
 > 2026-11-07 abgenommen; dieser Abschnitt geht darüber hinaus. Was hier steht, ist im
 > Werkzeug und in `denylist.txt`/`aufschub.txt` schon umgesetzt — das war nötig, um die
 > Zahlen überhaupt messen zu können. Bevor die XPath-Patches von WP3.2 geschrieben werden,
@@ -563,7 +573,7 @@ eine Entscheidung und folgt aus keiner Liste. Sie steht von Hand in
 damit auch die Grenze zwischen erzeugt und geschrieben: `700_10_Purge` nimmt weg, was aus der
 Denylist folgt; alles, was dazukommt, gehört in die späteren Modlets (D53).
 
-## 3d. Der sechste Weg: Block-Abwürfe (Nachtrag WP4.1) — **Abnahme offen**
+## 3d. Der sechste Weg: Block-Abwürfe (Nachtrag WP4.1) — **abgenommen 2026-11-22**
 
 **Stand:** 7. November 2026, gebaut und grün. Dieser Nachtrag **berichtigt** §3a, §3b und §3c.
 
@@ -805,7 +815,7 @@ echten Dateien: 5 Rezepte, 4 werkzeuggebunden, **0 unaufgelöste Verweise**.
 und ob der XML-Patcher des Spiels unsere XPaths trifft. Ohne `SDTD_PATH` überspringt es sich
 und sagt ausdrücklich „KEIN GRUEN".
 
-### Nachtrag WP5.1 (2026-11-08): es sucht die Dateien jetzt selbst — **Abnahme offen**
+### Nachtrag WP5.1 (2026-11-08): es sucht die Dateien jetzt selbst — **abgenommen 2026-11-22**
 
 Die beiden Pfade standen fest im Skript, auf `700_20_Material`. Als WP5.1 die Waffenrezepte in
 `700_30_Ausruestung` anlegte, **hat das Skript sie nicht gesehen und weiter grün gemeldet**.
@@ -816,7 +826,7 @@ Jetzt sucht es `mod/**/recipes.xml` und `mod/**/items.xml` selbst und nimmt `700
 aus (erzeugt, enthält nur Entfernungen). Gemessen nach der Änderung: **15 Rezepte, 12
 werkzeuggebunden, 0 unaufgelöste Verweise** — vorher sah derselbe Lauf nur 4 davon.
 
-### Nachtrag WP5.5b (2026-11-08): es sieht auch unsere **Blöcke** — **Abnahme offen**
+### Nachtrag WP5.5b (2026-11-08): es sieht auch unsere **Blöcke** — **abgenommen 2026-11-22**
 
 Derselbe Fehler, eine Stufe später bemerkt. Das Skript las Vanillas `blocks.xml`, **unsere
 aber nicht**: die Definitionen kamen aus Vanillas `items.xml` und `blocks.xml` plus unseren
@@ -848,7 +858,7 @@ arbeiten auf `testdaten/kette/` mit erfundenen Kennungen:
 Gemessen nach der Änderung: **32 eigene Rezepte, 17 werkzeuggebunden, 18 eigene Definitionen,
 0 unaufgelöste Verweise**; 44 Gegenproben, 0 fehlgeschlagen.
 
-### Nachtrag WP6 (2026-11-08): eingehängte Zutaten und Reparaturwerkzeuge — **Abnahme offen**
+### Nachtrag WP6 (2026-11-08): eingehängte Zutaten und Reparaturwerkzeuge — **abgenommen 2026-11-22**
 
 **Nach einem echten Fehler geschlossen.** WP5.5b hat vier Werkstatt-Bau-Rezepte berichtigt und
 dabei `resourceClay` als Zutat eingetragen. **Diese Kennung gibt es in Vanilla nicht** — der
@@ -886,7 +896,7 @@ Marken und Pfade stolpern und wäre ein Prüfer, der schreit.
 | vertippte eingehängte Zutat wird rot | Exit 1, nennt `pruefLehmGibtesnicht` | der Fehler von WP5.5b, nachgestellt |
 | vertipptes Reparaturwerkzeug wird rot | Exit 1, nennt `pruefFlickenGibtesnicht` | die zweite Stelle |
 
-### Nachtrag WP6.1 (2026-11-08): umgebogene Verweise — **Abnahme offen**
+### Nachtrag WP6.1 (2026-11-08): umgebogene Verweise — **abgenommen 2026-11-22**
 
 **Diesmal vor dem Fehler geschlossen, nicht nach ihm.** Beim Schreiben des Ausbaupfades fiel
 auf, dass die drei Arten von `<set>`-Zeile, die WP6.1 braucht, in dieselbe Lücke fallen wie
@@ -925,7 +935,7 @@ Prüfer etwas sieht — mit ihr beweist sie, dass er nicht **alles** sieht. Ein 
 `<set>`-Wert aufzulösen versucht, stolpert über `ItemCount`, `damage_category` und
 Prefab-Pfade und schreit, bis niemand mehr hinhört.
 
-### Nachtrag WP6.4 (2026-11-08): Verweise in eigenen Definitionen — **Abnahme offen**
+### Nachtrag WP6.4 (2026-11-08): Verweise in eigenen Definitionen — **abgenommen 2026-11-22**
 
 **Die vierte Stelle, und die größte.** Die drei Nachträge davor schlossen Lücken im
 *Umbiegen* von Vanilla. Diese schließt eine im *eigenen Schreiben*: ein selbst geschriebener
@@ -976,7 +986,7 @@ Prefab-Pfad gültig sind, sieht dieses Skript nicht — es vergleicht Namen von 
 Namen aus Rezepten. Und ob die Fenstergruppe `workstation_blk700_webstuhl` wirklich gefunden
 wird, entscheidet WP3.6.
 
-## 5b. `rezepte_mit_gesperrter_zutat` — der dritte Nebeneffekt des Purge (Nachtrag WP5.1) — **Abnahme offen**
+## 5b. `rezepte_mit_gesperrter_zutat` — der dritte Nebeneffekt des Purge (Nachtrag WP5.1) — **abgenommen 2026-11-22**
 
 **Stand:** 8. November 2026, gebaut, zwei Gegenproben grün. Dieser Nachtrag ergänzt §3c.
 
@@ -1125,7 +1135,7 @@ Projekts — nach „Nachweis statt Status" darf ohne seinen Lauf keine Antwort 
 
 ---
 
-## Nachtrag WP7.1 — die XPaths selbst (8. November 2026), **Abnahme offen**
+## Nachtrag WP7.1 — die XPaths selbst (8. November 2026), **abgenommen 2026-11-22**
 
 Bis hierher stand unter den Grenzen von `kette-pruefen.ps1` wortwörtlich: *„Ob der
 XML-Patcher des Spiels unsere XPaths trifft, steht hier nicht."* Das war die größte Lücke
@@ -1191,7 +1201,7 @@ Test-Vanilla und wurden rot. Der Vorgabewert hängt jetzt an
 - **Ein getroffener XPath heißt nicht, dass der Patch das Richtige tut.** Dafür sind die
   vier anderen Verweisklassen da — und für den Rest der Spieltest.
 
-## Nachtrag WP7.1b — ein Erzeuger für Localization-Zeilen, **Abnahme offen**
+## Nachtrag WP7.1b — ein Erzeuger für Localization-Zeilen, **abgenommen 2026-11-22**
 
 `tools/gen/wp7-baumtexte.ps1` ist das erste Skript des Projekts, das **Mod-Inhalt
 erzeugt** statt ihn zu prüfen. Begründung: Vanilla benennt die Rangschlüssel der Attribute
@@ -1211,7 +1221,7 @@ eine `.ps1` als ANSI, und aus „Jäger" wird „JÃ¤ger" — genau so stand es
 der CSV. Die übrigen Skripte des Projekts umgehen das, indem sie gar keine Umlaute
 enthalten.
 
-## Nachtrag WP7.2 — Fortschritts-Verweise (8. November 2026), **Abnahme offen**
+## Nachtrag WP7.2 — Fortschritts-Verweise (8. November 2026), **abgenommen 2026-11-22**
 
 Die XPath-Prüfung aus WP7.1 sagt, ob ein Patch **landet**. Sie sagt nichts darüber, ob der
 **Wert**, den er schreibt, etwas bedeutet. Bei `progression.xml` ist das die gefährlichere
@@ -1249,7 +1259,7 @@ Datei ist für die XPath-Prüfung einwandfrei und für diese rot.
 - **Ein auflösbarer Verweis heißt nicht, dass die Zuordnung sinnvoll ist.** Dass der Bogen
   beim Jäger und nicht beim Fuhrmann hängt, prüft kein Skript.
 
-## Nachtrag WP7.2b — der zweite Erzeuger, **Abnahme offen**
+## Nachtrag WP7.2b — der zweite Erzeuger, **abgenommen 2026-11-22**
 
 `tools/gen/wp7-perks.ps1` hält die Zuordnung der 16 Unterbereiche und 38 lebenden Perks als
 Tabelle und erzeugt daraus drei Dateien: die Patch-Zeilen für `progression.xml`, die für
@@ -1268,7 +1278,7 @@ Namen getragen.
 
 Auch diese Datei trägt eine **UTF-8-BOM** (Windows PowerShell 5.1, siehe Nachtrag WP7.1b).
 
-## Nachtrag WP7.4 — der dritte Erzeuger, **Abnahme offen**
+## Nachtrag WP7.4 — der dritte Erzeuger, **abgenommen 2026-11-22**
 
 `tools/gen/wp7-abschriften.ps1` erzeugt die Zeilen für D69 aus einer Tabelle im Skript:
 welche der 19 Buchreihen lebt, wie sie heißt, welche Einzelbände tot sind und **warum**.
@@ -1334,7 +1344,7 @@ Erzeuger noch einmal. Der zweite Lauf muss dieselben fünf Dateien schreiben; am
   ConfigsDump.
 - Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 16.
 
-## Nachtrag WP7.5 — der vierte Erzeuger, **Abnahme offen**
+## Nachtrag WP7.5 — der vierte Erzeuger, **abgenommen 2026-11-22**
 
 `tools/gen/wp7-bindung.ps1` erzeugt die Zeilen für D70. Im Skript stehen fünf Tabellen:
 welche Rezepte Vanillas Linie folgen, welche Rüstungsteile unter welcher Basisklasse
@@ -1417,7 +1427,7 @@ statt aufgeschoben sind.
   dieses Skript nicht.
 - Was das Spiel aus den Zeilen macht, sagt das Skript nicht — Prüfliste 17.
 
-## Nachtrag WP8.5 — Glossar gegen Sprachdatei (20. November 2026), **Abnahme offen**
+## Nachtrag WP8.5 — Glossar gegen Sprachdatei (20. November 2026), **abgenommen 2026-11-22**
 
 F-12 verlangt als Abnahme „Glossar und Localization sind konsistent (Prüfskript)". Dieser
 Nachtrag beschreibt das Skript. **Gebaut vor der Abnahme**, wie die Nachträge seit WP7.1 —
@@ -1485,7 +1495,7 @@ Abweichungen, 0 Treffer) und `kette-pruefen` (415 XPaths, 0 unaufgelöst) grün;
 `SDTD_PATH`) und der übersprungene `purge-patch`-Lauf, der in `check-all.ps1` weder gezählt
 noch rot wurde. → Behoben im folgenden Nachtrag.
 
-## Nachtrag Review 2026-11-20 — ohne Spielpfad ist nichts grün, **Abnahme offen**
+## Nachtrag Review 2026-11-20 — ohne Spielpfad ist nichts grün, **abgenommen 2026-11-22**
 
 Vor dem Push von WP1–WP8.4 hat ein unabhängiges Review (Codex war am Limit, darum eine
 getrennte, nur lesende Claude-Sitzung) sieben Befunde gemeldet. Dieser Nachtrag behebt den
@@ -1542,7 +1552,7 @@ Dazu aus diesem Vertrag selbst, seit WP8.1 offen und von derselben Art wie Befun
 `kette-pruefen -Patches <pfad, den es nicht gibt>` meldet „0 XPaths, GREEN". → Behoben im
 folgenden Nachtrag.
 
-## Nachtrag zweites Review 2026-11-20 — sechs Befunde behoben, **Abnahme offen**
+## Nachtrag zweites Review 2026-11-20 — sechs Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `c829afa` und `71cd623` hat Codex (`gpt-6.2-sol`) acht Befunde gemeldet:
 keiner kritisch oder hoch, fünf mittel, drei niedrig. Sechs sind hier behoben, zwei nicht.
@@ -1606,7 +1616,7 @@ fehlgeschlagen** („Exit 0 erwartet 1"). Gegen das neu gebaute: 74, 0 fehlgesch
 (`Localization::addCsv`). Die Prüfung verlangt sauberes CSV, sie behauptet nicht, das Spiel
 verlange es auch.
 
-## Nachtrag drittes Review 2026-11-20 — fünf Befunde behoben, **Abnahme offen**
+## Nachtrag drittes Review 2026-11-20 — fünf Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `537fa6c` und `034313f` hat Codex (`gpt-6.2-sol`) sieben Befunde gemeldet:
 keiner kritisch oder hoch, vier mittel, drei niedrig. Fünf sind hier behoben, einer schon in
@@ -1685,7 +1695,7 @@ nicht stehen lässt.
   belegt, und welche UI-Mods hineingehören, hängt an Q8 (Vertrag 03 §9).
 - Offen aus dem ersten Review bleiben die Befunde 3 bis 7.
 
-## Nachtrag viertes Review 2026-11-21 — fünf Befunde behoben, **Abnahme offen**
+## Nachtrag viertes Review 2026-11-21 — fünf Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `4420e66` bis `5fd3ea9` hat Codex (`gpt-6.2-sol`) fünf Befunde gemeldet:
 keiner kritisch oder hoch, drei mittel, zwei niedrig. Drei treffen die Prüfwerkzeuge, zwei
@@ -1782,7 +1792,7 @@ in einer Seuchennacht gilt das 1,9-Fache —, und das ist **gelesen, nicht gemes
 - Befund 4 des dritten Reviews (dritte Sprachspalte) wartet weiter auf den Nutzer; offen aus
   dem ersten Review bleiben die Befunde 3 bis 7.
 
-## Nachtrag fünftes Review 2026-11-21 — zwei Befunde behoben, **Abnahme offen**
+## Nachtrag fünftes Review 2026-11-21 — zwei Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `5fc2d3f` und `fba889b` hat Codex (`gpt-6.1-sol`) zwei Befunde gemeldet,
 beide an `kette-pruefen.ps1`: einer mittel, einer niedrig. Zu Daten, Texten und Hygiene
@@ -1837,7 +1847,7 @@ Dateinamen nennt. Gegen den neuen Stand: **96, 0 fehlgeschlagen.**
   hier nur `kette-pruefen.ps1`.
 - Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.
 
-## Nachtrag sechstes Review 2026-11-21 — zwei Befunde behoben, **Abnahme offen**
+## Nachtrag sechstes Review 2026-11-21 — zwei Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `071708b` hat Codex (`gpt-6.1-sol`) zwei Befunde gemeldet, wieder beide an
 `kette-pruefen.ps1`: einer mittel, einer niedrig. Beide zeigen, dass der Nachtrag darüber
@@ -1894,7 +1904,7 @@ fehlgeschlagen, alle vier mit diesem Grund.
   jede nur einmal, das Skript prüft also einen festen Stand.
 - Offen bleiben wie zuvor: Befund 4 des dritten Reviews, die Befunde 3 bis 7 des ersten.
 
-## Nachtrag siebtes Review 2026-11-21 — ein Befund behoben, **Abnahme offen**
+## Nachtrag siebtes Review 2026-11-21 — ein Befund behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `a231b8c` hat Codex (`gpt-6.1-sol`) einen Befund gemeldet, niedrig — und
 er widerlegt einen Satz des Nachtrags darüber: „Der Wechsel von `Select-String`
@@ -1922,7 +1932,7 @@ Gegen den neuen Stand: **100, 0 fehlgeschlagen.**
 weiter als definiert. Das war mit `Select-String` schon so; es kann ein falsches Grün
 erzeugen, wenn ein Verweis auf eine auskommentierte Kennung zeigt.
 
-## Nachtrag Review zu WP8.6, 2026-11-21 — ein Befund behoben, **Abnahme offen**
+## Nachtrag Review zu WP8.6, 2026-11-21 — ein Befund behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `9c74af9` hat Codex (`gpt-6.1-sol`) einen Befund gemeldet, mittel: die
 Absicherung des Mod-Namens aus WP8.6 hatte ein Loch, und ich hatte es im Glossar als
@@ -2006,7 +2016,7 @@ Muster, 1 Alleinname, 887 Zeilen; 0 Abweichungen, 0 verbotene Begriffe, 0 Verst�
   (Vertrag 02 §4). Eine Umbenennung ist dort acht Zeilen von Hand, und kein Werkzeug hält
   sie gegen `700_modName`.
 
-## Nachtrag zweites Review zu WP8.6, 2026-11-21 — fünf Befunde behoben, **Abnahme offen**
+## Nachtrag zweites Review zu WP8.6, 2026-11-21 — fünf Befunde behoben, **abgenommen 2026-11-22**
 
 Das Review des Stands `be1e58b` fand in der neuen Alleinnamen-Prüfung zwei mittlere und drei
 niedrige Lücken. Alle fünf waren echt.
@@ -2090,7 +2100,7 @@ Plan-0001 unter den offenen Punkten.
   Glossar oder die echte Sprachdatei aus einem anderen Grund rot, fällt die erste der
   beiden mit — dann ist `check-all` aber ohnehin rot.
 
-## Nachtrag WP8.7, 2026-11-22 — `kette-pruefen` sieht in bedingte Blöcke, **Abnahme offen**
+## Nachtrag WP8.7, 2026-11-22 — `kette-pruefen` sieht in bedingte Blöcke, **abgenommen 2026-11-22**
 
 Vertrag 03 §5 verlangt für XUi-Eingriffe einen `<conditional>`-Block. Bis hierher zählte
 `kette-pruefen` solche Blöcke nur („nicht von innen geprueft (conditional, include): N");
@@ -2168,7 +2178,7 @@ Vanilla, 13 auf eigene Knoten), 9 bedingte Blöcke mit 9 Zweigen, 9 XPaths darin
 - **Kein Lauf im Spiel.** Dass ein bedingter Block von uns lädt, zeigt erst das Protokoll
   (Plan-0001, Prüfliste 22).
 
-## Nachtrag Review zu WP8.7, 2026-11-22 — drei Befunde behoben, **Abnahme offen**
+## Nachtrag Review zu WP8.7, 2026-11-22 — drei Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `a390459` und `f4a0476` hat Codex (`gpt-6.1-sol`) drei Befunde gemeldet,
 alle mittel, alle an der Zerlegung der Bedingung aus dem Nachtrag oben. Die Mod-Dateien
@@ -2216,7 +2226,7 @@ bedingte Blöcke, 0 unaufgelöst.
 - **Die anderen Grenzen des Nachtrags WP8.7 gelten weiter**: kein NCalc-Leser, `mod_loaded`
   nur aufgelistet, jeder Zweig gegen Vanilla, kein Lauf im Spiel.
 
-## Nachtrag zweites Review zu WP8.7, 2026-11-22 — die Bedingung wird mit NCalc ausgewertet, **Abnahme offen**
+## Nachtrag zweites Review zu WP8.7, 2026-11-22 — die Bedingung wird mit NCalc ausgewertet, **abgenommen 2026-11-22**
 
 Vor dem Push von `049280e` hat Codex (`gpt-6.2-sol`) zwei weitere mittlere Befunde an
 derselben Stelle gemeldet: ein erreichbarer Zweig wurde als tot gemeldet
@@ -2298,7 +2308,7 @@ ausgewertet**; 0 unaufgelöst.
   vergleichen nur mit `null`.
 - **Kein Lauf im Spiel** (Plan-0001, Prüfliste 22).
 
-## Nachtrag drittes Review zu WP8.7, 2026-11-22 — fünf Befunde behoben, **Abnahme offen**
+## Nachtrag drittes Review zu WP8.7, 2026-11-22 — fünf Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `20ea35e` hat Codex (`gpt-6.2-sol`) fünf Befunde an der neuen Auswertung
 gemeldet: zwei mittel, drei niedrig. Keiner trifft die Mod-Dateien; die neun echten
@@ -2353,7 +2363,7 @@ gegen das neue **137 Gegenproben, 0 fehlgeschlagen**. `check-all.ps1`: 6 Prüfun
 - **Ob es das Ereignis, die Einstellung, das Besitzrecht gibt**, das eine solche Funktion
   nennt, weiß nur das laufende Spiel.
 
-## Nachtrag viertes Review zu WP8.7, 2026-11-22 — vier Befunde behoben, **Abnahme offen**
+## Nachtrag viertes Review zu WP8.7, 2026-11-22 — vier Befunde behoben, **abgenommen 2026-11-22**
 
 Vor dem Push von `75a10dd` hat Codex (`gpt-6.2-sol`) vier Befunde gemeldet: einen mittel,
 drei niedrig. Keiner trifft die Mod-Dateien.
@@ -2415,7 +2425,7 @@ wahr.
   Regel trifft also nur dieses eine. *(Seit WP8.8 liest auch `sprachverweise-pruefen.ps1`
   XML, nach derselben Regel.)*
 
-## Nachtrag WP8.8, 2026-11-22 — Sprachschlüssel-Verweise, **Abnahme offen**
+## Nachtrag WP8.8, 2026-11-22 — Sprachschlüssel-Verweise, **abgenommen 2026-11-22**
 
 ### Anlass
 
@@ -2547,7 +2557,7 @@ Knoten), 9 bedingte Blöcke.
   nur für die Form. Ob `name_key` und `desc_key` eine Zeile haben, prüft seit WP8.8
   `sprachverweise-pruefen.ps1`; die Symbole weiter niemand.
 
-## Nachtrag Review zu WP8.8, 2026-11-22 — sechs Befunde behoben, **Abnahme offen**
+## Nachtrag Review zu WP8.8, 2026-11-22 — sechs Befunde behoben, **abgenommen 2026-11-22**
 
 Das Review des Commits `723e23c` fand fünf mittlere und einen niedrigen Befund, alle in
 `sprachverweise-pruefen.ps1`, keinen an den Mod-Dateien.
@@ -2684,7 +2694,7 @@ jede mit „liest `gunPartsGroupDesc` (geerbt von `gunMGT1AK47Parts`)".
 `kette-pruefen` unverändert 433 XPaths (420 in Vanilla, 13 auf eigene Knoten), 9 bedingte
 Blöcke.
 
-## Nachtrag zweites Review zu WP8.8, 2026-11-22 — zwei Befunde behoben, **Abnahme offen**
+## Nachtrag zweites Review zu WP8.8, 2026-11-22 — zwei Befunde behoben, **abgenommen 2026-11-22**
 
 Das Review des Commits `a60fe9b` fand zwei mittlere Befunde, beide in
 `sprachverweise-pruefen.ps1`, keinen an den Mod-Dateien. Beide Lücken hat der Umbau des
@@ -2774,7 +2784,7 @@ keiner Operation eine der roten Knotenarten.
 
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
 
-## Nachtrag drittes Review zu WP8.8, 2026-11-22 — drei Befunde behoben, **Abnahme offen**
+## Nachtrag drittes Review zu WP8.8, 2026-11-22 — drei Befunde behoben, **abgenommen 2026-11-22**
 
 Das Review des Commits `387761b` fand einen mittleren und zwei niedrige Befunde, alle in
 `sprachverweise-pruefen.ps1` und seinen Gegenproben, keinen an den Mod-Dateien.
@@ -2854,7 +2864,7 @@ Exit 0. Gegen den Stand vor dem Fix weiter genau die sechs Bruchstück-Zeilen.
 
 `check-all.ps1`: **7 Prüfungen, 1 rot** (`recipes`, 80 Sackgassen, unverändert).
 
-## Nachtrag viertes Review zu WP8.8, 2026-11-22 — vier Befunde behoben, **Abnahme offen**
+## Nachtrag viertes Review zu WP8.8, 2026-11-22 — vier Befunde behoben, **abgenommen 2026-11-22**
 
 Das Review des Commits `c353996` fand einen mittleren und drei niedrige Befunde: zwei im
 Skript, einen an den Gegenproben, einen am Wortlaut des Plans. Keinen an den Mod-Dateien.
@@ -2944,7 +2954,7 @@ selben Tag entschieden, hier aufzuhören und sie als offen zu führen. Sie gelte
 
 Keine der drei ist nachgestellt. Geführt werden sie im Plan unter „Offene Punkte".
 
-## Nachtrag WP8.9, 2026-11-22 — Vorprüfung der Verträglichkeit mit einer fremden Mod, **Abnahme offen**
+## Nachtrag WP8.9, 2026-11-22 — Vorprüfung der Verträglichkeit mit einer fremden Mod, **abgenommen 2026-11-22**
 
 ### Anlass
 
@@ -3161,7 +3171,7 @@ tools/check/vertraeglichkeit-pruefen.ps1` (ohne Parameter, 10 Sekunden). **Ausga
 Was die Zeilen im Einzelnen sagen, steht im Plan unter WP8.9. Die Ausgabe selbst liegt
 nicht im Repository: sie nennt Pfade und Werte aus fremden Dateien.
 
-## Nachtrag Review zu WP8.9, 2026-11-22 — drei Befunde an `vertraeglichkeit-pruefen.ps1`, **Abnahme offen**
+## Nachtrag Review zu WP8.9, 2026-11-22 — drei Befunde an `vertraeglichkeit-pruefen.ps1`, **abgenommen 2026-11-22**
 
 ### Anlass
 

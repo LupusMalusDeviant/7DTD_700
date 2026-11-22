@@ -107,7 +107,7 @@ Nutzer-Abnahme.
 | WP1.1–WP1.4 | Vier Verträge in [`docs/contracts/`](../contracts/README.md). **Acht Modlets statt sechs** (D53) — Bauen und Fortschritt bekamen eigene Schichten. |
 | WP1.5 | `mod/` in acht Modlet-Ordner umgebaut, `build.ps1` und `smoke.ps1` darauf umgestellt, eine Fassung für alle acht aus `Directory.Build.props`. **104 geprüft, 0 rot.** |
 | WP1.5b | offen, braucht einen Spielstart |
-| WP1.6 | offen, braucht die Abnahme |
+| WP1.6 | ~~offen, braucht die Abnahme~~ **erledigt am 2026-11-22:** alle vier Verträge sind abgenommen (01 bis 03 einzeln, 04 als Block) |
 
 Dabei kamen vier Dinge heraus, die dieser Plan vorher nicht wusste — sie stehen im Finding
 [WP1-modlet-lader-und-xml-patcher.md](../rea/findings/WP1-modlet-lader-und-xml-patcher.md) und
@@ -1803,7 +1803,7 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
 
 | Von | Nach | Typ |
 |---|---|---|
-| WP1.6 Vertrags-Abnahme | WP3 Start | **extern, blockierend** (Nutzer) |
+| WP1.6 Vertrags-Abnahme | WP3 Start | **extern, blockierend** (Nutzer) — erledigt am 2026-11-22 |
 | WP2.1 Denylist-Werkzeug | WP3.1 | intern |
 | WP1 | WP2 | intern |
 | WP3 | WP4 | intern |
@@ -1939,7 +1939,14 @@ werden:
    Laufzeitaussage. Aufgabe liegt offen.)*~~
 2. **Dedicated Server** installieren — oder entscheiden, dass Z7 gestrichen wird. *(Blockiert
    WP9.2 und drei F-00-Kriterien. Aufgabe liegt offen.)*
-3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
+3. ~~**Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*~~
+   **Erledigt am 2026-11-22: alle vier Verträge sind abgenommen.** Vertrag 04 hat der Nutzer
+   als Block abgenommen, nach der Kurzübersicht der Regeln — mit allen Nachträgen bis
+   „Nachtrag Review zu WP8.9" und damit auch mit den Berichtigungen §3a und §3d samt den
+   §5-Nachträgen. Die Vermerke „Abnahme offen" in den Arbeitspaketen weiter oben sind damit
+   erledigt; sie bleiben als Verlauf stehen. Nicht abgenommen ist, was Vertrag 04 selbst als
+   offen nennt, und die zwei unbehobenen Befunde aus dem zweiten Review der Vorprüfung. Der
+   Verlauf bis dahin:
    **Stand 2026-11-22: Verträge 01, 02 und 03 sind abgenommen** — einzeln vorgelegt, mit
    Vertrag 02 §5 (der Sprachschlüssel ist die Kennung) und den Nachträgen WP8.7 und WP8.9 von
    Vertrag 03; in Vertrag 01 ist dabei „sechs Fertigkeitsbäume" auf fünf berichtigt (D66).
@@ -2331,8 +2338,8 @@ werden:
   Patch-Operation"), obwohl in der Kombination Befunde gerechnet sind; sie gehen verloren.
   Keiner der zwei ist nachgestellt; beide Beschreibungen passen zum Code.
 - **Vorprüfung WP8.9: vier Dinge sind offen** (2026-11-22, `vertraeglichkeit-pruefen.ps1`).
-  1. *Abnahme.* Vertrag 04 „Nachtrag WP8.9" — mit der Entscheidung, dass die Prüfung nicht
-     in `check-all.ps1` läuft.
+  1. ~~*Abnahme.* Vertrag 04 „Nachtrag WP8.9" — mit der Entscheidung, dass die Prüfung nicht
+     in `check-all.ps1` läuft.~~ Abgenommen am 2026-11-22 mit Vertrag 04 als Block.
   2. *Prüfliste 24 e gegen sieben erwartete Warnungen.* E C H O hat auf V 3.40 schon allein
      sieben Operationen ohne Treffer. Zählt eine solche Warnung als Fehlerzeile, die den
      Lauf entwertet, zählt Lauf 3 voraussichtlich nie; zählt sie nicht, muss 24 e das
