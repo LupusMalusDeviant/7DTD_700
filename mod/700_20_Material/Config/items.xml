@@ -153,9 +153,13 @@
 	     Keinen brauchbaren Ersatz gibt es fuer Schmiedeeisen, Tiegelstahl und das Trinkglas -
 	     die bleiben bis Phase 2 (F-16).
 	     ==================================================================================== -->
+	<!-- Silberpfennig: das ERSTE EIGENE Bild (Plan-0002 WP3.4, Vertrag 05). Es liegt als
+	     UIAtlases\ItemIconAtlas\ico700_silberpfennig.png in diesem Modlet; dass das Spiel den
+	     Ordner liest, ist gelesen (Finding F-16), aber im Spiel NICHT gesehen (S-09).
+	     Bleibt das Feld im Beutel leer: zurueck auf value="resourceSilverNugget" mit
+	     CustomIconTint e6dfc4 (Stand bis 2026-11-23). -->
 	<append xpath="/items/item[@name='casinoCoin']">
-		<property name="CustomIcon" value="resourceSilverNugget" />
-		<property name="CustomIconTint" value="e6dfc4" />
+		<property name="CustomIcon" value="ico700_silberpfennig" />
 	</append>
 	<append xpath="/items/item[@name='resourceScrapIron']">
 		<property name="CustomIcon" value="oreIronBoulder" />

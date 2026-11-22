@@ -11,11 +11,11 @@ Marken: **[E]** Entscheidung · **[A]** Abnahme eines Vertrags · **[S]** nur im
 
 ## 0. Stand und das Wichtigste zuerst
 
-**Stand 2026-11-22, spät:** Phase 1 ist gebaut, aber **nicht abgenommen**; nichts ist gepusht (HEAD lokal
-vor `origin`), die Mod liegt **nicht** im Spielordner.
+**Stand 2026-11-23, früh:** Phase 1 ist gebaut, aber **nicht abgenommen**; Phase 2 läuft im Loop (Plan-0002,
+Entwurf); nichts ist gepusht (HEAD lokal vor `origin`), die Mod liegt **nicht** im Spielordner.
 
-Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **225 Gegenproben, 0 fehlgeschlagen;
-7 Prüfungen, 1 rot (Exit 1)**. Rot ist `erreichbarer-anachronismus: resourceRepairKit`: der Spiel-Dump von
+Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **252 Gegenproben, 0 fehlgeschlagen;
+9 Prüfungen, 1 rot (Exit 1)** — zwei Prüfungen sind neu (*Symbole*, *Asset-Register*, N-18). Rot ist `erreichbarer-anachronismus: resourceRepairKit`: der Spiel-Dump von
 22:08 stammt aus einem Start **vor** der Sperre des Reparatur-Kits. Am Vorlauf des neuen Standes sind alle
 sieben Prüfungen grün; ein Vorlauf ist kein Nachweis. **Grün wird der Prüfbefehl erst mit einem Spielstart
 mit dem neuen Stand** (N-01).
@@ -27,6 +27,9 @@ Die fünf Punkte, die am meisten bewegen:
 3. **N-10** — Push: braucht deine Freigabe und die Wahl des Codex-Modells.
 4. **N-20 bis N-27** — was der Nachtlauf nach Empfehlung **gebaut** hat (Namen, Rezepte, Bilder).
 5. **N-40** — die sechs Kernfragen des Spiels ohne Antwort (Ziel, Tod, Seuchennacht, Religion, Figuren, Schwierigkeit).
+6. **N-64** — **Meshy nimmt keine Aufträge an** (Gratis-Tarif, HTTP 402 trotz 5332 Credits). Ohne Tarifwechsel
+   entsteht kein Meshy-Bild und kein Meshy-Modell; der Loop baut einfache Symbole solange in Blender.
+7. **N-60** — ohne Unity-Editor kommt kein eigenes 3D-Modell ins Spiel.
 
 ## 1. Sofort — hält etwas auf
 
@@ -51,6 +54,7 @@ Die fünf Punkte, die am meisten bewegen:
 | N-15 | [A] | Vertrag 04, **Nachtrag Dump-Suche** (`check-all.ps1` kennt `-UserDataFolder`). |
 | N-16 | [A] | Vertrag 04, **Nachtrag Leermeldung** (`=kein-aufschub` in `aufschub.txt`). |
 | N-17 | [A] | Vertrag 04, **Nachtrag zweites Review der Vorprüfung** (zwei Befunde an `vertraeglichkeit-pruefen.ps1` behoben). |
+| N-18 | [A] | Vertrag 04, **Nachtrag Prüfungen der Phase 2, Teil 1** (*Symbole* und *Asset-Register*: Regeln, Grenzen, 27 Gegenproben) — gebaut am 2026-11-23. Dazu gehört **Vertrag 05** (Asset-Pipeline, N-71), am selben Tag in drei Punkten präzisiert: eine Münze darf ein Punktmuster tragen; Zuschnitt ab Alpha 8, nie vergrößern; Quelle `eigen:blender` als eigener Rang. |
 
 Verträge für Phase 2 kommen dazu, sobald sie geschrieben sind (Plan-0002).
 
@@ -69,6 +73,7 @@ Marke; sonst wird es zurückgebaut.
 | N-25 | [E] | **Nachgezogene Widersprüche** in GDD und Features (fünf statt sechs Bäume, Blockschaden bleibt Vanilla, Karte in Phase 4 …) — nur Stand schon getroffener Entscheidungen, alter Wortlaut durchgestrichen. | `457a379` | Stichprobe |
 | N-26 | [E] [S] | **241 Sprachzeilen für Lücken**, darunter **102 neue Namen** (Sprachdatei 941 → 1182 Schlüssel): Startquest („Der Weg zum Händler"), Salbenverband, Steinpfeil / Eisenpfeil / Brandpfeil und die Bolzen, Haselbogen, Jagdbogen, 15 Waffen-Aufsätze (Pechwicklung, Stahlschneide, Spaltkeil …), zwölf Stücke Unterkleidung (Leinenhemd, Gewalkte Socken …), 22 Rüstungs-Aufsätze (Wollfutter, Gürteltasche, Köcherriemen, Eberzier …), Stürme (Fauler Wind, Aschesturm). Jeder Name steht im Glossar mit „Name zu prüfen". | D129; Liste aller Namen im Glossar §2, §3, §5, §6, §8 | Namen einzeln; zwei deutsche Formen für die Reparaturangabe („zu flicken" / „ausbessern") angleichen? |
 | N-27 | [E] | Berichtigung: die Biom-Ausrüstung trägt in Vanilla Namen (Lesefehler in Balancing 0003). | `037110f` | — |
+| N-28 | [E] [S] | **Erstes eigenes Bild:** der Silberpfennig zeigt `ico700_silberpfennig` — drei gehämmerte Silberscheiben mit Perlkreis, in Blender gebaut — statt des umgebogenen Silberbrockens (N-23). Dazu das Werkzeug `tools/assets/symbole.ps1`, das Register `assets/ASSETS.md` und zwei Prüfungen. Quellbild: `assets/quelle/symbole/ico700_silberpfennig.png`. | D131, Plan-0002 WP3.4 | ob dir das Bild gefällt; ob es im Beutel erscheint (S-09). Bleibt das Feld leer, ist es eine Zeile zurück auf den Silberbrocken. |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut
 
@@ -102,6 +107,7 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** (Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt) (N-03). | 5 min |
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
 | S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
+| S-09 | **Eigenes Bild im Beutel** (N-28, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
 
 ## 7. Phase 2 — Entscheidungen aus dem Loop
 
@@ -122,7 +128,8 @@ und Programmordner; Zeichenketten in `Assembly-CSharp.dll`):
 | N-60 | [E] [P] | **Unity-Editor 2022.3.62f2 installieren** (Download, Lizenz-Anmeldung — kann nur der Nutzer). Ohne ihn gibt es kein Asset-Bundle und damit **kein eigenes 3D-Modell im Spiel**. | Bis dahin baut der Loop alles, was ohne Editor geht: eigene **Symbole** (PNG), Quell-Modelle aus Meshy, Texte, XML, REA-Befunde. Modelle liegen dann fertig als Quelle bereit, aber nicht im Spiel. |
 | N-61 | [E] | **Python-Ausnahme für Blender-Skripte?** Ein Render- oder Export-Skript für Blender ist Python; im Projekt gilt das Python-Verbot. | Ohne dein Ja liegt kein Blender-Skript im Repository. Symbole entstehen dann ohne Blender (Bild aus Meshy, Zuschnitt mit PowerShell/.NET). |
 | N-62 | [S] | **Eigenes Symbol im Beutel:** ein Test-PNG unseres Modlets ansehen (Teil des gesammelten Spieltests, S-09). | Gebaut wird nach der Annahme `UIAtlases/ItemIconAtlas/<Name>.png`; stimmt sie nicht, zeigt der Gegenstand kein Bild — sofort sichtbar. |
-| N-63 | — | **Meshy:** freigegeben am 2026-11-22 („so viel wie du brauchst"). Je Stück werden Modell, Zweck und Credits im Asset-Register festgehalten. | — |
+| N-63 | — | **Meshy:** freigegeben am 2026-11-22 („so viel wie du brauchst"). Je Stück werden Modell, Zweck und Credits im Asset-Register festgehalten. | — (bisher 0 Credits verbraucht, siehe N-64) |
+| N-64 | [E] [P] | **Meshy lehnt jede Erzeugung ab.** Gemessen am 2026-11-23: Guthaben 5332 Credits (100 monatlich, 5232 dauerhaft), aber der erste Auftrag (Text zu Bild) kommt mit **HTTP 402** zurück: „Task creation on the free plan is no longer supported. To continue creating tasks, please upgrade your plan." Das Konto steht also auf dem Gratis-Tarif, und der erlaubt über die API nichts mehr. **Den Tarif wechseln kannst nur du** (Zahlung). | Bis dahin: einfache, harte Formen als Symbol **in Blender** (Münze, Barren, Klinge — D84 sieht das ohnehin so vor); alles Organische (Wesen, Kleidung, Rüstung als Modell) wartet. Nebenwirkung des Tarifs: auf einem Bezahl-Tarif gehören dir die Ergebnisse, auf dem Gratis-Tarif gälte CC BY 4.0 mit Nennung (N-75) — mit dem Wechsel erledigt sich auch diese Frage. |
 
 ### 7.1 Die 26 Entscheidungen des Phase-2-Plans
 

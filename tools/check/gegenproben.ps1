@@ -797,7 +797,7 @@ Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 
     'kette-pruefen: SDTD_PATH ist nicht gesetzt',
     'sprachverweise-pruefen: SDTD_PATH ist nicht gesetzt',
     '-> nicht geprueft, zaehlt als rot',
-    '7 Pruefungen, 4 rot')
+    '9 Pruefungen, 5 rot')
 
 # Der Nachbarfall aus dem zweiten Review (2026-11-20): SDTD_PATH ist GESETZT, zeigt aber auf
 # einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
@@ -812,7 +812,7 @@ Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Ab
 } -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
     'den Vanilla-Ordner',
     '-> nicht geprueft, zaehlt als rot',
-    '7 Pruefungen, 4 rot')
+    '9 Pruefungen, 5 rot')
 
 # Und der Fall, der seit WP8.1 nur aufgeschrieben war (Vertrag 04): ein GENANNTER Pfad,
 # den es nicht gibt, meldete "0 XPaths, GREEN".
@@ -917,7 +917,7 @@ else {
         'purge-patch (sind die Patches aktuell?)',
         'den Vanilla-Ordner',
         '-> nicht geprueft, zaehlt als rot',
-        '7 Pruefungen, 4 rot')
+        '9 Pruefungen, 5 rot')
 }
 
 # ------------------------------------------------- Viertes Review (2026-11-21)
@@ -1451,7 +1451,7 @@ Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile'
     Configuration   = $Configuration
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -MustContain @(
     '-> nicht geprueft, zaehlt als rot',
-    '7 Pruefungen, 4 rot')
+    '9 Pruefungen, 5 rot')
 
 # (6) Dasselbe OHNE -Source und ohne ConfigsDump: %APPDATA% zeigt fuer diesen Lauf auf einen
 #     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
@@ -1468,7 +1468,7 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $glossarDaten -MustContain @(
     'Quelle: KEINE',
     'NICHT GEPRUEFT: keine Quelle',
-    '7 Pruefungen, 5 rot')
+    '9 Pruefungen, 6 rot')
 
 # ------------------------------------------------- Dump-Suche kennt -UserDataFolder (2026-11-22)
 # Mit '-UserDataFolder=<Ordner>' legt das Spiel Spielstaende unter <Ordner>\Saves ab, nicht
@@ -1513,7 +1513,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $aAppdata -MustContain @(
         "Quelle: $aDump",
-        '7 Pruefungen, 4 rot') -MustNotContain @('Quelle: KEINE')
+        '9 Pruefungen, 5 rot') -MustNotContain @('Quelle: KEINE')
 
     # (b) Zwei Dumps, der unter %APPDATA% ist JUENGER: er gewinnt, nicht der Ort.
     $bAppdata = Join-Path $dumpBaum 'b\appdata'
@@ -1526,7 +1526,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $bAppdata -MustContain @(
         "Quelle: $bDumpAppdata",
-        '7 Pruefungen, 4 rot') -MustNotContain @("Quelle: $bDumpNutzer")
+        '9 Pruefungen, 5 rot') -MustNotContain @("Quelle: $bDumpNutzer")
 
     # (c) launchersettings.json ist kaputt: Hinweis, kein Abbruch, und ohne anderen Dump
     #     bleibt es bei "keine Quelle" mit Ergebniszeile.
@@ -1538,7 +1538,7 @@ try {
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $cAppdata -MustContain @(
         'launchersettings.json ist nicht lesbar',
         'Quelle: KEINE',
-        '7 Pruefungen, 5 rot')
+        '9 Pruefungen, 6 rot')
 
     # (d) Kein Startprogramm, aber SDTD_USERDATA zeigt auf den Ordner.
     $dAppdata = Join-Path $dumpBaum 'd\appdata'
@@ -1551,7 +1551,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $dAppdata -MustContain @(
         "Quelle: $dDump",
-        '7 Pruefungen, 4 rot') -MustNotContain @('Quelle: KEINE')
+        '9 Pruefungen, 5 rot') -MustNotContain @('Quelle: KEINE')
 }
 finally {
     if ($userdataVorher) { $env:SDTD_USERDATA = $userdataVorher }
@@ -2534,6 +2534,242 @@ try {
 }
 finally {
     if (Test-Path -LiteralPath $vertBaum) { Remove-Item -LiteralPath $vertBaum -Recurse -Force }
+}
+
+# ------------------------------------------ Symbole und Asset-Register (2026-11-23)
+# Zwei Werkzeuge, beide neu mit Plan-0002 (WP2.5, WP3.4) und Vertrag 05:
+#   tools\assets\symbole.ps1        erzeugt die Bilder aus dem Register und prueft sie (-Pruefen)
+#   tools\check\symbole-pruefen.ps1 haelt jedes genannte CustomIcon gegen die Bilder
+# Die Pruefbilder werden HIER gezeichnet (eine Ellipse) und liegen nicht im Repository: so
+# gibt es keine Binaerdatei in den Testdaten, und kein Bild stammt aus dem Spiel.
+Write-Output ""
+Write-Output "== Gegenproben: Symbole - Register, Zuschnitt, genannte Bilder =="
+Add-Type -AssemblyName System.Drawing
+$symboleSkript = Join-Path $repoRoot 'tools\assets\symbole.ps1'
+$symPruefSkript = Join-Path $here 'symbole-pruefen.ps1'
+$symBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-symbolprobe-' + [Guid]::NewGuid().ToString('N'))
+
+function New-PruefBild {
+    # Ein Bild der Kante $Kante mit einer Ellipse, deren Breite $Inhalt ist.
+    param([string]$Pfad, [int]$Kante = 240, [int]$Inhalt = 200, [switch]$OhneAlpha, [string]$Farbe = 'SteelBlue')
+    [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($Pfad))
+    $format = [System.Drawing.Imaging.PixelFormat]::Format32bppArgb
+    if ($OhneAlpha) { $format = [System.Drawing.Imaging.PixelFormat]::Format24bppRgb }
+    $bild = New-Object System.Drawing.Bitmap $Kante, $Kante, $format
+    try {
+        $g = [System.Drawing.Graphics]::FromImage($bild)
+        try {
+            if ($OhneAlpha) { $g.Clear([System.Drawing.Color]::White) } else { $g.Clear([System.Drawing.Color]::Transparent) }
+            $pinsel = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromName($Farbe))
+            try {
+                $rand = [int](($Kante - $Inhalt) / 2)
+                $g.FillEllipse($pinsel, $rand, $rand, $Inhalt, [int]($Inhalt * 0.7))
+            }
+            finally { $pinsel.Dispose() }
+        }
+        finally { $g.Dispose() }
+        $bild.Save($Pfad, [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally { $bild.Dispose() }
+}
+
+$symKopf = @(
+    '# Pruefregister',
+    '',
+    '| Name | Art | Modlet | Benutzt von | Quelle | Beleg | Lizenz | Nennung | Beschreibung | Kosten | Stand |',
+    '|---|---|---|---|---|---|---|---|---|---|---|')
+$symZeileGut = '| `ico700_pruefding` | symbol | `700_20_Pruef` | `pruefDing` | eigen:blender | - | eigenes Werk | keine noetig | - | - | bleibt |'
+$symXmlGut = @(
+    '<configs>',
+    '  <append xpath="/items">',
+    '    <item name="pruefDing"><property name="CustomIcon" value="ico700_pruefding" /></item>',
+    '    <item name="pruefZwei"><property name="CustomIcon" value="pruefVanillaBild" /></item>',
+    '  </append>',
+    "  <set xpath=""/items/item[@name='pruefDrei']/property[@name='CustomIcon']/@value"">pruefVanillaBild</set>",
+    '</configs>')
+
+function New-SymbolBaum {
+    # Legt unter $symBaum\<Name> einen vollstaendigen, sauberen Baum an und gibt ihn zurueck.
+    # -Fertig erzeugt auch das fertige Bild (mit dem echten Werkzeug).
+    param([string]$Name, [string[]]$Zeilen = @($symZeileGut), [string[]]$Xml = $symXmlGut, [switch]$Fertig)
+    $wurzel = Join-Path $symBaum $Name
+    [void][IO.Directory]::CreateDirectory((Join-Path $wurzel 'assets'))
+    [void][IO.Directory]::CreateDirectory((Join-Path $wurzel 'mod\700_20_Pruef\Config'))
+    [IO.File]::WriteAllLines((Join-Path $wurzel 'assets\ASSETS.md'), [string[]]($symKopf + $Zeilen), [Text.UTF8Encoding]::new($false))
+    [IO.File]::WriteAllLines((Join-Path $wurzel 'mod\700_20_Pruef\Config\items.xml'), [string[]]$Xml, [Text.UTF8Encoding]::new($false))
+    New-PruefBild (Join-Path $wurzel 'assets\quelle\symbole\ico700_pruefding.png')
+    New-PruefBild (Join-Path $wurzel 'vanilla\pruefVanillaBild.png') -Kante 160 -Inhalt 140 -Farbe 'Peru'
+    if ($Fertig) { $null = & $symboleSkript -Wurzel $wurzel }
+    return $wurzel
+}
+
+try {
+    # (a) Der saubere Baum: erzeugen, noch einmal erzeugen (nichts aendert sich), pruefen.
+    $symGut = New-SymbolBaum 'gut'
+    Test-Script 'symbole: erzeugt das fertige Bild aus dem Quellbild' 0 @{ Wurzel = $symGut } `
+        -FremdesSkript $symboleSkript -MustContain @('Zeilen: 1, davon Symbole: 1', 'geschrieben: 1, unveraendert: 0', 'GREEN')
+    Test-Script 'symbole: ein zweiter Lauf schreibt nichts' 0 @{ Wurzel = $symGut } `
+        -FremdesSkript $symboleSkript -MustContain @('geschrieben: 0, unveraendert: 1', 'GREEN')
+    Test-Script 'symbole -Pruefen: Register, Quellbild und fertiges Bild passen zusammen' 0 @{ Wurzel = $symGut; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('fertige Bilder gleich ihrem Quellbild: 1; Dateien ohne Zeile: 0', '0 Befunde -> GREEN')
+    Test-Script 'symbole-pruefen: jedes genannte Bild ist da, eigenes Bild 160x160 mit Alpha' 0 @{
+        ModOrdner = (Join-Path $symGut 'mod'); VanillaBilder = (Join-Path $symGut 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @(
+        'Vanilla-Bilder: 1; eigene Bilder: 1',
+        'CustomIcon genannt: 3 (aus Vanilla: 2, aus einem Modlet: 1)',
+        '0 Befunde -> GREEN')
+
+    # (b) Das Werkzeug: jeder falsche Eingang einzeln.
+    $w = New-SymbolBaum 'abweichend' -Fertig
+    New-PruefBild (Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png') -Farbe 'Firebrick'
+    Test-Script 'symbole -Pruefen: fertiges Bild stammt nicht aus dem Quellbild' 1 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('ico700_pruefding: das fertige Bild entspricht nicht seinem Quellbild', '1 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'ohne-zeile' -Fertig
+    New-PruefBild (Join-Path $w 'mod\700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_fremd.png') -Kante 160 -Inhalt 140
+    Test-Script 'symbole -Pruefen: Bild im Modlet ohne Registerzeile' 1 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('Datei ohne Registerzeile: mod\700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_fremd.png', 'Dateien ohne Zeile: 1') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'fertig-fehlt'
+    Test-Script 'symbole -Pruefen: das fertige Bild fehlt' 1 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('ico700_pruefding: das fertige Bild fehlt') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'pflichtfeld' -Fertig -Zeilen @(
+        '| `ico700_pruefding` | symbol | `700_20_Pruef` | `pruefDing` | eigen:blender | - |  | keine noetig | - | - | bleibt |',
+        '| `pruefmodell` | modell | `700_20_Pruef` | `pruefDing` | meshy:pruef-1 | - | CC BY 4.0 | Erstellt mit Meshy | ein Ding | 20 | fertig |',
+        '| `pruefklang` | geruch | `700_20_Pruef` | `pruefDing` | gefunden | x | y | z | a | b | bleibt |')
+    Test-Script 'symbole -Pruefen: leeres Pflichtfeld, Strich bei fremder Quelle, falsche Art, Quelle, Stand' 1 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @(
+        "(ico700_pruefding): Pflichtfeld 'Lizenz' ist leer",
+        "(pruefmodell): Pflichtfeld 'Beleg' traegt nur einen Strich",
+        "(pruefmodell): Stand 'fertig' gibt es nicht",
+        "(pruefklang): Art 'geruch' gibt es nicht",
+        "(pruefklang): Quelle 'gefunden' hat keine der vier Formen",
+        '5 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'doppelt-und-name' -Fertig -Zeilen @(
+        $symZeileGut,
+        '| `ico700_pruefding` | symbol | `700_20_Pruef` | `pruefZwei` | eigen:hand | - | eigenes Werk | keine noetig | - | - | bleibt |')
+    Test-Script 'symbole -Pruefen: derselbe Name in zwei Zeilen' 1 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('der Name steht schon in Zeile 5') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'name-falsch' -Zeilen @(
+        '| `PruefDing` | symbol | `700_20_Pruef` | `pruefDing` | eigen:blender | - | eigenes Werk | keine noetig | - | - | bleibt |')
+    Test-Script 'symbole: ein Symbol ohne ico700_ im Namen' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('ein Symbol heisst ico700_<wort> in Kleinbuchstaben') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'quelle-fehlt'
+    Remove-Item -LiteralPath (Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png')
+    Test-Script 'symbole: das Quellbild fehlt' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('ico700_pruefding: das Quellbild fehlt', 'geschrieben: 0') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'kein-alpha'
+    New-PruefBild (Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png') -OhneAlpha
+    Test-Script 'symbole: Quellbild ohne Alphakanal' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('das Quellbild hat keinen Alphakanal') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'zu-klein'
+    New-PruefBild (Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png') -Kante 100 -Inhalt 90
+    Test-Script 'symbole: Quellbild kleiner als 160x160' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('das Quellbild ist kleiner als 160x160 (100x100)') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'inhalt-klein'
+    New-PruefBild (Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png') -Kante 400 -Inhalt 60
+    Test-Script 'symbole: grosses Quellbild mit winzigem Inhalt - Vergroessern gibt es nicht' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('sichtbare Bildpunkte, gebraucht werden 148') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'kein-png'
+    [IO.File]::WriteAllText((Join-Path $w 'assets\quelle\symbole\ico700_pruefding.png'), 'kein Bild')
+    Test-Script 'symbole: Quellbild ist keine Bilddatei' 1 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('das Quellbild laesst sich nicht als Bild lesen') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'kein-register'
+    Remove-Item -LiteralPath (Join-Path $w 'assets\ASSETS.md')
+    Test-Script 'symbole -Pruefen: ohne Register ist nichts geprueft' 2 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('das Register fehlt', 'NICHT AUSGEFUEHRT') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'register-leer' -Zeilen @()
+    Test-Script 'symbole -Pruefen: Register ohne Zeile ist nichts geprueft' 2 @{ Wurzel = $w; Pruefen = $true } `
+        -FremdesSkript $symboleSkript -MustContain @('das Register hat keine Zeile', 'NICHT AUSGEFUEHRT') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'spalte-fehlt'
+    [IO.File]::WriteAllLines((Join-Path $w 'assets\ASSETS.md'), [string[]]@(
+            '| Name | Art | Modlet | Benutzt von | Quelle | Beleg | Nennung | Beschreibung | Kosten | Stand |',
+            '|---|---|---|---|---|---|---|---|---|---|',
+            '| `ico700_pruefding` | symbol | `700_20_Pruef` | `pruefDing` | eigen:blender | - | keine noetig | - | - | bleibt |'))
+    Test-Script 'symbole: Register ohne die Spalte Lizenz ist unlesbar' 2 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @('dem Register fehlen die Spalten: Lizenz', 'NICHT AUSGEFUEHRT') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'modlet-unbekannt' -Zeilen @(
+        '| `ico700_pruefding` | symbol | `700_99_GibtEsNicht` | `pruefDing` | eigen:blender | - | eigenes Werk | keine noetig | - | - | bleibt |')
+    Test-Script 'symbole: Zeile nennt ein Modlet, das es nicht gibt' 2 @{ Wurzel = $w } `
+        -FremdesSkript $symboleSkript -MustContain @("nennt das Modlet '700_99_GibtEsNicht'", 'NICHT AUSGEFUEHRT') -MustNotContain @('GREEN')
+
+    # (c) Die Pruefung der genannten Bilder: jede Regel einzeln.
+    $w = New-SymbolBaum 'verweis-fehlt' -Fertig -Xml @(
+        '<configs>',
+        '  <append xpath="/items"><item name="pruefDing"><property name="CustomIcon" value="ico700_pruefding" /></item>',
+        '    <item name="pruefVier"><property name="CustomIcon" value="ico700_gibtesnicht" /></item></append>',
+        "  <set xpath=""/items/item[@name='pruefDrei']/property[@name='CustomIcon']/@value"">ico700_auchnicht</set>",
+        '  <append xpath="/items/item[@name=''pruefFuenf'']"><property name="CustomIcon" value="PruefVanillaBild" /></append>',
+        '  <append xpath="/items/item[@name=''pruefSechs'']"><property name="CustomIcon" value="" /></append>',
+        '</configs>')
+    Test-Script 'symbole-pruefen: genanntes Bild fehlt (property und set), falsche Schreibung, leerer Wert' 1 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @(
+        "CustomIcon 'ico700_gibtesnicht' nennt ein Bild, das es weder in Vanilla noch in einem unserer Modlets gibt",
+        "CustomIcon 'ico700_auchnicht' nennt ein Bild, das es weder in Vanilla noch in einem unserer Modlets gibt",
+        "CustomIcon 'PruefVanillaBild' - das Bild heisst 'pruefVanillaBild' (Gross- und Kleinschreibung)",
+        'CustomIcon ohne Wert',
+        '4 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'falsche-form' -Fertig
+    New-PruefBild (Join-Path $w 'mod\700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_pruefding.png') -Kante 128 -Inhalt 100 -OhneAlpha
+    Test-Script 'symbole-pruefen: eigenes Bild 128x128 und ohne Alpha' 1 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @('hat keinen Alphakanal', 'ist 128x128 statt 160x160', '2 Befunde -> RED') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'doppelt' -Fertig
+    [void][IO.Directory]::CreateDirectory((Join-Path $w 'mod\700_30_Pruef\UIAtlases\ItemIconAtlas'))
+    Copy-Item -LiteralPath (Join-Path $w 'mod\700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_pruefding.png') -Destination (Join-Path $w 'mod\700_30_Pruef\UIAtlases\ItemIconAtlas\ico700_pruefding.png')
+    Test-Script 'symbole-pruefen: zwei Modlets tragen ein Bild gleichen Namens' 1 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @(
+        '700_30_Pruef\UIAtlases\ItemIconAtlas\ico700_pruefding.png: denselben Bildnamen traegt schon 700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_pruefding.png') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'name-und-ort' -Fertig
+    New-PruefBild (Join-Path $w 'mod\700_20_Pruef\UIAtlases\ItemIconAtlas\pruefVanillaBild.png') -Kante 160 -Inhalt 140
+    New-PruefBild (Join-Path $w 'mod\700_20_Pruef\UIAtlases\ItemIconAtlas\ico700_niemand.png') -Kante 160 -Inhalt 140
+    New-PruefBild (Join-Path $w 'mod\700_20_Pruef\UIAtlases\AndererAtlas\ico700_woanders.png') -Kante 160 -Inhalt 140
+    Test-Script 'symbole-pruefen: Name eines Vanilla-Bildes, ungenutztes Bild, fremder Atlas' 1 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @(
+        "pruefVanillaBild.png: traegt den Namen des Vanilla-Bildes 'pruefVanillaBild'",
+        'pruefVanillaBild.png: ein eigenes Bild heisst ico700_<wort> in Kleinbuchstaben',
+        'ico700_niemand.png: kein CustomIcon nennt dieses Bild',
+        'ico700_woanders.png: unter UIAtlases ist nur ItemIconAtlas\<Name>.png geregelt') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'ohne-vanilla' -Fertig
+    Test-Script 'symbole-pruefen: Vanillas Bilderordner fehlt - nicht pruefbar' 2 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'gibt-es-nicht')
+    } -FremdesSkript $symPruefSkript -MustContain @('Vanillas Bilderordner fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    Test-Script 'symbole-pruefen: ohne Spielpfad und ohne -VanillaBilder - nicht pruefbar' 2 @{
+        ModOrdner = (Join-Path $w 'mod')
+    } -FremdesSkript $symPruefSkript -OhneSpielpfad -MustContain @('SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'kein-customicon' -Xml @('<configs>', '  <append xpath="/items"><item name="pruefDing" /></append>', '</configs>')
+    Test-Script 'symbole-pruefen: keine Datei nennt ein CustomIcon - nicht pruefbar' 2 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @('nennt ein CustomIcon', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+    $w = New-SymbolBaum 'xml-kaputt' -Xml @('<configs>', '  <append xpath="/items">', '</configs>')
+    Test-Script 'symbole-pruefen: XML-Datei laesst sich nicht lesen - nicht pruefbar' 2 @{
+        ModOrdner = (Join-Path $w 'mod'); VanillaBilder = (Join-Path $w 'vanilla')
+    } -FremdesSkript $symPruefSkript -MustContain @('laesst sich nicht als XML lesen', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+}
+finally {
+    if (Test-Path -LiteralPath $symBaum) { Remove-Item -LiteralPath $symBaum -Recurse -Force }
 }
 
 Write-Output ""

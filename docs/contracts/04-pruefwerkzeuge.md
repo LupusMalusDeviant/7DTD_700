@@ -3380,3 +3380,100 @@ Operation, bleibt es bei Exit 2 — nicht geprüft, aber auch nicht grün.
 Die erste und die dritte Gegenprobe waren am unveränderten Skript rot (225 Gegenproben,
 2 fehlgeschlagen) und sind nach der Korrektur grün (225, 0 fehlgeschlagen) — das ist der
 Nachweis, dass sie den Fehler finden.
+
+## Nachtrag Prüfungen der Phase 2, Teil 1 — *symbole* und *asset-register*, 2026-11-23, **Abnahme offen**
+
+Geschrieben und gebaut im autonomen Lauf (Plan-0002 WP2.6 c/d, WP2.7), nach Claudes Empfehlung;
+**zu prüfen durch den Nutzer** (N-71). Die Regeln, was ein Symbol ist und wie das Register
+aussieht, stehen in [Vertrag 05](05-asset-pipeline.md); hier steht nur, was der Prüfbefehl damit
+tut. Die übrigen Prüfungen der Phase 2 (*wesen*, *welt*, *textluecken*) folgen in Teil 2.
+
+### Anlass
+
+`CustomIcon` ist ein Name. Fehlt das Bild dazu, bleibt das Feld im Beutel leer — ohne Meldung im
+Protokoll. Bis hierher hat das nur ein Blick in Vanillas Bilderordner geprüft. Mit dem ersten
+eigenen Bild (`ico700_silberpfennig`) kommen zwei Fragen dazu: hat das Bild die Form, die das
+Spiel erwartet, und steht es mit Quelle und Lizenz im Register?
+
+### Die zwei Prüfungen
+
+`check-all.ps1` zählt jetzt **neun** Prüfungen.
+
+| Prüfung | Skript | Braucht | Ausgänge |
+|---|---|---|---|
+| *Symbole (genannte Bilder)* | `tools/check/symbole-pruefen.ps1 [-ModOrdner <Ordner>] [-VanillaBilder <Ordner>]` | `SDTD_PATH` (Vanillas `Data\ItemIcons`) | 0 grün · 1 Befund · 2 nicht prüfbar |
+| *Asset-Register* | `tools/assets/symbole.ps1 -Pruefen [-Wurzel <Ordner>]` | nichts außerhalb des Repositorys | 0 grün · 1 Befund · 2 nicht ausführbar |
+
+Ausgang 2 zählt in `check-all.ps1` als rot, wie bei jeder anderen Prüfung.
+
+**Regeln von *symbole*:**
+
+1. Jeder Wert von `CustomIcon` in unseren XML-Dateien nennt ein Bild, das es gibt: `<Name>.png` in
+   Vanillas `Data\ItemIcons` **oder** unter `UIAtlases\ItemIconAtlas` eines unserer Modlets.
+   Groß- und Kleinschreibung zählt; ein Name, der nur in anderer Schreibung vorkommt, ist ein
+   eigener Befund mit der richtigen Schreibung.
+2. Gelesen werden zwei Formen: `<property name="CustomIcon" value="…"/>` an jeder Stelle, und
+   `<set xpath="…/property[@name='CustomIcon']/@value">Name</set>`.
+3. Jedes eigene Bild ist ein PNG mit Alphakanal, 160×160.
+4. Jedes eigene Bild heißt `ico700_<wort>` in Kleinbuchstaben und trägt nicht den Namen eines
+   Vanilla-Bildes.
+5. Kein Bildname kommt in zwei Modlets vor.
+6. Unter `UIAtlases` liegt nichts außer PNG-Dateien in `ItemIconAtlas`.
+7. Jedes eigene Bild wird von mindestens einem `CustomIcon` genannt.
+8. Nichts gelesen ist nicht grün: ohne Vanillas Bilderordner, ohne ein PNG darin oder ohne ein
+   einziges `CustomIcon` ist der Ausgang 2. Eine XML-Datei, die sich nicht lesen lässt, ebenso.
+
+**Regeln von *asset-register*:**
+
+1. Das Register `assets/ASSETS.md` hat eine Tabelle mit allen elf Spalten aus Vertrag 05 §5 und
+   mindestens einer Zeile; sonst Ausgang 2.
+2. Kein Pflichtfeld ist leer. Ein Strich ist nur in `Beleg`, `Beschreibung` und `Kosten` erlaubt
+   und nur bei `eigen:blender` und `eigen:hand`.
+3. `Art`, `Quelle` und `Stand` tragen einen der Werte aus Vertrag 05; kein Name steht zweimal.
+4. Zu jeder Zeile der Art `symbol` gibt es das Quellbild und das fertige Bild, und das fertige
+   Bild ist das, was aus dem Quellbild entsteht (sichtbarer Unterschied 0).
+5. Unter `mod/*/UIAtlases` liegt keine Datei ohne Zeile.
+6. Eine Zeile, die ein Modlet nennt, das es nicht gibt, ist Ausgang 2.
+
+### Grenzen
+
+- *symbole* liest **nicht**, ob das Spiel das Bild wirklich lädt — das ist gelesen (Finding F-16)
+  und im Spiel nicht gesehen (S-09).
+- Ein Gegenstand **ohne** `CustomIcon` zeigt das Bild seines eigenen Namens; ob es das gibt, prüft
+  diese Fassung nicht.
+- `CustomIcon` in einer Form, die keine der zwei gelesenen ist (etwa `setattribute`), wird nicht
+  gesehen. In unseren Dateien kommt keine vor (28 genannte Bilder am 2026-11-23, alle gelesen).
+- Der Vergleich „fertiges Bild gleich Quellbild" rechnet mit `System.Drawing` dieses Rechners.
+  Auf einem anderen Windows kann die Verkleinerung um einzelne Stufen abweichen; dann wäre die
+  Regel 4 dort rot, obwohl nichts falsch ist. Bis ein zweiter Rechner prüft, ist das ungemessen.
+
+### Gegenproben (Projektregel 5)
+
+27 neue Gegenproben in `gegenproben.ps1` (Abschnitt „Symbole und Asset-Register"); die Prüfbilder
+werden dort gezeichnet (eine Ellipse) und liegen nicht im Repository. Vier laufen gegen den
+sauberen Baum und müssen grün sein, 23 je gegen einen falschen Eingang:
+
+| Falscher Eingang | Erwartung |
+|---|---|
+| fertiges Bild stammt aus einem anderen Quellbild | Exit 1, „entspricht nicht seinem Quellbild" |
+| Bild im Modlet ohne Registerzeile | Exit 1, „Datei ohne Registerzeile" |
+| fertiges Bild fehlt | Exit 1 |
+| leeres Pflichtfeld; Strich bei Meshy-Quelle; Art, Quelle, Stand unbekannt | Exit 1, fünf Befunde einzeln |
+| derselbe Name in zwei Zeilen; Symbol ohne `ico700_` | Exit 1 |
+| Quellbild fehlt; ohne Alpha; kleiner als 160×160; Inhalt kleiner als 148; keine Bilddatei | Exit 1, je eigener Wortlaut |
+| Register fehlt; ohne Zeile; ohne die Spalte `Lizenz`; Modlet unbekannt | Exit 2 |
+| genanntes Bild fehlt (als `property` und als `set`); falsche Schreibung; leerer Wert | Exit 1, vier Befunde |
+| eigenes Bild 128×128 ohne Alpha | Exit 1, zwei Befunde |
+| zwei Modlets mit demselben Bildnamen | Exit 1 |
+| Bild mit Vanilla-Namen; ungenutztes Bild; fremder Atlas-Ordner | Exit 1 |
+| Vanillas Bilderordner fehlt; kein Spielpfad; kein `CustomIcon`; kaputtes XML | Exit 2 |
+
+Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **252 Gegenproben, 0
+fehlgeschlagen; 9 Prüfungen, 1 rot** (rot bleibt `resourceRepairKit` am Dump vom 22.11., N-01).
+*Symbole*: 5261 Vanilla-Bilder, 1 eigenes, 28 genannte Bilder (27 aus Vanilla, 1 aus dem Modlet),
+0 Befunde. *Asset-Register*: 1 Zeile, 1 Symbol, 0 Befunde.
+
+Beim Bau gefunden, weil der zweite Lauf des Werkzeugs das Bild noch einmal schrieb: eine Kopie
+über „Zeichnen" verändert fast durchsichtige Bildpunkte (Unterschied 124 bei einem Bild gegen
+sich selbst). Bilder werden darum als Bytes gelesen, und verglichen wird, was man sieht
+(Deckkraft und Farbe mal Deckkraft).

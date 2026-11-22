@@ -86,11 +86,11 @@ function Invoke-Pruefskript {
         2026-11-20: vorher riss eine Ausnahme in kette-pruefen den ganzen Lauf ab, und die
         Zeile "N Pruefungen, M rot" erschien nie.
     #>
-    param([string]$Pfad)
+    param([string]$Pfad, [hashtable]$Parameter = @{})
 
     $global:LASTEXITCODE = $null
     try {
-        & $Pfad
+        & $Pfad @Parameter
         $script:pruefKode = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 2 }
     }
     catch {
@@ -341,6 +341,50 @@ if (Test-Path $spracheSkript) {
 else {
     $red++
     Write-Output "  sprachverweise-pruefen.ps1 fehlt: $spracheSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
+# ---------------------------------------------------- Symbole (genannte Bilder)
+# CustomIcon ist ein Name. Fehlt das Bild dazu, bleibt das Feld im Beutel leer, und das Log
+# schweigt. symbole-pruefen.ps1 haelt jeden genannten Namen gegen Vanillas Data\ItemIcons und
+# gegen die Bilder unserer Modlets (Vertrag 05 Abschnitt 6, Plan-0002 WP2.5). Ohne SDTD_PATH
+# ist das Ausgang 2 und rot.
+$symboleSkript = Join-Path $here 'symbole-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Symbole (genannte Bilder) ----"
+if (Test-Path $symboleSkript) {
+    Invoke-Pruefskript $symboleSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  symbole-pruefen.ps1 fehlt: $symboleSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
+# ---------------------------------------------------- Asset-Register
+# Jedes ausgelieferte Stueck hat eine Zeile in assets/ASSETS.md, und jedes fertige Bild ist
+# das, was aus seinem Quellbild entsteht (Vertrag 05 Abschnitte 4 und 5). Das Werkzeug, das
+# die Bilder erzeugt, prueft das selbst: tools/assets/symbole.ps1 -Pruefen. Braucht keinen
+# Spielpfad.
+$registerSkript = Join-Path $repoRoot 'tools\assets\symbole.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Asset-Register ----"
+if (Test-Path $registerSkript) {
+    Invoke-Pruefskript $registerSkript @{ Pruefen = $true }
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  tools\assets\symbole.ps1 fehlt: $registerSkript"
     Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 

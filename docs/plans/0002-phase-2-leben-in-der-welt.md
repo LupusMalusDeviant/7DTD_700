@@ -25,6 +25,22 @@
 > **Fundstellen** stehen als `Datei:Zeile` oder Abschnitt dabei. Was nicht gemessen ist, heißt
 > „ungemessen" oder „unbelegt".
 
+## Stand der Schritte (autonomer Lauf)
+
+Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Prüfbefehl gelaufen,
+**nicht** im Spiel gesehen und **nicht** abgenommen.
+
+| Schritt | Stand | Wo |
+|---|---|---|
+| WP1.4 Textlücken, erster Stapel | gebaut (241 Zeilen) | `a3335ef`, D129 |
+| WP2.2 Vertrag 05 (Entwurf) | geschrieben, am 2026-11-23 in drei Punkten präzisiert | `b2ddada`, N-71, N-18 |
+| WP2.6 c/d, WP2.7 Prüfungen *symbole* und *asset-register* | gebaut, 27 Gegenproben | Vertrag 04 „Nachtrag Prüfungen der Phase 2, Teil 1" |
+| WP3.2 Beleg: Symbole aus dem Modlet | geschrieben | `57f721d`, Finding F-16 |
+| WP3.3 Lizenzlage Meshy | gelesen; **Meshy gesperrt** (HTTP 402 auf dem Gratis-Tarif) | Vertrag 05 §5.1, N-64 |
+| WP3.4 Symbol-Durchstich Silberpfennig | gebaut (Blender statt Meshy) | D131, N-28, S-09 |
+
+Offen aus WP2.6/WP2.7: *wesen*, *welt*, *textluecken*.
+
 ## Kontext / Motivation
 
 **Phase 1 ist gebaut, aber nicht abgenommen.** Der Prüfbefehl

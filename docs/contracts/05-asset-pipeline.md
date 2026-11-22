@@ -51,7 +51,7 @@ Dateien, kein Code.
 | Größe | **160×160** Pixel |
 | Hintergrund | durchsichtig; der Gegenstand freigestellt, mittig, mit mindestens 6 Pixeln Rand |
 | Darstellung | ein einzelner Gegenstand, schräg von oben, weiches Licht von links oben, kein Text, keine Hand, kein Boden, kein Rahmen — so wie Vanillas Bilder |
-| Stil | gebrauchte Dinge des Frühmittelalters: mattes Eisen, Holz, Leder, Leinen, Ton; kein Chrom, kein Kunststoff, keine Prägung, keine Schrift |
+| Stil | gebrauchte Dinge des Frühmittelalters: mattes Eisen, Holz, Leder, Leinen, Ton; kein Chrom, kein Kunststoff, keine Schrift, kein lesbares Zeichen. Eine Münze darf ein Muster aus Punkten tragen (Perlkreis) — keine Buchstaben, keine Ziffer, kein Kopf, kein Wappen. *(Geändert 2026-11-23: vorher „keine Prägung"; eine glatte Scheibe ist als Münze nicht zu erkennen.)* |
 
 ### 3.2 Namen (Ergänzung zu Vertrag 02)
 
@@ -67,9 +67,16 @@ Dateien, kein Code.
 1. **Umbiegen** auf ein vorhandenes Vanilla-Bild, wenn eines ohne Neuzeit passt (kein eigenes Bild).
 2. **Eigenes Bild aus einem eigenen Modell** (Teil B), sobald es eines gibt — das Bild ist dann eine
    Ansicht des Modells und ersetzt ein vorläufiges.
-3. **Erzeugtes Bild** (Meshy, Text zu Bild, freigestellt) als vorläufiges oder bleibendes Symbol.
+3. **Eigenes Bild aus Grundformen** (`eigen:blender`): harte, einfache Dinge — Barren, Münze,
+   Nagel, Klinge — in Blender aus Grundformen gebaut und freigestellt gerendert (D84). Das
+   Blender-Skript ist Python und liegt nicht im Repository (N-61); im Repository liegt das
+   Quellbild. *(Ergänzt 2026-11-23; so entstand das erste Symbol.)*
+4. **Erzeugtes Bild** (Meshy, Text zu Bild, freigestellt) als vorläufiges oder bleibendes Symbol.
    Freigabe des Nutzers vom 2026-11-22 (N-63). Der Beschreibungstext (Prompt) nennt nur das Ding
    und den Stil aus §3.1 — **keinen** Namen eines Spiels, einer Marke, eines Künstlers.
+   **Stand 2026-11-23: nicht möglich.** Meshy lehnt jede Erzeugung über die API ab (HTTP 402,
+   „Task creation on the free plan is no longer supported"), obwohl das Konto 5332 Credits trägt.
+   Bis der Nutzer den Tarif wechselt (N-64), entsteht kein Meshy-Stück.
 
 ### 3.4 Was ein Bild nicht zeigen darf
 
@@ -90,10 +97,18 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/assets/symbole.ps1 [-P
 | ohne Schalter | liest `assets/ASSETS.md`, erzeugt aus jedem Quellbild der Art `symbol` das fertige PNG (160×160, 32 Bit, Alpha) im Ordner des dort genannten Modlets; schreibt nur, wenn sich der Inhalt ändert | 0 = alles erzeugt; 1 = ein Quellbild fehlt, ist kein PNG mit Alpha oder kleiner als 160×160; 2 = Benutzungsfehler (Register unlesbar, Modlet unbekannt) |
 | `-Pruefen` | erzeugt nichts; vergleicht, ob jedes fertige PNG dem entspricht, was aus seinem Quellbild entstünde, und ob es im Modlet-Ordner ein PNG **ohne** Registerzeile gibt | 0 = stimmt; 1 = Abweichung; 2 = Benutzungsfehler |
 
-Zuschnitt: das Quellbild wird auf seinen sichtbaren Inhalt beschnitten (Alpha > 0), auf ein Quadrat
-mit durchsichtigem Rand ergänzt und mit guter Filterung auf 160×160 verkleinert. Keine Farbänderung,
-kein Schärfen. Werkzeug: PowerShell mit `System.Drawing` (auf diesem Rechner vorhanden; kein
-zusätzliches Paket).
+Zuschnitt: das Quellbild wird auf seinen sichtbaren Inhalt beschnitten (Alpha über 8 von 255 —
+ein Schleier aus der Freistellung zählt nicht), mittig mit 6 Pixeln Rand in ein Quadrat gesetzt
+und mit guter Filterung auf 160×160 verkleinert. Keine Farbänderung, kein Schärfen. **Vergrößert
+wird nie:** zeigt ein Quellbild in der längeren Richtung weniger als 148 sichtbare Bildpunkte, ist
+das Ausgang 1. Werkzeug: PowerShell mit `System.Drawing` (auf diesem Rechner vorhanden; kein
+zusätzliches Paket); die Bildarbeit steht als C# in derselben Datei.
+
+„Entspricht" heißt beim Prüfen: gleiche Größe und **kein sichtbarer Unterschied** — verglichen
+werden Deckkraft und Farbe mal Deckkraft, nicht die Farbe durchsichtiger Bildpunkte. Mit
+`-Pruefen` werden außerdem die Pflichtfelder jeder Registerzeile geprüft (§5); ein leeres Feld ist
+Ausgang 1. *(Präzisiert 2026-11-23 beim Bau; die Fassung davor nannte „Alpha > 0" und keine
+Untergrenze für den Inhalt.)*
 
 ## 5. Das Register `assets/ASSETS.md`
 
@@ -129,7 +144,13 @@ Abschnitt 3.2, und die Preisseite. Sinngemäß:
 - Kennzeichen, die Meshy in ein Ergebnis legt (Metadaten, Wasserzeichen), werden nicht entfernt
   (Abschnitt 2.4). Der Zuschnitt in §4 verändert nur Größe und Rand.
 
-**Folge, bis der Nutzer den Tarif nennt (N-75):** jedes Meshy-Stück wird so geführt, als gälte
+**Gemessen am 2026-11-23:** das Konto steht auf dem **Gratis-Tarif** — die API lehnt jede
+Erzeugung mit HTTP 402 ab („Task creation on the free plan is no longer supported. To continue
+creating tasks, please upgrade your plan."), bei 5332 Credits Guthaben. Damit ist die offene
+Frage oben für uns entschieden, bevor sie sich stellt: gekaufte Credits allein machen keinen
+Bezahl-Kunden, und auf dem Gratis-Tarif entsteht über die API gar nichts (N-64).
+
+**Folge, sobald wieder erzeugt werden kann und bis der Nutzer den Tarif nennt (N-75):** jedes Meshy-Stück wird so geführt, als gälte
 CC BY 4.0 — `Lizenz` = „Meshy; CC BY 4.0, falls Gratis-Tarif, sonst Eigentum des Nutzers (N-75)",
 `Nennung` = „Erstellt mit Meshy (meshy.ai) — CC BY 4.0". Die Nennung steht im Register und, sobald
 ein Paket gebaut wird, in der `README` des Pakets. Das ist in beiden Fällen zulässig.
@@ -138,11 +159,12 @@ ein Paket gebaut wird, in der `README` des Pakets. Das ist in beiden Fällen zul
 
 | Prüfung | Rot, wenn |
 |---|---|
-| *symbole* | ein `CustomIcon` in unseren Modlets auf einen Namen zeigt, den es weder in Vanillas `Data\ItemIcons` noch als PNG unter `UIAtlases/ItemIconAtlas` eines unserer Modlets gibt; ein PNG dort nicht 160×160 mit Alpha ist; zwei Modlets ein Bild gleichen Namens tragen |
+| *symbole* | ein `CustomIcon` in unseren Modlets auf einen Namen zeigt, den es weder in Vanillas `Data\ItemIcons` noch als PNG unter `UIAtlases/ItemIconAtlas` eines unserer Modlets gibt; ein PNG dort nicht 160×160 mit Alpha ist; zwei Modlets ein Bild gleichen Namens tragen; ein eigenes Bild nicht `ico700_…` heißt, den Namen eines Vanilla-Bildes trägt oder von keinem `CustomIcon` genannt wird |
 | *asset-register* | ein ausgeliefertes Stück keine Registerzeile hat; einer Zeile ein Pflichtfeld fehlt; `symbole.ps1 -Pruefen` abweicht |
 
 Jede Prüfung scheitert einmal nachweislich an einem bekannt falschen Input, bevor sie zählt
-(Projektregel 5).
+(Projektregel 5). **Gebaut am 2026-11-23** — die genauen Regeln, Grenzen und die 27 Gegenproben
+stehen in [Vertrag 04, „Nachtrag Prüfungen der Phase 2, Teil 1"](04-pruefwerkzeuge.md).
 
 ## 7. Teil B — Modelle und Bundles: offen
 
