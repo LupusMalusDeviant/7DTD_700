@@ -2213,3 +2213,85 @@ bedingte Blöcke, 0 unaufgelöst.
   („ohne Vergleich"). Wir schreiben keinen; wer einen braucht, muss diese Regel erweitern.
 - **Die anderen Grenzen des Nachtrags WP8.7 gelten weiter**: kein NCalc-Leser, `mod_loaded`
   nur aufgelistet, jeder Zweig gegen Vanilla, kein Lauf im Spiel.
+
+## Nachtrag zweites Review zu WP8.7, 2026-11-22 — die Bedingung wird mit NCalc ausgewertet, **Abnahme offen**
+
+Vor dem Push von `049280e` hat Codex (`gpt-6.2-sol`) zwei weitere mittlere Befunde an
+derselben Stelle gemeldet: ein erreichbarer Zweig wurde als tot gemeldet
+(`not (null != xpath('…'))`, ebenso mit `or`), und Klammern um `null` versteckten einen
+toten Zweig (`xpath('…') != (null)`). Das war das zweite Review in Folge mit Lücken in der
+Zerlegung der Bedingung, und der Grund war beide Male derselbe: **die Prüfung las den
+Ausdruck nicht, sie riet an seinem Text.** Jede Sonderregel schloss eine Form und öffnete
+die nächste. Der Nutzer hat am 2026-11-22 entschieden: die Bedingung wird mit der
+NCalc-Bibliothek des Spiels ausgewertet.
+
+### Vertragsänderungen — sie ersetzen Punkt 3 des Nachtrags WP8.7 und den Nachtrag „Review zu WP8.7"
+
+1. **Gelesen wird mit NCalc.** `kette-pruefen` lädt `NCalc.dll` aus der Spielinstallation
+   (`<SDTD_PATH>\7DaysToDie_Data\Managed\`, oder der Pfad aus dem neuen Parameter `-NCalc`)
+   und liest jede Bedingung mit denselben Optionen wie das Spiel (1542). Die Bibliothek
+   wird nur geladen, nichts davon liegt im Repo (Projektregel 1). Eigene Klammer-, Text-
+   und Vergleichsregeln gibt es nicht mehr.
+2. **Rot ist, was das Spiel nicht auswerten könnte:** ein Ausdruck, den NCalc nicht lesen
+   kann (Klammern, Anführungszeichen, Operatoren); ein Funktionsname außerhalb der elf des
+   Spiels; `mod_loaded` oder `xpath` mit etwas anderem als genau einem festen Text; ein
+   Ausdruck, der bei der Auswertung eine Ausnahme wirft oder **keinen Wahrheitswert**
+   liefert.
+3. **Ausgewertet wird wie im Spiel, soweit es hier geht.** `xpath(…)` läuft gegen die
+   Vanilla-Datei und liefert, was `XmlPatchConditionEvaluator::xpath` liefert: `null` ohne
+   Treffer, `More than one match` bei mehreren, sonst den Text des Treffers.
+   `mod_loaded(…)` ist unbekannt — also wird **jede Belegung** der in der Bedingung
+   genannten Mods durchgerechnet (geladen / nicht geladen), und rot ist ein Fehler in
+   irgendeiner davon. Bei mehr als acht genannten Mods in einer Bedingung ist sie nicht
+   prüfbar (Exit 2).
+4. **Der „tote Zweig" entfällt als Begriff.** Ob ein Zweig läuft, hängt an Mods, die diese
+   Prüfung nicht kennt; `xpath(…) = null` ist in Vanilla nie wahr und trotzdem sinnvoll.
+   An seine Stelle tritt eine einfachere Regel, die den Tippfehler fängt, um den es ging:
+   **jeder XPath in einer Bedingung muss in Vanilla etwas treffen** (oder nur eigene
+   Kennungen nennen) — gleich, wie der Ausdruck um ihn herum gebaut ist. Rot auch, wenn
+   der XPath kein gültiger Ausdruck ist oder keine Knotenmenge liefert.
+5. **Bedingungen mit anderen Funktionen** (`game_version`, `version`, `gamepref`, `event`,
+   `serverinfo`, `time_minutes`, `game_loaded`, `mod_version`, `has_entitlement`) werden
+   gelesen und auf ihre Funktionsnamen geprüft, aber **nicht ausgewertet** — ihre Werte
+   kennt nur das laufende Spiel. Sie werden gezählt.
+6. **Ohne NCalc ist es nicht geprüft.** Enthält eine Patch-Datei einen bedingten Block und
+   lässt sich die Bibliothek nicht laden, endet der Lauf mit Exit 2. Ohne bedingten Block
+   wird sie nicht gebraucht und nicht gesucht.
+7. **Neue Ausgabezeile:** `Bedingungen mit NCalc gelesen: N (ohne genannte Mods wahr: N,
+   falsch: N, nicht ausgewertet: N)`.
+
+### Gegenproben (Projektregel 5)
+
+Sieben neue; drei bestehende erwarten andere Zeilen, weil die Meldungen jetzt von NCalc
+kommen (die Urteile sind dieselben). Testdaten unter `tools/check/testdaten/kette/bedingt-*/`.
+
+| Probe | erwartet | altes Skript (`049280e`) |
+|---|---|---|
+| Fünf Schreibweisen für „das Ziel der Bedingung gibt es in Vanilla nicht" (`not (null != xpath(…))`, mit `or`, `!= (null)`, `(null) <> ((xpath(…)))`, `= null`) | Exit 1, 5 rot, keine Zeile „toter Text" | weniger als 5 rot, und die roten mit der Begründung „toter Text" |
+| Vier Bedingungen, an denen nichts falsch ist — eine ergibt in Vanilla „falsch", eine nennt drei Mods, eine ruft `event(…)` | Exit 0; gelesen 4, wahr 2, falsch 1, nicht ausgewertet 1 | Exit 0, aber ohne die Zeile |
+| Vier Bedingungen, die erst beim Auswerten scheitern — die erste nur, **wenn die genannte Mod geladen ist** | Exit 1, 4 rot | weniger als 4 rot |
+| Bedingter Block, `-NCalc` führt ins Leere | Exit 2, „NICHT GEPRUEFT" | kennt den Parameter nicht |
+| Bedingter Block, `-NCalc` ist keine Bibliothek | Exit 2 | dito |
+| Bedingter Block, kein `SDTD_PATH` | Exit 2 | Exit 0 — grün ohne die Bibliothek |
+| **Kein** bedingter Block, `-NCalc` führt ins Leere | Exit 0 — die Bibliothek wird nicht gesucht | kennt den Parameter nicht |
+
+Gegen `kette-pruefen.ps1` des Stands `049280e`: **132 Gegenproben, 10 fehlgeschlagen** (die
+sieben neuen und die drei mit umbenannten Zeilen). Gegen den neuen Stand: **132, 0
+fehlgeschlagen.**
+
+**`check-all.ps1` am 2026-11-22 nach der Änderung:** 6 Prüfungen, 1 rot (`recipes`, 80
+Sackgassen, unverändert). `kette-pruefen`: 20 Patch-Dateien, 427 XPaths, 9 bedingte Blöcke;
+**9 Bedingungen mit NCalc gelesen, ohne genannte Mods 9 wahr, 0 falsch, 0 nicht
+ausgewertet**; 0 unaufgelöst.
+
+### Grenzen
+
+- **Die Gegenproben zu bedingten Blöcken brauchen die Spielinstallation.** Ohne `SDTD_PATH`
+  enden sie mit Exit 2 und zählen als fehlgeschlagen — nicht geprüft ist nicht grün.
+- **Ein XPath, der auf das Element einer anderen Mod zielt, ist rot** (Regel 4). Heute gibt
+  es keinen; braucht WP8.9 einen, muss diese Regel zuerst erweitert werden.
+- **`mod_loaded`-Namen werden nicht geprüft**, nur aufgelistet und durchgerechnet.
+- **Der Text eines Treffers** (`ToString()`) wird hier aus einem `XDocument` gebildet wie
+  im Spiel; ein Vergleich damit (`xpath(…) = '<label …/>'`) ist trotzdem ungesehen — wir
+  vergleichen nur mit `null`.
+- **Kein Lauf im Spiel** (Plan-0001, Prüfliste 22).

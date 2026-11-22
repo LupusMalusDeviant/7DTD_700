@@ -288,13 +288,23 @@ unaufgelöst. Grenze: geprüft wird gegen Vanilla, nicht gegen den gepatchten St
 jeder Zweig (`<if cond="…">`, `<else>`) wird geprüft, als wäre er der aktive, auch ein Block
 im Block. Rot sind ein falsch gebauter Block (`<elseif>`, `<if>` ohne `cond`, `evaluator`,
 ein Zweig hinter `<else>`, kein `<if>`, keine Operation) und eine falsche Bedingung
-(unbekannte Funktion, offenes Anführungszeichen, **`xpath(…)` ohne Vergleich** — das Spiel
-verlangt einen Wahrheitswert und `xpath` liefert keinen —, ein XPath, der in Vanilla nichts
+(unbekannte Funktion, nicht lesbarer Ausdruck, **`xpath(…)` allein** — das Spiel verlangt
+einen Wahrheitswert und `xpath` liefert keinen —, ein XPath, der in Vanilla nichts
 trifft). Ausgabe: `bedingte Bloecke: N (Zweige: N, XPaths darin: N, xpath-Bedingungen: N)`
 und `in Bedingungen genannte Mods: …`; heute 9 Blöcke, keine genannte Mod. Ob eine Bedingung
-im Spiel wahr wird, prüft das Skript nicht. *(Seit dem Review am selben Tag: die Klammern
-des ganzen Ausdrucks müssen aufgehen, `(xpath(…)) != null` ist gültig, und ein toter Zweig
-fällt auch als `null != xpath(…)` auf.)*
+im Spiel wahr wird, prüft das Skript nicht.
+
+**Die Bedingung liest NCalc (seit dem zweiten Review am 2026-11-22).** Die eigene Zerlegung
+des Ausdrucks hatte in zwei Reviews hintereinander Lücken; jetzt liest ihn die Bibliothek,
+die ihn auch im Spiel liest: `NCalc.dll` aus `<SDTD_PATH>\7DaysToDie_Data\Managed\` (oder
+`-NCalc <Pfad>`), nur geladen, nie im Repo. Rot ist, was NCalc nicht lesen kann, was beim
+Auswerten eine Ausnahme wirft oder keinen Wahrheitswert liefert — in irgendeiner Belegung
+der genannten Mods. `xpath(…)` läuft gegen Vanilla wie im Spiel, und **jeder XPath einer
+Bedingung muss in Vanilla etwas treffen**. Hat eine Patch-Datei einen bedingten Block und
+fehlt die Bibliothek, ist der Lauf **nicht geprüft** (Exit 2). Ausgabe:
+`Bedingungen mit NCalc gelesen: N (ohne genannte Mods wahr: N, falsch: N, nicht
+ausgewertet: N)` — heute 9, alle wahr. Die Gegenproben zu bedingten Blöcken brauchen damit
+die Spielinstallation.
 
 **Was eine Patch-Datei ist (seit 2026-11-21).** Der Wurzelknoten heißt `<config>`, jedes Kind
 ist eine bekannte Operation und trägt ein `xpath` — sonst **rot**. *(Vorher zählte eine Datei

@@ -37,7 +37,11 @@ param(
     # ein Pruefer, der seine Dateien selbst sucht, laesst sich nicht gegenpruefen.
     [string[]]$Patches,
     # Vanilla Data/Config. Ohne Angabe aus SDTD_PATH.
-    [string]$Vanilla
+    [string]$Vanilla,
+    # Die NCalc.dll des Spiels, mit der die Bedingungen bedingter Bloecke gelesen werden
+    # (seit 2026-11-22). Ohne Angabe <SDTD_PATH>\7DaysToDie_Data\Managed\NCalc.dll.
+    # Gebraucht nur, wenn eine Patch-Datei einen <conditional> hat.
+    [string]$NCalc
 )
 
 $ErrorActionPreference = 'Stop'
@@ -482,132 +486,225 @@ $bedingteXPaths = 0
 $bedingungsXPaths = 0
 $genannteMods = @()
 
+# DIE BEDINGUNG WIRD MIT NCALC GELESEN (geaendert 2026-11-22, zweites Review zu WP8.7).
+# Die erste Fassung hat den Ausdruck GROB zerlegt - Texte maskiert, Funktionsaufrufe gesucht,
+# Klammern gezaehlt, nach einem Vergleich neben xpath(...) gesehen. Zwei Reviews in Folge
+# haben darin Luecken gefunden (Klammern, vertauschte Seiten, not/or, geklammertes null),
+# und jede Sonderregel hat eine Form geschlossen und die naechste geoeffnet. Der Grund war
+# immer derselbe: die Pruefung hat an dem Text geraten, statt ihn zu lesen.
+#
+# Jetzt liest ihn die Bibliothek, die ihn auch im Spiel liest: NCalc.dll aus der
+# Spielinstallation, mit denselben Optionen (1542). Geladen wird sie nur, wenn eine
+# Patch-Datei einen bedingten Block hat; laesst sie sich dann nicht laden, ist der Lauf
+# NICHT GEPRUEFT (Exit 2), nicht gruen. Im Repo liegt davon nichts (Projektregel 1).
+#
+# Was daraus folgt (Vertrag 04, Nachtrag zweites Review zu WP8.7):
+#   - rot ist, was NCalc nicht lesen kann, was beim Auswerten eine Ausnahme wirft oder
+#     keinen Wahrheitswert liefert - in IRGENDEINER Belegung der genannten Mods;
+#   - xpath(...) laeuft gegen Vanilla und liefert, was das Spiel liefert: null ohne Treffer,
+#     "More than one match" bei mehreren, sonst den Text des Treffers;
+#   - jeder XPath in einer Bedingung muss in Vanilla etwas treffen (oder nur eigene
+#     Kennungen nennen). Das ersetzt den "toten Zweig": ob ein Zweig laeuft, haengt an
+#     Mods, die hier niemand kennt, aber ein Ziel, das es nicht gibt, ist ein Tippfehler.
+$ncalcGeladen = $false
+$ncalcOpt = $null
+$ncalcHandler = $null
+$ncalcBelegung = @{}
+$ncalcXPath = @{}
+$vanillaXDocs = @{}
+$bedingungenGelesen = 0
+$bedingungenWahr = 0
+$bedingungenFalsch = 0
+$bedingungenOffen = 0
+
+function Initialize-NCalc {
+    if ($script:ncalcGeladen) { return }
+    $pfad = $NCalc
+    if (-not $pfad) {
+        if (-not $env:SDTD_PATH) {
+            Stop-Unpruefbar "eine Patch-Datei hat einen bedingten Block, und SDTD_PATH ist nicht gesetzt: die NCalc.dll des Spiels wird gebraucht, um die Bedingung zu lesen (oder -NCalc <Pfad>)"
+        }
+        try { $pfad = [IO.Path]::Combine($env:SDTD_PATH, '7DaysToDie_Data\Managed\NCalc.dll') }
+        catch { Stop-Unpruefbar "SDTD_PATH ist kein gueltiger Pfad: die NCalc.dll des Spiels laesst sich nicht suchen" }
+    }
+    $da = $false
+    try { $da = Test-Path -LiteralPath $pfad -PathType Leaf } catch { $da = $false }
+    if (-not $da) {
+        Stop-Unpruefbar "eine Patch-Datei hat einen bedingten Block, aber die NCalc.dll des Spiels fehlt: $pfad"
+    }
+    try {
+        Add-Type -AssemblyName System.Xml.Linq
+        $asm = [Reflection.Assembly]::LoadFrom((Resolve-Path -LiteralPath $pfad).ProviderPath)
+        $script:ncalcOpt = [Enum]::ToObject($asm.GetType('NCalc.EvaluateOptions', $true), 1542)
+        # Die drei Funktionen, die hier nachgestellt werden koennen. Der Vergleich ohne
+        # Gross/Klein ist der des Spiels (EqualsCaseInsensitive). Alles andere bekommt kein
+        # Ergebnis - NCalc wirft dann "Function not found", genau wie im Spiel.
+        $script:ncalcHandler = [NCalc.EvaluateFunctionHandler] {
+            param($name, $fa, $ignoreCase)
+            if ($name -eq 'mod_loaded') {
+                $modName = ([string]$fa.Parameters[0].Evaluate()).Trim()
+                $fa.Result = [bool]$script:ncalcBelegung[$modName]
+            }
+            elseif ($name -eq 'xpath') {
+                $fa.Result = $script:ncalcXPath[[string]$fa.Parameters[0].Evaluate()]
+            }
+        }
+    }
+    catch {
+        Stop-Unpruefbar "die NCalc.dll des Spiels laesst sich nicht laden ($pfad): $(Get-Innerste $_.Exception)"
+    }
+    $script:ncalcGeladen = $true
+}
+
+function Get-VanillaXDoc {
+    # Das Spiel wertet xpath(...) ueber XDocument aus (Extensions::XPathEvaluate), nicht
+    # ueber XmlDocument. Darum wird die Vanilla-Datei hier ein zweites Mal gelesen.
+    param([string]$Datei)
+    if (-not $script:vanillaXDocs.ContainsKey($Datei)) {
+        try {
+            $voll = (Resolve-Path -LiteralPath ([IO.Path]::Combine($Vanilla, $Datei))).ProviderPath
+            $script:vanillaXDocs[$Datei] = [System.Xml.Linq.XDocument]::Load($voll)
+        }
+        catch {
+            Stop-Unpruefbar "die Vanilla-Datei '$Datei' laesst sich fuer die Bedingung nicht lesen: $(Get-Innerste $_.Exception)"
+        }
+    }
+    return $script:vanillaXDocs[$Datei]
+}
+
+function Get-BedingungsKnoten {
+    # Alle Knoten des von NCalc gelesenen Ausdrucks, flach in eine Liste.
+    param($Knoten, [System.Collections.ArrayList]$Liste)
+    if ($null -eq $Knoten) { return }
+    [void]$Liste.Add($Knoten)
+    $typ = $Knoten.GetType()
+    foreach ($p in 'LeftExpression', 'MiddleExpression', 'RightExpression', 'Expression') {
+        $eigenschaft = $typ.GetProperty($p)
+        if ($null -ne $eigenschaft) { Get-BedingungsKnoten ($eigenschaft.GetValue($Knoten, $null)) $Liste }
+    }
+    if ($typ.Name -ceq 'Function') {
+        foreach ($argument in @($Knoten.Expressions)) { Get-BedingungsKnoten $argument $Liste }
+    }
+}
+
 function Test-Bedingung {
-    # Zerlegt den Ausdruck GROB: Texte in einfachen Anfuehrungszeichen werden maskiert, dann
-    # werden die Funktionsaufrufe gesucht. Das ist kein NCalc-Leser - es faengt die Fehler,
-    # die beim Schreiben wirklich passieren: vertippter Funktionsname, xpath ohne Vergleich,
-    # ein XPath, der in Vanilla nichts trifft.
     param([string]$Ausdruck, $VanillaDoc, [string]$Datei)
-    $maske = New-Object System.Text.StringBuilder
-    $inText = $false
-    $i = 0
-    while ($i -lt $Ausdruck.Length) {
-        $z = [string]$Ausdruck[$i]
-        if ($inText) {
-            if ($z -ceq '\' -and ($i + 1) -lt $Ausdruck.Length) { [void]$maske.Append('__'); $i += 2; continue }
-            if ($z -ceq "'") { $inText = $false; [void]$maske.Append("'"); $i++; continue }
-            [void]$maske.Append('_'); $i++; continue
-        }
-        if ($z -ceq "'") { $inText = $true }
-        [void]$maske.Append($z); $i++
+    Initialize-NCalc
+    $script:bedingungenGelesen++
+
+    # 1. Lesen. HasErrors() liest den Ausdruck und fuellt ParsedExpression.
+    $gelesen = $null
+    $lesefehler = $null
+    try {
+        $gelesen = New-Object NCalc.Expression -ArgumentList $Ausdruck, $script:ncalcOpt
+        if ($gelesen.HasErrors()) { $lesefehler = [string]$gelesen.Error }
     }
-    if ($inText) {
-        $script:unresolved += "Bedingung mit offenem Anfuehrungszeichen: $Ausdruck  ($Datei)"
+    catch { $lesefehler = [string](Get-Innerste $_.Exception) }
+    if ($lesefehler) {
+        $script:unresolved += "NCalc kann die Bedingung nicht lesen ($(($lesefehler -replace '\s+', ' ').Trim())): $Ausdruck  ($Datei)"
         return
     }
-    $m = $maske.ToString()
-    # DIE KLAMMERN DES GANZEN AUSDRUCKS (ergaenzt 2026-11-22, Review zu WP8.7). Vorher wurde
-    # nur von einem Funktionsaufruf aus nach seiner schliessenden Klammer gesucht:
-    # "(mod_loaded('X')" und "mod_loaded('X'))" waren gruen, obwohl NCalc beide nicht lesen
-    # kann. Jetzt wird ueber den maskierten Text gezaehlt - eine schliessende Klammer ohne
-    # offene ist ebenso rot wie eine offene am Ende.
-    $stand = 0
-    $unterNull = $false
-    foreach ($zeichen in $m.ToCharArray()) {
-        if ($zeichen -eq [char]'(') { $stand++ }
-        elseif ($zeichen -eq [char]')') { $stand--; if ($stand -lt 0) { $unterNull = $true } }
-    }
-    if ($unterNull -or $stand -ne 0) {
-        $script:unresolved += "Bedingung: die Klammern gehen nicht auf: $Ausdruck  ($Datei)"
-        return
-    }
-    foreach ($treffer in [regex]::Matches($m, '([A-Za-z_][A-Za-z0-9_]*)\s*\(')) {
-        $fn = $treffer.Groups[1].Value
-        if (@('not', 'and', 'or') -ccontains $fn) { continue }
-        if ($bekannteFunktionen -cnotcontains $fn) {
+
+    # 2. Die Funktionsaufrufe. Der Name muss einer der elf des Spiels sein; mod_loaded und
+    #    xpath bekommen genau einen festen Text - sonst laesst sich hier nichts nachstellen.
+    $knoten = New-Object System.Collections.ArrayList
+    Get-BedingungsKnoten $gelesen.ParsedExpression $knoten
+    $mods = New-Object System.Collections.ArrayList
+    $xpaths = New-Object System.Collections.ArrayList
+    $andereFunktion = $false
+    $inOrdnung = $true
+    foreach ($k in $knoten) {
+        if ($k.GetType().Name -cne 'Function') { continue }
+        $fn = [string]$k.Identifier.Name
+        if ($bekannteFunktionen -notcontains $fn) {
             $script:unresolved += "Bedingung ruft '$fn(' auf; das Spiel kennt: $($bekannteFunktionen -join ', ')  ($Datei)"
+            $inOrdnung = $false
             continue
         }
-        $auf = $treffer.Index + $treffer.Length - 1
-        $tiefe = 0
-        $zu = -1
-        for ($k = $auf; $k -lt $m.Length; $k++) {
-            $c = [string]$m[$k]
-            if ($c -ceq '(') { $tiefe++ }
-            elseif ($c -ceq ')') { $tiefe--; if ($tiefe -eq 0) { $zu = $k; break } }
-        }
-        if ($zu -lt 0) {
-            $script:unresolved += "Bedingung: die Klammer von '$fn(' wird nicht geschlossen: $Ausdruck  ($Datei)"
+        if ($fn -ne 'mod_loaded' -and $fn -ne 'xpath') { $andereFunktion = $true; continue }
+        $argumente = @($k.Expressions)
+        if ($argumente.Count -ne 1 -or $argumente[0].GetType().Name -cne 'ValueExpression' -or $argumente[0].Value -isnot [string]) {
+            $script:unresolved += "Bedingung: $fn(...) erwartet genau EINEN festen Text in einfachen Anfuehrungszeichen: $Ausdruck  ($Datei)"
+            $inOrdnung = $false
             continue
         }
-        if ($fn -cne 'mod_loaded' -and $fn -cne 'xpath') { continue }
-        $argument = $Ausdruck.Substring($auf + 1, $zu - $auf - 1).Trim()
-        $argMaske = $m.Substring($auf + 1, $zu - $auf - 1).Trim()
-        if ($argMaske -notmatch "^'_*'$") {
-            $script:unresolved += "Bedingung: $fn(...) erwartet EINEN Text in einfachen Anfuehrungszeichen, gefunden: $argument  ($Datei)"
-            continue
-        }
-        $text = [regex]::Replace($argument.Substring(1, $argument.Length - 2), '\\(.)', '$1')
-        if ($fn -ceq 'mod_loaded') {
+        $text = [string]$argumente[0].Value
+        if ($fn -eq 'mod_loaded') {
             $script:genannteMods += $text.Trim()
+            if (-not $mods.Contains($text.Trim())) { [void]$mods.Add($text.Trim()) }
             continue
         }
         $script:bedingungsXPaths++
-        $hits = 0
-        try { $hits = @($VanillaDoc.SelectNodes($text)).Count }
-        catch {
-            $script:unresolved += "XPath in der Bedingung ist kein gueltiger Ausdruck: $text  ($Datei)"
-            continue
-        }
-        # WAS NEBEN DEM AUFRUF STEHT (geaendert 2026-11-22, Review zu WP8.7). Zwei Fehler der
-        # ersten Fassung:
-        #   - "(xpath('...')) != null" wurde rot: zwischen Aufruf und Vergleich stand eine
-        #     gueltige Gruppierungsklammer, und gesucht wurde der Operator DIREKT daneben.
-        #     Jetzt werden Klammerpaare, die nur den Aufruf umschliessen, erst abgestreift.
-        #   - "null != xpath('...')" galt als Vergleich, aber die Probe auf den toten Zweig
-        #     sah nur nach RECHTS: ein XPath ohne Treffer blieb gruen. Jetzt gelten beide
-        #     Seiten gleich.
-        $links = $treffer.Index
-        $rechts = $zu
-        while ($true) {
-            $l = $links - 1
-            while ($l -ge 0 -and [char]::IsWhiteSpace($m[$l])) { $l-- }
-            $r = $rechts + 1
-            while ($r -lt $m.Length -and [char]::IsWhiteSpace($m[$r])) { $r++ }
-            if ($l -ge 0 -and $r -lt $m.Length -and $m[$l] -eq [char]'(' -and $m[$r] -eq [char]')') {
-                # Ein Name direkt vor der Klammer macht sie zum Aufruf einer Funktion - das ist
-                # keine Gruppierung mehr. Ausgenommen not/and/or: das sind Woerter der
-                # Sprache, die Klammer dahinter gruppiert.
-                $v = $l - 1
-                while ($v -ge 0 -and [char]::IsWhiteSpace($m[$v])) { $v-- }
-                $e = $v
-                while ($v -ge 0 -and ([char]::IsLetterOrDigit($m[$v]) -or $m[$v] -eq [char]'_')) { $v-- }
-                if ($e -gt $v) {
-                    $wort = $m.Substring($v + 1, $e - $v)
-                    if (@('not', 'and', 'or') -cnotcontains $wort) { break }
-                }
-                $links = $l
-                $rechts = $r
+        if (-not $xpaths.Contains($text)) { [void]$xpaths.Add($text) }
+    }
+
+    # 3. Jeder XPath gegen Vanilla, mit dem Ergebnis, das das Spiel daraus macht.
+    $script:ncalcXPath = New-Object System.Collections.Hashtable ([System.StringComparer]::Ordinal)
+    $xdoc = Get-VanillaXDoc $Datei
+    foreach ($text in $xpaths) {
+        $liste = $null
+        try {
+            $roh = [System.Xml.XPath.Extensions]::XPathEvaluate($xdoc, $text)
+            if ($roh -is [string] -or $roh -is [double] -or $roh -is [bool]) {
+                $script:unresolved += "XPath in der Bedingung liefert keine Knotenmenge: $text  ($Datei)"
+                $inOrdnung = $false
                 continue
             }
-            break
+            $liste = @($roh)
         }
-        $danach = $m.Substring($rechts + 1).TrimStart()
-        $davor = $m.Substring(0, $links).TrimEnd()
-        $vergleichDanach = $danach -match '^(!=|==|=|<>)'
-        $vergleichDavor = $davor -match '(!=|==|=|<>)$'
-        if (-not $vergleichDanach -and -not $vergleichDavor) {
-            $script:unresolved += "Bedingung: xpath(...) steht ohne Vergleich. Das Spiel verlangt einen Wahrheitswert, xpath liefert keinen (gebraucht: xpath('...') != null): $Ausdruck  ($Datei)"
+        catch {
+            $script:unresolved += "XPath in der Bedingung ist kein gueltiger Ausdruck: $text  ($Datei)"
+            $inOrdnung = $false
             continue
         }
-        $ungleichNull = ($danach -match '^(!=|<>)\s*null\b') -or ($davor -match '\bnull\s*(!=|<>)$')
-        if ($ungleichNull -and $hits -eq 0) {
+        if ($liste.Count -eq 0) {
             $ownNames = @([regex]::Matches($text, "@name=['""]([^'""]+)['""]") | ForEach-Object { $_.Groups[1].Value })
             $eigen = @($ownNames | Where-Object { $defined[$_] -eq 'unser' })
-            if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) { continue }
-            $script:unresolved += "Bedingung trifft in Vanilla nichts, der Zweig ist toter Text: $text  ($Datei)"
+            if ($ownNames.Count -gt 0 -and $eigen.Count -eq $ownNames.Count) {
+                # Ein Knoten aus einem frueheren eigenen Modlet: im Spiel ein Treffer.
+                $script:ncalcXPath[$text] = 'eigener Knoten'
+                continue
+            }
+            $script:unresolved += "Bedingung nennt ein Ziel, das es in Vanilla nicht gibt: $text  ($Datei)"
+            $inOrdnung = $false
+            continue
         }
+        if ($liste.Count -gt 1) { $script:ncalcXPath[$text] = 'More than one match' }
+        else { $script:ncalcXPath[$text] = $liste[0].ToString() }
     }
+    if (-not $inOrdnung) { return }
+
+    # 4. Auswerten. Andere Funktionen als mod_loaded und xpath kennt nur das laufende Spiel.
+    if ($andereFunktion) { $script:bedingungenOffen++; return }
+    if ($mods.Count -gt 8) {
+        Stop-Unpruefbar "eine Bedingung nennt $($mods.Count) Mods; durchgerechnet werden hoechstens acht (256 Belegungen): $Ausdruck  ($Datei)"
+    }
+    $belegungen = [int][math]::Pow(2, $mods.Count)
+    $ohneMods = $false
+    for ($b = 0; $b -lt $belegungen; $b++) {
+        $script:ncalcBelegung = New-Object System.Collections.Hashtable ([System.StringComparer]::Ordinal)
+        for ($j = 0; $j -lt $mods.Count; $j++) { $script:ncalcBelegung[$mods[$j]] = ((($b -shr $j) -band 1) -eq 1) }
+        $ergebnis = $null
+        try {
+            $lauf = New-Object NCalc.Expression -ArgumentList $Ausdruck, $script:ncalcOpt
+            $lauf.add_EvaluateFunction($script:ncalcHandler)
+            $ergebnis = $lauf.Evaluate()
+        }
+        catch {
+            $grund = (([string](Get-Innerste $_.Exception)) -replace '\s+', ' ').Trim()
+            $script:unresolved += "Bedingung laesst sich nicht auswerten ($grund): $Ausdruck  ($Datei)"
+            return
+        }
+        if ($ergebnis -isnot [bool]) {
+            $art = if ($null -eq $ergebnis) { 'null' } else { $ergebnis.GetType().Name }
+            $script:unresolved += "Bedingung liefert keinen Wahrheitswert, sondern $art. Das Spiel verlangt wahr oder falsch (xpath allein liefert den Treffer; gebraucht: xpath('...') != null): $Ausdruck  ($Datei)"
+            return
+        }
+        # Belegung 0 ist "keine der genannten Mods geladen" - der Stand, den wir kennen.
+        if ($b -eq 0) { $ohneMods = [bool]$ergebnis }
+    }
+    # Gezaehlt wird erst, wenn JEDE Belegung einen Wahrheitswert geliefert hat.
+    if ($ohneMods) { $script:bedingungenWahr++ } else { $script:bedingungenFalsch++ }
 }
 
 function Test-Bedingt {
@@ -804,6 +901,7 @@ Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  Patch-Dateien: {0} mit Vanilla-Gegenstueck, {1} ohne" -f $patchDateien, $ohneGegenstueck)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
 Write-Output ("  bedingte Bloecke: {0} (Zweige: {1}, XPaths darin: {2}, xpath-Bedingungen: {3})" -f $bedingteBloecke, $zweige, $bedingteXPaths, $bedingungsXPaths)
+Write-Output ("  Bedingungen mit NCalc gelesen: {0} (ohne genannte Mods wahr: {1}, falsch: {2}, nicht ausgewertet: {3})" -f $bedingungenGelesen, $bedingungenWahr, $bedingungenFalsch, $bedingungenOffen)
 $modListe = @($genannteMods | Sort-Object -Unique)
 Write-Output ("  in Bedingungen genannte Mods: {0}" -f $(if ($modListe.Count -gt 0) { $modListe -join ', ' } else { 'keine' }))
 Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
@@ -822,10 +920,13 @@ Write-Output '      den fertig gepatchten Stand. Ein XPath, der NUR auf einen Kn
 Write-Output '      FRUEHEREN eigenen Modlets zeigt, gilt als gruen, sobald jede Kennung darin'
 Write-Output '      von uns definiert ist - dass das frueher laedt, prueft die Ladereihenfolge,'
 Write-Output '      nicht dieses Skript.'
-Write-Output '    - Ein <conditional> wird in JEDEM Zweig geprueft, als waere er der aktive. Ob'
-Write-Output '      eine Bedingung im Spiel wahr wird, prueft niemand: mod_loaded-Namen werden nur'
-Write-Output '      aufgelistet, und die Bedingung wird grob zerlegt (Funktionsname, xpath-Text,'
-Write-Output '      Vergleich dahinter), nicht von NCalc gelesen.'
+Write-Output '    - Ein <conditional> wird in JEDEM Zweig geprueft, als waere er der aktive. Die'
+Write-Output '      Bedingung liest die NCalc.dll des Spiels; xpath laeuft gegen Vanilla, und fuer'
+Write-Output '      mod_loaded wird jede Belegung durchgerechnet. Ob es eine genannte Mod gibt,'
+Write-Output '      prueft niemand. Bedingungen mit anderen Funktionen (version, gamepref, event'
+Write-Output '      ...) werden gelesen, aber nicht ausgewertet. Ein XPath in einer Bedingung, der'
+Write-Output '      auf das Element einer ANDEREN Mod zielt, ist rot - das Ziel muss in Vanilla'
+Write-Output '      stehen.'
 Write-Output '    - Fortschritts-Verweise (parent, progression_name) werden nur auf der obersten'
 Write-Output '      Ebene gelesen, nicht in einem <conditional>. <include> wird nur gezaehlt.'
 Write-Output '    - Gelesen werden XML-Dateien. Localization.csv prueft mod700check localization.'

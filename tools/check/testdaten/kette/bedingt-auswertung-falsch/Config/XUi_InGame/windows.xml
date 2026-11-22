@@ -1,0 +1,31 @@
+<config>
+	<!-- Testdatei zweites Review zu WP8.7: Bedingungen, die NCalc lesen kann, die aber beim
+	     AUSWERTEN scheitern. Die erste ist der Grund, warum jede Belegung der Mods
+	     durchgerechnet wird: ohne die Mod ergibt sie "falsch" und sieht gesund aus; MIT der
+	     Mod steht ein Text, wo ein Wahrheitswert gebraucht wird.
+	       1. mod_loaded(...) and xpath(...)   - Fehler nur, wenn die Mod geladen ist
+	       2. mod_loaded(...) + 1              - Rechnen mit einem Wahrheitswert
+	       3. pruefUnbekannt = 1               - ein Name, der nichts bedeutet
+	       4. 1 + 1                            - eine Zahl, wo ein Wahrheitswert stehen muss
+	     Erwartet: Exit 1, 4 rot. -->
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod') and xpath('/windows/window[@name=&quot;pruefFenster&quot;]')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod') + 1">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="pruefUnbekannt = 1">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="1 + 1">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

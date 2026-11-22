@@ -1495,6 +1495,21 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    Skript des Stands `f4a0476` 125 Gegenproben, 2 fehlgeschlagen, gegen das neue 125, 0.
    Die zwölf Formen sind auch mit der `NCalc.dll` des Spiels ausgewertet, mit derselben
    Einteilung. → Vertrag 04 „Nachtrag Review zu WP8.7", Abnahme offen.
+
+   **Zweites Review zu WP8.7 (2026-11-22): die Bedingung liest jetzt NCalc.** Das Review
+   zu `049280e` fand wieder zwei Lücken an derselben Stelle (`not (null != xpath(…))` als
+   „tot" gemeldet, obwohl der Zweig läuft; `!= (null)` versteckte ein fehlendes Ziel). Der
+   Grund war beide Male derselbe — die Prüfung riet am Text der Bedingung, statt ihn zu
+   lesen —, und der Nutzer hat entschieden: ausgewertet wird mit der NCalc-Bibliothek des
+   Spiels. `kette-pruefen` lädt sie aus der Spielinstallation (nichts davon im Repo), liest
+   jede Bedingung mit den Optionen des Spiels, rechnet jede Belegung der genannten Mods
+   durch und stellt `xpath(…)` gegen Vanilla nach. Der „tote Zweig" ist als Begriff weg;
+   dafür gilt: jeder XPath einer Bedingung muss in Vanilla etwas treffen. Hat eine
+   Patch-Datei einen bedingten Block und fehlt die Bibliothek, ist der Lauf nicht geprüft
+   (Exit 2). Sieben neue Gegenproben, drei mit umbenannten Zeilen; gegen das Skript des
+   Stands `049280e` 132 Gegenproben, 10 fehlgeschlagen, gegen das neue 132, 0. `check-all`:
+   6 Prüfungen, 1 rot (`recipes`, unverändert); 9 Bedingungen gelesen, alle wahr.
+   → Vertrag 04 „Nachtrag zweites Review zu WP8.7", Abnahme offen.
 8. **WP8.8** `[Claude-prüfbar]` `mod700check localization` grün.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.

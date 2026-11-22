@@ -1,0 +1,31 @@
+<config>
+	<!-- Testdatei zweites Review zu WP8.7: Bedingungen, die NCalc liest und auswertet und an
+	     denen nichts falsch ist - auch wenn sie in Vanilla FALSCH ergeben. Ein Zweig, der in
+	     Vanilla nicht laeuft, ist kein Fehler (er ist fuer den Fall gedacht, dass eine andere
+	     Mod das Ziel entfernt hat).
+	       1. not (null != xpath(Ziel da))        - in Vanilla falsch, gruen
+	       2. xpath(Ziel da) != (null)            - wahr
+	       3. drei Mods mit and/or/not            - acht Belegungen, ohne Mods wahr
+	       4. event('christmas')                  - gelesen, nicht ausgewertet
+	     Erwartet: Exit 0; gelesen 4, wahr 2, falsch 1, nicht ausgewertet 1. -->
+	<conditional>
+		<if cond="not (null != xpath('/windows/window[@name=&quot;pruefFenster&quot;]'))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFenster&quot;]') != (null)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefErsteMod') and mod_loaded('pruefZweiteMod') or not mod_loaded('pruefDritteMod')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="event('christmas')">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>

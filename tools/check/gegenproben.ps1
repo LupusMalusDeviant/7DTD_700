@@ -977,12 +977,13 @@ Test-Script 'kette-pruefen: falsche Bedingungen werden rot' 1 @{
     Patches      = @(Join-Path $data 'kette\bedingt-bedingung-falsch\Config\XUi_InGame\windows.xml')
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @(
-    'xpath(...) steht ohne Vergleich',
+    'Bedingung liefert keinen Wahrheitswert, sondern String',
     "Bedingung ruft 'eventActive(' auf",
-    'Bedingung trifft in Vanilla nichts, der Zweig ist toter Text: /windows/window[@name="pruefGibtesnicht"]',
-    'Bedingung mit offenem Anfuehrungszeichen',
+    'Bedingung nennt ein Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefGibtesnicht"]',
+    "NCalc kann die Bedingung nicht lesen",
     'XPath in der Bedingung ist kein gueltiger Ausdruck',
-    'mod_loaded(...) erwartet EINEN Text',
+    'mod_loaded(...) erwartet genau EINEN festen Text',
+    'Bedingungen mit NCalc gelesen: 6 (ohne genannte Mods wahr: 0, falsch: 0, nicht ausgewertet: 0)',
     '6 rot')
 
 # (d) Der Aufbau des Blocks: evaluator, <elseif>, <if> ohne cond, <if> hinter <else>,
@@ -1017,7 +1018,8 @@ Test-Script 'kette-pruefen: Gruppierungsklammern und vertauschte Seiten sind gue
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @(
     'bedingte Bloecke: 6 (Zweige: 6, XPaths darin: 6, xpath-Bedingungen: 6)',
-    'in Bedingungen genannte Mods: pruefUiMod') -MustNotContain @('steht ohne Vergleich')
+    'Bedingungen mit NCalc gelesen: 6 (ohne genannte Mods wahr: 6, falsch: 0, nicht ausgewertet: 0)',
+    'in Bedingungen genannte Mods: pruefUiMod') -MustNotContain @('keinen Wahrheitswert')
 
 # (f) Falsche Formen, die GRUEN waren: Klammern, die nicht aufgehen (offen am Ende, eine zu
 #     viel, falsche Reihenfolge), und ein toter Zweig, wenn 'null' links steht. Dazu zwei,
@@ -1030,13 +1032,110 @@ Test-Script 'kette-pruefen: falsche Klammern und tote Zweige mit vertauschten Se
     Patches      = @(Join-Path $data 'kette\bedingt-klammern-falsch\Config\XUi_InGame\windows.xml')
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @(
-    "die Klammern gehen nicht auf: (mod_loaded('pruefUiMod')  (",
-    "die Klammern gehen nicht auf: mod_loaded('pruefUiMod'))",
-    "die Klammern gehen nicht auf: )mod_loaded('pruefUiMod')(",
-    'der Zweig ist toter Text: /windows/window[@name="pruefGibtesnicht"]',
-    'der Zweig ist toter Text: /windows/window[@name="pruefAuchNicht"]',
-    'xpath(...) steht ohne Vergleich',
+    "): (mod_loaded('pruefUiMod')  (",
+    "): mod_loaded('pruefUiMod'))  (",
+    "): )mod_loaded('pruefUiMod')(  (",
+    'Bedingung nennt ein Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefGibtesnicht"]',
+    'Bedingung nennt ein Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefAuchNicht"]',
+    'Bedingung liefert keinen Wahrheitswert, sondern String',
     '6 rot')
+
+# Zweites Review zu WP8.7 (2026-11-22): DIE BEDINGUNG LIEST JETZT NCALC. Zwei Reviews in
+# Folge haben Luecken in der eigenen Zerlegung gefunden; seitdem liest den Ausdruck die
+# Bibliothek, die ihn auch im Spiel liest (NCalc.dll aus der Spielinstallation). Die Proben
+# (a) bis (f) oben pruefen dieselben Testdateien weiter - ihre erwarteten Zeilen heissen
+# jetzt anders, die Urteile sind dieselben. Diese Proben brauchen die Spielinstallation:
+# ohne SDTD_PATH enden sie mit Exit 2 und zaehlen als fehlgeschlagen.
+#
+# (g) Fuenf Schreibweisen fuer "das Ziel der Bedingung gibt es in Vanilla nicht". Die alte
+#     Zerlegung hat zwei davon gruen gelassen (geklammertes null) und eine mit der falschen
+#     Begruendung rot gemacht ("toter Zweig" bei not(...), obwohl er laeuft). Jetzt gilt
+#     eine Regel fuer alle fuenf.
+Test-Script 'kette-pruefen: ein Bedingungs-XPath ohne Ziel in Vanilla ist rot, gleich wie geschrieben' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-ziel-fehlt\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefErstes"]',
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefZweites"]',
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefDrittes"]',
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefViertes"]',
+    'Ziel, das es in Vanilla nicht gibt: /windows/window[@name="pruefFuenftes"]',
+    '5 rot') -MustNotContain @('toter Text')
+
+# (h) Bedingungen, die in Vanilla FALSCH ergeben, sind kein Fehler - der Zweig ist fuer den
+#     Fall gedacht, dass eine andere Mod das Ziel entfernt hat. Dazu drei Mods (acht
+#     Belegungen) und eine Funktion, die nur das laufende Spiel auswerten kann.
+Test-Script 'kette-pruefen: Bedingungen werden ausgewertet; falsch in Vanilla ist kein Fehler' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-auswertung-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    'Bedingungen mit NCalc gelesen: 4 (ohne genannte Mods wahr: 2, falsch: 1, nicht ausgewertet: 1)',
+    'in Bedingungen genannte Mods: pruefDritteMod, pruefErsteMod, pruefZweiteMod')
+
+# (i) Bedingungen, die NCalc LESEN kann und die erst beim AUSWERTEN scheitern. Die erste
+#     zeigt, warum jede Belegung durchgerechnet wird: ohne die Mod ergibt sie "falsch" und
+#     sieht gesund aus; mit der Mod steht ein Text, wo ein Wahrheitswert gebraucht wird.
+Test-Script 'kette-pruefen: Bedingungen, die beim Auswerten scheitern, werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-auswertung-falsch\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "): mod_loaded('pruefUiMod') and xpath(",
+    "): mod_loaded('pruefUiMod') + 1  (",
+    '): pruefUnbekannt = 1  (',
+    'Bedingung liefert keinen Wahrheitswert, sondern Int32',
+    'Bedingungen mit NCalc gelesen: 4 (ohne genannte Mods wahr: 0, falsch: 0, nicht ausgewertet: 0)',
+    '4 rot')
+
+# (j) OHNE NCALC IST ES NICHT GEPRUEFT. Der gefaehrlichste Zustand eines Pruefers ist der,
+#     in dem ihm sein Werkzeug fehlt: dann darf er nicht gruen sagen. Drei Wege dorthin -
+#     der Pfad fuehrt ins Leere, die Datei ist keine Bibliothek, der Spielpfad fehlt.
+Test-Script 'kette-pruefen: bedingter Block, NCalc-Pfad fuehrt ins Leere - nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    NCalc        = (Join-Path $data 'kette\gibtesnicht\NCalc.dll')
+} -MustContain @('die NCalc.dll des Spiels fehlt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'kette-pruefen: bedingter Block, NCalc-Datei ist keine Bibliothek - nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    NCalc        = (Join-Path $data 'kette\vanilla\blocks.xml')
+} -MustContain @('laesst sich nicht laden', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+Test-Script 'kette-pruefen: bedingter Block ohne Spielpfad - nicht geprueft' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\bedingt-gut\Config\XUi_InGame\windows.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -OhneSpielpfad -MustContain @('SDTD_PATH ist nicht gesetzt', 'NICHT GEPRUEFT') -MustNotContain @('GREEN')
+
+# (k) Die Kehrseite: eine Patch-Datei OHNE bedingten Block braucht die Bibliothek nicht und
+#     darf an ihrem Fehlen nicht scheitern - sonst haengt jede Probe dieser Datei am Spiel.
+Test-Script 'kette-pruefen: ohne bedingten Block wird NCalc nicht gebraucht' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\xpath-gut\blocks.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    NCalc        = (Join-Path $data 'kette\gibtesnicht\NCalc.dll')
+} -MustContain @(
+    'geprueefte XPaths: 3 (3 in Vanilla, 0 auf eigene Knoten)',
+    'Bedingungen mit NCalc gelesen: 0 (ohne genannte Mods wahr: 0, falsch: 0, nicht ausgewertet: 0)')
 
 # (3) Der Fall, an dem das Review es gezeigt hat: eine VANILLA-Datei als Patch. Ihr
 #     Wurzelknoten ist <blocks>, ihre Kinder sind keine Operationen.

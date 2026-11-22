@@ -1,0 +1,37 @@
+<config>
+	<!-- Testdatei zweites Review zu WP8.7: der XPath der Bedingung trifft in Vanilla nichts.
+	     Fuenf Schreibweisen, die die alte Zerlegung verschieden behandelt hat - zwei davon
+	     gruen, eine mit der falschen Begruendung ("toter Zweig", obwohl er laeuft). Jetzt
+	     gilt fuer alle dieselbe Regel: das Ziel einer Bedingung muss in Vanilla stehen.
+	       1. not (null != xpath(...))
+	       2. mod_loaded(...) or xpath(...) != null
+	       3. xpath(...) != (null)
+	       4. (null) <> ((xpath(...)))
+	       5. xpath(...) = null
+	     Erwartet: Exit 1, 5 rot, je "nennt ein Ziel, das es in Vanilla nicht gibt". -->
+	<conditional>
+		<if cond="not (null != xpath('/windows/window[@name=&quot;pruefErstes&quot;]'))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="mod_loaded('pruefUiMod') or xpath('/windows/window[@name=&quot;pruefZweites&quot;]') != null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefDrittes&quot;]') != (null)">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="(null) &lt;&gt; ((xpath('/windows/window[@name=&quot;pruefViertes&quot;]')))">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;pruefFuenftes&quot;]') = null">
+			<setattribute name="depth" xpath="/windows/window[@name='pruefFenster']">2</setattribute>
+		</if>
+	</conditional>
+</config>
