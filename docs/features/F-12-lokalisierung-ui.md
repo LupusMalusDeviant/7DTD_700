@@ -142,9 +142,15 @@ gelesen und gegen die NCalc-Bibliothek des Spiels gemessen (Vertrag 03 §5, Nach
 welche Sprites der Atlas führt, ist ungelesen. *Kompass- und HUD-Begriffe* sind Text und
 gehören zu den Scheiben von WP8.5.
 
-**Zur UI-Kompatibilität (D5):** die `mod_loaded`-Bedingungen fehlen, solange Q8 offen ist;
+**Zur UI-Kompatibilität (D5):** ~~die `mod_loaded`-Bedingungen fehlen, solange Q8 offen ist;~~
 die drei älteren XUi-Patches in `700_40_Bauen` stehen noch ohne Block. Beides steht im
 Plan-0001 (WP8.7, Offene Punkte) und in Prüfliste 22.
+
+**Nachtrag 2026-11-22 (WP8.9, D86):** Q8 ist entschieden — die Referenz-UI-Mods sind
+**AGF HUDPlus** und **E C H O // Hybrid UI**. Eine `mod_loaded`-Bedingung gibt es weiter
+nicht: sie kommt erst, wenn die Testmatrix einen Konflikt zeigt (Vertrag 03 §5, Nachtrag
+WP8.9). Das Akzeptanzkriterium „läuft mit jeder Referenz-UI-Mod ohne XML-Fehler im Log" ist
+**offen** — die Matrix ist nicht gefahren (Plan-0001, Prüfliste 24).
 
 **Offen aus „Ladebildschirm-Tipps, Menü- und Spielstart-Texte":** 158 Händler-Untertitel
 (F-10, nicht entschieden), vier Optionszeilen mit „Feral" (englischer Begriff offen), die

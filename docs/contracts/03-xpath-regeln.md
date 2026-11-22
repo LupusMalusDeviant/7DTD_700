@@ -194,7 +194,8 @@ Im Spiel hat noch kein bedingter Block von uns geladen.
 
 **Was die Regel „jeder Eingriff in `XUi_*` in einen `conditional`-Block mit `mod_loaded`" heute
 heißt.** Sie setzt eine Liste bekannter UI-Mods voraus, und die gibt es nicht: Q8 ist offen
-(Plan-0001 WP8.9). Bis der Nutzer sie nennt, gilt:
+(Plan-0001 WP8.9). *(Seit dem 2026-11-22 gibt es sie, D86 — siehe „Nachtrag WP8.9" unten;
+die Tabelle hier gilt unverändert weiter.)* Bis der Nutzer sie nennt, gilt:
 
 | Eingriff | Form |
 |---|---|
@@ -211,6 +212,25 @@ umgestellt, **wenn ein bedingter Block von uns im Spiel gelaufen ist** — bis d
 Schreibweise gemessen, nicht gesehen, und ein Fehler darin nähme dem Webstuhl sein Fenster
 und der Feuerstelle ihre Slots. Die Theming-Patches aus WP8.7 sind die ersten Blöcke; an
 ihnen kostet ein Fehler nur eine Farbe. → Prüfliste 22.
+
+### Nachtrag WP8.9 (2026-11-22): die Referenz-UI-Mods sind benannt — **Abnahme offen**
+
+Q8 ist entschieden (D86): **„AGF HUDPlus"** und **„E C H O // Hybrid UI"**. Damit gibt es die
+Liste, die die Regel oben voraussetzt. An der Form der Patches ändert das heute nichts:
+
+1. **Keine `mod_loaded`-Bedingung auf Vorrat.** Die Tabelle des Nachtrags WP8.7 gilt weiter.
+   Eine Bedingung auf eine der beiden Mods kommt erst dazu, wenn die Testmatrix (Mod allein,
+   Mod + AGF HUDPlus, Mod + E C H O) einen Konflikt zeigt — und dann genau an dem Patch, der
+   ihn hat.
+2. **Der Name in `mod_loaded('…')` wird nicht geraten.** Er wird aus der `ModInfo.xml` der
+   Referenz-Mod abgeschrieben, sobald sie vorliegt, und im Spiel bestätigt. Ob die Funktion
+   den `Name`, den Ordnernamen oder beides kennt, ist weiter nicht gelesen (§9).
+3. **Die Dateien der Referenz-Mods gehören nicht ins Repository.** Sie liegen unter
+   `GameRefs/ui-mods/` und werden nie committet; aus ihnen wird nichts übernommen
+   (Projektregeln 1 und 7).
+4. **Erwartete Ladereihenfolge:** unsere Ordner beginnen mit `700_` und stehen damit vor
+   Ordnern, die mit einem Buchstaben beginnen — eine UI-Mod lädt nach uns (Spec 01 §4.1
+   Punkt 5). Das ist aus den Namen geschlossen, nicht im Protokoll gesehen.
 
 ## 6. `include` zerlegt Dateien, ersetzt aber keine Modlets
 
@@ -266,7 +286,10 @@ Jede Patch-Datei beginnt mit einem Kopf, der sagt, wohin sie gehört und warum:
   gemessen seit dem 2026-11-22 (§5, Nachtrag WP8.7). **Offen bleibt der Lauf im Spiel**
   (Prüfliste 22) und was `mod_loaded` als Namen erwartet — den `Name` aus `ModInfo.xml` oder
   den Ordnernamen, mit oder ohne Groß/Klein.
-- **Welche UI-Mods** in den `mod_loaded`-Bedingungen stehen, hängt an der offenen Frage Q8 —
-  der Nutzer benennt die Referenz-UI-Mods (Plan-0001 WP8.9).
+- ~~**Welche UI-Mods** in den `mod_loaded`-Bedingungen stehen, hängt an der offenen Frage Q8 —
+  der Nutzer benennt die Referenz-UI-Mods (Plan-0001 WP8.9).~~ **Benannt am 2026-11-22 (D86):**
+  „AGF HUDPlus" und „E C H O // Hybrid UI". **Offen bleibt**, unter welchem Namen `mod_loaded`
+  sie kennt — das steht erst fest, wenn ihre `ModInfo.xml` vorliegt — und ob überhaupt eine
+  Bedingung gebraucht wird: das zeigt die Testmatrix (§5, Nachtrag WP8.9).
 - Ob ein Modlet eine Datei patchen kann, die **nicht** in der Liste der 52 steht (etwa eine von
   einer anderen Mod eingebrachte), ist nicht geprüft.

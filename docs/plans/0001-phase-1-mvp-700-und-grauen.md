@@ -1623,6 +1623,24 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
 9. **WP8.9** `[braucht Nutzer]` **Welche Referenz-UI-Mods gelten** (offene Frage Q8)? Danach
    Testmatrix fahren: Mod plus jede Referenz-UI-Mod, keine XML-Fehler im Protokoll.
 
+   **Stand 2026-11-22: die Frage ist beantwortet, die Matrix nicht gefahren.** *Entschieden
+   (D86):* „AGF HUDPlus" und „E C H O // Hybrid UI" — eine HUD-Erweiterung, die etwas an
+   Vanilla-Fenster hängt, und eine vollständige UI-Überarbeitung. Q8 ist im GDD geschlossen,
+   Vertrag 03 trägt den „Nachtrag WP8.9" (Abnahme offen). *Belegt ist nur, dass es beide
+   gibt* (Websuche: Nexus Mods 870 und 12210, E C H O dort für 3.1 und 3.2 beschrieben).
+   **Nicht belegt:** dass sie V 3.40 tragen, ob sie eine DLL mitbringen, wie ihr Name für
+   `mod_loaded` lautet — die Nexus-Seiten ließen sich nicht automatisch lesen. *Was fehlt,
+   in dieser Reihenfolge:*
+   - `[braucht Nutzer]` die Dateien beider Mods unter `GameRefs/ui-mods/` (Prüfliste 24 a);
+   - `[Claude-prüfbar]`, sobald sie da sind: **Vorprüfung ohne Spiel** — unsere XUi-XPaths
+     gegen Vanillas XUi-Dateien, auf die zuvor die Patches der Referenz-Mod angewandt sind,
+     und umgekehrt. Sie sagt, welcher unserer Patches sein Ziel verliert, bevor ein Lauf es
+     zeigt. Braucht einen Nachtrag in Vertrag 04 und Gegenproben wie jede neue Prüfung;
+   - `[braucht Nutzer]` die drei Läufe im Spiel und der Blick auf die Fenster (Prüfliste
+     24 b bis d). Hängt an der installierten Mod und an Prüfliste 22.
+
+   Gebaut ist in diesem Schritt nichts, an der Mod ist nichts geändert.
+
 **Ergebnis:** Dunklere, nebligere Nächte; vollständige DE/EN-Texte; UI im Setting-Ton.
 
 ---
@@ -1664,7 +1682,8 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
 | WP5, WP6, WP7, WP8 | WP9 | intern |
 | Spielstart mit EAC aus (Nutzeraufgabe) | WP3.6, jede Laufzeitprüfung | **extern, blockierend** |
 | Dedicated Server (Nutzeraufgabe) | WP9.2 | **extern, blockierend** für Z7 |
-| Referenz-UI-Mods benennen (Q8) | WP8.9 | extern (Nutzer) |
+| ~~Referenz-UI-Mods benennen (Q8)~~ erledigt am 2026-11-22 (D86) | WP8.9 | extern (Nutzer) |
+| Dateien der zwei Referenz-UI-Mods bereitstellen, drei Läufe fahren (Prüfliste 24) | WP8.9 | **extern, blockierend** |
 
 ```mermaid
 graph LR
@@ -1789,8 +1808,9 @@ werden:
    `vanilla-keys.txt`, `--prefix` als Liste, `kette-pruefen.ps1` — jetzt auch mit §5b
    `rezepte_mit_gesperrter_zutat` und §5a Nachtrag WP5.5b, eigene Blöcke) und **Vertrag 02 §5**
    — der Sprachschlüssel IST die Kennung, der alte Aufbau `700_itm_spatha` ist nicht umsetzbar.
-4. **Referenz-UI-Mods benennen** (Q8) für die Kompatibilitäts-Testmatrix. *(Braucht es erst
-   für WP8.9.)*
+4. ~~**Referenz-UI-Mods benennen** (Q8) für die Kompatibilitäts-Testmatrix. *(Braucht es erst
+   für WP8.9.)*~~ Benannt am 2026-11-22: AGF HUDPlus und E C H O // Hybrid UI (D86). Offen
+   ist jetzt Prüfliste 24.
 5. **Durchsatz-Annahme korrigieren:** drei Arbeitstage pro Woche, oder andere Zahl?
    *(Verschiebt alle Meilensteine.)*
 6. **Spieltests urteilen:** Waffenzweck erkennbar (WP5.7), **ob die vier geborgten
@@ -2048,6 +2068,26 @@ werden:
     fortgeschrittene Waffen und Werkzeuge …")? *(Vanillas Satz hieße: ein angehängter
     `DescriptionKey` gilt nicht vor dem geerbten — das ist der eine Punkt, den das Finding
     nicht aus dem Code belegt.)* Braucht die installierte Mod.
+24. **Die Testmatrix mit den zwei Referenz-UI-Mods fahren** (WP8.9/D86, 22. November 2026).
+    Braucht die installierte Mod, einen Start **ohne EAC** und die Dateien beider Mods.
+    a) **Dateien holen:** „AGF - V3 - HUDPlus - 1Main" (Nexus Mods, Mod 870) und
+    „E C H O // Hybrid UI" (Mod 12210), jeweils den Stand für V 3.x, entpackt nach
+    `GameRefs/ui-mods/<Ordnername>/` — so, dass `ModInfo.xml` direkt im Ordner liegt. Nicht
+    ins Repository, nicht in den Spielordner. Dabei notieren: Fassung der Mod, für welche
+    Spielfassung sie ausgewiesen ist, ob eine DLL dabei ist, ob sie weitere Mods verlangt.
+    **Trägt eine der beiden V 3.40 nicht, hier anhalten** — dann entscheidet D86 neu.
+    b) **Drei Läufe**, jeder mit frischem Protokoll: (1) unsere Mod allein, (2) dazu AGF
+    HUDPlus, (3) statt AGF dazu E C H O. Je Lauf: Hauptmenü, Welt laden, Inventar und
+    Handwerksfenster öffnen, dann Feuerstelle, Kalkofen und Webstuhl öffnen (dort sitzen
+    unsere drei XUi-Patches), beenden.
+    c) **Am Bildschirm:** hat die Feuerstelle ihre Werkzeugslots, der Kalkofen seine
+    Brennstoffkammer, öffnet der Webstuhl sein Fenster? Ist das Hauptmenü getönt wie in
+    Lauf 1 (Prüfliste 22), oder hat die UI-Mod es übernommen? Fehlt oder überlappt etwas?
+    d) **Im Protokoll** (liest Claude, wenn die drei Dateien genannt sind): keine Zeile mit
+    `ERR` oder `XML` zu einem unserer Modlets oder zu einer XUi-Datei; die Ladereihenfolge
+    der Mods — erwartet stehen unsere `700_`-Ordner vor der UI-Mod.
+    *(Ein Konflikt hier ist der einzige Anlass für eine `mod_loaded`-Bedingung, Vertrag 03
+    §5 Nachtrag WP8.9.)*
 
 ## Offene Punkte
 
@@ -2096,7 +2136,9 @@ werden:
   sieht in die Blöcke hinein — die Kehrseite ist damit weg. Die drei Patches stehen
   **trotzdem weiter ohne Block**: umgestellt wird, wenn ein Block von uns im Spiel gelaufen
   ist (Prüfliste 22 a), weil ein Fehler in der Schreibweise sonst Webstuhl-Fenster und
-  Feuerstellen-Slots kostet. Die Liste der UI-Mods fehlt weiter (Q8).
+  Feuerstellen-Slots kostet. ~~Die Liste der UI-Mods fehlt weiter (Q8).~~ Die Liste gibt es
+  seit dem 2026-11-22 (D86: AGF HUDPlus, E C H O // Hybrid UI); eine `mod_loaded`-Bedingung
+  kommt trotzdem erst, wenn die Testmatrix einen Konflikt zeigt (Prüfliste 24).
 - **35 Herausforderungen sind unerfüllbar, und der Purge sieht sie nicht** (gezählt in
   WP8.5, vierte Scheibe, 2026-11-21). `challenges.xml` steht in keiner unserer Dateien und
   nicht in der Erreichbarkeitsprüfung. 41 der 148 sichtbaren Herausforderungen nennen eine
