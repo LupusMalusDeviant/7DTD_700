@@ -1641,6 +1641,65 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
      wenn die Referenz-Mod in ihm nachweislich geladen ist** (24 e, ergänzt nach dem Review
      von `ecffb1e`).
 
+   **Nachtrag vom selben Tag: beide Referenz-Mods liegen unter `GameRefs/ui-mods/`.** Der
+   Nutzer hat das Herunterladen freigegeben; die Nexus-Seiten ließen sich im Browser lesen,
+   Dateien gibt Nexus aber nur angemeldet heraus — AGF kam deshalb von der Seite des
+   Autors, E C H O hat der Nutzer selbst geladen. D86 bleibt, wie es ist — hier steht, was
+   seither belegt ist. Ausgeführt wurde aus beiden Archiven nichts.
+   - *AGF, belegt aus den Dateien:* geladen von der GitHub-Seite des Autors, auf die die
+     Nexus-Seite der Mod selbst verweist (`AuroraGiggleFairy.github.io`,
+     `04_DownloadZips/AGF-V3-SERVER-1HUDPlus.zip`, 73 265 Byte, SHA-256 `f649f588…cfd615727`).
+     Entpackt nach `GameRefs/ui-mods/AGF-V3-SERVER-1HUDPlus-v6.6.2/`, 10 Dateien, `ModInfo.xml`
+     direkt im Ordner. Dort: `Name` = **`AGF-1HUDPlus`**, `Version` = 6.6.2. **Keine DLL**
+     (0 Dateien `*.dll`/`*.exe`) — reines XML: `XUi_Common/styles.xml`,
+     `XUi_InGame/windows.xml`, `templates.xml`, `xui.xml`, dazu `items.xml` und
+     `Localization.csv`; kein `XUi_Menu`. Ausgewiesen für „7d2d Version: 3"; die letzte
+     Anpassung im Änderungsprotokoll nennt 3.3 (v6.6.0). EAC an oder aus, keine
+     Abhängigkeiten. **V 3.40 nennt sie nirgends** — ob sie sie trägt, zeigt erst Lauf 2.
+   - *Der Dateiname hat sich geändert:* „AGF - V3 - HUDPlus - 1Main" (so in D86 aus der
+     Websuche) steht auf Nexus nur noch unter den alten Dateien, zuletzt 6.3.0 vom
+     27. Juni 2026. Die Hauptdatei heißt „AGF - V3 - SERVER - 1HUDPlus" (6.6.2 vom
+     11. Oktober 2026); die ist geholt.
+   - *Erster Blick, keine Vorprüfung:* eine Textsuche in AGFs fünf Patch-Dateien nach den
+     Zielen unserer vier XUi-Dateien findet `windowToolsCampfire`, `workstation_cementMixer`,
+     `windowOutput` und `mainMenuVersion` nirgends, und keinen unserer acht Stil-Einträge
+     setzt AGF (sie hängt eigene an `/styles/global` und `/styles`). AGFs
+     `mod_loaded`-Bedingungen nennen zehn andere AGF-Mods. Eine Textsuche sieht nicht, ob
+     AGF einen **Elternknoten** unserer Ziele ersetzt oder entfernt (in `windows.xml`
+     zählt die Suche 19 `remove`- und 54 `set`-Tags) — das klärt erst die Vorprüfung, die
+     die Patches anwendet.
+   - *E C H O, belegt aus den Dateien:* Archiv „ECHO Hybrid UI" 1.6 von Nexus Mods 12210
+     (270 324 Byte, SHA-256 `d9c43b6d…f3116cc9bd`), entpackt nach
+     `GameRefs/ui-mods/ZZZZ-ECHO-Hybrid-UI/`, 61 Dateien, `ModInfo.xml` direkt im Ordner.
+     Dort: `Name` = **`EchoHybridUI`**, `Version` = 1.6, `SkipWithAntiCheat` = true — mit
+     EAC lädt das Spiel sie gar nicht. **Zwei DLLs** (`EchoHybridUI.dll`, 39 936 Byte;
+     `EchoHybridUI.BuffDirection.dll`, 35 328 Byte), beide ungeöffnet. XML in vier
+     XUi-Ordnern (`XUi`, `XUi_Common`, `XUi_InGame`, `XUi_Menu`), dazu `buffs`, `dialogs`,
+     `entityclasses`, `items`, `nav_objects`, `quests`, `sounds`, eine Sprachdatei und
+     37 Bilder. `ModInfo.xml` und `README.txt` nennen **3.1 und 3.2**, geprüft sei gegen
+     „local 3.2 assemblies and XUi". **V 3.40 steht nirgends** — und eine DLL, die gegen
+     3.2 gebaut ist, kann auf 3.40 an ihren Patch-Zielen scheitern; dann zählt Lauf 3 nach
+     Prüfliste 24 e nicht. Die Nexus-Seite verlangt `0_TFP_Harmony` und sagt selbst, dass
+     Mods, die dieselben Fenster anfassen, sich mit ihr überschreiben können.
+   - *Erster Blick auf E C H O, keine Vorprüfung — drei Berührungen mit unseren Zielen:*
+     (1) **Stil-Einträge:** E C H O setzt `disabledColor`, `disabledLabelColor` und
+     `hoverColor` in `XUi_Common/styles.xml` — drei der acht, die `700_90_Sprache` setzt.
+     Lädt E C H O nach uns (der Ordnername legt es nahe, gesehen ist es nicht), gewinnt ihr
+     Wert: kein XML-Fehler, aber unsere Tönung gilt für diese drei nicht. Die anderen fünf
+     setzt sie dem Namen nach nicht. (2) **Hauptmenü:** E C H O verschiebt und verbreitert
+     das Fenster `mainMenuVersion` und färbt sein Etikett um; wir hängen an dasselbe
+     Fenster etwas an. Ob unser Anhang dann noch richtig sitzt, zeigt nur der Bildschirm
+     (Prüfliste 22 und 24 c). (3) **Feuerstelle:** E C H O färbt Etiketten und Knöpfe in
+     `windowToolsCampfire` und `windowOutput` über einen `//`-Pfad um; das Attribut am
+     Raster, das wir setzen, nennt sie nicht. `workstation_cementMixer` nennt sie nicht.
+     `mod_loaded` benutzt E C H O nicht; ihre 54 bedingten Blöcke fragen mit `xpath(…)`, ob
+     ein Ziel da ist. Was eine Textsuche nicht sieht, gilt hier erst recht: die Zählung
+     findet in ihren XUi-Dateien 65 `remove`-Tags, und die DLLs ändern Fenster zur
+     Laufzeit, wo keine XML-Prüfung hinsieht.
+   - *Was daraus folgt, ohne dass etwas entschieden ist:* keine `mod_loaded`-Bedingung auf
+     Vorrat (D86 Punkt 3) — die drei Berührungen sind Fragen an Lauf 3, kein Befund. Für
+     `mod_loaded` stünden die Namen jetzt fest: `AGF-1HUDPlus` und `EchoHybridUI`.
+
    Gebaut ist in diesem Schritt nichts, an der Mod ist nichts geändert.
 
 **Ergebnis:** Dunklere, nebligere Nächte; vollständige DE/EN-Texte; UI im Setting-Ton.
@@ -2072,12 +2131,17 @@ werden:
     nicht aus dem Code belegt.)* Braucht die installierte Mod.
 24. **Die Testmatrix mit den zwei Referenz-UI-Mods fahren** (WP8.9/D86, 22. November 2026).
     Braucht die installierte Mod, einen Start **ohne EAC** und die Dateien beider Mods.
-    a) **Dateien holen:** „AGF - V3 - HUDPlus - 1Main" (Nexus Mods, Mod 870) und
-    „E C H O // Hybrid UI" (Mod 12210), jeweils den Stand für V 3.x, entpackt nach
-    `GameRefs/ui-mods/<Ordnername>/` — so, dass `ModInfo.xml` direkt im Ordner liegt. Nicht
-    ins Repository, nicht in den Spielordner. Dabei notieren: Fassung der Mod, für welche
-    Spielfassung sie ausgewiesen ist, ob eine DLL dabei ist, ob sie weitere Mods verlangt.
-    **Trägt eine der beiden V 3.40 nicht, hier anhalten** — dann entscheidet D86 neu.
+    a) **Dateien holen — erledigt am 22. November 2026.** Beide liegen unter
+    `GameRefs/ui-mods/`, nicht im Repository, nicht im Spielordner:
+    `AGF-V3-SERVER-1HUDPlus-v6.6.2/` (Fassung 6.6.2, keine DLL, `Name` `AGF-1HUDPlus`;
+    Hauptdatei „AGF - V3 - SERVER - 1HUDPlus", der frühere Name „… 1Main" steht auf Nexus
+    nur noch unter den alten Dateien) und `ZZZZ-ECHO-Hybrid-UI/` (Fassung 1.6, **zwei
+    DLLs**, `Name` `EchoHybridUI`, `SkipWithAntiCheat`). Für einen Lauf kopiert der Nutzer
+    den jeweiligen Ordner nach `Mods/` und nimmt ihn danach wieder heraus. E C H O bringt
+    Code mit: in Lauf 3 läuft damit fremder Code im Spiel — das ist die Entscheidung
+    dessen, der den Lauf startet. **Keine der beiden nennt V 3.40** (AGF: „Version 3",
+    zuletzt 3.3; E C H O: 3.1 und 3.2, DLLs gegen 3.2 gebaut). **Trägt eine der beiden
+    V 3.40 im Lauf nicht, hier anhalten** — dann entscheidet D86 neu.
     b) **Drei Läufe**, jeder mit frischem Protokoll: (1) unsere Mod allein, (2) dazu AGF
     HUDPlus, (3) statt AGF dazu E C H O. Je Lauf: Hauptmenü, Welt laden, Inventar und
     Handwerksfenster öffnen, dann Feuerstelle, Kalkofen und Webstuhl öffnen (dort sitzen
