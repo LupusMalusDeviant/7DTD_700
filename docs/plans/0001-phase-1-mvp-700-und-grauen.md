@@ -1929,8 +1929,13 @@ der Kette hängt und nicht an der Paketgröße.
 Die Punkte, die Claude nicht erledigen kann — gesammelt, in der Reihenfolge, in der sie gebraucht
 werden:
 
-1. **Spiel einmal mit abgeschaltetem EAC starten**, Welt laden, beenden. *(Blockiert M1 und jede
-   Laufzeitaussage. Aufgabe liegt offen.)*
+1. **Erledigt am 2026-11-22, 21:05.** Start mit `-noeac`, Welt geladen, beendet: acht Modlets
+   geladen, der Kern meldet `[700] loaded v0.1.0 (game build V 3.4.0 (b10))` und die geprüfte
+   Spielfassung, 0 `EXC`. `smoke.ps1` gegen dieses Protokoll: 123 geprüft, 0 rot, Exit 0 —
+   das ist die Messgröße von M1. Einzelheiten in F-00 (Kriterium „SP-Start"). Die Mod ist
+   danach auf Anweisung des Nutzers wieder aus dem Spielordner genommen. Der Punkt lautete:
+   ~~**Spiel einmal mit abgeschaltetem EAC starten**, Welt laden, beenden. *(Blockiert M1 und jede
+   Laufzeitaussage. Aufgabe liegt offen.)*~~
 2. **Dedicated Server** installieren — oder entscheiden, dass Z7 gestrichen wird. *(Blockiert
    WP9.2 und drei F-00-Kriterien. Aufgabe liegt offen.)*
 3. **Verträge abnehmen** (WP1.6), nachdem Claude sie entworfen hat. *(Blockiert WP3.)*
@@ -2275,8 +2280,13 @@ werden:
   dieses Laufs (`check-all.ps1 -Source C:\Users\Anwender\Saves\Pregen06k01\Z\ConfigsDump`):
   214 Gegenproben, 0 fehlgeschlagen; `anachronisms` grün (523 Kennungen, 0 verboten
   erreichbar, 40 Hinweise); `recipes` rot, 80 Sackgassen — dieselben Zahlen wie am Dump vom
-  21. November, jetzt mit den Patches bis WP8.8. **Zwei Dinge daraus:** (1) Prüfliste 1
-  und der Kern bleiben offen — ein Lauf **ohne** EAC fehlt weiter. (2) **`check-all.ps1`
+  21. November, jetzt mit den Patches bis WP8.8. **Zwei Dinge daraus:** (1) ~~Prüfliste 1
+  und der Kern bleiben offen — ein Lauf **ohne** EAC fehlt weiter.~~ Nachgeholt um 21:05
+  desselben Abends, siehe Prüfliste 1. Im selben Lauf hat der Nutzer das Fertigkeitsfenster
+  fotografiert: unter dem Zahnrad stehen „Leichte Rüstung", „Mittlere Rüstung", „Schwere
+  Rüstung", „Chefkoch", „Vom Land leben", „Schlösserknacken" und „Der glückliche Sammler"
+  mit Vanillas Symbolen (darunter ein Einkaufswagen) — der offene Punkt zu
+  `skillGeneralPerks` ist damit am Bildschirm belegt. (2) **`check-all.ps1`
   findet diesen Dump nicht von selbst:** das Spiel lief mit `-UserDataFolder=C:\Users\…`,
   die Spielstände liegen damit nicht unter `%APPDATA%\7DaysToDie\Saves`, wo das Skript
   sucht; ohne `-Source` las es weiter den Dump vom 21. November.

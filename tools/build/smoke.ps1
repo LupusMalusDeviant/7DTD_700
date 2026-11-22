@@ -201,7 +201,7 @@ if (-not $SkipLog) {
     else {
         Write-Output ("  Datei: " + $LogPath)
         Write-Output ("  Stand: " + (Get-Item $LogPath).LastWriteTime)
-        $log = Get-Content $LogPath -Raw
+        $log = Get-Content $LogPath -Raw -Encoding UTF8
 
         # Woertliche Zeichenketten aus Mod::InitModCode, Mod::LoadMod und
         # ModManager::loadModsFromFolder, als Anker. Die Modlet-Namen seit D53.

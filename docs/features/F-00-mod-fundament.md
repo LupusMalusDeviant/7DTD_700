@@ -63,7 +63,17 @@ Prio-1-Fragen beantwortet. Soll-Signaturen: `tools/meta/expect/f00.tsv` (12 Zeil
       Laderegeln geprüft: `smoke.ps1 -SkipLog` → **14 geprüft, 0 rot**. Darunter: Wurzel
       `<xml>`, keine `<ModInfo>`-Hülle, `Name` gegen `^[0-9a-zA-Z_\-]+$`, `Version` per
       `Version.TryParse`, keine Felder, die der Lader ignoriert.
-- [ ] **SP-Start:** `[700] loaded vX.Y.Z (game build …)` im Log, keine Fehler
+- [x] **SP-Start:** `[700] loaded vX.Y.Z (game build …)` im Log, keine Fehler
+      → **Erfüllt am 2026-11-22, 21:05** (Protokoll
+      `output_log_client__2026-11-22__21-05-22.txt`, Start mit `-noeac`): „Not started with
+      EAC, anticheat disabled", acht Modlets geladen, `[700] loaded v0.1.0 (game build
+      V 3.4.0 (b10))`, „Spielfassung V 3.4.0 (b10) entspricht der geprüften Fassung",
+      `Initialized code in mod '700_00_Core'`, Harmony 2.13.0.0 mit 0 Patch-Zielen,
+      `[700] GameStartDone erreicht — Welt läuft`; 0 `EXC`, 2 fremde `ERR` (Discord, Xbox
+      Live). `smoke.ps1 -LogPath <dieses Protokoll>`: **123 geprüft, 0 rot, Exit 0**;
+      Gegenprobe am Lauf mit EAC von 20:45: 7 rot, Exit 1. Dabei gefunden und behoben:
+      `smoke.ps1` las das Protokoll als ANSI und fand die Zeile des Build-Guards mit „ü"
+      nicht (1 rot ohne Grund); es liest jetzt UTF-8. Was davor hier stand:
       → `smoke.ps1` (ohne `-SkipLog`) prüft das selbst und **findet jetzt auch Protokolle**:
       sie liegen unter `%APPDATA%\7DaysToDie\logs\`, nicht unter `LocalLow`. Der Lauf gegen das
       neueste vorhandene Protokoll (30. Juli 2026, V 3.1.0, ohne diese Mod) ist erwartungsgemäß
