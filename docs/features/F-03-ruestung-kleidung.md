@@ -4,6 +4,17 @@
 |---|---|---|---|
 | MVP | X (+A) | S | nein |
 
+> **Konzept (Nachtlauf 2026-11-22, zu prüfen durch den Nutzer, D127):**
+> [`docs/konzept/ruestung.md`](../konzept/ruestung.md) arbeitet Rüstung und Kleidung vom Vorbild
+> her aus — Leitbild (Alltag, Arbeit, Kampf um 700), Steckbriefe für T0 bis T3, die zwölf Stücke
+> Unterkleidung und die 22 Aufsätze, Garnituren, Stückliste für F-16 und 15 Fragen (§5.4). Zwei
+> Befunde betreffen dieses Dokument unmittelbar: (1) die Unterkleidung (`clothing*`) und die
+> Rüstungs-Aufsätze trugen Vanillas Namen — das bricht die Abnahme „Keine Vanilla-Rüstung mit
+> modernem Namen bleibt erhältlich" (Texte dazu: D129); (2) keines unserer Rüstungsteile trägt
+> einen Kälte- oder Hitzewert, „Kleidung schützt vor Kälte und Nässe" gilt heute nur für die
+> Unterkleidung. Was die Biome an Kleidung verlangen, steht in
+> [`docs/konzept/biome.md`](../konzept/biome.md) (D128).
+
 ## Ziel
 Rüstung ist teuer, schwer und spürbar. Kleidung schützt vor Kälte und Nässe.
 

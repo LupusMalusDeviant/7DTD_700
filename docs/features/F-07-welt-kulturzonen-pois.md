@@ -4,6 +4,15 @@
 |---|---|---|---|
 | P2 | X (+A) | S | optional |
 
+> **Konzept und Prüfung (Nachtlauf 2026-11-22, zu prüfen durch den Nutzer, D128, D110):**
+> [`docs/konzept/biome.md`](../konzept/biome.md) misst, was V 3.40 je Biom hat (Gefahr, Sturm,
+> Temperatur, Gegner, Bewuchs), zeigt, dass der Biom-Fortschritt mit unserer Mod **nicht lösbar**
+> ist, und entwirft fünf Landschaften samt Schutzstücken, Suden und Texten. Zwei Zuordnungen der
+> Tabelle unten tragen danach nicht (die „Küste" liegt auf einem Biom ohne Meer bei 35–41 °C, die
+> „Heide" auf Dauerfrost). [`docs/pruefung/0002-erscheinung.md`](../pruefung/0002-erscheinung.md)
+> §4.5 misst die POIs: von 1 105 Vanilla-POIs ist kein Gebäude frei von Neuzeit — „Höhlen, Hütten,
+> Ruinen" (Phase 2a unten) liefert danach keine Gebäude. Dieses Dokument ist dadurch nicht geändert.
+
 ## Ziel
 Die Welt sieht aus wie Mitteleuropa um 700: Wald, Moor, Weiler, Klöster, Ringwälle,
 Römerruinen. Keine Städte, Asphaltstraßen oder Hochhäuser.

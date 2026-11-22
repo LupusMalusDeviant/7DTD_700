@@ -4,6 +4,15 @@
 |---|---|---|---|
 | P2 (Start) | A | C | nein |
 
+> **Stücklisten (Nachtlauf 2026-11-22, zu prüfen durch den Nutzer, D126, D127, D130):** drei
+> Papiere nennen, was Phase 2 an Bildern und Modellen braucht, je mit Rang und Begründung —
+> Waffen: [`konzept/waffen.md`](../konzept/waffen.md) §5; Rüstung:
+> [`konzept/ruestung.md`](../konzept/ruestung.md) §5.3; alles Übrige (Symbole, Wesen,
+> Werkstätten, Trinkgefäß, Schriften): [`pruefung/0002-erscheinung.md`](../pruefung/0002-erscheinung.md)
+> §6. Gemeinsame Empfehlung, abweichend von der Reihenfolge unten: **Symbole zuerst** (kein
+> Modell nötig, sofort sichtbar), der Langbogen von Priorität 3 auf 1. Die Reihenfolge unten ist
+> dadurch nicht geändert.
+
 ## Ziel
 Ein reproduzierbarer Weg von Quell-Asset bis zum Spiel, für **Retexturen und neue
 Modelle** (Entscheidung D3). Er steht, bevor die eigentliche Asset-Produktion beginnt.

@@ -4,6 +4,14 @@
 |---|---|---|---|
 | 1: Waffen, Qualität, Verschleiß · 2: Schild, Schadensarten, Werfen | X+H (+A) | S+C | ja |
 
+> **Konzept (Nachtlauf 2026-11-22, zu prüfen durch den Nutzer, D126):**
+> [`docs/konzept/waffen.md`](../konzept/waffen.md) arbeitet die Waffen vom Vorbild her aus — 34
+> Steckbriefe (Vorbild, Erscheinung für den Modellbau, Namen, Texte DE/EN), ein eigener Abschnitt
+> zu Schwertern (Sax-Familie, Spatha, wurmbunte Klinge, Scheide, Schwert als Statuszeichen), 29
+> Brüche im heutigen Sortiment, eine Stückliste für F-16 und 22 Empfehlungen (E-01 bis E-22).
+> Dieses Dokument ist dadurch **nicht** geändert; gebaut sind aus dem Konzept nur Texte für
+> Gegenstände, die bisher Vanillas Namen oder keine Beschreibung trugen (D129).
+
 ## Ziel
 **Vanilla+** (D20): Die vertraute Vanilla-Steuerung (Hieb, Power-Attack) bleibt, ergänzt um
 Schild-Blocken, Schadensarten, Verschleiß und Wurfwaffen (D21). Nahkampf ist die Basis;
