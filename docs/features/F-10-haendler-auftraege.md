@@ -16,6 +16,8 @@ Aufträge führen hinaus in die Bedrohung und erzählen dabei die Geschichte der
 | **Fürstenhof** | Kämmerer | Waffen, Rüstung, Pferde (teuer, F-13), Aufträge höherer Stufe |
 | **Schmiedehof** (optional) | Schmied | Eisen (knapp!), Reparatur, Waffen |
 
+> **Widerspruch, offen** — siehe Prüfung 0003, W-24
+
 - Schutzzone wie Vanilla-Trader, Öffnungszeiten (nachts geschlossen, F-17)
 - **Lehrmeister** verkaufen Abschriften (Grundfähigkeiten, F-21)
 - Bezahlt wird in Silber (D30)

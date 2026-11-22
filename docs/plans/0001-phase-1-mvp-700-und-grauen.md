@@ -2447,6 +2447,13 @@ werden:
      (Vorschlag Schreinerbank, Leinenfutter). Im Spiel sieht sie heute niemand.
   4. *`modRoboticDroneWeaponMod` fällt weiter durch das Urteil.* Die Drohne bleibt gesperrt
      (D87); der Fehler sitzt in der Ableitung über Mods, nicht in der Denylist.
+- **Bilder im Beutel: acht Symbole umgebogen im Nachtlauf vom 2026-11-22, ZU PRÜFEN durch den
+  Nutzer** (D130; Prüfung [`0002`](../pruefung/0002-erscheinung.md) §4.3). Silberpfennig,
+  Raseneisenerz, Luppe, Leim, Nähzeug, Erste-Hilfe-Verband, Pergamentfetzen und Bogenzeug
+  zeigen ein vorhandenes Vanilla-Bild ohne Neuzeit (`CustomIcon`, zum Teil mit Farbton); die
+  acht Bilddateien sind in `Data\ItemIcons` gesehen. Im Spiel hat es niemand gesehen — Teil
+  des gesammelten Spieltests. Nicht gebaut: die 100 Abschriften und Lehrblätter (Vorschlag in
+  D130), Schmiedeeisen, Tiegelstahl, Trinkglas (kein brauchbares Vanilla-Bild, F-16).
 - **Zweites Review der Vorprüfung: beide Befunde behoben im Nachtlauf vom 2026-11-22, ZU
   PRÜFEN durch den Nutzer** (Vertrag 04, „Nachtrag zweites Review der Vorprüfung", Abnahme
   offen). Nachgestellt als drei Gegenproben; zwei davon waren am unveränderten Skript rot
@@ -2769,7 +2776,7 @@ werden:
 
 ## Referenzen
 
-- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen D1–D64
+- [GDD](../GDD.md) — Vision, Säulen, Roadmap §5, Entscheidungen ~~D1–D64~~ D1–D91
 - [Balancing WP5](../balancing/0001-wp5-waffen-ruestung-und-kosten.md) — 16 Waffen, 4
   Rüstungsstufen, 17 eigene Rezepte mit Erz-Äquivalent (WP5.6)
 - [Spec 01 — Technischer Rahmen](../specs/01-technischer-rahmen.md) — Modlet-Architektur,

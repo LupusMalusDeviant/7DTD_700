@@ -21,6 +21,7 @@ in die Zeit passt**: Geschütztürme, Strom, Elektrofallen, Sprengstoff.
    Blitze, Teleportation oder Schockwellen.
 4. **Erlernt:** Die Magie hängt am Perkbaum **Runenkunde** (umgedeuteter Intellekt-Baum) und an
    Abschriften (F-04). Sie ist kein Loot-Glück.
+   (**Widerspruch, offen** — siehe Prüfung 0003, W-01)
 5. **Christlich und heidnisch gleichwertig:** Runen und Segen sind zwei Traditionen mit
    unterschiedlichem Stil, aber gleicher Stärke. Die Mod wertet keinen Glauben.
 6. **Vanilla zuerst (P5):** Jede Magieform wird auf ein bestehendes Vanilla-System

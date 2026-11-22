@@ -28,6 +28,8 @@ billigen Jumpscares.
 - [verifizieren] per REA bzw. Test: Was davon geht über Weather/Biome-XML, was braucht Sky-/Licht-Hooks?
 
 ### B2 — Klanglandschaft (MVP: Vanilla-Sounds umgedeutet · P2: eigene Sounds)
+> **Widerspruch, offen** — siehe Prüfung 0003, W-06
+
 - Stille als Werkzeug: Tierlaute verstummen, wenn Seuchentote nahe sind
 - Ferne Klänge: Glocke eines verlassenen Klosters, Wolfsheulen, Rufe, Weinen, Raunen, knackende Äste
 - Positionsabhängig und selten wiederholt, damit sie nicht zur Tapete werden
@@ -205,4 +207,5 @@ eine Abfrage der Lichtstärke am Spielerort und eine Abfrage „Mitspieler in de
 
 *Notiz für Phase 2 (Regel 6):* Entweder gröbere Definition (Nacht + kein Dach + Zufall, rein XML)
 oder C# für die Lichtabfrage. Gehört zu D18 und ist hier nicht entschieden.
+(**Widerspruch, offen** — siehe Prüfung 0003, W-33)
 Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-4--f-17-grauen-und-atmosphäre)

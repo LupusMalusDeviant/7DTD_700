@@ -28,7 +28,7 @@ Perks, die Mitspielern helfen:
 - **Krieger:** Schildwall-Bonus für Mitspieler in der Nähe
 - **Runenkundiger:** Schutzzeichen und Segen wirken auf die ganze Gruppe
 - **Jäger:** markiert Gegner bzw. Spuren für die Gruppe
-- **Transport & Logistik:** größere Gruppenlast, Wegsteine für Gruppe
+- ~~**Transport & Logistik:**~~ **Fuhrmann** (D66): größere Gruppenlast, Wegsteine für Gruppe
 
 ## Akzeptanzkriterien
 - [ ] Zwei Spieler teilen Truhen und Werkstätten ohne Rechteprobleme (Dedicated)

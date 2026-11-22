@@ -14,7 +14,7 @@ Silber** (D30).
 | Vanilla | 700 | Häufigkeit | Quelle |
 |---|---|---|---|
 | Iron (Schrott) | Raseneisenerz → Luppe → Schmiedeeisen | **knapp** | Moor- und Sumpf-Ressourcenblöcke; Altmetall aus Römerruinen; Plünderer-Beute (F-20) |
-| Lead, Brass | Kupfer, Bronze-Altmetall | selten | Ruinen |
+| Lead, Brass | ~~Kupfer, Bronze-Altmetall~~ Blei (`resourceScrapLead`), Buntmetall (`resourceScrapBrass`) — laut [Glossar](../glossar.md) | selten | Ruinen |
 | Oil Shale, Gas | entfällt; Pech bzw. Teer aus Holz | – | Kräuterküche |
 | Coal | Holzkohle (Meiler) | normal | Feuerstelle bzw. Meiler |
 | Nitrate | entfällt | – | – |

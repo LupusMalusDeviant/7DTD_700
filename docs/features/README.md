@@ -16,7 +16,7 @@ Legende:
 | [F-05](F-05-ressourcen-waehrung.md) | Ressourcen & Währung | 1 | X | S | nein | F-01 |
 | [F-06](F-06-seuchentote-bestiarium.md) | Seuchentote & Bestiarium | 2 | X (+A) | S | optional | F-07, F-18 |
 | [F-07](F-07-welt-kulturzonen-pois.md) | Welt, Kulturzonen & POIs | 2 · 4 (Karte) | X (+A) | S | ja (Biome) | F-01 |
-| [F-08](F-08-licht-feuer-verteidigung.md) | Licht, Feuer & Verteidigung | 1 | X+H | S+C | ja | F-04 |
+| [F-08](F-08-licht-feuer-verteidigung.md) | Licht, Feuer & Verteidigung | 1 | ~~X+H~~ X (F-08: „C# / Harmony — nicht nötig“) | S+C | ja | F-04 |
 | [F-09](F-09-seuchennacht.md) | Seuchennacht | 2 | X+H | S | ja | F-06, F-17 |
 | [F-10](F-10-haendler-auftraege.md) | Händler & Aufträge | 2 · 3 | X+H | S | ja (Eskorte) | F-05, F-07, F-20 |
 | [F-11](F-11-krankheit-heilkunde.md) | Krankheit & Heilkunde | 2 | X (+H) | S | optional | F-19 |
@@ -37,9 +37,9 @@ Legende:
 
 **Phase 1, MVP „700 & Grauen“** (D49):
 1. F-01 + F-05 + F-12 (reines XML, schnelle sichtbare Wirkung)
-2. F-21 (sechs Bäume als XML-Gerüst, noch ohne Learning by Doing) → F-04 → F-03 → F-02 (Basis)
-3. F-18 (Bau-Pfad + Gegner-Blockschaden)
-4. F-17 B1/B2/B8 (Dunkelheit, Nebel, Klang, sichere Orte) + F-08 (Licht, Brenndauer = erster Harmony-Patch)
+2. F-21 (~~sechs~~ fünf Bäume als XML-Gerüst (D66), noch ohne Learning by Doing) → F-04 → F-03 → F-02 (Basis)
+3. F-18 (Bau-Pfad ~~+ Gegner-Blockschaden~~; der Blockschaden der Toten bleibt Vanilla, D65)
+4. F-17 B1/B2/B8 (Dunkelheit, Nebel, Klang, sichere Orte) + F-08 (Licht, Brenndauer ~~= erster Harmony-Patch~~ per XML; F-08: „C# / Harmony — nicht nötig“)
 5. → **interner Playtest Phase 1** → Entscheidung über öffentlichen Release (D46)
 
 **Phase 2:** F-16 zuerst → F-06, F-07, F-09 → F-15 (Kern), F-17 (Rest) → F-02 (Schild, Schadensarten, Werfen), F-21 (Learning by Doing), F-11, F-19 (Verderb, Ackerbau), F-10 (Basis) → Playtest

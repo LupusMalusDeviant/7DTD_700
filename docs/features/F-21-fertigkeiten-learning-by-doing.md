@@ -152,6 +152,7 @@ damage with knives" bleibt für „Tiefer Schnitt" sachlich richtig, nur englisc
 Handwerks-Stufen und Bücher als Daten. Von den fünf Vanilla-Attributnamen steht **einer** im Code
 (`attFortitude`, einmal, in `EntityPlayerLocal::Update`), dazu `attcrafting` in der
 Werkbank-UI. Der Code hängt also fast nicht an den Vanilla-Attributen (D45 ist tragfähig).
+(**Widerspruch, offen** — siehe Prüfung 0003, W-33)
 
 **Learning by Doing kostet C#.** Es gibt keinen XML-Auslöser „Gegenstand fertig hergestellt“.
 `buffs.xml` hat viele `triggered_effect trigger="…"`, aber keinen dafür; Handwerks-Stufen steigen

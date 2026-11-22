@@ -31,7 +31,7 @@ Mods/
 ├── 700_20_Material/            # F-05, F-04  Ressourcen, Ketten, Werkstätten
 ├── 700_30_Ausruestung/         # F-02, F-03  Waffen, Rüstung, Qualität, Verschleiß
 ├── 700_40_Bauen/               # F-18, F-08  Bauteile, Befestigung, Licht und Feuer
-├── 700_50_Fortschritt/         # F-21  die sechs Fertigkeitsbäume
+├── 700_50_Fortschritt/         # F-21  die ~~sechs~~ fünf Fertigkeitsbäume (D66)
 ├── 700_60_Welt/                # F-17  Nachtwerte, Nebel, sichere Orte
 └── 700_90_Sprache/             # F-12  Localization und XUi-Theming — zuletzt
 ```

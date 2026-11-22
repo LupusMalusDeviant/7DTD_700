@@ -9,7 +9,7 @@ Die Welt sieht aus wie Mitteleuropa um 700: Wald, Moor, Weiler, Klöster, Ringw�
 Römerruinen. Keine Städte, Asphaltstraßen oder Hochhäuser.
 
 ## Umfang
-- **RWG** (`rwgmixer.xml`): Städte, Straßen und Großtiles deaktivieren bzw. ersetzen; Biome auf Wald/Moor/Gebirge/Heide umdeuten (Wüste und Ödland entfallen oder werden zu Heide/Brandland)
+- **RWG** (`rwgmixer.xml`): Städte, Straßen und Großtiles deaktivieren bzw. ersetzen; Biome auf Wald/Moor/Gebirge/Heide umdeuten (~~Wüste und Ödland entfallen oder werden zu Heide/Brandland~~ Wüste wird Küste, Ödland wird Moor — siehe Tabelle unten; D72 baut darauf)
 - **POIs (eigene Prefabs):** Grubenhaus, Langhaus, Hofstelle, Weiler, Kloster, Motte/Ringwall, Römerruine (Villa, Kastell), Köhlerei, Mühle
 - Prefabs entstehen im **Ingame-Prefab-Editor** mit Vanilla- und Mod-Blöcken. Das sind keine Unity-Assets, aber viel Handarbeit.
 - **Blöcke:** Flechtwerk, Lehmwand, Palisade, Reetdach, Bruchstein (Umdeutung bzw. Retexturen über vorhandene Block-Shapes)
@@ -33,7 +33,7 @@ Römerruinen. Keine Städte, Asphaltstraßen oder Hochhäuser.
 ## Umsetzung
 - Phase 2a: RWG-Filter. Nur Vanilla-POIs ohne Anachronismen zulassen (Höhlen, Hütten, Ruinen). Damit wird die Welt schnell „leer und alt“.
 - Phase 2b: eigene Prefabs, schrittweise. Block-Optik über **Retexturen** (F-16).
-- **Phase 3: eigene handgebaute Karte (D4).** Sie nutzt die Prefabs und Blöcke aus
+- **~~Phase 3~~ Phase 4: eigene handgebaute Karte (D4).** Sie nutzt die Prefabs und Blöcke aus
   Phase 2 und erzählt das Setting über Orte (Hauptkloster, Fürstensitz, verlassene
   Römerstadt). Erst angehen, wenn die RWG-Inhalte stabil sind.
 

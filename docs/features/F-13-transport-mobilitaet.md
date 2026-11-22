@@ -34,7 +34,7 @@ aber nur über magische Fahrzeuge oder Wegsteine.
 - **Seuchennacht:** Alle Wegsteine schweigen, es gibt keine Flucht
 - Optik: Nebel, Rauch, glimmende Runen (D38 erlaubt etwas mehr Sichtbarkeit)
 
-## Fertigkeitsbaum „Transport & Logistik“ (D19, F-21)
+## Fertigkeitsbaum ~~„Transport & Logistik“~~ „Fuhrmann“ (D66; D19, F-21)
 Perks z. B.: Tragkraft, Wagnerei (Karren und Wagen bauen und verbessern), Tierkunde (zähmen,
 pflegen, Pferde beruhigen), Sattlerei, Wegkunde (Wegsteine nutzen und bauen, Ausdauer
 beim Marsch).

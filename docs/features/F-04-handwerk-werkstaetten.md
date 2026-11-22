@@ -25,6 +25,8 @@ Fünf Tiers wie im GDD 3.1: Überleben → Hof → Werkstatt → Burg → Meiste
 | Webstuhl | (Klon per XML) | – | Weberschiffchen | Tuch, Gambeson-Teile, Segeltuch |
 | Räucherkammer / Trockengestell | (Klon per XML) | Holz | – | Konserven (F-19) |
 
+> **Widerspruch, offen** — siehe Prüfung 0003, W-28 (Zeile „Kräuterküche“, Werkzeugslot „Destillierhelm“).
+
 **Die drei Klone sind nicht Phase-1-Arbeit (D57, 8. November 2026).** Sie wandern in die Pakete,
 die ihren Inhalt bringen, weil nach dem Purge in ganz Vanilla kein Satz von fünf Rezepten übrig
 ist, der auf einen von ihnen gehört — ihr Inhalt liegt in anderen Features:

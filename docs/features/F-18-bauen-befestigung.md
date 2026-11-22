@@ -6,7 +6,9 @@
 
 ## Ziel
 Das Vanilla-Blocksystem trägt den Basenbau weiter (D28), nur in Materialien von 700. Ohne
-Stahl und Beton bleibt die Basis verteidigbar, weil die **Gegner angepasst** werden (D29).
+Stahl und Beton bleibt die Basis verteidigbar, ~~weil die **Gegner angepasst** werden (D29)~~
+weil Mörtelstein so viel aushält wie Vanilla-Stahl; der Blockschaden der Toten bleibt, wie
+Vanilla ihn setzt (D65).
 
 ## Upgrade-Pfad (Umdeutung)
 

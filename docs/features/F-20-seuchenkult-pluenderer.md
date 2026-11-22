@@ -23,7 +23,7 @@ Seite des Folk-Horrors.
 - Ton: unheimlich, nicht albern; keine Satanismus-Klischees, sondern verzweifelter Volksglaube
 
 ## Umsetzung
-- **Erst prüfen (Q19):** Hat V 3.40 bereits menschliche Gegner bzw. Banditen, auf deren KI wir aufbauen können? → REA
+- ~~**Erst prüfen (Q19):** Hat V 3.40 bereits menschliche Gegner bzw. Banditen, auf deren KI wir aufbauen können? → REA~~ **Q19 ist beantwortet: „Ja, mehr als erwartet“** — Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-10--f-20-und-f-13)
 - Falls nein: menschliche Gegner auf Basis von NPC- bzw. Zombie-KI mit Waffen → C# und Assets (aufwendig, Phase 3 begründet)
 - Assets: Kultisten-Kleidung (Retextur bzw. neu), Masken, Kultstätten-Prefabs
 
