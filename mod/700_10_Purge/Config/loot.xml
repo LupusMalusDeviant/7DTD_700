@@ -16,7 +16,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     519 Zeilen. -->
+	     499 Zeilen. -->
 
 	<remove xpath="/lootcontainers/lootcontainer/item[@name='ammoGasCan']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootcontainer/item[@name='oldCash']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -391,11 +391,7 @@
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardBatonCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardBatteryBankBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardBladeTrapBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardBowCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardDartTrapBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardFarmT1Bundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardFarmT2Bundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardFarmT3Bundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardGeneratorBankBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardGyrocopterPartsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardHandgunCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -414,7 +410,6 @@
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardLegendarySteelSledgehammerCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardLegendarySteelSpearCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardLegendarySteelToolsCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardMacheteCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardMachineGunCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardMinibikePartsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardMotorToolsCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -426,40 +421,25 @@
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardShotgunCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardShotgunTurretBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSolarBankBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSteelClubCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSteelKnuckleCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSteelSledgehammerCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSteelSpearCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardSteelToolsCraftingBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT0HandgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT0MachineGunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT0RifleBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT0ShotgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1BookBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1HandgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1MachineGunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1MeleeModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1RangedModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1RifleBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1ShotgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1SkillMagazineBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT1TrapsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2BookBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2FoodBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2HandgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2MachineGunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2MeleeModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2RangedModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2RifleBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2ShotgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT2TrapsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3BookBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3FoodBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3HandgunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3HandgunLegendaryBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3MachineGunBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3MachineGunLegendaryBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3MeleeModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3RangedModsBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3RifleBundle']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/lootcontainers/lootgroup/item[@name='questRewardT3RifleLegendaryBundle']" />  <!-- Weg zu einer gesperrten Kennung -->

@@ -2268,6 +2268,21 @@ werden:
     Warnungen als Fehlerzeile nach e)? *(Offener Punkt „Vorprüfung WP8.9".)*
     Die Vorprüfung selbst wiederholt sich mit
     `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check/vertraeglichkeit-pruefen.ps1`.
+25. **Sackgassen und Belohnungen im Spiel ansehen** (D89, Balancing 0003, 22. November 2026).
+    Braucht einen Spielstart mit der Mod; dabei legt das Spiel einen neuen ConfigsDump an.
+    a) Danach `check-all.ps1` laufen lassen: `recipes` meldet **0 Sackgassen** (bis dahin 80,
+    weil es den Dump vom 21. November liest) — das ist der Nachweis, der Vorlauf war keiner.
+    b) Im Handwerksfenster Eisenspitzhacke, Holzbogen, Blasebalg und einen Aufsatz ansehen:
+    Leder bzw. Schmiedeeisen statt Klebeband und Mechanikteilen, keine graue Zutat. Steht
+    die neue Zutat in der Liste (sie ist per `insertAfter` eingefügt), und steigt ihre Menge
+    mit der Qualitätsstufe?
+    c) Einen Auftrag der Stufe 1 abschließen: unter den Belohnungen steht das
+    „Lehrblatt-Bündel"; geöffnet gibt es drei Sorten Lehrblätter.
+    d) Eine Belohnung, die früher modern war (Abschluss der Stufe 1: das Fahrrad), zeigt
+    300 Silberpfennige — als Münzstapel, mit der Menge.
+    e) Im Kreativmenü „Feldbündel 2" und „Aufsatz-Bündel Fernkampf 1" nehmen und öffnen: es
+    kommt etwas heraus, das Spiel hängt nicht, im Protokoll steht keine Fehlerzeile. Beide
+    würfeln aus einer Liste mit nur einem Eintrag.
 
 ## Offene Punkte
 
@@ -2327,15 +2342,23 @@ werden:
   4. *Groß und klein bei Operationsnamen.* AGF schreibt `<insertafter>`; ob das Spiel das
      annimmt, ist nicht gelesen (der REA-Blick auf `XmlPatcher` blieb ohne Antwort). Lauf 2
      zeigt es am Protokoll (Prüfliste 24 f).
-- **Sackgassen und leere Belohnungen: der Vorschlag liegt vor, die Abnahme ist offen**
-  (2026-11-22). [`docs/balancing/0003`](../balancing/0003-sackgassen-und-belohnungen.md)
-  führt die 80 Sackgassen Rezept für Rezept (28 Kernweg, 29 Aufsätze, 5 Gerichte und Leim,
-  5 zu sperren, 13 Bögen, Armbrüste und Sonderpfeile — seit D87 mit eigenem Ersatz statt
-  wartend) und die 115 Belohnungen auf leere Gruppen
-  (57 über freigegebene Bündel, 14 mit angepasstem Inhalt, 44 in Silberpfennigen). Vier
-  Grundsätze hat der Nutzer am selben Tag entschieden; sie stehen dort am Anfang.
-  **Ursache der meisten leeren Belohnungen** ist die Denylist-Zeile `questReward*Bundle`,
-  die alle 92 Belohnungsbündel sperrt, auch das Lehrblatt-Bündel. Gebaut ist nichts.
+- **Sackgassen und leere Belohnungen: abgenommen und gebaut am 2026-11-22 (D89), im Spiel
+  nicht gesehen.** [`docs/balancing/0003`](../balancing/0003-sackgassen-und-belohnungen.md)
+  führt die 80 Sackgassen Rezept für Rezept und die 115 Belohnungen auf leere Gruppen; der
+  Abschnitt „Stand des Baus" dort nennt Dateien, Zahlen und die drei Stellen, an denen der
+  Bau genauer wurde als die Tabelle. **Rezepte:** 264 Operationen in `700_20`, `700_30` und
+  `700_40`; 73 Rezepte bekommen zeitgemäße Zutaten, 7 entfallen. **Belohnungen:** 20 Bündel
+  einzeln freigegeben (Denylist), 11 davon im Inhalt gekürzt, 26 Gruppen zahlen
+  Silberpfennige. **Gerechnet, nicht gesehen:** ein Vorlauf außerhalb des Repositorys
+  (alle Modlets auf Vanilla angerechnet) meldet 0 Sackgassen und 0 Belohnungen auf leere
+  Gruppen; am Stand davor trifft er die Zahlen des ConfigsDumps (80, 115). `recipes` in
+  `check-all.ps1` bleibt rot, bis ein neuer Dump vorliegt (Prüfliste 25).
+  **Folgearbeit — eine Lücke der Prüfung:** `mod700check` kennt den Inhalt eines Bündels
+  (`Create_item`, `Random_item`) nicht als Weg zu einem Gegenstand. Ein freigegebenes Bündel
+  mit Gesperrtem darin bliebe grün. Für die 20 Bündel ist es von Hand nachgezählt; als
+  Prüfung gehört es in Vertrag 04 und ins Werkzeug.
+  **Folgearbeit — Namen:** Langbogen, Armbrust, Schwere Armbrust, Nadelpfeil und
+  Feuertopfpfeil tragen weiter Vanillas Namen und Werte (WP5.2, D87).
 - **Sieben Fertigkeiten tragen weiter Vanillas Namen** (vom Nutzer am 2026-11-21 im Spiel
   gesehen, eingetragen am 2026-11-22). Unter `skillGeneralPerks` — im Fertigkeitsfenster der
   Reiter mit dem Zahnrad — stehen `perkLightArmor`, `perkMediumArmor`, `perkHeavyArmor`,

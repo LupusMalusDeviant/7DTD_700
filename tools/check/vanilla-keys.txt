@@ -1029,3 +1029,40 @@ perkMiner69rRank2Desc
 perkPummelPeteRank3Desc
 perkPummelPeteRank3LongDesc
 perkPummelPeteRank5Desc
+
+# --- D89 / Balancing 0003: die freigegebenen Belohnungsbuendel ---------------------
+# 30 Zeilen: 20 Buendel, die seit D89 wieder Auftragsbelohnung sind, und die zehn
+# Beschreibungen, die sie sich teilen. Vanilla nennt sie "Zeitschriftenpaket",
+# "Macheten-Fertigungspaket", "Nahkampf-Mods-Paket" - Woerter, die das Glossar sperrt
+# oder die eine umgedeutete Waffe beim alten Namen nennen. NICHT hier: die 72 Buendel,
+# die gesperrt bleiben; ihre Texte sieht kein Spieler.
+questRewardT1SkillMagazineBundle          # Lehrblatt-Buendel
+questRewardMagazineBundleDesc
+questRewardSteelKnuckleCraftingBundle     # Werkbuendel: Stahlfaust
+questRewardMacheteCraftingBundle          # Werkbuendel: Spatha
+questRewardSteelClubCraftingBundle        # Werkbuendel: Streitkolben
+questRewardSteelSpearCraftingBundle       # Werkbuendel: Fluegellanze
+questRewardSteelSledgehammerCraftingBundle  # Werkbuendel: Streithammer
+questRewardSteelToolsCraftingBundle       # Werkbuendel: Werkzeug
+questRewardBowCraftingBundle              # Werkbuendel: Bogen
+questRewardMeleeWeaponCraftingBundleDesc
+questRewardRangedWeaponCraftingBundleDesc
+questRewardFarmT1Bundle                   # Feldbuendel 1 bis 3
+questRewardFarmT2Bundle
+questRewardFarmT3Bundle
+questRewardFarmBundleDesc
+questRewardT2FoodBundle                   # Speisebuendel
+questRewardFoodBundleDesc
+questRewardT1BookBundle                   # Abschriften-Buendel
+questRewardBookBundleDesc
+questRewardT1MeleeModsBundle              # Aufsatz-Buendel Nahkampf 1 bis 3
+questRewardT2MeleeModsBundle
+questRewardT3MeleeModsBundle
+questRewardMeleeModsBundleDesc
+questRewardT1RangedModsBundle             # Aufsatz-Buendel Fernkampf 1 und 2
+questRewardT2RangedModsBundle
+questRewardRangedModsBundleDesc
+questRewardT1TrapsBundle                  # Fallenbuendel 1 und 2
+questRewardT2TrapsBundle
+questRewardT1TrapsBundleDesc
+questRewardT2TrapsBundleDesc

@@ -12,7 +12,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     492 Zeilen. -->
+	     472 Zeilen. -->
 
 	<set xpath="/items/item[@name='TEST_ITEM_00']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:253 -->
 	<set xpath="/items/item[@name='TEST_ITEM_01']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:253 -->
@@ -351,11 +351,7 @@
 	<set xpath="/items/item[@name='questRewardBatonCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardBatteryBankBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardBladeTrapBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardBowCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardDartTrapBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardFarmT1Bundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardFarmT2Bundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardFarmT3Bundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardGeneratorBankBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardGyrocopterPartsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardHandgunCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
@@ -374,7 +370,6 @@
 	<set xpath="/items/item[@name='questRewardLegendarySteelSledgehammerCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardLegendarySteelSpearCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardLegendarySteelToolsCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardMacheteCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardMachineGunCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardMinibikePartsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardMotorToolsCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
@@ -391,40 +386,25 @@
 	<set xpath="/items/item[@name='questRewardShotgunCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardShotgunTurretBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardSolarBankBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardSteelClubCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardSteelKnuckleCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardSteelSledgehammerCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardSteelSpearCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardSteelToolsCraftingBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT0HandgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT0MachineGunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT0RifleBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT0ShotgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT1BookBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT1HandgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT1MachineGunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT1MeleeModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT1RangedModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT1RifleBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT1ShotgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT1SkillMagazineBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT1TrapsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT2BookBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT2FoodBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT2HandgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT2MachineGunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT2MeleeModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT2RangedModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT2RifleBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT2ShotgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT2TrapsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3BookBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3FoodBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3HandgunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3HandgunLegendaryBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3MachineGunBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3MachineGunLegendaryBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
-	<set xpath="/items/item[@name='questRewardT3MeleeModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3RangedModsBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3RifleBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->
 	<set xpath="/items/item[@name='questRewardT3RifleLegendaryBundle']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:223 -->

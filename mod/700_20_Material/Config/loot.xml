@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_20_Material / loot.xml
+	     F-05 Rohstoffe, Plan-0001 Ziel Z3; Balancing 0003, D89
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53 - 700_10_Purge nimmt weg, die
+	     anderen fuegen hinzu).
+
+	     ===================================================================
+	     26 BELOHNUNGSGRUPPEN ZAHLEN SILBER
+	     ===================================================================
+
+	     Gemessen am ConfigsDump vom 21. November 2026: 115 von 496
+	     Auftragsbelohnungen zeigten auf eine Loot-Gruppe, die nach dem Purge nichts
+	     mehr hergab. 41 Gruppen. 15 davon sind wieder gefuellt, weil ihr Buendel
+	     freigegeben ist (denylist.txt, items.xml in diesem Modlet). Die 26 hier
+	     waren rein modern - Fahrzeuge, Strom, Geschuetze, Benzin, Schusswaffen -
+	     oder haben kein lebendes Stueck mehr. Vom Nutzer entschieden (D89): sie
+	     zahlen Silberpfennige (casinoCoin, D30).
+
+	     DIE MENGE RICHTET SICH NACH DER NIEDRIGSTEN AUFTRAGSSTUFE, die auf die
+	     Gruppe zeigt:
+
+	       Stufe           1     2     3     4     5     6
+	       Silberpfennige  300   600   1000  1500  2000  3000
+
+	     Vanillas eigene Muenzbelohnungen liegen zwischen 100 und 4000. Alle Zahlen
+	     sind Setzungen fuer WP9.
+
+	     DIE GRUPPE BLEIBT, EIN EINTRAG KOMMT DAZU. Die Gruppen stehen nach dem Purge
+	     leer da (Vertrag 03 Abschnitt 4: auf ihre Namen zeigen Auftraege, ein
+	     fehlender Name bricht hart). Angehaengt wird ein Eintrag mit fester Menge -
+	     so schreibt Vanilla die Benzin-Belohnung selbst
+	     (<item name="ammoGasCan" count="5000"/>).
+
+	     EINE NEBENWIRKUNG, BEKANNT UND GEWOLLT IN KAUF GENOMMEN: fuenf dieser
+	     Gruppen liegen in Vanilla auch in den Buendelgruppen der Abwurfkisten
+	     (groupAirDropT1Bundles bis T5Bundles): groupQuestWrench,
+	     groupQuestAmmoCraftingBundle, groupQuestNailgun, groupQuestTimedCharges,
+	     groupQuestT3RangedMods. Eine Abwurfkiste kann darum statt nichts jetzt
+	     Silber enthalten.
+
+	     NICHT GESEHEN: wie das Belohnungsfenster einen Muenzstapel aus einer
+	     Loot-Gruppe zeigt, und ob die Menge so ankommt. Das zeigt der Lauf im Spiel. -->
+
+	<!-- Stufe 1: 300 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestBicycle']">
+		<item name="casinoCoin" count="300" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestWrench']">
+		<item name="casinoCoin" count="300" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestHelmetLightSchematic']">
+		<item name="casinoCoin" count="300" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestAmmoCraftingBundle']">
+		<item name="casinoCoin" count="300" />
+	</append>
+
+	<!-- Stufe 2: 600 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestMinibikeParts']">
+		<item name="casinoCoin" count="600" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestNailgun']">
+		<item name="casinoCoin" count="600" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestMiningHelmet']">
+		<item name="casinoCoin" count="600" />
+	</append>
+	<!-- Nahrungspaket 02: keines seiner vier Gerichte lebt. -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestT3Food']">
+		<item name="casinoCoin" count="600" />
+	</append>
+
+	<!-- Stufe 3: 1000 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestGeneratorBank']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestSecuritySystem']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestDartTrap']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestTimedCharges']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestMotorcycleParts']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestNightVisionGoggles']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+	<!-- Aufsaetze Fernkampf 3: alle vier gehoeren an Schusswaffen. -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestT3RangedMods']">
+		<item name="casinoCoin" count="1000" />
+	</append>
+
+	<!-- Stufe 4: 1500 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestGas']">
+		<item name="casinoCoin" count="1500" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestBatteryBank']">
+		<item name="casinoCoin" count="1500" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestBladeTrap']">
+		<item name="casinoCoin" count="1500" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuest4x4Parts']">
+		<item name="casinoCoin" count="1500" />
+	</append>
+	<!-- Nahrungspaket 03: keines seiner vier Gerichte lebt. -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestT4Food']">
+		<item name="casinoCoin" count="1500" />
+	</append>
+
+	<!-- Stufe 5: 2000 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestAutoTurret']">
+		<item name="casinoCoin" count="2000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestShotgunTurret']">
+		<item name="casinoCoin" count="2000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestSolarBank']">
+		<item name="casinoCoin" count="2000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestGyrocopterParts']">
+		<item name="casinoCoin" count="2000" />
+	</append>
+
+	<!-- Stufe 6: 3000 -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestLegendaryMeleeCrafting']">
+		<item name="casinoCoin" count="3000" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupQuestLegendaryRangedCrafting']">
+		<item name="casinoCoin" count="3000" />
+	</append>
+</config>

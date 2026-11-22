@@ -704,3 +704,35 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 !hayBaleSquare
 !treeAzalea
 !keystoneBlock             # Landclaim; Spielmechanik, kein Gegenstand
+
+# --- Belohnungsbuendel (D89, Balancing 0003) ------------------------------------
+# Das Muster 'questReward*Bundle' oben trifft alle 92 Belohnungsbuendel, auch die,
+# deren Inhalt lebt. Gemessen am ConfigsDump vom 2026-11-21: 115 von 496
+# Auftragsbelohnungen zeigten auf eine Loot-Gruppe, die nichts mehr hergab - allein das
+# Lehrblatt-Buendel stand hinter 48. Freigegeben wird JE BUENDEL, nicht das Muster:
+# die 72 uebrigen (Schusswaffen, Strom, Fahrzeuge, Geschuetze, Minen) bleiben gesperrt.
+#
+# Inhalt unveraendert - alles darin lebt:
+!questRewardT1SkillMagazineBundle           # drei Sorten Lehrblaetter je zweimal
+!questRewardSteelKnuckleCraftingBundle      # Bruchstuecke der Eisenfaust und Lehrblatt
+!questRewardMacheteCraftingBundle           # Spatha (D58)
+!questRewardSteelClubCraftingBundle         # Keule
+!questRewardSteelSpearCraftingBundle        # Speer
+!questRewardSteelSledgehammerCraftingBundle # Hammer
+!questRewardSteelToolsCraftingBundle        # Werkzeug
+!questRewardBowCraftingBundle               # Bogen-Bruchstuecke, Eisenpfeile, Lehrblatt
+!questRewardT1MeleeModsBundle               # sechs Aufsaetze, alle leben
+!questRewardT3MeleeModsBundle               # fuenf Aufsaetze, alle leben
+# Inhalt gekuerzt - 700_20_Material/Config/items.xml nimmt das Gesperrte heraus:
+!questRewardFarmT1Bundle                    # Setzlinge: nur Pilz und Goldrute
+!questRewardFarmT2Bundle                    # Setzlinge: nur Aloe
+!questRewardFarmT3Bundle                    # Setzlinge: nur Hopfen
+!questRewardT2FoodBundle                    # abgekochtes Wasser statt Mineralwasser; zwei Eintoepfe
+# questRewardT3FoodBundle und T4FoodBundle bleiben gesperrt: keines ihrer Gerichte lebt,
+# ihre Gruppen zahlen Silber (Balancing 0003).
+!questRewardT1BookBundle                   # nur Blaetter der lebenden Reihen
+!questRewardT2MeleeModsBundle               # ohne Stacheldraht und Bunkerbrecher
+!questRewardT1RangedModsBundle              # nur 'Der Jaeger'
+!questRewardT2RangedModsBundle              # nur Pfeilauflage und 'Laehmschuss'
+!questRewardT1TrapsBundle                   # nur Holzspiesse
+!questRewardT2TrapsBundle                   # nur Eisenspiesse

@@ -60,4 +60,81 @@
 		     ihr wird, ist Sache von F-02. -->
 
 	</append>
+
+	<!-- ===================================================================
+	     BELOHNUNGSBUENDEL: ELF BUENDEL BEKOMMEN EINEN INHALT, DER LEBT
+	     ===================================================================
+	     Balancing 0003 (docs/balancing/0003-sackgassen-und-belohnungen.md), vom
+	     Nutzer am 22. November 2026 abgenommen (D89).
+
+	     Der Purge sperrte alle 92 Belohnungsbuendel ueber EIN Namensmuster
+	     (denylist.txt: questReward*Bundle). 20 davon sind seit D89 einzeln
+	     freigegeben. Neun tragen nur Lebendes und bleiben, wie Vanilla sie schreibt.
+	     Die elf hier nennen neben Lebendem auch Gesperrtes - und DAS SIEHT KEINE
+	     PRUEFUNG: mod700check kennt als Weg zu einem Gegenstand Rezept, Loot,
+	     Haendler, Auftragsbelohnung, Block-Abwurf und Startausruestung, nicht den
+	     Inhalt eines Buendels (Create_item, Random_item). Ein freigegebenes Buendel
+	     mit Mineralwasser darin bliebe gruen. Darum steht hier, was jedes Buendel
+	     danach noch nennt, und der Vorlauf zaehlt es nach (Balancing 0003, Stand
+	     des Baus).
+
+	     GEAENDERT WIRD NUR DIE LISTE, nie das Buendel selbst: Symbol, Klasse und
+	     Klang bleiben Vanilla. Wo eine Zufallsliste kuerzer wird, sinkt Random_count
+	     mit - mit Unique_random_only="true" darf er die Zahl der Eintraege nicht
+	     uebersteigen. Random_item_count nennt je Eintrag eine Zahl.
+
+	     Die Namen der Buendel stehen in 700_90_Sprache. -->
+
+	<!-- Feldbuendel 1 bis 3. Vanilla wuerfelt drei Setzlinge aus sechs, vier und drei
+	     Sorten; es leben Pilz und Goldrute (1), Aloe (2), Hopfen (3). Es bleiben drei
+	     Setzlinge je Buendel. Felder und Lehrblatt (Create_item) bleiben. -->
+	<set xpath="/items/item[@name='questRewardFarmT1Bundle']/property[@class='Action0']/property[@name='Random_item']/@value">plantedMushroom1,plantedGoldenrod1</set>
+	<set xpath="/items/item[@name='questRewardFarmT1Bundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">2,1</set>
+	<set xpath="/items/item[@name='questRewardFarmT1Bundle']/property[@class='Action0']/property[@name='Random_count']/@value">2</set>
+	<set xpath="/items/item[@name='questRewardFarmT2Bundle']/property[@class='Action0']/property[@name='Random_item']/@value">plantedAloe1</set>
+	<set xpath="/items/item[@name='questRewardFarmT2Bundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">3</set>
+	<set xpath="/items/item[@name='questRewardFarmT2Bundle']/property[@class='Action0']/property[@name='Random_count']/@value">1</set>
+	<set xpath="/items/item[@name='questRewardFarmT3Bundle']/property[@class='Action0']/property[@name='Random_item']/@value">plantedHop1</set>
+	<set xpath="/items/item[@name='questRewardFarmT3Bundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">3</set>
+	<set xpath="/items/item[@name='questRewardFarmT3Bundle']/property[@class='Action0']/property[@name='Random_count']/@value">1</set>
+
+	<!-- Speisebuendel (Vanillas Nahrungspaket 01). Abgekochtes Wasser statt
+	     Mineralwasser; von sieben Gerichten leben zwei - Gemuese- und
+	     Fleischeintopf, beide seit D89 wieder kochbar. Random_count bleibt 1. Die
+	     Nahrungspakete 02 und 03 bleiben gesperrt: keines ihrer Gerichte lebt, ihre
+	     Gruppen zahlen Silber (loot.xml in diesem Modlet). -->
+	<set xpath="/items/item[@name='questRewardT2FoodBundle']/property[@class='Action0']/property[@name='Create_item']/@value">foodSkillMagazine,drinkJarBoiledWater</set>
+	<set xpath="/items/item[@name='questRewardT2FoodBundle']/property[@class='Action0']/property[@name='Random_item']/@value">foodVegetableStew,foodMeatStew</set>
+	<set xpath="/items/item[@name='questRewardT2FoodBundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">10,10</set>
+
+	<!-- Abschriften-Buendel (Vanillas 3-Buecher-Paket). Von 126 Blaettern leben 78;
+	     die 48 anderen gehoeren zu gesperrten Reihen und Blaettern (Schusswaffen,
+	     Robotik, Kaffee, Zigarre). Drei Blaetter bleiben es. -->
+	<set xpath="/items/item[@name='questRewardT1BookBundle']/property[@class='Action0']/property[@name='Random_item']/@value">bookRangersArrowRecovery,bookRangersCripplingShot,bookRangersKnockdown,bookRangersFlamingArrows,bookRangersAPAmmo,bookRangersExplodingBolts,bookRangersForestGuide,bookSpearHunter1Damage,bookSpearHunter2Maintenance,bookSpearHunter3Bleed,bookSpearHunter4KillMove,bookSpearHunter5RapidStrike,bookSpearHunter6PenetratingShaft,bookSpearHunter7QuickStrike,bookHuntingJournalBears,bookHuntingJournalCoyotes,bookHuntingJournalDeer,bookHuntingJournalMountainLions,bookHuntingJournalVultures,bookHuntingJournalWolves,bookHuntingJournalSelfDefense,bookArtOfMiningLuckyStrike,bookArtOfMiningDiamondTools,bookArtOfMiningPallets,bookArtOfMiningAvalanche,bookArtOfMiningDamage,bookBatterUpFoulBalls,bookBatterUpBigHits,bookBatterUpStealingBases,bookBatterUpKnockdown,bookBatterUpSlowPitch,bookBatterUpMaintenance,bookBatterUpMetalChain,bookWasteTreasuresAcid,bookWasteTreasuresCloth,bookWasteTreasuresCoffins,bookWasteTreasuresDoors,bookWasteTreasuresHoney,bookWasteTreasuresSinks,bookUrbanCombatAdrenalineRush,bookUrbanCombatRoomClearing,bookUrbanCombatJumping,bookUrbanCombatLandMines,bookUrbanCombatLanding,bookUrbanCombatSneaking,bookNightStalkerArchery,bookNightStalkerBlades,bookNightStalkerSilentNight,bookNightStalkerSlumberParty,bookNightStalkerStealthDamage,bookNightStalkerThiefAdrenaline,bookNightStalkerTwilightThief,bookFiremansAlmanacSpeed,bookFiremansAlmanacPrevention,bookFiremansAlmanacHarvest,bookFiremansAlmanacHeat,bookFiremansAlmanacMolotov,bookBarBrawling1BasicMoves,bookBarBrawling2DropABomb,bookBarBrawling3KillerInstinct,bookBarBrawling4FinishingMoves,bookBarBrawling5AdrenalineHealing,bookBarBrawling6RageMode,bookBarBrawling7BoozedUp,bookLuckyLooterAmmunition,bookLuckyLooterBooks,bookLuckyLooterBrass,bookLuckyLooterDukes,bookLuckyLooterFood,bookLuckyLooterLead,bookLuckyLooterMedical,bookGreatHeistAdrenalineFall,bookGreatHeistGoldRush,bookGreatHeistClaimed,bookGreatHeistGems,bookGreatHeistMotionDetection,bookGreatHeistSafes,bookGreatHeistSprintSneak</set>
+
+	<!-- Aufsaetze fuer Nahkampfwaffen, Buendel 2. Von vier leben zwei (ohne
+	     Stacheldraht und Bunkerbrecher). Die Buendel 1 und 3 nennen nur Lebendes
+	     und bleiben unveraendert. -->
+	<set xpath="/items/item[@name='questRewardT2MeleeModsBundle']/property[@class='Action0']/property[@name='Random_item']/@value">modMeleeClubBurningShaft,modMeleeFortifyingGrip</set>
+	<set xpath="/items/item[@name='questRewardT2MeleeModsBundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">1,1</set>
+	<set xpath="/items/item[@name='questRewardT2MeleeModsBundle']/property[@class='Action0']/property[@name='Random_count']/@value">2</set>
+
+	<!-- Aufsaetze fuer Bogen und Armbrust, Buendel 1 und 2. Von elf lebt einer ('Der
+	     Jaeger'), von zehn leben zwei (Pfeilauflage und 'Laehmschuss'); alles andere
+	     gehoert an Schusswaffen. Buendel 3 bleibt gesperrt, seine Gruppe zahlt
+	     Silber. -->
+	<set xpath="/items/item[@name='questRewardT1RangedModsBundle']/property[@class='Action0']/property[@name='Random_item']/@value">modGunMeleeTheHunter</set>
+	<set xpath="/items/item[@name='questRewardT1RangedModsBundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">1</set>
+	<set xpath="/items/item[@name='questRewardT1RangedModsBundle']/property[@class='Action0']/property[@name='Random_count']/@value">1</set>
+	<set xpath="/items/item[@name='questRewardT2RangedModsBundle']/property[@class='Action0']/property[@name='Random_item']/@value">modGunCrippleEm,modGunBowArrowRest</set>
+	<set xpath="/items/item[@name='questRewardT2RangedModsBundle']/property[@class='Action0']/property[@name='Random_item_count']/@value">1,1</set>
+	<set xpath="/items/item[@name='questRewardT2RangedModsBundle']/property[@class='Action0']/property[@name='Random_count']/@value">2</set>
+
+	<!-- Fallenbuendel 1 und 2. Vanilla: Spiesse 5, Stacheldraht 5, zwei Sorten Minen
+	     je 5, Fallen-Lehrblatt 3. Es leben nur die Spiesse (Holz, dann Eisen) -
+	     dafuer zehn statt fuenf. -->
+	<set xpath="/items/item[@name='questRewardT1TrapsBundle']/property[@class='Action0']/property[@name='Create_item']/@value">trapSpikesWoodDmg0</set>
+	<set xpath="/items/item[@name='questRewardT1TrapsBundle']/property[@class='Action0']/property[@name='Create_item_count']/@value">10</set>
+	<set xpath="/items/item[@name='questRewardT2TrapsBundle']/property[@class='Action0']/property[@name='Create_item']/@value">trapSpikesIronDmg0</set>
+	<set xpath="/items/item[@name='questRewardT2TrapsBundle']/property[@class='Action0']/property[@name='Create_item_count']/@value">10</set>
 </config>

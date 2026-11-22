@@ -1,8 +1,9 @@
 # 0003 — Sackgassen-Rezepte und leere Auftragsbelohnungen
 
 **Stand:** 2026-11-22 · **Vom Nutzer abgenommen am 2026-11-22** („Abnehmen und bauen", D89).
-**Gebaut:** die Rezepte (Tabellen 1 bis 5) — siehe „Stand des Baus" am Ende. Die Belohnungen
-folgen im nächsten Schritt.
+**Gebaut am selben Tag:** die Rezepte (Tabellen 1 bis 5) und die Belohnungen — siehe „Stand
+des Baus" am Ende, dort stehen auch die drei Stellen, an denen der Bau genauer wurde als die
+Tabelle. **Nicht gesehen:** nichts davon im Spiel; der Nachweis ist ein neuer ConfigsDump.
 **Gehört zu:** Plan 0001, Ziel Z3 („sackgassenfrei") und offener Punkt „erster Lauf im Spiel,
 leere Belohnungen"; F-05, F-02, F-03.
 
@@ -256,6 +257,58 @@ Texte der freigegebenen Bündel — „Zeitschriften-Bündel" muss „Lehrblatt-
 - Erwartet nach dem Bau: **0 Sackgassen**, 0 Belohnungen auf leere Gruppen.
 
 ## Stand des Baus
+
+### Belohnungen — gebaut am 2026-11-22
+
+| Was | Wo | Zahl |
+|---|---|---|
+| Bündel einzeln freigegeben (`!<Name>`) | `tools/check/denylist.txt`, neuer Abschnitt am Ende | 20 |
+| Purge-Patch neu erzeugt (`mod700check purge-patch`) | `mod/700_10_Purge/Config/items.xml`, `loot.xml` | je 20 Zeilen weniger; 1931 Patchzeilen |
+| Inhalt gekürzt | `mod/700_20_Material/Config/items.xml` | 11 Bündel, 28 Operationen |
+| Silber | `mod/700_20_Material/Config/loot.xml` (neu) | 26 Gruppen |
+| Namen und Beschreibungen | `mod/700_90_Sprache/Config/Localization.csv`, `tools/check/vanilla-keys.txt` | 30 Zeilen |
+
+**Drei Stellen, an denen der Bau genauer wurde als die Tabelle oben** — die Tabelle war aus
+der Liste der leeren Gruppen geschrieben, der Bau hat jedes Bündel gelesen:
+
+1. **Nahrung:** nur `groupQuestT2Food` bleibt Nahrung (Lehrblätter, abgekochtes Wasser,
+   Gemüse- oder Fleischeintopf). In den Nahrungspaketen 02 und 03 lebt **keines** der je vier
+   Gerichte — nach dem Satz der Tabelle („bleibt in einer Stufe keines, zahlt die Gruppe
+   Silber") zahlen `groupQuestT3Food` 600 und `groupQuestT4Food` 1500. Damit **57 + 12 + 46 =
+   115** statt 57 + 14 + 44; freigegeben sind 20 Bündel, nicht 22.
+2. **Feld:** die Zufallspflanze ist je Stufe eine andere Liste. Es leben Pilz und Goldrute
+   (Feldbündel 1), Aloe (2) und Hopfen (3). Jedes Bündel gibt weiter drei Setzlinge.
+3. **Abschriften:** von den 126 Blättern des Bündels leben 78, nicht „13 Reihen".
+
+**Die Prüfwerkzeuge sehen den Inhalt eines Bündels nicht.** Die offene Frage von oben ist
+beantwortet: `mod700check` kennt als Weg zu einem Gegenstand Rezept, Loot, Händler,
+Auftragsbelohnung, Block-Abwurf und Startausrüstung — nicht `Create_item` und `Random_item`.
+Ein freigegebenes Bündel mit Mineralwasser darin bleibt in `anachronisms` und `purge-patch`
+grün. Gemessen ist der Inhalt darum am Vorlauf, mit einer eigenen Zählung außerhalb des
+Repositorys:
+
+| Stand | geprüfte `questReward*`-Bündel | Befunde |
+|---|---|---|
+| nach dem Bau | 20 | **2** — beide an `questRewardVehiclePartsBundle`, das ich nicht freigegeben habe und das nur in den gesperrten Fahrzeugbündeln steckt |
+| Gegenprobe: derselbe Purge, Inhalts-Patches fehlen | 20 | **93** |
+
+Dieselbe Zählung über alle 434 nicht gesperrten Bündel meldet 1362 Befunde an rund 220
+Bündeln (`tier0*`, `admin*`, `note*Admin`); stichprobenweise nachgesehen, stehen sie in
+keiner Loot-Gruppe, keinem Auftrag, keiner Händlerliste und keinem Rezept — Vanillas
+Testbündel. **Das ist eine Lücke der Prüfung, kein Befund am Spiel**, und sie steht als
+Folgearbeit im Plan.
+
+**Der Vorlauf nach beiden Schritten:** 2668 Operationen, 0 ohne Treffer; 271 Rezepte, 271
+erreichbar, 0 Sackgassen; 496 Auftragsbelohnungen, **0** auf eine leere Gruppe (vorher 115,
+66 davon nur auf leere).
+
+**Eine Nebenwirkung:** fünf der 26 Silber-Gruppen liegen in Vanilla auch in den Bündelgruppen
+der Abwurfkisten (`groupAirDropT1Bundles` bis `T5Bundles`). Eine Abwurfkiste kann darum statt
+nichts jetzt 300 bis 1000 Silberpfennige enthalten.
+
+**Nicht gesehen:** wie das Belohnungsfenster einen Münzstapel aus einer Loot-Gruppe zeigt;
+ob ein Bündel mit gekürzter Zufallsliste sauber öffnet (`Random_count` ist überall höchstens
+so groß wie die Liste); die neuen Namen im Spiel. Das steht in der Prüfliste des Plans.
 
 ### Rezepte — gebaut am 2026-11-22
 
