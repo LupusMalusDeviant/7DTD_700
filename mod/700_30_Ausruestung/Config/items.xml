@@ -77,7 +77,7 @@
 		     Zeit des Schleifsteins, weil man dafuer ans Feuer muss. -->
 		<item name="itm700_schmiedeflicken">
 			<property name="Extends" value="resourceForgedIron" />
-			<property name="CustomIcon" value="resourceForgedIron" />
+			<property name="CustomIcon" value="ico700_schmiedeeisen" />
 			<property name="CustomIconTint" value="d8b48a" />
 			<property name="Stacknumber" value="50" />
 			<property name="EconomicValue" value="60" />

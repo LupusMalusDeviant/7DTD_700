@@ -41,8 +41,8 @@
 		     resourceForgedIron (Schmiedeeisen) - sie ist ein Halbzeug, kein Werkzeug. -->
 		<item name="itm700_klinge">
 			<property name="Extends" value="resourceForgedIron" />
-			<property name="CustomIcon" value="resourceForgedIron" />
-			<property name="CustomIconTint" value="d8dee0" />
+			<property name="CustomIcon" value="ico700_klinge" />
+			<property name="CustomIconTint" value="ffffff" />
 			<property name="EconomicValue" value="90" />
 			<property name="Stacknumber" value="50" />
 			<property name="CraftingIngredientTime" value="8" />
@@ -160,6 +160,17 @@
 	     CustomIconTint e6dfc4 (Stand bis 2026-11-23). -->
 	<append xpath="/items/item[@name='casinoCoin']">
 		<property name="CustomIcon" value="ico700_silberpfennig" />
+	</append>
+	<!-- Schmiedeeisen und Tiegelstahl: Vanillas Bild ist ein gegossener Barren mit dem Stempel
+	     "Fe 26" - Schrift und Ordnungszahl. Eigene Bilder: ausgeschmiedete Staebe (Plan-0002
+	     WP3.6, D132). Der Farbton c2d6d6, den Vanilla dem Schmiedeeisen gibt, galt dem alten
+	     Bild und wird neutral gesetzt. Im Spiel nicht gesehen (S-09). -->
+	<append xpath="/items/item[@name='resourceForgedIron']">
+		<property name="CustomIcon" value="ico700_schmiedeeisen" />
+	</append>
+	<set xpath="/items/item[@name='resourceForgedIron']/property[@name='CustomIconTint']/@value">ffffff</set>
+	<append xpath="/items/item[@name='resourceForgedSteel']">
+		<property name="CustomIcon" value="ico700_tiegelstahl" />
 	</append>
 	<append xpath="/items/item[@name='resourceScrapIron']">
 		<property name="CustomIcon" value="oreIronBoulder" />

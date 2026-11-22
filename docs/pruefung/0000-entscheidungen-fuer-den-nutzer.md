@@ -74,6 +74,7 @@ Marke; sonst wird es zurückgebaut.
 | N-26 | [E] [S] | **241 Sprachzeilen für Lücken**, darunter **102 neue Namen** (Sprachdatei 941 → 1182 Schlüssel): Startquest („Der Weg zum Händler"), Salbenverband, Steinpfeil / Eisenpfeil / Brandpfeil und die Bolzen, Haselbogen, Jagdbogen, 15 Waffen-Aufsätze (Pechwicklung, Stahlschneide, Spaltkeil …), zwölf Stücke Unterkleidung (Leinenhemd, Gewalkte Socken …), 22 Rüstungs-Aufsätze (Wollfutter, Gürteltasche, Köcherriemen, Eberzier …), Stürme (Fauler Wind, Aschesturm). Jeder Name steht im Glossar mit „Name zu prüfen". | D129; Liste aller Namen im Glossar §2, §3, §5, §6, §8 | Namen einzeln; zwei deutsche Formen für die Reparaturangabe („zu flicken" / „ausbessern") angleichen? |
 | N-27 | [E] | Berichtigung: die Biom-Ausrüstung trägt in Vanilla Namen (Lesefehler in Balancing 0003). | `037110f` | — |
 | N-28 | [E] [S] | **Erstes eigenes Bild:** der Silberpfennig zeigt `ico700_silberpfennig` — drei gehämmerte Silberscheiben mit Perlkreis, in Blender gebaut — statt des umgebogenen Silberbrockens (N-23). Dazu das Werkzeug `tools/assets/symbole.ps1`, das Register `assets/ASSETS.md` und zwei Prüfungen. Quellbild: `assets/quelle/symbole/ico700_silberpfennig.png`. | D131, Plan-0002 WP3.4 | ob dir das Bild gefällt; ob es im Beutel erscheint (S-09). Bleibt das Feld leer, ist es eine Zeile zurück auf den Silberbrocken. |
+| N-29 | [E] [S] | **Drei weitere eigene Bilder** statt Vanillas Barren mit dem Stempel „Fe 26": **Schmiedeeisen** (auch Schmiedeflicken, getönt), **Tiegelstahl**, **Klinge**. Alle aus Blender, alle im Register. Quellbilder unter `assets/quelle/symbole/`. | D132, Plan-0002 WP3.6 | die Bilder selbst (einfach gehalten — Stäbe und eine rohe Klinge); im Spiel S-09. |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut
 
@@ -107,7 +108,7 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** (Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt) (N-03). | 5 min |
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
 | S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
-| S-09 | **Eigenes Bild im Beutel** (N-28, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
+| S-09 | **Eigenes Bild im Beutel** (N-28, N-29, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes; dazu Schmiedeeisen, Tiegelstahl, Klinge, Schmiedeflicken. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
 
 ## 7. Phase 2 — Entscheidungen aus dem Loop
 

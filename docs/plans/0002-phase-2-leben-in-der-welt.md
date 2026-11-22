@@ -37,7 +37,8 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP2.6 c/d, WP2.7 Prüfungen *symbole* und *asset-register* | gebaut, 27 Gegenproben | Vertrag 04 „Nachtrag Prüfungen der Phase 2, Teil 1" |
 | WP3.2 Beleg: Symbole aus dem Modlet | geschrieben | `57f721d`, Finding F-16 |
 | WP3.3 Lizenzlage Meshy | gelesen; **Meshy gesperrt** (HTTP 402 auf dem Gratis-Tarif) | Vertrag 05 §5.1, N-64 |
-| WP3.4 Symbol-Durchstich Silberpfennig | gebaut (Blender statt Meshy) | D131, N-28, S-09 |
+| WP3.4 Symbol-Durchstich Silberpfennig | gebaut (Blender statt Meshy) | `f174d69`, D131, N-28, S-09 |
+| WP3.6 Eigene Symbole, Rang 0 | **begonnen:** Schmiedeeisen, Tiegelstahl, Klinge (3 von rund 40). Offen: Trinkglas, die umgedeuteten Waffen, zwölf Rüstungsteile — organische Formen warten auf Meshy (N-64) | D132, N-29 |
 
 Offen aus WP2.6/WP2.7: *wesen*, *welt*, *textluecken*.
 

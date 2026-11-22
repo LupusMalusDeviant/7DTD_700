@@ -15,6 +15,9 @@ Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen S
 | Name | Art | Modlet | Benutzt von | Quelle | Beleg | Lizenz | Nennung | Beschreibung | Kosten | Stand |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `ico700_silberpfennig` | symbol | `700_20_Material` | `casinoCoin` | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
+| `ico700_schmiedeeisen` | symbol | `700_20_Material` | `resourceForgedIron`, `itm700_schmiedeflicken` (getönt) | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
+| `ico700_tiegelstahl` | symbol | `700_20_Material` | `resourceForgedSteel` | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
+| `ico700_klinge` | symbol | `700_20_Material` | `itm700_klinge` | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
 
 ## Anmerkungen zu einzelnen Stücken
 
@@ -22,3 +25,8 @@ Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen S
   Zeichen; in Blender aus Grundformen gebaut und gerendert (2026-11-23). Erstes eigenes Symbol,
   Durchstich für den Weg vom Quellbild ins Spiel (Plan-0002 WP3.4). **Im Spiel nicht gesehen** (S-09).
   Das Blender-Skript liegt nicht im Repository (Python, N-61).
+- **`ico700_schmiedeeisen`**, **`ico700_tiegelstahl`** — ausgeschmiedete Stäbe, dunkel und rostfleckig
+  (Eisen) bzw. bläulich und glatter (Stahl). Ersetzen Vanillas gegossenen Barren mit dem Stempel
+  „Fe 26" (Schrift, Ordnungszahl). Gebaut 2026-11-23 in Blender (Plan-0002 WP3.6).
+- **`ico700_klinge`** — rohe Klinge mit Angel, ohne Griff. Der Gegenstand zeigte vorher denselben
+  gestempelten Barren. Gebaut 2026-11-23 in Blender.
