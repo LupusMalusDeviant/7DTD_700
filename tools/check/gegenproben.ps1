@@ -1439,6 +1439,11 @@ Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile'
 #     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
 #     anachronisms, recipes, purge-patch, die Kette und (seit WP8.8) die Sprachschluessel
 #     koennen nicht laufen = 5 rot.
+#     Seit dem 2026-11-22 sucht check-all.ps1 auch unter SDTD_USERDATA. Die Variable wird
+#     darum ab hier bis zum Ende der Dump-Suche-Gegenproben weggenommen - sonst faende der
+#     Lauf auf einem Rechner, der sie gesetzt hat, einen echten Dump.
+$userdataVorher = $env:SDTD_USERDATA
+Remove-Item Env:SDTD_USERDATA -ErrorAction SilentlyContinue
 Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als rot' 1 @{
     SkipGegenproben = $true
     Configuration   = $Configuration
@@ -1446,6 +1451,95 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
     'Quelle: KEINE',
     'NICHT GEPRUEFT: keine Quelle',
     '7 Pruefungen, 5 rot')
+
+# ------------------------------------------------- Dump-Suche kennt -UserDataFolder (2026-11-22)
+# Mit '-UserDataFolder=<Ordner>' legt das Spiel Spielstaende unter <Ordner>\Saves ab, nicht
+# unter %APPDATA%. check-all.ps1 suchte nur unter %APPDATA% und las am 2026-11-22 nach einem
+# Start mit dem neuen Stand weiter den Dump vom Vortag: 80 Sackgassen, obwohl der neue 0
+# hatte. Vier Gegenproben, alle in einem nachgebauten Baum und mit kaputtem Spielpfad - der
+# macht vier Pruefungen rot (wie Fall 5 oben), die fuenfte Zahl haengt allein an der Quelle:
+# "4 rot" heisst Dump gefunden, "5 rot" heisst keiner.
+$dumpBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-dumpsuche-' + [Guid]::NewGuid().ToString('N'))
+try {
+    function New-ProbeDump {
+        # Legt <Wurzel>\Saves\Welt\Stand\ConfigsDump mit dem sauberen Satz an und stellt
+        # seine Aenderungszeit; gibt den Ordner zurueck.
+        param([string]$Wurzel, [datetime]$Zeit)
+        $ziel = Join-Path $Wurzel 'Saves\Welt\Stand\ConfigsDump'
+        New-Item -ItemType Directory -Force -Path $ziel | Out-Null
+        Copy-Item -Path (Join-Path $data 'sauber\*') -Destination $ziel -Recurse -Force
+        (Get-Item -LiteralPath $ziel).LastWriteTime = $Zeit
+        return $ziel
+    }
+    function New-ProbeAppdata {
+        # Legt <Wurzel>\7DaysToDie\launchersettings.json mit dem gegebenen Inhalt an.
+        param([string]$Wurzel, [string]$Inhalt)
+        New-Item -ItemType Directory -Force -Path (Join-Path $Wurzel '7DaysToDie') | Out-Null
+        [IO.File]::WriteAllText((Join-Path $Wurzel '7DaysToDie\launchersettings.json'), $Inhalt, [Text.UTF8Encoding]::new($false))
+    }
+    function Get-LauncherJson {
+        param([string]$Ordner)
+        $wert = '-UserDataFolder="' + $Ordner + '"'
+        return (@{ DefaultRunConfig = @{ UseEAC = $true; AdditionalParameters = $wert } } | ConvertTo-Json)
+    }
+    $alt = (Get-Date).AddDays(-2)
+    $neu = (Get-Date).AddDays(-1)
+
+    # (a) Der Dump liegt NUR unter dem Ordner, den das Startprogramm nennt.
+    $aAppdata = Join-Path $dumpBaum 'a\appdata'
+    $aNutzer = Join-Path $dumpBaum 'a\nutzerdaten'
+    $aDump = New-ProbeDump $aNutzer $neu
+    New-ProbeAppdata $aAppdata (Get-LauncherJson $aNutzer)
+    Test-Script 'check-all: Dump unter dem UserDataFolder des Startprogramms wird gefunden' 1 @{
+        SkipGegenproben = $true
+        Configuration   = $Configuration
+    } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $aAppdata -MustContain @(
+        "Quelle: $aDump",
+        '7 Pruefungen, 4 rot') -MustNotContain @('Quelle: KEINE')
+
+    # (b) Zwei Dumps, der unter %APPDATA% ist JUENGER: er gewinnt, nicht der Ort.
+    $bAppdata = Join-Path $dumpBaum 'b\appdata'
+    $bNutzer = Join-Path $dumpBaum 'b\nutzerdaten'
+    $bDumpNutzer = New-ProbeDump $bNutzer $alt
+    $bDumpAppdata = New-ProbeDump (Join-Path $bAppdata '7DaysToDie') $neu
+    New-ProbeAppdata $bAppdata (Get-LauncherJson $bNutzer)
+    Test-Script 'check-all: ueber alle Suchorte gewinnt der juengste Dump' 1 @{
+        SkipGegenproben = $true
+        Configuration   = $Configuration
+    } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $bAppdata -MustContain @(
+        "Quelle: $bDumpAppdata",
+        '7 Pruefungen, 4 rot') -MustNotContain @("Quelle: $bDumpNutzer")
+
+    # (c) launchersettings.json ist kaputt: Hinweis, kein Abbruch, und ohne anderen Dump
+    #     bleibt es bei "keine Quelle" mit Ergebniszeile.
+    $cAppdata = Join-Path $dumpBaum 'c\appdata'
+    New-ProbeAppdata $cAppdata '{ "DefaultRunConfig" : { "AdditionalParameters" : '
+    Test-Script 'check-all: kaputte launchersettings.json ist ein Hinweis, kein Abbruch' 1 @{
+        SkipGegenproben = $true
+        Configuration   = $Configuration
+    } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $cAppdata -MustContain @(
+        'launchersettings.json ist nicht lesbar',
+        'Quelle: KEINE',
+        '7 Pruefungen, 5 rot')
+
+    # (d) Kein Startprogramm, aber SDTD_USERDATA zeigt auf den Ordner.
+    $dAppdata = Join-Path $dumpBaum 'd\appdata'
+    $dNutzer = Join-Path $dumpBaum 'd\nutzerdaten'
+    New-Item -ItemType Directory -Force -Path $dAppdata | Out-Null
+    $dDump = New-ProbeDump $dNutzer $neu
+    $env:SDTD_USERDATA = $dNutzer
+    Test-Script 'check-all: Dump unter SDTD_USERDATA wird gefunden' 1 @{
+        SkipGegenproben = $true
+        Configuration   = $Configuration
+    } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $dAppdata -MustContain @(
+        "Quelle: $dDump",
+        '7 Pruefungen, 4 rot') -MustNotContain @('Quelle: KEINE')
+}
+finally {
+    if ($userdataVorher) { $env:SDTD_USERDATA = $userdataVorher }
+    else { Remove-Item Env:SDTD_USERDATA -ErrorAction SilentlyContinue }
+    if (Test-Path -LiteralPath $dumpBaum) { Remove-Item -LiteralPath $dumpBaum -Recurse -Force }
+}
 
 # ------------------------------------------------- Review zu WP8.6 (2026-11-21)
 # Der Name der Mod steht in EINER Zeile der Sprachdatei (D6). Abgesichert war das mit einem

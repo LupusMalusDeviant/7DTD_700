@@ -3240,3 +3240,52 @@ byte-gleich mit dem Stand davor.
 11 Befunde, die Ausgabe Zeile für Zeile gleich mit der vor der Änderung. Die Tabelle im
 „Nachtrag WP8.9" gilt weiter; insbesondere hat Regel 3 dort keine verschluckte Stelle
 aufgedeckt.
+
+## Nachtrag Dump-Suche, 2026-11-22 — `check-all.ps1` kennt `-UserDataFolder`, **Abnahme offen**
+
+Gebaut auf ausdrücklichen Auftrag des Nutzers vom 2026-11-22 („Ja, bau sie"), nach der
+Block-Abnahme desselben Tages; dieser Nachtrag selbst ist noch nicht abgenommen.
+
+**Der Fehler.** §1 nennt als Ort des Dumps `%APPDATA%\7DaysToDie\Saves\…\ConfigsDump`. Das
+stimmt nur für die Vorgabe des Spiels: mit `-UserDataFolder=<Ordner>` liegen Spielstände unter
+`<Ordner>\Saves`. Auf diesem Rechner gibt das Startprogramm des Spiels den Schalter bei jedem
+Start mit. `check-all.ps1` las deshalb am 2026-11-22 nach einem Start mit dem neuen Stand
+weiter den Dump vom Vortag — 80 Sackgassen, obwohl der neue Dump 0 hatte.
+
+**Die Regel.** Ohne `-Source` sucht `check-all.ps1` an bis zu drei Orten, und über alle Orte
+gewinnt der **jüngste** Dump (Änderungszeit des Ordners `ConfigsDump`):
+
+| # | Ort | Woher |
+|---|---|---|
+| 1 | `%APPDATA%\7DaysToDie\Saves` | Vorgabe des Spiels, wie bisher |
+| 2 | `<Ordner>\Saves` | `<Ordner>` aus `%APPDATA%\7DaysToDie\launchersettings.json`, Feld `DefaultRunConfig.AdditionalParameters`, Schalter `-UserDataFolder=` (mit oder ohne Anführungszeichen, Groß-/Kleinschreibung egal) |
+| 3 | `%SDTD_USERDATA%\Saves` | Umgebungsvariable, falls gesetzt — für Starts am Startprogramm vorbei |
+
+Die Ausgabe nennt die Suchorte in einer Zeile `Gesucht unter:` vor der Zeile `Quelle:`. Eine
+unlesbare `launchersettings.json` und ein ungültiges `SDTD_USERDATA` sind je ein Hinweis, kein
+Abbruch; der Ort wird übergangen. `-Source` geht allem vor, wie bisher. Kein Pfad ist im
+Skript fest eingetragen.
+
+**Grenzen.** (1) „Der jüngste Dump" ist der des letzten Spielstarts, **auch wenn der ohne die
+Mod lief** — dann wird Vanilla geprüft und `anachronisms` ist rot. Das galt schon vorher; die
+Zeile `Quelle:` zu lesen bleibt Pflicht. (2) Ein `-UserDataFolder`, der nur auf einer
+Befehlszeile stand und in keiner der drei Quellen, wird nicht gefunden. (3) Gelesen wird nur
+`DefaultRunConfig`; andere Abschnitte der Datei nicht.
+
+**Gegenproben** (218 statt 214, alle in einem nachgebauten Baum unter dem Temp-Ordner, mit
+kaputtem Spielpfad — „4 rot" heißt Dump gefunden, „5 rot" heißt keiner):
+
+| Lauf | Erwartet |
+|---|---|
+| Dump nur unter dem Ordner aus `launchersettings.json` | `Quelle:` nennt ihn, 4 rot |
+| zwei Dumps, der unter `%APPDATA%` ist jünger | `Quelle:` nennt den jüngeren, nicht den des Startprogramms |
+| `launchersettings.json` ist kaputtes JSON | Hinweis, `Quelle: KEINE`, Ergebniszeile mit 5 rot |
+| kein Startprogramm, `SDTD_USERDATA` gesetzt | `Quelle:` nennt den Dump dort, 4 rot |
+
+**Drei Verfälschungen, jede macht ihre Gegenprobe rot:** der Schalter wird in der Datei nicht
+erkannt (Lauf 1 rot); `SDTD_USERDATA` wird nicht gelesen (Lauf 4 rot); die Sortierung läuft
+aufsteigend (Lauf 2 rot). Das Skript ist danach byte-gleich mit dem Stand davor.
+
+**Am echten Rechner:** `check-all.ps1` ohne Zusatz nennt
+`Gesucht unter: …\AppData\Roaming\7DaysToDie\Saves; C:\Users\Anwender\Saves`, liest den Dump
+von 22:08 und endet mit 218 Gegenproben, 0 fehlgeschlagen; 7 Prüfungen, 0 rot, Exit 0.

@@ -2364,7 +2364,10 @@ werden:
   `skillGeneralPerks` ist damit am Bildschirm belegt. (2) **`check-all.ps1`
   findet diesen Dump nicht von selbst:** das Spiel lief mit `-UserDataFolder=C:\Users\…`,
   die Spielstände liegen damit nicht unter `%APPDATA%\7DaysToDie\Saves`, wo das Skript
-  sucht; ohne `-Source` las es weiter den Dump vom 21. November.
+  sucht; ohne `-Source` las es weiter den Dump vom 21. November. **Behoben am 2026-11-22:**
+  die Suche liest den `-UserDataFolder` aus `launchersettings.json` (und `SDTD_USERDATA`),
+  der jüngste Dump gewinnt — Vertrag 04 „Nachtrag Dump-Suche", Abnahme offen; vier neue
+  Gegenproben, drei Verfälschungen.
 - **Entschieden, noch nicht gebaut** (2026-11-22, D87 und D88). Jeder Punkt ist
   `[Claude-prüfbar]` und bekommt Namen in beiden Sprachen, Glossar-Einträge und Prüflauf:
   1. *WP5.2 Fernkampf ist frei.* Langbogen (`gunBowT3CompoundBow`), Armbrust
@@ -2417,8 +2420,9 @@ werden:
   Gruppen; am Stand davor trifft er die Zahlen des ConfigsDumps (80, 115). ~~`recipes` in
   `check-all.ps1` bleibt rot, bis ein neuer Dump vorliegt (Prüfliste 25).~~ **Belegt am
   2026-11-22 am Dump des Spiels von 22:08: `recipes` 0 Sackgassen, alle 7 Prüfungen grün**
-  (Prüfliste 25 a). Ohne `-Source` liest `check-all.ps1` weiter den alten Dump und bleibt
-  rot, solange die Dump-Suche `-UserDataFolder` nicht kennt. Die 0 leeren Belohnungen sind
+  (Prüfliste 25 a). ~~Ohne `-Source` liest `check-all.ps1` weiter den alten Dump und bleibt
+  rot, solange die Dump-Suche `-UserDataFolder` nicht kennt.~~ Seit demselben Abend findet
+  `check-all.ps1` diesen Dump ohne Zusatz und ist grün. Die 0 leeren Belohnungen sind
   weiter nur gerechnet, im Spiel sind Rezepte und Belohnungen nicht angesehen (25 b bis d).
   **Folgearbeit — eine Lücke der Prüfung:** `mod700check` kennt den Inhalt eines Bündels
   (`Create_item`, `Random_item`) nicht als Weg zu einem Gegenstand. Ein freigegebenes Bündel

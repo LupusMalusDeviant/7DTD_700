@@ -11,7 +11,10 @@
     Die Quelle ist entweder ein ConfigsDump des Spiels (gemergt, gilt als Nachweis) oder
     Data/Config der Installation (Vanilla, nur Vorlauf). Den Dump legt das Spiel bei jedem
     Start selbst an, unter
-      %APPDATA%\7DaysToDie\Saves\<Welt>\<Spielstand>\ConfigsDump\
+      <Nutzerdaten>\Saves\<Welt>\<Spielstand>\ConfigsDump\
+    <Nutzerdaten> ist %APPDATA%\7DaysToDie oder der Ordner, den '-UserDataFolder' nennt.
+    Gesucht wird unter %APPDATA%, unter dem UserDataFolder aus launchersettings.json und
+    unter SDTD_USERDATA (falls gesetzt); der juengste Dump gewinnt.
 
 .PARAMETER Source
     Ordner mit Config-XML. Ohne Angabe wird der neueste ConfigsDump genommen, sonst
@@ -133,16 +136,54 @@ if ($env:SDTD_PATH) {
 }
 
 # ---------------------------------------------------- Quelle bestimmen
+# Das Spiel legt Spielstaende nicht immer unter %APPDATA% ab: mit '-UserDataFolder=<Ordner>'
+# liegen sie unter <Ordner>\Saves. Bis zum 2026-11-22 suchte dieses Skript nur unter
+# %APPDATA% - und las nach einem Start mit -UserDataFolder weiter den alten Dump: 80
+# Sackgassen, obwohl der neue Dump 0 hatte. Gesucht wird darum an bis zu drei Orten, und es
+# gewinnt der JUENGSTE Dump ueber alle Orte:
+#   (1) %APPDATA%\7DaysToDie\Saves                    - Vorgabe des Spiels
+#   (2) der Ordner aus %APPDATA%\7DaysToDie\launchersettings.json
+#       (DefaultRunConfig.AdditionalParameters, '-UserDataFolder=...') - was das
+#       Startprogramm des Spiels bei jedem Start mitgibt
+#   (3) SDTD_USERDATA, falls gesetzt                  - fuer Starts am Startprogramm vorbei
+# Ein Ort, der sich nicht lesen laesst, wird genannt und uebergangen; er bricht nichts ab.
+$suchorte = @()
 if (-not $Source) {
-    $dumps = @()
-    try {
-        $saves = [IO.Path]::Combine($env:APPDATA, '7DaysToDie\Saves')
-        if (Test-Path -LiteralPath $saves) {
-            $dumps = @(Get-ChildItem -LiteralPath $saves -Recurse -Directory -Filter 'ConfigsDump' -ErrorAction SilentlyContinue |
-                Sort-Object LastWriteTime -Descending)
+    if ($env:APPDATA) {
+        try { $suchorte += [IO.Path]::Combine($env:APPDATA, '7DaysToDie\Saves') } catch { }
+
+        try {
+            $launcher = [IO.Path]::Combine($env:APPDATA, '7DaysToDie\launchersettings.json')
+            if (Test-Path -LiteralPath $launcher) {
+                $einstellungen = Get-Content -LiteralPath $launcher -Raw -Encoding UTF8 | ConvertFrom-Json
+                $zusatz = [string]$einstellungen.DefaultRunConfig.AdditionalParameters
+                if ($zusatz -match '(?i)-UserDataFolder=(?:"([^"]+)"|(\S+))') {
+                    $ordner = if ($Matches[1]) { $Matches[1] } else { $Matches[2] }
+                    $suchorte += [IO.Path]::Combine($ordner, 'Saves')
+                }
+            }
+        }
+        catch {
+            Write-Output "Hinweis: launchersettings.json ist nicht lesbar - ein UserDataFolder des Startprogramms bleibt unbeachtet."
         }
     }
-    catch { $dumps = @() }
+
+    if ($env:SDTD_USERDATA) {
+        try { $suchorte += [IO.Path]::Combine($env:SDTD_USERDATA, 'Saves') }
+        catch { Write-Output "Hinweis: SDTD_USERDATA ist kein gueltiger Pfad und bleibt unbeachtet: $($env:SDTD_USERDATA)" }
+    }
+
+    $suchorte = @($suchorte | Select-Object -Unique)
+    $dumps = @()
+    foreach ($ort in $suchorte) {
+        try {
+            if (Test-Path -LiteralPath $ort) {
+                $dumps += @(Get-ChildItem -LiteralPath $ort -Recurse -Directory -Filter 'ConfigsDump' -ErrorAction SilentlyContinue)
+            }
+        }
+        catch { }
+    }
+    $dumps = @($dumps | Sort-Object LastWriteTime -Descending)
 
     if ($dumps.Count -gt 0) { $Source = $dumps[0].FullName }
     elseif ($spielConfig) { $Source = $spielConfig }
@@ -150,6 +191,8 @@ if (-not $Source) {
 
 Write-Output ""
 Write-Output "==== Inhaltspruefungen ===="
+
+if ($suchorte.Count -gt 0) { Write-Output ("Gesucht unter: " + ($suchorte -join '; ')) }
 
 if ($Source) {
     Write-Output "Quelle: $Source"
@@ -160,7 +203,7 @@ else {
     # Keine Quelle ist "zwei Pruefungen nicht gelaufen", kein Abbruch. Vorher stand hier ein
     # 'throw' - der Lauf endete ohne "N Pruefungen, M rot", und wer nur den Ausgang liest,
     # sah einen Fehler des Skripts statt zweier roter Pruefungen.
-    Write-Output "Quelle: KEINE - kein ConfigsDump unter %APPDATA% und kein gueltiger SDTD_PATH. -Source angeben."
+    Write-Output "Quelle: KEINE - kein ConfigsDump an den Suchorten und kein gueltiger SDTD_PATH. -Source angeben."
     foreach ($ohne in 'anachronisms', 'recipes') {
         $ran++
         $red++
