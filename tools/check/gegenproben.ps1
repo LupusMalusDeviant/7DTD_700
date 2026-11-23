@@ -598,7 +598,9 @@ Test-Output 'Herausforderung mit gesperrtem Ziel faellt auf' 1 `
                    'ziel-nennt-gesperrtes: zielListe',
                    (Format-Zahl 'herausforderungen' 7),
                    (Format-Zahl 'unerfuellbar_gesperrt' 2),
-                   (Format-Zahl 'unerfuellbar_ohne_weg' 0)) `
+                   (Format-Zahl 'unerfuellbar_ohne_weg' 0),
+                   (Format-Zahl 'verweise_auf_fehlendes' 0),
+                   (Format-Zahl 'gruppen_ohne_herausforderung' 0)) `
     -MustNotContain @('unerfuellbares-ziel: zielLebt',
                       'unerfuellbares-ziel: zielHandFrei',
                       'unerfuellbares-ziel: zielListe',
@@ -678,6 +680,30 @@ Test-Case 'Zielaufschub ohne Kennung' 2 @(
     'anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-ohne-muster.txt'))
 Test-Case 'Leermeldung neben einem Zielaufschub ist ein Widerspruch' 2 @(
     'anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-und-leermeldung.txt'))
+
+# Z11. Verweise ins Leere (D139). Seit unser Modlet Herausforderungen entfernt, kann ein
+#      Name zurueckbleiben, den niemand mehr traegt: die Gruppe einer Herausforderung, das
+#      Ziel 'ChallengeComplete' (auf eine Herausforderung und auf eine Gruppe), die Liste der
+#      Aktion 'CompleteChallenge' in gameevents.xml - und eine Gruppe, die leer geworden ist.
+#      Das Spiel prueft keinen dieser Namen vorher (Finding F-18). Alle Ziele im Pruefsatz
+#      sind erfuellbar: rot machen ihn allein die Verweise. Eine andere Aktion mit einer
+#      Eigenschaft gleichen Namens zaehlt nicht.
+Test-Output 'Verweise auf fehlende Herausforderung und Gruppe, leere Gruppe' 1 `
+    @('anachronisms', (Join-Path $data 'ziele-verweise'), '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('herausforderung-verweis-fehlt: zielOhneGruppe',
+                   'herausforderung-verweis-fehlt: zielNenntFehlende',
+                   "Herausforderung 'zielEntfernt'",
+                   'herausforderung-verweis-fehlt: zielNenntFehlendeGruppe',
+                   "Gruppe 'pruefGruppeFort'",
+                   'herausforderung-verweis-fehlt: zielEntfernt',
+                   'gruppe-ohne-herausforderung: pruefGruppeLeer',
+                   (Format-Zahl 'verweise_auf_fehlendes' 4),
+                   (Format-Zahl 'gruppen_ohne_herausforderung' 1)) `
+    -MustNotContain @('unerfuellbares-ziel',
+                      'zielGanzAnderes',
+                      'herausforderung-verweis-fehlt: zielNenntVorhandene',
+                      'herausforderung-verweis-fehlt: zielLebt',
+                      'gruppe-ohne-herausforderung: pruefGruppe ')
 
 Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="

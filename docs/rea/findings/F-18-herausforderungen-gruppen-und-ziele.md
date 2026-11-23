@@ -615,6 +615,8 @@ Einträge einlösen, speichern, das Modlet mit geänderter `challenges.xml` eins
 - **Die Zielprüfung im Werkzeug** (`anachronisms`, Regel `unerfuellbares-ziel`; Vertrag 04,
   Nachtrag Ziele der Herausforderungen, D138) liest eine Liste als Entweder-oder (hier §7,
   `CureDebuff`) und meldet einen unbekannten Namen, weil das Spiel es nicht tut (§7.8).
-- **Nicht gebaut:** das Entfernen der zehn ohne Gegenstück (Empfehlung in D138) und die
-  Vorprüfung der Verweise aus §6 (`group`, `is_group`, `CompleteChallenge`), die erst mit dem
-  Entfernen nötig wird. Spieltest: S-13 der Entscheidungsliste.
+- **Zehn ohne Gegenstück entfernt** (D139): Sammler 8, Bauer 4, Heiler 8; kein Verweis zeigte
+  auf eine der zehn. Dazu die Vorprüfung der Verweise aus §6 (`group`, `ChallengeComplete` mit
+  und ohne `is_group`, `CompleteChallenge`) und der leeren Gruppe aus §3 im Werkzeug
+  (`herausforderung-verweis-fehlt`, `gruppe-ohne-herausforderung`).
+- **Offen bleibt der Beweis** aus „Offen" Nr. 1: Spieltest S-13 der Entscheidungsliste.

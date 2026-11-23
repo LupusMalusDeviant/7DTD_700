@@ -166,6 +166,8 @@ internal static class ChallengeTargets
                 + "ist falsch geschrieben.");
         }
 
+        References(report, source, document);
+
         report.Limitation(
             "Die Zielpruefung liest an einem Ziel nur Kennungen von Gegenstaenden und Bloecken "
             + "(item, block, alternate_item, needed_resource, held mit required_held). Ob es "
@@ -173,6 +175,140 @@ internal static class ChallengeTargets
             + "(Kill, EnterBiome, MeetTrader, QuestComplete, debuff), sieht sie nicht; ebenso "
             + "wenig, ob eine Menge erreichbar ist oder ob das Spiel ein Ziel ueberhaupt "
             + "zaehlt. Eine Liste gilt als Entweder-oder - das ist eine Annahme.");
+    }
+
+    /// <summary>
+    /// Verweise zwischen Herausforderungen, Gruppen und der Abschluss-Aktion. Noetig, seit
+    /// unser Modlet Herausforderungen ENTFERNT (D139): nach Finding F-18 schlaegt das Spiel
+    /// drei dieser Namen ohne Vorpruefung nach - eine Herausforderung in einer Gruppe, die
+    /// es nicht gibt, ein Ziel 'ChallengeComplete' auf eine fehlende Gruppe, und die
+    /// Namensliste der Aktion 'CompleteChallenge' in gameevents.xml. Eine leere Gruppe gilt
+    /// sofort als vollstaendig, ihre Zeile bleibt stehen und die Belohnung kommt nie.
+    /// </summary>
+    private static void References(Report report, ConfigSource source, XDocument document)
+    {
+        var groups = new HashSet<string>(StringComparer.Ordinal);
+        foreach (XElement group in document.Descendants("challenge_group"))
+        {
+            if (group.Attribute("name")?.Value is string groupName && groupName.Length > 0)
+            {
+                groups.Add(groupName);
+            }
+        }
+
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        var members = new Dictionary<string, int>(StringComparer.Ordinal);
+        int missing = 0;
+
+        foreach (XElement challenge in document.Descendants("challenge"))
+        {
+            string? name = challenge.Attribute("name")?.Value;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                continue;
+            }
+
+            names.Add(name);
+            string? group = challenge.Attribute("group")?.Value;
+            if (string.IsNullOrWhiteSpace(group))
+            {
+                continue;
+            }
+
+            members[group] = members.GetValueOrDefault(group) + 1;
+            if (!groups.Contains(group))
+            {
+                missing++;
+                report.Error("herausforderung-verweis-fehlt", name,
+                    $"steht in der Gruppe '{group}', und die gibt es nicht "
+                    + $"(challenges.xml:{((IXmlLineInfo)challenge).LineNumber}). Das Spiel "
+                    + "schlaegt die Gruppe ohne Vorpruefung nach (Finding F-18).");
+            }
+        }
+
+        foreach (XElement challenge in document.Descendants("challenge"))
+        {
+            string owner = challenge.Attribute("name")?.Value ?? "(ohne name)";
+            foreach (XElement objective in challenge.Elements("objective"))
+            {
+                if (objective.Attribute("type")?.Value != "ChallengeComplete")
+                {
+                    continue;
+                }
+
+                bool isGroup = string.Equals(objective.Attribute("is_group")?.Value, "true",
+                    StringComparison.OrdinalIgnoreCase);
+                foreach (string target in Values(objective, "challenge"))
+                {
+                    if (isGroup ? groups.Contains(target) : names.Contains(target))
+                    {
+                        continue;
+                    }
+
+                    missing++;
+                    report.Error("herausforderung-verweis-fehlt", owner,
+                        $"Ziel ChallengeComplete nennt die {(isGroup ? "Gruppe" : "Herausforderung")} "
+                        + $"'{target}', und die gibt es nicht "
+                        + $"(challenges.xml:{((IXmlLineInfo)objective).LineNumber}).");
+                }
+            }
+        }
+
+        // Die Abschluss-Aktion: <action class="CompleteChallenge"> mit der Namensliste in
+        // <property name="challenges" value="a,b,c"/>.
+        XDocument? events = source.Load("gameevents.xml");
+        if (events is not null)
+        {
+            foreach (XElement action in events.Descendants("action"))
+            {
+                if (action.Attribute("class")?.Value != "CompleteChallenge")
+                {
+                    continue;
+                }
+
+                foreach (XElement property in action.Elements("property"))
+                {
+                    if (property.Attribute("name")?.Value != "challenges")
+                    {
+                        continue;
+                    }
+
+                    foreach (string target in Values(property, "value"))
+                    {
+                        if (names.Contains(target))
+                        {
+                            continue;
+                        }
+
+                        missing++;
+                        report.Error("herausforderung-verweis-fehlt", target,
+                            "die Aktion CompleteChallenge nennt diese Herausforderung, und es "
+                            + $"gibt sie nicht (gameevents.xml:{((IXmlLineInfo)property).LineNumber}). "
+                            + "Die Aktion greift ohne Vorpruefung zu (Finding F-18).");
+                    }
+                }
+            }
+        }
+
+        int empty = 0;
+        foreach (string group in groups.OrderBy(g => g, StringComparer.Ordinal))
+        {
+            if (members.GetValueOrDefault(group) > 0)
+            {
+                continue;
+            }
+
+            empty++;
+            report.Error("gruppe-ohne-herausforderung", group,
+                "die Gruppe hat keine Herausforderung mehr. Sie gilt sofort als vollstaendig, "
+                + "ihre Zeile bleibt im Fenster stehen, und die Gruppenbelohnung kommt nie "
+                + "(Finding F-18). Die Gruppe mit entfernen.");
+        }
+
+        report.Count("herausforderungsgruppen", groups.Count);
+        report.Count("verweise_auf_fehlendes", missing);
+        report.Count("gruppen_ohne_herausforderung", empty);
+        report.Count("kleinste_gruppe", members.Count == 0 ? 0 : members.Values.Min());
     }
 
     /// <summary>

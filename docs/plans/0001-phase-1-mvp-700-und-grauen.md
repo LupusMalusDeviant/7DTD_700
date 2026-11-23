@@ -2590,8 +2590,8 @@ werden:
   Gefahren in Phase 1 an sind und was dann gegen sie hilft, steht in keinem Dokument.
   *Stand 2026-11-23 (Plan-0002 WP1.6, D137):* neu gemessen, die 35 stimmen; neun haben ein
   lebendes Gegenstück bekommen (`700_50_Fortschritt/Config/challenges.xml`), die 16 der
-  Biom-Reihen sind mit der Vorlage „Jahr 700" verborgen (D136), zehn stehen noch. Frage (2)
-  ist weiter offen.
+  Biom-Reihen sind mit der Vorlage „Jahr 700" verborgen (D136), zehn sind entfernt (D139).
+  Frage (2) ist gebaut: `anachronisms` meldet `unerfuellbares-ziel` (D138).
 - **Felder ~~lassen~~ ließen sich nicht bauen** (gefunden ebenda) — **behoben am 2026-11-22
   (D89), im Spiel nicht gesehen.** Vanillas Rezept für das Feld
   (`farmPlotBlockVariantHelper`) verlangt 25 `resourcePotassiumNitratePowder`, und das ist

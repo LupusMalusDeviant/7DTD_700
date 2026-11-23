@@ -245,8 +245,14 @@ Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D137). Abnahme: N
    seine Stelle tritt, ist eine Entscheidung, keine Ableitung aus der Sperrliste.
 2. Die Datei ist von Hand geschrieben (D53) und **biegt Ziele um**: `setattribute` und
    `removeattribute` an `challenge` und `objective`, `remove` nur an einem einzelnen `objective`.
-   Sie entfernt **keinen** Knoten `challenge` und **keine** Gruppe, solange nicht gelesen ist,
-   was ein alter Spielstand mit einer fehlenden Herausforderung tut (Finding F-18).
+   ~~Sie entfernt **keinen** Knoten `challenge` und **keine** Gruppe, solange nicht gelesen ist,
+   was ein alter Spielstand mit einer fehlenden Herausforderung tut (Finding F-18).~~
+   **Geändert am selben Tag (D139), nachdem F-18 gelesen war:** die Datei darf eine einzelne
+   Herausforderung **entfernen**, wenn (a) sich ihr Ziel nicht ersetzen lässt, (b) ihre Gruppe
+   danach mindestens eine Herausforderung behält und (c) kein Verweis auf sie zeigt (Ziel
+   `ChallengeComplete`, Aktion `CompleteChallenge` in `gameevents.xml`). (b) und (c) prüft
+   `anachronisms` am Dump (Vertrag 04, Nachtrag Ziele). Eine **Gruppe** entfernt die Datei
+   weiter nicht.
 3. Die Kennung einer Herausforderung bleibt Vanillas Kennung, auch wenn das Ziel ein anderes
    ist (`craftPipeBomb` heißt im Spiel „Webstuhl bauen"). Das ist gewollt: Gruppe, Platz,
    Belohnung und der Fortschritt alter Spielstände hängen an der Kennung.
@@ -259,6 +265,6 @@ Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D137). Abnahme: N
 **Grenzen.** ~~Keine Prüfung im Repository weiß, ob ein Ziel erfüllbar ist — weder die neun neuen
 noch die zehn, die stehen bleiben. Die Zahl „35" ist mit einem Skript außerhalb des Repositorys
 gemessen.~~ *Seit demselben Tag prüft `anachronisms` die Ziele (Vertrag 04, Nachtrag Ziele der
-Herausforderungen); die zehn stehen in `aufschub.txt`.* Ob das Spiel die neuen Ziele zählt, ist
-nicht gesehen (S-12). Finding F-18 ist gelesen: Nr. 2 darf fallen, sobald das Entfernen der zehn
-abgenommen ist (D138).
+Herausforderungen); die zehn sind entfernt (D139).* Ob das Spiel die neuen Ziele zählt, ist
+nicht gesehen (S-12). Dass ein alter Spielstand eine entfernte Herausforderung verträgt, ist
+gelesen, nicht gesehen (F-18, S-13).

@@ -103,18 +103,12 @@ ziel:desertSurvival*      # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4
 ziel:snowSurvival*        # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
 ziel:wastelandSurvival*   # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
 #
-# Zehn ohne lebendes Gegenstueck (D137). Sie stehen wie in Vanilla, bis entschieden ist,
-# ob sie verborgen, entfernt oder umgedeutet werden (Entscheidungsliste N-33, Finding F-18).
-ziel:gathererPotassium    # WP1.6: Salpeter ist gesperrt, kein Gegenstueck (D137, N-33)
-ziel:gathererOilShale     # WP1.6: Oelschiefer ist gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingCoffeeBeans   # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingYucca         # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingBlueberry     # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingPumpkin       # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingCorn          # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:farmingPotato        # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
-ziel:healerConcussion     # WP1.6: Schmerzmittel gesperrt, kein lebendes Mittel (D137, N-33)
-ziel:healerFatigued       # WP1.6: Vitamine gesperrt, kein lebendes Mittel (D137, N-33)
+# Zehn ohne lebendes Gegenstueck (D137) standen hier vom 2026-11-23 an fuer wenige Stunden
+# (gathererPotassium, gathererOilShale, farmingCoffeeBeans, farmingYucca, farmingBlueberry,
+# farmingPumpkin, farmingCorn, farmingPotato, healerConcussion, healerFatigued). Sie sind
+# EINGELOEST mit D139: 700_50_Fortschritt entfernt sie, seit Finding F-18 gelesen hat, dass
+# eine Gruppe schrumpfen darf. Am Spiel-Dump vom 22.11. stehen sie noch und sind dort rot -
+# der Dump ist alt, der Aufschub waere es auch.
 # resourceArmorCraftingKit ist mit WP5.5 EINGELOEST und steht darum nicht mehr hier.
 # Gemessen: nach dem Purge verlangen ihn nur noch vier Rezepte, die Biom-Abzeichen
 # biomeWeatherItem1 bis 4 - und die sind ueber resourceScrapPolymers ohnehin schon tot.

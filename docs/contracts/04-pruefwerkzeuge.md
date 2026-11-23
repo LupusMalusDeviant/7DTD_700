@@ -3652,6 +3652,30 @@ Gegenstand hat keinen Weg mehr und darum kein Urteil — die Aufgabe verlangt ih
 `purge-patch` und `ungeprueft` lesen dieselbe Datei und beachten die `ziel:`-Zeilen nicht.
 `check-all.ps1` ändert sich nicht.
 
+### Verweise ins Leere (ergänzt am selben Tag, D139)
+
+Seit `700_50_Fortschritt` Herausforderungen **entfernt**, kann ein Name zurückbleiben, den
+niemand mehr trägt. Nach Finding F-18 §6 schlägt das Spiel diese Namen **ohne Vorprüfung** nach.
+
+11. Fehler **`herausforderung-verweis-fehlt`**, je Stelle einer:
+    - eine `<challenge group="X">`, und es gibt keine `<challenge_group name="X">`;
+    - ein Ziel `ChallengeComplete challenge="X"` auf eine Herausforderung, die es nicht gibt —
+      mit `is_group="true"` auf eine Gruppe, die es nicht gibt;
+    - ein Name in `<action class="CompleteChallenge">` → `<property name="challenges" value="…">`
+      in `gameevents.xml`, den keine Herausforderung trägt. Fehlt `gameevents.xml` in der
+      Quelle, entfällt dieser Teil ohne Meldung.
+12. Fehler **`gruppe-ohne-herausforderung`**: eine `<challenge_group>`, der keine
+    Herausforderung mehr angehört. Sie gälte sofort als vollständig, ihre Zeile bliebe stehen,
+    die Belohnung käme nie (F-18 §3).
+13. Zähler: `herausforderungsgruppen`, `verweise_auf_fehlendes`, `gruppen_ohne_herausforderung`,
+    `kleinste_gruppe` (die Mitgliederzahl der kleinsten Gruppe, die Mitglieder hat).
+14. Für diese beiden Fehler gibt es **keinen Aufschub**: ein Verweis ins Leere ist kein Stand,
+    den ein späteres Arbeitspaket einlöst, sondern ein möglicher Abbruch beim Laden.
+
+An Vanilla: `herausforderungsgruppen 19`, `verweise_auf_fehlendes 0`,
+`gruppen_ohne_herausforderung 0`, `kleinste_gruppe 7`. Nicht geprüft: `hidden_by` (nach F-18
+abgesichert), `category` einer Gruppe, mehr als zehn in einer Gruppe.
+
 ### Kalibrierung
 
 Gegen das unveränderte `Data/Config` von V 3.40 b10 mit der heutigen Sperrliste:
@@ -3671,9 +3695,11 @@ Messung waren es fünf Ziele mit drei Kennungen (`frameShapes`, `woodShapes`,
   `block_tag` nur an Blöcken mit dem Tag, an Kadavern nur mit `is_block="false"`; `CureDebuff`
   und `UseItem` nur Gegenstände der Aktion „Essen" (alles Finding F-18). Ein Gegenstand, der
   nur im Loot liegt, gilt bei `Harvest` als „mit Weg".
-- **Verweise ohne Vorprüfung im Spiel** (F-18 §6) sind nicht abgedeckt: `group="X"` ohne Gruppe,
-  `ChallengeComplete … is_group` auf eine fehlende Gruppe, die Liste `CompleteChallenge` in
-  `gameevents.xml`. Sie werden nötig, sobald eine Herausforderung oder Gruppe entfernt wird.
+- ~~**Verweise ohne Vorprüfung im Spiel** (F-18 §6) sind nicht abgedeckt.~~ *Seit D139
+  abgedeckt, siehe „Verweise ins Leere".* Sie laufen wie alles in `anachronisms` gegen den
+  **Dump**; am Repository allein (vor einem Spielstart) sieht sie nur der Vorlauf.
+- Was ein **Spielereignis** ausgibt (`gameevents.xml`, Aktionen wie `AddItems`; 13 Stellen in
+  V 3.40 b10), ist kein Weg in Abschnitt 3 — ungemessen, ob darunter Gesperrtes ist.
 - Was aus Wesen fällt (`entityclasses.xml`, `<drop>`), ist weiter **kein Weg** in Abschnitt 3.
   Gemessen am 2026-11-23: sieben Kennungen, alle haben auch einen anderen Weg, keine ist
   gesperrt — heute kein Loch, aber eines, sobald ein Wesen etwas fallen lässt, das sonst
@@ -3701,8 +3727,19 @@ Elf neue Gegenproben in `gegenproben.ps1` (Abschnitt „Ziele der Herausforderun
 9. Quelle ohne `challenges.xml`: gesagt, nicht rot.
 10. `ziel:` ohne Kennung: Exit 2.
 11. Leermeldung neben Zielaufschub: Exit 2.
+12. (D139) Prüfsatz `ziele-verweise`: Gruppe fehlt, `ChallengeComplete` auf fehlende
+    Herausforderung und auf fehlende Gruppe, `CompleteChallenge` nennt eine fehlende, eine
+    Gruppe ist leer — vier Verweise und eine leere Gruppe, Exit 1; die vorhandenen Verweise
+    und eine fremde Aktion mit gleichnamiger Eigenschaft bleiben ungenannt. Der saubere
+    Prüfsatz aus Nr. 1 zeigt für beide Zähler 0.
 
 Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **291 Gegenproben, 0
 fehlgeschlagen; 10 Prüfungen, 1 rot** (`anachronisms` am Dump vom 22.11., jetzt 13 Fehler: die
 vier alten und die neun Ziele, die der Dump noch in Vanillas Fassung zeigt). Am Vorlauf:
 `unerfuellbare_herausforderungen 26`, `davon_aufgeschoben 26`, 0 rot.
+
+Lauf nach D139 (zehn Herausforderungen entfernt, zehn Zielaufschübe eingelöst, Verweisprüfung):
+**292 Gegenproben, 0 fehlgeschlagen; 10 Prüfungen, 1 rot** — `anachronisms` am Dump vom 22.11.
+mit 23 Fehlern (die vier alten und 19 Ziele: der Dump kennt weder die neun umgebogenen noch die
+zehn entfernten). Am Vorlauf: `herausforderungen 165`, `unerfuellbare_herausforderungen 16`,
+`davon_aufgeschoben 16`, `verweise_auf_fehlendes 0`, `kleinste_gruppe 4`, 0 rot.

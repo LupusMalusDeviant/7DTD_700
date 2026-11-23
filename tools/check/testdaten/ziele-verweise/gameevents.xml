@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Die Abschluss-Aktion nennt zwei Herausforderungen: eine gibt es, eine nicht. -->
+<gameevents>
+	<action_sequence name="pruefEinfuehrungUeberspringen">
+		<action class="CompleteChallenge">
+			<property name="challenges" value="zielLebt,zielEntfernt" />
+			<property name="force_redeem" value="true" />
+		</action>
+		<!-- eine andere Aktion mit derselben Eigenschaft zaehlt nicht -->
+		<action class="PruefAndereAktion">
+			<property name="challenges" value="zielGanzAnderes" />
+		</action>
+	</action_sequence>
+</gameevents>

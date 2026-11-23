@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<recipes>
+	<recipe name="pruefSalbe" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+	<recipe name="pruefFackel" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+	<!-- Der Sammelblock traegt den Zusatz im Namen; das Rezept auch. -->
+	<recipe name="pruefRahmen:VariantHelper" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+</recipes>

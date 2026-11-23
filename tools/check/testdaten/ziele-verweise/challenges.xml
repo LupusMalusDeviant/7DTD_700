@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Verweise ins Leere - so sieht es aus, wenn jemand eine Herausforderung oder eine Gruppe
+     entfernt und vergisst, wer sie nennt. Das Spiel prueft keinen davon vorher (F-18).
+     Alle Ziele sind erfuellbar; rot werden hier nur die Verweise. -->
+<challenges>
+	<challenge_category name="pruefKategorie" title="pruef" icon="pruef" />
+	<challenge_group name="pruefGruppe" category="pruefKategorie" title_key="pruef" />
+	<!-- eine Gruppe, der alle Herausforderungen genommen wurden -->
+	<challenge_group name="pruefGruppeLeer" category="pruefKategorie" title_key="pruef" />
+
+	<!-- in Ordnung -->
+	<challenge name="zielLebt" group="pruefGruppe">
+		<objective type="Harvest" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- die Gruppe gibt es nicht (mehr) -->
+	<challenge name="zielOhneGruppe" group="pruefGruppeFort">
+		<objective type="Harvest" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- nennt eine Herausforderung, die es nicht gibt -->
+	<challenge name="zielNenntFehlende" group="pruefGruppe">
+		<objective type="ChallengeComplete" challenge="zielEntfernt" count="1" is_redeemed="true" />
+	</challenge>
+
+	<!-- nennt eine Gruppe, die es nicht gibt -->
+	<challenge name="zielNenntFehlendeGruppe" group="pruefGruppe">
+		<objective type="ChallengeComplete" challenge="pruefGruppeFort" is_redeemed="true" is_group="true" />
+	</challenge>
+
+	<!-- in Ordnung: nennt eine Herausforderung und eine Gruppe, die es gibt -->
+	<challenge name="zielNenntVorhandene" group="pruefGruppe">
+		<objective type="ChallengeComplete" challenge="zielLebt" count="1" is_redeemed="true" />
+		<objective type="ChallengeComplete" challenge="pruefGruppe" is_redeemed="true" is_group="true" />
+	</challenge>
+</challenges>

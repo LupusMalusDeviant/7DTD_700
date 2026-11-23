@@ -15,17 +15,16 @@
 	     Rohrbomben, Benzinkanister, Rohre, Kunststoff, Autoteile. Der Purge sieht sie
 	     nicht, weil ein Ziel kein Weg zu einem Gegenstand ist.
 
-	     Hier steht nur, was sich ERSETZEN laesst (D104: "ein Ziel mit lebendem
-	     Gegenstueck wird ersetzt"). Die Herausforderung behaelt ihren Namen, ihre
-	     Gruppe, ihren Platz und ihre Belohnung - geaendert wird das Ziel, bei fuenf
-	     dazu das Symbol. Kein Knoten 'challenge' wird entfernt: was ein alter
-	     Spielstand mit einer fehlenden Herausforderung tut, ist nicht gelesen.
+	     Zuerst, was sich ERSETZEN laesst (D104: "ein Ziel mit lebendem Gegenstueck
+	     wird ersetzt"). Die Herausforderung behaelt ihren Namen, ihre Gruppe, ihren
+	     Platz und ihre Belohnung - geaendert wird das Ziel, bei fuenf dazu das Symbol.
 
-	     NICHT hier: die 16 Ziele der vier Biom-Reihen (ihr Reiter ist verborgen,
-	     solange der Biom-Fortschritt aus ist - D136) und zehn Ziele ohne Gegenstueck
-	     (Salpeter, Oelschiefer, sechs Feldfruechte, zwei Arzneien). Ueber die
-	     entscheidet D137 erst, wenn gelesen ist, was das Spiel mit einer kleineren
-	     Gruppe macht.
+	     Am Ende der Datei: zehn Ziele ohne Gegenstueck (Salpeter, Oelschiefer, sechs
+	     Feldfruechte, zwei Arzneien) werden ENTFERNT (D139), seit Finding F-18 gelesen
+	     hat, dass eine Gruppe schrumpfen darf.
+
+	     NICHT hier: die 16 Ziele der vier Biom-Reihen (ihr Reiter ist verborgen und
+	     ihre Gruppen ruhen, solange der Biom-Fortschritt aus ist - D136, F-18).
 
 	     REIHENFOLGE JE ZIEL: zuerst alles, was das Ziel ueber seinen ALTEN Gegenstand
 	     findet, zuletzt der Gegenstand selbst. Danach traefe der XPath nichts mehr.
@@ -102,4 +101,39 @@
 	<!-- 9. Chrysanthemen ernten -> Pilze ernten (die vierte Feldfrucht, die lebt). -->
 	<removeattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="block_tag" />
 	<setattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="item">foodCropMushrooms</setattribute>
+
+	<!-- ===================================================================
+	     ZEHN OHNE GEGENSTUECK WERDEN ENTFERNT (D139, Finding F-18)
+	     ===================================================================
+
+	     Verbergen laesst sich eine einzelne Herausforderung nicht (F-18: kein Attribut
+	     dafuer). Stehen gelassen, ist ihre Gruppe nie abschliessbar - die Belohnung fuers
+	     Ganze kommt erst, wenn JEDE Herausforderung der Gruppe eingeloest ist.
+
+	     Eine Gruppe darf schrumpfen (F-18: "vollstaendig" ist keine Zahl; Vanilla hat selbst
+	     eine Gruppe mit sieben). Danach: Sammler 8, Bauer 4, Heiler 8. Keine Gruppe wird leer.
+
+	     Kein Verweis zeigt auf eine der zehn: nicht die Abschluss-Aktion in gameevents.xml
+	     (sie nennt nur die zehn der Einfuehrung), kein Ziel 'ChallengeComplete'.
+
+	     NICHT BEWIESEN: dass ein alter Spielstand den Eintrag einer entfernten
+	     Herausforderung still verliert, ist aus dem Code geschlossen, nicht gesehen
+	     (Spieltest S-13). -->
+
+	<!-- Sammler: Salpeter und Oelschiefer sind gesperrt. -->
+	<remove xpath="/challenges/challenge[@name='gathererPotassium']" />
+	<remove xpath="/challenges/challenge[@name='gathererOilShale']" />
+
+	<!-- Bauer: sechs Feldfruechte, die es nicht mehr gibt. Es bleiben Goldrute, Aloe,
+	     Hopfen und Pilze. -->
+	<remove xpath="/challenges/challenge[@name='farmingCoffeeBeans']" />
+	<remove xpath="/challenges/challenge[@name='farmingYucca']" />
+	<remove xpath="/challenges/challenge[@name='farmingBlueberry']" />
+	<remove xpath="/challenges/challenge[@name='farmingPumpkin']" />
+	<remove xpath="/challenges/challenge[@name='farmingCorn']" />
+	<remove xpath="/challenges/challenge[@name='farmingPotato']" />
+
+	<!-- Heiler: gegen Gehirnerschuetterung und Erschoepfung gibt es kein lebendes Mittel. -->
+	<remove xpath="/challenges/challenge[@name='healerConcussion']" />
+	<remove xpath="/challenges/challenge[@name='healerFatigued']" />
 </config>
