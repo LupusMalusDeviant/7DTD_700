@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  TEST-UEBERLAGERUNG: Proben-Gegenstaende fuer S-33 und S-35 (Plan-0002 WP9.10, Vertrag 01 B2).
+
+  Per Konsole:  giveself t700_wurfspeer   giveself t700_zauberstab   giveself t700_amulett
+  Keine Beute, kein Haendler, kein Rezept.
+-->
+<config>
+	<append xpath="/items">
+
+		<!-- S-33 (4): Vanillas Steinspeer mit der Wurf-Aktion, die Vanilla nur auskommentiert hat
+		     (items.xml, Abschnitt "Old properties for the thrown version of the spear"). Werte von dort. -->
+		<item name="t700_wurfspeer">
+			<property name="Extends" value="meleeWpnSpearT0StoneSpear"/>
+			<property name="IsSticky" value="true"/>
+			<property name="StickyOffset" value=".7"/>
+			<property name="StickyColliderUp" value="1"/>
+			<property name="StickyColliderRadius" value=".1"/>
+			<property name="StickyColliderLength" value="2"/>
+			<property name="StickyForwardDirection" value="0,0,1"/>
+			<property class="Action1">
+				<property name="Class" value="ThrownWeapon"/>
+				<property name="Hitmask_override" value="Bullet"/>
+				<property name="Delay" value="1.2"/>
+				<property name="Throw_strength_default" value="6"/>
+				<property name="Throw_strength_max" value="18"/>
+				<property name="Max_strain_time" value="1"/>
+				<property name="Sound_start" value="spear_throw"/>
+				<property name="FlyTime" value="0"/>
+				<property name="Gravity" value="-7.5"/>
+				<property name="LifeTime" value="60"/>
+			</property>
+		</item>
+
+		<!-- S-35 (1): eine Bedingung IN der Aktion (ItemAction.ExecutionRequirements, Finding WP9.5).
+		     Schlagen geht nur mit t700_odem ab 10 und zieht 10 ab. Erst "buff t700_odemFuellen" (30),
+		     dann dreimal schlagen: 30, 20, 10, 0 im Protokoll; der vierte Schlag sollte nicht gehen. -->
+		<item name="t700_zauberstab">
+			<property name="Extends" value="meleeWpnClubT0WoodenClub"/>
+			<property class="Action0">
+				<requirement name="CVarCompare" cvar="t700_odem" operation="GTE" value="10"/>
+			</property>
+			<effect_group name="t700_zauberstabKosten">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="t700_odem" operation="subtract" value="10"/>
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="CVarLogValue" cvar="t700_odem"/>
+			</effect_group>
+		</item>
+
+		<!-- S-35 (2): ein Amulett auf dem vierten Abzeichen-Platz. Vanilla legt dort schon
+		     biomeWeatherItem4 ab (Biom-Fortschritt): der Test zeigt, ob beide sich verdraengen. -->
+		<item name="t700_amulett">
+			<property name="Extends" value="biomeBadge1"/>
+			<property name="EquipSlot" value="BiomeBadge4"/>
+		</item>
+
+	</append>
+</config>

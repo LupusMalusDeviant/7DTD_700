@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  TEST-UEBERLAGERUNG: Proben-Buffs fuer S-32, S-33, S-34 (Plan-0002 WP9.10, Vertrag 01 B2).
+
+  Jede Probe heisst t700_..., liegt in keiner Beute und wird per Konsole gesetzt:
+      buff t700_cvarSetzen        (dann t700_cvarZeigen, nach Neustart nur t700_cvarZeigen)
+      buff t700_craftZaehler
+      buff t700_lichtAnzeige
+      buff t700_gesellschaftSender
+      buff t700_seuchennacht
+      buff t700_odemFuellen       (fuer den Zauberstab aus items.xml)
+
+  Was zaehlt, steht im PROTOKOLL: CVarLogValue schreibt "CVarLogValue: name == wert" auf der
+  Seite, auf der der Buff laeuft; LogMessage schreibt "MinEventLogMessage: ...". Die Zeilen im
+  Protokoll des Clients UND des Servers liest Claude. Auf dem Bildschirm erscheinen nur kurze
+  Meldungen ueber der Schnellleiste (ShowToolbeltMessage).
+
+  Die vier CVar-Namen der Probe S-32 tragen absichtlich die Zeichen . _ % vorn (Vertrag 07 Paragraf 2).
+-->
+<config>
+	<append xpath="/buffs">
+
+		<!-- S-32 (1) bis (3): vier Werte setzen, je einmal mit . _ % und ohne Zeichen. -->
+		<buff name="t700_cvarSetzen" hidden="true">
+			<duration value="1"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".t700_punkt" operation="set" value="1"/>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="_t700_strich" operation="set" value="2"/>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="%t700_prozent" operation="set" value="3"/>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="t700_normal" operation="set" value="4"/>
+				<triggered_effect trigger="onSelfBuffStart" action="LogMessage" message="t700 S-32: vier Werte gesetzt"/>
+				<triggered_effect trigger="onSelfBuffStart" action="AddBuff" buff="t700_cvarZeigen"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-32 (1) bis (3) und (5): die vier Werte eine Minute lang alle fuenf Sekunden ins Protokoll. -->
+		<buff name="t700_cvarZeigen" hidden="true">
+			<duration value="60"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="LogMessage" message="t700 S-32: Werte auf dieser Seite"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".t700_punkt"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="_t700_strich"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="%t700_prozent"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="t700_normal"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-33 (1) bis (3): Vanillas Herstell-Zaehler fuer den Steinspeer und die Herstell-Erfahrung. -->
+		<buff name="t700_craftZaehler" hidden="true">
+			<duration value="300"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="_craftCount_meleeWpnSpearT0StoneSpear"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="_xpFromCrafting"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-34 (1): Lichtstufe am Spieler in vier Baendern. Ob CompareLightLevel in Prozent (0 bis 100)
+		     oder als Bruch (0 bis 1) vergleicht, ist nicht gelesen: zeigt jede Lage "ab 60", rechnet es
+		     als Bruch, und die Baender muessen auf 0.1, 0.3, 0.6 umgestellt werden. -->
+		<buff name="t700_lichtAnzeige" hidden="true">
+			<duration value="300"/>
+			<update_rate value="2"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message="TEST Licht unter 10">
+					<requirement name="CompareLightLevel" operation="LT" value="10"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message="TEST Licht 10 bis 30">
+					<requirement name="CompareLightLevel" operation="GTE" value="10"/>
+					<requirement name="CompareLightLevel" operation="LT" value="30"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message="TEST Licht 30 bis 60">
+					<requirement name="CompareLightLevel" operation="GTE" value="30"/>
+					<requirement name="CompareLightLevel" operation="LT" value="60"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message="TEST Licht ab 60">
+					<requirement name="CompareLightLevel" operation="GTE" value="60"/>
+				</triggered_effect>
+			</effect_group>
+		</buff>
+
+		<!-- S-34 (2): jeder Spieler mit dem Sender legt Spielern im Umkreis von 10 m den Empfang auf.
+		     Ob der Sender sich selbst trifft, zeigt der Test: steht man allein und sieht trotzdem
+		     "TEST Gesellschaft", trifft selfAOE auch den Sender. -->
+		<buff name="t700_gesellschaftSender" hidden="true">
+			<duration value="300"/>
+			<update_rate value="2"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" target="selfAOE" range="10" target_tags="player" buff="t700_gesellschaftEmpfang"/>
+			</effect_group>
+		</buff>
+		<buff name="t700_gesellschaftEmpfang" hidden="true">
+			<duration value="3"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ShowToolbeltMessage" message="TEST Gesellschaft"/>
+				<triggered_effect trigger="onSelfBuffStart" action="LogMessage" message="t700 S-34: Gesellschaft empfangen"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-34: laeuft die Seuchennacht? IsBloodMoon fragt SkyManager::IsBloodMoonVisible. -->
+		<buff name="t700_seuchennacht" hidden="true">
+			<duration value="600"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message="TEST Seuchennacht laeuft">
+					<requirement name="IsBloodMoon"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="LogMessage" message="t700 S-34: Seuchennacht laeuft">
+					<requirement name="IsBloodMoon"/>
+				</triggered_effect>
+			</effect_group>
+		</buff>
+
+		<!-- S-35 (1): Odem fuer den Test-Zauberstab auf 30 setzen. -->
+		<buff name="t700_odemFuellen" hidden="true">
+			<duration value="1"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="t700_odem" operation="set" value="30"/>
+				<triggered_effect trigger="onSelfBuffStart" action="CVarLogValue" cvar="t700_odem"/>
+			</effect_group>
+		</buff>
+
+	</append>
+</config>
