@@ -531,6 +531,8 @@
 				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="blk700_runenritzer,itm700_ritzmesser,itm700_meissel"/>
 				<!-- WP10.5a (D178): die ersten vier Runen. -->
 				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="itm700_glutrune,itm700_schutzrune,itm700_wetterrune,itm700_wanderrune"/>
+				<!-- WP10.5d (D181): das Hammeramulett -->
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="itm700_hammeramulett"/>
 				<!-- Rang 2 "Runen kosten weniger Kreide": -25 % Kreide in Runen-Rezepten. -->
 				<passive_effect name="CraftingIngredientCount" operation="perc_add" level="2,3" value="-.25" tags="itm700_runenkreide"/>
 				<effect_description level="1" desc_key="prk700_runenritzenRank1Desc" long_desc_key="prk700_runenritzenRank1LongDesc"/>
@@ -559,6 +561,8 @@
 			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="5" desc_key="att700_runenkundigerStufe5"/></level_requirements>
 			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="8" desc_key="att700_runenkundigerStufe8"/></level_requirements>
 			<effect_group>
+				<!-- WP10.5d (D181): das Bernsteinamulett. Die Odem-Werte der Raenge kommen mit WP10.6. -->
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="itm700_bernsteinamulett"/>
 				<effect_description level="1" desc_key="prk700_odemtiefeRank1Desc" long_desc_key="prk700_odemtiefeRank1LongDesc"/>
 				<effect_description level="2" desc_key="prk700_odemtiefeRank2Desc" long_desc_key="prk700_odemtiefeRank2LongDesc"/>
 				<effect_description level="3" desc_key="prk700_odemtiefeRank3Desc" long_desc_key="prk700_odemtiefeRank3LongDesc"/>

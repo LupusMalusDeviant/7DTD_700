@@ -40,6 +40,8 @@
 		<item group="skillMagazines" unique_only="true" count="4" />
 		<item name="drinkJarEmpty" count="5,10" />
 		<item group="cookingPotsQ1" count="1,2" />
+		<!-- WP10.5d (D181): der Kreuzanhaenger, nur hier (F-15, Vertrag 01 Teil 2b) -->
+		<item name="itm700_kreuzanhaenger" prob="0.5" />
 	</append>
 
 	<!-- ==== Marktflecken (Bob) -->
@@ -56,6 +58,9 @@
 		<item name="drinkJarEmpty" count="5,10" />
 		<item group="cookingPotsAll" count="2,4" />
 		<item name="toolCookingGrill" count="1,2" />
+		<!-- WP10.5d (D181): Bernstein (F-05, F-10 B "Marktflecken ... Bernstein"); bis die
+		     Kueste eine eigene Karte hat, der einzige Weg zu ihm -->
+		<item name="itm700_bernstein" count="1,4" prob="0.6" />
 	</append>
 
 	<!-- ==== Fuerstenhof (Hugh) -->

@@ -182,6 +182,7 @@ Nutzer D100 abnimmt.
 | `resourceGlue` | Leim | Glue | Kleber / Glue | D78 |
 | `itm700_runenkreide` | Runenkreide | Rune Chalk | — | F-15, D177 — zu prüfen (N-121) |
 | `itm700_glutstein` | Glutstein | Ember Stone | — | F-15, D177 — zu prüfen (N-121) |
+| `itm700_bernstein` | Bernstein | Amber | — | F-05, D181 — zu prüfen (N-125) |
 | `medicalFirstAidBandage` | Salbenverband | Salved Bandage | Erste-Hilfe-Verband / First Aid Bandage | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `drugHerbalAntibiotics` | Kräutersud | Herb Decoction | Natürliche Antibiotika / Herbal Antibiotics | Loop 2026-11-23 — Name zu prüfen (D99, D133) |
 | `itm700_eulenauge` | Eulenauge | Owl's Eye | — (Trank) | F-15, D174, D179 — zu prüfen (N-123) |
@@ -196,6 +197,10 @@ Nutzer D100 abnimmt.
 | `itm700_fluchtopf` | Fluchtopf | Curse Pot | — (Wurf, Fluch der Schwere) | F-15, D115, D174, D180 — zu prüfen (N-124) |
 | `buff700_segenWehrAbklingen` | Wehr: Ruhe | Warding: Resting | — (Abklingzeit) | D180 — zu prüfen (N-124) |
 | `buff700_totensegenAbklingen` | Totensegen: Ruhe | Blessing of the Dead: Resting | — (Abklingzeit) | D180 — zu prüfen (N-124) |
+| `itm700_bernsteinamulett` | Bernsteinamulett | Amber Amulet | — (Amulett, `BiomeBadge4`) | F-15, D174, D181 — zu prüfen (N-125) |
+| `itm700_hammeramulett` | Hammeramulett | Hammer Amulet | — (Amulett) | F-15, D174, D181 — zu prüfen (N-125) |
+| `itm700_kreuzanhaenger` | Kreuzanhänger | Cross Pendant | — (Amulett, Klostermarkt) | F-15, D174, D181 — zu prüfen (N-125) |
+| `itm700_reliquienkapsel` | Reliquienkapsel | Reliquary | — (Amulett, nur Beute) | F-15, D174, D181 — zu prüfen (N-125) |
 
 ## 4. Werkstätten und Feuer
 

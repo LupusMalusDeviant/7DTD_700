@@ -133,4 +133,15 @@
 	<append xpath="/lootcontainers/lootgroup[@name='groupScrapRare']">
 		<item name="resourceScrapBrass" count="2,5" />
 	</append>
+
+	<!-- WP10.5d (D181): die Reliquienkapsel, nur Beute (F-15, Vertrag 01 Teil 2b). F-15 sagt
+	     "in Kloestern und Kirchen"; Vanilla hat keine Kloster-Truhe, aber Saerge und Totenladen
+	     stehen in Kirchen und auf Friedhoefen. Sehr selten (veryLow, 5 %), als eigener Wurf wie
+	     die Fundschriften oben. Zu pruefen (N-125). -->
+	<append xpath="/lootcontainers/lootgroup[@name='groupCoffins']">
+		<item name="itm700_reliquienkapsel" loot_prob_template="veryLow" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupCaskets']">
+		<item name="itm700_reliquienkapsel" loot_prob_template="veryLow" force_prob="true" />
+	</append>
 </config>

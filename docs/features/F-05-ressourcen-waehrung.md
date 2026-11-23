@@ -20,7 +20,7 @@ Silber** (D30).
 | Nitrate | entfällt | – | – |
 | Concrete | Kalkmörtel, Bruchstein | normal | Kalkofen, Steinbruch |
 | Wood, Stone, Clay | Holz, Stein, Lehm | **reichlich** | überall |
-| – (neu) | Bernstein | selten | Küste (Kulturzone), Handel; Magie (F-15), Wegsteine (F-13) |
+| – (neu) | Bernstein | selten | Küste (Kulturzone), Handel; Magie (F-15), Wegsteine (F-13) — *gebaut mit WP10.5d (D181, N-125):* `itm700_bernstein` in `700_20_Material`, vorerst **nur** beim Marktflecken; die Küste wartet auf die eigene Karte |
 | – (neu) | Salz | knapp | Handel, Salzquellen-POI; Konservieren (F-19) |
 
 - Erzverteilung je Kulturzone (`biomes.xml` / `rwgmixer.xml`, F-07)

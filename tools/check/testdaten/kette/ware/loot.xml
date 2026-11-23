@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.5d): eine bekannte und eine vertippte Beute.
+     Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/lootcontainers/lootgroup[@name='pruefGruppe']">
+		<item name="pruefWerkzeug" />
+		<item name="pruefBeuteFehlt" />
+		<item group="pruefGruppe" />
+	</append>
+</config>

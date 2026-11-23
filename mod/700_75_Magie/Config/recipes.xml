@@ -123,5 +123,18 @@
 			<ingredient name="resourceBone" count="1" />
 		</recipe>
 
+		<!-- WP10.5d (D181): die zwei herstellbaren Amulette, an der Runenritzer-Bank mit dem
+		     Ritzmesser, je an einem Lederriemen. Bernstein frei mit Odemtiefe 1, Hammer mit
+		     Runenritzen 1 (700_50_Fortschritt). Kreuz und Reliquie sind nicht herstellbar
+		     (Handel bzw. Beute, 700_70_Handel). -->
+		<recipe name="itm700_bernsteinamulett" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="30" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_bernstein" count="2" />
+			<ingredient name="resourceLeather" count="1" />
+		</recipe>
+		<recipe name="itm700_hammeramulett" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="30" is_trackable="false" tags="learnable">
+			<ingredient name="resourceForgedIron" count="1" />
+			<ingredient name="resourceLeather" count="1" />
+		</recipe>
+
 	</append>
 </config>

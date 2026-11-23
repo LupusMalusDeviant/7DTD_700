@@ -1036,6 +1036,28 @@ if ($progPool.Count -gt 0) {
     }
 }
 
+# BEUTE UND WARE (ergaenzt 2026-11-23, Plan-0002 WP10.5d). Ein Gegenstand, der nur als
+# Beute oder beim Haendler zu haben ist (Reliquienkapsel, Kreuzanhaenger, Bernstein), haengt
+# an EINEM Namen in loot.xml bzw. traders.xml. Vertippt, liegt er nirgends - ohne Meldung.
+# Gefunden beim Bau der Amulette: die Gegenproben mit 'itm700_reliquienkapsl' und
+# 'itm700_kreuzanhanger' blieben in check-all gruen. Gelesen wird jedes <item name> in den
+# Patch-Dateien loot.xml und traders.xml; <item group> (Verweis auf eine Gruppe) nicht.
+$wareRefs = 0
+foreach ($path in $Patches) {
+    if (-not $path -or -not (Test-Path $path)) { continue }
+    $datei = [IO.Path]::GetFileName($path)
+    if ($datei -ne 'loot.xml' -and $datei -ne 'traders.xml') { continue }
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
+    foreach ($n in $xml.SelectNodes('//item[@name]')) {
+        $wert = $n.GetAttribute('name')
+        $wareRefs++
+        if (-not $defined.ContainsKey($wert)) {
+            $unresolved += "Beute oder Ware '$wert' ist nirgends definiert  ($datei)"
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
@@ -1048,6 +1070,7 @@ Write-Output ("  in Bedingungen genannte Mods: {0}" -f $(if ($modListe.Count -gt
 Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltungen: {1}" -f $angelegteRefs, $freischaltRefs)
+Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

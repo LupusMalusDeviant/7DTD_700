@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.5d). Erfundene Kennungen, kein Spielinhalt. -->
+<lootcontainers>
+	<lootgroup name="pruefGruppe">
+		<item name="pruefRohstoff" />
+	</lootgroup>
+</lootcontainers>

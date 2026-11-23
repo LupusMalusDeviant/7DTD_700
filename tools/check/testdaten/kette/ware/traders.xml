@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.5d): eine bekannte und eine vertippte Ware.
+     Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/traders/trader_info[@id='1']/trader_items[1]">
+		<item name="pruefRohstoff" prob="0.5" />
+		<item name="pruefWareFehlt" />
+	</append>
+</config>

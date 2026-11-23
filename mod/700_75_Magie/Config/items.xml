@@ -346,5 +346,98 @@
 			</effect_group>
 		</item>
 
+		<!-- WP10.5d (D181): VIER AMULETTE (F-15 "Amulette und Reliquien", Q32).
+		     Platz: der vierte Abzeichen-Platz BiomeBadge4 (Finding WP9.5, D171); ob er sich mit
+		     Vanillas biomeWeatherItem4 verdraengt, zeigt S-35 (2). Ein Amulett zugleich - es
+		     gibt nur einen Platz. Vorlage ist Vanillas Biom-Abzeichen (biomeWeatherItem1):
+		     armorLightMaster ohne DisplayType, keine Aufsatzplaetze, keine Qualitaet.
+		     WER DIE WIRKUNG SCHREIBT: Bernstein-, Hammer- und Kreuzamulett tragen nur Marken.
+		     Gelesen werden sie mit WornItems (Vanillas Bedingung, so zaehlt Vanilla seine
+		     Abzeichen) - der Bernstein von buff700_odemStufe (WP10.6, Vertrag 07 N1.1), Hammer
+		     und Kreuz von buff700_grauenSchutz (WP11, N1.3). So schreibt je Wert ein Buff.
+		     Bis diese Buffs stehen, wirken die drei noch nicht. Die Reliquienkapsel wirkt selbst.
+		     Bilder sind geborgte Vanilla-Bilder, getoent (F-16 spaeter). -->
+
+		<item name="itm700_bernsteinamulett">
+			<property name="Extends" value="armorLightMaster" param1="DisplayType" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="resourceRockSmall" />
+			<property name="CustomIconTint" value="e0952a" />
+			<property name="DescriptionKey" value="itm700_bernsteinamulettDesc" />
+			<property name="EquipSlot" value="BiomeBadge4" />
+			<property name="Tags" value="amulett700,amulett700_bernstein" />
+			<property name="ShowQuality" value="false" />
+			<property name="KeepOnDeath" value="false" />
+			<property name="IsCosmetic" value="false" />
+			<property name="EconomicValue" value="300" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+		</item>
+
+		<item name="itm700_hammeramulett">
+			<property name="Extends" value="armorLightMaster" param1="DisplayType" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="meleeToolRepairT1ClawHammer" />
+			<property name="CustomIconTint" value="b0a898" />
+			<property name="DescriptionKey" value="itm700_hammeramulettDesc" />
+			<property name="EquipSlot" value="BiomeBadge4" />
+			<property name="Tags" value="amulett700,amulett700_grauen" />
+			<property name="ShowQuality" value="false" />
+			<property name="KeepOnDeath" value="false" />
+			<property name="IsCosmetic" value="false" />
+			<property name="EconomicValue" value="250" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+		</item>
+
+		<!-- Kreuzanhaenger: absichtlich gleich stark wie das Hammeramulett (Leitplanke 5),
+		     gleiche Marke amulett700_grauen. Nicht herstellbar: der Klostermarkt fuehrt ihn
+		     (700_70_Handel). -->
+		<item name="itm700_kreuzanhaenger">
+			<property name="Extends" value="armorLightMaster" param1="DisplayType" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="resourceNail" />
+			<property name="CustomIconTint" value="d8c070" />
+			<property name="DescriptionKey" value="itm700_kreuzanhaengerDesc" />
+			<property name="EquipSlot" value="BiomeBadge4" />
+			<property name="Tags" value="amulett700,amulett700_grauen" />
+			<property name="ShowQuality" value="false" />
+			<property name="KeepOnDeath" value="false" />
+			<property name="IsCosmetic" value="false" />
+			<property name="EconomicValue" value="250" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+		</item>
+
+		<!-- Reliquienkapsel: -10 % Schaden von Seuchentoten. Die Bedingung fragt den Angreifer
+		     (EntityTagCompare target="other", wie die Bannrune beim Austeilen). Ob das Spiel
+		     beim EINSTECKEN den Angreifer als "other" fuehrt, ist nicht gelesen
+		     [verifizieren, S-40]: wenn nicht, wirkt die Kapsel gar nicht - dann gilt sie
+		     gegen allen Schaden mit kleinerem Wert (Rueckfall, N-125). Nur Beute in Saergen und
+		     Totenladen (700_70_Handel), nicht herstellbar. -->
+		<item name="itm700_reliquienkapsel">
+			<property name="Extends" value="armorLightMaster" param1="DisplayType" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="resourceScrapBrass" />
+			<property name="CustomIconTint" value="c8a060" />
+			<property name="DescriptionKey" value="itm700_reliquienkapselDesc" />
+			<property name="EquipSlot" value="BiomeBadge4" />
+			<property name="Tags" value="amulett700,amulett700_reliquie" />
+			<property name="ShowQuality" value="false" />
+			<property name="KeepOnDeath" value="false" />
+			<property name="IsCosmetic" value="false" />
+			<property name="EconomicValue" value="500" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+			<effect_group>
+				<requirement name="EntityTagCompare" target="other" tags="zombie" />
+				<passive_effect name="GeneralDamageResist" operation="base_add" value=".1" />
+			</effect_group>
+		</item>
+
 	</append>
 </config>

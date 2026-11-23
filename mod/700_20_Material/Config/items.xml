@@ -37,6 +37,27 @@
 			<property name="CraftingIngredientTime" value="4" />
 		</item>
 
+		<!-- Bernstein (F-05 "selten, Kueste, Handel"; D181, zu pruefen N-125). Die Kueste wartet
+		     auf die eigene Karte (konzept/biome.md), bis dahin kommt er nur ueber den Handel
+		     (Marktflecken, 700_70_Handel). Voll ausgeschrieben, OHNE Extends: jeder Vanilla-Stoff
+		     traegt eine Schmelz- oder Wurfwirkung, die Bernstein nicht hat. Bild: der kleine
+		     Stein, honiggelb getoent, bis ein eigenes kommt (F-16). -->
+		<item name="itm700_bernstein">
+			<property name="CreativeMode" value="Player" />
+			<property name="HoldType" value="45" />
+			<property name="Meshfile" value="@:Other/Items/Misc/sackPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="50" />
+			<property name="EconomicValue" value="60" />
+			<property name="EconomicBundleSize" value="1" />
+			<property name="Group" value="Resources" />
+			<property name="CustomIcon" value="resourceRockSmall" />
+			<property name="CustomIconTint" value="e0952a" />
+			<property name="DescriptionKey" value="itm700_bernsteinDesc" />
+			<property name="CraftingIngredientTime" value="2" />
+		</item>
+
 		<!-- Klinge: ausgeschmiedet, noch ohne Griff und Scheide. Erbt von
 		     resourceForgedIron (Schmiedeeisen) - sie ist ein Halbzeug, kein Werkzeug. -->
 		<item name="itm700_klinge">

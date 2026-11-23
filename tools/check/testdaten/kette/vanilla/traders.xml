@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.5d). Erfundene Kennungen, kein Spielinhalt. -->
+<traders>
+	<trader_info id="1">
+		<trader_items>
+			<item name="pruefRohstoff" />
+		</trader_items>
+	</trader_info>
+</traders>

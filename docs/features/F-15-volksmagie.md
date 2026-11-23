@@ -188,6 +188,17 @@ zugleich.** Stärke wie eine Rune (10–15 %).
 Hammer und Kreuz sind absichtlich **gleich**: Leitplanke 5. Die Reliquie ist die einzige, die man
 nicht herstellen kann — so hat GDD 2.3 („Amulette, Reliquien") eine Mechanik.
 
+*Gebaut mit WP10.5d (D181, zu prüfen N-125):* die vier Amulette in `700_75_Magie` auf `BiomeBadge4`,
+nach Vanillas Biom-Abzeichen. **Bernsteinamulett** (Bank, Ritzmesser; 2 Bernstein, Leder; Odemtiefe 1)
+und **Hammeramulett** (Bank; Schmiedeeisen, Leder; Runenritzen 1) werden geritzt; der
+**Kreuzanhänger** steht am Klostermarkt, die **Reliquienkapsel** liegt selten in Särgen und
+Totenladen (beides `700_70_Handel`). Bernstein, Hammer und Kreuz tragen nur Marken
+(`amulett700_bernstein`, `amulett700_grauen`); ihre Wirkung schreiben `buff700_odemStufe` (WP10.6) und
+`buff700_grauenSchutz` (WP11), die sie per `WornItems` lesen — bis dahin wirken sie nicht. Die
+Reliquienkapsel wirkt selbst: `GeneralDamageResist` +0,1 mit der Bedingung „Angreifer ist ein
+Seuchentoter" **[verifizieren, S-40: ob beim Einstecken der Angreifer als „other" gilt]**. Dafür neu:
+**Bernstein** (`itm700_bernstein`, `700_20_Material`), bis zur Küste nur beim Marktflecken.
+
 ### Fallen mit Auslöser (D115)
 
 F-08 hat Schwingbalken und Pechtopf in Phase 1 aufgeschoben, weil Vanillas einzige mechanische

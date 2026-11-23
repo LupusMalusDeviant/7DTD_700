@@ -4076,3 +4076,25 @@ ohne Namenszeile, und das ist nach der neuen Regel richtig rot.
 
 **Grenzen:** Ob `installable_tags`, `modifier_tags` und Wirkungen eines Aufsatzes im Spiel greifen,
 prüft keine statische Prüfung (S-37).
+
+## Nachtrag WP10.5d — Beute und Ware in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-125)
+
+Gebaut im autonomen Lauf (Plan-0002 WP10.5d, D181).
+
+**Anlass.** Reliquienkapsel, Kreuzanhänger und Bernstein gibt es **nur** als Beute bzw. beim Händler.
+Ihr einziger Weg ins Spiel ist ein Name in `loot.xml` oder `traders.xml`. Die Gegenprobe am echten
+Stand — `itm700_reliquienkapsl` in der Beute, `itm700_kreuzanhanger` in der Ware — blieb in
+`check-all` grün: keine Prüfung las diese Namen.
+
+**Die Regel.** `kette-pruefen` liest in den Patch-Dateien `loot.xml` und `traders.xml` jedes
+`<item name>` und sucht es unter den Definitionen (Vanilla `items.xml`/`blocks.xml`, unsere
+`items.xml`/`blocks.xml`, Aufsätze). `<item group>` ist ein Gruppenverweis und wird nicht gelesen.
+Neue Zeile in der Ausgabe: `Beute und Ware mit Namen: N` (am echten Stand 96).
+
+**Gegenprobe** (1 neu, 322 → **323**): `kette/ware` mit Vanilla-Gegenstücken `kette/vanilla/loot.xml`
+und `traders.xml` — die vertippte Beute und die vertippte Ware sind rot (2 rot), die bekannten Namen und
+der Gruppenverweis nicht.
+
+**Grenzen:** Lootgruppen-Verweise (`group=`), Wahrscheinlichkeiten und ob ein Händler die Ware
+wirklich zeigt, prüft das nicht. Entfernungen im Purge (`<remove xpath>`) sind XPaths und laufen wie
+bisher durch die XPath-Prüfung.

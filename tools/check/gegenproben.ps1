@@ -1081,6 +1081,16 @@ Test-Script 'kette-pruefen: ohne Aufsatz-Datei ist auch der eigene Aufsatz nicht
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @("Ergebnis 'pruefAufsatzEigen' ist nirgends definiert", "Ergebnis 'pruefAufsatzFehlt' ist nirgends definiert", '2 rot')
 
+# WP10.5d (2026-11-23): ein Name in Beute oder Haendlerware muss ein Gegenstand sein. Die
+# vertippte Beute und die vertippte Ware werden rot, die bekannten und der Gruppen-Verweis nicht.
+Test-Script 'kette-pruefen: vertippte Beute und Ware werden rot, bekannte nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\ware\loot.xml'), (Join-Path $data 'kette\ware\traders.xml'))
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("Beute oder Ware 'pruefBeuteFehlt' ist nirgends definiert", "Beute oder Ware 'pruefWareFehlt' ist nirgends definiert", 'Beute und Ware mit Namen: 4', '2 rot') -MustNotContain @("'pruefWerkzeug' ist nirgends", "'pruefRohstoff' ist nirgends", "'pruefGruppe' ist nirgends")
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen
