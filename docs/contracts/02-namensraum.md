@@ -171,3 +171,68 @@ die Quelle, nicht die Nachdokumentation.
   Phase 2 bzw. 3 dazu und erweitern diesen Vertrag dann.
 - Ob ein Vanilla-Localization-Schlüssel überschrieben werden **darf**, ohne andere Mods zu
   stören, ist nicht geprüft. Bis dahin: nur wo unvermeidlich, und kommentiert.
+
+## Nachtrag Phase 2 — Namensraum für Wesen, Welt, Handel und Assets, 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (Plan-0002 WP2.4), nach Claudes Empfehlung; **zu prüfen durch den
+Nutzer** (N-35). Der abgenommene Text oben bleibt unverändert. Kennungen dieser Arten gibt es
+noch nicht — der Nachtrag steht, bevor die erste entsteht.
+
+### A. Präfixe (ergänzt §2)
+
+| Art | Datei | Präfix | Beispiel |
+|---|---|---|---|
+| Wesen-Klasse | `entityclasses.xml` | `ent700_` (besteht) | `ent700_seuchentoterKnecht` |
+| Wesen-Gruppe | `entitygroups.xml` | `eg700_` | `eg700_waldNacht` |
+| Spawner der Spielstufen | `gamestages.xml` | `gs700_` | `gs700_seuchennacht` |
+| Klang | `sounds.xml` | `snd700_` | `snd700_seuchentoterRuf` |
+| Spielereignis (Folge) | `gameevents.xml` | `ge700_` | `ge700_seuchennachtBeginn` |
+| Auftrag | `quests.xml` | `q700_` | `q700_brunnenWeihen` |
+| Auftragsliste | `quests.xml` | `ql700_` | `ql700_schmiedStufe1` |
+| Warengruppe eines Händlers | `traders.xml` | `tg700_` | `tg700_heilkraeuter` |
+| Dialog | `dialogs.xml` | `dlg700_` | `dlg700_schmied` |
+| Figur | `npc.xml` | `npc700_` | `npc700_schmied` |
+| Beute-Behälter | `loot.xml` | `lc700_` | `lc700_klosterTruhe` |
+| Beute-Gruppe | `loot.xml` | `lg700_` (besteht) | |
+| Herausforderung, neu | `challenges.xml` | `ch700_` | `ch700_runeRitzen` |
+| Gruppe von Herausforderungen, neu | `challenges.xml` | `chg700_` | `chg700_runenkundiger` |
+| Ort (Prefab) | `Prefabs/` | `poi700_` | `poi700_gehoeft_01` |
+| Bundle | `Resources/` | `b700_` | `b700_wesen.unity3d` |
+| Symbol | `UIAtlases/ItemIconAtlas/` | `ico700_` (Vertrag 05) | `ico700_silberpfennig` |
+| Buff, CVar | `buffs.xml` | `buff700_`, `cv700_` (bestehen) | `buff700_grauen`, `cv700_grauen` |
+
+Schreibweise wie §2: Kleinschreibung nach dem Präfix, Binnengroßschreibung, deutsch nach §3.
+
+**Drei Klarstellungen:**
+
+1. **CVars heißen `cv700_…`, nicht `700_…`.** F-15 und F-17 schreiben `700_odem`, `700_odemMax`,
+   `700_grauen`; das sind Entwürfe von vor diesem Vertrag. Gebaut wird `cv700_odem`,
+   `cv700_odemMax`, `cv700_grauen` (so steht `cv700_grauen` seit Phase 1 in §2). Die
+   Feature-Dokumente werden beim Bau nachgezogen. **[verifizieren, WP9]** Ob das Spiel dem
+   ersten Zeichen eines CVar-Namens eine Bedeutung gibt (gespeichert oder nicht, an Mitspieler
+   gesendet oder nicht), ist nicht gelesen — vor dem ersten neuen CVar zu lesen.
+2. **Was Vanillas Kennung behält, bekommt kein Präfix.** Ein umgedeuteter Vanilla-Gegenstand,
+   ein Händler (`trader_info` trägt eine Zahl, keinen Namen), eine umgebogene Herausforderung
+   (Vertrag 01, Teil 1c): die Kennung bleibt, der Anzeigename ändert sich. Ein Präfix steht nur
+   an dem, was wir **anlegen**.
+3. **Eine Kennung ist kein Anzeigename** (§1). `ent700_seuchentoterKnecht` sagt dem Bauenden,
+   was es ist; was der Spieler liest, steht im Sprach-Modlet und vorher im Glossar.
+
+### B. Namensmuster für Anzeigenamen (ergänzt §6)
+
+Verbindlich ist die **Form**; jeder einzelne Name bleibt Vorschlag, bis er im Glossar abgenommen
+ist (P2-E11).
+
+| Was | Muster | Beispiel | Nicht |
+|---|---|---|---|
+| Seuchentote (Grundtypen) | Art + **Stand oder Herkunft**, kein Vorname | „Seuchentoter Knecht", „Seuchentote Magd" | „Zombie", ein Eigenname, eine Berufsbezeichnung der Neuzeit |
+| Besondere Wesen | **ein** Wort aus dem Glossar, deutsch und englisch festgelegt | „Moorleiche", „Verderbter" | zusammengesetzte Kunstwörter, Namen aus anderen Spielen oder Mods (Projektregel 7) |
+| Tiere | der gewöhnliche Name | „Wolf", „Keiler" | |
+| Orte | §6: erfunden, mit `-heim`, `-feld`, `-wik`, `-grad`, `-dun`, `-ing` | „Rabenwik" | reale Orte |
+| Ortstypen (wo kein Eigenname steht) | Gattung | „Gehöft", „Mühle", „Kapelle" | Neuzeit-Gattungen („Tankstelle") |
+| Händler | **Posten**, dazu ein Personenname nach §6 | „Schmied Radulf" | Vanillas Namen und Stimmen (D102) |
+| Aufträge | Tätigkeit im Infinitiv oder als Hauptwort | „Brunnen weihen" | Stufen-Jargon („Tier 2") |
+
+Offen und beim Nutzer (Textlücken §8 Nr. 5): die **englischen** Wörter für Verderbte und
+Moorleichen, und ob der Name eines Wesens im Spiel überhaupt erscheint — vor dem Schreiben zu
+messen (WP5).

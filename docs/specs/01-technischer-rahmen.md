@@ -63,9 +63,11 @@ Jedes Inhalts-Modlet hat denselben Aufbau:
     └── XUi_Menu/               # vom Lader erkannt (Mod::DetectContents)
 ```
 
-Phase 2 ergänzt im Core-Modlet: `Resources/*.unity3d` (AssetBundles),
-`UIAtlases/ItemIconAtlas/` (Item-Icons, **[verifizieren]**: Pfad in V 3.40), `Prefabs/`
-(eigene POIs).
+Phase 2 ergänzt ~~im Core-Modlet~~: `Resources/*.unity3d` (AssetBundles),
+`UIAtlases/ItemIconAtlas/` (Item-Icons, ~~**[verifizieren]**: Pfad in V 3.40~~ belegt in Finding
+F-16), `Prefabs/` (eigene POIs). **Nicht im Core-Modlet** (Vorschlag vom 2026-11-23, Vertrag 01,
+Nachtrag Phase 2 Teil 2, Abnahme offen): der Kern wird mit aktivem EAC übersprungen, die
+XML-Modlets nicht — Assets liegen in dem Modlet, dessen XML sie nennt.
 
 **Ladereihenfolge:** allein über den Ordnernamen. `ModManager::loadModsFromFolder` ruft
 `SdDirectory::GetDirectories` und danach `System.Array::Sort` — die Reihenfolge ist damit

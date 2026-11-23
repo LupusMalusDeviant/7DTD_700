@@ -268,3 +268,86 @@ gemessen.~~ *Seit demselben Tag prüft `anachronisms` die Ziele (Vertrag 04, Nac
 Herausforderungen); die zehn sind entfernt (D139).* Ob das Spiel die neuen Ziele zählt, ist
 nicht gesehen (S-12). Dass ein alter Spielstand eine entfernte Herausforderung verträgt, ist
 gelesen, nicht gesehen (F-18, S-13).
+
+## Nachtrag Phase 2, Teil 2 — die Modlets der Phase 2 und wo Assets liegen, 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (Plan-0002 WP2.3), nach Claudes Empfehlung; **zu prüfen durch den
+Nutzer** (N-35). **Noch nichts davon ist gebaut:** kein neuer Ordner liegt unter `mod/`. Der
+Nachtrag legt fest, wohin die Features der Phase 2 gehören, bevor das erste entsteht.
+
+### A. Vier neue Modlets, zwölf insgesamt
+
+| Ordner | Features | Inhalt | DLL |
+|---|---|---|---|
+| `700_45_Leben` | F-11, F-19 | Krankheit und Heilkunde, Nahrung und Verderb, Ackerbau | nein |
+| `700_65_Wesen` | F-06, F-09 (XML-Teil) | Seuchentote und Bestiarium: Klassen, Gruppen, Spawning, Spielstufen, Seuchennacht-Wellen, die Klänge der Wesen | nein |
+| `700_70_Handel` | F-10 | Händler und ihre Ware, Aufträge, Dialoge, Beute-Tabellen, Schriftstücke des Lore-Rahmens | nein |
+| `700_75_Magie` | F-15 | Volksmagie: Runen, Schutzzeichen, Amulette, ihre Zustände und Rezepte | nein |
+
+Die acht bestehenden wachsen, ohne ihren Zweck zu ändern:
+
+| Ordner | bekommt in Phase 2 |
+|---|---|
+| `700_00_Core` | **allen** C#-Code (Grauen, Direktor, Schild, Learning by Doing) — und sonst nichts, siehe B |
+| `700_30_Ausruestung` | F-02 Rest: Schild, Schadensarten, Werfen |
+| `700_50_Fortschritt` | F-21 Rest: Learning by Doing (XML-Teil), der Baum des Runenkundigen, Herausforderungen (Teil 1c) |
+| `700_60_Welt` | F-07: Landschaften, Biom-Fortschritt, Zufallswelt, eigene Orte; F-17 Rest: die Werte von Grauen und Trugbildern; die Spielvorlage (Teil 1b) |
+
+**Warum `Wesen` nicht in `Welt` liegt:** die Regel aus §3 — *Modlet weg → genau dieses Feature
+weg*. Wer `65_Wesen` herausnimmt, hat unsere Landschaft mit Vanillas Gegnern; wer `60_Welt`
+herausnimmt, unsere Wesen in Vanillas Landschaft. Beides sind Zustände, in denen sich ein Fehler
+suchen lässt.
+
+**Reihenfolge.** `45_Leben` steht nach Material und Bauen (Arznei braucht Rohstoffe, Felder sind
+Blöcke) und vor dem Fortschritt. `65`, `70`, `75` stehen nach der Welt. Die Regel aus §5 Nr. 4
+(kein Modlet hängt von einem späteren ab) gilt **je Datei**: das Spiel wendet auf eine Datei die
+Patches aller Modlets an, bevor es die nächste liest; ein Perk in `50_Fortschritt` darf darum
+ein Rezept aus `75_Magie` nennen, aber kein XPath in `50` darf auf einen Knoten zielen, den erst
+`75` in **derselben** Datei anlegt.
+
+**Grenzfälle, verbindlich:**
+
+| Fall | Gehört nach | Grund |
+|---|---|---|
+| Welche Gruppe in welchem Biom erscheint (`spawning.xml`) | `65_Wesen` | es ist die Frage „wer", nicht „wo" |
+| Das Biom selbst, sein Wetter, sein Dekor (`biomes.xml`, `weathersurvival.xml`) | `60_Welt` | |
+| Was ein Wesen fallen lässt oder bei sich trägt | `65_Wesen` | gehört zum Wesen wie das Rezept zur Waffe |
+| Truhen, Fundorte, Beute allgemein (`loot.xml`) | `70_Handel` | F-10 trägt „Beute" |
+| Zustand einer Krankheit, Wirkung einer Arznei (`buffs.xml`) | `45_Leben` | |
+| Zustand „Grauen" (`buffs.xml`) | `60_Welt` | wie in Phase 1 |
+| Zustand eines Zaubers (`buffs.xml`) | `75_Magie` | |
+| Perk, der eine Arznei oder Rune freischaltet | `50_Fortschritt` | wie §3: die Bindung gehört zum Baum |
+| Auftrag, den ein Händler vergibt (`quests.xml`, `dialogs.xml`) | `70_Handel` | |
+| Herausnehmen einer Vanilla-Klasse aus den Spawn-Gruppen | `10_Purge`, sobald die Sperrliste Wesen kennt (Vertrag 04, Prüfung *wesen*); bis dahin von Hand in `65_Wesen`, mit Vermerk | wie §3: Sperren ist Purge, auch wenn F-06 ersetzt |
+| Anzeigename, Beschreibung, jeder sichtbare Text | `90_Sprache` | ausnahmslos, wie bisher |
+
+`build.ps1` zählt die Ordner unter `mod/` selbst auf; §6 („alle acht Ordner") liest sich ab dann
+als „alle Ordner unter `mod/`". `ModInfo.xml`, Fassung und `SkipWithAntiCheat=false` gelten für
+die neuen wie in §4.
+
+### B. Wo Assets liegen (ändert Spec 01 §2.2 „Phase 2 ergänzt im Core-Modlet")
+
+1. **Kein Asset in `700_00_Core`.** Das Kern-Modlet trägt `SkipWithAntiCheat=true` und wird mit
+   aktivem EAC übersprungen; die XML-Modlets laden (Folgerung aus §4, nicht bewiesen). Läge ein
+   Bundle im Kern, zeigte XML dann auf etwas, das fehlt. Der Kern trägt die DLL und nichts sonst.
+2. **Symbole** liegen im Modlet des Gegenstands, den sie zeigen, unter
+   `UIAtlases/ItemIconAtlas/` (Teil 1 A, Finding F-16). Das Spiel sammelt sie aus allen Modlets
+   in einen Atlas; der Name muss darum über alle Modlets eindeutig sein (`ico700_…`, Vertrag 05).
+3. **Bundles** (`Resources/*.unity3d`) liegen in dem Modlet, dessen XML sie nennt.
+   **[verifizieren, Plan-0002 WP4.1]** Ob `#@modfolder:` den Ordner des nennenden Modlets meint
+   und ob es eine Form für ein fremdes Modlet gibt, ist nicht gelesen; bis dahin gilt diese
+   Regel, weil sie in beiden Fällen stimmt.
+4. **Eigene Orte** (`Prefabs/`) liegen in `700_60_Welt`. **[verifizieren, WP6]** Ob der Lader
+   `Prefabs/` aus jedem Modlet liest, ist nicht gelesen.
+5. **Klänge** liegen im Bundle des Modlets, das sie nennt (Wesen in `65`, Händler in `70`).
+6. **Ein Modlet ohne `Config/`**, nur mit Assets, entsteht nicht: ein Asset ohne das XML, das es
+   nennt, ist keine abschaltbare Einheit.
+
+### Grenzen
+
+- Dass XML-Modlets mit aktivem EAC laden, bleibt die Folgerung aus §4. Stimmt sie nicht, ist B
+  Nr. 1 gegenstandslos, aber nicht falsch.
+- Zwölf Ordner statt acht verlängern die Liste im Spiel („Mods"), sonst nichts; gemessen ist der
+  Start mit acht.
+- Die Zuordnung der Features folgt Plan-0002 (WP5 bis WP13). Verschiebt sich dort ein Feature,
+  folgt dieser Nachtrag — nicht umgekehrt gebaut und nachgetragen.

@@ -299,3 +299,95 @@ Jede Patch-Datei beginnt mit einem Kopf, der sagt, wohin sie gehört und warum:
   Bedingung gebraucht wird: das zeigt die Testmatrix (§5, Nachtrag WP8.9).
 - Ob ein Modlet eine Datei patchen kann, die **nicht** in der Liste der 52 steht (etwa eine von
   einer anderen Mod eingebrachte), ist nicht geprüft.
+
+## Nachtrag Phase 2 — die Dateien der Phase 2 und „sperren statt löschen" für Wesen, 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (Plan-0002 WP2.5), nach Claudes Empfehlung; **zu prüfen durch den
+Nutzer** (N-35). Der abgenommene Text oben bleibt unverändert; §3 nennt aus den 52 nur, was
+Phase 1 brauchte.
+
+### A. Die 52 Namen, vollständig
+
+Gelesen am 2026-11-23 mit `mod700meta members <Assembly-CSharp.dll> --type StockFileHashes --il`
+(V 3.40 b10; nur die Dateinamen, kein Code). 46 liegen unter `Config/`, sechs unter `XUi_…`:
+
+```
+archetypes  biomes  blockplaceholders  blocks  buffs  challenges  devicesgameprefs  dialogs
+dmscontent  entityclasses  entitygroups  events  gameevents  gamestages  item_modifiers  items
+loadingscreen  loot  materials  misc  Music  nav_objects  npc  painting  physicsbodies
+progression  qualityinfo  quests  recipes  rwgmixer  sandbox_overrides  shapes  signs  sounds
+spawning  subtitles  toolbelt  traders  twitch  twitch_events  ui_display  utilityai  vehicles
+videos  weathersurvival  worldglobal                                    (jeweils .xml)
+XUi_Common/styles.xml  XUi_Common/templates.xml
+XUi_InGame/styles.xml  XUi_InGame/templates.xml  XUi_InGame/windows.xml  XUi_InGame/xui.xml
+```
+
+`Localization.csv` steht nicht darin und wird trotzdem gelesen (Vertrag 02 §5, seit Phase 1 im
+Spiel bestätigt). **Die Liste belegt, dass das Spiel die Datei als Stammdatei führt — nicht,
+dass ein Patch darin wirkt.** Den Nachweis je Datei gibt der Dump nach einem Spielstart.
+
+### B. Was Phase 2 neu berührt
+
+| Datei | wofür | Modlet | in der Liste | im Dump vom 22.11. | schon gepatcht |
+|---|---|---|---|---|---|
+| `entityclasses.xml` | Wesen | `65_Wesen` | ja | ja | ja (Phase 1) |
+| `entitygroups.xml` | Gruppen | `65_Wesen` | ja | ja | nein |
+| `spawning.xml` | wer wo erscheint | `65_Wesen` | ja | ja | nein |
+| `gamestages.xml` | Spielstufen, Seuchennacht | `65_Wesen` | ja | ja | nein |
+| `sounds.xml` | Klänge | `65_Wesen`, `70_Handel` | ja | ja | nein |
+| `biomes.xml` | Landschaft, Dekor | `60_Welt` | ja | ja | ja (Phase 1) |
+| `rwgmixer.xml` | Zufallswelt | `60_Welt` | ja | ja | nein |
+| `weathersurvival.xml` | Wetter, Biom-Gefahren | `60_Welt` | ja | ja | nein |
+| `worldglobal.xml` | Licht, Nebel | `60_Welt` | ja | ja | ja (Phase 1) |
+| `sandbox_overrides.xml` | Spielvorlage | `60_Welt` | ja | ja | ja (D136) |
+| `traders.xml` | Händler, Ware | `70_Handel` | ja | ja | ja (Purge) |
+| `quests.xml` | Aufträge | `70_Handel` | ja | ja | ja (Purge) |
+| `dialogs.xml` | Gespräche | `70_Handel` | ja | ja | nein |
+| `npc.xml` | Figuren | `70_Handel` | ja | ja | nein |
+| `subtitles.xml` | Untertitel statt Stimmen (D102) | `70_Handel` | ja | ja | nein |
+| `gameevents.xml` | Spielereignisse | je Feature | ja | ja | nein |
+| `challenges.xml` | Herausforderungen | `50_Fortschritt` | ja | ja | ja (D137) |
+| `buffs.xml` | Zustände | `45`, `60`, `75` | ja | ja | ja (Phase 1) |
+| `Music.xml` | Musik (D114) | offen | ja | **nein** | nein |
+
+„Im Dump" heißt: im `ConfigsDump` des Starts vom 22.11., 22:08 (44 Dateien; der Dump liegt im
+`UserDataFolder` des Startprogramms, nicht unter `%APPDATA%`). Drei Dinge fallen auf:
+
+1. **`sandbox_overrides.xml` steht im Dump.** Nach dem nächsten Start zeigt er also, ob unsere
+   Vorlage „Jahr 700" (D136) angehängt wurde — ein Beleg ohne Blick ins Fenster. Ob sie dort
+   erscheint und vorgewählt ist, bleibt S-11.
+2. **`Music.xml` schreibt die Liste groß, auf der Platte heißt sie `music.xml`, und im Dump
+   fehlt sie.** Unter Windows sind die Namen gleich, auf einem Linux-Server nicht. Wer sie
+   patcht, liest vorher, welchen Namen der Patcher sucht (§3: ein falscher Dateiname schweigt),
+   und hat keinen Dump als Nachweis.
+3. **`devicesgameprefs.xml`** steht in der Liste, aber weder unter `Data/Config` noch im Dump;
+   Phase 2 braucht sie nicht. Ältere Dumps (bis April 2026, 41 Dateien) kennen auch
+   `sandbox_overrides.xml`, `signs.xml` und `toolbelt.xml` nicht — ein Dump sagt nur etwas über
+   die Spielfassung, aus der er stammt.
+
+Was **nicht** in der Liste steht und trotzdem zur Phase 2 gehört: Orte (`Prefabs/`, eigene
+Dateien, kein XPath), die Ortsliste einer erzeugten Welt (`prefabs.xml` im Weltordner — sie
+wird gelesen und geprüft, nicht gepatcht; Vertrag 04, Prüfung *welt*), Bundles und Symbole
+(Vertrag 05).
+
+### C. Sperren statt löschen — für Wesen
+
+§4 gilt für Wesen entsprechend:
+
+1. **Eine Vanilla-Klasse wird nicht entfernt.** Schläfer in Orten, Aufträge, Spielereignisse und
+   die Zucht-Regeln der Spielstufen nennen Klassen beim Namen; eine fehlende Klasse bricht beim
+   Laden oder beim ersten Erscheinen.
+2. **Gesperrt wird der Weg zu ihr:** ihr Eintrag in den Gruppen (`entitygroups.xml`) fällt, oder
+   die Gruppe wird durch eine eigene ersetzt, wo `spawning.xml` und `gamestages.xml` sie nennen.
+   `remove` ist dafür erlaubt — auf den **Eintrag einer Gruppe**, nicht auf die Klasse.
+3. **Eine Gruppe wird nicht leer.** Was eine leere Gruppe beim Erscheinen tut, ist nicht
+   gelesen; bis dahin bekommt jede Gruppe, der wir Einträge nehmen, mindestens einen eigenen.
+4. **Schläfer in Orten** (Gruppen, die ein Prefab nennt) sind ein eigener Weg und bleiben, wie
+   die Kisteninhalte in Orten, die bekannte Lücke von F-07: die Prüfung *wesen* sieht Gruppen,
+   keine Prefabs.
+5. Das **Aussehen** einer Vanilla-Klasse zu ändern (Modell, Material) ist kein Sperren und kein
+   Löschen, sondern Sache von Vertrag 05, Teil B.
+
+**[verifizieren, WP5 / WP9]** Punkt 1 und 3 sind Übertragungen aus §4, nicht gelesen: ob eine
+fehlende Klasse wirklich bricht und was eine leere Gruppe tut, gehört in das Finding, das vor
+dem ersten Patch an `entitygroups.xml` steht.
