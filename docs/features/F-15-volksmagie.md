@@ -136,6 +136,16 @@ des Teils rechnet (Schutz-, Wetterrune) und ob Runenritzen Rang 2 die Kreide wir
 *Quellsud* ist neu: der einzige Weg, Odem mit Material statt Zeit zu kaufen. Ohne ihn hinge jeder
 Runenkundige in der Seuchennacht allein an der Regeneration. *Sud* statt *Tee* nach D123.
 
+*Gebaut mit WP10.5b (D179, zu prüfen N-123)* in `700_75_Magie`: die vier Tränke der Tabelle,
+gebraut in der Kräuterküche, freigeschaltet beim Heiler über die Wundversorgung (`craftingMedical`
+Stufen 10, 20, 40, 50 — sie zeigten nur noch auf gesperrte Rezepte). Feste Buff-Dauer,
+`stack_type replace`. **Eulenauge** nimmt Vanillas Nachtsicht-Bild mit einem Drittel der Stärke
+**[verifizieren, S-38: ob es grün ist]**. **Bärenmut** schreibt den Grauen-Teil nicht selbst:
+`buff700_grauenSchutz` (WP11) zählt ihn per `HasBuff` (Vertrag 07 N1.3); die Nachwirkung kommt
+nur, wenn die Zeit abläuft. **Quellsud** trägt zwei Bedingungen in der Aktion — Abklingzeit und
+`cv700_odemMax` > 0 —, geschrieben in Vanillas Form `!HasBuff` (der Vertrag sagt „NotHasBuff" als
+Beschreibung). Bis WP10.6 `cv700_odemMax` setzt, ist er darum für alle gesperrt.
+
 ### Zauber (nur Odem)
 
 | Name (DE / EN, Vorschlag) | Wirkung | Odem | Bemerkung |

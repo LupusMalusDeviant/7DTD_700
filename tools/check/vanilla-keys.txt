@@ -1361,6 +1361,10 @@ buffSnow_Storm_Recover01Name              # Schneesturm: Abklingen
 drugHerbalAntibiotics                     # Kraeutersud (D99/D133)
 drugHerbalAntibioticsDesc
 medicalT2-2                               # Stufe 2: Kraeutersud
+medicalT1-2                               # D179: Stufe 1 Wolfsbalsam statt der gesperrten Fort-Bites
+medicalT2-1                               # D179: Stufe 2 Eulenauge statt des gesperrten Gipsverbands
+medicalT2-3                               # D179: Stufe 2 Baerenmut statt des gesperrten Recog
+medicalT3-1                               # D179: Stufe 3 Quellsud statt des gesperrten Verbandskastens
 challengePlaceDewCollector                # D137: neun Herausforderungen mit neuem Ziel, je Titel, Kurztext, Beschreibung
 challengePlaceDewCollectorShort
 challengePlaceDewCollectorDesc

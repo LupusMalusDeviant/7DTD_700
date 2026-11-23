@@ -77,5 +77,133 @@
 			</effect_group>
 		</item>
 
+		<!-- WP10.5b (D179): VIER TRAENKE UND SALBEN (F-15 "Traenke und Salben").
+		     Kein Odem, jeder darf sie trinken (F-15 Abgrenzung); gebraut in der Kraeuterkueche
+		     (chemistryStation), freigeschaltet beim Heiler ueber die Wundversorgung
+		     (craftingMedical, 700_50_Fortschritt). Voll ausgeschrieben nach Vanillas
+		     drinkJarRedTea bzw. medicalAloeCream, OHNE Extends: geerbt kaemen deren
+		     Wasser- und Heilwirkung mit.
+		     Glas und Topf: der Krug ist Vanillas Glas (Meshfile), wie beim abgekochten Wasser
+		     auch. Ein eigener Tonkrug ist ein Asset (F-16) und Phase-2-Arbeit fuer spaeter.
+		     Die Dauer steht fest im Buff (stack_type replace: ein zweiter Trank setzt die Zeit
+		     neu, verlaengert nicht - F-15 "Stapeln"). Vanillas CVar-Dauer ueber den Stoffwechsel
+		     brauchen wir nicht. Zu pruefen: N-123. -->
+
+		<item name="itm700_eulenauge">
+			<property name="Tags" value="medical,itm700_trank" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarRedTeaPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="90" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarRedTea" />
+			<property name="CustomIconTint" value="7f8fd6" />
+			<property name="DescriptionKey" value="itm700_eulenaugeDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="4" />
+				<property name="Sound_start" value="player_drinking" />
+				<property name="Create_item" value="drinkJarEmpty" />
+				<property name="Use_jar_refund" value="true" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_eulenauge" />
+			</effect_group>
+		</item>
+
+		<item name="itm700_baerenmut">
+			<property name="Tags" value="medical,itm700_trank" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarRedTeaPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="110" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarRedTea" />
+			<property name="CustomIconTint" value="b5652e" />
+			<property name="DescriptionKey" value="itm700_baerenmutDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="4" />
+				<property name="Sound_start" value="player_drinking" />
+				<property name="Create_item" value="drinkJarEmpty" />
+				<property name="Use_jar_refund" value="true" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_baerenmut" />
+			</effect_group>
+		</item>
+
+		<!-- Die Salbe: Vanillas Aloe-Salbe (HoldType, Ton), aber nur auf sich selbst - kein
+		     zweiter Griff "auf andere" (F-11 Heilkunde fuer andere kommt mit dem Wundarzt). -->
+		<item name="itm700_wolfsbalsam">
+			<property name="Tags" value="medical,itm700_trank" />
+			<property name="HoldType" value="64" />
+			<property name="Meshfile" value="@:Other/Items/Health/bandage.FBX" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="70" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="medicalAloeCream" />
+			<property name="CustomIconTint" value="9fae6a" />
+			<property name="DescriptionKey" value="itm700_wolfsbalsamDesc" />
+			<property name="SoundPickup" value="aloe_grab" />
+			<property name="SoundPlace" value="aloe_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="1.5" />
+				<property name="Sound_start" value="player_ointment" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_wolfsbalsam" />
+			</effect_group>
+		</item>
+
+		<!-- Quellsud: +20 Odem, dann 10 min Abklingzeit (Vertrag 07 N1.1, N1.2). Die
+		     Bedingungen stehen IN der Aktion (ExecutionRequirements, Finding WP9.5): solange
+		     die Abklingzeit laeuft oder wer gar keinen Odem hat (cv700_odemMax 0, also kein
+		     Runenkundiger ab Stufe 2), wird nicht getrunken - der Sud bleibt im Beutel statt
+		     verschwendet. Gekappt bei cv700_odemMax; den setzt erst WP10.6, bis dahin bleibt
+		     der Sud gesperrt. Ob die Sperre eine Meldung zeigt: S-38. -->
+		<item name="itm700_quellsud">
+			<property name="Tags" value="medical,itm700_trank" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarRedTeaPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="140" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarBoiledWater" />
+			<property name="CustomIconTint" value="9fd3e0" />
+			<property name="DescriptionKey" value="itm700_quellsudDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="4" />
+				<property name="Sound_start" value="player_drinking" />
+				<property name="Create_item" value="drinkJarEmpty" />
+				<property name="Use_jar_refund" value="true" />
+				<requirement name="!HasBuff" buff="buff700_quellsudAbklingen" />
+				<requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="add" value="20" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="set" value="@cv700_odemMax">
+					<requirement name="CVarCompare" cvar="cv700_odem" operation="GT" value="@cv700_odemMax" />
+				</triggered_effect>
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_quellsudAbklingen" />
+			</effect_group>
+		</item>
+
 	</append>
 </config>

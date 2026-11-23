@@ -184,6 +184,12 @@ Nutzer D100 abnimmt.
 | `itm700_glutstein` | Glutstein | Ember Stone | — | F-15, D177 — zu prüfen (N-121) |
 | `medicalFirstAidBandage` | Salbenverband | Salved Bandage | Erste-Hilfe-Verband / First Aid Bandage | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `drugHerbalAntibiotics` | Kräutersud | Herb Decoction | Natürliche Antibiotika / Herbal Antibiotics | Loop 2026-11-23 — Name zu prüfen (D99, D133) |
+| `itm700_eulenauge` | Eulenauge | Owl's Eye | — (Trank) | F-15, D174, D179 — zu prüfen (N-123) |
+| `itm700_baerenmut` | Bärenmut | Bear's Courage | — (Trank) | F-15, D174, D179 — zu prüfen (N-123) |
+| `itm700_wolfsbalsam` | Wolfsbalsam | Wolf's Balm | — (Salbe) | F-15, D174, D179 — zu prüfen (N-123) |
+| `itm700_quellsud` | Quellsud | Spring Brew | — (Trank, Odem) | F-15, D174, D179 — zu prüfen (N-123) |
+| `buff700_baerenmutNach` | Verbrauchter Mut | Spent Courage | — (Nachwirkung) | D179 — zu prüfen (N-123) |
+| `buff700_quellsudAbklingen` | Quellsud: Nachklang | Spring Brew: Fading | — (Abklingzeit) | D179 — zu prüfen (N-123) |
 
 ## 4. Werkstätten und Feuer
 

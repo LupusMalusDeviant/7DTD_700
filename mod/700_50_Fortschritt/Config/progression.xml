@@ -571,4 +571,32 @@
 			</effect_group>
 		</perk>
 	</append>
+
+	<!-- ===== Die Traenke beim Heiler (D179; Plan-0002 WP10.5b) =====
+	     VON HAND GESCHRIEBEN. F-15 "Traenke und Salben", F-21 (der Heiler braut, D66).
+
+	     Die Wundversorgung (craftingMedical) fuehrt acht Stufen; sechs davon zeigten auf
+	     Rezepte, die der Purge entfernt hat (oben: "2 von 8 bleiben"). Vier dieser leeren
+	     Stufen fuellen jetzt die Traenke - so steht keine Stufe mehr fuer etwas, das es nicht
+	     gibt:
+	       10  Wolfsbalsam  (vorher Fort-Bites)
+	       20  Eulenauge    (vorher Gipsverband)
+	       40  Baerenmut    (vorher Recog)
+	       50  Quellsud     (vorher Verbandskasten)
+	     Die Anzeigezeilen werden ueber ihre name_key-Liste gefasst, der Eintrag ueber seine
+	     Stelle; die Namen der Stufen stehen in 700_90_Sprache. 60 und 75 (Antibiotika,
+	     Steroide) bleiben leer, bis F-11 (Heilkunde) sie fuellt - zu pruefen, N-123. -->
+	<append xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/effect_group">
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="10,100" value="1" tags="itm700_wolfsbalsam"/>
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="20,100" value="1" tags="itm700_eulenauge"/>
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="40,100" value="1" tags="itm700_baerenmut"/>
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="50,100" value="1" tags="itm700_quellsud"/>
+	</append>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT1-1,medicalT1-2']/@icon">medicalFirstAidBandage,medicalAloeCream</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT1-1,medicalT1-2']/unlock_entry[@unlock_tier='2']/@item">itm700_wolfsbalsam</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/@icon">drinkJarRedTea,drugHerbalAntibiotics,drinkJarRedTea</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/unlock_entry[@unlock_tier='1']/@item">itm700_eulenauge</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/unlock_entry[@unlock_tier='3']/@item">itm700_baerenmut</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/@icon">drinkJarBoiledWater,drugAntibiotics,drugSteroids</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/unlock_entry[@unlock_tier='1']/@item">itm700_quellsud</set>
 </config>

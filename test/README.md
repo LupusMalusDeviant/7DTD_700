@@ -63,6 +63,7 @@ Danach die Protokolle beider Seiten aufheben; Claude liest die Zeilen `CVarLogVa
 | S-35 (2) | `giveself t700_amulett`, anlegen; dazu ein `biomeWeatherItem4` | welchen Platz nimmt es, verdrängt es das Abzeichen |
 | S-36 *(seit WP10.4)* | `giveself blk700_runenritzer`, `giveself itm700_ritzmesser`, `giveself itm700_meissel`, setzen und öffnen | Größe und Sitz des Stumpfs; zwei Werkzeugplätze nehmen nur Messer und Meißel; Runenkreide und Glutstein herstellbar; ohne Punkt in Runenritzen sind Stock und Werkzeuge im Rezeptfenster gesperrt |
 | S-37 *(seit WP10.5a)* | `giveself itm700_glutrune` (und `bannrune`, `schutzrune`, `wetterrune`, `wanderrune`), in Waffe bzw. Rüstung setzen | passt jede nur dort, wo sie soll; keine zweite Rune daneben; Rüstwert mit Schutzrune +10 %; Glutrune: Seuchentoter brennt ab und zu nach |
+| S-38 *(seit WP10.5b)* | `giveself itm700_eulenauge` (und `baerenmut`, `wolfsbalsam`, `quellsud`), je trinken bzw. auftragen | Eulenauge nachts: besser, grün?; Bärenmut 3 min, dann „Verbrauchter Mut"; Wolfsbalsam: Leben steigt langsam um rund 24; Quellsud ohne Runenkunde: lässt sich nicht trinken — sagt das Spiel etwas? |
 | S-35 (3) *(seit WP10.3)* | Fertigkeitsfenster öffnen (K), Reihe der Symbole oben | sechs Bäume, „Runenkunde" mit Stern als sechster; passt die Reihe neben das Suchfeld; steht irgendwo ein Rohschlüssel wie `att700_runenkundiger`; einen Punkt hineinsetzen und Perks ansehen |
 
 **Nicht in diesem Lauf** (kein Ersatz durch eine Probe): S-32 (4) „Server setzt einen Wert" braucht

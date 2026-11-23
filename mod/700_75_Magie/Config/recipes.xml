@@ -67,5 +67,36 @@
 			<ingredient name="resourceLeather" count="1" />
 		</recipe>
 
+		<!-- WP10.5b (D179): die vier Traenke in der Kraeuterkueche (chemistryStation),
+		     'learnable' - frei beim Heiler ueber die Wundversorgung (craftingMedical,
+		     700_50_Fortschritt). Nur Kraeuter und Hausmittel (F-15: "nur Material"), alles
+		     Kennungen, die der Purge stehen laesst:
+		     - Eulenauge: Heidelbeeren (Volksglaube: schaerfen den Blick im Dunkeln), Goldrute.
+		     - Baerenmut: Honig und Pilze - der Berserker-Sud der Sage, hier zahm.
+		     - Wolfsbalsam: Tierfett und Goldrute; die Goldrute hiess "heidnisch Wundkraut".
+		     - Quellsud: Goldrute, Honig und eine Prise Runenkreide - der einzige Trank mit einem
+		       Stoff des Runenkundigen, weil er dessen Odem fuellt.
+		     Mengen sind Vorschlag (N-123). -->
+		<recipe name="itm700_eulenauge" count="1" craft_area="chemistryStation" craft_time="20" is_trackable="false" tags="learnable,chemStationCrafting">
+			<ingredient name="drinkJarBoiledWater" count="1" />
+			<ingredient name="foodCropBlueberries" count="3" />
+			<ingredient name="resourceCropGoldenrodPlant" count="1" />
+		</recipe>
+		<recipe name="itm700_baerenmut" count="1" craft_area="chemistryStation" craft_time="20" is_trackable="false" tags="learnable,chemStationCrafting">
+			<ingredient name="drinkJarBoiledWater" count="1" />
+			<ingredient name="foodHoney" count="1" />
+			<ingredient name="foodCropMushrooms" count="2" />
+		</recipe>
+		<recipe name="itm700_wolfsbalsam" count="2" craft_area="chemistryStation" craft_time="20" is_trackable="false" tags="learnable,chemStationCrafting">
+			<ingredient name="resourceAnimalFat" count="2" />
+			<ingredient name="resourceCropGoldenrodPlant" count="2" />
+		</recipe>
+		<recipe name="itm700_quellsud" count="1" craft_area="chemistryStation" craft_time="30" is_trackable="false" tags="learnable,chemStationCrafting">
+			<ingredient name="drinkJarBoiledWater" count="1" />
+			<ingredient name="resourceCropGoldenrodPlant" count="2" />
+			<ingredient name="foodHoney" count="1" />
+			<ingredient name="itm700_runenkreide" count="1" />
+		</recipe>
+
 	</append>
 </config>

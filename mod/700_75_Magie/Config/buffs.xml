@@ -21,5 +21,59 @@
 			</effect_group>
 		</buff>
 
+		<!-- WP10.5b (D179): die Buffs der vier Traenke (F-15 "Traenke und Salben"). Feste Dauer,
+		     stack_type replace: derselbe Trank setzt die Zeit neu (F-15 "Stapeln"). -->
+
+		<!-- Eulenauge, 5 min: Vanillas Nachtsicht-Bild (NightVision, sonst am Helm-Aufsatz mit
+		     Staerke 1) mit einem Drittel der Staerke. F-15 will "etwas besser, ohne gruenes Bild" -
+		     ob ein Drittel noch gruen ist, zeigt erst S-38; dann wird die Zahl kleiner oder ein
+		     anderer Weg gesucht. -->
+		<buff name="buff700_eulenauge" name_key="itm700_eulenauge" description_key="buff700_eulenaugeDesc" icon="ui_game_symbol_candy_eye_candy">
+			<stack_type value="replace" />
+			<duration value="300" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyScreenEffect" effect_name="NightVision" intensity=".33" fade="1" />
+				<triggered_effect trigger="onSelfBuffRemove" action="ModifyScreenEffect" effect_name="NightVision" intensity="0" fade="1" />
+			</effect_group>
+		</buff>
+
+		<!-- Baerenmut, 3 min: +10 % Nahkampfschaden. Die -15 % Grauen-Zuwachs schreibt dieser
+		     Buff NICHT selbst: buff700_grauenSchutz (WP11) zaehlt ihn per HasBuff mit (Vertrag
+		     07 N1.3). Danach 2 min Erschoepfung: Ausdauer kommt 10 % langsamer zurueck. Nur wenn
+		     die Zeit ablaeuft (onSelfBuffFinish); wer nachtrinkt, schiebt sie auf, entgeht ihr
+		     aber nicht. -->
+		<buff name="buff700_baerenmut" name_key="itm700_baerenmut" description_key="buff700_baerenmutDesc" icon="ui_game_symbol_berserker">
+			<stack_type value="replace" />
+			<duration value="180" />
+			<effect_group>
+				<passive_effect name="EntityDamage" operation="perc_add" value=".1" tags="melee" />
+				<triggered_effect trigger="onSelfBuffFinish" action="AddBuff" buff="buff700_baerenmutNach" />
+			</effect_group>
+		</buff>
+
+		<buff name="buff700_baerenmutNach" name_key="buff700_baerenmutNach" description_key="buff700_baerenmutNachDesc" icon="ui_game_symbol_fatigued">
+			<stack_type value="replace" />
+			<duration value="120" />
+			<effect_group>
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.1" />
+			</effect_group>
+		</buff>
+
+		<!-- Wolfsbalsam, 2 min: +1 Leben je 5 s = 24 Leben. -->
+		<buff name="buff700_wolfsbalsam" name_key="itm700_wolfsbalsam" description_key="buff700_wolfsbalsamDesc" icon="ui_game_symbol_add">
+			<stack_type value="replace" />
+			<duration value="120" />
+			<effect_group>
+				<passive_effect name="HealthChangeOT" operation="base_add" value=".2" />
+			</effect_group>
+		</buff>
+
+		<!-- Abklingzeit des Quellsuds, 10 min, sichtbar (Vertrag 07 N1.2). Bleibt ueber einen
+		     Neustart, wenn Vanilla laufende Buffs mit Restzeit speichert - Indiz, S-38. -->
+		<buff name="buff700_quellsudAbklingen" name_key="buff700_quellsudAbklingen" description_key="buff700_quellsudAbklingenDesc" icon="ui_game_symbol_clock">
+			<stack_type value="ignore" />
+			<duration value="600" />
+		</buff>
+
 	</append>
 </config>
