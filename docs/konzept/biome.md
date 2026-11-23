@@ -451,8 +451,15 @@ Einschränkung.
 | 3 | Pelzkragen | Fur Collar | „Ein Kragen aus Pelz, das Haar nach innen, bis über die Nase gezogen. Der Atem wird warm, bevor er die Brust erreicht.\n\nSchützt nicht vor Hitze, Kälte oder Sturm." | "A collar of fur, hair inward, drawn up over the nose. The breath is warm before it reaches the chest.\n\nNo protection against heat, cold or storm." |
 | 4 | Riechbündel | Herb Bundle | „Raute, Wermut und Wacholder, in Leinen gebunden und vor der Nase getragen. Die Alten sagen, der Dunst aus dem Moor gehe an Bitterem nicht vorbei.\n\nSchützt nicht vor Hitze, Kälte oder Sturm." | "Rue, wormwood and juniper, bound in linen and worn before the nose. The old ones say the reek of the mire will not pass anything bitter.\n\nNo protection against heat, cold or storm." |
 
-**Offen:** (a) Ob das höhere Stück die Gefahr der niedrigeren Biome mit aufhebt, ist nicht
-gemessen; es ersetzt das niedrigere im Platz. Hebt es alle auf, muss die Reihe als *ein* Stück
+**Stand 2026-11-23 (WP6.3, D154):** (a) ist gemessen — jedes Stück hat einen **eigenen Platz**
+(`BiomeBadge`, `BiomeBadge2`, `BiomeBadge3`, `BiomeBadge4`) und setzt nur die Frist seiner
+Landschaft (Bedingung `WornItems` mit `biomeBadge1` bis `4`); vier Stücke also, kein wachsendes.
+(c) ist gebaut: Zutaten aus Tuch, Leder, Holzkohle, Flachs und Goldrute (`700_60_Welt/Config/
+recipes.xml`, N-99). Die Texte unten sind noch nicht im Spiel (WP6.3 Teil 2); das Riechbündel
+braucht dort Goldrute statt „Raute, Wermut und Wacholder".
+
+**Offen (Stand vor WP6.3):** ~~(a) Ob das höhere Stück die Gefahr der niedrigeren Biome mit aufhebt, ist nicht
+gemessen; es ersetzt das niedrigere im Platz.~~ Hebt es alle auf, muss die Reihe als *ein* Stück
 erzählt werden, das wächst (Tuch → Tuch mit Schleier → mit Pelz → mit Kräutern), nicht als vier.
 (b) Dass „Pelzkragen" gegen die Biom-Gefahr hilft, aber laut Text nicht gegen Kälte, ist
 Vanillas Mechanik und klingt schief; der Text nennt deshalb den Atem, nicht die Wärme.
@@ -486,6 +493,11 @@ Vanillas Mechanik und klingt schief; der Text nennt deshalb den Atem, nicht die 
   Dunst aus der Brust.\n\nIm Moor hältst du es länger unter freiem Himmel aus." / "Bitter enough
   to draw the tongue together. They say that what tastes like this keeps the reek out of the
   chest.\n\nIn the mire you can stay longer under the open sky."
+
+**Stand 2026-11-23 (WP6.3, D154, N-99):** gebaut als **Bittersud / Bitter Brew** aus Moorpilz,
+Goldrute und abgekochtem Wasser, weil es keinen Wermut gibt; Text unten in Teil 2 anzupassen
+(„Bitter, dass es die Zunge zusammenzieht" trägt weiter). Hustensud und Bittersud zeigen einen
+Krug statt der Spritze.
 
 **Offen:** Der Name darf nichts versprechen, was nicht in den Topf kommt — „Wermutsud" braucht
 eine Zutat Wermut, die es nicht gibt. Zutaten und Mengen sind Balancing. Ob der Trinkton eines

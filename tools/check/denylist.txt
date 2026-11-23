@@ -464,7 +464,22 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 !armorParts                # Ruestungsteile, abstrakter Werkstoff
 !clothing*                 # Kleidungsstufen T1-T3, ohne eigenen Inhalt
 !backpack*                 # Tragebuendel; Rucksaecke sind aelter als 700
-!biomeWeatherItem*         # unsichtbare Fortschrittsmarke, kein Gegenstand
+!biomeWeatherItem*         # die vier Schutzstuecke des Biom-Fortschritts (eigener Platz am Koerper);
+                           # bis 2026-11-23 hiess es hier "unsichtbare Fortschrittsmarke, kein
+                           # Gegenstand" - falsch, biome.md 1.11 (WP6.3, N-99)
+
+# --- Biom-Fortschritt, Weg B (WP6.3, D154, N-99 - zu pruefen durch den Nutzer) ----
+# Die vier Sude kommen zurueck, mit Zutaten des Settings (Rezepte in 700_60_Welt).
+# drinkYuccaJuiceSmoothie bleibt gesperrt (Yucca). Dazu die zwei Wildpflanzen, die
+# in Winterhoehen und Moorland als einzige wachsen: Heidelbeere (die europaeische ist
+# heimisch, biome.md 5 Nr. 11) und der Moorpilz. Ihre Pflanzen zum Saeen bleiben
+# gesperrt (plantedBlueberry*), Gerichte daraus auch (food*Blueberr* sonst).
+!foodBurntSmoothie         # -> Hustensud
+!foodOasisSmoothie         # -> Honigwasser
+!foodFrostbiteSmoothie     # -> Biersuppe
+!foodAtomicSmoothie        # -> Bittersud
+!foodCropBlueberries       # -> Heidelbeere / Bilberry
+!foodCropMushroomsRadiated # -> Moorpilz / Mire Mushroom
 
 # --- Quest-Marken und Schatzkarten ----------------------------------------------
 !quest_tier*complete       # keine Gegenstandskennung, sondern eine Quest-Marke

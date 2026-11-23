@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / recipes.xml
+	     Plan-0002 WP6.3, Biom-Fortschritt Weg B (D128, D154). Zu pruefen durch den Nutzer (N-99).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ZUTATEN SIND SETZUNGEN (Balancing). Regel: was Vanilla verlangt und frei ist,
+	     bleibt; was gesperrt ist, wird durch eine freie Zutat des Settings ersetzt
+	     (Grundsatz aus D89). Alle Zutaten sind vor dem Bau gegen die Sperrliste
+	     geprueft; die Pruefung "recipes" meldet jede, die es nicht ist. -->
+
+	<!-- ====================================================
+	     1. Die vier Sude (biome.md 3.3)
+	     ====================================================
+	     Hustensud (foodBurntSmoothie): Vanillas Zutaten sind alle frei - Holzkohle,
+	     Nesselfaser, Pilze, abgekochtes Wasser. Keine Zeile.
+
+	     Honigwasser (foodOasisSmoothie): Oelschiefer ist gesperrt, Pilze passen nicht
+	     zum Namen. Honig kommt dazu, Hauswurz (Aloe) bleibt mit 2 statt 5. -->
+	<remove xpath="/recipes/recipe[@name='foodOasisSmoothie']/ingredient[@name='resourceOilShale']" />
+	<remove xpath="/recipes/recipe[@name='foodOasisSmoothie']/ingredient[@name='foodCropMushrooms']" />
+	<set xpath="/recipes/recipe[@name='foodOasisSmoothie']/ingredient[@name='resourceCropAloeLeaf']/@count">2</set>
+	<append xpath="/recipes/recipe[@name='foodOasisSmoothie']"><ingredient name="foodHoney" count="1" /></append>
+
+	<!-- Biersuppe (foodFrostbiteSmoothie): Dosen-Chili ist gesperrt, Beeren gehoeren
+	     nicht in eine Biersuppe. Bier und zwei Stueck gebratenes Fleisch. Der
+	     Kochbonus zielte auf die Beeren und faellt mit ihnen. -->
+	<remove xpath="/recipes/recipe[@name='foodFrostbiteSmoothie']/ingredient[@name='foodCanChili']" />
+	<remove xpath="/recipes/recipe[@name='foodFrostbiteSmoothie']/ingredient[@name='foodCropBlueberries']" />
+	<remove xpath="/recipes/recipe[@name='foodFrostbiteSmoothie']/effect_group" />
+	<set xpath="/recipes/recipe[@name='foodFrostbiteSmoothie']/ingredient[@name='foodGrilledMeat']/@count">2</set>
+
+	<!-- Bittersud (foodAtomicSmoothie): Yucca, Mais und Saeure sind gesperrt. Was
+	     bleibt, ist der Moorpilz; dazu Goldrute (die echte Goldrute ist in Europa
+	     heimisch) und abgekochtes Wasser. Der Kochbonus zielt jetzt auf den Pilz. -->
+	<remove xpath="/recipes/recipe[@name='foodAtomicSmoothie']/ingredient[@name='foodCropYuccaFruit']" />
+	<remove xpath="/recipes/recipe[@name='foodAtomicSmoothie']/ingredient[@name='foodCropGraceCorn']" />
+	<remove xpath="/recipes/recipe[@name='foodAtomicSmoothie']/ingredient[@name='resourceAcid']" />
+	<append xpath="/recipes/recipe[@name='foodAtomicSmoothie']"><ingredient name="resourceCropGoldenrodPlant" count="5" /><ingredient name="drinkJarBoiledWater" count="1" /></append>
+	<set xpath="/recipes/recipe[@name='foodAtomicSmoothie']/effect_group/passive_effect[@name='CraftingIngredientCount']/@tags">foodCropMushroomsRadiated</set>
+
+	<!-- ====================================================
+	     2. Die vier Schutzstuecke (biome.md 3.2)
+	     ====================================================
+	     700_30_Ausruestung entfernt Vanillas vier Rezepte (D89, Tabelle 4: Ruestungssatz,
+	     Kunststoff, Linse). Hier kommen sie neu, mit demselben Namen, derselben Zeit und
+	     denselben Marken - "learnable" heisst: freigeschaltet vom Abschluss der Reihe
+	     (Vanillas UnlockedBy am Gegenstand). Je Stueck dieselben Zutaten wie die
+	     Aufgabe 7 der Reihe (challenges.xml desselben Modlets); beide Listen gehoeren
+	     zusammen.
+
+	     Rauchtuch       Vanilla ohne Ruestungssatz und Kunststoff: Tuch, Leder, Holzkohle
+	     Sandschleier    Tuch, Leder, Flachs (statt Linse)
+	     Pelzkragen      Leder (mehr, statt Satz und Kunststoff), Flachs, Tuch (statt Linse)
+	     Riechbuendel    Tuch, Leder, Goldrute (statt Blei und Stahl - ein Kraeuterbuendel) -->
+	<append xpath="/recipes">
+		<recipe name="biomeWeatherItem1" count="1" craft_time="60" tags="biomeProgression,learnable">
+			<ingredient name="resourceCloth" count="20" />
+			<ingredient name="resourceLeather" count="10" />
+			<ingredient name="resourceCoal" count="50" />
+		</recipe>
+		<recipe name="biomeWeatherItem2" count="1" craft_time="60" tags="biomeProgression,learnable">
+			<ingredient name="resourceCloth" count="30" />
+			<ingredient name="resourceLeather" count="10" />
+			<ingredient name="resourceCropCottonPlant" count="20" />
+		</recipe>
+		<recipe name="biomeWeatherItem3" count="1" craft_time="60" tags="biomeProgression,learnable">
+			<ingredient name="resourceLeather" count="30" />
+			<ingredient name="resourceCropCottonPlant" count="50" />
+			<ingredient name="resourceCloth" count="10" />
+		</recipe>
+		<recipe name="biomeWeatherItem4" count="1" craft_time="60" tags="biomeProgression,learnable">
+			<ingredient name="resourceCloth" count="10" />
+			<ingredient name="resourceLeather" count="10" />
+			<ingredient name="resourceCropGoldenrodPlant" count="20" />
+		</recipe>
+	</append>
+</config>

@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     361 Zeilen. -->
+	     357 Zeilen. -->
 
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletAP']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='ammo44MagnumBulletBall']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -154,11 +154,9 @@
 	<remove xpath="/recipes/recipe[@name='electrictimerrelay']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='electricwirerelay']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='endTableLamp']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='foodAtomicSmoothie']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodBaconAndEggs']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodBakedPotato']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodBlueberryPie']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='foodBurntSmoothie']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodCanSham']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodChickenNuggets']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodChickenWings']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -167,12 +165,10 @@
 	<remove xpath="/recipes/recipe[@name='foodCornMeal']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodCornOnTheCob']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodFishTacos']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='foodFrostbiteSmoothie']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodGumboStew']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodHoboStew']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodHoneyBrisket']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodHoneyGlazedSham']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/recipes/recipe[@name='foodOasisSmoothie']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodPumpkinBread']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodPumpkinCheesecake']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/recipes/recipe[@name='foodPumpkinPie']" />  <!-- Weg zu einer gesperrten Kennung -->

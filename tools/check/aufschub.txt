@@ -94,14 +94,13 @@
 # eine Herausforderung, die erfuellbar ist, tut nichts und faellt als
 # 'zielaufschub-trifft-nichts' auf.
 #
-# Die vier Biom-Reihen: je vier von sieben Aufgaben verlangen Gesperrtes (die Traenke,
-# Salpeter, Oelschiefer, Feldfruechte, den Ruestungs-Bausatz). Ihr Reiter ist verborgen,
-# solange der Biom-Fortschritt aus ist (D136); wer ihn anstellt, sieht sie. Was aus den
-# Reihen wird, entscheidet der Umbau des Biom-Fortschritts.
-ziel:burntSurvival*       # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
-ziel:desertSurvival*      # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
-ziel:snowSurvival*        # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
-ziel:wastelandSurvival*   # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
+# Die vier Biom-Reihen standen hier bis 2026-11-23 (je vier von sieben Aufgaben verlangten
+# Gesperrtes). Mit WP6.3 (Weg B, D154, N-99) sind ihre Ziele frei - 700_60_Welt/challenges.xml;
+# die vier Zeilen sind gestrichen, damit die Pruefung zeigt, dass es stimmt.
+#
+# DAMIT IST NICHTS MEHR AUFGESCHOBEN, weder Gegenstand noch Ziel (Stand 2026-11-23, WP6.3).
+# Die Leermeldung kommt darum zurueck, wie oben angekuendigt:
+=kein-aufschub   # alle Aufschuebe eingeloest, zuletzt die vier Biom-Reihen (WP6.3, D154)
 #
 # Zehn ohne lebendes Gegenstueck (D137) standen hier vom 2026-11-23 an fuer wenige Stunden
 # (gathererPotassium, gathererOilShale, farmingCoffeeBeans, farmingYucca, farmingBlueberry,

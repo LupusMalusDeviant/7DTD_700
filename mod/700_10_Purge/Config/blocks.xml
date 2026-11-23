@@ -23,7 +23,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     146 Zeilen aus 2 Teilen. -->
+	     144 Zeilen aus 2 Teilen. -->
 
 	<append xpath="/blocks/block[@name='airConditioner']"><property name="CreativeMode" value="None" /></append>  <!-- verboten nach eigenschaft: moderner_werkstoff -->
 	<set xpath="/blocks/block[@name='appliancesVariantHelper']/property[@name='CreativeMode']/@value">None</set>  <!-- verboten nach name: denylist.txt:392 -->
@@ -137,10 +137,8 @@
 	<remove xpath="/blocks/block/drop[@name='cntFileCabinetBlockVariantHelper']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='decoPumpkinJackOLantern']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCornMeal']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/blocks/block/drop[@name='foodCropBlueberries']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCropCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/blocks/block/drop[@name='foodCropMushroomsRadiated']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCropPotato']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCropPumpkin']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/blocks/block/drop[@name='foodCropYuccaFruit']" />  <!-- Weg zu einer gesperrten Kennung -->

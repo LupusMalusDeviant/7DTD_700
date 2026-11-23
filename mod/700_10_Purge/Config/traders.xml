@@ -13,7 +13,7 @@
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     401 Zeilen. -->
+	     399 Zeilen. -->
 
 	<remove xpath="/traders/trader_info/trader_items/item[@name='foodCropGraceCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_info/trader_items/item[@name='plantedGraceCorn1']" />  <!-- Weg zu einer gesperrten Kennung -->
@@ -218,9 +218,7 @@
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodChiliDog']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCornBread']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCornMeal']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCropBlueberries']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCropCorn']" />  <!-- Weg zu einer gesperrten Kennung -->
-	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCropMushroomsRadiated']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodCropPotato']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodFishTacos']" />  <!-- Weg zu einer gesperrten Kennung -->
 	<remove xpath="/traders/trader_item_groups/trader_item_group/item[@name='foodHoboStew']" />  <!-- Weg zu einer gesperrten Kennung -->

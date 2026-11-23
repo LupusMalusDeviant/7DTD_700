@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / challenges.xml
+	     Plan-0002 WP6.3, Biom-Fortschritt Weg B (D128, D154). Zu pruefen durch den Nutzer (N-99).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Die vier Biom-Reihen (Burnt/Desert/Snow/Wasteland Survival) behalten Kennung,
+	     Gruppe, Reihenfolge und Belohnung (wie D137). Geaendert sind nur die Ziele, die
+	     eine gesperrte Kennung nennen - vorher vier von sieben je Reihe:
+
+	       Aufgabe 2 (Ernte)   Heidelbeere und Moorpilz sind jetzt frei (Sperrliste, WP6.3)
+	       Aufgabe 3, 4 (Sud)  die Sude sind jetzt frei; Rezepte in recipes.xml
+	       Aufgabe 6 (Erz)     Brandland: Salpeter -> Holzkohle, Sandheide: Oelschiefer ->
+	                           Eisen (beide Erze liegen in der Landschaft, biome.md 1.8)
+	       Aufgabe 7 (Zeug)    genau die Zutaten des Schutzstuecks in recipes.xml
+
+	     Die Zahl 250 bei Aufgabe 6 ist Vanillas; sie bleibt. -->
+
+	<!-- ==================================================== Brandland -->
+	<set xpath="/challenges/challenge[@name='burntSurvivalHarvestOre']/objective[@type='Harvest']/@item">resourceCoal</set>
+	<remove xpath="/challenges/challenge[@name='burntSurvivalGatherGear']/objective[@item='resourceArmorCraftingKit']" />
+	<remove xpath="/challenges/challenge[@name='burntSurvivalGatherGear']/objective[@item='resourceScrapPolymers']" />
+
+	<!-- ==================================================== Sandheide -->
+	<set xpath="/challenges/challenge[@name='desertSurvivalHarvestOre']/objective[@type='Harvest']/@item">resourceScrapIron</set>
+	<remove xpath="/challenges/challenge[@name='desertSurvivalGatherGear']/objective[@item='resourceArmorCraftingKit']" />
+	<remove xpath="/challenges/challenge[@name='desertSurvivalGatherGear']/objective[@item='resourceScrapPolymers']" />
+	<remove xpath="/challenges/challenge[@name='desertSurvivalGatherGear']/objective[@item='resourceScopeLens']" />
+	<set xpath="/challenges/challenge[@name='desertSurvivalGatherGear']/objective[@item='resourceCloth']/@count">30</set>
+	<append xpath="/challenges/challenge[@name='desertSurvivalGatherGear']"><objective type="Gather" item="resourceCropCottonPlant" count="20" /></append>
+
+	<!-- ==================================================== Winterhoehen -->
+	<remove xpath="/challenges/challenge[@name='snowSurvivalGatherGear']/objective[@item='resourceArmorCraftingKit']" />
+	<remove xpath="/challenges/challenge[@name='snowSurvivalGatherGear']/objective[@item='resourceScrapPolymers']" />
+	<remove xpath="/challenges/challenge[@name='snowSurvivalGatherGear']/objective[@item='resourceScopeLens']" />
+	<set xpath="/challenges/challenge[@name='snowSurvivalGatherGear']/objective[@item='resourceLeather']/@count">30</set>
+	<append xpath="/challenges/challenge[@name='snowSurvivalGatherGear']"><objective type="Gather" item="resourceCloth" count="10" /></append>
+
+	<!-- ==================================================== Moorland -->
+	<remove xpath="/challenges/challenge[@name='wastelandSurvivalGatherGear']/objective[@item='resourceArmorCraftingKit']" />
+	<remove xpath="/challenges/challenge[@name='wastelandSurvivalGatherGear']/objective[@item='resourceScrapPolymers']" />
+	<remove xpath="/challenges/challenge[@name='wastelandSurvivalGatherGear']/objective[@item='resourceScrapLead']" />
+	<remove xpath="/challenges/challenge[@name='wastelandSurvivalGatherGear']/objective[@item='resourceForgedSteel']" />
+	<append xpath="/challenges/challenge[@name='wastelandSurvivalGatherGear']"><objective type="Gather" item="resourceCloth" count="10" /><objective type="Gather" item="resourceCropGoldenrodPlant" count="20" /></append>
+</config>

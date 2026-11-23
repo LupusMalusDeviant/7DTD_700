@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / items.xml
+	     Plan-0002 WP6.3, Biom-Fortschritt Weg B (D128, D154). Zu pruefen durch den Nutzer (N-99).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Die vier Sude gegen die Biom-Gefahr (docs/konzept/biome.md 3.3). Ihre Wirkung
+	     bleibt Vanillas (P5): sie setzen die Frist der Landschaft hoch und geben einen
+	     kurzen Lauf-Zuschlag. Geaendert ist nur, was man sieht und hoert:
+
+	       foodBurntSmoothie   Hustensud    Spritze -> Krug (Modell, Halteart, Ton, Symbol)
+	       foodOasisSmoothie   Honigwasser  Symbol: Honigtee statt Tonikum
+	       foodFrostbiteSmoothie Biersuppe  bleibt (Topf passt)
+	       foodAtomicSmoothie  Bittersud    Spritze -> Krug (Modell, Halteart, Ton, Symbol)
+
+	     Halteart 3, Toene und Modelle sind Vanillas eigene Werte am Krug
+	     (drinkJarRedTea, drinkJarGoldenRodTea). Die Symbole sind Vanillas Bilder, bis
+	     eigene kommen (F-16). Im Spiel nicht gesehen (S-30). -->
+
+	<!-- Hustensud: Krug mit rotem Tee -->
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@name='CustomIcon']/@value">drinkJarRedTea</set>
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@name='HoldType']/@value">3</set>
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@name='Meshfile']/@value">@:Other/Items/Food/masonJarRedTeaPrefab.prefab</set>
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@name='SoundPickup']/@value">jars_grab</set>
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@name='SoundPlace']/@value">jars_place</set>
+	<set xpath="/items/item[@name='foodBurntSmoothie']/property[@class='Action0']/property[@name='Sound_start']/@value">player_drinking</set>
+
+	<!-- Honigwasser: nur das Symbol -->
+	<set xpath="/items/item[@name='foodOasisSmoothie']/property[@name='CustomIcon']/@value">drinkJarHoneyTea</set>
+
+	<!-- Bittersud: Krug mit Goldrutentee (die Goldrute ist seine Zutat) -->
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@name='CustomIcon']/@value">drinkJarGoldenRodTea</set>
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@name='HoldType']/@value">3</set>
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@name='Meshfile']/@value">@:Other/Items/Food/masonJarGoldenRodTeaPrefab.prefab</set>
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@name='SoundPickup']/@value">jars_grab</set>
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@name='SoundPlace']/@value">jars_place</set>
+	<set xpath="/items/item[@name='foodAtomicSmoothie']/property[@class='Action0']/property[@name='Sound_start']/@value">player_drinking</set>
+</config>
