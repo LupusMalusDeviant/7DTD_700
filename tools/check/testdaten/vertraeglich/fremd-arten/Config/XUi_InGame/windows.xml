@@ -2,7 +2,7 @@
 	<!-- Aendert jede Stelle, die unser Modlet 700_40_Pruef geschrieben hat. -->
 	<setattribute xpath="/windows/window[@name='pruefFensterD']" name="pos">9,9</setattribute>
 	<csv xpath="/windows/window[@name='pruefFensterD']/@tags" delim="," op="remove">c</csv>
-	<removeattribute xpath="/windows/window[@name='pruefFensterD']" name="art" />
+	<removeattribute xpath="/windows/window[@name='pruefFensterD']/@art" />
 	<set xpath="/windows/window[@name='pruefFensterD']/note[@name='hinweis']">fremder Text</set>
 	<!-- Trifft allein nichts: Etiketten hat das Fenster erst, wenn wir sie eingefuegt haben. -->
 	<setattribute xpath="//window[@name='pruefFensterD']/label" name="text">f</setattribute>

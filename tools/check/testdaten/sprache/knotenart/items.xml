@@ -4,7 +4,8 @@
 	     nicht rechnet. Vorher tat es an jeder dieser Stellen nichts und zaehlte die
 	     Operation als angewandt. Kein Spielinhalt. -->
 	<setattribute xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']/@value" name="wert">2</setattribute>
-	<removeattribute xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']/@value" name="wert"/>
+	<!-- removeattribute auf ein ELEMENT: das lehnt das Spiel ab (seit 2026-11-23 wie das Spiel; vorher stand hier ein Attribut mit name=, die Form, die das Spiel nicht liest) -->
+	<removeattribute xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']"/>
 	<insertAfter xpath="/items/item[@name='pruefDing']/@name"><property name="Gewicht" value="1"/></insertAfter>
 	<insertBefore xpath="/items/item[@name='pruefDing']/@name"><property name="Gewicht" value="1"/></insertBefore>
 	<csv xpath="/items/item[@name='pruefDing']/property[@name='Stacknumber']" delim=",">a</csv>

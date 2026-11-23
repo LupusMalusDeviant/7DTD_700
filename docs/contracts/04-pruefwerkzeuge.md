@@ -4366,6 +4366,10 @@ Lücke war echt.
 
 **Grenzen.** Mehrfach-Treffer werden gegen Vanilla gezählt, nicht gegen den gepatchten Stand. Das
 gemeinsame Patch-Modell `patch-operationen.ps1` (genutzt von `sprachverweise-pruefen`,
-`vertraeglichkeit-pruefen`, `testueberlagerung-pruefen`) rechnet `removeattribute` noch als Element mit
-`name` — so, wie das Spiel es **nicht** tut. Das betrifft vor allem fremde Mods in
-`vertraeglichkeit-pruefen` und ist als eigener Schritt offen.
+`vertraeglichkeit-pruefen`, `testueberlagerung-pruefen`) rechnet `removeattribute` **seit
+2026-11-23 so wie das Spiel** (Wunsch des Nutzers): das Attribut kommt aus dem XPath, ein Treffer auf ein
+Element ist „nicht gerechnet" mit dem Grund „das Spiel lehnt das ab". Drei Testdateien standen noch in
+der alten Form und sind nachgezogen (`sprache/knotenart`, `sprache/gruppe-leer/entfernt`,
+`vertraeglich/fremd-arten`); die Erwartung der Knotenart-Gegenprobe nennt jetzt das Element. Gegen die
+alte Fassung von `patch-operationen.ps1` zählt dieselbe Gegenprobe die falsche Form als angewandt
+(6 rot statt 7) und schlägt fehl.

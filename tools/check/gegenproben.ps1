@@ -2609,7 +2609,7 @@ Test-Script 'sprachverweise: Treffer der falschen Knotenart sind rot - sieben Fa
     Vanilla     = $spracheVanilla
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
     '<setattribute> rechnet diese Pruefung nur auf einem Element',
-    '<removeattribute> rechnet diese Pruefung nur auf einem Element',
+    '<removeattribute xpath="/items/item[@name=''pruefDing'']/property[@name=''Stacknumber'']"> trifft ein Element; das Spiel lehnt das ab',
     '<insertAfter> rechnet diese Pruefung nur auf einem Element',
     '<insertBefore> rechnet diese Pruefung nur auf einem Element',
     '<csv> rechnet diese Pruefung nur auf einem Attribut',

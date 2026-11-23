@@ -61,14 +61,19 @@ function Invoke-Operation {
         return
     }
     # Welche Paare aus Operation und Knotenart hier ankommen, entscheidet Get-Hindernis:
-    # setattribute, removeattribute, remove, insertAfter und insertBefore nur mit einem
-    # Element, csv nur mit einem Attribut. Darum steht unten kein stilles "sonst nichts".
+    # setattribute, remove, insertAfter und insertBefore nur mit einem Element,
+    # removeattribute und csv nur mit einem Attribut. Darum steht unten kein stilles
+    # "sonst nichts".
     if (Test-Gleich $Name 'setattribute') {
         $Treffer.SetAttribute($Operation.GetAttribute('name'), $text)
         return
     }
     if (Test-Gleich $Name 'removeattribute') {
-        $Treffer.RemoveAttribute($Operation.GetAttribute('name'))
+        # WIE DAS SPIEL (geaendert 2026-11-23, Spieltest): das Attribut kommt aus dem XPath,
+        # ein Attribut 'name' an der Operation liest das Spiel nicht. Bis dahin stand hier
+        # RemoveAttribute(name) auf einem Element - genau die Form, die das Spiel ablehnt
+        # ("Can only remove Attributes (matched Element ...)", Player.log 2026-11-23).
+        [void]$Treffer.get_OwnerElement().RemoveAttributeNode($Treffer)
         return
     }
     if (Test-Gleich $Name 'remove') {
@@ -122,7 +127,7 @@ function Invoke-Operation {
     }
 }
 
-$nurElement = @('setattribute', 'removeattribute', 'insertAfter', 'insertBefore')
+$nurElement = @('setattribute', 'insertAfter', 'insertBefore')
 
 function Get-Hindernis {
     # Warum sich eine Operation an ihren Treffern NICHT rechnen laesst - oder $null.
@@ -148,6 +153,9 @@ function Get-Hindernis {
             }
         }
         elseif ($art -eq $script:element) {
+            if (Test-Gleich $Name 'removeattribute') {
+                return 'ein Element; das Spiel lehnt das ab ("Can only remove Attributes ... use remove instead")'
+            }
             if (Test-Gleich $Name 'csv') {
                 return 'ein Element; <csv> rechnet diese Pruefung nur auf einem Attribut'
             }
