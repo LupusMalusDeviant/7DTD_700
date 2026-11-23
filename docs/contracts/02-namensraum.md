@@ -213,6 +213,9 @@ Schreibweise wie §2: Kleinschreibung nach dem Präfix, Binnengroßschreibung, d
    Feature-Dokumente werden beim Bau nachgezogen. **[verifizieren, WP9]** Ob das Spiel dem
    ersten Zeichen eines CVar-Namens eine Bedeutung gibt (gespeichert oder nicht, an Mitspieler
    gesendet oder nicht), ist nicht gelesen — vor dem ersten neuen CVar zu lesen.
+   *Gelesen am 2026-11-23 (WP9.2):* ja — `.`, `_` und `%` ändern Senden bzw. Speichern; Namen
+   ohne Zeichen davor (also `cv700_…`) sind normal. Statisches Indiz, Bestätigung S-32; Einzelheiten
+   und die Form `.cv700_…` für Anzeigewerte in [Vertrag 07 §2](07-zustaende-phase-2.md) (Entwurf).
 2. **Was Vanillas Kennung behält, bekommt kein Präfix.** Ein umgedeuteter Vanilla-Gegenstand,
    ein Händler (`trader_info` trägt eine Zahl, keinen Namen), eine umgebogene Herausforderung
    (Vertrag 01, Teil 1c): die Kennung bleibt, der Anzeigename ändert sich. Ein Präfix steht nur

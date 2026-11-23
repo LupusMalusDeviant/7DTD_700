@@ -31,6 +31,7 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 | F-10 Händlerstimmen | `tools/meta/expect/wp85.tsv` | 9 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.7) |
 | Vertrag 06 Kern | `tools/meta/expect/v06-kern.tsv` | 3 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.1) |
 | Vertrag 06 HarmonyX | `tools/meta/expect/v06-harmony.tsv` | 5 | 2026-11-23, grün, gegen `Mods/0_TFP_Harmony/0Harmony.dll` (neu, WP9.1) |
+| Vertrag 07 Zustände | `tools/meta/expect/v07-zustaende.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.2) |
 
 Für alle Patches gilt ab Phase 2b [Vertrag 06](../../contracts/06-csharp-kern-und-patches.md) (Entwurf).
 

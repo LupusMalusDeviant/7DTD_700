@@ -1,0 +1,10 @@
+# Soll-Signaturen fuer Vertrag 07 (Zustaende der Phase 2): wo CVars gesetzt, gesendet und geschrieben werden.
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Die Lesart "erstes Zeichen . _ % aendert Senden und Schreiben" (Vertrag 07 §2) haengt an SetCustomVar und Write.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/v07-zustaende.tsv
+EntityBuffs	SetCustomVar	void EntityBuffs::SetCustomVar(string, float, bool, CVarOperation, bool)
+EntityBuffs	SetCustomVarNetwork	void EntityBuffs::SetCustomVarNetwork(string, float, CVarOperation)
+EntityBuffs	GetCustomVar	float EntityBuffs::GetCustomVar(string)
+EntityBuffs	Write	void EntityBuffs::Write(PooledBinaryWriter, bool)
+EntityBuffs	Read	void EntityBuffs::Read(PooledBinaryReader)
