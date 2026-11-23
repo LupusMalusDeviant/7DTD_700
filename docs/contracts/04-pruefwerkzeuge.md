@@ -4118,3 +4118,26 @@ geprüft", 0 rot.
 
 **Grenzen:** Buffs, die nur über Marken oder Code gesetzt werden, und `buff_tags` liest die Regel nicht.
 Die Test-Überlagerung (`test/`) gehört nicht zu den Patch-Dateien.
+
+## Nachtrag WP10.9 — Tags in Bedingungen in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-127)
+
+Gebaut im autonomen Lauf (Plan-0002 WP10.9, D183).
+
+**Anlass.** Der Lichtfunke kostet Odem über `HoldingItemHasTags`, das Bernsteinamulett wirkt über
+`WornItems` — beide hängen an einem Tag eines Gegenstands. Die Gegenprobe `lichtfunk700` (statt
+`lichtfunke700`) blieb in `check-all` grün: der Funke hätte still nichts gekostet.
+
+**Die Regel.** `kette-pruefen` liest in den Patch-Dateien `tags="…"` jeder `<requirement>` namens
+`HoldingItemHasTags`, `!HoldingItemHasTags`, `ItemHasTags` oder `WornItems` (Listen mit Komma oder `|`)
+und sucht jeden Tag unter den `Tags` der Gegenstände und Aufsätze aus Vanilla (`items.xml`,
+`item_modifiers.xml`) und aus den Patch- und Gegenstands-Dateien. Fehlt `items.xml` im Vanilla-Ordner,
+bleibt die Regel aus und die Ausgabe sagt „nicht geprüft". Neue Zeile: `Tags in Bedingungen: N` (am
+echten Stand 3).
+
+**Gegenprobe** (1 neu, 325 → **326**): `kette/tag` — vertippter Tag in einer verneinten Liste und in
+`WornItems` rot; eigener Tag, Vanilla-Tag und der zweite Tag einer Vanilla-Liste nicht; `EntityTagCompare`
+zählt nicht mit (2 rot). Am echten Modlet: `lichtfunk700` zweimal rot.
+
+**Grenzen:** Tags auf Wesen (`EntityTagCompare`), Block-Tags und `buff_tags` liest die Regel nicht. Groß- und
+Kleinschreibung unterscheidet sie nicht. Der Zweig „nicht geprüft" hat keine eigene Gegenprobe:
+`kette-pruefen` braucht Vanillas `items.xml` schon für die Gegenstände und bricht ohne sie früher ab.

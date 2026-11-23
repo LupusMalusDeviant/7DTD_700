@@ -667,6 +667,10 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Projektil und Glimmen aus WP7.5; Abgleich gegen D10 (F-15:111). (M)
 9. **WP10.9** `[Claude-prüfbar]` **Einfache Zauber:** Glutpfeil, Lichtfunke; der Bannkreis als
    Aura, solange WP9.5 keine kleine Meide-Zone zeigt (F-15:93–94). (M)
+   *Gebaut 2026-11-23 (D183, zu prüfen N-127, Spieltest S-42):* Glutpfeil als Fernkampf ohne
+   Munition, Lichtfunke als Fackel-Licht mit Odem-Abzug beim Halten, Bannkreis als Aura;
+   Freischaltung Glutzauber 1/2, Bannkunde 2. `kette-pruefen` liest Tags in Bedingungen (326
+   Gegenproben). Offen: Bannkunde 3 „Schweres Wort".
 10. **WP10.10** `[braucht Nutzer]` Testlauf T3: Runenstein an einer Palisade, Odem-Leiste, ein
     Trank, eine Rune.
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.9): Bedingungen auf Tags. Gruen: ein eigener Tag
+     (gehalten), ein Vanilla-Tag (getragen), der zweite Tag einer Vanilla-Liste (verneint).
+     Rot: ein vertippter Tag in einer Liste und einer in WornItems. Eine Bedingung anderer Art
+     mit tags="..." zaehlt nicht. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/buffs">
+		<buff name="pruefBuffTag">
+			<duration value="1" />
+			<effect_group>
+				<requirement name="HoldingItemHasTags" tags="pruefTagEigen" />
+				<requirement name="WornItems" tags="pruefTagVanilla" operation="GTE" value="1" />
+				<requirement name="!HoldingItemHasTags" tags="pruefTagZweit,pruefTagFehlt" />
+				<requirement name="WornItems" tags="pruefTagGetragenFehlt" operation="GTE" value="1" />
+				<requirement name="EntityTagCompare" target="other" tags="pruefWesenTag" />
+				<passive_effect name="WalkSpeed" operation="perc_add" value="0" />
+			</effect_group>
+		</buff>
+	</append>
+</config>

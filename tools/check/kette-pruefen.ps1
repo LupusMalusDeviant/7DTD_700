@@ -1102,6 +1102,55 @@ if (Test-Path $buffVanillaPfad) {
     }
 }
 
+# TAGS IN BEDINGUNGEN (ergaenzt 2026-11-23, Plan-0002 WP10.9). Der Lichtfunke kostet Odem ueber
+# HoldingItemHasTags, das Bernsteinamulett wirkt ueber WornItems - beide haengen an einem Tag
+# eines Gegenstands. Ein vertippter Tag macht die Bedingung still falsch: kein Abzug, keine
+# Wirkung, keine Meldung. Gelesen wird tags="..." jeder <requirement> mit dem Namen
+# HoldingItemHasTags, !HoldingItemHasTags, ItemHasTags oder WornItems in den Patch-Dateien;
+# gesucht unter den Tags der Gegenstaende und Aufsaetze aus Vanilla (items.xml,
+# item_modifiers.xml) und aus den Patch-Dateien. Ohne Vanillas items.xml bleibt die Pruefung
+# aus - gesagt in der Ausgabe.
+$tagRefs = 0
+$tagPool = @{}
+$tagGeprueft = $false
+$tagVanillaPfad = Join-Path $Vanilla 'items.xml'
+if (Test-Path $tagVanillaPfad) {
+    $tagGeprueft = $true
+    foreach ($vd in @('items.xml', 'item_modifiers.xml')) {
+        $vp = Join-Path $Vanilla $vd
+        if (-not (Test-Path $vp)) { continue }
+        $kennungen = Get-Kennungen $vp '<property\s+name="Tags"\s+value="([^"]*)"' 1
+        if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+        foreach ($wert in $kennungen.Namen) { foreach ($t in ($wert -split '[,|]')) { if ($t.Trim()) { $tagPool[$t.Trim()] = 'vanilla' } } }
+    }
+    $tagQuellen = @($Patches) + @($Gegenstaende)
+    foreach ($path in $tagQuellen) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        foreach ($n in $xml.SelectNodes("//property[@name='Tags']")) {
+            foreach ($t in ($n.GetAttribute('value') -split '[,|]')) { if ($t.Trim()) { $tagPool[$t.Trim()] = 'unser' } }
+        }
+    }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        foreach ($n in $xml.SelectNodes('//requirement[@tags]')) {
+            if ($n.GetAttribute('name') -notmatch '^!?(HoldingItemHasTags|ItemHasTags|WornItems)$') { continue }
+            foreach ($t in ($n.GetAttribute('tags') -split '[,|]')) {
+                $t = $t.Trim()
+                if ($t.Length -eq 0) { continue }
+                $tagRefs++
+                if (-not $tagPool.ContainsKey($t)) {
+                    $unresolved += "Tag '$t' in $($n.GetAttribute('name')) steht an keinem Gegenstand  ($datei)"
+                }
+            }
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
@@ -1116,6 +1165,7 @@ Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltungen: {1}" -f $angelegteRefs, $freischaltRefs)
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
+Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

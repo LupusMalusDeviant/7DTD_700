@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.9): ein eigener Gegenstand mit einem eigenen Tag.
+     Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/items">
+		<item name="pruefFunke">
+			<property name="Tags" value="pruefTagEigen" />
+		</item>
+	</append>
+</config>

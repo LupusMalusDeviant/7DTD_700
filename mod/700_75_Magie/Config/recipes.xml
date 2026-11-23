@@ -136,5 +136,24 @@
 			<ingredient name="resourceLeather" count="1" />
 		</recipe>
 
+		<!-- WP10.9 (D183): die drei Zauber. Einmal geritzt, bleiben sie; sie kosten danach nur
+		     Odem. Freigeschaltet von Glutzauber 1 (Glutpfeil), Glutzauber 2 (Lichtfunke) und
+		     Bannkunde 2 (Bannkreis), 700_50_Fortschritt. -->
+		<recipe name="itm700_glutpfeil" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="40" is_trackable="false" tags="learnable">
+			<ingredient name="resourceWood" count="4" />
+			<ingredient name="itm700_glutstein" count="2" />
+			<ingredient name="itm700_runenkreide" count="2" />
+		</recipe>
+		<recipe name="itm700_lichtfunke" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="40" is_trackable="false" tags="learnable">
+			<ingredient name="resourceWood" count="2" />
+			<ingredient name="itm700_glutstein" count="3" />
+			<ingredient name="itm700_runenkreide" count="1" />
+		</recipe>
+		<recipe name="itm700_bannkreis" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="40" is_trackable="false" tags="learnable">
+			<ingredient name="resourceWood" count="4" />
+			<ingredient name="resourceBone" count="2" />
+			<ingredient name="itm700_runenkreide" count="3" />
+		</recipe>
+
 	</append>
 </config>

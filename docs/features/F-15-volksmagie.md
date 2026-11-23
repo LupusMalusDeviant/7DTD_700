@@ -174,6 +174,24 @@ Beschreibung). Bis WP10.6 `cv700_odemMax` setzt, ist er darum für alle gesperrt
 | **Lichtfunke** / Light Spark | Licht wie eine Fackel, solange gehalten | 0,5 je s | netto −0,25 je s: mit 100 Odem knapp 7 min; Licht bleibt Ressource (P4) |
 | **Bannkreis** / Ban Circle | Aura 5 m um den Zaubernden: Gegner −25 % Tempo | 30 | 20 s; Aura statt Meide-Zone (D171) |
 
+*Gebaut mit WP10.9 (D183, zu prüfen N-127):* drei bleibende Gegenstände in `700_75_Magie`, einmal an der
+Runenritzer-Bank geritzt (Ritzmesser), danach **nur Odem**. **Glutpfeil** (Glutzauber 1): die Frage
+„ohne Munition" ist mit Vanilla beantwortet — `gunBotT1JunkSledge` schießt `Ranged` mit `Infinite_ammo`
+und ohne `Magazine_items`; so trifft der Glutpfeil auf Sicht bis 25 m mit 30 Schaden (Steinpfeil 35 aus
+dem Holzbogen, −5 wie dessen Abzug) und legt `buff700_brand`. Ein **sichtbares Geschoss** gibt es so nicht;
+es kommt mit den Partikeln aus F-16 (Rückfall „Glutspan" als Wurf bleibt, Frage N-127 (1)). Kosten
+`.cv700_glutKosten`, 10 bzw. ab Glutzauber 2 nur 8 — so wirkt der Rangtext „2 Odem weniger".
+**Lichtfunke** (Glutzauber 2): `ItemClassTorch` mit dem Licht des Fackel-Modells, ohne `heldTorch` (er
+wärmt und trocknet nicht), ohne Setzen an die Wand. Das Licht trägt keine Bedingung (Eigenschaft, keine
+Wirkung) — darum: Halten senkt die Erholung um 0,5/s (netto −0,25/s), und ohne Odem **zehrt** er
+0,5 Leben/s (`buff700_funkeZehrt`, P4: Licht bleibt Ressource). **Bannkreis** (Bannkunde 2): ein Stecken,
+der Schlag zieht den Kreis — `buff700_bannkreis` setzt 20 s lang jede Sekunde `buff700_bannSchwere`
+(−25 %, 2 s) auf alles in 5 m außer Spielern, Händlern, Fahrzeugen, Geschützen (Vanillas
+`buffRingOfFire`). Vertrag 07 Nachtrag 3. Erscheinung bis F-16: Glutpfeil und Bannkreis als
+eingefärbte Holzkeule, Lichtfunke als Fackel (Frage N-127 (3)). **Offen:** Bannkunde 3 „Schweres Wort"
+wirkt noch nicht — `buff700_fluchSchwere` liegt auf dem Ziel und kann den Rang des Werfers nicht lesen;
+Vorschlag N-127 (4). Spieltest S-42.
+
 ### Runenstein der Glut (Rahmen für WP10.8)
 
 1 Schuss je 2 s, Reichweite 12 m, Schaden je Schuss 60 % eines Glutpfeils, **eine Glutladung = 10

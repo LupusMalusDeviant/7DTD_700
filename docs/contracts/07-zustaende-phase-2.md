@@ -270,3 +270,23 @@ Tod), per eigener `effect_group` mit `!HasBuff` — damit sind sie nach Betreten
 
 **Der Punkt** folgt §1 Nr. 4 (abgeleitet → lokal); die Leiste liest auf dem Rechner des Spielers, wo der
 lokale Wert liegt. Ob der Buff dort läuft (S-32 (1)), entscheidet wie in N1.3, ob der Punkt bleibt.
+
+## Nachtrag 3 — die drei Zauber (Plan-0002 WP10.9), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (D183); **zu prüfen durch den Nutzer** (N-127). **Ändert N1.1, Zeile
+„Lichtfunke"**: es gibt keinen Buff `buff700_lichtfunke`. Grund: das Licht kommt aus dem Fackel-Modell
+(`ItemClassTorch`, Eigenschaft `LightValue`), und eine Eigenschaft trägt in XML keine Bedingung — das
+Licht lässt sich nicht an `cv700_odem` > 0 binden. Statt eines eigenen Abzug-Buffs rechnet der eine
+Schreiber der Erholung den Abzug mit; ohne Odem zehrt der Funke am Leben.
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `.cv700_odemRegen` (aus N1.1) | lokaler CVar | dazu −0,5, solange ein Gegenstand mit Tag `lichtfunke700` gehalten wird | weiter **allein** `buff700_odemStufe` (`HoldingItemHasTags`) | abgeleitet | `buff700_odemRegen` |
+| `.cv700_glutKosten` | lokaler CVar | 10, ab Glutzauber Rang 2: 8 | **allein** `buff700_odemStufe` | abgeleitet | der Glutpfeil: Sperre in der Aktion (`CVarCompare … @.cv700_glutKosten`) und Abzug beim Schuss |
+| `buff700_funkeZehrt` | Buff, 2 s, sichtbar | −0,5 Leben je s | `buff700_odemRegen`, jede Sekunde, solange der Lichtfunke ohne Odem gehalten wird | geht verloren | Leben |
+| `buff700_bannkreis` | Buff, 20 s, sichtbar | Aura 5 m | der Bannkreis beim Schlag; Sperre `!HasBuff` in der Aktion | **bleibt** wie eine Abklingzeit (Indiz, N1.2) | setzt jede Sekunde `buff700_bannSchwere` (`selfAOE`) |
+| `buff700_bannSchwere` | Buff auf anderen Wesen (N1.4), 2 s, verborgen | −25 % Tempo | `buff700_bannkreis` | geht verloren | Tempo des Wesens |
+
+Ergänzt N1.4: der Bannkreis legt **nicht** `buff700_fluchSchwere` (−15 %, 30 s), sondern den kurzen
+`buff700_bannSchwere` — wer den Kreis verlässt, ist gleich wieder schnell. Der Glutpfeil legt
+`buff700_brand` wie die Glutrune.

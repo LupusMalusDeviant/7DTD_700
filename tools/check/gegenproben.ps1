@@ -1110,6 +1110,17 @@ Test-Script 'kette-pruefen: ohne buffs.xml im Vanilla-Ordner sind Buffs nicht ge
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('Buff-Verweise: nicht geprueft', '0 rot')
 
+# WP10.9 (2026-11-23): ein Tag in HoldingItemHasTags/WornItems muss an einem Gegenstand stehen -
+# eigener Tag, Vanilla-Tag und der zweite Tag einer Vanilla-Liste sind gruen; der vertippte Tag in
+# einer Liste und der in WornItems rot; EntityTagCompare zaehlt nicht mit.
+Test-Script 'kette-pruefen: vertippte Tags in Bedingungen werden rot, bekannte nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\tag\buffs.xml'), (Join-Path $data 'kette\tag\items.xml'))
+    Vanilla      = (Join-Path $data 'kette\tag\vanilla')
+} -MustContain @("Tag 'pruefTagFehlt' in !HoldingItemHasTags steht an keinem Gegenstand", "Tag 'pruefTagGetragenFehlt' in WornItems steht an keinem Gegenstand", 'Tags in Bedingungen: 5', '2 rot') -MustNotContain @("'pruefTagEigen' in", "'pruefTagVanilla' in", "'pruefTagZweit' in", "'pruefWesenTag'")
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen

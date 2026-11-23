@@ -201,6 +201,11 @@ Nutzer D100 abnimmt.
 | `itm700_hammeramulett` | Hammeramulett | Hammer Amulet | — (Amulett) | F-15, D174, D181 — zu prüfen (N-125) |
 | `itm700_kreuzanhaenger` | Kreuzanhänger | Cross Pendant | — (Amulett, Klostermarkt) | F-15, D174, D181 — zu prüfen (N-125) |
 | `itm700_reliquienkapsel` | Reliquienkapsel | Reliquary | — (Amulett, nur Beute) | F-15, D174, D181 — zu prüfen (N-125) |
+| `itm700_glutpfeil` | Glutpfeil | Ember Bolt | — (Zauber, Fernkampf ohne Munition) | F-15, D174, D183 — zu prüfen (N-127) |
+| `itm700_lichtfunke` | Lichtfunke | Light Spark | — (Zauber, gehaltenes Licht) | F-15, D174, D183 — zu prüfen (N-127) |
+| `itm700_bannkreis` | Bannkreis | Ban Circle | — (Zauber, Aura) | F-15, D171, D183 — zu prüfen (N-127) |
+| `buff700_bannkreis` | Bannkreis | Ban Circle | — (Aura auf dem Zaubernden) | D183 — zu prüfen (N-127) |
+| `buff700_funkeZehrt` | Der Funke zehrt | The Spark Feeds | — (Lichtfunke ohne Odem) | D183 — zu prüfen (N-127) |
 
 ## 4. Werkstätten und Feuer
 

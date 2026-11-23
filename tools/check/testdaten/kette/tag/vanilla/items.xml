@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.9). Erfundene Kennungen, kein Spielinhalt
+     (Projektregel 1 und 7). Dies ist der Vanilla-Stand: ein Gegenstand mit zwei Tags. -->
+<items>
+	<item name="pruefRohstoff">
+		<property name="Tags" value="pruefTagVanilla,pruefTagZweit" />
+		<property name="Stacknumber" value="500" />
+	</item>
+	<item name="pruefWerkzeug">
+		<property name="Stacknumber" value="1" />
+	</item>
+</items>

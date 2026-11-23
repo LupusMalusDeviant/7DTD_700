@@ -144,7 +144,13 @@
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value=".25" />
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value=".5"><requirement name="HasBuff" buff="buff700_amfeuer" /></triggered_effect>
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="multiply" value="1.15"><requirement name="WornItems" tags="amulett700_bernstein" operation="GTE" value="1" /></triggered_effect>
+				<!-- WP10.9 (D183): der gehaltene Lichtfunke kostet 0,5 je Sekunde - netto -0,25. -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="subtract" value=".5"><requirement name="HoldingItemHasTags" tags="lichtfunke700" /></triggered_effect>
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value="0"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="LTE" value="0" /></triggered_effect>
+
+				<!-- WP10.9 (D183): was ein Glutpfeil kostet - 10, ab Glutzauber Rang 2 nur 8. -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_glutKosten" operation="set" value="10" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_glutKosten" operation="set" value="8"><requirement name="ProgressionLevel" progression_name="prk700_glutzauber" operation="GTE" value="2" /></triggered_effect>
 			</effect_group>
 		</buff>
 
@@ -162,6 +168,46 @@
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="set" value="0" />
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="set" value="@cv700_odem"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" /></triggered_effect>
 				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="divide" value="@cv700_odemMax"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" /></triggered_effect>
+
+				<!-- WP10.9 (D183): ohne Odem zehrt der gehaltene Lichtfunke am Leben. -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_funkeZehrt">
+					<requirement name="HoldingItemHasTags" tags="lichtfunke700" />
+					<requirement name="CVarCompare" cvar="cv700_odem" operation="LTE" value="0" />
+				</triggered_effect>
+			</effect_group>
+		</buff>
+
+		<!-- WP10.9 (D183): drei Buffs der Zauber (Vertrag 07 Nachtrag 3).
+		     buff700_funkeZehrt  0,5 Leben je Sekunde, solange der Lichtfunke ohne Odem brennt;
+		       haelt 2 s und wird jede Sekunde neu gesetzt, endet also gleich nach dem Weglegen.
+		     buff700_bannkreis   20 s auf dem Zaubernden; jede Sekunde setzt er allen Wesen in 5 m
+		       buff700_bannSchwere - Form und Ausnahmen wie Vanillas buffRingOfFire.
+		     buff700_bannSchwere -25 % Tempo, 2 s, verborgen; wer den Kreis verlaesst, ist gleich
+		       wieder schnell. -->
+		<buff name="buff700_funkeZehrt" name_key="buff700_funkeZehrt" description_key="buff700_funkeZehrtDesc" icon="ui_game_symbol_fire" icon_color="255,140,60">
+			<damage_type value="heat" />
+			<stack_type value="replace" />
+			<duration value="2" />
+			<effect_group>
+				<passive_effect name="HealthChangeOT" operation="base_subtract" value=".5" />
+			</effect_group>
+		</buff>
+		<buff name="buff700_bannkreis" name_key="buff700_bannkreis" description_key="buff700_bannkreisDesc" icon="ui_game_symbol_skull">
+			<stack_type value="ignore" />
+			<duration value="20" />
+			<update_rate value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" target="selfAOE" range="5" buff="buff700_bannSchwere">
+					<requirement name="!EntityTagCompare" target="other" tags="npc,vehicle,player,turret,drone" />
+				</triggered_effect>
+			</effect_group>
+		</buff>
+		<buff name="buff700_bannSchwere" hidden="true">
+			<stack_type value="replace" />
+			<duration value="2" />
+			<effect_group>
+				<passive_effect name="WalkSpeed" operation="perc_add" value="-.25" />
+				<passive_effect name="RunSpeed" operation="perc_add" value="-.25" />
 			</effect_group>
 		</buff>
 

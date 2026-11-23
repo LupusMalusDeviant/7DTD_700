@@ -551,6 +551,8 @@
 				     Fluchtopf; Rang 2 "Kreis": Totensegen. -->
 				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="itm700_segenWehr,itm700_fluchtopf"/>
 				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="2,3" value="1" tags="itm700_totensegen"/>
+				<!-- WP10.9 (D183): Rang 2 "Kreis" auch den Bannkreis. -->
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="2,3" value="1" tags="itm700_bannkreis"/>
 				<effect_description level="1" desc_key="prk700_bannkundeRank1Desc" long_desc_key="prk700_bannkundeRank1LongDesc"/>
 				<effect_description level="2" desc_key="prk700_bannkundeRank2Desc" long_desc_key="prk700_bannkundeRank2LongDesc"/>
 				<effect_description level="3" desc_key="prk700_bannkundeRank3Desc" long_desc_key="prk700_bannkundeRank3LongDesc"/>
@@ -573,6 +575,11 @@
 			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="6" desc_key="att700_runenkundigerStufe6"/></level_requirements>
 			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="9" desc_key="att700_runenkundigerStufe9"/></level_requirements>
 			<effect_group>
+				<!-- WP10.9 (D183): Rang 1 "Funke" der Glutpfeil, Rang 2 "Licht in der Hand" der
+				     Lichtfunke; den Nachlass auf den Glutpfeil (8 statt 10 Odem) rechnet
+				     buff700_odemStufe in 700_75_Magie. Rang 3 "Steinglut" kommt mit WP10.8. -->
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="itm700_glutpfeil"/>
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="2,3" value="1" tags="itm700_lichtfunke"/>
 				<effect_description level="1" desc_key="prk700_glutzauberRank1Desc" long_desc_key="prk700_glutzauberRank1LongDesc"/>
 				<effect_description level="2" desc_key="prk700_glutzauberRank2Desc" long_desc_key="prk700_glutzauberRank2LongDesc"/>
 				<effect_description level="3" desc_key="prk700_glutzauberRank3Desc" long_desc_key="prk700_glutzauberRank3LongDesc"/>

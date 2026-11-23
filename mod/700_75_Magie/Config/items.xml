@@ -439,5 +439,140 @@
 			</effect_group>
 		</item>
 
+		<!-- ===== DREI EINFACHE ZAUBER (D183; Plan-0002 WP10.9; F-15 "Zauber (nur Odem)") =====
+		     Jeder Zauber ist ein Gegenstand, der bleibt; er kostet nur Odem. Gesperrt wird in der
+		     Aktion (requirement), abgezogen beim Ausloesen - wie die Segen (WP10.5c).
+		     Glutpfeil: Vanillas Fernkampf ohne Munition (gunBotT1JunkSledge: Class Ranged,
+		       Infinite_ammo, keine Magazine_items) - ein Treffer auf Sicht bis 25 m, Schaden wie
+		       ein Steinpfeil vom Holzbogen (35 - 5 = 30), dazu buff700_brand. Kein sichtbares
+		       Geschoss, bis F-16 ein Bild bringt (zu pruefen, N-127). Kosten .cv700_glutKosten:
+		       10, ab Glutzauber 2 nur 8 (buff700_odemStufe schreibt ihn).
+		     Lichtfunke: Vanillas ItemClassTorch (Licht aus dem Fackel-Modell). Eine Eigenschaft
+		       traegt keine Bedingung, also bleibt das Licht an; solange er gehalten wird, sinkt die
+		       Erholung um 0,5 je Sekunde (buff700_odemStufe), und ohne Odem zehrt er am Leben
+		       (buff700_funkeZehrt). Kein heldTorch: er waermt nicht und trocknet nicht.
+		     Bannkreis: ein Stecken; der Schlag zieht den Kreis. 30 Odem, 20 s Aura von 5 m um den
+		       Zaubernden (buff700_bannkreis, selfAOE wie Vanillas buffRingOfFire). -->
+		<item name="itm700_glutpfeil">
+			<property name="Tags" value="itm700_zauber,melee,noMods" />
+			<property name="DisplayType" value="meleeTorch" />
+			<property name="HoldType" value="2" />
+			<property name="Meshfile" value="@:Other/Items/Weapons/Melee/ClubWood/clubWoodPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mwood" />
+			<property name="TintColor" value="150, 70, 40" />
+			<property name="Stacknumber" value="1" />
+			<property name="EconomicValue" value="300" />
+			<property name="SellableToTrader" value="false" />
+			<property name="Group" value="Basics,Ammo/Weapons" />
+			<property name="CustomIcon" value="meleeWpnClubT0WoodenClub" />
+			<property name="CustomIconTint" value="e07040" />
+			<property name="DescriptionKey" value="itm700_glutpfeilDesc" />
+			<property name="SoundUnholster" value="weapon_unholster" />
+			<property name="SoundHolster" value="weapon_holster" />
+			<property class="Action0">
+				<property name="Class" value="Ranged" />
+				<property name="Hitmask_override" value="Bullet" />
+				<property name="Delay" value="2" />
+				<property name="Infinite_ammo" value="true" />
+				<property name="Single_magazine_usage" value="true" />
+				<property name="Sound_start" value="torch_swoosh" />
+				<property name="Sound_repeat" value="" />
+				<property name="Sound_end" value="" />
+				<property name="Sound_empty" value="" />
+				<property name="ScopeOffset" value="0,0,0" />
+				<property name="SideOffset" value="0,0,0" />
+				<property name="BarrelOffset" value="0,0,0" />
+				<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="@.cv700_glutKosten" />
+			</property>
+			<effect_group name="itm700_glutpfeil" tiered="false">
+				<passive_effect name="MaxRange" operation="base_set" value="25" />
+				<passive_effect name="DamageFalloffRange" operation="base_set" value="25" />
+				<passive_effect name="EntityDamage" operation="base_set" value="30" />
+				<passive_effect name="BlockDamage" operation="base_set" value="0" />
+				<passive_effect name="MagazineSize" operation="base_set" value="-1" />
+				<passive_effect name="RoundsPerMinute" operation="base_set" value="30" />
+				<passive_effect name="BurstRoundCount" operation="base_set" value="1" />
+				<passive_effect name="SpreadDegreesVertical" operation="base_set" value="1" />
+				<passive_effect name="SpreadDegreesHorizontal" operation="base_set" value="1" />
+				<triggered_effect trigger="onSelfRangedBurstShotEnd" action="ModifyCVar" cvar="cv700_odem" operation="subtract" value="@.cv700_glutKosten" />
+				<triggered_effect trigger="onSelfDamagedOther" action="AddBuff" target="other" buff="buff700_brand" />
+			</effect_group>
+		</item>
+
+		<item name="itm700_lichtfunke">
+			<property name="Tags" value="itm700_zauber,lichtfunke700,noMods" />
+			<property name="DisplayType" value="meleeTorch" />
+			<property name="Class" value="ItemClassTorch" />
+			<property name="HoldType" value="12" />
+			<property name="Meshfile" value="@:Other/Items/Tools/torch02_unlitPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="1" />
+			<property name="EconomicValue" value="250" />
+			<property name="SellableToTrader" value="false" />
+			<property name="Group" value="Basics" />
+			<property name="CustomIcon" value="meleeToolTorch" />
+			<property name="CustomIconTint" value="ffe0a0" />
+			<property name="DescriptionKey" value="itm700_lichtfunkeDesc" />
+			<property name="LightValue" value=".35" />
+			<property name="LightSource" value="lightSource" />
+			<property name="ActivateObject" value="lightSource" />
+			<property name="AlwaysActive" value="true" />
+			<property name="SoundUnholster" value="torch_unholster" />
+			<property name="SoundHolster" value="torch_holster" />
+			<property class="Action0">
+				<property name="Class" value="DynamicMelee" />
+				<property name="Sphere" value=".1" />
+				<property name="Sound_start" value="torch_swoosh" />
+				<property name="SwingDegrees" value="65" />
+				<property name="SwingAngle" value="90" />
+			</property>
+			<effect_group name="itm700_lichtfunke" tiered="false">
+				<passive_effect name="MaxRange" operation="base_set" value="2.4" />
+				<passive_effect name="EntityDamage" operation="base_set" value="2" />
+				<passive_effect name="BlockDamage" operation="base_set" value="0" />
+				<passive_effect name="AttacksPerMinute" operation="base_set" value="60" />
+				<passive_effect name="StaminaLoss" operation="base_set" value="4" tags="primary" />
+			</effect_group>
+		</item>
+
+		<item name="itm700_bannkreis">
+			<property name="Tags" value="itm700_zauber,melee,noMods" />
+			<property name="DisplayType" value="meleeTorch" />
+			<property name="HoldType" value="2" />
+			<property name="Meshfile" value="@:Other/Items/Weapons/Melee/ClubWood/clubWoodPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mwood" />
+			<property name="TintColor" value="200, 200, 190" />
+			<property name="Stacknumber" value="1" />
+			<property name="EconomicValue" value="300" />
+			<property name="SellableToTrader" value="false" />
+			<property name="Group" value="Basics" />
+			<property name="CustomIcon" value="meleeWpnClubT0WoodenClub" />
+			<property name="CustomIconTint" value="d0d0c0" />
+			<property name="DescriptionKey" value="itm700_bannkreisDesc" />
+			<property name="SoundUnholster" value="weapon_unholster" />
+			<property name="SoundHolster" value="weapon_holster" />
+			<property class="Action0">
+				<property name="Class" value="DynamicMelee" />
+				<property name="Sphere" value=".1" />
+				<property name="Sound_start" value="club_swinglight" />
+				<property name="SwingDegrees" value="65" />
+				<property name="SwingAngle" value="90" />
+				<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="30" />
+				<requirement name="!HasBuff" buff="buff700_bannkreis" />
+			</property>
+			<effect_group name="itm700_bannkreis" tiered="false">
+				<passive_effect name="MaxRange" operation="base_set" value="2.4" />
+				<passive_effect name="EntityDamage" operation="base_set" value="3" />
+				<passive_effect name="BlockDamage" operation="base_set" value="0" />
+				<passive_effect name="AttacksPerMinute" operation="base_set" value="40" />
+				<passive_effect name="StaminaLoss" operation="base_set" value="6" tags="primary" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="subtract" value="30" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_bannkreis" />
+			</effect_group>
+		</item>
+
 	</append>
 </config>
