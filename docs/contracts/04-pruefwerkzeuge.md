@@ -3609,8 +3609,11 @@ Gegenstand hat keinen Weg mehr und darum kein Urteil — die Aufgabe verlangt ih
    `herausforderungen: keine challenges.xml - Ziele nicht geprueft` im Bericht; das ist kein
    Fehler (die kleinen Prüfsätze haben keine).
 2. An jedem `<objective>` einer `<challenge>` werden **Kennungen** gelesen, in Gruppen:
-   `item` (Kommaliste); `block` zusammen mit `alternate_item`; `needed_resource`; `held` nur,
-   wenn `required_held="true"`. Der Zusatz `:VariantHelper` wird für das Urteil abgetrennt.
+   ~~`item` (Kommaliste); `block` zusammen mit `alternate_item`;~~ `item` — eine Kommaliste
+   nur bei `Craft`, `UseItem` und `CureDebuff`, bei jeder anderen Art das **ganze Attribut als
+   ein Name**; `block` für sich; `needed_resource`; `held` nur, wenn `required_held="true"`.
+   Der Zusatz `:VariantHelper` wird für das Urteil abgetrennt. *Berichtigt am 2026-11-23 nach
+   Review 33, siehe „Berichtigung nach Review 33" unten.*
 3. Jeder Wert hat einen **Zustand**:
    - *gesperrt* — eine Regel der Sperrliste oder eine Eigenschaftsregel trifft die Kennung.
      Gefragt wird die **Regel, nicht die Erreichbarkeit**; eine Freigabe schlägt wie überall,
@@ -3675,6 +3678,43 @@ niemand mehr trägt. Nach Finding F-18 §6 schlägt das Spiel diese Namen **ohne
 An Vanilla: `herausforderungsgruppen 19`, `verweise_auf_fehlendes 0`,
 `gruppen_ohne_herausforderung 0`, `kleinste_gruppe 7`. Nicht geprüft: `hidden_by` (nach F-18
 abgesichert), `category` einer Gruppe, mehr als zehn in einer Gruppe.
+
+### Berichtigung nach Review 33, 2026-11-23 — **Abnahme offen** (mit N-34)
+
+Das Codex-Review der Commits `75091ed..d2596a1` fand drei Stellen, an denen die Regel anders
+liest als das Spiel nach Finding F-18. Alle drei machten die Prüfung **grün, wo sie rot sein
+müsste** (oder umgekehrt). Geändert, weil der Nachtrag noch nicht abgenommen ist; die Abnahme
+unter N-34 umfasst diese Berichtigung.
+
+15. **`alternate_item` entscheidet nichts.** Es ersetzt bei `BlockPlace` nur die
+    Vorbedingungs-Anzeige; gezählt wird der genannte Block (F-18 §7.5). Bisher war es ein
+    zweiter Wert der Block-Gruppe: ein fehlender Block mit lebender Fackel war nur ein Hinweis.
+    Jetzt steht `block` allein. Lebt `alternate_item` nicht, ist das der Hinweis
+    **`ziel-anzeige-nennt-totes`** (Zähler `anzeige_nennt_totes`): erfüllbar, aber das Fenster
+    nennt etwas, das man nicht bekommt.
+16. **Eine Liste nur, wo das Spiel teilt.** `Craft` (F-18 §7.4), `UseItem` und `CureDebuff`
+    (§7.6) teilen `item` am Komma. `Harvest`, `Gather` und `Wear` lösen das ganze Attribut über
+    `ItemClass::GetItem` in **eine** Typnummer auf (§7.2, §7.3, §7.7): `item="a,b"` ist dort ein
+    Name, den es nicht gibt, und das Ziel ist tot. Für Arten, die F-18 nicht gelesen hat
+    (`BlockUpgrade`), gilt dasselbe — ein Komma zählt erst als Liste, wenn ein Finding das
+    Teilen zeigt. `block`, `needed_resource`, `held` und `alternate_item` werden nie geteilt.
+17. **Groß- und Kleinschreibung zählt bei Namen nicht.** Herausforderungen und Gruppen liegen
+    im Spiel in einem `CaseInsensitiveStringDictionary` (F-18 §1). Regel 11 und 12 vergleichen
+    seither ohne Schreibung: `group="BASICS"` trifft `Basics`, und die Gruppe ist nicht leer.
+    Die Schreibung der **Zielart** (`type`) bleibt wie in Vanilla verlangt — wie das Spiel sie
+    vergleicht, ist nicht gelesen.
+
+**Kalibrierung danach** (mit der Sperrliste vom 2026-11-23, ohne Aufschub, alte gegen neue
+Fassung): am unveränderten `Data/Config` beide `unerfuellbare_herausforderungen 24`,
+`unerfuellbar_ohne_weg 0`, `ziele_mit_gesperrtem_listenwert 6`; am Dump vom 22.11., 22:08,
+beide 35 (24 gesperrt, 11 ohne Weg), dieselben 35 Namen. Vanilla hat keine Liste außerhalb von
+`CureDebuff`, nur ein `alternate_item` (die Fackel) — an echten Daten ändert sich nichts. Die
+35 aus der Kalibrierung oben gehörten zur Sperrliste jenes Tages.
+
+**Gegenproben** (Projektregel 5): Z12 (`testdaten/ziele-listen`) und Z13
+(`testdaten/ziele-schreibung`) in `gegenproben.ps1`. Gegen die alte Fassung (`ec9140d`) war
+Z12 **grün** (Exit 0, drei Hinweise statt drei Fehlern, `zielGatherListe` gar nicht genannt)
+und Z13 **rot** (drei fehlende Verweise, eine leere Gruppe); mit der neuen ist es umgekehrt.
 
 ### Kalibrierung
 

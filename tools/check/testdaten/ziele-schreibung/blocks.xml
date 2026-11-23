@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blocks>
+	<!-- Gibt Holz beim Ernten: der Weg zu 'pruefHolz'. -->
+	<block name="pruefBaum">
+		<drop event="Harvest" name="pruefHolz" count="2" />
+	</block>
+	<!-- Wird gesetzt, nicht erworben: kein Weg fuehrt zu ihm, und das ist richtig so. -->
+	<block name="pruefLicht">
+		<property name="Tags" value="pruefmarke" />
+	</block>
+	<block name="pruefRahmen">
+		<property name="Tags" value="pruefmarke" />
+	</block>
+</blocks>

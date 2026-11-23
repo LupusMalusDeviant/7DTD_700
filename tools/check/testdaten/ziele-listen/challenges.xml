@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Wie das Spiel ein Ziel liest (Finding F-18 §7, Review 33 vom 2026-11-23).
+     (1) alternate_item ersetzt bei BlockPlace nur die Anzeige der Vorbedingung; gezaehlt wird
+         der genannte Block. Ein fehlender Block mit lebender Fackel ist unerfuellbar.
+     (2) Eine Kommaliste in 'item' gibt es nur bei Craft, UseItem und CureDebuff. Harvest,
+         Gather und Wear loesen das GANZE Attribut als einen Namen auf - eine Liste dort ist
+         ein Name, den es nicht gibt.
+     Erfundene Kennungen; Gegenstaende, Bloecke und Rezepte wie in 'ziele-tippfehler'. -->
+<challenges>
+	<challenge_category name="pruefKategorie" title="pruef" icon="pruef" />
+	<challenge_group name="pruefGruppe" category="pruefKategorie" title_key="pruef" />
+
+	<!-- unerfuellbar: den Block gibt es nicht; die Fackel aendert nur die Anzeige -->
+	<challenge name="zielBlockNurAnzeige" group="pruefGruppe">
+		<objective type="BlockPlace" block="pruefGibtEsNicht" alternate_item="pruefFackel" count="1" />
+	</challenge>
+
+	<!-- unerfuellbar: Harvest kennt keine Liste, 'pruefHolz,pruefGibtEsNicht' ist ein Name -->
+	<challenge name="zielHarvestListe" group="pruefGruppe">
+		<objective type="Harvest" item="pruefHolz,pruefGibtEsNicht" count="10" />
+	</challenge>
+
+	<!-- unerfuellbar: Gather ebenso -->
+	<challenge name="zielGatherListe" group="pruefGruppe">
+		<objective type="Gather" item="pruefSalbe,pruefHolz" count="1" />
+	</challenge>
+
+	<!-- erfuellbar, mit Hinweis: der Block lebt, die Anzeige nennt etwas ohne Weg -->
+	<challenge name="zielAnzeigeTot" group="pruefGruppe">
+		<objective type="BlockPlace" block="pruefLicht" alternate_item="pruefSalbee" count="1" />
+	</challenge>
+
+	<!-- erfuellbar, mit Hinweis: CureDebuff kennt die Liste, die Salbe lebt -->
+	<challenge name="zielCureListe" group="pruefGruppe">
+		<objective type="CureDebuff" debuff="pruefWunde" item="pruefSalbe,pruefSalbee" count="1" />
+	</challenge>
+
+	<!-- erfuellbar: Craft kennt die Liste, die Salbe hat ein Rezept -->
+	<challenge name="zielCraftListe" group="pruefGruppe">
+		<objective type="Craft" item="pruefSalbe,pruefSalbee" count="1" />
+	</challenge>
+</challenges>

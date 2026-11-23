@@ -705,6 +705,38 @@ Test-Output 'Verweise auf fehlende Herausforderung und Gruppe, leere Gruppe' 1 `
                       'herausforderung-verweis-fehlt: zielLebt',
                       'gruppe-ohne-herausforderung: pruefGruppe ')
 
+# Z12. Wie das Spiel ein Ziel liest (Finding F-18 §7; Review 33 vom 2026-11-23). alternate_item
+#      aendert bei BlockPlace nur die Anzeige - ein fehlender Block mit lebender Fackel ist
+#      unerfuellbar, eine tote Anzeige nur ein Hinweis. Eine Kommaliste in 'item' gibt es nur
+#      bei Craft, UseItem, CureDebuff; Harvest und Gather lesen das ganze Attribut als EINEN
+#      Namen. Vor der Berichtigung war dieser Satz gruen (Exit 0, drei Hinweise statt drei
+#      Fehlern), und 'zielGatherListe' fiel gar nicht auf.
+Test-Output 'alternate_item entscheidet nichts, Listen nur bei Craft/UseItem/CureDebuff' 1 `
+    @('anachronisms', (Join-Path $data 'ziele-listen'), '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('unerfuellbares-ziel: zielBlockNurAnzeige',
+                   'pruefGibtEsNicht (nicht definiert)',
+                   'unerfuellbares-ziel: zielHarvestListe',
+                   'pruefHolz,pruefGibtEsNicht (ohne Weg)',
+                   'unerfuellbares-ziel: zielGatherListe',
+                   'ziel-anzeige-nennt-totes: zielAnzeigeTot',
+                   'ziel-nennt-gesperrtes: zielCureListe',
+                   'ziel-nennt-gesperrtes: zielCraftListe',
+                   (Format-Zahl 'unerfuellbare_herausforderungen' 3),
+                   (Format-Zahl 'anzeige_nennt_totes' 1)) `
+    -MustNotContain @('unerfuellbares-ziel: zielAnzeigeTot',
+                      'unerfuellbares-ziel: zielCureListe',
+                      'unerfuellbares-ziel: zielCraftListe')
+
+# Z13. Namen von Herausforderungen und Gruppen vergleicht das Spiel ohne Gross- und
+#      Kleinschreibung (CaseInsensitiveStringDictionary, F-18 §1). Jeder Verweis im Satz trifft,
+#      nur anders geschrieben. Vor der Berichtigung: drei fehlende Verweise und eine leere
+#      Gruppe, Exit 1.
+Test-Output 'Verweise anders geschrieben treffen, die Gruppe ist nicht leer' 0 `
+    @('anachronisms', (Join-Path $data 'ziele-schreibung'), '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @((Format-Zahl 'verweise_auf_fehlendes' 0),
+                   (Format-Zahl 'gruppen_ohne_herausforderung' 0)) `
+    -MustNotContain @('herausforderung-verweis-fehlt', 'gruppe-ohne-herausforderung')
+
 Write-Output ""
 Write-Output "== Gegenproben: Wesen - eine Klasse im Gelaende ist kein Gegenstand (D142) =="
 # Vertrag 04, Nachtrag Pruefungen der Phase 2, Teil 2. Welche Klassen im Gelaende erscheinen,
@@ -3453,6 +3485,20 @@ try {
     $w = New-UeberBaum 'gleicher-wert' -Zeilen @("  <set xpath=""$ueberXPath"">30</set>")
     Test-Script 'testueberlagerung: eine Zeile, die nichts aendert, ist ueberholt' 1 (Get-UeberParameter $w) `
         -FremdesSkript $ueberSkript -MustContain @("<set> aendert nichts, der Wert ist schon '30'") -MustNotContain @('GREEN')
+
+    # Regel 5a (Review 33, 2026-11-23): eine Ueberlagerung VERKUERZT Zahlen (Vertrag 01 B).
+    # Vor der Berichtigung waren alle drei gruen - jede Aenderung galt als erlaubt.
+    $w = New-UeberBaum 'kein-zahl' -Zeilen @("  <set xpath=""$ueberXPath"">abc</set>")
+    Test-Script 'testueberlagerung: <set> auf Text ist keine Verkuerzung' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("<set> setzt 'abc' - eine Ueberlagerung setzt nur Zahlen") -MustNotContain @('GREEN', '30 -> abc')
+
+    $w = New-UeberBaum 'laenger' -Zeilen @("  <set xpath=""$ueberXPath"">3000</set>")
+    Test-Script 'testueberlagerung: <set> auf eine groessere Zahl verlaengert' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('<set> verkuerzt nicht, 30 -> 3000') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'alter-wert-text' -Zeilen @("  <set xpath=""/blocks/block[@name='pruefLicht']/property[@name='Class']/@value"">2</set>")
+    Test-Script 'testueberlagerung: <set> auf einen Wert, der keine Zahl ist' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("<set> trifft den Wert 'PruefKlasse', und der ist keine Zahl") -MustNotContain @('GREEN')
 
     $w = New-UeberBaum 'unter-mod'
     Write-Pruefdatei (Join-Path $w 'mod\700_99_Test\ModInfo.xml') @('<xml />')

@@ -187,6 +187,14 @@ nichts; eine Zeile ändert nichts; eine andere Operation als `<set>`; eine fremd
 `700_99*` unter `mod/`; falscher Name oder fehlende `ModInfo.xml`. `kette-pruefen.ps1` kann das
 nicht: es prüft XPaths gegen Vanilla, und die Ziele der Überlagerung legt erst die Mod an.
 
+*Ergänzt am 2026-11-23 nach Review 33:* „nur Zahlen verkürzt" ist jetzt auch eine Regel der
+Prüfung. Rot ist außerdem: ein `<set>`, dessen neuer Wert keine Zahl ist (Punkt als
+Dezimalzeichen, endlich); ein `<set>` auf einen Wert, der keine Zahl ist; ein `<set>`, dessen
+neue Zahl **nicht kleiner** ist als die alte. Bis dahin galt jede Änderung als erlaubt — `30 →
+abc` und `30 → 3000` waren grün. Folge: ein Wert, bei dem eine *größere* Zahl schneller heißt
+(eine Rate), lässt sich mit `<set>` nicht verkürzen; dafür sind die Proben aus B2 da. Drei neue
+Gegenproben, gegen die alte Fassung (`ec9140d`) alle drei grün, gegen die neue rot.
+
 **Erste Fassung** (`test/700_99_Test/Config/blocks.xml`): die acht Lichtquellen aus F-08 brennen
 `GrowthRate` 2 statt 30 (Wandfackel), 15 (Unschlittkerze Wand und Tisch), 60 (vier Öllampen), 45
 (Holzfeuer). 2 ist Vanillas eigene Untergrenze („should be set no lower than 2"). Der Test

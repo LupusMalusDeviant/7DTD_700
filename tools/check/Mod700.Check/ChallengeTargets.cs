@@ -23,8 +23,10 @@ namespace Mod700.Check;
 /// nichts.</para>
 ///
 /// <para><b>Eine Liste ist ein Entweder-oder</b> (<c>item="a,b,c"</c> bei CureDebuff). Tot
-/// ist ein Ziel erst, wenn KEIN Wert lebt; lebt einer, steht der Rest als Hinweis da. Dass
-/// das Spiel Listen so liest, ist eine Annahme, bis ein Finding sie bestaetigt.</para>
+/// ist ein Ziel erst, wenn KEIN Wert lebt; lebt einer, steht der Rest als Hinweis da. Listen
+/// gibt es nur bei Craft, UseItem und CureDebuff (Finding F-18 §7); jede andere Art liest
+/// das ganze Attribut als einen Namen. <c>alternate_item</c> aendert nur die Anzeige und
+/// entscheidet nichts (Review 33, 2026-11-23).</para>
 /// </summary>
 internal static class ChallengeTargets
 {
@@ -57,6 +59,7 @@ internal static class ChallengeTargets
         int deadOther = 0;
         int deferred = 0;
         int partial = 0;
+        int displayed = 0;
 
         foreach (XElement challenge in document.Descendants("challenge"))
         {
@@ -69,12 +72,18 @@ internal static class ChallengeTargets
             challenges++;
             var deadTexts = new List<string>();
             var partialTexts = new List<string>();
+            var displayTexts = new List<string>();
             bool onlyBlocked = true;
 
             foreach (XElement objective in challenge.Elements("objective"))
             {
                 string type = objective.Attribute("type")?.Value ?? "(ohne type)";
                 int line = ((IXmlLineInfo)objective).LineNumber;
+                foreach ((string shown, string state) in Display(objective, judgement, anyWay, recipes))
+                {
+                    displayTexts.Add($"{type} alternate_item (challenges.xml:{line}): {shown} ({state})");
+                }
+
                 var groups = Groups(objective, type, definitions, judgement, anyWay, recipes);
                 if (groups.Count == 0)
                 {
@@ -145,6 +154,16 @@ internal static class ChallengeTargets
                     string.Join(" | ", partialTexts)
                     + ". Erfuellbar, solange das Spiel die Liste als Entweder-oder liest.");
             }
+
+            if (displayTexts.Count > 0)
+            {
+                displayed++;
+                report.Hint("ziel-anzeige-nennt-totes", name,
+                    string.Join(" | ", displayTexts)
+                    + ". alternate_item ersetzt nur die Anzeige der Vorbedingung (Finding F-18 "
+                    + "§7.5): gezaehlt wird der Block, aber das Fenster nennt etwas, das man "
+                    + "nicht bekommt.");
+            }
         }
 
         report.Count("herausforderungen", challenges);
@@ -154,6 +173,7 @@ internal static class ChallengeTargets
         report.Count("unerfuellbar_gesperrt", deadBlocked);
         report.Count("unerfuellbar_ohne_weg", deadOther);
         report.Count("ziele_mit_gesperrtem_listenwert", partial);
+        report.Count("anzeige_nennt_totes", displayed);
         report.Count("zielaufschubregeln", deferrals.TargetRules);
 
         var unused = deferrals.UnusedTargetRules.ToList();
@@ -174,7 +194,9 @@ internal static class ChallengeTargets
             + "die verlangten Wesen, Biome, Haendler, Auftraege oder Zustaende noch gibt "
             + "(Kill, EnterBiome, MeetTrader, QuestComplete, debuff), sieht sie nicht; ebenso "
             + "wenig, ob eine Menge erreichbar ist oder ob das Spiel ein Ziel ueberhaupt "
-            + "zaehlt. Eine Liste gilt als Entweder-oder - das ist eine Annahme.");
+            + "zaehlt. Eine Liste in 'item' gilt nur bei Craft, UseItem und CureDebuff, und "
+            + "dort als Entweder-oder (F-18 §7); jede andere Art liest das ganze Attribut als "
+            + "einen Namen. alternate_item zaehlt nicht, es gibt nur Hinweise.");
     }
 
     /// <summary>
@@ -187,7 +209,9 @@ internal static class ChallengeTargets
     /// </summary>
     private static void References(Report report, ConfigSource source, XDocument document)
     {
-        var groups = new HashSet<string>(StringComparer.Ordinal);
+        // Das Spiel legt Herausforderungen und Gruppen in einem CaseInsensitiveStringDictionary
+        // ab (Finding F-18 §1): 'Basics' und 'basics' sind derselbe Name.
+        var groups = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (XElement group in document.Descendants("challenge_group"))
         {
             if (group.Attribute("name")?.Value is string groupName && groupName.Length > 0)
@@ -196,8 +220,8 @@ internal static class ChallengeTargets
             }
         }
 
-        var names = new HashSet<string>(StringComparer.Ordinal);
-        var members = new Dictionary<string, int>(StringComparer.Ordinal);
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var members = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         int missing = 0;
 
         foreach (XElement challenge in document.Descendants("challenge"))
@@ -329,7 +353,13 @@ internal static class ChallengeTargets
         // Herstellen verlangt ein Rezept; alles andere irgendeinen Weg.
         bool craft = type == "Craft";
 
-        List<(string, string?)> items = Values(objective, "item")
+        // Eine Kommaliste in 'item' gibt es nur dort, wo Finding F-18 §7 das Teilen gelesen
+        // hat. Jede andere Art (Harvest, Gather, Wear ...) loest das GANZE Attribut als einen
+        // Namen auf; ein Komma darin ist ein Name, den es nicht gibt.
+        IEnumerable<string> itemValues = ListTypes.Contains(type)
+            ? Values(objective, "item")
+            : Whole(objective, "item");
+        List<(string, string?)> items = itemValues
             .Select(v => (v, ItemState(v, craft, judgement, anyWay, recipes)))
             .ToList();
         if (items.Count > 0)
@@ -338,20 +368,18 @@ internal static class ChallengeTargets
         }
 
         // Ein Block wird gesetzt oder aufgewertet, nicht erworben: 'wallTorchLightPlayer'
-        // hat in Vanilla keinen Weg, die Fackel in der Hand (alternate_item) setzt ihn. Darum
-        // gilt fuer Bloecke "definiert und nicht gesperrt", und alternate_item zaehlt als
-        // zweiter Wert derselben Gruppe.
-        List<(string, string?)> blocks = Values(objective, "block")
+        // hat in Vanilla keinen Weg. Darum gilt fuer Bloecke "definiert und nicht gesperrt".
+        // alternate_item gehoert NICHT dazu: es ersetzt nur die Anzeige der Vorbedingung,
+        // gezaehlt wird der Block (F-18 §7.5). Es steht in Display() und gibt nur Hinweise.
+        List<(string, string?)> blocks = Whole(objective, "block")
             .Select(v => (v, BlockState(v, definitions, judgement)))
-            .Concat(Values(objective, "alternate_item")
-                .Select(v => (v, ItemState(v, false, judgement, anyWay, recipes))))
             .ToList();
         if (blocks.Count > 0)
         {
             groups.Add(("block", blocks));
         }
 
-        List<(string, string?)> resources = Values(objective, "needed_resource")
+        List<(string, string?)> resources = Whole(objective, "needed_resource")
             .Select(v => (v, ItemState(v, false, judgement, anyWay, recipes)))
             .ToList();
         if (resources.Count > 0)
@@ -363,7 +391,7 @@ internal static class ChallengeTargets
         if (string.Equals(objective.Attribute("required_held")?.Value, "true",
                 StringComparison.OrdinalIgnoreCase))
         {
-            List<(string, string?)> held = Values(objective, "held")
+            List<(string, string?)> held = Whole(objective, "held")
                 .Select(v => (v, ItemState(v, false, judgement, anyWay, recipes)))
                 .ToList();
             if (held.Count > 0)
@@ -375,9 +403,40 @@ internal static class ChallengeTargets
         return groups;
     }
 
+    /// <summary>
+    /// Was ein Ziel nur ANZEIGT: <c>alternate_item</c> an BlockPlace. Lebt es nicht, ist die
+    /// Herausforderung trotzdem erfuellbar - aber ihr Fenster nennt etwas, das man nicht
+    /// bekommt. Ein Hinweis, kein Fehler.
+    /// </summary>
+    private static List<(string Name, string State)> Display(
+        XElement objective,
+        Judgement judgement,
+        HashSet<string> anyWay,
+        HashSet<string> recipes) =>
+        Whole(objective, "alternate_item")
+            .Select(v => (v, ItemState(v, false, judgement, anyWay, recipes)))
+            .Where(v => v.Item2 is not null)
+            .Select(v => (v.v, v.Item2!))
+            .ToList();
+
+    /// <summary>
+    /// Zielarten, deren <c>item</c> das Spiel am Komma teilt (F-18 §7.4, §7.6). Wie das
+    /// Spiel die Art selbst vergleicht, ist nicht nachgelesen; hier zaehlt die Schreibung
+    /// wie in Vanilla.
+    /// </summary>
+    private static readonly HashSet<string> ListTypes =
+        new(StringComparer.Ordinal) { "Craft", "UseItem", "CureDebuff" };
+
     private static IEnumerable<string> Values(XElement objective, string attribute) =>
         (objective.Attribute(attribute)?.Value ?? string.Empty)
         .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    /// <summary>Das ganze Attribut als EIN Name, wie das Spiel es dort aufloest.</summary>
+    private static IEnumerable<string> Whole(XElement objective, string attribute)
+    {
+        string value = (objective.Attribute(attribute)?.Value ?? string.Empty).Trim();
+        return value.Length == 0 ? [] : [value];
+    }
 
     private static string Bare(string name) =>
         name.EndsWith(VariantSuffix, StringComparison.Ordinal)

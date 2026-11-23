@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Groß- und Kleinschreibung der Namen ist dem Spiel gleich: Herausforderungen, Gruppen
+     und Kategorien liegen in einem CaseInsensitiveStringDictionary (Finding F-18 §1; Review
+     33 vom 2026-11-23). Jeder Verweis hier trifft, nur anders geschrieben - der Satz ist
+     gruen. Ein Vergleich, der die Schreibung beachtet, meldet drei fehlende Verweise und
+     eine leere Gruppe. Gegenstaende, Bloecke und Rezepte wie in 'ziele-tippfehler'. -->
+<challenges>
+	<challenge_category name="pruefKategorie" title="pruef" icon="pruef" />
+	<challenge_group name="pruefGruppe" category="pruefKategorie" title_key="pruef" />
+	<challenge_group name="pruefZweite" category="pruefKategorie" title_key="pruef" />
+
+	<challenge name="zielLebt" group="pruefGruppe">
+		<objective type="Harvest" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- die einzige Herausforderung der zweiten Gruppe; die Gruppe anders geschrieben -->
+	<challenge name="zielAndereSchreibung" group="PRUEFZWEITE">
+		<objective type="Harvest" item="pruefHolz" count="10" />
+	</challenge>
+
+	<challenge name="zielNenntAndersGeschrieben" group="pruefGruppe">
+		<objective type="ChallengeComplete" challenge="ZIELLEBT" count="1" is_redeemed="true" />
+		<objective type="ChallengeComplete" challenge="PruefGruppe" is_redeemed="true" is_group="true" />
+	</challenge>
+</challenges>

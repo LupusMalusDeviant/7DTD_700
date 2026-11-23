@@ -19,6 +19,11 @@
          Datei, darauf der Reihe nach die gleichnamige Datei jedes Modlets).
       5. Jedes <set> aendert den Wert. Ein <set> auf denselben Wert ist ein Befund: dann
          ist die Zeile ueberholt.
+     5a. Jedes <set> verkuerzt: alter und neuer Wert sind Zahlen (Punkt als Dezimalzeichen,
+         endlich), und der neue ist kleiner. Text, eine groessere Zahl und ein Treffer auf
+         einen Wert, der keine Zahl ist, sind Befunde (Review 33, 2026-11-23). Eine Rate, bei
+         der eine groessere Zahl schneller heisst, kann die Ueberlagerung nicht setzen - dafuer
+         gibt es Proben (Regel 7).
       6. Nichts gelesen ist nicht gruen (Ausgang 2).
       Seit Nachtrag Teil 1d (Plan-0002 WP9.10, 2026-11-23) zusaetzlich, Regel 3 gelockert:
       7. <append> ist erlaubt, wenn jedes angehaengte Element einen Namen t700_* traegt (Probe)
@@ -82,6 +87,17 @@ function Read-Xml {
     try { $doc.LoadXml([IO.File]::ReadAllText($Pfad)) }
     catch { Stop-Unpruefbar "$Rolle '$Pfad' laesst sich nicht als XML lesen" }
     return $doc
+}
+
+function Get-Zahl {
+    # Regel 5a (Review 33, 2026-11-23): eine Ueberlagerung VERKUERZT Zahlen. Gelesen wird mit
+    # dem Punkt als Dezimalzeichen, wie das Spiel seine XML liest; alles andere (leer, Text,
+    # 'NaN', 'Infinity', Komma als Dezimalzeichen) ist keine Zahl -> $null.
+    param([string]$Text)
+    $wert = 0.0
+    $ok = [double]::TryParse($Text.Trim(), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$wert)
+    if (-not $ok -or [double]::IsNaN($wert) -or [double]::IsInfinity($wert)) { return $null }
+    return $wert
 }
 
 $operationen = @('set', 'setattribute', 'append', 'prepend', 'insertAfter', 'insertBefore', 'remove', 'removeattribute', 'csv')
@@ -221,10 +237,22 @@ foreach ($ueber in $ueberlagerungen) {
             $hindernis = Get-Hindernis $name $treffer
             if ($null -ne $hindernis) { $befunde.Add("${kurz}: <set> trifft ${hindernis}: $xpath"); continue }
             $neu = $operation.get_InnerText().Trim()
+            $neuZahl = Get-Zahl $neu
+            if ($null -eq $neuZahl) {
+                $befunde.Add("${kurz}: <set> setzt '$neu' - eine Ueberlagerung setzt nur Zahlen, und nur kleinere: $xpath")
+                continue
+            }
             foreach ($knoten in $treffer) {
                 $alt = if ($knoten.get_NodeType() -eq $attributArt) { $knoten.get_Value() } else { $knoten.get_InnerText() }
+                $altZahl = Get-Zahl $alt
                 if (Test-Gleich $alt $neu) {
                     $befunde.Add("${kurz}: <set> aendert nichts, der Wert ist schon '$neu': $xpath")
+                }
+                elseif ($null -eq $altZahl) {
+                    $befunde.Add("${kurz}: <set> trifft den Wert '$alt', und der ist keine Zahl - eine Ueberlagerung verkuerzt nur Zahlen: $xpath")
+                }
+                elseif ($neuZahl -ge $altZahl) {
+                    $befunde.Add("${kurz}: <set> verkuerzt nicht, $alt -> $neu - eine Ueberlagerung setzt nur kleinere Zahlen: $xpath")
                 }
                 else {
                     $geaendert++
