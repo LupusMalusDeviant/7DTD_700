@@ -27,8 +27,10 @@ billigen Jumpscares.
 - Verzahnt mit F-08 (Brenndauer): Wer kein Licht hat, ist blind
 - [verifizieren] per REA bzw. Test: Was davon geht über Weather/Biome-XML, was braucht Sky-/Licht-Hooks?
 
-### B2 — Klanglandschaft (MVP: Vanilla-Sounds umgedeutet · P2: eigene Sounds)
-> **Widerspruch, offen** — siehe Prüfung 0003, W-06
+### B2 — Klanglandschaft (MVP: Seuchentote seltener hörbar · P2: ferne Klänge nur als Trugbild, eigene Sounds)
+> ~~**Widerspruch, offen** — siehe Prüfung 0003, W-06~~ *Aufgelöst mit WP11.1 (2026-11-23):* die
+> Überschrift folgt D74 — ferne Klänge ohne Quelle sind Trugbilder (B4), echte ferne Klänge (die
+> Glocke eines Klosters, F-09 §6) gehören zum Direktor.
 
 - Stille als Werkzeug: Tierlaute verstummen, wenn Seuchentote nahe sind
 - Ferne Klänge: Glocke eines verlassenen Klosters, Wolfsheulen, Rufe, Weinen, Raunen, knackende Äste
@@ -53,6 +55,60 @@ Wirkung in Stufen (alle dezent):
 | Unruhig (30+) | Herzschlag-Sound, Ausdauer-Regeneration leicht reduziert |
 | Verängstigt (60+) | Zittrige Fernkampf-Zielführung, Trugbilder (B4) beginnen |
 | Grauen (85+) | Sichtrand dunkel, stärkere Trugbilder, kurze Panik (Sprint-Zwang beim Treffer) |
+
+#### B3 in Zahlen (Plan-0002 WP11.1, 2026-11-23, D184, zu prüfen N-128)
+
+Alle Zahlen sind **Setzungen**; der Testlauf WP11.10 stellt sie mit verkürzten Werten nach. Ein Buff
+am Spieler zählt **alle 5 Sekunden**; hier je Minute angegeben. Jede Zeile ist eine Bedingung, die es
+gibt (Kurz-Check, Finding WP9.4).
+
+| Steigt | je Minute | Bedingung |
+|---|---|---|
+| Nacht, draußen | +1 | `TimeOfDay` 21–5 und `!IsSheltered` |
+| dunkel | +2 | `CompareLightLevel` unter der Schwelle aus S-34 (1) |
+| allein *(nur Mehrspiel, s. u.)* | +1 | kein `buff700_gesellschaft` und `cv700_mitspielerDa` = 1 |
+| Gesundheit unter 30 % | +2 | `StatComparePercCurrentToMax` |
+| Seuchennacht läuft | +4 | `IsBloodMoon` |
+| Seuchennacht naht | + `cv700_grauenDruck` / 10 (bis +3) | vom Direktor (F-09 §6) |
+| Treffer | +3 je Treffer | Auslöser `onOtherDamagedSelf` |
+
+| Sinkt | je Minute | Bedingung |
+|---|---|---|
+| Tag, draußen oder drinnen | −3 | `TimeOfDay` 6–20 |
+| unter Dach, nicht dunkel | −1 | `IsSheltered` und Licht über der Schwelle |
+| Am Feuer | −4 | `HasBuff buff700_amfeuer` |
+| in Gesellschaft | −1 | `HasBuff buff700_gesellschaft` |
+
+**Schutz** senkt nur den **Zuwachs**: `.cv700_grauenSchutz` (Vertrag 07 N1.3) — Bärenmut 25 %,
+Hammeramulett bzw. Kreuzanhänger 15 %, Schutzzeichen-Aura 25 %; zusammen **höchstens 50 %**.
+Schlaf und Mahlzeit (Tabelle oben) senken erst, wenn ein Auslöser dafür gelesen ist **[verifizieren
+in WP11.3]** — sonst Streichposten, Tageslicht und Feuer tragen die Erlösung allein.
+
+**Was das heißt:** allein, nachts, im dunklen Wald: +4/min → **Unruhig nach 7½ min, Verängstigt nach
+15 min**; eine Spielnacht (22–4 Uhr bei 60-Minuten-Tagen) dauert 15 min. **Grauen (85)** erreicht nur, wer
+dazu getroffen wird, verwundet ist oder in der Seuchennacht draußen steht. Mit Fackel (nicht dunkel):
++1/min, Unruhig erst nach 30 min. Am Feuer fällt es um 4/min, am Tag um 3/min — nach einer Nacht ist
+der Morgen die Erlösung (Grundsatz 2).
+
+**Stufen mit Abstand:** eine Stufe kommt bei 30/60/85 und geht erst bei 25/55/80 — kein Flackern an der
+Schwelle.
+
+| Stufe | Wirkung in Zahlen | Weg | „mild" |
+|---|---|---|---|
+| Unruhig (30+) | Ausdauer-Erholung −10 %; Herzschlag-Laut, sobald F-16 einen liefert (Vanilla hat keinen) | Buff | nur der Laut |
+| Verängstigt (60+) | Streuung Fernkampf und Zauber +25 %; Trugbilder (B4) beginnen | Buff, Tags `ranged`/`itm700_zauber` | Trugbilder selten, keine Streuung |
+| Grauen (85+) | Sichtrand dunkel (`ModifyScreenEffect Dark`, schwach); beim Treffer 3 s Lauftempo +10 % und Ausdauer-Erholung −50 % („Panik") | Buff | nur der Sichtrand |
+
+„Sprint-Zwang beim Treffer" (Tabelle oben) gibt es in XML nicht; die „Panik" oben ist die Fassung
+ohne Zwang. Nahkampf-Schaden und -Tempo bleiben in jeder Stufe unberührt (P3).
+
+**Einzelspiel (D118):** im Einzelspiel ist der Spieler immer allein — **„allein" zählt dort nicht**. Den
+Unterschied kennt XML nicht; der Direktor (C#, Server) setzt `cv700_mitspielerDa` = 1, solange mehr als
+ein Spieler in der Welt ist (Vertrag 07 Nachtrag 4). Fehlt der C#-Teil, liest der Wert 0 und „allein"
+entfällt überall — der sichere Rückfall.
+
+**Karte und Marken (D96):** die Stufe „voll" schaltet Karte, Kompass-Leiste und Marken **nicht** ab. Sie
+sind Bedienhilfe (P5); Furcht kommt aus Dunkelheit und Klang, nicht aus Orientierungsverlust.
 
 - Mechanische Effekte sind gewollt (D14). Säule P3 bleibt aber: Nahkampf wird **nicht** unbrauchbar, vor allem Bogen und Zauber leiden
 - Umsetzung: Buffs und CVars per XML; Messung von Licht, Nähe zu Mitspielern und Sichtkontakt braucht wahrscheinlich C# → REA
@@ -131,7 +187,7 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 → [hook-hypothesen.md#f-17](../rea/hook-hypothesen.md#f-17)
 
 ## Akzeptanzkriterien
-- [ ] Playtest-Frage „Hattest du nachts im Wald allein Angst?“: Mehrheit sagt Ja (5+ Tester)
+- [ ] ~~Playtest-Frage „Hattest du nachts im Wald allein Angst?“: Mehrheit sagt Ja (5+ Tester)~~ *Ersetzt mit WP11.1 (Prüfung 0003 B-34, D45/D46 — solo und intern):* im Testlauf WP11.10 erreicht, wer eine Nacht allein ohne Licht draußen im Wald steht, **mindestens „Verängstigt"**; wer mit Fackel am Feuer sitzt, kommt **nicht über „Unruhig"**. Die Frage an Spieler bleibt für einen öffentlichen Release.
 - [ ] Keine Nacht fühlt sich wie die andere an (Direktor-Log zeigt Phasenwechsel)
 - [ ] Trugbilder sind nur beim betroffenen Spieler sichtbar (Dedicated + 2 Clients)
 - [ ] Grauen-Intensität „aus“ entfernt Trugbilder und Furcht-Effekte vollständig; „mild“ entfernt alle Mechanik-Mali

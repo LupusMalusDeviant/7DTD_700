@@ -290,3 +290,24 @@ Schreiber der Erholung den Abzug mit; ohne Odem zehrt der Funke am Leben.
 Ergänzt N1.4: der Bannkreis legt **nicht** `buff700_fluchSchwere` (−15 %, 30 s), sondern den kurzen
 `buff700_bannSchwere` — wer den Kreis verlässt, ist gleich wieder schnell. Der Glutpfeil legt
 `buff700_brand` wie die Glutrune.
+
+## Nachtrag 4 — Grauen und Seuchennacht ausgearbeitet (Plan-0002 WP11.2), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (D184); **zu prüfen durch den Nutzer** (N-128). Noch nichts davon ist gebaut.
+Die Zahlen stehen in F-17 „B3 in Zahlen" und F-09 „Ausarbeitung" (§7 dieses Vertrags).
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `buff700_grauenZaehlen` | Buff, dauernd, verborgen | zählt alle 5 s | gesetzt wie die Odem-Buffs über Vanillas `buffStatusCheck01` (Nachtrag 2) | neu gesetzt | schreibt **allein** `cv700_grauen` (§3.1): Zuwachs × (1 − `.cv700_grauenSchutz`), Abbau, Kappung 0–100 |
+| `buff700_grauenUnruhig` / `…Veraengstigt` / `…Grauen` (§3.1) | Buff | an ab 30/60/85, aus unter 25/55/80 | `buff700_grauenZaehlen` per `CVarCompare` | abgeleitet | Effekte nach `cv700_grauenDaempfung` (§3.2) |
+| `buff700_grauenPanik` | Buff, 3 s | Lauftempo +10 %, Ausdauer-Erholung −50 % | Treffer (`onOtherDamagedSelf`) bei Stufe Grauen und Dämpfung 0 | geht verloren | — |
+| `cv700_mitspielerDa` | CVar je Spieler | 1, wenn mehr als ein Spieler in der Welt ist, sonst 0 | **Server**, Direktor (C#, §3.3), bei Betreten und Verlassen eines Spielers | wird neu gesetzt | Zeile „allein" in `buff700_grauenZaehlen` (D118) |
+| `buff700_seuchennachtBeginn` | Buff, 70 s, verborgen | 60 s Stille, dann ein Glockenschlag und eine Meldung | jeder Spieler selbst, wenn `IsBloodMoon` wahr wird und `buff700_seuchennachtGelaeutet` fehlt | geht verloren | — |
+| `buff700_seuchennachtGelaeutet` | Buff, 12 h Spielzeit, verborgen | Marke „heute schon geläutet" | `buff700_seuchennachtBeginn` beim Ende | **bleibt** (Indiz, N1.2) | Sperre gegen ein zweites Läuten |
+
+**Rückfall ohne C#:** `cv700_mitspielerDa` liest 0, „allein" entfällt (Einzelspiel-Regel D118 gilt dann
+überall); `cv700_grauenDruck` liest 0, keine Vorboten. Das Grauen selbst läuft ganz in XML.
+
+**Ergänzt §3.1:** der Schreiber von `cv700_grauen` ist **ein** Buff. Treffer schreiben nicht selbst in den
+Wert, sondern zählen über einen Auslöser in demselben Buff — sonst hätte `cv700_grauen` zwei Schreiber
+derselben Art, und die Kappung wüsste nicht von beiden (§1 Nr. 2).

@@ -693,7 +693,11 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Vanillas Optionen, die Vorboten. F-17: Zahlen für B3 (Steig- und Sinkraten zu den Schwellen 30,
    60, 85; F-17:51–55), der Satz zum Einzelspiel (D118), ein erfüllbares Kriterium statt „5+
    Tester" (0003:264), die Überschrift von B2 (0003:328). (L)
+   *Ausgearbeitet 2026-11-23 (D184, zu prüfen N-128):* F-09 „Ausarbeitung" §1–8 und sechs neue
+   Kriterien; F-17 „B3 in Zahlen", Einzelspiel-Satz, Karte auf „voll", neues Kriterium, B2-Überschrift.
 2. **WP11.2** `[Claude-prüfbar]` Vertragsbezug: Vertrag 07. (S)
+   *Entwurf 2026-11-23:* Vertrag 07 Nachtrag 4 (Zähl-Buff, Panik, `cv700_mitspielerDa`, Beginn der
+   Seuchennacht), **Abnahme offen**.
 3. **WP11.3** `[Claude-prüfbar]` **Grauen, Stufe XML** (P2-E19): CVar, drei Stufen-Buffs, Quellen
    aus den vorhandenen Bedingungen (Nacht, kein Dach, Zufall, Zähler; Kurz-Check:119–127), „Am
    Feuer" senkt, der Regler aus/mild/voll über eine vorhandene Bedingung, soweit belegt. (M)
