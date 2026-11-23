@@ -259,7 +259,8 @@ if (Test-Path $ourCsv) {
     # keine Kennung ist (700_modName, XUi-Elemente). Der Sprachschluessel eines
     # Gegenstands IST seine Kennung - siehe die Berichtigung in Vertrag 02 §5 -, also
     # muss hier jedes Kennungspraefix stehen und nicht nur '700_'.
-    $praefixe = '700_,itm700_,blk700_,buff700_,cv700_,prk700_,att700_,lg700_,ent700_'
+    # skl700_ seit WP10.3 (Vertrag 02 Nachtrag A, Fertigkeitsgruppe).
+    $praefixe = '700_,itm700_,blk700_,buff700_,cv700_,prk700_,att700_,lg700_,ent700_,skl700_'
     $arguments = @('localization', $ourCsv, '--prefix', $praefixe)
     $vanillaKeys = Join-Path $here 'vanilla-keys.txt'
     if (Test-Path $vanillaKeys) { $arguments += @('--vanilla-keys', $vanillaKeys) }

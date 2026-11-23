@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_50_Fortschritt / XUi_InGame/windows.xml
+	     F-21, F-15: der Runenkundige als sechstes Attribut (D111, D171, D176; Plan-0002 WP10.3)
+
+	     VON HAND GESCHRIEBEN.
+
+	     Das Fertigkeitsfenster zeigt die Attribute als Reihe von Symbolen in einem Raster mit
+	     cols="8" (Finding WP9-odem-und-verderb.md Paragraf 5). Vanilla fuehrt 8 Attribute,
+	     eines davon versteckt (attGeneralPerks); ob das versteckte einen Platz belegt, ist nicht
+	     gelesen. Darum 9 Plaetze: zeigt das Spiel nur 8, bleibt einer leer.
+
+	     Die Plaetze werden schmaler (43 auf 40), damit der neunte nicht unter das Suchfeld
+	     rutscht, das bei x=394 beginnt: 18 + 9 x 40 = 378.
+
+	     Additiv (D5): nur zwei Attribute an einem Raster, kein Fenster ersetzt.
+	     Pruefung im Spiel: S-35 (3). -->
+
+	<setattribute name="cols"
+	              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">9</setattribute>
+	<setattribute name="cell_width"
+	              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">40</setattribute>
+</config>

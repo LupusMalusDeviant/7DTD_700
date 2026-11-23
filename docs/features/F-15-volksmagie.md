@@ -23,6 +23,9 @@ in die Zeit passt**: Geschütztürme, Strom, Elektrofallen, Sprengstoff.
    **sechsten, eigenen Attribut Runenkundiger** (D111, D171; `attIntellect` bleibt der Heiler, D66)
    und an Abschriften (F-04). Sie ist kein Loot-Glück.
    ~~(**Widerspruch, offen** — siehe Prüfung 0003, W-01)~~ *W-01 berichtigt mit WP10.1 (D174, zu prüfen N-118).*
+   *Gebaut mit WP10.3 (D176, N-120):* `att700_runenkundiger`, im Spiel **Runenkunde**, mit zwei Gruppen
+   und vier Perks (Runenritzen, Bannkunde, Odemtiefe, Glutzauber) in `700_50_Fortschritt`; ihre
+   Wirkungen kommen mit WP10.5–10.9.
 5. **Christlich und heidnisch gleichwertig:** Runen und Segen sind zwei Traditionen mit
    unterschiedlichem Stil, aber gleicher Stärke. Die Mod wertet keinen Glauben.
 6. **Vanilla zuerst (P5):** Jede Magieform wird auf ein bestehendes Vanilla-System

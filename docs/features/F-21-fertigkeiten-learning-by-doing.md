@@ -20,7 +20,7 @@ und die Zuordnung folgt den Marken, die den Purge überleben — gemessen in
 | **Krieger** | `attFortitude` | 4: Schlagringe, bloße Hand | Nahkampf, Schild, schwere Rüstung | Klingenkunde, Wuchtwaffen, Schildwall, Rüstungsgewöhnung | Schildwall-Bonus für Nachbarn |
 | **Jäger** | `attAgility` | 17: Bögen, Armbrüste, Pfeile, Messer | Bogen, Armbrust, Wurfwaffen, Schleichen, Spuren, Tiere jagen | Bogenschießen, Wurfarm, Fährtenlesen, Leiser Tritt | Gegner bzw. Spuren für Gruppe markieren |
 | **Handwerker** | `attStrength` | 18: Äxte, Hacken, Schaufeln, Hammer | Schmieden, Bauen, Werkstätten, Reparatur, Abbau | Schmiedekunst, Zimmerei, Steinmetz, Bergmann | Reparatur für andere, Gesellen anleiten |
-| ~~**Runenkundiger**~~ **Phase 2 (D66)** | — | — | Magie, Odem, Runen, Runensteine, Flüche | Runenritzen, Odemtiefe, Glutzauber, Bannkunde, Hochmagie | Gruppen-Schutzzeichen |
+| ~~**Runenkundiger**~~ **Phase 2 (D66)** — *gebaut WP10.3 (D176):* **Runenkunde** | `att700_runenkundiger` (eigenes, sechstes Attribut, D111) | — (Magie-Gegenstände bekommen die Marke mit WP10.9) | Magie, Odem, Runen, Runensteine, Flüche | Runenritzen, Odemtiefe, Glutzauber, Bannkunde; ~~Hochmagie~~ (Phase 4, D38) | Gruppen-Schutzzeichen |
 | **Heiler** | `attIntellect` | 0 — keine Waffenmarke | Kräuter, Krankheiten, Tränke, Segen, Furcht | Kräuterkunde, Wundarzt, Seuchenkunde, Seelentrost | Heilt bzw. segnet Gruppe, Furcht-Aura senken |
 | **Fuhrmann** (hieß „Transport & Logistik") | `attPerception` | 4: Speere, wandern in WP7.2 zum Jäger | Tragkraft, Karren, Tiere, Pferde, Wegsteine, Marsch | Tragkraft, Wagnerei, Tierkunde, Sattlerei, Wegkunde | Gruppenlast, Wegsteine für Gruppe |
 

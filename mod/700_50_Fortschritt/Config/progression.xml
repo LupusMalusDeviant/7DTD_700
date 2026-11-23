@@ -470,4 +470,96 @@
 	     den Beutesack - kein eigenes Bild. Der Name ("Finderglueck") steht in
 	     700_90_Sprache/Config/Localization.csv. Der Perk selbst bleibt, wo er ist. -->
 	<setattribute name="icon" xpath="/progression/perks/perk[@name='perkLuckyLooter']">ui_game_symbol_loot_sack</setattribute>
+
+	<!-- ===== Der Runenkundige, das sechste Attribut (D111, D171, D176; Plan-0002 WP10.3) =====
+	     VON HAND GESCHRIEBEN. F-15, F-21. Phase 2: hier, nicht in Phase 1 (D66).
+
+	     Ein EIGENES Attribut, kein umgedeutetes: alle fuenf Vanilla-Attribute tragen schon
+	     einen Baum (D66), attIntellect den Heiler. Der Code nennt nur attFortitude und
+	     attcrafting beim Namen (siehe oben), ein neues Attribut beruehrt keinen von beiden.
+
+	     Stufe 1 hat jeder; ab Stufe 2 gibt es Odem (F-15 "Der Kern der Phase 2 in Zahlen").
+	     Die Wirkungen der Perks kommen mit ihrem Inhalt: Runen und Rezepte in WP10.5, Odem in
+	     WP10.6, Zauber in WP10.9, Runenstein in WP10.8. Bis dahin tragen die Perks nur ihre
+	     Stufen und Texte - gebaut wird in derselben Phase, ausgeliefert erst mit Inhalt (D66).
+
+	     Symbole sind vorhandene des Spiels, keine eigenen (F-16 spaeter). -->
+	<insertAfter xpath="/progression/attributes/attribute[@name='attIntellect']">
+		<attribute name="att700_runenkundiger" name_key="att700_runenkundigerName" desc_key="att700_runenkundigerDesc" icon="ui_game_symbol_star">
+			<level_requirements level="1"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
+			<level_requirements level="2"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
+			<level_requirements level="3"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
+			<level_requirements level="4"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
+			<level_requirements level="5"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
+			<level_requirements level="6"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints02"/></level_requirements>
+			<level_requirements level="7"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints02"/></level_requirements>
+			<level_requirements level="8"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints02"/></level_requirements>
+			<level_requirements level="9"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints03"/></level_requirements>
+			<level_requirements level="10"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints03"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="att700_runenkundigerRank1Desc" long_desc_key="att700_runenkundigerRank1LongDesc"/>
+				<effect_description level="2" desc_key="att700_runenkundigerRank2Desc" long_desc_key="att700_runenkundigerRank2LongDesc"/>
+				<effect_description level="3" desc_key="att700_runenkundigerRank3Desc" long_desc_key="att700_runenkundigerRank3LongDesc"/>
+				<effect_description level="4" desc_key="att700_runenkundigerRank4Desc" long_desc_key="att700_runenkundigerRank4LongDesc"/>
+				<effect_description level="5" desc_key="att700_runenkundigerRank5Desc" long_desc_key="att700_runenkundigerRank5LongDesc"/>
+				<effect_description level="6" desc_key="att700_runenkundigerRank6Desc" long_desc_key="att700_runenkundigerRank6LongDesc"/>
+				<effect_description level="7" desc_key="att700_runenkundigerRank7Desc" long_desc_key="att700_runenkundigerRank7LongDesc"/>
+				<effect_description level="8" desc_key="att700_runenkundigerRank8Desc" long_desc_key="att700_runenkundigerRank8LongDesc"/>
+				<effect_description level="9" desc_key="att700_runenkundigerRank9Desc" long_desc_key="att700_runenkundigerRank9LongDesc"/>
+				<effect_description level="10" desc_key="att700_runenkundigerRank10Desc" long_desc_key="att700_runenkundigerRank10LongDesc"/>
+			</effect_group>
+		</attribute>
+	</insertAfter>
+
+	<!-- Zwei Gruppen, wie Vanilla drei je Attribut fuehrt. Praefix skl700_ (Vertrag 02
+	     Nachtrag A, ergaenzt mit WP10.3). -->
+	<append xpath="/progression/skills">
+		<skill name="skl700_runenUndZeichen" parent="att700_runenkundiger" name_key="skl700_runenUndZeichenName" desc_key="skl700_runenUndZeichenDesc" icon="ui_game_symbol_star"><effect_group/></skill>
+		<skill name="skl700_odemUndZauber" parent="att700_runenkundiger" name_key="skl700_odemUndZauberName" desc_key="skl700_odemUndZauberDesc" icon="ui_game_symbol_fire"><effect_group/></skill>
+	</append>
+
+	<!-- Vier Perks aus F-21 (Runenritzen, Bannkunde, Odemtiefe, Glutzauber), je drei Raenge
+	     an den Stufen 2/5/8 bzw. 3/6/9 des Attributs. Hochmagie bleibt Phase 4 (D38). -->
+	<append xpath="/progression/perks">
+		<perk name="prk700_runenritzen" max_level="3" parent="skl700_runenUndZeichen" name_key="prk700_runenritzenName" desc_key="prk700_runenritzenDesc" icon="ui_game_symbol_star">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="2" desc_key="att700_runenkundigerStufe2"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="5" desc_key="att700_runenkundigerStufe5"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="8" desc_key="att700_runenkundigerStufe8"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_runenritzenRank1Desc" long_desc_key="prk700_runenritzenRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_runenritzenRank2Desc" long_desc_key="prk700_runenritzenRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_runenritzenRank3Desc" long_desc_key="prk700_runenritzenRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_bannkunde" max_level="3" parent="skl700_runenUndZeichen" name_key="prk700_bannkundeName" desc_key="prk700_bannkundeDesc" icon="ui_game_symbol_skull">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="3" desc_key="att700_runenkundigerStufe3"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="6" desc_key="att700_runenkundigerStufe6"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="9" desc_key="att700_runenkundigerStufe9"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_bannkundeRank1Desc" long_desc_key="prk700_bannkundeRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_bannkundeRank2Desc" long_desc_key="prk700_bannkundeRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_bannkundeRank3Desc" long_desc_key="prk700_bannkundeRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_odemtiefe" max_level="3" parent="skl700_odemUndZauber" name_key="prk700_odemtiefeName" desc_key="prk700_odemtiefeDesc" icon="ui_game_symbol_campfire">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="2" desc_key="att700_runenkundigerStufe2"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="5" desc_key="att700_runenkundigerStufe5"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="8" desc_key="att700_runenkundigerStufe8"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_odemtiefeRank1Desc" long_desc_key="prk700_odemtiefeRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_odemtiefeRank2Desc" long_desc_key="prk700_odemtiefeRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_odemtiefeRank3Desc" long_desc_key="prk700_odemtiefeRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_glutzauber" max_level="3" parent="skl700_odemUndZauber" name_key="prk700_glutzauberName" desc_key="prk700_glutzauberDesc" icon="ui_game_symbol_fire">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="3" desc_key="att700_runenkundigerStufe3"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="6" desc_key="att700_runenkundigerStufe6"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="9" desc_key="att700_runenkundigerStufe9"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_glutzauberRank1Desc" long_desc_key="prk700_glutzauberRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_glutzauberRank2Desc" long_desc_key="prk700_glutzauberRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_glutzauberRank3Desc" long_desc_key="prk700_glutzauberRank3LongDesc"/>
+			</effect_group>
+		</perk>
+	</append>
 </config>

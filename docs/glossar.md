@@ -318,6 +318,13 @@ Nutzer D100 abnimmt.
 | `attagility` | Jäger | Hunter | Beweglichkeit / Agility | D66, WP7 |
 | `attintellect` | Heiler | Healer | Intelligenz / Intellect | D66, WP7 |
 | `attperception` | Fuhrmann | Carter | Wahrnehmung / Perception | D66, WP7 |
+| `att700_runenkundigerName` | Attribut: Runenkunde | Attribute: Rune Lore | — (neu, sechstes Attribut `att700_runenkundiger`) | D111, D176 — Name zu prüfen (N-120) |
+| `skl700_runenUndZeichenName` | Runen und Zeichen | Runes and signs | — | D176 — zu prüfen (N-120) |
+| `skl700_odemUndZauberName` | Odem und Zauber | Odem and spells | — | D176 — zu prüfen (N-120) |
+| `prk700_runenritzenName` | Runenritzen | Rune-carving | — | F-21, D176 — zu prüfen (N-120) |
+| `prk700_bannkundeName` | Bannkunde | Ban-lore | — | F-21, D176 — zu prüfen (N-120) |
+| `prk700_odemtiefeName` | Odemtiefe | Depth of odem | — | F-21, D176 — zu prüfen (N-120) |
+| `prk700_glutzauberName` | Glutzauber | Ember-craft | — | F-21, D176 — zu prüfen (N-120) |
 | `buffPerkTheDentistName` | Totenpfennig | Dead Man's Penny | Der Zahnarzt / The Dentist | D77 |
 | `perkMasterChefName` | Herdmeister | Hearth-master | Chefkoch / Master Chef | D90 |
 | `perkLuckyLooterName` | Finderglück | Finder's Luck | Der glückliche Sammler / Lucky Looter | D90 |
@@ -338,6 +345,7 @@ englisches Spielwort aus. Das bleibt so.
 | — | Stufe | level (einer Fertigkeit), tier (eines Dings), rank (eines Perks) | Level, Stufe, Rang | WP7 |
 | — | Fertigkeit | skill | Skill, Perk, Fertigkeit | WP7 |
 | — | Ausdauer | stamina | Ausdauer | D73 |
+| — | Odem | odem (Lehnwort, klein im Satz) | — (neu: Kraftvorrat der Volksmagie) | D36, D176 — englische Form zu prüfen (N-120) |
 | `lblCategoryAmmoWeapons` | Geschosse/Waffen | Missiles/Weapons | Munition/Waffen / Ammo/Weapons | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `lblCategoryChemicals` | Gebräue | Brews | Chemikalien / Chemicals | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `xuiAmmo` | Geschosse | Missiles | Munition / Ammo | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |

@@ -194,6 +194,7 @@ noch nicht — der Nachtrag steht, bevor die erste entsteht.
 | Figur | `npc.xml` | `npc700_` | `npc700_schmied` |
 | Beute-Behälter | `loot.xml` | `lc700_` | `lc700_klosterTruhe` |
 | Beute-Gruppe | `loot.xml` | `lg700_` (besteht) | |
+| Fertigkeitsgruppe (`<skill>` unter einem Attribut) — **ergänzt am 2026-11-23, WP10.3, Abnahme offen** (N-120) | `progression.xml` | `skl700_` | `skl700_runenUndZeichen` |
 | Herausforderung, neu | `challenges.xml` | `ch700_` | `ch700_runeRitzen` |
 | Gruppe von Herausforderungen, neu | `challenges.xml` | `chg700_` | `chg700_runenkundiger` |
 | Ort (Prefab) | `Prefabs/` | `poi700_` | `poi700_gehoeft_01` |

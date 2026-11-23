@@ -16,13 +16,16 @@
   Achtung: der Behälter attCrafting bleibt bestehen, auch wenn er leer wirkt —
   XUiC_CategoryList::SetupCategoriesByWorkstation liest ihn (Risiko R8 im Plan).
 
+  Seit Phase 2 (Plan-0002 WP10.3, D176): der sechste Baum, att700_runenkundiger, als
+  EIGENES Attribut (D111), dazu das Fertigkeitsfenster mit 9 statt 8 Plätzen (XUi_InGame).
+
   Learning by Doing gehört ebenfalls zu F-21, braucht aber C# und kommt in Phase 2:
   es gibt keinen XML-Auslöser für den Abschluss eines Craft-Vorgangs.
 -->
 <xml>
 	<Name value="700_50_Fortschritt" />
 	<DisplayName value="700 — Fertigkeiten" />
-	<Description value="Fünf Fertigkeitsbäume auf den fünf Vanilla-Attributen, umgedeutet: Handwerker, Krieger, Jäger, Heiler, Fuhrmann. Der Runenkundige kommt mit der Volksmagie in Phase 2." />
+	<Description value="Sechs Fertigkeitsbäume: fünf Vanilla-Attribute, umgedeutet (Handwerker, Krieger, Jäger, Heiler, Fuhrmann), und die Runenkunde als sechstes, eigenes Attribut der Volksmagie." />
 	<Author value="Lupus Malus Deviant" />
 	<Version value="__VERSION__" />
 	<Website value="" />
