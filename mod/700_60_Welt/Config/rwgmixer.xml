@@ -41,7 +41,7 @@
 	<set xpath="/rwgmixer/world/property[@class='roadside']/property[@name='count']/@value">0, 0, 0</set>
 
 	<!-- ==== 3. Tankstellen -->
-	<removeattribute xpath="/rwgmixer/prefab_spawn_adjust[@partial_name='gas_station']" name="min_count"/>
+	<removeattribute xpath="/rwgmixer/prefab_spawn_adjust[@partial_name='gas_station']/@min_count"/>
 	<setattribute xpath="/rwgmixer/prefab_spawn_adjust[@partial_name='gas_station']" name="weight">0.01</setattribute>
 
 	<!-- ==== 2. Moderne Orte selten -->

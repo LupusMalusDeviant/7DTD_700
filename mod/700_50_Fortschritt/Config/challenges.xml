@@ -42,7 +42,7 @@
 	        Praedikat auf 'block' traefe die dritte im Spiel, aber nicht in der Pruefung. -->
 	<setattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="type">Craft</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="item">drinkJarBoiledWater</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="block" />
+	<removeattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective/@block" />
 
 	<!-- 2. Rohrbomben fertigen -> an der Zimmermannsbank einen Webstuhl bauen (D57). -->
 	<setattribute xpath="/challenges/challenge[@name='craftPipeBomb']/objective[@item='thrownAmmoPipeBomb']" name="count">1</setattribute>
@@ -54,52 +54,52 @@
 
 	<!-- 4. Rohre sammeln -> Federn aus Vogelnestern. -->
 	<setattribute xpath="/challenges/challenge[@name='harvestPipes']" name="icon">ui_game_symbol_tracking_chicken</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="item">resourceFeather</setattribute>
 
 	<!-- 5. Kunststoff sammeln -> Stofffetzen. -->
 	<setattribute xpath="/challenges/challenge[@name='harvestPolymers']" name="icon">ui_game_symbol_scrap</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="item">resourceCloth</setattribute>
 
 	<!-- 6. Autoteile sammeln -> erlegte Tiere ausnehmen: Knochen und Tierfett.
 	        Drei Ziele werden zwei. 'is_block' wie bei 'harvestAnimals' (Fleisch vom Tier). -->
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']" name="icon">ui_game_symbol_skull</setattribute>
 	<remove xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='resourceRadiator']" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="is_block">false</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="count">10</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="item">resourceBone</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="is_block">false</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="count">10</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="item">resourceAnimalFat</setattribute>
 
 	<!-- 7. Mechanische Teile sammeln -> Buntmetall. -->
 	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']" name="icon">ui_game_symbol_forge</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="count">20</setattribute>
 	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="item">resourceScrapBrass</setattribute>
 
 	<!-- 8. Elektrische Teile sammeln -> Schmiedeeisen bergen. -->
 	<setattribute xpath="/challenges/challenge[@name='harvestElectricParts']" name="icon">ui_game_symbol_hammer</setattribute>
-	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="block_tag" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="override_tracker_index" />
-	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="track_distance" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']/@block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']/@override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']/@track_distance" />
 	<setattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="item">resourceForgedIron</setattribute>
 
 	<!-- 9. Chrysanthemen ernten -> Pilze ernten (die vierte Feldfrucht, die lebt). -->
-	<removeattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']/@block_tag" />
 	<setattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="item">foodCropMushrooms</setattribute>
 
 	<!-- ===================================================================
