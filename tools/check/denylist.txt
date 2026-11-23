@@ -228,6 +228,12 @@ questReward*Bundle    # Belohnungsbuendel fuer Turm, Generator, Batterie, Solar
 explosive*
 resourceGunPowder*
 
+# FREIGABE (Nutzer, 2026-11-23, im Gespraech: "Ja, freigeben"): der Fluchtopf (D180, F-15) ist ein
+# geworfener Tontopf mit einem Fluch, kein Sprengkoerper - er nutzt nur Vanillas Klasse
+# ItemClassTimeBomb fuer den Wurf und den Zuender. Die Regel 'sprengkoerper' sperrt diese Klasse
+# fuer Vanillas Molotow, Rohrbombe, Dynamit und Granaten; fuer ihn gilt sie nicht.
+!itm700_fluchtopf          # D180: Wurf-Fluch aus Ton, Klasse ItemClassTimeBomb nur als Technik
+
 # ================================================================================
 # WP3.1c (2026-11-07): die Sichtung der 512 ungepruefen Kennungen
 # ================================================================================
