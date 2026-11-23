@@ -44,7 +44,9 @@
 	     (0 bis -46) - darum blendet der Controller die Leiste waehrend des Schleichens aus. Die
 	     Buff-Liste rueckt dafuer um 12 nach oben (pos 90,132 -> 90,144); sonst lag die Leiste
 	     ueber dem untersten Buff-Symbol. Die 12 sind am Bildschirmfoto des Spieltests geschaetzt
-	     (zu pruefen). -->
+	     (zu pruefen).
+	     PLATZHALTER (Nutzer, 2026-11-23): Lage und Aussehen gelten, bis die Oberflaeche ihre
+	     eigene Gestalt bekommt (F-16). -->
 	<set xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@controller='BuffPopoutList']/@pos">90,144</set>
 	<append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][not(@controller)]">
 		<rect name="700_odem" width="171" height="16" pos="0,-37" controller="Mod700.OdemLeiste, Mod700" visible="{odemzeigen}">

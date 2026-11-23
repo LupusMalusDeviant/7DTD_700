@@ -66,6 +66,12 @@ Sound ist für den Grusel wichtiger als jedes Modell. Deshalb bekommt Klang eine
 
 Die Lizenz wird je Datei gelesen und im Asset-Register eingetragen, nicht je Quelle angenommen.
 
+## Platzhalter in der Oberfläche
+
+- **Odem-Leiste** (D199, vom Nutzer am 2026-11-23 als Platzhalter angenommen): ein Vanilla-Balken in
+  Bernstein mit Vanillas Windsymbol, direkt über der Ausdauer. Eine eigene Gestalt (Rahmen, Zeichen)
+  gehört in die Oberfläche der Phase 3.
+
 ## Offene Fragen
 - ~~Q9: Asset-Quellen (selbst / beauftragt / lizenzierte Packs)?~~ Entschieden mit D84.
 - **Lizenz der Meshy-Ergebnisse:** hängt nach Claudes Stand vom Tarif ab, ungelesen. Vor dem
