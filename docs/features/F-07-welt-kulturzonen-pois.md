@@ -70,7 +70,9 @@ Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen
 
 # Ausarbeitung für Phase 2 (Plan-0002 WP6.1, 2026-11-23)
 
-**Stand:** im Loop ausgearbeitet, **jede Setzung zu prüfen durch den Nutzer** (N-71, D152). Der Text
+**Stand:** im Loop ausgearbeitet, **jede Setzung zu prüfen durch den Nutzer** (N-97, D152; bis
+2026-11-23 als N-71 geführt). Die Punkte `[verifizieren]` beantwortet das Finding
+[`F-07-zufallswelt-und-orte.md`](../rea/findings/F-07-zufallswelt-und-orte.md) (WP6.2, D153). Der Text
 oben bleibt stehen; wo die Ausarbeitung ihm widerspricht, steht es hier mit Grund. Gebaut ist von
 F-07 bisher: Nebel und dunklere Nächte (`700_60_Welt`, D72), die Purge-Zeilen für Händlerware und
 Aufträge, sonst nichts.
@@ -89,13 +91,19 @@ Aufträge, sonst nichts.
 **Aufträge der Händler** (`quests.xml`, je Händler dieselbe Liste): vergraben (`*_buried_supplies`,
 braucht **keinen** Ort), räumen (`clear`, `clear_infested`), holen (`fetch`, `fetch_clear`),
 ~~Strom wiederherstellen~~ (seit D103 gesperrt), „zum nächsten Händler" (`tierN_nexttrader`). Jede
-Ortsaufgabe wählt ihr Ziel mit `RandomPOIGoto` — einen Ort mit passender Marke und Stufe. **Wie weit
-vom Händler und wie oft derselbe Ort, ist nicht gelesen** — WP6.2.
+Ortsaufgabe wählt ihr Ziel mit `RandomPOIGoto` — einen Ort mit passender Marke und Stufe. ~~**Wie weit
+vom Händler und wie oft derselbe Ort, ist nicht gelesen** — WP6.2.~~ **Stand WP6.2:** das Ziel kommt
+aus den Orten um den Händler (nach dessen bevorzugter Entfernungsstufe) oder um einen Weltpunkt,
+gefiltert nach Stufe, Marke, Landschaft und laufenden Sperren (Finding §4). Orte je Stufe müssen
+darum **je Landschaft nahe den Händlern** stehen.
 
-**Händler entstehen mit Ortschaften.** `rwgmixer.xml` führt je Siedlungsart eine Eigenschaft
+~~**Händler entstehen mit Ortschaften.** `rwgmixer.xml` führt je Siedlungsart eine Eigenschaft
 `spawn_trader`; abgeschaltet ist sie nur am Wegrand (`roadside`) und im Westernstädtchen
 (`oldwest`). Eine Welt ohne Ortschaften hat danach **keinen Händler** und damit keinen Auftrag —
-gelesen, nicht im Code nachgewiesen, **[verifizieren, WP6.2]**.
+gelesen, nicht im Code nachgewiesen, **[verifizieren, WP6.2]**.~~ **Berichtigt (WP6.2, Finding §1):**
+Händler sind gewöhnliche Orte (`trader_*`, erlaubt in `city, town, rural, wilderness`), die über
+`prefab_spawn_adjust` verteilt werden (je Landschaft einer, `min_count 2`, `max_count 4`). Das Feld
+hinter `spawn_trader` liest das Spiel **nirgends**. Eine Welt ohne Städte behält also ihre Händler.
 
 ## B. Die fünf Landschaften
 
@@ -142,12 +150,18 @@ derselben Stufe kennt der Spieler den Ort. Mehr Abwechslung kommt aus Weg C unte
 **2. Händler.** Fünf Händlerorte, Händler entstehen mit Ortschaften. Ohne Ortschaften braucht es
 **einen eigenen Händlerort** (Handelsposten, F-10) und einen Weg, ihn zu setzen — entweder eine
 Siedlungsart, die nur aus eigenen Orten besteht, oder Vanillas Händlerorte umgekleidet (Weg C).
-**[verifizieren, WP6.2]**.
+~~**[verifizieren, WP6.2]**.~~ **Stand WP6.2:** Händler brauchen keine Ortschaft (oben, A). Ein eigener
+Händlerort ist ein gewöhnlicher Ort mit `TraderArea`, verteilt über `prefab_spawn_adjust`; sein Name
+muss mit `trader_` beginnen, damit die Welterzeugung ihn als Händler für Startpunkte zählt (Finding
+§1, `[im Spiel bestätigen]`, S-29). Bis er steht, tragen Vanillas fünf Händlerorte, umgekleidet nach
+Weg C.
 
 **3. Ersatz für Ortschaften.** Eine Zufallswelt ohne Städte ist leer. Vorschlag: eine eigene
 Siedlungsart „Weiler" (drei bis sechs Hofstellen um einen Platz), die in `rwgmixer.xml` an die
-Stelle von `countrytown` tritt und den Händler trägt. Ob eine Siedlungsart ohne Straßen entstehen
-kann, ist **[verifizieren, WP6.2]**.
+Stelle von `countrytown` tritt ~~und den Händler trägt~~. ~~Ob eine Siedlungsart ohne Straßen entstehen
+kann, ist **[verifizieren, WP6.2]**.~~ **Stand WP6.2:** Siedlungen wachsen aus Straßenkacheln; ohne
+Kacheln gibt es keine Siedlungsart. Der „Weiler" braucht also eigene Kacheln (Prefabs, im Editor des
+Spiels) und `spawn_gateway="false"`, damit er Feldwege statt Fernstraßen bekommt (Finding §3).
 
 ## D. Die Welt von 2a — drei Wege (P2-E14)
 
@@ -172,13 +186,22 @@ zu schweben oder in Wände zu ragen; ob Behälter ihre Beute behalten; ob die Ko
 Das klärt das Finding WP6.2 und **ein Blick im Spiel (S-29)**. C braucht einen eigenen Vertrag
 (Nachtrag zu Vertrag 03: „umkleiden ist kein Sperren") — WP6.2.
 
+**Stand WP6.2 (Finding §5, §6):** Orte speichern Blöcke **per Name**; ein Modell-Block liest `Model`
+beim Laden seiner Klasse. Ein `<set>` auf `Model` kleidet also jeden Ort um, der den Block enthält;
+Klasse, Behälter, Beute und `MultiBlockDim` bleiben. Offen bleibt nur, was man sehen muss: ob das
+Ersatzmodell im Maß sitzt und ob die Kollision mitwandert (S-29, drei Blöcke). Der Vertrags-Nachtrag
+zu Vertrag 03 folgt mit WP6.5b, wenn S-29 den Weg trägt.
+
 ## E. Wege statt Straßen
 
 Straßen sind Kacheln (`rwg_tile_*`, 68) und Verbindungen zwischen Siedlungen. Vorschlag: die
 Kacheln bleiben (ohne sie keine Siedlung), ihr **Belag** wird über die Block-Retextur (WP4.7) zu
-festgefahrener Erde, bis dahin bleiben sie Asphalt. Ob die Verbindungsstraßen abschaltbar sind,
-ohne Händlerwege zu brechen, ist **[verifizieren, WP6.2]**. Bis dahin gilt: Asphalt ist die
-**sichtbarste Lücke** der Welt von 2a und steht so in der Prüfliste.
+festgefahrener Erde, bis dahin bleiben sie Asphalt. ~~Ob die Verbindungsstraßen abschaltbar sind,
+ohne Händlerwege zu brechen, ist **[verifizieren, WP6.2]**.~~ **Stand WP6.2 (Finding §3):** Fernstraßen
+entstehen zwischen Siedlungen, deren Art `spawn_gateway` trägt; Arten ohne Gateway bekommen (Lesart)
+Feldwege, Wildnisorte Pfade. Händler hängen nicht an Straßen. Eine Welt nur aus Siedlungsarten ohne
+Gateway hätte keine Fernstraßen — ob dann noch Feldwege entstehen, zeigt S-29. Bis dahin gilt: Asphalt
+ist die **sichtbarste Lücke** der Welt von 2a und steht so in der Prüfliste.
 
 ## F. Nebel im Flusstal (D72)
 
@@ -191,7 +214,7 @@ Wassernähe bräuchte eine Abfrage am Spielerort.
 Automaten (7 Blöcke, Klasse `VendingMachine`) und Tresore/Waffenschränke (Behälter) gehören nach
 Weg C: das **Modell** wird umgekleidet (Fass, Kiste mit Schloss), die **Mechanik** bleibt (P5).
 Ein Automat, der verkauft, wird damit zu einem „Krämerfass" — ob das trägt, entscheidet der Nutzer
-(N-71); die Alternative ist, Automaten über Weg B mit ihren Orten wegfallen zu lassen.
+(N-97); die Alternative ist, Automaten über Weg B mit ihren Orten wegfallen zu lassen.
 
 ## H. Beute je Ort (D121)
 
@@ -216,17 +239,20 @@ Vanillas Fertigkarten (Navezgane, PREGEN) werden **nicht unterstützt**; die Spi
 | WP6.5b | Umkleide-Tabelle (Weg C), erst nach S-29 | WP6.2, S-29 |
 | WP6.6 | eigene Orte nach Abschnitt C | WP6.2 (Bauweg) |
 
-## K. Offen für den Nutzer (N-71)
+## K. Offen für den Nutzer (N-97, N-98)
 
 1. **Weg B + C** für die Welt von 2a — oder nur B (leer, wenig Aufträge bis zu eigenen Orten)?
 2. **Elf Entwürfe** als erste Reihe (Abschnitt C) — reicht das, oder lieber mehr kleine Orte?
 3. **Asphalt** bleibt in Phase 2 sichtbar (bis zur Retextur) — hinnehmbar?
 4. **Automaten** umkleiden (Krämerfass) oder wegfallen lassen?
 5. P2-E13 (die fünf Landschaftsnamen) bleibt offen wie bisher.
+6. **Eigene Orte im Editor des Spiels** (N-98): ein Ort ohne Editor ist unbelegt; wer baut sie?
+7. **Name des eigenen Händlerorts** `trader_poi700_…` statt `poi700_…` (Vertrag 02, Nachtrag WP6.2).
 
 ## Akzeptanzkriterien der Ausarbeitung
 
 - [x] Bedarfsrechnung (Aufträge, Händler, Ortschaften) — Abschnitt C, Zahlen gemessen
 - [x] die Welt von 2a mit Wegen und Empfehlung — Abschnitt D
 - [x] Wege, Nebel, Automaten, Beute, Fertigkarten — Abschnitte E bis I
-- [ ] die drei **[verifizieren]** aus A, C, E — WP6.2
+- [x] die drei **[verifizieren]** aus A, C, E — WP6.2, statisch beantwortet (Finding
+  `F-07-zufallswelt-und-orte.md`); was man sehen muss, steht in S-29

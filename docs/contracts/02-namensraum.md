@@ -197,6 +197,7 @@ noch nicht — der Nachtrag steht, bevor die erste entsteht.
 | Herausforderung, neu | `challenges.xml` | `ch700_` | `ch700_runeRitzen` |
 | Gruppe von Herausforderungen, neu | `challenges.xml` | `chg700_` | `chg700_runenkundiger` |
 | Ort (Prefab) | `Prefabs/` | `poi700_` | `poi700_gehoeft_01` |
+| Händlerort (Prefab mit `TraderArea`) — **ergänzt am 2026-11-23, WP6.2, Abnahme offen** | `Prefabs/` | `trader_poi700_` | `trader_poi700_handelsposten_01` |
 | Bundle | `Resources/` | `b700_` | `b700_wesen.unity3d` |
 | Symbol | `UIAtlases/ItemIconAtlas/` | `ico700_` (Vertrag 05) | `ico700_silberpfennig` |
 | Buff, CVar | `buffs.xml` | `buff700_`, `cv700_` (bestehen) | `buff700_grauen`, `cv700_grauen` |
@@ -218,6 +219,11 @@ Schreibweise wie §2: Kleinschreibung nach dem Präfix, Binnengroßschreibung, d
    an dem, was wir **anlegen**.
 3. **Eine Kennung ist kein Anzeigename** (§1). `ent700_seuchentoterKnecht` sagt dem Bauenden,
    was es ist; was der Spieler liest, steht im Sprach-Modlet und vorher im Glossar.
+4. **Händlerorte beginnen mit `trader_`** (ergänzt am 2026-11-23, WP6.2, **Abnahme offen**, N-98).
+   Die Welterzeugung erkennt einen Händlerort am Namen und zählt nur ihn für die Startpunkte der
+   Spieler (Finding `docs/rea/findings/F-07-zufallswelt-und-orte.md` §1). Darum steht dort
+   `trader_` **vor** unserem Präfix. Ob das Spiel den Anfang oder nur das Vorkommen des Wortes
+   prüft, ist statisch nicht belegt (S-29); der Name trägt beide Fälle.
 
 ### B. Namensmuster für Anzeigenamen (ergänzt §6)
 

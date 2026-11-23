@@ -1,0 +1,20 @@
+# Soll-Signaturen für das Finding „Zufallswelt und Orte" (Plan-0002 WP6.2), Build Steam 26309840.
+# Format: Typ<TAB>Member<TAB>Signatur  — genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp62.tsv
+# Exit 0 = alle Soll-Signaturen vorhanden, Exit 1 = mindestens eine fehlt oder weicht ab.
+# Kein Patch hängt daran: die Zeilen sichern nur, dass das Finding noch zum Build passt.
+WorldGenerationEngineFinal.WorldGenerationFromXml/<Load>d__2	MoveNext	bool WorldGenerationEngineFinal.WorldGenerationFromXml/<Load>d__2::MoveNext()
+WorldGenerationEngineFinal.TownshipData	.ctor	void WorldGenerationEngineFinal.TownshipData::.ctor(string, int)
+WorldGenerationEngineFinal.PrefabManager	getScoreForPrefab	float WorldGenerationEngineFinal.PrefabManager::getScoreForPrefab(PrefabData, Vector2i)
+WorldGenerationEngineFinal.PrefabManager/POIWeightData	.ctor	void WorldGenerationEngineFinal.PrefabManager/POIWeightData::.ctor(string, FastTags`1<TagGroup/Poi>, FastTags`1<TagGroup/Poi>, float, float, int, int)
+WorldGenerationEngineFinal.StreetTile	SpawnMarkerPartsAndPrefabs	void WorldGenerationEngineFinal.StreetTile::SpawnMarkerPartsAndPrefabs(PrefabData, Vector3i, int, int, float)
+WorldGenerationEngineFinal.HighwayPlanner	Plan	void WorldGenerationEngineFinal.HighwayPlanner::Plan(DynamicProperties, int)
+WorldGenerationEngineFinal.HighwayPlanner	RunTownshipDirtRoads	void WorldGenerationEngineFinal.HighwayPlanner::RunTownshipDirtRoads()
+WorldGenerationEngineFinal.WorldBuilder	GenerateTask	void WorldGenerationEngineFinal.WorldBuilder::GenerateTask()
+WorldGenerationEngineFinal.WorldBuilder	CreatePlayerSpawn	bool WorldGenerationEngineFinal.WorldBuilder::CreatePlayerSpawn(Vector2i, bool)
+ObjectiveRandomPOIGoto	GetPosition	UnityEngine.Vector3 ObjectiveRandomPOIGoto::GetPosition(EntityNPC, EntityPlayer, System.Collections.Generic.List`1<UnityEngine.Vector2>, int)
+DynamicPrefabDecorator	GetRandomPOINearTrader	static PrefabInstance DynamicPrefabDecorator::GetRandomPOINearTrader(EntityTrader, FastTags`1<TagGroup/Global>, byte, System.Collections.Generic.List`1<UnityEngine.Vector2>, int, BiomeFilterTypes, string)
+DynamicPrefabDecorator	GetRandomPOINearWorldPos	static PrefabInstance DynamicPrefabDecorator::GetRandomPOINearWorldPos(UnityEngine.Vector2, int, int, FastTags`1<TagGroup/Global>, byte, System.Collections.Generic.List`1<UnityEngine.Vector2>, int, BiomeFilterTypes, string)
+Prefab	loadIdMapping	ArrayListMP`1<int> Prefab::loadIdMapping(string, string, bool)
+Prefab	LoadXMLData	bool Prefab::LoadXMLData(PathAbstractions/AbstractedLocation)
+BlockShapeModelEntity	Init	void BlockShapeModelEntity::Init(Block)

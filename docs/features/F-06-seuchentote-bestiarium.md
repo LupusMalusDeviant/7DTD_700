@@ -288,7 +288,7 @@ er ist kein Brecher. Zum Vergleich: Knecht 8, Magd 7, Holzfäller 20.
 | `eg700_anfuehrerSpaet` | Nachzehrer schwärend, glutäugig, verdammt; Spukhund; Schreiende verderbt, schwärend | späte |
 
 Hawaiihemd und Bowler schlagen wie der Büttel, stehen aber nicht darin — sie sind aus der freien
-Landschaft genommen (D149). Die Gewichte sind Setzungen (N-70); **welche Gruppe ab welcher
+Landschaft genommen (D149). Die Gewichte sind Setzungen (N-96); **welche Gruppe ab welcher
 Spielstufe ruft, entscheidet F-09 beim Einbau (WP11).**
 
 ## 10. Grusel-Verhalten (D12, Details in F-17 B6)
