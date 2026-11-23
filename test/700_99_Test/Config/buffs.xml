@@ -9,6 +9,7 @@
       buff t700_gesellschaftSender
       buff t700_seuchennacht
       buff t700_odemFuellen       (fuer den Zauberstab aus items.xml)
+      buff t700_odemVoll          (echter Odem auf den Hoechstwert, seit WP10.6)
 
   Was zaehlt, steht im PROTOKOLL: CVarLogValue schreibt "CVarLogValue: name == wert" auf der
   Seite, auf der der Buff laeuft; LogMessage schreibt "MinEventLogMessage: ...". Die Zeilen im
@@ -118,6 +119,23 @@
 			<effect_group>
 				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="t700_odem" operation="set" value="30"/>
 				<triggered_effect trigger="onSelfBuffStart" action="CVarLogValue" cvar="t700_odem"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-41 (seit WP10.6), auch fuer S-38 und S-39: den ECHTEN Odem auf den Hoechstwert
+		     setzen und eine Minute lang alle fuenf Sekunden die Odem-Werte ins Protokoll. Der
+		     Hoechstwert kommt aus der Runenkunde (buff700_odemStufe) - ohne Stufe 2 bleibt er 0,
+		     und die Probe zeigt genau das. -->
+		<buff name="t700_odemVoll" hidden="true">
+			<duration value="60"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cv700_odem" operation="set" value="@cv700_odemMax"/>
+				<triggered_effect trigger="onSelfBuffStart" action="LogMessage" message="t700 S-41: Odem auf Hoechstwert gesetzt"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="cv700_odem"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="cv700_odemMax"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_odemRegen"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_odemAnteil"/>
 			</effect_group>
 		</buff>
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.6): ein Wurf, dessen Explosion einen vertippten
+     Buff legt. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/items">
+		<item name="pruefWurf">
+			<property class="Explosion">
+				<property name="Buff" value="pruefBuffWurfFehlt" />
+			</property>
+		</item>
+	</append>
+</config>

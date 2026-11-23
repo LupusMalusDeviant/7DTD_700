@@ -250,3 +250,23 @@ gleich, weil kein CVar daran hängt; der Dedicated-Test in WP10.10 zeigt, ob bei
 | bleibt | wird neu gesetzt | geht verloren |
 |---|---|---|
 | `cv700_odem`, laufende Abklingzeiten (Indiz) | `cv700_odemMax`, `.cv700_odemRegen`, `.cv700_grauenSchutz`, `buff700_odemStufe`, `buff700_grauenSchutz`, `buff700_lichtfunke` | `buff700_fluchSchwere`, `buff700_brand` |
+
+## Nachtrag 2 — die Odem-Leiste (Plan-0002 WP10.6), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (D182); **zu prüfen durch den Nutzer** (N-126). Füllt §7 „HUD-Leisten —
+eigener Nachtrag".
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `.cv700_odemAnteil` | lokaler CVar | `cv700_odem` / `cv700_odemMax`, 0 ohne Odem | **allein** `buff700_odemRegen`, nach dem Zählen | abgeleitet | die Leiste (`{cvar(…)}`, Finding WP10.6) |
+| `.cv700_odemZeigen` | lokaler CVar | 1, wenn `cv700_odemMax` > 0, sonst 0 | **allein** `buff700_odemRegen` | abgeleitet | die Leiste: jedes Bild füllt sich damit, ohne Odem bleibt der Platz leer |
+
+**Wer setzt die zwei Odem-Buffs:** Vanillas `buffStatusCheck01` (läuft bei jedem Spieler, bleibt über den
+Tod), per eigener `effect_group` mit `!HasBuff` — damit sind sie nach Betreten, Laden und Tod da. Ergänzt
+§3.4 („`buff700_odemRegen` … beim Betreten gesetzt"): der Weg ist dieser.
+
+**Warum die Oberfläche nicht rechnet:** die Bindung `{cvar(…)}` ist gelesen, die Rechen-Schreibweise
+`{# … }` mit CVars nicht. Fertige Werte im Buff halten die Oberfläche auf das Gelesene beschränkt.
+
+**Der Punkt** folgt §1 Nr. 4 (abgeleitet → lokal); die Leiste liest auf dem Rechner des Spielers, wo der
+lokale Wert liegt. Ob der Buff dort läuft (S-32 (1)), entscheidet wie in N1.3, ob der Punkt bleibt.

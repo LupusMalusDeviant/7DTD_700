@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.6): ein eigener Buff, der einen Vanilla-Buff,
+     sich selbst und einen vertippten Buff nennt. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/buffs">
+		<buff name="pruefBuffEigen">
+			<duration value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="AddBuff" buff="pruefBuffVanilla,pruefBuffFehlt" />
+				<triggered_effect trigger="onSelfBuffStart" action="RemoveBuff" buff="pruefBuffEigen">
+					<requirement name="HasBuff" buff="pruefBuffEigen" />
+				</triggered_effect>
+			</effect_group>
+		</buff>
+	</append>
+</config>

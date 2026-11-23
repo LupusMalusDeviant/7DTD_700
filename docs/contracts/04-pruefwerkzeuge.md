@@ -4098,3 +4098,23 @@ der Gruppenverweis nicht.
 **Grenzen:** Lootgruppen-Verweise (`group=`), Wahrscheinlichkeiten und ob ein Händler die Ware
 wirklich zeigt, prüft das nicht. Entfernungen im Purge (`<remove xpath>`) sind XPaths und laufen wie
 bisher durch die XPath-Prüfung.
+
+## Nachtrag WP10.6 — Buff-Namen in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-126)
+
+Gebaut im autonomen Lauf (Plan-0002 WP10.6, D182).
+
+**Anlass.** Die Volksmagie hängt an Buff-Namen: Trank → Buff, Segen → Buff und Abklingzeit,
+Statusprüfung → Odem-Buffs, Wurf → Fluch. Die Gegenprobe `buff700_odemRegn` (statt `buff700_odemRegen`)
+im `AddBuff` der Statusprüfung blieb in `check-all` grün — der Odem wäre still nie gelaufen.
+
+**Die Regel.** `kette-pruefen` liest in den Patch-Dateien jedes Attribut `buff="…"` (Listen mit Komma)
+und jedes `<property name="Buff">` und sucht den Namen unter Vanillas `buffs.xml` und den `<buff name>`
+der Patch-Dateien. Fehlt `buffs.xml` im Vanilla-Ordner (Prüfdaten), bleibt die Regel aus und die Ausgabe
+sagt „nicht geprüft". Neue Zeile: `Buff-Verweise: N` (am echten Stand 20).
+
+**Gegenproben** (2 neu, 323 → **325**): `kette/buff` — vertippter Buff im `AddBuff` und in der
+Explosion rot, Vanilla- und eigener Buff nicht (2 rot); ohne `buffs.xml` im Vanilla-Ordner „nicht
+geprüft", 0 rot.
+
+**Grenzen:** Buffs, die nur über Marken oder Code gesetzt werden, und `buff_tags` liest die Regel nicht.
+Die Test-Überlagerung (`test/`) gehört nicht zu den Patch-Dateien.

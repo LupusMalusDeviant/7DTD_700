@@ -97,6 +97,15 @@ Runenkundigen steckt, trotzdem Zugang zur Volksmagie — er kauft oder braut sie
 | Anzeige | eigene Leiste unter der Ausdauer, additiv (D5) | WP10.6 |
 | Wenn er fehlt | die Aktion geht nicht; eine Meldung sagt, warum | `ExecutionRequirements` (Finding WP9.5) sperrt; die Meldung **[verifizieren in WP10.6]** |
 
+*Gebaut mit WP10.6 (D182, zu prüfen N-126)* in `700_75_Magie`: `buff700_odemStufe` schreibt
+`cv700_odemMax` (Stufe × 10 ab Stufe 2, Odemtiefe +10 je Rang) und `.cv700_odemRegen` (0,25; am Feuer
+0,5; Bernsteinamulett × 1,15; ohne Odem 0); `buff700_odemRegen` zählt, kappt und schreibt die
+Anzeigewerte. Beide setzt Vanillas `buffStatusCheck01`. Die **Leiste** liegt über den Balken links unten,
+gefüllt über die Bindung `{cvar(…)}` ([Finding WP10.6](../rea/findings/WP10-odem-leiste.md)),
+ohne Zahl, ohne Odem unsichtbar (Vertrag 07 Nachtrag 2). **Die Meldung bei fehlendem Odem** ist
+weiter offen: Vanilla zeigt bei einer gesperrten Aktion nichts Eigenes; ob ein Ton kommt, zeigt
+S-39 (1). **[verifizieren, S-41]:** Bindung, Zahlformat, Erholung nach Tod und Laden.
+
 ### Runen (Aufsätze, F-04 Runenritzer-Bank)
 
 | Rune (DE / EN, Vorschlag) | Sitzt in | Wirkung | Material | Vorbild in Vanilla |

@@ -110,6 +110,61 @@
 
 		<!-- Fluch der Schwere, 30 s, auf dem getroffenen Wesen (Vertrag 07 N1.4): -15 % Tempo.
 		     Verborgen: ein Seuchentoter zeigt keine Symbole. Geht beim Neustart verloren. -->
+		<!-- WP10.6 (D182): DER ODEM (F-15 "Odem", Vertrag 07 N1.1).
+		     Zwei Buffs, die immer laufen, verborgen, bleiben ueber den Tod:
+		     buff700_odemStufe  ALLEIN schreibt cv700_odemMax und .cv700_odemRegen.
+		       odemMax = 10 je Stufe der Runenkunde ab Stufe 2 (Stufe 1 = 0), dazu Odemtiefe
+		       +10 je Rang. Erholung 0,25 je Sekunde, am Feuer 0,5, mit dem Bernsteinamulett
+		       x1,15 (WornItems, wie Vanilla seine Abzeichen zaehlt). Ohne Odem keine Erholung.
+		     buff700_odemRegen  zaehlt die Erholung auf cv700_odem, kappt bei odemMax und
+		       schreibt die zwei Anzeigewerte der Leiste (.cv700_odemAnteil 0..1,
+		       .cv700_odemZeigen 0/1; Vertrag 07 Nachtrag 2).
+		     Beide setzt Vanillas buffStatusCheck01 (laeuft immer, auch nach dem Tod), sobald sie
+		     fehlen - unten am Ende der Datei. Die Reihenfolge der Zeilen ist die Rechnung: jede
+		     Zeile ueberschreibt die vorige, wenn ihre Bedingung gilt. -->
+		<buff name="buff700_odemStufe" hidden="true" remove_on_death="false">
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="20"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="2" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="30"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="3" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="40"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="4" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="50"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="5" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="60"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="6" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="70"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="7" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="80"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="8" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="90"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="9" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="set" value="100"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="10" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="add" value="10"><requirement name="ProgressionLevel" progression_name="prk700_odemtiefe" operation="GTE" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="add" value="10"><requirement name="ProgressionLevel" progression_name="prk700_odemtiefe" operation="GTE" value="2" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odemMax" operation="add" value="10"><requirement name="ProgressionLevel" progression_name="prk700_odemtiefe" operation="GTE" value="3" /></triggered_effect>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value=".25" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value=".5"><requirement name="HasBuff" buff="buff700_amfeuer" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="multiply" value="1.15"><requirement name="WornItems" tags="amulett700_bernstein" operation="GTE" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemRegen" operation="set" value="0"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="LTE" value="0" /></triggered_effect>
+			</effect_group>
+		</buff>
+
+		<buff name="buff700_odemRegen" hidden="true" remove_on_death="false">
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odem" operation="add" value="@.cv700_odemRegen" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odem" operation="set" value="@cv700_odemMax"><requirement name="CVarCompare" cvar="cv700_odem" operation="GT" value="@cv700_odemMax" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_odem" operation="set" value="0"><requirement name="CVarCompare" cvar="cv700_odem" operation="LT" value="0" /></triggered_effect>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemZeigen" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemZeigen" operation="set" value="1"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="set" value="@cv700_odem"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_odemAnteil" operation="divide" value="@cv700_odemMax"><requirement name="CVarCompare" cvar="cv700_odemMax" operation="GT" value="0" /></triggered_effect>
+			</effect_group>
+		</buff>
+
 		<buff name="buff700_fluchSchwere" hidden="true">
 			<stack_type value="replace" />
 			<duration value="30" />
@@ -119,5 +174,16 @@
 			</effect_group>
 		</buff>
 
+	</append>
+
+	<!-- WP10.6 (D182): Vanillas buffStatusCheck01 laeuft bei jedem Spieler immer (entityclasses
+	     playerMale, Buffs; remove_on_death="false"). Eine eigene effect_group daran setzt die
+	     zwei Odem-Buffs, wenn sie fehlen - beim ersten Betreten, nach dem Laden, nach dem Tod.
+	     Ein Knoten aus Vanilla, also kein XPath ueber eine Modlet-Grenze (Vertrag 01 Teil 2b). -->
+	<append xpath="/buffs/buff[@name='buffStatusCheck01']">
+		<effect_group>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_odemStufe"><requirement name="!HasBuff" buff="buff700_odemStufe" /></triggered_effect>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_odemRegen"><requirement name="!HasBuff" buff="buff700_odemRegen" /></triggered_effect>
+		</effect_group>
 	</append>
 </config>

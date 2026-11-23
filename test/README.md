@@ -5,7 +5,7 @@ Hier liegt, was **nur zum Testen** neben die Mod gelegt wird und **nie im Paket*
 
 | Ordner | Tut |
 |---|---|
-| `700_99_Test/` | verkürzt Uhren: die acht Lichtquellen aus F-08 brennen `GrowthRate` 2 statt 15 bis 60; seit WP9.10 dazu **11 Proben** (8 Buffs, 3 Gegenstände) für S-32 bis S-35 |
+| `700_99_Test/` | verkürzt Uhren: die acht Lichtquellen aus F-08 brennen `GrowthRate` 2 statt 15 bis 60; seit WP9.10 dazu **11 Proben** (8 Buffs, 3 Gegenstände) für S-32 bis S-35, seit WP10.6 **12** (dazu `t700_odemVoll` für S-38 bis S-41) |
 
 ## Benutzen
 
@@ -64,8 +64,9 @@ Danach die Protokolle beider Seiten aufheben; Claude liest die Zeilen `CVarLogVa
 | S-36 *(seit WP10.4)* | `giveself blk700_runenritzer`, `giveself itm700_ritzmesser`, `giveself itm700_meissel`, setzen und öffnen | Größe und Sitz des Stumpfs; zwei Werkzeugplätze nehmen nur Messer und Meißel; Runenkreide und Glutstein herstellbar; ohne Punkt in Runenritzen sind Stock und Werkzeuge im Rezeptfenster gesperrt |
 | S-37 *(seit WP10.5a)* | `giveself itm700_glutrune` (und `bannrune`, `schutzrune`, `wetterrune`, `wanderrune`), in Waffe bzw. Rüstung setzen | passt jede nur dort, wo sie soll; keine zweite Rune daneben; Rüstwert mit Schutzrune +10 %; Glutrune: Seuchentoter brennt ab und zu nach |
 | S-38 *(seit WP10.5b)* | `giveself itm700_eulenauge` (und `baerenmut`, `wolfsbalsam`, `quellsud`), je trinken bzw. auftragen | Eulenauge nachts: besser, grün?; Bärenmut 3 min, dann „Verbrauchter Mut"; Wolfsbalsam: Leben steigt langsam um rund 24; Quellsud ohne Runenkunde: lässt sich nicht trinken — sagt das Spiel etwas? |
-| S-39 *(seit WP10.5c)* | `giveself itm700_segenWehr`, `itm700_totensegen`, `itm700_fluchtopf`; Odem per Konsole: `buff t700_odemFuellen` | Segen ohne Odem: geht nicht; mit Odem: Symbol, Odem −20 bzw. −25, Abklingzeit sichtbar; Totensegen: kommt ein Seuchentoter näher heran, ehe er dich bemerkt?; Fluchtopf auf drei Seuchentote: langsamer, kein Schaden, wie groß das Bild, kostet der Wurf Odem? |
+| S-39 *(seit WP10.5c)* | `giveself itm700_segenWehr`, `itm700_totensegen`, `itm700_fluchtopf`; vorher Runenkunde auf Stufe 3 (`giveselfskillpoints 10`, Punkte setzen) und `buff t700_odemVoll` *(berichtigt mit WP10.6: `t700_odemFuellen` setzt nur den Testwert `t700_odem`)* | Segen ohne Odem: geht nicht; mit Odem: Symbol, Odem −20 bzw. −25, Abklingzeit sichtbar; Totensegen: kommt ein Seuchentoter näher heran, ehe er dich bemerkt?; Fluchtopf auf drei Seuchentote: langsamer, kein Schaden, wie groß das Bild, kostet der Wurf Odem? |
 | S-40 *(seit WP10.5d)* | `giveself itm700_reliquienkapsel` (und `bernsteinamulett`, `hammeramulett`, `kreuzanhaenger`), anlegen; zum Vergleich `giveself biomeWeatherItem4` | welcher Platz; verdrängen sich Amulett und Abzeichen; nur ein Amulett zugleich; mit Reliquienkapsel: weniger Schaden von einem Seuchentoten, aber nicht von einem Wolf |
+| S-41 *(seit WP10.6)* | ohne Punkt in Runenkunde ins Spiel; dann `giveselfskillpoints 10`, Runenkunde auf 2, später 5; `buff t700_odemVoll`; an ein Feuer stellen | ohne Runenkunde: keine Leiste über den Balken links unten; ab Stufe 2: Leiste erscheint, füllt sich langsam (20 Odem in rund 80 s), am Feuer doppelt so schnell; nach Segen sinkt sie; Protokoll `CVarLogValue: cv700_odemMax` 20 bzw. 50; nach Tod und nach Neustart: Odem noch da? |
 | S-35 (3) *(seit WP10.3)* | Fertigkeitsfenster öffnen (K), Reihe der Symbole oben | sechs Bäume, „Runenkunde" mit Stern als sechster; passt die Reihe neben das Suchfeld; steht irgendwo ein Rohschlüssel wie `att700_runenkundiger`; einen Punkt hineinsetzen und Perks ansehen |
 
 **Nicht in diesem Lauf** (kein Ersatz durch eine Probe): S-32 (4) „Server setzt einen Wert" braucht

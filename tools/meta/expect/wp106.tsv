@@ -1,0 +1,10 @@
+# Soll-Signaturen fuer das Finding WP10-odem-leiste (Plan-0002 WP10.6).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran; die Datei meldet ein Spiel-Update, das die Bindung {cvar(...)} der
+# Oberflaeche (Odem-Leiste in 700_75_Magie) ungueltig machen koennte.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp106.tsv
+BindingItemCvar	.ctor	void BindingItemCvar::.ctor(BindingInfo, string)
+BindingItemCvar	GetValue	string BindingItemCvar::GetValue()
+BindingsManager	ReplaceCVars	static string BindingsManager::ReplaceCVars(string)
+BindingInfoNcalc	nCalcEvaluateFunction	void BindingInfoNcalc::nCalcEvaluateFunction(string, NCalc.FunctionArgs, bool)

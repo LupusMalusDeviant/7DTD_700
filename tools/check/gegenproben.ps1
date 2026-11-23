@@ -1091,6 +1091,25 @@ Test-Script 'kette-pruefen: vertippte Beute und Ware werden rot, bekannte nicht'
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @("Beute oder Ware 'pruefBeuteFehlt' ist nirgends definiert", "Beute oder Ware 'pruefWareFehlt' ist nirgends definiert", 'Beute und Ware mit Namen: 4', '2 rot') -MustNotContain @("'pruefWerkzeug' ist nirgends", "'pruefRohstoff' ist nirgends", "'pruefGruppe' ist nirgends")
 
+# WP10.6 (2026-11-23): ein Buff-Name muss ein Buff sein - in AddBuff/RemoveBuff/HasBuff, in
+# Listen mit Komma und in der Explosion eines Wurfs. Vanilla-Buff und eigener Buff sind gruen.
+Test-Script 'kette-pruefen: vertippte Buffs werden rot, Vanilla- und eigene nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\buff\buffs.xml'), (Join-Path $data 'kette\buff\items.xml'))
+    Vanilla      = (Join-Path $data 'kette\buff\vanilla')
+} -MustContain @("Buff 'pruefBuffFehlt' ist nirgends definiert", "Buff 'pruefBuffWurfFehlt' ist nirgends definiert", 'Buff-Verweise: 5', '2 rot') -MustNotContain @("Buff 'pruefBuffVanilla'", "Buff 'pruefBuffEigen'")
+
+# Ohne Vanillas buffs.xml sagt die Pruefung, dass sie nicht prueft - und wird davon nicht rot.
+Test-Script 'kette-pruefen: ohne buffs.xml im Vanilla-Ordner sind Buffs nicht geprueft, gesagt' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\buff\items.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Buff-Verweise: nicht geprueft', '0 rot')
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen

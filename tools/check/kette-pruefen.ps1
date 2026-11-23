@@ -1058,6 +1058,50 @@ foreach ($path in $Patches) {
     }
 }
 
+# BUFF-NAMEN (ergaenzt 2026-11-23, Plan-0002 WP10.6). Die Volksmagie haengt an Buff-Namen:
+# ein Trank legt einen Buff, ein Segen dazu seine Abklingzeit, Vanillas Statuspruefung setzt
+# die Odem-Buffs, ein Wurf legt einen Fluch. Ein vertippter Name legt NICHTS - ohne Meldung.
+# Gefunden beim Bau des Odems: die Gegenprobe 'buff700_odemRegn' blieb in check-all gruen.
+# Gelesen wird jedes Attribut buff="..." (AddBuff, RemoveBuff, HasBuff; Listen mit Komma) und
+# jedes <property name="Buff"> (Explosion) in den Patch-Dateien; gesucht unter Vanillas
+# buffs.xml und den <buff name> der Patch-Dateien. Ohne Vanillas buffs.xml (Pruefdaten) bleibt
+# die Pruefung aus - gesagt in der Ausgabe.
+$buffRefs = 0
+$buffPool = @{}
+$buffGeprueft = $false
+$buffVanillaPfad = Join-Path $Vanilla 'buffs.xml'
+if (Test-Path $buffVanillaPfad) {
+    $buffGeprueft = $true
+    $kennungen = Get-Kennungen $buffVanillaPfad '<buff name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $buffPool[$n] = 'vanilla' }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        foreach ($n in $xml.SelectNodes('//buff[@name]')) { $buffPool[$n.GetAttribute('name')] = 'unser' }
+    }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        $werte = New-Object System.Collections.Generic.List[string]
+        foreach ($n in $xml.SelectNodes('//*[@buff]')) { $werte.Add($n.GetAttribute('buff')) }
+        foreach ($n in $xml.SelectNodes("//property[@name='Buff']")) { $werte.Add($n.GetAttribute('value')) }
+        foreach ($wert in $werte) {
+            foreach ($b in ($wert -split ',')) {
+                $b = $b.Trim()
+                if ($b.Length -eq 0) { continue }
+                $buffRefs++
+                if (-not $buffPool.ContainsKey($b)) {
+                    $unresolved += "Buff '$b' ist nirgends definiert  ($datei)"
+                }
+            }
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
@@ -1071,6 +1115,7 @@ Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltungen: {1}" -f $angelegteRefs, $freischaltRefs)
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
+Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }
