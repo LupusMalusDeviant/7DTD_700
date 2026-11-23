@@ -3245,8 +3245,37 @@ try {
     $w = New-UeberBaum 'kein-set' -Zeilen @(
         '  <append xpath="/blocks/block[@name=''pruefLicht'']"><property name="Neu" value="1" /></append>',
         '  <remove xpath="/blocks/block[@name=''pruefLicht'']/property[@name=''Class'']" />')
-    Test-Script 'testueberlagerung: <append> und <remove> sind nicht erlaubt' 1 (Get-UeberParameter $w) `
-        -FremdesSkript $ueberSkript -MustContain @('<append> - eine Ueberlagerung benutzt nur <set>', '<remove> - eine Ueberlagerung benutzt nur <set>', '2 Befunde -> RED') -MustNotContain @('GREEN')
+    Test-Script 'testueberlagerung: <append> ohne Probe-Namen und <remove> sind nicht erlaubt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("<append> legt 'Neu' an - eine Ueberlagerung legt nur Proben an, deren Name mit t700_ beginnt", '<remove> - eine Ueberlagerung benutzt nur <set>', '2 Befunde -> RED') -MustNotContain @('GREEN')
+
+    # Nachtrag Teil 1d (WP9.10): Proben t700_* duerfen angehaengt werden - aber nur so.
+    $w = New-UeberBaum 'probe-gut' -Zeilen @(
+        "  <set xpath=""$ueberXPath"">2</set>",
+        '  <append xpath="/blocks"><block name="t700_pruefProbe"><property name="Class" value="PruefKlasse" /></block></append>')
+    Test-Script 'testueberlagerung: eine Probe t700_ wird angehaengt' 0 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('Proben: 1', "+ Probe block 't700_pruefProbe'", '0 Befunde -> GREEN')
+
+    $w = New-UeberBaum 'probe-trifft-nichts' -Zeilen @(
+        '  <append xpath="/gibtesnicht"><block name="t700_pruefProbe" /></append>')
+    Test-Script 'testueberlagerung: eine Probe, deren Ziel nichts trifft' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('<append> trifft nichts am Stand nach unseren Modlets: /gibtesnicht') -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'probe-doppelt' -Zeilen @(
+        '  <append xpath="/blocks"><block name="t700_pruefProbe" /></append>',
+        '  <append xpath="/blocks"><block name="t700_pruefProbe" /></append>')
+    Test-Script 'testueberlagerung: eine Probe, die es schon gibt' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @("Probe 't700_pruefProbe' gibt es am Stand nach unseren Modlets schon") -MustNotContain @('GREEN')
+
+    $w = New-UeberBaum 'mod-nennt-probe'
+    Write-Pruefdatei (Join-Path $w 'mod\700_40_Pruef\Config\items.xml') @('<config>', '  <append xpath="/items"><item name="t700_versehen" /></append>', '</config>')
+    Test-Script 'testueberlagerung: die Mod nennt eine Probe' 1 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('items.xml: nennt eine Probe (t700_)') -MustNotContain @('GREEN')
+
+    # Der Fehlalarm vom ersten echten Lauf: 'ent700_' enthaelt 't700_', ist aber ein Wesen-Name.
+    $w = New-UeberBaum 'mod-nennt-wesen'
+    Write-Pruefdatei (Join-Path $w 'mod\700_40_Pruef\Config\entityclasses.xml') @('<config>', '  <append xpath="/entity_classes"><entity_class name="ent700_wolf" /></append>', '</config>')
+    Test-Script 'testueberlagerung: ent700_ in der Mod ist keine Probe' 0 (Get-UeberParameter $w) `
+        -FremdesSkript $ueberSkript -MustContain @('0 Befunde -> GREEN') -MustNotContain @('nennt eine Probe')
 
     $w = New-UeberBaum 'gleicher-wert' -Zeilen @("  <set xpath=""$ueberXPath"">30</set>")
     Test-Script 'testueberlagerung: eine Zeile, die nichts aendert, ist ueberholt' 1 (Get-UeberParameter $w) `

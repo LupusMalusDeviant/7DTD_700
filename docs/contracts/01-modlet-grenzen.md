@@ -213,6 +213,35 @@ Paket, Signatur `Valid`; `build.ps1 -MitTest` ohne `-Install` bricht ab. **Nicht
 `-Install` und `-Install -MitTest` (keine Installation ohne Freigabe, N-11) — der
 Installationszweig ist gelesen, nicht ausgeführt.
 
+### B2. Proben in der Test-Überlagerung — Nachtrag Teil 1d, 2026-11-23, **Abnahme offen**
+
+Geschrieben im autonomen Lauf (Plan-0002 WP9.10, D173), **zu prüfen durch den Nutzer** (N-117).
+Ändert in B den Satz „Nur `<set>` — sie legt nichts an".
+
+**Anlass.** Die Spieltests S-32 bis S-35 fragen Dinge, die keine verkürzte Zahl beantwortet: ob ein
+CVar mit `.` den Server erreicht, ob ein Zauber Odem abzieht, ob ein Speer fliegt. Dafür braucht der
+Test **eigene Proben** — Buffs, die einen Wert anzeigen, und Gegenstände, die es in der Mod (noch)
+nicht gibt.
+
+**Neu darf die Überlagerung:**
+
+1. `<append>`, wenn **jedes** Element, das sie anhängt, ein `name` trägt, der mit **`t700_`**
+   beginnt (Probe). Eigenschaften, Effekte und Bedingungen **innerhalb** einer Probe sind frei.
+2. Eine Probe darf es am Stand nach unseren Modlets noch nicht geben (kein Überschreiben unter
+   gleichem Namen).
+3. Keine Datei unter `mod/` nennt `t700_` — die Mod hängt nie von einer Probe ab.
+4. Proben stehen in keiner Beute, keinem Händler, keinem Rezept; man holt sie mit der Konsole
+   (`giveself`, `buff`).
+5. Alles Übrige aus B gilt weiter: nur `ModInfo.xml` und XML unter `Config/`, nie im Paket,
+   `<set>` trifft und ändert, `<remove>` und alle anderen Operationen bleiben verboten.
+
+**Warum `t700_` und kein Präfix aus Vertrag 02.** Die Präfixe dort (`buff700_`, `itm700_`) gehören
+der Mod; eine Probe mit ihnen sähe aus wie ein Teil der Mod und fände sich bei jeder Suche nach
+Mod-Namen. `t700_` sagt „Test" und ist mit einem `grep` ganz zu finden.
+
+**Prüfung.** `testueberlagerung-pruefen.ps1` prüft Nr. 1 bis 3; Gegenproben in `gegenproben.ps1`,
+Abschnitt „Test-Überlagerung".
+
 ---
 
 ## Nachtrag Phase 2, Teil 1b — die Spielvorlage in `700_60_Welt`, 2026-11-23, **Abnahme offen**

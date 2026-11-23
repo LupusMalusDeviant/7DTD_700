@@ -20,6 +20,11 @@
       5. Jedes <set> aendert den Wert. Ein <set> auf denselben Wert ist ein Befund: dann
          ist die Zeile ueberholt.
       6. Nichts gelesen ist nicht gruen (Ausgang 2).
+      Seit Nachtrag Teil 1d (Plan-0002 WP9.10, 2026-11-23) zusaetzlich, Regel 3 gelockert:
+      7. <append> ist erlaubt, wenn jedes angehaengte Element einen Namen t700_* traegt (Probe)
+         und das Ziel am Stand nach unseren Modlets trifft.
+      8. Eine Probe gibt es dort noch nicht (kein Ueberschreiben unter gleichem Namen).
+      9. Keine Datei unter mod\ nennt t700_ - die Mod haengt nie an einer Probe.
 
     AUSGAENGE: 0 gruen, 1 Befund, 2 nicht pruefbar.
 
@@ -94,7 +99,19 @@ if ($ueberlagerungen.Count -eq 0) { Stop-Unpruefbar "unter $TestOrdner liegt kei
 
 $dateien = 0
 $zeilen = 0
+$proben = 0
 $geaendert = 0
+
+# Regel 9 (Nachtrag Teil 1d): keine Datei der Mod nennt eine Probe.
+foreach ($modDatei in ([IO.Directory]::GetFiles($ModOrdner, '*', [IO.SearchOption]::AllDirectories) | Sort-Object)) {
+    $endung = [IO.Path]::GetExtension($modDatei).ToLowerInvariant()
+    if ($endung -ne '.xml' -and $endung -ne '.csv' -and $endung -ne '.txt') { continue }
+    # Mit Wortgrenze: 'ent700_' (Wesen, Vertrag 02) enthaelt 't700_' und ist keine Probe -
+    # gefunden beim ersten echten Lauf am 2026-11-23 (4 falsche Befunde in 700_65 und 700_90).
+    if ([regex]::IsMatch([IO.File]::ReadAllText($modDatei), '(?<![A-Za-z0-9_])t700_')) {
+        $befunde.Add("$($modDatei.Substring($ModOrdner.Length + 1)): nennt eine Probe (t700_) - die Mod haengt nie an einer Probe der Test-Ueberlagerung")
+    }
+}
 $uebergangen = 0
 $ausgabe = New-Object System.Collections.Generic.List[string]
 
@@ -152,8 +169,46 @@ foreach ($ueber in $ueberlagerungen) {
             $name = $operation.get_LocalName()
             $xpath = $operation.GetAttribute('xpath')
             $zeilen++
+            # Regel 7-9 (Nachtrag Teil 1d, WP9.10): <append> nur fuer Proben t700_*.
+            if (Test-Gleich $name 'append') {
+                $kinder = @($operation.get_ChildNodes() | Where-Object { $_.get_NodeType() -eq $element })
+                $vorher = $befunde.Count
+                if ($kinder.Count -eq 0) { $befunde.Add("${kurz}: <append> haengt nichts an  (xpath=""$xpath"")") }
+                foreach ($kind in $kinder) {
+                    $probe = $kind.GetAttribute('name')
+                    if (-not $probe) { $probe = '(ohne name)' }
+                    if ($probe -cnotlike 't700_*') {
+                        $befunde.Add("${kurz}: <append> legt '$probe' an - eine Ueberlagerung legt nur Proben an, deren Name mit t700_ beginnt  (xpath=""$xpath"")")
+                    }
+                }
+                $treffer = New-Object System.Collections.Generic.List[object]
+                try { foreach ($knoten in $stand.SelectNodes($xpath)) { $treffer.Add($knoten) } }
+                catch { $befunde.Add("${kurz}: XPath laesst sich nicht auswerten: $xpath"); continue }
+                if ($treffer.Count -eq 0) {
+                    $befunde.Add("${kurz}: <append> trifft nichts am Stand nach unseren Modlets: $xpath")
+                    continue
+                }
+                foreach ($knoten in $treffer) {
+                    foreach ($kind in $kinder) {
+                        $probe = $kind.GetAttribute('name')
+                        if (-not $probe) { continue }
+                        foreach ($geschwister in $knoten.get_ChildNodes()) {
+                            if ($geschwister.get_NodeType() -eq $element -and $geschwister.GetAttribute('name') -ceq $probe) {
+                                $befunde.Add("${kurz}: Probe '$probe' gibt es am Stand nach unseren Modlets schon - kein Ueberschreiben unter gleichem Namen")
+                                break
+                            }
+                        }
+                    }
+                }
+                if ($befunde.Count -eq $vorher) {
+                    $proben += $kinder.Count
+                    foreach ($kind in $kinder) { $ausgabe.Add("    + Probe $($kind.get_LocalName()) '$($kind.GetAttribute('name'))'   $xpath") }
+                    foreach ($knoten in $treffer) { Invoke-Operation $name $operation $knoten $stand }
+                }
+                continue
+            }
             if (-not (Test-Gleich $name 'set')) {
-                $befunde.Add("${kurz}: <$name> - eine Ueberlagerung benutzt nur <set>  (xpath=""$xpath"")")
+                $befunde.Add("${kurz}: <$name> - eine Ueberlagerung benutzt nur <set> und <append> von Proben (t700_)  (xpath=""$xpath"")")
                 continue
             }
             $treffer = New-Object System.Collections.Generic.List[object]
@@ -183,7 +238,7 @@ foreach ($ueber in $ueberlagerungen) {
 if ($zeilen -eq 0 -and $befunde.Count -eq 0) { Stop-Unpruefbar "keine Ueberlagerung unter $TestOrdner traegt eine Patch-Zeile" }
 
 Write-Output "testueberlagerung-pruefen: $TestOrdner"
-Write-Output ("  Ueberlagerungen: {0}; Dateien: {1}; Zeilen: {2}; geaenderte Werte: {3}" -f $ueberlagerungen.Count, $dateien, $zeilen, $geaendert)
+Write-Output ("  Ueberlagerungen: {0}; Dateien: {1}; Zeilen: {2}; geaenderte Werte: {3}; Proben: {4}" -f $ueberlagerungen.Count, $dateien, $zeilen, $geaendert, $proben)
 Write-Output ("  Operationen der Modlets, die nicht gerechnet wurden (bedingte Bloecke u. a.): {0}" -f $uebergangen)
 foreach ($a in $ausgabe) { Write-Output $a }
 foreach ($b in $befunde) { Write-Output "  BEFUND: $b" }

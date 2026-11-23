@@ -36,6 +36,13 @@ legt die Mod hinein und **entfernt** die Überlagerung wieder.
 5. Kerzenstumpf: Name, Aufnehmen mit E, Abschlagen (N-03).
 6. Danach ohne `-MitTest` neu installieren.
 
+## Proben (seit Nachtrag Teil 1d, 2026-11-23)
+
+Neben `<set>` darf die Überlagerung **Proben** anhängen: Buffs oder Gegenstände, deren Name mit
+`t700_` beginnt. Sie dienen nur dem Test (z. B. ein Buff, der einen CVar ins Protokoll schreibt),
+liegen in keiner Beute und keinem Rezept und kommen per Konsole (`buff t700_…`, `giveself t700_…`).
+Die Mod nennt `t700_` nie. Regeln: [Vertrag 01, Abschnitt B2](../docs/contracts/01-modlet-grenzen.md).
+
 ## Eine Zeile ergänzen
 
 Nur `<set>`, nur auf Knoten, die unsere Modlets angelegt haben. Die Prüfung
