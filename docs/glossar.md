@@ -365,6 +365,8 @@ Arbeitsvorrat im Plan (WP8.5).
 | `kasino` | DE | Silberpfennig | D30 |
 | `radiated` | EN | (EN offen, siehe Welt) | GDD 2.3 |
 | `verstrahl` | DE | Moorleichen | GDD 2.3 |
+| `white.?river` | beide | (keine Händler-Fraktion; der einzelne Händler spricht für sich, lore.md §4) | D159, WP8.4 |
+| `cassadore` | beide | Räuber / robbers | D159, WP8.4 |
 
 ### Umgedeutete Dinge: der alte Name ist nicht mehr der Name
 
@@ -536,12 +538,33 @@ zweite Zeile, die nur aus dem Namen bestand, ließen sie durch.)*
 
 ### Orte und Personen
 
-**Stand: Das Mischland hat keinen Ortsnamen und keine benannte Person.** Kein Text von uns
+~~**Stand: Das Mischland hat keinen Ortsnamen und keine benannte Person.** Kein Text von uns
 nennt einen Ort oder einen Menschen beim Namen — der Zettel am Anfang (`noteDuke01Desc`) ist
-ohne Unterschrift, die Händler heißen weiter wie in Vanilla (F-10, Phase 2). Der erste Name,
+ohne Unterschrift, die Händler heißen weiter wie in Vanilla (F-10, Phase 2).~~ Der erste Name,
 der gebraucht wird, kommt zuerst in diese Liste, gebildet nach Vertrag 02 §6: Orte erfunden,
 auf `-heim`, `-feld`, `-wik`, `-grad`, `-dun`, `-ing`; Personen aus dem germanischen,
 romanischen, slawischen und keltischen Namensschatz der Zeit.
+
+**Stand 2026-11-23 (WP6.7, WP8.1, WP8.4; D158–D160, zu prüfen N-103 bis N-105):** das Mischland hat
+weiter **keinen Ortsnamen**. Personen gibt es jetzt — Schreiber von Fundschriften und Hortbriefen,
+dazu die fünf Händler als Vorschlag. Der Name „Wido" stand mit WP6.7 im Spiel, bevor er hier stand;
+das ist mit dieser Zeile nachgeholt.
+
+| Kennung | Deutsch | Englisch | Vanilla | Quelle |
+|---|---|---|---|---|
+| — | Bruder Wido | Brother Wido | — | Klosterbuch, `itm700_schriftMoench1Desc`/`2Desc`, D158 |
+| — | Hrodo | Hrodo | Claude | Hortbrief, `treasure_claude`, D160 |
+| — | Gerlind | Gerlind | Jennifer | Hortbrief, `treasure_jennifer`, D160 |
+| — | Odila | Odila | Nickole | Hortbrief, `treasure_nickole`, D160 |
+| — | Ratbod, sein Sohn Ebbo | Ratbod, his son Ebbo | Raphael, Joey | Hortbrief, `treasure_raphael`, D160 |
+| — | Swanhild | Swanhild | Sarah | Hortbrief, `treasure_sarah`, D160 |
+| — | Stephanus | Stephanus | Stephan | Hortbrief, `treasure_stephan`, D160 |
+| — | Theudo | Theudo | Taylor | Hortbrief, `treasure_taylor`, D160 |
+| — | Bruder Gerwin, Cellerar | Brother Gerwin, Cellarer | Trader Rekt | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
+| — | Reginhart, Kaufmann | Reginhart the Merchant | Trader Bob | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
+| — | Waldo, Kämmerer | Waldo the Chamberlain | Trader Hugh | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
+| — | Gisla, Köhlerin | Gisla the Charcoal-Burner | Trader Jen | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
+| — | Haduwin, Fährmann | Haduwin the Ferryman | Trader Joel | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
 
 **Erlaubt und in Gebrauch — Völker der Zeit als Herkunft, nie als Gegner:** „Römer" /
 „Romans" (`resourceConcreteMixDesc`, `meleeWpnBladeT3MacheteDesc`), „fränkisch" /
