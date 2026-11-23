@@ -29,6 +29,10 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 | F-06 Wesen, Farbe | `tools/meta/expect/wp55.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 |
 | F-07 Zufallswelt | `tools/meta/expect/wp62.tsv` | 15 | 2026-11-23, grün, V 3.40 b10 |
 | F-10 Händlerstimmen | `tools/meta/expect/wp85.tsv` | 9 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.7) |
+| Vertrag 06 Kern | `tools/meta/expect/v06-kern.tsv` | 3 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.1) |
+| Vertrag 06 HarmonyX | `tools/meta/expect/v06-harmony.tsv` | 5 | 2026-11-23, grün, gegen `Mods/0_TFP_Harmony/0Harmony.dll` (neu, WP9.1) |
+
+Für alle Patches gilt ab Phase 2b [Vertrag 06](../../contracts/06-csharp-kern-und-patches.md) (Entwurf).
 
 **Gegenprobe des Signatur-Checks (WP9.7, 2026-11-23):** an `wp85.tsv` je eine absichtlich falsche
 Fassung — Signatur geändert, Member-Spalte vertippt, Typ fehlt, Member fehlt — alle vier Exit 1.

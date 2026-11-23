@@ -1,0 +1,9 @@
+# Soll-Signaturen fuer Vertrag 06 (C#-Kern und Harmony-Patches), Patch-Register und Zielaufloesung.
+# Gegen das vom Spiel vorgeladene HarmonyX: Mods/0_TFP_Harmony/0Harmony.dll (SHA-256 c349e1a3...78df), V 3.40 b10.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<SDTD_PATH>/Mods/0_TFP_Harmony/0Harmony.dll" --expect tools/meta/expect/v06-harmony.tsv
+HarmonyLib.Harmony	CreateClassProcessor	HarmonyLib.PatchClassProcessor HarmonyLib.Harmony::CreateClassProcessor(System.Type)
+HarmonyLib.PatchClassProcessor	Patch	System.Collections.Generic.List`1<System.Reflection.MethodInfo> HarmonyLib.PatchClassProcessor::Patch()
+HarmonyLib.Harmony	GetPatchedMethods	System.Collections.Generic.IEnumerable`1<System.Reflection.MethodBase> HarmonyLib.Harmony::GetPatchedMethods()
+HarmonyLib.Harmony	UnpatchSelf	void HarmonyLib.Harmony::UnpatchSelf()
+HarmonyLib.AccessTools	DeclaredMethod	static System.Reflection.MethodInfo HarmonyLib.AccessTools::DeclaredMethod(System.Type, string, System.Type[], System.Type[])

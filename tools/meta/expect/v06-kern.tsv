@@ -1,0 +1,7 @@
+# Soll-Signaturen fuer Vertrag 06 (C#-Kern): Pfad des Modlets fuer Schalter.xml, Netz-Wachen S und C.
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/v06-kern.tsv
+Mod	get_Path	string Mod::get_Path()
+ConnectionManager	get_IsServer	bool ConnectionManager::get_IsServer()
+GameManager	get_IsDedicatedServer	static bool GameManager::get_IsDedicatedServer()
