@@ -4333,3 +4333,39 @@ Modlet: `craftingBlade` und `_craftCount_itm700_stepbahn` rot (3 rot), danach gr
 
 **Grenzen:** ob Vanilla den Zähler wirklich unter diesem Namen führt und ob er auch für Blöcke zählt
 (Webstuhl, Holzfeuer), prüft kein Werkzeug — das zeigt S-49.
+
+## Nachtrag Spieltest — Form der Patch-Operationen in `kette-pruefen`, 2026-11-23, **Abnahme offen**
+
+Gebaut auf Wunsch des Nutzers („Prüflücken schließen", 2026-11-23) nach dem Spieltest.
+
+**Anlass.** Zwei Fehler fand erst das Spiel, `kette-pruefen` war grün:
+- `<removeattribute xpath="…" name="min_count"/>` in `700_60_Welt/rwgmixer.xml` und zwanzigmal in
+  `700_50_Fortschritt/challenges.xml`. Das Spiel nimmt das Attribut aus dem XPath und bricht den Patch
+  ab, wenn der ein Element trifft („Can only remove Attributes (matched Element …), use remove instead",
+  Player.log 2026-11-23 15:37). Behoben in 4192042.
+- Ein `<append>` in `700_75_Magie/XUi_InGame/windows.xml` traf **zwei** `rect name="hud"`; die
+  Odem-Leiste erschien doppelt. Behoben in f076429.
+
+**Die Regeln** (gegen die Vanilla-Datei gleichen Pfads, wie die XPath-Prüfung):
+1. `<removeattribute>` mit einem Attribut `name` ist rot — das Spiel liest nur den XPath.
+2. `<removeattribute>`, dessen XPath in Vanilla ein Element trifft, ist rot. Trifft er nichts (Ziel aus
+   einem eigenen Modlet), muss sein letzter Schritt ein Attribut sein (`…/@name`), sonst rot.
+3. `<remove>`, das ein Attribut trifft, ist rot (das Spiel verlangt dafür `removeattribute`).
+4. `<append>`, `<prepend>`, `<insertAfter>`, `<insertBefore>`, die in Vanilla **mehr als eine** Stelle
+   treffen, sind rot — außer unmittelbar davor (nur Leerraum dazwischen) steht ein Kommentar, der mit
+   `mehrere Ziele:` beginnt und den Grund nennt. Die fünf Horden-Zeilen in
+   `700_65_Wesen/gamestages.xml` tragen ihn jetzt.
+
+Neue Zeile: `Patch-Form: N removeattribute geprueft, M Einfuegen an mehreren Stellen vermerkt` (am
+echten Stand 21 und 5).
+
+**Gegenprobe** (1 neu, 344 → **345**): `kette/patchform` — name=, Element, `remove` auf ein Attribut,
+Einfügen ohne Vermerk und mit einem Vermerk, der nicht am Anfang steht: 5 rot; XPath auf das Attribut und
+Einfügen mit Vermerk grün. Dieselben Testdaten mit der Fassung vor diesem Nachtrag: **Exit 0, grün** — die
+Lücke war echt.
+
+**Grenzen.** Mehrfach-Treffer werden gegen Vanilla gezählt, nicht gegen den gepatchten Stand. Das
+gemeinsame Patch-Modell `patch-operationen.ps1` (genutzt von `sprachverweise-pruefen`,
+`vertraeglichkeit-pruefen`, `testueberlagerung-pruefen`) rechnet `removeattribute` noch als Element mit
+`name` — so, wie das Spiel es **nicht** tut. Das betrifft vor allem fremde Mods in
+`vertraeglichkeit-pruefen` und ist als eigener Schritt offen.

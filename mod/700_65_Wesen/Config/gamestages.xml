@@ -19,21 +19,29 @@
 	       Anfuehrer spaet ab 200              283 Stufen
 	     Bei Stufe 31 bringt Vanilla vor dem Rest 3 x 44 Tote; zwei Brecher sind darin
 	     weniger als ein Zehntel (F-09). Die Gruppen stehen in entitygroups.xml (WP5.6).
-	     Alle Zahlen sind Setzungen (N-130). -->
+	     Alle Zahlen sind Setzungen (N-130).
 
+	     Jede Operation unten trifft mit Absicht viele Stufen; der Kommentar "mehrere Ziele:"
+	     direkt davor sagt das der Pruefung (kette-pruefen, Patch-Form, seit 2026-11-23). -->
+
+	<!-- mehrere Ziele: eine Zeile in jeder Horden-Stufe von 30 bis unter 100 (14) -->
 	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 30 and @stage &lt; 100]/spawn[last()]">
 		<spawn group="eg700_brecherFrueh" num="2" maxAlive="1" duration="1" interval="90" />
 	</insertBefore>
+	<!-- mehrere Ziele: eine Zeile in jeder Horden-Stufe von 100 bis unter 250 (22) -->
 	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 100 and @stage &lt; 250]/spawn[last()]">
 		<spawn group="eg700_brecherMittel" num="4" maxAlive="2" duration="1" interval="60" />
 	</insertBefore>
+	<!-- mehrere Ziele: eine Zeile in jeder Horden-Stufe ab 250 (276) -->
 	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 250]/spawn[last()]">
 		<spawn group="eg700_brecherSpaet" num="6" maxAlive="2" duration="1" interval="45" />
 	</insertBefore>
 
+	<!-- mehrere Ziele: eine Zeile in jeder Horden-Stufe von 60 bis unter 200 (22) -->
 	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 60 and @stage &lt; 200]/spawn[last()]">
 		<spawn group="eg700_anfuehrerFrueh" num="1" maxAlive="1" duration="1" />
 	</insertBefore>
+	<!-- mehrere Ziele: eine Zeile in jeder Horden-Stufe ab 200 (283) -->
 	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 200]/spawn[last()]">
 		<spawn group="eg700_anfuehrerSpaet" num="2" maxAlive="1" duration="1" />
 	</insertBefore>

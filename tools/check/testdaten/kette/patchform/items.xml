@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- Testdaten fuer kette-pruefen, Patch-Form (2026-11-23). Fuenf Formen sind rot, zwei gruen. -->
+
+	<!-- rot: name= statt Attribut im XPath (so stand es in rwgmixer.xml und challenges.xml) -->
+	<removeattribute xpath="/items/item[@name='pruefFormA']/property" name="value" />
+	<!-- rot: der XPath trifft ein Element -->
+	<removeattribute xpath="/items/item[@name='pruefFormB']/property" />
+	<!-- gruen: der XPath zeigt auf das Attribut -->
+	<removeattribute xpath="/items/item[@name='pruefFormA']/property/@value" />
+	<!-- rot: remove auf ein Attribut -->
+	<remove xpath="/items/item[@name='pruefFormB']/property/@value" />
+
+	<append xpath="/items/item">
+		<property name="pruefFormOhneVermerk" value="1" />
+	</append>
+
+	<!-- mehrere Ziele: Gegenprobe, gewollt an beiden Gegenstaenden -->
+	<append xpath="/items/item">
+		<property name="pruefFormMitVermerk" value="1" />
+	</append>
+
+	<!-- Hinweis: mehrere Ziele, aber nicht am Anfang - zaehlt nicht -->
+	<append xpath="/items/item">
+		<property name="pruefFormFalscherVermerk" value="1" />
+	</append>
+</config>

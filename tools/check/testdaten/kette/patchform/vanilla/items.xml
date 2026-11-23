@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Testdaten fuer kette-pruefen, Patch-Form (2026-11-23). Erfundene Kennungen, kein
+     Spielinhalt. pruefRohstoff und pruefWerkzeug wie in kette\vanilla (die eigenen Rezepte
+     brauchen sie); dazu zwei Gegenstaende, damit ein XPath auf /items/item[@name='pruefForm…']
+     und /items/item mehrere Stellen trifft. -->
+<items>
+	<item name="pruefRohstoff">
+		<property name="Stacknumber" value="500" />
+	</item>
+	<item name="pruefWerkzeug">
+		<property name="Stacknumber" value="1" />
+	</item>
+	<item name="pruefFormA">
+		<property name="Wert" value="1" />
+	</item>
+	<item name="pruefFormB">
+		<property name="Wert" value="2" />
+	</item>
+</items>

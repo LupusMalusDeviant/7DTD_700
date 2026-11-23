@@ -830,6 +830,64 @@ function Test-Bedingt {
     }
 }
 
+# DIE FORM EINER OPERATION, WIE DAS SPIEL SIE VERLANGT (ergaenzt 2026-11-23, Spieltest).
+# Zwei Fehler hat erst das Spiel gefunden, diese Pruefung liess sie durch:
+#   - <removeattribute xpath="..." name="min_count"/> in rwgmixer.xml und zwanzigmal in
+#     challenges.xml. Das Spiel nimmt das Attribut aus dem XPath; trifft der ein Element,
+#     bricht es den Patch ab ("Can only remove Attributes (matched Element ...), use remove
+#     instead"; Player.log 2026-11-23 15:37). Umgekehrt lehnt es <remove> auf ein Attribut ab.
+#   - <append> in XUi_InGame/windows.xml traf ZWEI rect name="hud" - die Odem-Leiste erschien
+#     doppelt. Ein Einfuegen an mehreren Stellen ist manchmal gewollt (die Horden-Stufen in
+#     gamestages.xml); dann steht unmittelbar davor ein Kommentar, der mit "mehrere Ziele:"
+#     beginnt und den Grund nennt. Ohne ihn ist es rot.
+# Gerechnet wird gegen Vanilla (wie die XPaths oben). Trifft der XPath dort nichts (Ziel aus
+# einem eigenen Modlet), prueft removeattribute nur die Schreibweise: der letzte Schritt muss
+# ein Attribut sein.
+$removeattributeGeprueft = 0
+$mehrfachVermerkt = 0
+$einfuegenVerben = @('append', 'prepend', 'insertAfter', 'insertBefore')
+
+function Test-MehrfachVermerk {
+    # Der Kommentar unmittelbar vor der Operation - Leerraum dazwischen zaehlt nicht.
+    param($Node)
+    $vorher = $Node.get_PreviousSibling()
+    while ($null -ne $vorher -and ($vorher.get_NodeType() -eq [System.Xml.XmlNodeType]::Whitespace -or
+                                   $vorher.get_NodeType() -eq [System.Xml.XmlNodeType]::SignificantWhitespace)) {
+        $vorher = $vorher.get_PreviousSibling()
+    }
+    if ($null -eq $vorher -or $vorher.get_NodeType() -ne [System.Xml.XmlNodeType]::Comment) { return $false }
+    return $vorher.get_Value().TrimStart().StartsWith('mehrere Ziele:', [System.StringComparison]::Ordinal)
+}
+
+function Test-PatchForm {
+    param($Node, [string]$Verb, [string]$XPath, $Treffer, [string]$Datei)
+    $elemente = @($Treffer | Where-Object { $_.get_NodeType() -eq [System.Xml.XmlNodeType]::Element }).Count
+    $attribute = @($Treffer | Where-Object { $_.get_NodeType() -eq [System.Xml.XmlNodeType]::Attribute }).Count
+    if ($Verb -ceq 'removeattribute') {
+        $script:removeattributeGeprueft++
+        if ($Node.HasAttribute('name')) {
+            $script:unresolved += "<removeattribute> mit name=""$($Node.GetAttribute('name'))"": das Spiel liest das Attribut nur aus dem XPath (.../@$($Node.GetAttribute('name'))): $XPath  ($Datei)"
+            return
+        }
+        if ($elemente -gt 0) {
+            $script:unresolved += "<removeattribute> trifft ein Element; das Spiel bricht den Patch ab (`"Can only remove Attributes`"): $XPath  ($Datei)"
+            return
+        }
+        if ($Treffer.Count -eq 0 -and $XPath -notmatch '/@[^/\[\]\s]+\s*$') {
+            $script:unresolved += "<removeattribute> zeigt nicht auf ein Attribut (letzter Schritt .../@name): $XPath  ($Datei)"
+        }
+        return
+    }
+    if ($Verb -ceq 'remove' -and $attribute -gt 0) {
+        $script:unresolved += "<remove> trifft ein Attribut; das Spiel lehnt das ab (`"use removeattribute instead`"): $XPath  ($Datei)"
+        return
+    }
+    if ($einfuegenVerben -ccontains $Verb -and $Treffer.Count -gt 1) {
+        if (Test-MehrfachVermerk $Node) { $script:mehrfachVermerkt++; return }
+        $script:unresolved += "<$Verb> trifft $($Treffer.Count) Stellen und fuegt an jeder ein; ist das gewollt, steht unmittelbar davor ein Kommentar 'mehrere Ziele: <Grund>': $XPath  ($Datei)"
+    }
+}
+
 function Test-PatchEbene {
     # Die Kinder von <config> und, seit WP8.7, die Kinder eines <if> oder <else>.
     param($Behaelter, [string]$Datei, $VanillaDoc, [int]$Tiefe)
@@ -865,12 +923,14 @@ function Test-PatchEbene {
         }
         $script:xpathChecked++
         if ($Tiefe -gt 0) { $script:bedingteXPaths++ }
-        $hits = 0
-        try { $hits = @($VanillaDoc.SelectNodes($xp)).Count }
+        $trefferListe = @()
+        try { $trefferListe = @($VanillaDoc.SelectNodes($xp)) }
         catch {
             $script:unresolved += "XPath ist kein gueltiger Ausdruck: $xp  ($Datei)"
             continue
         }
+        $hits = $trefferListe.Count
+        Test-PatchForm $node $verb $xp $trefferListe $Datei
         if ($hits -gt 0) { $script:xpathVanilla++; continue }
         # Kein Treffer in Vanilla: stammt das Ziel aus einem eigenen Modlet?
         $ownNames = @([regex]::Matches($xp, "@name='([^']+)'") | ForEach-Object { $_.Groups[1].Value })
@@ -1362,6 +1422,7 @@ Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene 
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
 Write-Output ("  Patch-Dateien: {0} mit Vanilla-Gegenstueck, {1} ohne" -f $patchDateien, $ohneGegenstueck)
 Write-Output ("  geprueefte XPaths: {0} ({1} in Vanilla, {2} auf eigene Knoten)" -f $xpathChecked, $xpathVanilla, $xpathOwn)
+Write-Output ("  Patch-Form: {0} removeattribute geprueft, {1} Einfuegen an mehreren Stellen vermerkt" -f $removeattributeGeprueft, $mehrfachVermerkt)
 Write-Output ("  bedingte Bloecke: {0} (Zweige: {1}, XPaths darin: {2}, xpath-Bedingungen: {3})" -f $bedingteBloecke, $zweige, $bedingteXPaths, $bedingungsXPaths)
 Write-Output ("  Bedingungen mit NCalc gelesen: {0} (ohne genannte Mods wahr: {1}, falsch: {2}, nicht ausgewertet: {3})" -f $bedingungenGelesen, $bedingungenWahr, $bedingungenFalsch, $bedingungenOffen)
 $modListe = @($genannteMods | Sort-Object -Unique)

@@ -1175,6 +1175,19 @@ Test-Script 'kette-pruefen: vertippte Stufe und Zaehler ohne Rezept im Lern-Buff
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @("Stufe 'pruefStufeFehlt' (progression_name an triggered_effect) ist kein Fortschritts-Knoten", "Zaehler '_craftCount_pruefBlockFehlt' nennt kein Rezept", 'Lern-Verweise (Stufen, Zaehler): 6', '2 rot') -MustNotContain @("'pruefAttA' (progression_name", "'pruefPerkA' (progression_name", '_craftCount_pruefBlockEigen', '_coretemp')
 
+# Spieltest 2026-11-23: zwei Fehler fand erst das Spiel. <removeattribute> mit name= bzw. auf ein
+# Element (rwgmixer.xml, challenges.xml) und ein <append>, das zwei rect name="hud" traf (doppelte
+# Odem-Leiste). Rot: name=, Element, <remove> auf Attribut, Einfuegen an zwei Stellen ohne Vermerk
+# und mit einem Vermerk, der nicht mit "mehrere Ziele:" beginnt. Gruen: XPath auf das Attribut,
+# Einfuegen mit Vermerk.
+Test-Script 'kette-pruefen: removeattribute in falscher Form und Einfuegen an mehreren Stellen ohne Vermerk werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\patchform\items.xml')
+    Vanilla      = (Join-Path $data 'kette\patchform\vanilla')
+} -MustContain @("<removeattribute> mit name=""value""", '<removeattribute> trifft ein Element', '<remove> trifft ein Attribut', "/items/item  (items.xml)", 'Patch-Form: 3 removeattribute geprueft, 1 Einfuegen an mehreren Stellen vermerkt', '5 rot') -MustNotContain @("pruefFormA']/property/@value")
+
 # WP11.3 (2026-11-23): CVar-Namen. Nur gelesen nur mit Schreiber ausserhalb der XML im Vertrag
 # (Server/C#), nur geschrieben nur, wenn der Vertrag den Namen nennt. Der Name mit "Server" im
 # Wort darf sich nicht selbst freisprechen; Fliesstext im Vertrag zaehlt nicht; t700_ und $ nicht.
