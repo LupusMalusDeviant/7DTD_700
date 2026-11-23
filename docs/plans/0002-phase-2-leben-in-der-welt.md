@@ -101,6 +101,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP11.7 Verhalten, Teil | **gebaut** (D188, N-132, S-46): der Lauscher als Werte am Aussätzigen. Offen: Pirscher (C#, WP11.6), Totsteller (WP6.6). | 65_Wesen |
 | WP11.8 Klang | **gelesen, nichts gebaut** (D189, N-133): Finding „Stille und Umgebungslaute", Soll-Datei `wp118.tsv` (11 Zeilen, `verify` Exit 0, Gegenprobe Exit 1); Triage-Zeile 21 entschieden: C# beim Client, Patch vielleicht. | rea/findings, tools/meta, triage |
 | WP14.2 Drehbücher, Teil | **geschrieben** (D191, N-135): `docs/pruefung/0004-drehbuch-spieltests.md` — alle 47 S-Zeilen in fünf Sitzungen (A 15, B 160, C 25, D 60 min, E wartet), T1–T3 abgebildet, T4 bleibt Playtest. Elfte Prüfung `drehbuch-pruefen` (Vertrag 04 Nachtrag WP14.2), Gegenproben 330 → **337**. | pruefung, tools/check |
+| WP12.1 F-02, F-21 nachgeschärft | **geschrieben** (D192, N-136): Schadensarten per XML über Vanillas Waffen-Marken, Schildwerte und zwei Wege, Wurfwaffen, Lernen durch Tun mit Zahlen. Nichts gebaut. Offen: Schild Phase 2 oder 3. | F-02, F-21 |
 | WP11.9 Deutungs-Texte | **gebaut** (D190, N-134, S-47): sechs Fundschriften (Strafe, Fluch, Krankheit je zwei), 12 Sprachzeilen, 6 Glossarzeilen, Beute-Gruppe 12 → 18. Im Spiel ungelesen. | 70_Handel, 90_Sprache, glossar, lore |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
@@ -766,6 +767,9 @@ mit eigenem Gesicht und Vorboten.
    Skill-Punkt-Weg (D71). F-02 — Werte des Schilds (Winkel, Minderung, Ausdauer, Verschleiß), eine
    Tabelle der Schadensarten gegen Rüstung und Gegner (F-02:133; F-03:99), Wurfwaffen nach
    waffen.md:1126. (M)
+   *Geschrieben 2026-11-23 (D192, zu prüfen N-136):* F-02 §1–4 (Schadensarten über Vanillas Marken,
+   Schildwerte mit Weg A XML / Weg B Patch, Wurfwaffen, Maximal-Haltbarkeit streichen), F-21 §1–5
+   (Umfang, Zahlen, Lehrblatt +3, Perk „Lehrzeit", Netz). **Offen:** Schild Phase 2 oder 3 (N-136 (1)).
 2. **WP12.2** `[Claude-prüfbar]` Vertragsbezug: Vertrag 06 und 07. (S)
 3. **WP12.3** `[Claude-prüfbar]` **Patch Learning by Doing:** Finding → Soll-Datei →
    Manifest-Zeile → Postfix auf dem Server; Zählung als reine Logik mit Unit-Tests; der Fortschritt

@@ -169,6 +169,103 @@ Gegenstände und ihre Namen.
 
 Furcht (F-17 B3, D14) wirkt vor allem auf Fernkampf (Zittern) und Zauber, kaum auf den Nahkampf.
 
+## Ausarbeitung Phase 2 (Plan-0002 WP12.1, 2026-11-23, D192, zu prüfen N-136)
+
+Alle Zahlen sind **Setzungen** für das Balancing (WP14.3), im Spiel ungesehen.
+
+### 1. Schadensarten über Vanillas Marken (XML, WP12.4)
+
+**Gemessen** an Vanillas `items.xml` und `entityclasses.xml` (V 3.40 b10):
+
+- Vanilla kennt die vier Arten als Eigenschaft `Damage_type` (`Piercing`, `Slashing`, `Bashing`; im
+  Code dazu `Crushing`, Kurz-Check Prio 9) — aber nur an Geschossen und Wurfsachen, nicht an
+  Nahkampfwaffen. Einen **Schutz je Art** gibt es in XML nicht: Vanilla hat ihn selbst auskommentiert
+  (`PiercingProtection`, Vermerk „Not supported at this time", `items.xml` am `ammo9mmBulletHP`).
+- **Was trägt: Schutz je Marke der Waffe.** `PhysicalDamageResist` nimmt `tags`; Vanilla nutzt das am
+  Insektenschwarm (`animalInsectSwarm`: 75 gegen alles außer `ranged`, 99 gegen `ranged`). Die Marken
+  stehen schon an den Waffen: `bladeSkill` (5), `axe` (4), `knife` (3), `spearSkill` (4), `clubSkill`
+  (5), `sledgeSkill` (4), `bowSkill` (6), `crossbow` (2) — und die **Hände der Seuchentoten** tragen
+  `blunt,melee,light` (`meleeHandMaster`).
+
+Daraus die Zuordnung, ohne neue Marke:
+
+| Art | Marken der Quelle | Waffen bei uns |
+|---|---|---|
+| **Schnitt** | `bladeSkill`, `axe`, `knife` | Sax, Spatha, Beile, Messer |
+| **Stich** | `spearSkill`, `bowSkill`, `crossbow` | Ger, Flügellanze, Pfeile, Bolzen |
+| **Wucht** | `clubSkill`, `sledgeSkill`, `blunt` | Keulen, Hämmer, Faustwehr — **und jeder Schlag eines Seuchentoten** |
+
+**Schutz je Art, zusätzlich zu Vanillas `PhysicalDamageResist`** (Prozentpunkte für die **ganze**
+Garnitur, auf die Teile verteilt wie Vanillas Grundwert):
+
+| Rüstung (F-03) | gegen Schnitt | gegen Stich | gegen Wucht | Gedanke |
+|---|---|---|---|---|
+| T0 Lumpen | 0 | 0 | 0 | — |
+| T1 Wolle und Leder | +3 | 0 | +3 | gibt T1 endlich mehr als einen Set-Bonus (F-03, Balancing 0001 §4) |
+| T2 Gambeson | +5 | +5 | **+12** | Stepparbeit fängt Schläge — gut gegen Seuchentote |
+| T3 Kettenzeug | **+15** | −5 | +3 | Ringe halten die Schneide, nicht die Spitze |
+
+| Gegner (F-06) | gegen Schnitt | gegen Stich | gegen Wucht | Gedanke |
+|---|---|---|---|---|
+| gewöhnliche Seuchentote | +0 | +0 | +0 | ungeschützt — Schnitt ist so gut wie alles |
+| Seuchentoter Krieger (`zombieSoldier`) | +15 | −5 | 0 | trägt Kette wie T3 |
+| Brecher (WP5.6: Büttel, Muhme, Hirte, Felswerfer, Moorleiche) | 0 | 0 | +10 | schwer, die Keule prallt ab |
+| Kriecher | −10 | 0 | +10 | weich und am Boden: schneiden ja, schlagen kaum |
+
+**Bauweg (WP12.4):** je Zeile ein `<append>` mit `passive_effect name="PhysicalDamageResist"
+operation="base_add" tags="…"` an der Rüstungsklasse bzw. Wesenklasse. Kein C#.
+**[verifizieren, Spieltest mit WP12.4]:** (1) ob Schutz an **getragener** Rüstung die Marken der
+**angreifenden** Waffe sieht wie Vanillas Schwarm — sonst geht die Hälfte (Rüstung) nur per Patch, die
+andere (Gegner) bleibt XML; (2) ob unsere Waffen die Marken über `Extends` erben.
+
+### 2. Der Schild
+
+**Werte** (für beide Wege unten gleich, wo sie greifen):
+
+| Wert | Rundschild (Holz, T1) | Beschlagener Schild (T2) | Grund |
+|---|---|---|---|
+| Winkel | 120° von vorn (±60°) | 120° | wer flankiert, trifft |
+| Minderung Nahkampf | 70 % | 80 % | der Schild fängt, nicht der Arm |
+| Minderung Fernkampf | 50 % | 60 % | Pfeile treffen auch Kanten |
+| Ausdauer je geblocktem Treffer | 12 | 10 | Vanilla-Ausdauer 100: acht bis zehn Treffer, dann sinkt der Arm |
+| ohne Ausdauer | kein Block | kein Block | |
+| Verschleiß | −1 Haltbarkeit je 10 abgefangene Punkte | dasselbe | |
+| Haltbarkeit | 300 | 600 | Reparatur Nähzeug bzw. Schmiedeflicken (D60, D62) |
+| erhoben | Gehen −30 %, kein Sprint, kein Schlag | dasselbe | Haltung, nicht Zauber |
+
+**Zwei Wege — und ein Widerspruch, den du entscheiden musst (N-136 (1)):** das GDD (§5 Phase 2) und
+P2-E22 legen den Schild in **Phase 2**, die Triage (D172, zu prüfen) legt den Patch nach **Phase 3**,
+damit Phase 2 ohne Harmony bleibt. Beides gilt nicht zugleich.
+
+| Weg | was | geht | Kosten |
+|---|---|---|---|
+| **A — XML, ohne Richtung** | der Schild ist ein **gehaltenes** Stück (eine zweite Hand gibt es im Code nicht, Finding WP9 §2): solange er in der Hand liegt, `PhysicalDamageResist` +25 gegen alles von **allen** Seiten, Gehen −10 %; geschlagen wird mit ihm wie mit einer schwachen Keule | Phase 2, sofort nach dem Modell (WP4) | kein Winkel, kein Erheben, keine Ausdauer je Treffer — ein „Schutzbrett", ehrlich benannt |
+| **B — Patch** | Postfix auf `EntityAlive::DamageEntity` beim Besitzer des Getroffenen: Richtung gegen Blick, `cv700_schildErhoben`, Ausdauer, Verschleiß (Kurz-Check Prio 9, Finding WP9 §2) | Phase 2b (WP12.5) oder Phase 3 | der erste Harmony-Patch; Netz-Klasse S+C, Dedicated-Test |
+
+**Empfehlung:** A in Phase 2 bauen — er ist zugleich das Verhalten bei **abgeschaltetem** Patch, das
+Vertrag 06 für jeden Patch verlangt. B danach, sobald du den Patch freigibst; erst dann zählen Winkel und
+Ausdauer. **[verifizieren]** für A: ob ein Buff „hält den Schild" über `HoldingItemHasTags` am Spieler
+zuverlässig wirkt, auch für Fernkampfschaden.
+
+### 3. Wurfwaffen (D21, waffen.md E-17)
+
+| Stück | Stufe | Schaden | Reichweite | Art | liegt danach | Text-Gedanke |
+|---|---|---|---|---|---|---|
+| **Wurfspeer / Javelin** | T1 | 35 | 15 m | Stich | im Ziel bzw. am Boden, aufheben | der Speer des Jägers |
+| **Wurfbeil / Throwing Axe** | T2 | 45 | 10 m | Schnitt | dasselbe | „das Beil der Franken" als Hörensagen; Erbstück *Franziska* nur als Fund |
+| **Ango / Ango** | T3 | 70 | 12 m | Stich | dasselbe | schwerer Wurfspeer mit langem Eisenhals (E-02) |
+| ~~Wurfmesser~~ | — | — | — | — | — | entfällt (E-17, P2-E22) |
+
+Gebaut wird mit Vanillas `ItemActionThrownWeapon`, die nur am Steinspeer auskommentiert ist (Finding WP9
+§3), **erst nach S-33 (4)** — trägt sie nicht, rutscht das Werfen (P2-E22). Je ein Stück im Gürtel, kein
+Stapel; die Haltbarkeit sinkt je Wurf wie ein Schlag.
+
+### 4. Verlust an Maximal-Haltbarkeit (D60, WP12.7)
+
+Bleibt **Streichposten**: es gibt dafür in XML nichts (D60 gemessen), und ein Patch nur dafür lohnt
+nicht. Der Schleifstein repariert weiter nur teilweise. **Empfehlung:** für Phase 2 streichen, in die
+Rückschau (WP14.6).
+
 ## Umsetzung
 ### XML
 Items, Rezepte, Qualitätsnamen, Haltbarkeit, Reparatur-Items, Perks (F-21 Krieger bzw. Jäger), Buffs (Blutung, Betäubt).

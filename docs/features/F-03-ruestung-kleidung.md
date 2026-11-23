@@ -96,7 +96,7 @@ dazu vier D-Zeilen Rückbau an WP3.
 - Gewicht → Bewegungs- und Ausdauer-Malus über vorhandene Rüstungs-Mechanik
 - Set-Boni über vorhandene Rüstungsset-Logik: Zuordnung umdeuten
 - **Qualität** (D23): Material = Grundstufe, Handwerksqualität = Feinstufe (wie F-02)
-- **Schutz je Schadensart** (D21): Gambeson gut gegen Wucht, Kette gut gegen Schnitt und schwächer gegen Stich (Phase 2)
+- **Schutz je Schadensart** (D21): Gambeson gut gegen Wucht, Kette gut gegen Schnitt und schwächer gegen Stich (Phase 2) — *Zahlen und XML-Weg seit WP12.1 in [F-02 „Ausarbeitung Phase 2" §1](F-02-waffen-kampf.md) (D192, zu prüfen N-136)*
 - **Verschleiß & Reparatur** wie bei Waffen (F-02) — mit einem dritten Gegenstand (D62,
   8. November 2026): **Nähzeug** (Vanillas `resourceSewingKit`, in WP5.5 um Rezept und
   `RepairAmount` ergänzt) flickt T0, T1 und T2 voll, das **Kettenhemd** flickt der

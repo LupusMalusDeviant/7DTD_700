@@ -54,6 +54,71 @@ für Lernen durch Herstellen und Benutzen und für das sechste Attribut im Fenst
 
 REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 
+## Ausarbeitung Phase 2 (Plan-0002 WP12.1, 2026-11-23, D192, zu prüfen N-136)
+
+Alle Zahlen sind **Setzungen**, im Spiel ungesehen.
+
+### 1. Umfang (P2-E18)
+
+| Lernt durch Tun | Phase 2 | Weg |
+|---|---|---|
+| **Handwerks-Stufen** (Klingenschmiede, Rüstungsbau …, die 14 lebenden) | **ja** | Herstellen gebundener Rezepte |
+| Perks der Bäume (Krieger, Jäger …) | nein | Skill-Punkte wie bisher |
+| Kampf, Abbau, Laufen | **nein** — kein Lernen durch Kämpfen in Phase 2 (P2-E18) | Notiz Phase 3 |
+| Runenkunde (F-15) | nein | Skill-Punkte; Odem ist das Üben |
+
+*Berichtigt gegen P2-E18:* der Plan schrieb „ein Patch, serverseitig". Seit dem Finding WP9.3 (N-113)
+gilt: **kein Patch**, gezählt wird **beim Spieler** über Vanillas `_craftCount_<Gegenstand>`.
+
+### 2. Zahlen je Herstellung
+
+Ein unsichtbarer Buff `buff700_lernen` am Spieler (über `buffStatusCheck01`, wie das Grauen), Takt
+10 s. **Was zählt:** je Handwerks-Stufe ihre **gebundenen** Rezepte (24, Tabelle WP7.5) und **ein offenes
+Vorstück**, das man vorher schon machen kann (Klingenschmiede: die Klinge; Rüstungsbau: die Steppbahn;
+die übrigen nennt der Bau, WP12.3). **Wie:** alle **3** fertigen Stücke hebt sich die Stufe um **1**
+(`AddProgressionLevel`), höchstens **10-mal** je Gegenstand (30 Stück). Zwei Merk-CVars je Gegenstand
+statt einer je Schwelle: `.cv700_lernGezahlt<Kurzname>` (0–10) und `.cv700_lernZiel<Kurzname>`
+(= Gezahlt × 3 + 3, Vergleich mit `@`), damit Neuladen nichts doppelt zahlt.
+
+**Rechnung an einem Weg (Klingenschmiede, Spatha ab 36):**
+
+| Schritt | Stufe |
+|---|---|
+| **Grundfähigkeit (D24):** Rang 1 „Lehrzeit" (§4, +10) **oder** vier Lehrblätter (§3, je +3) | 1 → 11 — der Sax ist offen *(Startzahl der Stufen liest WP12.3)* |
+| 30 Saxe | 11 → 21 |
+| 30 Klingen | 21 → 31 |
+| Rang 2 „Lehrzeit" (+3) und ein Lehrblatt (+3) | 31 → 37 — die Spatha ist offen |
+
+**Erst lernen, dann üben (D24):** der Buff zählt für eine Stufe erst, wenn sie die Grundfähigkeit hat
+(Stufe ≥ 11); vorher macht man Klingen umsonst. **Gegen das Abarbeiten billiger Stücke:** nur Gebundenes
+und je Stufe ein Vorstück zählen, jedes höchstens zehnmal. Tun trägt bis kurz vor T3; den letzten
+Schritt geben Wissen oder Punkte.
+
+**[verifizieren beim Bau, WP12.3]:** ob `CVarCompare` den Namen `_craftCount_…` liest (Indiz ja, Finding
+WP9 §1), auf welcher Zahl eine Handwerks-Stufe beginnt, und ob `AddProgressionLevel` eine Stufe über
+ihr Höchstmaß hebt (soll nicht).
+
+### 3. Das Lehrblatt wird der Sprung
+
+Bisher der **einzige** Weg (D70, D71). Mit Phase 2 hebt ein Lehrblatt um **3** statt 1 — selten und
+wertvoll, nicht mehr der einzige Weg. Tun trägt bis kurz vor T3 (Rechnung oben); für T3 braucht es Tun
+**und** Blätter oder Punkte.
+
+### 4. Der Skill-Punkt-Weg (D24, D71)
+
+D24 verlangt die Grundfähigkeit „per Skill-Punkt **oder** Abschrift". D71 hat den Punkt-Weg auf
+Phase 2 gelegt. **Vorschlag:** je Baum ein Perk **„Lehrzeit"** mit drei Rängen: Rang 1 hebt die
+Handwerks-Stufen **seines** Baums um 10 (die Grundfähigkeit), Rang 2 und 3 um je 3
+(`AddProgressionLevel` beim Kauf) — der Punkt ist ein gekauftes Wissen. Eine zweite Bindung (D71s Sorge)
+entsteht nicht: die Rezepte hängen weiter nur an den Stufen. **[verifizieren, WP12.3]:** welcher
+Auslöser beim Kauf eines Rangs feuert (Vanilla-Perks nutzen `onSelfProgressionUpdate`?).
+
+### 5. Netz und Neustart
+
+Gezählt und gehoben wird beim Spieler (N-113), gespeichert mit dem Spieler. Ein veränderter Client
+könnte schummeln — im Koop wiegt das leicht. Das Kriterium „nach **Server**-Neustart" heißt damit
+„nach Neustart des Spielstands"; S-33 (2) prüft den Zähler.
+
 ## Akzeptanzkriterien
 - [ ] **Fünf** Bäume vollständig, ~~keine Vanilla-Attribut- bzw. -Perknamen sichtbar~~ kein **moderner** Attribut- oder Perkname sichtbar (der sechste Baum in Phase 2, D66). *Geändert am 2026-11-22 (D90):* unter dem Zahnrad behalten „Leichte Rüstung", „Mittlere Rüstung", „Schwere Rüstung", „Vom Land leben" und „Schlösserknacken" Vanillas Namen; „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück.
 - [ ] Ohne Grundfähigkeit ist ein Rezept gesperrt; mit Grundfähigkeit steigt die Qualität durch wiederholtes Herstellen
