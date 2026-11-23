@@ -3848,3 +3848,42 @@ Abschnitt „Wesen" in `gegenproben.ps1`, Prüfsätze `testdaten/wesen`, `wesen-
 
 23.11.2026, `tools/check/check-all.ps1` mit gesetztem `SDTD_PATH`: Zahlen im Commit und in der
 Entscheidungsliste (N-36).
+
+## Nachtrag WP5.3 — der Erzeuger der Wesen-Namen, 2026-11-23, **Abnahme offen** (N-67)
+
+`tools/gen/wp5-wesen-namen.ps1` erzeugt die Sprachzeilen für die Namen aller Wesen (F-06 §2 bis
+§4, D147). Begründung wie bei den Erzeugern aus WP7: Vanilla gibt jeder Klasse ihren eigenen
+Sprachschlüssel — der Schlüssel ist der Klassenname, die Stufe steht im Namen ausgeschrieben. Aus
+56 Namen und vier Stufenwörtern werden **176 Zeilen** (155 Seuchentote, 21 Tiere); eine
+Namensänderung wäre von Hand fünf Zeilen, und eine vergessene Stufe fiele niemandem auf.
+
+**Anders als die Erzeuger aus WP7** steht die Tabelle nicht im Skript, sondern daneben in
+`tools/gen/wp5-wesen-namen.tsv` (UTF-8, fünf Spalten: Kennung, Art, Geschlecht, Deutsch,
+Englisch). Das Skript enthält darum keine Umlaute und braucht keine BOM; wer einen Namen ändert,
+fasst nur die Tabelle an.
+
+**Es bricht ab** (Exit 1, schreibt nichts), wenn
+
+- eine Klasse `zombie*` oder `animal*` des Builds in der Tabelle fehlt (Vorlagen ausgenommen),
+- eine Tabellenzeile im Build keine Klasse hat,
+- Vanillas Sprachdatei für eine Klasse keinen Schlüssel führt (unsere Zeile wäre tot),
+- zwei Klassen denselben Namen bekämen, ohne dass Vanilla ihnen selbst denselben gibt
+  (`zombieFrostclaw` und `zombieChuck` heißen in Vanilla beide „Chuck" — das ist erlaubt),
+- eine Stufe vorkommt, für die kein Stufenwort in der Tabelle steht.
+
+**Vier Gegenproben von Hand** (2026-11-23, je eine verfälschte Kopie der Tabelle; nicht in
+`gegenproben.ps1`, weil der Erzeuger kein Teil des Prüfbefehls ist): Zeile `zombieBoe` gestrichen →
+Exit 1, „steht nicht in der Tabelle" (5 Fehler: die Grundklasse und ihre vier Stufen); `zombieJoe`
+auf den Namen von `zombieBoe` gesetzt → Exit 1, „Derselbe Name"; eine Zeile `zombieGibtEsNicht`
+angehängt → Exit 1, „hat im Build keine Klasse"; das Stufenwort `Charged` gestrichen → Exit 1,
+26 Fehler. In allen vier Fällen wurde keine Datei geschrieben. Der echte Lauf: 176 Klassen,
+176 Zeilen, 0 Fehler.
+
+**Ausgabe** nach `tools/gen/out/` (nicht im Repository): `wp5-wesen-namen-texte.csv`,
+`wp5-wesen-namen-keys.txt` (für `vanilla-keys.txt`, mit dem englischen Namen als Grund) und
+`wp5-wesen-namen-glossar.md` (55 Zeilen Festbegriffe für die Grundklassen). Das Erzeugnis sind die
+Zeilen in Sprachdatei, Schlüsselliste und Glossar; die Prüfung *Glossar gegen Sprachdatei* hält
+die 55 Grundnamen danach Zeichen für Zeichen gegen die Sprachdatei.
+
+**Grenze:** der Erzeuger prüft, dass jede Klasse einen Namen hat — nicht, ob der Name passt, und
+nicht, ob das Spiel ihn je zeigt (F-06 §2: gelesen sind die Meldungen im Chat; S-26).

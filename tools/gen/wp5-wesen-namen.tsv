@@ -1,0 +1,75 @@
+# Namen der Wesen (F-06 §2 bis §4, D147) - die Tabelle zu tools/gen/wp5-wesen-namen.ps1.
+# JEDER NAME HIER IST EIN VORSCHLAG, bis der Nutzer ihn abnimmt (N-67).
+#
+# Spalten, durch Tabulator getrennt:  Kennung  Art  Geschlecht  Deutsch  Englisch
+#   Art  stand  Seuchentoter nach Stand oder Herkunft: der Name bekommt "Seuchentoter" davor,
+#               in einer Stufe das Stufenwort (Vertrag 02, Nachtrag Phase 2, Teil B)
+#        eigen  ein Wort fuer sich (besondere Wesen, Rollennamen): ohne "Seuchentoter",
+#               in einer Stufe mit Stufenwort
+#        tier   Tier: der gewoehnliche Name, in einer Stufe mit Stufenwort
+#        wort   kein Wesen, sondern ein Baustein: 'grund' und die vier Stufen;
+#               Deutsch steht als "maennlich/weiblich"
+#   Geschlecht  m oder w - das grammatische Geschlecht des deutschen Namens
+#
+# Die Datei ist UTF-8 ohne BOM; das Skript daneben enthaelt keine Umlaute.
+grund	wort	-	Seuchentoter/Seuchentote	Plague-dead
+Feral	wort	-	Verderbter/Verderbte	Blighted
+Radiated	wort	-	Schwärender/Schwärende	Festering
+Charged	wort	-	Glutäugiger/Glutäugige	Ember-Eyed
+Infernal	wort	-	Verdammter/Verdammte	Damned
+zombieArlene	stand	w	Magd	Maid
+zombieBiker	stand	m	Schmied	Smith
+zombieBoe	stand	m	Knecht	Farmhand
+zombieBowler	stand	m	Müller	Miller
+zombieBurnt	eigen	m	Verbrannter	Burnt One
+zombieBusinessMan	stand	m	Meier	Steward
+zombieChuck	eigen	m	Felswerfer	Rock Hurler
+zombieDarlene	stand	w	Bäuerin	Farmwife
+zombieDemolition	eigen	m	Berstender	Burster
+zombieFatCop	stand	m	Büttel	Bailiff
+zombieFatHawaiian	stand	m	Pilger	Pilgrim
+zombieFemaleFat	stand	w	Muhme	Gammer
+zombieFrostclaw	eigen	m	Felswerfer	Rock Hurler
+zombieInmate	stand	m	Gefangener	Captive
+zombieJanitor	stand	m	Stallknecht	Stablehand
+zombieJoe	stand	m	Bauer	Peasant
+zombieLab	stand	m	Infirmar	Infirmarer
+zombieLumberjack	stand	m	Holzfäller	Woodcutter
+zombieMaleHazmat	stand	m	Aussätziger	Leper
+zombieMarlene	stand	w	Weberin	Weaver
+zombieMoe	stand	m	Köhler	Charcoal Burner
+zombieMutated	eigen	w	Moorleiche	Bog Body
+zombieNurse	stand	w	Siechenmagd	Infirmary Maid
+zombiePartyGirl	stand	w	Schankmagd	Tavern Maid
+zombiePlagueSpitter	stand	m	Hirte	Herdsman
+zombieRancher	stand	m	Hirte	Herdsman
+zombieScreamer	eigen	w	Schreiende	Wailer
+zombieSkateboarder	stand	m	Strauchdieb	Footpad
+zombieSoldier	stand	m	Krieger	Warrior
+zombieSpider	eigen	m	Springer	Leaper
+zombieSteve	stand	m	Tagelöhner	Day Labourer
+zombieSteveCrawler	eigen	m	Kriecher	Crawler
+zombieTomClark	stand	m	Töpfer	Potter
+zombieUtilityWorker	stand	m	Erzgräber	Ore Digger
+zombieWight	eigen	m	Nachzehrer	Shroud Eater
+zombieYo	stand	m	Bursche	Lad
+animalRabbit	tier	m	Hase	Hare
+animalChicken	tier	m	Huhn	Chicken
+animalDoe	tier	w	Hirschkuh	Hind
+animalStag	tier	m	Hirsch	Stag
+animalBoar	tier	m	Wildschwein	Wild Boar
+animalWolf	tier	m	Wolf	Wolf
+animalBear	tier	m	Bär	Bear
+animalBearSmall	tier	m	Jungbär	Young Bear
+animalSnake	tier	w	Kreuzotter	Adder
+animalCoyote	tier	m	Verwilderter Hund	Feral Dog
+animalMountainLion	tier	m	Luchs	Lynx
+animalDireWolf	tier	m	Altwolf	Elder Wolf
+animalZombieDog	tier	m	Seuchenhund	Plague Hound
+animalZombieBear	tier	m	Seuchenbär	Plague Bear
+animalZombieBoar	tier	m	Seucheneber	Plague Boar
+animalZombieVulture	tier	m	Seuchengeier	Plague Vulture
+animalBossGrace	tier	w	Die Alte Bache	The Old Sow
+animalBeeSwarm	tier	m	Bienenschwarm	Bee Swarm
+animalInsectSwarm	tier	m	Mückenschwarm	Midge Swarm
+animalChickenHostile	tier	m	Tolles Huhn	Mad Hen

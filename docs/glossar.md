@@ -68,6 +68,83 @@ eine Abweichung.
 | `buffWasteland_StormName` | Fauler Wind | Foul Wind | Radioaktiver Sturm / Radiation Storm | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
 | — | Anfang, Höhe, Abklingen (die Stufen eines Sturms, hinter seinem Namen: „Fauler Wind: Anfang“; zwölf Zeilen `buff…_Storm_…Name`) | Onset, Height, Easing | Stadium 1, Stadium 2, Erholung / Stage 1, Stage 2, Recovery | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
 
+### Wesen — Vorschlag, nicht abgenommen (N-67)
+
+Die Namen der Seuchentoten und Tiere aus F-06 §2 bis §4 (D147), erzeugt mit
+`tools/gen/wp5-wesen-namen.ps1` aus der Tabelle `tools/gen/wp5-wesen-namen.tsv`. **Jeder Name ist
+ein Vorschlag aus dem Loop** — ein Name ändert sich in der Tabelle, dann hier, dann in der
+Sprachdatei (Regel 1). Die Tabelle führt die Grundklassen; die Stufen entstehen aus vier Wörtern
+davor, die den Platz von „Seuchentoter" einnehmen:
+
+- `Feral` — **Verderbter / Verderbte** — Blighted
+- `Radiated` — **Schwärender / Schwärende** — Festering
+- `Charged` — **Glutäugiger / Glutäugige** — Ember-Eyed
+- `Infernal` — **Verdammter / Verdammte** — Damned
+
+„Verderbter Knecht", „Schwärende Magd", „Verdammte Moorleiche". Der **Nachzehrer**
+(`zombieWight…`, englisch Shroud Eater) hat keine Grundklasse und steht darum nicht in der
+Tabelle; ihn gibt es nur in den vier Stufen. Die Zeile „Moorleichen = Radiated" weiter oben ist
+mit D100 überholt (die Moorleiche ist die Gestalt im Moor, keine Stufe) und bleibt stehen, bis der
+Nutzer D100 abnimmt.
+
+| Kennung | Deutsch | Englisch | Vanilla | Quelle |
+|---|---|---|---|---|
+| `animalBear` | Bär | Bear | Bear | F-06, D147 (Vorschlag) |
+| `animalBearSmall` | Jungbär | Young Bear | Little Bear | F-06, D147 (Vorschlag) |
+| `animalBeeSwarm` | Bienenschwarm | Bee Swarm | Bee Swarm | F-06, D147 (Vorschlag) |
+| `animalBoar` | Wildschwein | Wild Boar | Boar | F-06, D147 (Vorschlag) |
+| `animalBossGrace` | Die Alte Bache | The Old Sow | Grace | F-06, D147 (Vorschlag) |
+| `animalChicken` | Huhn | Chicken | Chicken | F-06, D147 (Vorschlag) |
+| `animalChickenHostile` | Tolles Huhn | Mad Hen | Murder Chicken | F-06, D147 (Vorschlag) |
+| `animalCoyote` | Verwilderter Hund | Feral Dog | Coyote | F-06, D147 (Vorschlag) |
+| `animalDireWolf` | Altwolf | Elder Wolf | Dire Wolf | F-06, D147 (Vorschlag) |
+| `animalDoe` | Hirschkuh | Hind | Doe | F-06, D147 (Vorschlag) |
+| `animalInsectSwarm` | Mückenschwarm | Midge Swarm | Insect Swarm | F-06, D147 (Vorschlag) |
+| `animalMountainLion` | Luchs | Lynx | Mountain Lion | F-06, D147 (Vorschlag) |
+| `animalRabbit` | Hase | Hare | Rabbit | F-06, D147 (Vorschlag) |
+| `animalSnake` | Kreuzotter | Adder | Snake | F-06, D147 (Vorschlag) |
+| `animalStag` | Hirsch | Stag | Stag | F-06, D147 (Vorschlag) |
+| `animalWolf` | Wolf | Wolf | Wolf | F-06, D147 (Vorschlag) |
+| `animalZombieBear` | Seuchenbär | Plague Bear | Zombie Bear | F-06, D147 (Vorschlag) |
+| `animalZombieBoar` | Seucheneber | Plague Boar | Zombie Boar | F-06, D147 (Vorschlag) |
+| `animalZombieDog` | Seuchenhund | Plague Hound | Zombie Dog | F-06, D147 (Vorschlag) |
+| `animalZombieVulture` | Seuchengeier | Plague Vulture | Zombie Vulture | F-06, D147 (Vorschlag) |
+| `zombieArlene` | Seuchentote Magd | Plague-dead Maid | Arlene | F-06, D147 (Vorschlag) |
+| `zombieBiker` | Seuchentoter Schmied | Plague-dead Smith | Biker | F-06, D147 (Vorschlag) |
+| `zombieBoe` | Seuchentoter Knecht | Plague-dead Farmhand | Boe | F-06, D147 (Vorschlag) |
+| `zombieBowler` | Seuchentoter Müller | Plague-dead Miller | Bowler | F-06, D147 (Vorschlag) |
+| `zombieBurnt` | Verbrannter | Burnt One | Burnt | F-06, D147 (Vorschlag) |
+| `zombieBusinessMan` | Seuchentoter Meier | Plague-dead Steward | Businessman | F-06, D147 (Vorschlag) |
+| `zombieChuck` | Felswerfer | Rock Hurler | Chuck | F-06, D147 (Vorschlag) |
+| `zombieDarlene` | Seuchentote Bäuerin | Plague-dead Farmwife | Darlene | F-06, D147 (Vorschlag) |
+| `zombieDemolition` | Berstender | Burster | Demolition | F-06, D147 (Vorschlag) |
+| `zombieFatCop` | Seuchentoter Büttel | Plague-dead Bailiff | Cop | F-06, D147 (Vorschlag) |
+| `zombieFatHawaiian` | Seuchentoter Pilger | Plague-dead Pilgrim | Tourist | F-06, D147 (Vorschlag) |
+| `zombieFemaleFat` | Seuchentote Muhme | Plague-dead Gammer | Big Mama | F-06, D147 (Vorschlag) |
+| `zombieFrostclaw` | Felswerfer | Rock Hurler | Chuck | F-06, D147 (Vorschlag) |
+| `zombieInmate` | Seuchentoter Gefangener | Plague-dead Captive | Inmate | F-06, D147 (Vorschlag) |
+| `zombieJanitor` | Seuchentoter Stallknecht | Plague-dead Stablehand | Janitor | F-06, D147 (Vorschlag) |
+| `zombieJoe` | Seuchentoter Bauer | Plague-dead Peasant | Joe | F-06, D147 (Vorschlag) |
+| `zombieLab` | Seuchentoter Infirmar | Plague-dead Infirmarer | Lab Worker | F-06, D147 (Vorschlag) |
+| `zombieLumberjack` | Seuchentoter Holzfäller | Plague-dead Woodcutter | Lumberjack | F-06, D147 (Vorschlag) |
+| `zombieMaleHazmat` | Seuchentoter Aussätziger | Plague-dead Leper | Hazmat | F-06, D147 (Vorschlag) |
+| `zombieMarlene` | Seuchentote Weberin | Plague-dead Weaver | Marlene | F-06, D147 (Vorschlag) |
+| `zombieMoe` | Seuchentoter Köhler | Plague-dead Charcoal Burner | Moe | F-06, D147 (Vorschlag) |
+| `zombieMutated` | Moorleiche | Bog Body | Mutated | F-06, D147 (Vorschlag) |
+| `zombieNurse` | Seuchentote Siechenmagd | Plague-dead Infirmary Maid | Nurse | F-06, D147 (Vorschlag) |
+| `zombiePartyGirl` | Seuchentote Schankmagd | Plague-dead Tavern Maid | Party Girl | F-06, D147 (Vorschlag) |
+| `zombiePlagueSpitter` | Seuchentoter Hirte | Plague-dead Herdsman | Rancher | F-06, D147 (Vorschlag) |
+| `zombieRancher` | Seuchentoter Hirte | Plague-dead Herdsman | Rancher | F-06, D147 (Vorschlag) |
+| `zombieScreamer` | Schreiende | Wailer | Screamer | F-06, D147 (Vorschlag) |
+| `zombieSkateboarder` | Seuchentoter Strauchdieb | Plague-dead Footpad | Thug | F-06, D147 (Vorschlag) |
+| `zombieSoldier` | Seuchentoter Krieger | Plague-dead Warrior | Soldier | F-06, D147 (Vorschlag) |
+| `zombieSpider` | Springer | Leaper | Spider | F-06, D147 (Vorschlag) |
+| `zombieSteve` | Seuchentoter Tagelöhner | Plague-dead Day Labourer | Steve | F-06, D147 (Vorschlag) |
+| `zombieSteveCrawler` | Kriecher | Crawler | Crawler | F-06, D147 (Vorschlag) |
+| `zombieTomClark` | Seuchentoter Töpfer | Plague-dead Potter | Tom Clark | F-06, D147 (Vorschlag) |
+| `zombieUtilityWorker` | Seuchentoter Erzgräber | Plague-dead Ore Digger | Utility Worker | F-06, D147 (Vorschlag) |
+| `zombieYo` | Seuchentoter Bursche | Plague-dead Lad | Yo | F-06, D147 (Vorschlag) |
+
 ## 3. Stoffe
 
 | Kennung | Deutsch | Englisch | Vanilla | Quelle |

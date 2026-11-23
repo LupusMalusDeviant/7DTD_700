@@ -66,8 +66,26 @@ Sagengestalt im Moor (D100; Prüfung 0003 W-25).
 | `Charged` | Glutäugiger / Glutäugige | Ember-Eyed | schlägt mit Wirkung (Vanilla: Stromschlag) |
 | `Infernal` | Verdammter / Verdammte | Damned | brennt und steckt an |
 
-Die Namen stehen vorn: „Verderbter Knecht", „Schwärende Magd". Die englischen Fassungen sind offen
-(Glossar Zeile 60, 400). **Zu prüfen im Spiel:** die Wirkung der dritten Stufe ist in Vanilla ein
+**So entsteht ein Name** (Vertrag 02, Nachtrag Phase 2, Teil B — WP5.2):
+
+- Ein Seuchentoter nach **Stand oder Herkunft** trägt „Seuchentoter" bzw. „Seuchentote" davor:
+  „Seuchentoter Knecht", „Seuchentote Magd" — englisch „Plague-dead Farmhand" („the plague-dead"
+  ist der Begriff des Nutzers vom 2026-11-20).
+- In einer Stufe tritt das Stufenwort an diese Stelle: „Verderbter Knecht", „Schwärende Magd".
+- **Besondere Wesen und Rollennamen** stehen als ein Wort für sich: Moorleiche, Nachzehrer,
+  Schreiende, Verbrannter, Felswerfer, Springer, Kriecher, Berstender — in einer Stufe
+  „Verderbte Moorleiche".
+- Tiere tragen den gewöhnlichen Namen.
+
+Die Tabellen in §3 und §4 nennen den **Kern** des Namens; die 176 fertigen Namen erzeugt
+`tools/gen/wp5-wesen-namen.ps1` aus `tools/gen/wp5-wesen-namen.tsv`. Die englischen Stufenwörter
+sind offen (Glossar §2 und §10).
+
+**Wo der Spieler den Namen überhaupt liest** (gelesen am Code, nicht im Spiel gesehen): der Name
+eines Wesens wird von `GameManager::GameMessageServer` und `EntityPlayer::Kill` geholt — das sind
+die Meldungen im Chat („… wurde von … getötet") —, dazu von Kartenobjekten und Twitch-Meldungen.
+Über dem Kopf eines Seuchentoten steht kein Name. Die Namen sind also **selten sichtbar**; das
+Aussehen wiegt schwerer (S-26). **Zu prüfen im Spiel:** die Wirkung der dritten Stufe ist in Vanilla ein
 Stromschlag — Name und Text des Effekts gehören zu WP5.5, die Mechanik bleibt (P5).
 
 ## 3. Zuordnung der 36 Grundnamen
@@ -79,7 +97,7 @@ Aufträgen). Spalte **freie Landschaft:** was WP5.4 mit der Klasse in den Landsc
 Das Aussehen ist **angenommen** (niemand hat die Figuren für dieses Dokument angesehen); die Namen
 richten sich nach Vanillas Kennung, Körperbau und Rolle.
 
-| Kennung | Vanilla DE | Stufen | Landschaft | 700 Deutsch | 700 Englisch | freie Landschaft |
+| Kennung | Vanilla DE | Stufen | Landschaft | 700 Deutsch (Kern) | 700 Englisch (Kern) | freie Landschaft |
 |---|---|---|---|---|---|---|
 | `zombieArlene` | Arlene | FRC | W B S H M | Magd | Maid | bleibt |
 | `zombieBiker` | Biker | FRI | W B S H | Schmied | Smith | **heraus** |
@@ -242,9 +260,9 @@ Alles XML (P5) — kein C#, kein Asset:
 | Schritt | Datei | Was |
 |---|---|---|
 | WP5.3 Namen | `mod/700_90_Sprache/Config/Localization.csv`; `tools/check/vanilla-keys.txt` | 155 + 21 Sprachzeilen unter Vanillas Schlüsseln (der Schlüssel ist die Klasse), DE und EN; jede Zeile mit Begründung in der Schlüsselliste |
-| WP5.4 Gruppen | `mod/700_60_Welt/Config/entitygroups.xml` (neu); `tools/check/denylist.txt` | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; neun Wesenregeln |
-| WP5.5 Sagengestalten | `entityclasses.xml`, `entitygroups.xml`, Sprachzeilen | Spuk-Hund als eigene Klasse auf Vanillas Modell; Texte |
-| WP5.6 Seuchennacht | `entitygroups.xml` | Gruppen `grp700_…` für Brecher und Anführer, noch von niemandem gerufen |
+| WP5.4 Gruppen | `mod/700_65_Wesen/Config/entitygroups.xml` (neues Modlet nach Vertrag 01, Nachtrag Phase 2); `tools/check/denylist.txt` | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; neun Wesenregeln. Vanilla-Klassen werden nie entfernt, nur ihr Eintrag in einer Gruppe; keine Gruppe wird leer (Vertrag 03, Nachtrag Teil C) |
+| WP5.5 Sagengestalten | `mod/700_65_Wesen/Config/entityclasses.xml`, `entitygroups.xml`, Sprachzeilen | Spuk-Hund als eigene Klasse `ent700_…` auf Vanillas Modell; Texte |
+| WP5.6 Seuchennacht | `mod/700_65_Wesen/Config/entitygroups.xml` | Gruppen `eg700_…` für Brecher und Anführer, noch von niemandem gerufen |
 
 **Warum kein C#?** Namen, Gruppen und Varianten sind in Vanilla Daten. Was Code bräuchte — Leichen
 fressen, Hinterhalt aus dem Wasser, ein Licht, das lockt —, steht oben als offen und wird nicht in

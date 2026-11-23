@@ -1404,3 +1404,187 @@ modArmorPlatingReinforcedDesc             # Lamellenbesatz las den Text des Schu
 # Der sechste ist ein Vanilla-Schluessel: der leere Wasserkrug ist bei uns aus Ton, nicht
 # aus Glas (D98, N-42). Der Name "Leerer Wasserkrug" bleibt Vanillas.
 drinkJarEmptyDesc
+
+# --- Plan-0002 WP5.3: Namen der Wesen (F-06, D147; Vorschlag, N-67) -------------
+# Vanilla gibt jeder Klasse ihren eigenen Schluessel - der Schluessel ist der Klassenname,
+# die Stufe steht im Namen ausgeschrieben. Wir deuten die Wesen um, statt sie zu ersetzen:
+# zombieBoe bleibt zombieBoe (Gruppen, Orte und Auftraege nennen die Klasse beim Namen),
+# der Spieler liest "Seuchentoter Knecht". 176 Schluessel = 155 Seuchentote + 21 Tiere,
+# erzeugt mit tools/gen/wp5-wesen-namen.ps1 aus wp5-wesen-namen.tsv; daneben steht der
+# englische Name, den die Zeile traegt.
+animalBear                        # Bear
+animalBearSmall                   # Young Bear
+animalBeeSwarm                    # Bee Swarm
+animalBoar                        # Wild Boar
+animalBossGrace                   # The Old Sow
+animalChicken                     # Chicken
+animalChickenHostile              # Mad Hen
+animalCoyote                      # Feral Dog
+animalDireWolf                    # Elder Wolf
+animalDoe                         # Hind
+animalInsectSwarm                 # Midge Swarm
+animalMountainLion                # Lynx
+animalRabbit                      # Hare
+animalSnake                       # Adder
+animalStag                        # Stag
+animalWolf                        # Wolf
+animalZombieBear                  # Plague Bear
+animalZombieBoar                  # Plague Boar
+animalZombieDog                   # Plague Hound
+animalZombieVulture               # Plague Vulture
+animalZombieVultureRadiated       # Festering Plague Vulture
+zombieArlene                      # Plague-dead Maid
+zombieArleneCharged               # Ember-Eyed Maid
+zombieArleneFeral                 # Blighted Maid
+zombieArleneRadiated              # Festering Maid
+zombieBiker                       # Plague-dead Smith
+zombieBikerFeral                  # Blighted Smith
+zombieBikerInfernal               # Damned Smith
+zombieBikerRadiated               # Festering Smith
+zombieBoe                         # Plague-dead Farmhand
+zombieBoeCharged                  # Ember-Eyed Farmhand
+zombieBoeFeral                    # Blighted Farmhand
+zombieBoeInfernal                 # Damned Farmhand
+zombieBoeRadiated                 # Festering Farmhand
+zombieBowler                      # Plague-dead Miller
+zombieBowlerFeral                 # Blighted Miller
+zombieBowlerInfernal              # Damned Miller
+zombieBowlerRadiated              # Festering Miller
+zombieBurnt                       # Burnt One
+zombieBurntCharged                # Ember-Eyed Burnt One
+zombieBurntFeral                  # Blighted Burnt One
+zombieBurntInfernal               # Damned Burnt One
+zombieBurntRadiated               # Festering Burnt One
+zombieBusinessMan                 # Plague-dead Steward
+zombieBusinessManCharged          # Ember-Eyed Steward
+zombieBusinessManFeral            # Blighted Steward
+zombieBusinessManInfernal         # Damned Steward
+zombieBusinessManRadiated         # Festering Steward
+zombieChuck                       # Rock Hurler
+zombieChuckCharged                # Ember-Eyed Rock Hurler
+zombieChuckFeral                  # Blighted Rock Hurler
+zombieChuckInfernal               # Damned Rock Hurler
+zombieChuckRadiated               # Festering Rock Hurler
+zombieDarlene                     # Plague-dead Farmwife
+zombieDarleneCharged              # Ember-Eyed Farmwife
+zombieDarleneFeral                # Blighted Farmwife
+zombieDarleneInfernal             # Damned Farmwife
+zombieDarleneRadiated             # Festering Farmwife
+zombieDemolition                  # Burster
+zombieFatCop                      # Plague-dead Bailiff
+zombieFatCopFeral                 # Blighted Bailiff
+zombieFatCopInfernal              # Damned Bailiff
+zombieFatCopRadiated              # Festering Bailiff
+zombieFatHawaiian                 # Plague-dead Pilgrim
+zombieFatHawaiianFeral            # Blighted Pilgrim
+zombieFatHawaiianInfernal         # Damned Pilgrim
+zombieFatHawaiianRadiated         # Festering Pilgrim
+zombieFemaleFat                   # Plague-dead Gammer
+zombieFemaleFatFeral              # Blighted Gammer
+zombieFemaleFatInfernal           # Damned Gammer
+zombieFemaleFatRadiated           # Festering Gammer
+zombieFrostclaw                   # Rock Hurler
+zombieFrostclawCharged            # Ember-Eyed Rock Hurler
+zombieFrostclawFeral              # Blighted Rock Hurler
+zombieFrostclawInfernal           # Damned Rock Hurler
+zombieFrostclawRadiated           # Festering Rock Hurler
+zombieInmate                      # Plague-dead Captive
+zombieInmateCharged               # Ember-Eyed Captive
+zombieInmateFeral                 # Blighted Captive
+zombieInmateInfernal              # Damned Captive
+zombieInmateRadiated              # Festering Captive
+zombieJanitor                     # Plague-dead Stablehand
+zombieJanitorCharged              # Ember-Eyed Stablehand
+zombieJanitorFeral                # Blighted Stablehand
+zombieJanitorInfernal             # Damned Stablehand
+zombieJanitorRadiated             # Festering Stablehand
+zombieJoe                         # Plague-dead Peasant
+zombieJoeCharged                  # Ember-Eyed Peasant
+zombieJoeFeral                    # Blighted Peasant
+zombieJoeRadiated                 # Festering Peasant
+zombieLab                         # Plague-dead Infirmarer
+zombieLabCharged                  # Ember-Eyed Infirmarer
+zombieLabFeral                    # Blighted Infirmarer
+zombieLabRadiated                 # Festering Infirmarer
+zombieLumberjack                  # Plague-dead Woodcutter
+zombieLumberjackFeral             # Blighted Woodcutter
+zombieLumberjackInfernal          # Damned Woodcutter
+zombieLumberjackRadiated          # Festering Woodcutter
+zombieMaleHazmat                  # Plague-dead Leper
+zombieMaleHazmatCharged           # Ember-Eyed Leper
+zombieMaleHazmatFeral             # Blighted Leper
+zombieMaleHazmatInfernal          # Damned Leper
+zombieMaleHazmatRadiated          # Festering Leper
+zombieMarlene                     # Plague-dead Weaver
+zombieMarleneCharged              # Ember-Eyed Weaver
+zombieMarleneFeral                # Blighted Weaver
+zombieMarleneRadiated             # Festering Weaver
+zombieMoe                         # Plague-dead Charcoal Burner
+zombieMoeFeral                    # Blighted Charcoal Burner
+zombieMoeInfernal                 # Damned Charcoal Burner
+zombieMoeRadiated                 # Festering Charcoal Burner
+zombieMutated                     # Bog Body
+zombieMutatedCharged              # Ember-Eyed Bog Body
+zombieMutatedFeral                # Blighted Bog Body
+zombieMutatedInfernal             # Damned Bog Body
+zombieMutatedRadiated             # Festering Bog Body
+zombieNurse                       # Plague-dead Infirmary Maid
+zombieNurseCharged                # Ember-Eyed Infirmary Maid
+zombieNurseFeral                  # Blighted Infirmary Maid
+zombieNurseRadiated               # Festering Infirmary Maid
+zombiePartyGirl                   # Plague-dead Tavern Maid
+zombiePartyGirlCharged            # Ember-Eyed Tavern Maid
+zombiePartyGirlFeral              # Blighted Tavern Maid
+zombiePartyGirlRadiated           # Festering Tavern Maid
+zombiePlagueSpitter               # Plague-dead Herdsman
+zombiePlagueSpitterCharged        # Ember-Eyed Herdsman
+zombiePlagueSpitterFeral          # Blighted Herdsman
+zombiePlagueSpitterInfernal       # Damned Herdsman
+zombiePlagueSpitterRadiated       # Festering Herdsman
+zombieRancher                     # Plague-dead Herdsman
+zombieRancherCharged              # Ember-Eyed Herdsman
+zombieRancherFeral                # Blighted Herdsman
+zombieRancherInfernal             # Damned Herdsman
+zombieRancherRadiated             # Festering Herdsman
+zombieScreamer                    # Wailer
+zombieScreamerCharged             # Ember-Eyed Wailer
+zombieScreamerFeral               # Blighted Wailer
+zombieScreamerRadiated            # Festering Wailer
+zombieSkateboarder                # Plague-dead Footpad
+zombieSkateboarderCharged         # Ember-Eyed Footpad
+zombieSkateboarderFeral           # Blighted Footpad
+zombieSkateboarderInfernal        # Damned Footpad
+zombieSkateboarderRadiated        # Festering Footpad
+zombieSoldier                     # Plague-dead Warrior
+zombieSoldierFeral                # Blighted Warrior
+zombieSoldierInfernal             # Damned Warrior
+zombieSoldierRadiated             # Festering Warrior
+zombieSpider                      # Leaper
+zombieSpiderCharged               # Ember-Eyed Leaper
+zombieSpiderFeral                 # Blighted Leaper
+zombieSpiderInfernal              # Damned Leaper
+zombieSpiderRadiated              # Festering Leaper
+zombieSteve                       # Plague-dead Day Labourer
+zombieSteveCharged                # Ember-Eyed Day Labourer
+zombieSteveCrawler                # Crawler
+zombieSteveCrawlerFeral           # Blighted Crawler
+zombieSteveFeral                  # Blighted Day Labourer
+zombieSteveRadiated               # Festering Day Labourer
+zombieTomClark                    # Plague-dead Potter
+zombieTomClarkCharged             # Ember-Eyed Potter
+zombieTomClarkFeral               # Blighted Potter
+zombieTomClarkRadiated            # Festering Potter
+zombieUtilityWorker               # Plague-dead Ore Digger
+zombieUtilityWorkerCharged        # Ember-Eyed Ore Digger
+zombieUtilityWorkerFeral          # Blighted Ore Digger
+zombieUtilityWorkerInfernal       # Damned Ore Digger
+zombieUtilityWorkerRadiated       # Festering Ore Digger
+zombieWightCharged                # Ember-Eyed Shroud Eater
+zombieWightFeral                  # Blighted Shroud Eater
+zombieWightInfernal               # Damned Shroud Eater
+zombieWightRadiated               # Festering Shroud Eater
+zombieYo                          # Plague-dead Lad
+zombieYoCharged                   # Ember-Eyed Lad
+zombieYoFeral                     # Blighted Lad
+zombieYoInfernal                  # Damned Lad
+zombieYoRadiated                  # Festering Lad
