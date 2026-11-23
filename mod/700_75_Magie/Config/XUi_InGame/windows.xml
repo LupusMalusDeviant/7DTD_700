@@ -31,13 +31,15 @@
 	     Sichtbar nur mit Odem: JEDES Teil ist ein gefuelltes Bild, dessen Fuellung
 	     .cv700_odemZeigen (0 oder 1) ist - ohne Runenkunde ab Stufe 2 bleibt der Platz leer.
 	     Keine Zahl im Balken: eine Zahl laesst sich nicht ausblenden, ohne die Sichtbarkeit an
-	     eine Rechnung zu binden, deren Schreibweise ungeprueft ist. Platz: ueber dem
+	     eine Rechnung zu binden, deren Schreibweise ungeprueft ist. Alle Teile auf der obersten Ebene (foregroundlayer): der Balken liegt ueber dem Rand
+	     des Fensters, und ohne die Ebene schnitt das Spiel ihn ab - nur das Zeichen war zu sehen
+	     (Spieltest S-41, 2026-11-23; Verdacht, zu bestaetigen). Platz: ueber dem
 	     Schleich-Balken, der nur beim Schleichen erscheint; nichts von Vanilla rueckt. -->
 	<append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud']">
 		<rect name="700_odem" width="171" height="16" pos="0,22">
-			<sprite depth="1" name="700_odemRand" color="0,0,0,128" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemZeigen:0)}" />
-			<sprite depth="2" name="700_odemGrund" color="70,70,70,160" width="169" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemZeigen:0)}" />
-			<sprite depth="3" name="700_odemFuellung" color="214,150,50,200" width="169" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemAnteil:0.00)}" />
+			<sprite depth="1" name="700_odemRand" color="0,0,0,128" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemZeigen:0)}" foregroundlayer="true" />
+			<sprite depth="2" name="700_odemGrund" color="70,70,70,160" width="169" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemZeigen:0)}" foregroundlayer="true" />
+			<sprite depth="3" name="700_odemFuellung" color="214,150,50,200" width="169" type="filled" fillspritepad="true" fill="{cvar(.cv700_odemAnteil:0.00)}" foregroundlayer="true" />
 			<sprite depth="4" name="700_odemZeichen" sprite="ui_game_symbol_wind" size="14,14" pos="10,-8" pivot="center" type="filled" fill="{cvar(.cv700_odemZeigen:0)}" foregroundlayer="true" />
 		</rect>
 	</append>
