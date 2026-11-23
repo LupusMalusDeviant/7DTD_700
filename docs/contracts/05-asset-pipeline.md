@@ -8,7 +8,7 @@
 - **Gilt ab:** Phase 2 (Plan-0002 WP3, WP4, WP7)
 - **Belege:** [F-16-symbole-aus-dem-modlet.md](../rea/findings/F-16-symbole-aus-dem-modlet.md) ·
   Spec 01 §6 (Assets, Recht) · F-16 · D84 (Asset-Quellen) ·
-  [0000-entscheidungen](../pruefung/0000-entscheidungen-fuer-den-nutzer.md) N-60 bis N-63, N-75 bis N-79
+  [0000-entscheidungen](../pruefung/0000-entscheidungen-fuer-den-nutzer.md) N-60 bis N-65, N-75 bis N-79
 
 ## 1. Die Grundregeln
 
@@ -34,8 +34,9 @@
 |---|---|---|---|
 | `assets/ASSETS.md` | das Register (§5) | ja | nein |
 | `assets/quelle/symbole/<Name>.png` | Quellbild eines Symbols, so wie es entstanden ist (beliebige Größe, freigestellt) | ja | nein |
-| `assets/quelle/modelle/<Name>/` | Quell-Modell (GLB), Texturen, ggf. Referenzbild | ja (Git LFS, sobald das erste Modell kommt — Teil B) | nein |
-| `tools/assets/blender/*.py` | Blender-Skripte, aus denen Quellbilder (und später Quell-Modelle) entstehen — die einzige Stelle mit Python (§1 Nr. 5) | ja | nein |
+| `assets/quelle/modelle/<Name>/` | ~~Quell-Modell (GLB), Texturen, ggf. Referenzbild~~ bei einem Modell aus einem Skript: zwei Ansichten und `masse.json` (§7.1); bei einem Modell ohne Skript die Quelldatei selbst | ja (~~Git LFS, sobald das erste Modell kommt~~ Git LFS erst für Quelldateien ohne Skript — §7.1 Nr. 4) | nein |
+| `dist/modelle/<Name>/` | erzeugtes Modell (GLB, FBX) und gebackene Texturen (§7.1) | nein (`dist/` ist ignoriert) | nein |
+| `tools/assets/blender/*.py` | Blender-Skripte, aus denen Quellbilder und Quell-Modelle entstehen — die einzige Stelle mit Python (§1 Nr. 5) | ja | nein |
 | `mod/<Modlet>/UIAtlases/ItemIconAtlas/<Name>.png` | das fertige Symbol, **erzeugt**, nicht von Hand bearbeitet | ja | ja |
 | `unity/` | Unity-Projekt für Bundles | Teil B | nein |
 | `mod/<Modlet>/Resources/*.unity3d` | Bundles | Teil B | ja |
@@ -186,6 +187,46 @@ als Annahme:
 
 Bis dahin gilt für Modelle nur: Quellen dürfen entstehen und im Register stehen (`Stand` =
 `zu prüfen`), **ausgeliefert wird keines**.
+
+### 7.1 Quell-Modelle ohne Unity (Nachtrag 2026-11-23 — Abnahme offen, N-65)
+
+Geschrieben mit dem ersten Quell-Modell (Rundschild, Plan-0002 WP4.2). Regelt nur, was **vor**
+Unity liegt; die sechs Punkte oben bleiben offen.
+
+1. **Die Quelle eines eigenen Modells aus Grundformen ist sein Blender-Skript**
+   (`tools/assets/blender/<stueck>.py`, Quelle `eigen:blender`). Ein Befehl baut alles neu:
+   `blender -b --factory-startup --python tools/assets/blender/<stueck>.py -- dist/modelle/<stueck> assets/quelle/modelle/<stueck>`.
+2. **Erzeugnisse liegen nicht im Repository:** `dist/modelle/<stueck>/` trägt `<stueck>.glb`,
+   `<stueck>.fbx` und die Texturen als PNG. `dist/` steht schon in der `.gitignore`. Von dort
+   liest später das Unity-Projekt (WP4.4).
+3. **Im Repository liegen** das Skript und unter `assets/quelle/modelle/<stueck>/` zwei Ansichten
+   des fertigen Modells (`ansicht-vorn.png`, `ansicht-hinten.png`, 900×900, freigestellt) und
+   `masse.json` (Dreiecke, Ecken, Ausdehnung, Texturgröße, Blender-Fassung).
+4. **Git LFS wird damit noch nicht gebraucht** und ist nicht eingerichtet. Nötig wird es erst
+   für ein Modell, dessen Quelle **kein** Skript ist (ein Meshy-Ergebnis, eine von Hand gebaute
+   `.blend`-Datei) — dann liegt die Datei selbst unter `assets/quelle/modelle/<stueck>/` (N-65).
+5. **Form eines Quell-Modells:** ein Netz, ein Stoff (`m700_<stueck>`), eine UV-Abwicklung ohne
+   Überlappung, drei Texturen — `_farbe` (sRGB), `_orm` (nach glTF: Grün = Rauheit, Blau =
+   Metall; Rot ist frei und steht auf 1), `_normal` (Tangentenraum, +Y). Die Texturen sind aus
+   dem Aufbau des Skripts **gebacken**, nicht gemalt. Einheit Meter, Maßstab 1. Was Unitys
+   Standard-Stoff braucht (Metall in Rot, Glätte im Alpha), entsteht beim Bundle-Bau (WP4.4),
+   nicht hier.
+6. **Lage:** ein gehaltenes Stück steht so, wie es getragen wird; der **Ursprung liegt am Griff**
+   (dort sitzt die Hand). In Blender zeigt die Vorderseite nach −Y, im GLB nach +Z. Wie das Spiel
+   ein Stück an die Hand hängt, ist ungelesen (Punkt 3 oben) — die Lage kann sich danach ändern.
+7. **Richtwerte (zu prüfen, N-65):** ein gehaltenes Stück höchstens **3000 Dreiecke**, Texturen
+   **1024²** (Spec 01 §6: Standard 1024², höchstens 2048²). Eine Zahl für Dreiecke nennt Spec 01
+   nicht; an Vanillas Modellen ist sie nicht gemessen.
+8. **Gemessen am Rundschild (2026-11-23, Blender 5.3.0):** 1994 Dreiecke, 1123 Ecken im Netz
+   (1937 im GLB nach dem Trennen an Kanten und UV-Nähten), 86,8 cm Durchmesser, 12,1 cm tief;
+   GLB 1,7 MB mit drei eingebetteten Texturen. Zwei Läufe nacheinander ergeben **dasselbe GLB und
+   dieselben drei Texturen, Byte für Byte**; die FBX-Datei (Zeitstempel) und die Ansichten
+   (Renderer) unterscheiden sich von Lauf zu Lauf — die Ansichten werden darum nur neu
+   eingecheckt, wenn sich das Modell ändert.
+9. **Register:** eine Zeile der Art `modell`, `Stand` = `zu prüfen`, `Modlet` = das Modlet, in dem
+   das Stück voraussichtlich landet. Die Prüfung *asset-register* liest bei einem Modell nur die
+   Pflichtfelder; **ob ein Modell im Paket liegt, prüft sie noch nicht** (kommt mit dem ersten
+   Bundle).
 
 ## 8. Was dieser Vertrag nicht regelt
 

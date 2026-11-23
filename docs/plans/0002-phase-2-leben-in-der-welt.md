@@ -50,6 +50,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP3.7 Denylist ergänzen | **gemessen, nichts gebaut:** alle sechs Kandidaten aus Prüfung 0002 §8 Nr. 2 sind ausdrückliche Freigaben der Sperrliste (D54 bis D56, abgenommen) — der Schritt braucht den Nutzer. Je Kennung Stand und Empfehlung; der Plasmastab existiert in V 3.40 nicht mehr | N-38, N-55 |
 | WP3.8 Dekor der freien Landschaft | gebaut: 55 Dekor-Zeilen entfernt (12 Minen, 10 Wracks, Radkappen, Reifen, Schlackensteine, Schrotthaufen, Fässer, Müll) mit 30 Patchzeilen; gezählt an der Datei sind es 55, nicht 63. Angesehen und nicht angefasst: die 28 Zeilen `cnt…RandomLootHelper` (der Code entscheidet, was sie hinstellen), Kakteen, Straßen | D144, N-39, S-24 |
 | WP3.9 Texte, nächste Stapel | **begonnen:** sechs Beschreibungen, die auf einen fremden Text zeigten (Schwere Armbrust, Feuertopfbolzen, Lamellenbesatz, Bogenteile, Rüstungsteile, leerer Wasserkrug) — fünf Patchzeilen, sechs Sprachzeilen. Offen: Rangtitel mit altem Perk-Namen; Behälter | D143, N-37, N-59, S-07 |
+| WP4.2 Quell-Modelle ohne Unity | **Rundschild gebaut** (Blender-Skript, 1994 Dreiecke, drei gebackene Texturen 1024², GLB und FBX unter `dist/modelle/rundschild/`, zwei Ansichten im Repository); zwei Läufe ergeben dasselbe GLB Byte für Byte. Nicht in Unity und nicht im Spiel gesehen. **Offen:** das Meshy-Requisit (Meshy gesperrt, N-64) | D145, Vertrag 05 §7.1, N-65 |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
@@ -361,8 +362,9 @@ ohne Wracks und Minen — alles bis zum Vorlauf geprüft, im Spiel gesehen erst 
    `mod700meta` und Vanillas Dateien. (M)
 2. **WP4.2** `[Claude-prüfbar]` **Quell-Modelle ohne Unity:** der Rundschild in Blender (D84:
    einfache harte Formen entstehen selbst; F-16:30) und **ein** Requisit über Meshy mit Nacharbeit,
-   um den Weg Meshy → Blender → FBX samt Polygon- und Texturbudget zu belegen. Kein Skript im
-   Repository (P2-E08); die Schritte stehen im Register. (M)
+   um den Weg Meshy → Blender → FBX samt Polygon- und Texturbudget zu belegen. ~~Kein Skript im
+   Repository (P2-E08); die Schritte stehen im Register.~~ Das Skript liegt unter
+   `tools/assets/blender/` (Freigabe des Nutzers vom 2026-11-23, N-61). (M)
 3. **WP4.3** `[braucht Nutzer]` **Unity 2022.3.62f2 installieren** und anmelden, Pfad nennen
    (P2-E05). Ohne das endet WP4 hier.
 4. **WP4.4** `[Claude-prüfbar, sobald WP4.3]` Projekt `unity/`, Editor-Skript in C#, **ein** Befehl

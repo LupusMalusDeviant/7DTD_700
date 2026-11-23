@@ -8,6 +8,9 @@ Zeile wird nicht ausgeliefert; `tools/assets/symbole.ps1 -Pruefen` macht das rot
 - Quellbilder der Symbole: `assets/quelle/symbole/<Name>.png`
 - Fertige Symbole (erzeugt, nicht von Hand bearbeitet): `mod/<Modlet>/UIAtlases/ItemIconAtlas/<Name>.png`
 - Erzeugen: `powershell -NoProfile -ExecutionPolicy Bypass -File tools/assets/symbole.ps1`
+- Quell-Modelle: das Blender-Skript unter `tools/assets/blender/<stueck>.py` ist die Quelle; Ansichten
+  und Maße unter `assets/quelle/modelle/<stueck>/`; das erzeugte Modell (GLB, FBX, Texturen) unter
+  `dist/modelle/<stueck>/` — nicht im Repository (Vertrag 05 §7.1). **Ausgeliefert wird noch keines.**
 
 Die Tabelle wird von einem Werkzeug gelesen: eine Zeile je Stück, kein `|` in einer Zelle, ein
 Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen Stücken.
@@ -18,6 +21,7 @@ Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen S
 | `ico700_schmiedeeisen` | symbol | `700_20_Material` | `resourceForgedIron`, `itm700_schmiedeflicken` (getönt) | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
 | `ico700_tiegelstahl` | symbol | `700_20_Material` | `resourceForgedSteel` | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
 | `ico700_klinge` | symbol | `700_20_Material` | `itm700_klinge` | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
+| `rundschild` | modell | `700_30_Ausruestung` | noch keiner (Rundschild, Konzept S-33; Kennung offen bis F-02 Phase 2) | eigen:blender | — | eigenes Werk des Projekts | keine nötig | — | — | zu prüfen |
 
 ## Anmerkungen zu einzelnen Stücken
 
@@ -31,3 +35,12 @@ Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen S
   „Fe 26" (Schrift, Ordnungszahl). Gebaut 2026-11-23 in Blender (Plan-0002 WP3.6).
 - **`ico700_klinge`** — rohe Klinge mit Angel, ohne Griff. Der Gegenstand zeigte vorher denselben
   gestempelten Barren. Gebaut 2026-11-23 in Blender.
+- **`rundschild`** — erstes Quell-Modell (Plan-0002 WP4.2), gebaut 2026-11-23 mit
+  `tools/assets/blender/rundschild.py` nach `docs/konzept/waffen.md` S-33: runder Brettschild, 86 cm,
+  sieben Bretter unter heller Rohhaut (die Fugen zeichnen sich ab), Rand mit vernähtem
+  Rohhautstreifen, hoher kegeliger Eisenbuckel mit fünf Nieten über dem Faustloch, innen die
+  eiserne Fessel mit umwickeltem Griff, je zwei Nieten an den Enden (auch von vorn zu sehen).
+  **Nicht dabei:** Tragriemen, Bemalung. 1994 Dreiecke, drei Texturen 1024² (Farbe,
+  Rauheit/Metall, Normalen), Ursprung am Griff. Ansichten:
+  `assets/quelle/modelle/rundschild/ansicht-vorn.png` und `ansicht-hinten.png`. **Nicht im Spiel,
+  nicht in Unity gesehen** — es gibt noch kein Bundle (N-60) und keinen Gegenstand dazu (N-65).

@@ -1,0 +1,29 @@
+{
+  "stueck": "rundschild",
+  "dreiecke": 1994,
+  "flaechen": 1066,
+  "ecken": 1123,
+  "uv_inseln_ecken": 4126,
+  "stoffe": 1,
+  "ausdehnung_m": {
+    "von": [
+      -0.434,
+      -0.1093,
+      -0.434
+    ],
+    "bis": [
+      0.434,
+      0.0119,
+      0.434
+    ]
+  },
+  "texturen": {
+    "kante": 1024,
+    "dateien": [
+      "rundschild_farbe.png",
+      "rundschild_orm.png",
+      "rundschild_normal.png"
+    ]
+  },
+  "blender": "5.3.0"
+}
