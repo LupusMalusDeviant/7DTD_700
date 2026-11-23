@@ -560,16 +560,20 @@ das ist mit dieser Zeile nachgeholt.
 | — | Swanhild | Swanhild | Sarah | Hortbrief, `treasure_sarah`, D160 |
 | — | Stephanus | Stephanus | Stephan | Hortbrief, `treasure_stephan`, D160 |
 | — | Theudo | Theudo | Taylor | Hortbrief, `treasure_taylor`, D160 |
-| `npcTraderRekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Cellerar am Klostermarkt; F-10 B, D159, D163 — zu prüfen (N-108) |
-| `npcTraderBob` | Reginhart | Reginhart | Trader Bob | Kaufmann im Marktflecken; F-10 B, D159, D163 — zu prüfen (N-108) |
-| `npcTraderHugh` | Waldo | Waldo | Trader Hugh | Kämmerer am Fürstenhof; F-10 B, D159, D163 — zu prüfen (N-108) |
-| `npcTraderJen` | Gisla | Gisla | Trader Jen | Köhlerin am Köhlerhof; F-10 B, D159, D163 — zu prüfen (N-108) |
-| `npcTraderJoel` | Haduwin | Haduwin | Trader Joel | Fährmann am Fährhof; F-10 B, D159, D163 — zu prüfen (N-108) |
-| `subtitleSpeaker_Trader_Rekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Sprecher im Untertitel; D163 |
-| `subtitleSpeaker_Trader_Bob` | Reginhart | Reginhart | Trader Bob | Sprecher im Untertitel; D163 |
-| `subtitleSpeaker_Trader_Hugh` | Waldo | Waldo | Trader Hugh | Sprecher im Untertitel; D163 |
-| `subtitleSpeaker_Trader_Jen` | Gisla | Gisla | Trader Jen | Sprecher im Untertitel; D163 |
-| `subtitleSpeaker_Trader_Joel` | Haduwin | Haduwin | Trader Joel | Sprecher im Untertitel; D163 |
+| `npcTraderRekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Cellerar am Klostermarkt; F-10 B, D159, D163, D166 — zu prüfen (N-108) |
+| `npcTraderBob` | Kaufmann Reginhart | Merchant Reginhart | Trader Bob | im Marktflecken; F-10 B, D159, D163, D166 — zu prüfen (N-108) |
+| `npcTraderHugh` | Kämmerer Waldo | Chamberlain Waldo | Trader Hugh | am Fürstenhof; F-10 B, D159, D163, D166 — zu prüfen (N-108) |
+| `npcTraderJen` | Köhlerin Gisla | Charcoal-Burner Gisla | Trader Jen | am Köhlerhof; F-10 B, D159, D163, D166 — zu prüfen (N-108) |
+| `npcTraderJoel` | Fährmann Haduwin | Ferryman Haduwin | Trader Joel | am Fährhof; F-10 B, D159, D163, D166 — zu prüfen (N-108) |
+| `subtitleSpeaker_Trader_Rekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Sprecher im Untertitel; D163, D166 |
+| `subtitleSpeaker_Trader_Bob` | Kaufmann Reginhart | Merchant Reginhart | Trader Bob | Sprecher im Untertitel; D163, D166 |
+| `subtitleSpeaker_Trader_Hugh` | Kämmerer Waldo | Chamberlain Waldo | Trader Hugh | Sprecher im Untertitel; D163, D166 |
+| `subtitleSpeaker_Trader_Jen` | Köhlerin Gisla | Charcoal-Burner Gisla | Trader Jen | Sprecher im Untertitel; D163, D166 |
+| `subtitleSpeaker_Trader_Joel` | Fährmann Haduwin | Ferryman Haduwin | Trader Joel | Sprecher im Untertitel; D163, D166 |
+
+*Seit D166 (WP8.2, Vertragsbezug):* das Namensschild trägt **Amt und Namen** — so verlangt es
+Vertrag 02 Nachtrag Teil B („Händler: Posten, dazu ein Personenname", Beispiel „Schmied Radulf").
+D163 hatte den Namen allein gesetzt.
 
 **Die fünf Posten** (Name auf Karte und Kompass, `trader_*` und `trader_*2`; D163, zu prüfen N-108).
 Ein Ortsname im Sinne von Vertrag 02 §6 ist das nicht — es sind Gattungsnamen, wie man einen Hof

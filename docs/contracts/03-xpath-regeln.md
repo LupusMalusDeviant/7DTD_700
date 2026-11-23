@@ -344,7 +344,7 @@ dass ein Patch darin wirkt.** Den Nachweis je Datei gibt der Dump nach einem Spi
 | `quests.xml` | Aufträge | `70_Handel` | ja | ja | ja (Purge) |
 | `dialogs.xml` | Gespräche | `70_Handel` | ja | ja | nein |
 | `npc.xml` | Figuren | `70_Handel` | ja | ja | nein |
-| `subtitles.xml` | Untertitel statt Stimmen (D102) | `70_Handel` | ja | ja | nein |
+| `subtitles.xml` | Untertitel statt Stimmen (D102) — *Hinweis 2026-11-23, WP8.2, Abnahme offen:* ein Untertitel hängt an einem abgespielten Klang; mit `TraderDialog` aus (D164) spielt die Figur keinen, Untertitel „statt" Stimme trägt dieser Weg darum vermutlich nicht (Finding WP8-haendlerstimmen-traderdialog §3, vermutet) | `70_Handel` | ja | ja | nein |
 | `gameevents.xml` | Spielereignisse | je Feature | ja | ja | nein |
 | `challenges.xml` | Herausforderungen | `50_Fortschritt` | ja | ja | ja (D137) |
 | `buffs.xml` | Zustände | `45`, `60`, `75` | ja | ja | ja (Phase 1) |

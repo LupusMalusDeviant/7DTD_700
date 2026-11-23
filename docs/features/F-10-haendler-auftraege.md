@@ -100,7 +100,7 @@ wechselt die Landschaft — `rwgmixer.xml` bleibt, wie es ist.
 Namen nach Vertrag 02 §6 (germanisch, keine realen Heiligen, D108); sie kommen mit WP8.5 ins
 Glossar und in die Sprachdatei (`npcTrader…`). Der Fährhof weicht von D41 ab — **zu prüfen**.
 *Stand 2026-11-23:* Sortimente gebaut (WP8.3, D162, N-107), Namen und Postennamen in der Sprachdatei
-(WP8.5 Teil 1, D163, N-108); das Schild zeigt nur den Namen, das Amt steht in der Herausforderung.
+(WP8.5 Teil 1, D163, N-108); das Schild zeigt ~~nur den Namen~~ seit D166 Amt und Namen (Vertrag 02 Teil B).
 Alternative: der Moor-Händler wird ein zweiter Marktflecken.
 
 **Marktfrieden:** die Schutzzone heißt im Text so (lore.md §4). Die Posten bilden keinen Bund; aus
@@ -167,6 +167,21 @@ nutzt in Vanilla Orte der Stufe 5 (nicht gemessen, **[verifizieren]** in WP8.4).
 | WP8.4 | 347 + 55 Auftragstexte nach E, Angebote im Ton von lore.md | E, lore.md |
 | WP8.5 | Händlernamen, Stimmen aus (Finding), kurze Rede | B, D |
 | WP8.6 | Beute in 700 (F-05) | WP6.7 |
+
+### G2. Vertragsbezug (WP8.2, 2026-11-23, D166)
+
+Das in WP8.3 bis WP8.6 Gebaute gegen Vertrag 01 bis 03 gelesen:
+
+| Was | Vertrag | Ergebnis |
+|---|---|---|
+| `traders.xml`, `loot.xml`, Fundschriften in `700_70_Handel` | 01 (Tabelle „Händler und ihre Ware … Beute-Tabellen"; „Truhen, Fundorte, Beute allgemein → `70_Handel`") | passt |
+| Spielvorlage (`EWA`) in `700_60_Welt` | 01 Nachtrag 1b, 03 B (`sandbox_overrides.xml` → `60_Welt`) | passt |
+| Sprachzeilen in `700_90_Sprache`, vorher im Glossar | 02 §5, Glossar-Regel | passt |
+| `remove` auf `trader_items[1]/item` | 03 §4: `remove` erlaubt für Einträge von Händler-Warengruppen, nicht für Definitionen | passt |
+| XPath absolut, ohne `//` | 03 Regel 2 | passt |
+| neue Gruppen | keine angelegt; Präfixe `lg700_` (besteht) und `tg700_` (Nachtrag 02 A, für eigene Warengruppen) stünden bereit | passt |
+| **Namensschild der Händler** | 02 Nachtrag Teil B: „Händler: **Posten**, dazu ein Personenname" (Beispiel „Schmied Radulf") | **wich ab** — D163 setzte den Namen allein. **Berichtigt (D166):** Bruder Gerwin, Kaufmann Reginhart, Kämmerer Waldo, Köhlerin Gisla, Fährmann Haduwin |
+| `subtitles.xml` „Untertitel statt Stimmen" | 03 Nachtrag B | trägt nach dem Finding zu `TraderDialog` vermutlich nicht (Untertitel hängen am Klang); als Hinweis in Vertrag 03 eingetragen, Abnahme offen |
 
 ### H. Offen für den Nutzer (N-104)
 
