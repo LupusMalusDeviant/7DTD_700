@@ -209,6 +209,10 @@ Je zwei Schriften sprechen aus einer Deutung der Seuchennacht (`docs/lore.md` §
 | `itm700_honigsalbe` | Honigsalbe | Honey Salve | — (Arznei gegen den Wundbrand) | F-11, D197 — zu prüfen (N-141) |
 | `buff700_fieberName` | Fieber | Fever | — (Zustand, Kälte und Nässe) | F-11, D197 — zu prüfen (N-141) |
 | `buff700_wundbrandName` | Wundbrand | Wound-rot | — (Zustand, unverbundene Blutung) | F-11, D197 — zu prüfen (N-141) |
+| `toolApiarySmoker` | Rauchtopf | Smoke Pot | Smoker | F-19, D198 — zu prüfen (N-142) |
+| `toolApiaryExtractor` | Honigpresse | Honey Press | Honigschleuder / Honey Extractor | F-19, D198 — zu prüfen (N-142) |
+| `toolApiaryBroodBox` | Korbring | Skep Ring | Brutkasten / Brood Box | F-19, D198 — zu prüfen (N-142) |
+| `resourceCropAloeLeaf` | Aloeblatt | Aloe Leaf | Aloe-Vera-Blatt / Aloe Vera Leaf | F-19, D198 — zu prüfen (N-142) |
 | `buff700_baerenmutNach` | Verbrauchter Mut | Spent Courage | — (Nachwirkung) | D179 — zu prüfen (N-123) |
 | `buff700_quellsudAbklingen` | Quellsud: Nachklang | Spring Brew: Fading | — (Abklingzeit) | D179 — zu prüfen (N-123) |
 | `itm700_weihwasser` | Geweihtes Wasser | Holy Water | — (Grundstoff der Segen) | F-15, D180 — zu prüfen (N-124) |

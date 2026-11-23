@@ -43,3 +43,41 @@ Lebensmittel **verderben** (D32), und eine Siedlung lebt von Acker und Vieh (D33
 - [ ] Ohne Konservieren verdirbt Fleisch innerhalb von 1–2 Ingame-Tagen; geräuchert hält es eine Woche oder länger
 - [ ] Ein Pferch mit Hühnern versorgt einen Spieler dauerhaft mit Eiern, wenn gefüttert
 - [ ] Verderb-Logik ist auf dem Dedicated Server konsistent (keine Client-Abweichungen)
+
+## Ausarbeitung Phase 2 (Plan-0002 WP13.1, D198, zu prüfen N-142)
+
+### 1. Was im Spiel lebt (gemessen am Build, Denylist und Phase-1-Sperren)
+
+| Bereich | Lebt | Gesperrt | Quelle |
+|---|---|---|---|
+| Saat | Aloe, Goldrute, Hopfen, Pilze, Baumsetzlinge (`plantedAloe*`, `plantedGoldenrod*`, `plantedHop*`, `plantedMushroom*`, `plantedtree*`) | Mais, Kartoffel, Kürbis, Heidelbeere (Saat), Yucca, Baumwolle, Chrysantheme, Schneebeere, Kaffee | `tools/check/denylist.txt` |
+| Wild | Heidelbeeren und Moorpilze am Strauch, Nesselfaser aus Gras (`treeGrassMaster` → `resourceYuccaFibers`) | — | Vanilla-Blöcke |
+| Vieh | Hühnerstall (`cntChickenCoop`, Nistkasten, Auslauf), Bienenstock (`cntApiary` mit Werkzeugen) | Stall-Lampe (`toolChickenCoopLamp`) | Denylist |
+| Trank | Bier im Krug (`drinkJarBeer`: Hopfen 4 + abgekochtes Wasser, Chemiestation-Platz) | — | Vanilla-Rezept |
+| Wasser | gelöst (D134) | — | F-05 |
+
+Flachs gibt es nur als Material (der Baumwoll-Acker ist gesperrt); er kommt wild.
+
+### 2. Was in Phase 2 per XML geht (Empfehlung, zu prüfen N-142)
+- **Wildkorn** (`itm700_korn`): fällt beim Ernten von Gras, wie heute die Nesselfaser, mit kleiner
+  Chance. Kein eigener Acker — das braucht ein Feldmodell (Asset, Unity).
+- **Mahlstein → Mehl → Brot**: Mahlstein als Werkzeug am Feuer (wie der Kochtopf), Mehl aus Wildkorn,
+  Brot aus Mehl und Wasser. Bau in WP13.4; die Vanilla-Backwaren werden dort gemessen.
+- **Met**: Honig und Wasser im Kochtopf, Gegenstück zum Bier. Bau in WP13.4.
+- **Rübe**: auf dem Kartoffel-Acker als Grundlage, eigenes Bild über Tönung. Die Erscheinung des Ackers
+  bliebe Kartoffel — Empfehlung: auf ein Modell warten (N-142 (3)).
+
+### 3. Was ein Modell braucht (Unity, Aufgaben #8/#9)
+Gesätes Getreide (Gerste, Roggen, Emmer), Kohl, Erbsen, Bohnen, Flachs-Acker, Hanf. Meshy kann die
+Pflanzen liefern; ohne Asset-Bundle kommen sie nicht ins Spiel. Notiert für WP13.4b.
+
+### 4. Was nicht Phase 2 ist
+- **Verderb nach Zeit** und **Räucherkammer**: nach Phase 3 (C#, der Rucksack hat keinen Takt; WP9.5).
+  Bis dahin gibt es keinen Verderb, statt eines halben ohne Uhr (Empfehlung, zu prüfen N-142 (2)).
+- **Viehhaltung** außer Huhn und Biene: Phase 3 (D33).
+- **Fisch**: kein Angelsystem im Spiel; nicht geplant.
+
+### 5. Texte (WP13.1, in diesem Paket)
+Aloe heißt „Aloe“ (ohne „Vera“), der Smoker „Rauchtopf“, die Honigschleuder „Honigpresse“, der
+Brutkasten „Korbring“, das Bier kommt im Krug wie beim Großvater. Der Bienenstock nennt keine gesperrte
+Chrysantheme mehr. Prüfung im Spiel: S-53.

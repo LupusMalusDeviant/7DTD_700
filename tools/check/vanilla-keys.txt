@@ -1992,3 +1992,15 @@ buffDysentery01GetBetterDesc
 buffDysentery01UntreatedTooltip
 buffDysenteryCureDisplayName
 buffDysenteryCureDisplayDesc
+# WP13.1 (D198): Ackerbau und Bienen - Aloe ohne 'Vera', Rauchtopf, Honigpresse, Korbring, Bier im Krug
+plantedAloe1
+plantedAloe2
+plantedAloe3HarvestDesc
+resourceCropAloeLeaf
+resourceCropAloeLeafDesc
+toolApiarySmoker
+toolApiarySmokerDesc
+toolApiaryExtractor
+toolApiaryBroodBox
+toolApiaryBroodBoxDesc
+drinkJarBeerDesc
