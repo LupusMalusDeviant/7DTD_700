@@ -376,6 +376,11 @@ Je zwei Schriften sprechen aus einer Deutung der Seuchennacht (`docs/lore.md` §
 | `prk700_bannkundeName` | Bannkunde | Ban-lore | — | F-21, D176 — zu prüfen (N-120) |
 | `prk700_odemtiefeName` | Odemtiefe | Depth of odem | — | F-21, D176 — zu prüfen (N-120) |
 | `prk700_glutzauberName` | Glutzauber | Ember-craft | — | F-21, D176 — zu prüfen (N-120) |
+| `prk700_lehrzeitHandwerkerName` | Lehrzeit | Apprenticeship | — (je Baum einer; Ränge „Zur Hand gehen", „Dem Alten abgeschaut", „Mit eigener Hand") | F-21 §4, D195 — zu prüfen (N-139) |
+| `prk700_lehrzeitKriegerName` | Lehrzeit | Apprenticeship | — | F-21 §4, D195 — zu prüfen (N-139) |
+| `prk700_lehrzeitJaegerName` | Lehrzeit | Apprenticeship | — | F-21 §4, D195 — zu prüfen (N-139) |
+| `prk700_lehrzeitHeilerName` | Lehrzeit | Apprenticeship | — | F-21 §4, D195 — zu prüfen (N-139) |
+| `prk700_lehrzeitFuhrmannName` | Lehrzeit | Apprenticeship | — | F-21 §4, D195 — zu prüfen (N-139) |
 | `buffPerkTheDentistName` | Totenpfennig | Dead Man's Penny | Der Zahnarzt / The Dentist | D77 |
 | `perkMasterChefName` | Herdmeister | Hearth-master | Chefkoch / Master Chef | D90 |
 | `perkLuckyLooterName` | Finderglück | Finder's Luck | Der glückliche Sammler / Lucky Looter | D90 |

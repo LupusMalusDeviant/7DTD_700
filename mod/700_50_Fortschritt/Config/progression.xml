@@ -614,4 +614,60 @@
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/unlock_entry[@unlock_tier='3']/@item">itm700_baerenmut</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/@icon">drinkJarBoiledWater,drugAntibiotics,drugSteroids</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/unlock_entry[@unlock_tier='1']/@item">itm700_quellsud</set>
+
+	<!-- ===== WP12.3b Lehrzeit (F-21 §4, D195) - ERZEUGT von tools/gen/wp12-lernen.ps1, nicht von Hand aendern =====
+	     Je Baum ein Perk, drei Raenge an den Stufen 1/4/7 seines Attributs. Der Perk selbst wirkt nicht:
+	     buff700_lernen (700_50_Fortschritt/buffs.xml) zahlt jeden Rang einmal aus. -->
+	<append xpath="/progression/perks">
+		<perk name="prk700_lehrzeitHandwerker" max_level="3" parent="skillIntellectCraftsmanship" name_key="prk700_lehrzeitHandwerkerName" desc_key="prk700_lehrzeitHandwerkerDesc" icon="ui_game_symbol_book">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="attStrength" operation="GTE" value="1" desc_key="reqStrengthLevel01"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="attStrength" operation="GTE" value="4" desc_key="reqStrengthLevel04"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="attStrength" operation="GTE" value="7" desc_key="reqStrengthLevel07"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_lehrzeitHandwerkerRank1Desc" long_desc_key="prk700_lehrzeitHandwerkerRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_lehrzeitHandwerkerRank2Desc" long_desc_key="prk700_lehrzeitHandwerkerRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_lehrzeitHandwerkerRank3Desc" long_desc_key="prk700_lehrzeitHandwerkerRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_lehrzeitKrieger" max_level="3" parent="skillStrengthCombat" name_key="prk700_lehrzeitKriegerName" desc_key="prk700_lehrzeitKriegerDesc" icon="ui_game_symbol_book">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="attFortitude" operation="GTE" value="1" desc_key="reqFortitudeLevel01"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="attFortitude" operation="GTE" value="4" desc_key="reqFortitudeLevel04"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="attFortitude" operation="GTE" value="7" desc_key="reqFortitudeLevel07"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_lehrzeitKriegerRank1Desc" long_desc_key="prk700_lehrzeitKriegerRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_lehrzeitKriegerRank2Desc" long_desc_key="prk700_lehrzeitKriegerRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_lehrzeitKriegerRank3Desc" long_desc_key="prk700_lehrzeitKriegerRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_lehrzeitJaeger" max_level="3" parent="skillAgilityCombat" name_key="prk700_lehrzeitJaegerName" desc_key="prk700_lehrzeitJaegerDesc" icon="ui_game_symbol_book">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="attAgility" operation="GTE" value="1" desc_key="reqAgilityLevel01"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="attAgility" operation="GTE" value="4" desc_key="reqAgilityLevel04"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="attAgility" operation="GTE" value="7" desc_key="reqAgilityLevel07"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_lehrzeitJaegerRank1Desc" long_desc_key="prk700_lehrzeitJaegerRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_lehrzeitJaegerRank2Desc" long_desc_key="prk700_lehrzeitJaegerRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_lehrzeitJaegerRank3Desc" long_desc_key="prk700_lehrzeitJaegerRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_lehrzeitHeiler" max_level="3" parent="skillFortitudeRecovery" name_key="prk700_lehrzeitHeilerName" desc_key="prk700_lehrzeitHeilerDesc" icon="ui_game_symbol_book">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="attIntellect" operation="GTE" value="1" desc_key="reqIntellectLevel01"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="attIntellect" operation="GTE" value="4" desc_key="reqIntellectLevel04"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="attIntellect" operation="GTE" value="7" desc_key="reqIntellectLevel07"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_lehrzeitHeilerRank1Desc" long_desc_key="prk700_lehrzeitHeilerRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_lehrzeitHeilerRank2Desc" long_desc_key="prk700_lehrzeitHeilerRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_lehrzeitHeilerRank3Desc" long_desc_key="prk700_lehrzeitHeilerRank3LongDesc"/>
+			</effect_group>
+		</perk>
+		<perk name="prk700_lehrzeitFuhrmann" max_level="3" parent="skillIntellectInfluence" name_key="prk700_lehrzeitFuhrmannName" desc_key="prk700_lehrzeitFuhrmannDesc" icon="ui_game_symbol_book">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="attPerception" operation="GTE" value="1" desc_key="reqPerceptionLevel01"/></level_requirements>
+			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="attPerception" operation="GTE" value="4" desc_key="reqPerceptionLevel04"/></level_requirements>
+			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="attPerception" operation="GTE" value="7" desc_key="reqPerceptionLevel07"/></level_requirements>
+			<effect_group>
+				<effect_description level="1" desc_key="prk700_lehrzeitFuhrmannRank1Desc" long_desc_key="prk700_lehrzeitFuhrmannRank1LongDesc"/>
+				<effect_description level="2" desc_key="prk700_lehrzeitFuhrmannRank2Desc" long_desc_key="prk700_lehrzeitFuhrmannRank2LongDesc"/>
+				<effect_description level="3" desc_key="prk700_lehrzeitFuhrmannRank3Desc" long_desc_key="prk700_lehrzeitFuhrmannRank3LongDesc"/>
+			</effect_group>
+		</perk>
+	</append>
 </config>

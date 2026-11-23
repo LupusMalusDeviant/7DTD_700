@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 # wp12-lernen.ps1 - erzeugt den Lern-Buff fuer Lernen durch Tun (Plan-0002 WP12.3, F-21
 # "Ausarbeitung Phase 2", D192, D194; zu pruefen N-138) und die Lehrblaetter mit +3.
 #
@@ -105,6 +105,48 @@ foreach ($st in ($zeilen | Select-Object -ExpandProperty Stufe -Unique)) {
     if ($h.Count -ne 1) { $fehler += "Stufe '$st': $($h.Count) Hefte statt einem gefunden" } else { $hefte[$st] = $h[0].GetAttribute('name') }
 }
 
+# --- Lehrzeit (F-21 §4, D195): je Baum ein Perk mit drei Raengen ----------------------------
+# Rang 1 hebt jede Handwerks-Stufe seines Baums einmal um 10 (die Grundfaehigkeit), Rang 2 und 3
+# je um 3. Welche Stufen zu welchem Baum gehoeren, steht in UNSERER progression.xml (D68, @parent);
+# hier steht nur, wo der Perk haengt. Ausgezahlt wird im Lern-Buff, nicht beim Kauf: einen Ausloeser
+# "Rang gekauft" kennt XML nicht sicher, und der Buff merkt sich im gespeicherten
+# cv700_lehrzeitGezahlt<Baum>, welcher Rang schon gezahlt ist - Neuladen zahlt nichts doppelt.
+$baeume = @(
+    [pscustomobject]@{ Att = 'attStrength';   Kurz = 'Handwerker'; De = 'Handwerkers'; En = "Craftsman's"; Gruppe = 'skillIntellectCraftsmanship'; Req = 'reqStrengthLevel' }
+    [pscustomobject]@{ Att = 'attFortitude';  Kurz = 'Krieger';    De = 'Kriegers';    En = "Warrior's";   Gruppe = 'skillStrengthCombat';         Req = 'reqFortitudeLevel' }
+    [pscustomobject]@{ Att = 'attAgility';    Kurz = 'Jaeger';     De = 'Jägers';      En = "Hunter's";    Gruppe = 'skillAgilityCombat';          Req = 'reqAgilityLevel' }
+    [pscustomobject]@{ Att = 'attIntellect';  Kurz = 'Heiler';     De = 'Heilers';     En = "Healer's";    Gruppe = 'skillFortitudeRecovery';      Req = 'reqIntellectLevel' }
+    [pscustomobject]@{ Att = 'attPerception'; Kurz = 'Fuhrmann';   De = 'Fuhrmanns';   En = "Carter's";    Gruppe = 'skillIntellectInfluence';     Req = 'reqPerceptionLevel' }
+)
+$raenge = @(@{ R = 1; Att = 1; Plus = 10 }, @{ R = 2; Att = 4; Plus = 3 }, @{ R = 3; Att = 7; Plus = 3 })
+$unserProg = Get-Content (Join-Path $Repo 'mod\700_50_Fortschritt\Config\progression.xml') -Raw -Encoding UTF8
+$locVanilla = @{}
+foreach ($z in Get-Content (Join-Path $cfg 'Localization.csv') -Encoding UTF8) { $k = ($z -split ',', 2)[0]; if ($k) { $locVanilla[$k] = $true } }
+$locUnser = @{}
+foreach ($z in Get-Content (Join-Path $Repo 'mod\700_90_Sprache\Config\Localization.csv') -Encoding UTF8) {
+    if ($z -match '^([^,]+),[^,]*,[^,]*,,,,"([^"]*)",,"([^"]*)"') { $locUnser[$Matches[1]] = @{ En = $Matches[2]; De = $Matches[3] } }
+}
+$gruppenVanilla = @{}
+foreach ($n in $prog.SelectNodes('//skill')) { $gruppenVanilla[$n.GetAttribute('name')] = $n.GetAttribute('parent') }
+foreach ($b in $baeume) {
+    $b | Add-Member -NotePropertyName Stufen -NotePropertyValue @(
+        [regex]::Matches($unserProg, "crafting_skill\[@name='(crafting\w+)'\]/@parent`">$($b.Att)<") | ForEach-Object { $_.Groups[1].Value })
+    if ($b.Stufen.Count -eq 0) { $fehler += "Baum $($b.Kurz) ($($b.Att)): keine Handwerks-Stufe in unserer progression.xml" }
+    foreach ($st in $b.Stufen) {
+        if (-not $stufen.ContainsKey($st)) { $fehler += "Baum $($b.Kurz): '$st' ist keine Handwerks-Stufe des Builds" }
+        if (-not $locUnser.ContainsKey("${st}Name")) { $fehler += "Baum $($b.Kurz): '$st' hat keinen Namen in unserer Localization.csv" }
+    }
+    if (-not $gruppenVanilla.ContainsKey($b.Gruppe)) { $fehler += "Baum $($b.Kurz): Gruppe '$($b.Gruppe)' gibt es im Build nicht" }
+    elseif ($unserProg -notmatch "skill\[@name='$($b.Gruppe)'\]/@parent`">$($b.Att)<" -and $gruppenVanilla[$b.Gruppe] -ne $b.Att) {
+        $fehler += "Baum $($b.Kurz): Gruppe '$($b.Gruppe)' haengt nicht an $($b.Att)"
+    }
+    if ($unserProg -match "skill\[@name='$($b.Gruppe)'\]`">true<") { $fehler += "Baum $($b.Kurz): Gruppe '$($b.Gruppe)' ist verborgen" }
+    foreach ($r in $raenge) {
+        $key = '{0}{1:00}' -f $b.Req, $r.Att
+        if (-not $locVanilla.ContainsKey($key)) { $fehler += "Baum $($b.Kurz): Bedingungstext '$key' fehlt in Vanillas Localization.csv" }
+    }
+}
+
 if ($fehler.Count -gt 0) {
     foreach ($f in $fehler) { Write-Output "  [ROT]  $f" }
     Write-Output "wp12-lernen: $($fehler.Count) Fehler, nichts geschrieben"
@@ -145,6 +187,23 @@ foreach ($e in $zeilen) {
     $null = $sb.AppendLine("$t action=`"ModifyCVar`" cvar=`"$zaehler`" operation=`"add`" value=`"1`">$jetzt</triggered_effect>")
     $null = $sb.AppendLine("$t action=`"ShowToolbeltMessage`" message_key=`"buff700_lernenGeuebt`">$jetzt</triggered_effect>")
 }
+$null = $sb.AppendLine('				<!-- ===== Lehrzeit (F-21 §4, D195): jeder gekaufte Rang zahlt EINMAL, der Reihe nach ===== -->')
+foreach ($b in $baeume) {
+    $zaehler = "cv700_lehrzeitGezahlt$($b.Kurz)"
+    $perk = "prk700_lehrzeit$($b.Kurz)"
+    foreach ($r in $raenge) {
+        $null = $sb.AppendLine("				<!-- $perk Rang $($r.R): $($b.Stufen -join ', ') je +$($r.Plus) -->")
+        $null = $sb.AppendLine("$t action=`"ModifyCVar`" cvar=`".cv700_lernJetzt`" operation=`"set`" value=`"0`" />")
+        $null = $sb.AppendLine("$t action=`"ModifyCVar`" cvar=`".cv700_lernJetzt`" operation=`"set`" value=`"1`">" +
+            "<requirement name=`"ProgressionLevel`" progression_name=`"$perk`" operation=`"GTE`" value=`"$($r.R)`" />" +
+            "<requirement name=`"CVarCompare`" cvar=`"$zaehler`" operation=`"EQ`" value=`"$($r.R - 1)`" /></triggered_effect>")
+        foreach ($st in $b.Stufen) {
+            $null = $sb.AppendLine("$t action=`"AddProgressionLevel`" progression_name=`"$st`" level=`"$($r.Plus)`">$jetzt</triggered_effect>")
+        }
+        $null = $sb.AppendLine("$t action=`"ModifyCVar`" cvar=`"$zaehler`" operation=`"add`" value=`"1`">$jetzt</triggered_effect>")
+        $null = $sb.AppendLine("$t action=`"ShowToolbeltMessage`" message_key=`"buff700_lehrzeitGelernt`">$jetzt</triggered_effect>")
+    }
+}
 $null = $sb.AppendLine('			</effect_group>')
 $null = $sb.AppendLine('		</buff>')
 $null = $sb.AppendLine('	</append>')
@@ -170,6 +229,53 @@ foreach ($st in ($hefte.Keys | Sort-Object)) {
 $itemsPfad = Join-Path $AusOrdner 'wp12-lernen-items.xml'
 [IO.File]::WriteAllText($itemsPfad, $ib.ToString().Replace("`r`n", "`n"), (New-Object System.Text.UTF8Encoding $false))
 
+# --- Lehrzeit: Perks fuer progression.xml und ihre Texte --------------------------------------
+$pb = New-Object System.Text.StringBuilder
+$null = $pb.AppendLine('	<!-- ===== WP12.3b Lehrzeit (F-21 §4, D195) - ERZEUGT von tools/gen/wp12-lernen.ps1, nicht von Hand aendern =====')
+$null = $pb.AppendLine('	     Je Baum ein Perk, drei Raenge an den Stufen 1/4/7 seines Attributs. Der Perk selbst wirkt nicht:')
+$null = $pb.AppendLine('	     buff700_lernen (700_50_Fortschritt/buffs.xml) zahlt jeden Rang einmal aus. -->')
+$null = $pb.AppendLine('	<append xpath="/progression/perks">')
+foreach ($b in $baeume) {
+    $perk = "prk700_lehrzeit$($b.Kurz)"
+    $null = $pb.AppendLine("		<perk name=`"$perk`" max_level=`"3`" parent=`"$($b.Gruppe)`" name_key=`"${perk}Name`" desc_key=`"${perk}Desc`" icon=`"ui_game_symbol_book`">")
+    foreach ($r in $raenge) {
+        $key = '{0}{1:00}' -f $b.Req, $r.Att
+        $null = $pb.AppendLine("			<level_requirements level=`"$($r.R)`"><requirement name=`"ProgressionLevel`" progression_name=`"$($b.Att)`" operation=`"GTE`" value=`"$($r.Att)`" desc_key=`"$key`"/></level_requirements>")
+    }
+    $null = $pb.AppendLine('			<effect_group>')
+    foreach ($r in $raenge) {
+        $null = $pb.AppendLine("				<effect_description level=`"$($r.R)`" desc_key=`"${perk}Rank$($r.R)Desc`" long_desc_key=`"${perk}Rank$($r.R)LongDesc`"/>")
+    }
+    $null = $pb.AppendLine('			</effect_group>')
+    $null = $pb.AppendLine('		</perk>')
+}
+$null = $pb.AppendLine('	</append>')
+$perksPfad = Join-Path $AusOrdner 'wp12-lernen-perks.xml'
+[IO.File]::WriteAllText($perksPfad, $pb.ToString().Replace("`r`n", "`n"), (New-Object System.Text.UTF8Encoding $false))
+
+$rangDe = @{ 1 = 'Zur Hand gehen'; 2 = 'Dem Alten abgeschaut'; 3 = 'Mit eigener Hand' }
+$rangEn = @{ 1 = 'Lending a hand'; 2 = 'Watched the old one'; 3 = 'By your own hand' }
+$csv = New-Object System.Text.StringBuilder
+function Add-Zeile([string]$k, [string]$en, [string]$de) { $null = $csv.Append("$k,progression,Perk,,,,`"$en`",,`"$de`",,,,,,,,,,,`r`n") }
+foreach ($b in $baeume) {
+    $perk = "prk700_lehrzeit$($b.Kurz)"
+    $listeDe = ($b.Stufen | ForEach-Object { $locUnser["${_}Name"].De }) -join ', '
+    $listeEn = ($b.Stufen | ForEach-Object { $locUnser["${_}Name"].En }) -join ', '
+    Add-Zeile "${perk}Name" 'Apprenticeship' 'Lehrzeit'
+    Add-Zeile "${perk}Desc" "A season at the side of one who knows the craft. What you watch, your hands learn.\n\nRaises the $($b.En) crafts: $listeEn." "Eine Zeit an der Seite eines, der das Handwerk kann. Was du siehst, lernen deine Hände.\n\nHebt die Handwerke des $($b.De): $listeDe."
+    foreach ($r in $raenge) {
+        Add-Zeile "${perk}Rank$($r.R)Desc" $rangEn[$r.R] $rangDe[$r.R]
+        $mehr = if ($r.R -eq 1) { ' Enough for the first bound recipes.' } else { '' }
+        $mehrDe = if ($r.R -eq 1) { ' Das reicht für die ersten gebundenen Rezepte.' } else { '' }
+        Add-Zeile "${perk}Rank$($r.R)LongDesc" "Once: $listeEn rise by $($r.Plus).$mehr" "Einmal: $listeDe steigen um $($r.Plus).$mehrDe"
+    }
+}
+Add-Zeile 'buff700_lehrzeitGelernt' 'What the old one showed you now sits in your hands.' 'Was der Alte dir zeigte, sitzt nun in deinen Händen.'
+$textePfad = Join-Path $AusOrdner 'wp12-lernen-texte.csv'
+[IO.File]::WriteAllText($textePfad, $csv.ToString(), (New-Object System.Text.UTF8Encoding $false))
+
 Write-Output ("wp12-lernen: {0} Gegenstaende ({1} gebunden, {2} Vorstuecke), {3} Stufen, {4} Lehrblaetter; Bindung gelesen: {5} Rezepte" -f `
     $zeilen.Count, @($zeilen | Where-Object Art -eq 'gebunden').Count, @($zeilen | Where-Object Art -eq 'Vorstueck').Count, $hefte.Count, $hefte.Count, $gebunden)
+Write-Output ("wp12-lernen: Lehrzeit in {0} Baeumen, {1} Handwerks-Stufen, {2} Sprachzeilen" -f `
+    $baeume.Count, ($baeume | ForEach-Object { $_.Stufen.Count } | Measure-Object -Sum).Sum, (($csv.ToString() -split "`r`n").Count - 1))
 exit 0

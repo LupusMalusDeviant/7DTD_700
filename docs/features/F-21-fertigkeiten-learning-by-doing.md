@@ -144,8 +144,15 @@ Wundversorgung, Küche, Kräutergarten, Sattlerei) haben keine gebundenen eigene
 Phase 2 nicht durch Tun und behalten +1 — *Notiz:* Bogenbau und Küche wären die nächsten, mit
 Vanillas eigenen Rezepten.
 
-**Noch offen:** der Perk „Lehrzeit" (§4) — bis dahin kommt die Grundfähigkeit über vier Lehrblätter
-(1 + 4 × 3 = 13). Die drei [verifizieren]-Punkte aus §2 prüft S-49.
+~~**Noch offen:** der Perk „Lehrzeit" (§4) — bis dahin kommt die Grundfähigkeit über vier Lehrblätter
+(1 + 4 × 3 = 13).~~ Die drei [verifizieren]-Punkte aus §2 prüft S-49.
+
+**Lehrzeit gebaut (WP12.3b, D195, zu prüfen N-139):** je Baum ein Perk, drei Ränge an Attribut 1/4/7,
+unter Werkstattkunde (Handwerker), Wuchtwaffen (Krieger), Bogen und Messer (Jäger), Heilkunde (Heiler),
+Handel und Wege (Fuhrmann). Rang 1 +10, Rang 2 und 3 je +3 auf **jede** Handwerks-Stufe des Baums,
+ausgezahlt einmal je Rang von `buff700_lernen` (der Perk wirkt nicht selbst; §4s offene Frage nach dem
+Auslöser beim Kauf entfällt damit). Die Grundfähigkeit kommt jetzt auf drei Wegen: Rang 1, vier
+Lehrblätter, oder beides gemischt. Ränge: „Zur Hand gehen", „Dem Alten abgeschaut", „Mit eigener Hand".
 
 ## Akzeptanzkriterien
 - [ ] **Fünf** Bäume vollständig, ~~keine Vanilla-Attribut- bzw. -Perknamen sichtbar~~ kein **moderner** Attribut- oder Perkname sichtbar (der sechste Baum in Phase 2, D66). *Geändert am 2026-11-22 (D90):* unter dem Zahnrad behalten „Leichte Rüstung", „Mittlere Rüstung", „Schwere Rüstung", „Vom Land leben" und „Schlösserknacken" Vanillas Namen; „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück.

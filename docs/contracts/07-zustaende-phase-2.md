@@ -336,3 +336,16 @@ laufen der Reihe nach, wie in `buff700_odemStufe`; **Indiz**, S-49 (1)).
 
 **Lehrblätter:** die Hefte der acht Stufen, die durch Tun lernen, heben um **3** (die erste
 `effect_group`; der Zufallspunkt der Gelehrten-Kleidung bleibt 1). Die übrigen sechs Stufen bleiben bei 1.
+
+**Ergänzt mit WP12.3b (D195, N-139) — Lehrzeit:**
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `prk700_lehrzeit<Baum>` | Perk je Baum (Handwerker, Krieger, Jaeger, Heiler, Fuhrmann), 3 Ränge | Rang 1 ab Attribut 1, Rang 2 ab 4, Rang 3 ab 7; wirkt **nicht selbst** | der Spieler, mit Skill-Punkten | bleibt (Vanilla) | `buff700_lernen` |
+| `cv700_lehrzeitGezahlt<Baum>` | CVar je Spieler und Baum, **gespeichert** | 0–3: so viele Ränge sind ausgezahlt | **allein** `buff700_lernen`: ist der Perk ≥ r und Gezahlt = r − 1, hebt er jede Handwerks-Stufe des Baums (D68) einmal um 10 (r = 1) bzw. 3 (r = 2, 3) | **bleibt** (Indiz §2, S-50 (3)) | `buff700_lernen` |
+
+Ausgezahlt wird im Takt des Lern-Buffs (höchstens 10 s nach dem Kauf), nicht beim Kauf: einen
+Auslöser „Rang gekauft" kennt XML nicht sicher. **Folge:** wer seine Punkte zurücksetzt, behält die
+gezahlten Stufen, und ein neuer Kauf zahlt nichts mehr (Gezahlt bleibt stehen) — kein Doppeln, aber auch
+keine Rückgabe. Im Spiel geht Zurücksetzen nur über die Konsole: Vanillas Vergessenstrank
+(`drinkJarGrandpasForgettingElixir`) ist gesperrt (Purge, kein Rezept, keine Beute, keine Ware).
