@@ -175,6 +175,28 @@
 		<buff name="buff700_grauenVeraengstigt" name_key="buff700_grauenVeraengstigt" description_key="buff700_grauenVeraengstigtDesc" icon="ui_game_symbol_skull" icon_color="220,160,80" remove_on_death="false">
 			<stack_type value="ignore"/>
 			<duration value="0"/>
+			<update_rate value="30"/>
+			<effect_group>
+				<!-- Trugbilder (B4, WP11.5): alle 30 s ein Wurf, siehe buff700_trugSchritte. -->
+				<requirement name="IsLocalPlayer"/>
+				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="LT" value="2"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_trugWurf" operation="set" value="randomint(1,100)"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_trugSchritte">
+					<requirement name="CVarCompare" cvar=".cv700_trugWurf" operation="LTE" value="4"/>
+					<requirement name="!IsIndoors"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="PlaySound" sound="rustle" play_in_head="true">
+					<requirement name="CVarCompare" cvar=".cv700_trugWurf" operation="GT" value="4"/>
+					<requirement name="CVarCompare" cvar=".cv700_trugWurf" operation="LTE" value="8"/>
+					<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="PlaySound" sound="door_old_int_single_open" play_in_head="true">
+					<requirement name="CVarCompare" cvar=".cv700_trugWurf" operation="GT" value="8"/>
+					<requirement name="CVarCompare" cvar=".cv700_trugWurf" operation="LTE" value="10"/>
+					<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+					<requirement name="IsIndoors"/>
+				</triggered_effect>
+			</effect_group>
 			<effect_group>
 				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
 				<passive_effect name="SpreadDegreesHorizontal" operation="perc_add" value=".25" tags="ranged,itm700_zauber"/>
@@ -184,6 +206,22 @@
 		<buff name="buff700_grauenGrauen" name_key="buff700_grauenGrauen" description_key="buff700_grauenGrauenDesc" icon="ui_game_symbol_skull" icon_color="220,60,40" remove_on_death="false">
 			<stack_type value="ignore"/>
 			<duration value="0"/>
+			<update_rate value="30"/>
+			<effect_group>
+				<!-- Im Grauen ein zweiter Wurf je 30 s (B4 "staerkere Trugbilder"): Schritte oder
+				     Rascheln doppelt so oft, nur auf "voll". -->
+				<requirement name="IsLocalPlayer"/>
+				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_trugWurfGrauen" operation="set" value="randomint(1,100)"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_trugSchritte">
+					<requirement name="CVarCompare" cvar=".cv700_trugWurfGrauen" operation="LTE" value="5"/>
+					<requirement name="!IsIndoors"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="PlaySound" sound="rustle" play_in_head="true">
+					<requirement name="CVarCompare" cvar=".cv700_trugWurfGrauen" operation="GT" value="5"/>
+					<requirement name="CVarCompare" cvar=".cv700_trugWurfGrauen" operation="LTE" value="10"/>
+				</triggered_effect>
+			</effect_group>
 			<effect_group>
 				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="LT" value="2"/>
 				<triggered_effect trigger="onSelfBuffStart" action="ModifyScreenEffect" effect_name="Dark" intensity=".3" fade="2"/>
@@ -198,6 +236,29 @@
 			<effect_group>
 				<passive_effect name="RunSpeed" operation="perc_add" value=".1"/>
 				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.5"/>
+			</effect_group>
+		</buff>
+
+		<!-- TRUGBILDER (F-17 B4, D187; Plan-0002 WP11.5), soweit Vanilla Laute hat.
+		     Regeln aus B4: nur beim Betroffenen (IsLocalPlayer; PlaySound im Kopf, also nur
+		     auf seinem Rechner), nie Schaden, nie ein Laut, der einen echten Gegner meldet
+		     (D74: kein Stoehnen, kein Wolf). Vanillas Laute dafuer:
+		       Schritte   barestepleaves - fuenf Schritte in drei Sekunden, nur draussen
+		       Rascheln   rustle (der Laut eines Strauchs)
+		       eine Tuer  door_old_int_single_open, nur drinnen
+		     Haeufigkeit: Veraengstigt alle 30 s ein Wurf aus 100 - Schritte 4, Rascheln 4,
+		     Tuer 2 (rund alle 5 Minuten etwas); auf "mild" nur die Schritte. Im Grauen ein
+		     zweiter Wurf (Schritte 5, Rascheln 5). Fluestern, Klopfen, die Gestalt am Waldrand
+		     und die flackernde Fackel brauchen eigene Laute und Bilder (F-16). Ob ein Laut
+		     im Kopf keine Geraeusch-Marke fuer die Toten setzt, ist ungelesen [verifizieren
+		     S-45] - setzt er eine, faellt der Trugbild-Laut weg. -->
+		<buff name="buff700_trugSchritte" hidden="true">
+			<stack_type value="ignore"/>
+			<duration value="3"/>
+			<update_rate value=".6"/>
+			<effect_group>
+				<requirement name="IsLocalPlayer"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="PlaySound" sound="barestepleaves" play_in_head="true"/>
 			</effect_group>
 		</buff>
 

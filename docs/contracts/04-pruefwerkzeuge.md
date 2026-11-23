@@ -4194,3 +4194,23 @@ Zahlvergleich `gamestage[@stage >= 10]` trifft (2 rot). Am echten Modlet: `eg700
 **Grenzen:** Gruppen, die nur der Spielcode nennt (z. B. Vanillas Wanderhorden in `spawning.xml` über
 eigene Attribute), und die Gewichte `p` liest die Regel nicht. Ob eine Gruppe leer wird, weil die
 Säuberung Wesen entfernt, prüft weiter `mod700check wesen` am Dump.
+
+## Nachtrag WP11.5 — Laute in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-131)
+
+Gebaut im autonomen Lauf (Plan-0002 WP11.5, D187).
+
+**Anlass.** Trugbilder, die Glocke der Seuchennacht und die Zauber sind Laute. Ein vertippter Name
+spielt nichts, ohne Meldung — die Gegenprobe `rustel` blieb grün.
+
+**Die Regel.** `kette-pruefen` liest `sound="…"` jedes `triggered_effect` mit `action="PlaySound"` und den
+Wert jeder `<property>`, deren Name mit `Sound` beginnt, in den Patch-Dateien, und sucht ihn unter Vanillas
+`<SoundDataNode name>` in `sounds.xml`. Leere Werte, Namen mit `#` (Vanilla setzt dort Stimme oder
+Geschlecht ein) und Zahlen (`SoundRandomTime` u. a.) zählen nicht. Ohne Vanillas `sounds.xml` bleibt die
+Regel aus. Neue Zeile: `Laute: N` (am echten Stand 69).
+
+**Gegenprobe** (1 neu, 329 → **330**): `kette/laut` — vertippter Laut im `PlaySound` und in `Sound_start`
+rot; Vanilla-Laute, `#`, die Zahl und der leere Wert nicht (2 rot). Am echten Modlet: `rustel` und
+`club_swinglite` je rot.
+
+**Grenzen:** eigene Laute (F-16) gibt es noch nicht; kommen sie, muss die Regel deren Liste kennen.
+Laute, die der Spielcode aus Teilen zusammensetzt, liest sie nicht.

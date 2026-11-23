@@ -1205,6 +1205,40 @@ if (Test-Path $gruppenVanillaPfad) {
     }
 }
 
+# LAUTE (ergaenzt 2026-11-23, Plan-0002 WP11.5). Trugbilder, Glocke und Zauber sind Laute; ein
+# vertippter Name spielt nichts - die Nacht bliebe still, ohne Meldung. Gelesen wird sound="..."
+# jedes triggered_effect PlaySound und der Wert jeder <property>, deren Name mit "Sound" beginnt
+# (Sound_start, SoundPickup, ...), in den Patch-Dateien; gesucht unter Vanillas
+# <SoundDataNode name> in sounds.xml. Leere Werte und Namen mit '#' (Vanilla setzt dort Stimme
+# oder Geschlecht ein) zaehlen nicht. Ohne Vanillas sounds.xml bleibt die Regel aus.
+$lautRefs = 0
+$lautGeprueft = $false
+$lautVanillaPfad = Join-Path $Vanilla 'sounds.xml'
+if (Test-Path $lautVanillaPfad) {
+    $lautGeprueft = $true
+    $lautPool = @{}
+    $kennungen = Get-Kennungen $lautVanillaPfad '<SoundDataNode\s+name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $lautPool[$n] = $true }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        $werte = New-Object System.Collections.Generic.List[string]
+        foreach ($n in $xml.SelectNodes("//triggered_effect[@action='PlaySound'][@sound]")) { $werte.Add($n.GetAttribute('sound')) }
+        foreach ($n in $xml.SelectNodes("//property[starts-with(@name,'Sound')][@value]")) { $werte.Add($n.GetAttribute('value')) }
+        foreach ($w in $werte) {
+            $w = $w.Trim()
+            if ($w.Length -eq 0 -or $w.Contains('#')) { continue }
+            # Zahlen sind keine Laute: SoundRandomTime, SoundAlertTime u. a. tragen Sekunden.
+            if ($w -match '^[\d.,\s-]+$') { continue }
+            $lautRefs++
+            if (-not $lautPool.ContainsKey($w)) { $unresolved += "Laut '$w' steht nicht in Vanillas sounds.xml  ($datei)" }
+        }
+    }
+}
+
 # CVAR-NAMEN (ergaenzt 2026-11-23, Plan-0002 WP11.3). Das Grauen rechnet in einem Buff mit
 # sieben CVars, liest drei, die C# schreiben soll, und den Schutz aus einem zweiten Modlet. Ein
 # vertippter Name liest still 0 - der Schutz wirkte nie, die Rechnung liefe weiter, keine Meldung.
@@ -1288,6 +1322,7 @@ Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltunge
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
+Write-Output ("  Laute: {0}" -f $(if ($lautGeprueft) { $lautRefs } else { 'nicht geprueft (keine sounds.xml im Vanilla-Ordner)' }))
 Write-Output ("  Wesen und Gruppen: {0}" -f $(if ($gruppenGeprueft) { $gruppenRefs } else { 'nicht geprueft (keine entitygroups.xml im Vanilla-Ordner)' }))
 Write-Output ("  CVar-Verweise: {0}" -f $(if ($cvarGeprueft) { $cvarRefs } else { 'nicht geprueft (kein Vertrag der Zustaende angegeben)' }))
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)

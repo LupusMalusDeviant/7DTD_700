@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.5): Laute in Sound-Eigenschaften. Gruen: ein Vanilla-Laut,
+     eine Zahl in SoundRandomTime, ein leerer Wert. Rot: ein vertippter Laut in Sound_start.
+     Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/items">
+		<item name="pruefLautGegenstand">
+			<property name="SoundPickup" value="pruefLautZweit" />
+			<property name="SoundRandomTime" value="90" />
+			<property name="Sound_repeat" value="" />
+			<property class="Action0">
+				<property name="Sound_start" value="pruefLautAuchFehlt" />
+			</property>
+		</item>
+	</append>
+</config>

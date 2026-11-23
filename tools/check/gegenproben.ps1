@@ -1144,6 +1144,16 @@ Test-Script 'kette-pruefen: vertippte Wesen-Gruppe und vertipptes Wesen werden r
     Vanilla      = (Join-Path $data 'kette\gruppe\vanilla')
 } -MustContain @("Wesen-Gruppe 'pruefGruppeFehlt' ist nirgends definiert", "Wesen 'pruefWesenFehlt' in einer Gruppe ist nirgends definiert", 'Wesen und Gruppen: 5', 'geprueefte XPaths: 2 (2 in Vanilla', '2 rot') -MustNotContain @("'pruefGruppeVanilla'", "'pruefGruppeEigen'", "'pruefWesenVanilla'", 'XPath trifft nichts')
 
+# WP11.5 (2026-11-23): ein Laut muss in Vanillas sounds.xml stehen - im PlaySound und in jeder
+# Sound-Eigenschaft. Namen mit '#', Zahlen (SoundRandomTime) und leere Werte zaehlen nicht.
+Test-Script 'kette-pruefen: vertippte Laute werden rot, Vanilla-Laute, Zahlen und # nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\laut\buffs.xml'), (Join-Path $data 'kette\laut\items.xml'))
+    Vanilla      = (Join-Path $data 'kette\laut\vanilla')
+} -MustContain @("Laut 'pruefLautFehlt' steht nicht", "Laut 'pruefLautAuchFehlt' steht nicht", 'Laute: 4', '2 rot') -MustNotContain @("'pruefLautVanilla'", "'pruefLautZweit'", "'90'", 'pruef#stimme')
+
 # Ohne Vertrag in Pruefdaten sagt die Regel, dass sie nicht prueft - und wird davon nicht rot.
 Test-Script 'kette-pruefen: ohne Vertrag der Zustaende sind CVars nicht geprueft, gesagt' 0 @{
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')

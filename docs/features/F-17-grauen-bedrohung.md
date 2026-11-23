@@ -139,6 +139,17 @@ Ab Stufe „Verängstigt“, selten, immer mehrdeutig:
 (Client). Echte Gegner sehen **niemals** wie Trugbilder aus. Der Spieler darf zweifeln, aber
 nicht betrogen werden.
 
+*Gebaut mit WP11.5, soweit Vanilla Laute hat (D187, zu prüfen N-131, Spieltest S-45). Warum nicht C#?
+`IsLocalPlayer`, `RandomRoll`-artiger Wurf und `PlaySound` im Kopf sind XML (Finding WP9.4).* Die Stufe
+„Verängstigt" würfelt alle 30 s aus 100: **Schritte** (Vanillas `barestepleaves`, fünf in drei Sekunden,
+nur draußen) 4, **Rascheln** (`rustle`) 4, **eine Tür** (`door_old_int_single_open`, nur drinnen) 2 — rund
+alle fünf Minuten etwas. Auf „mild" nur die Schritte, auf „aus" nichts. Die Stufe „Grauen" würfelt ein
+zweites Mal (Schritte 5, Rascheln 5, nur „voll"). Alles nur beim Betroffenen (`IsLocalPlayer`, Laut im
+Kopf). **Nicht gebaut** — braucht eigene Laute oder Bilder (F-16): Flüstern beim Namen, Klopfen, die
+Gestalt am Waldrand (Streichposten nach Plan), das Irrlicht, die flackernde Fackel. **[verifizieren S-45]:**
+ob ein Laut im Kopf keine Geräusch-Marke für die Toten setzt — setzt er eine, lockt das Trugbild echte
+Gegner, und es fällt weg.
+
 ### B5 — Bedrohungs-Direktor (P2, H, Server)
 Steuert die Spannungskurve zwischen den Seuchennächten:
 - **Phasen:** Ruhe → Vorzeichen → Bedrohung → Erlösung (adaptiv nach Aktivität, Grauen-Werten und Gamestage)

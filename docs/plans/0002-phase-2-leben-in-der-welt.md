@@ -710,6 +710,9 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Helligkeitsregler ins Bild eingeht (F-17:149–154). (L)
 5. **WP11.5** `[Claude-prüfbar]` **Trugbilder** (B4, nur beim Betroffenen; F-17:60–69): Klänge aus
    WP7.6 auf dem XML-Weg aus F-17:189–191; die Schattengestalt ist ein Streichposten. (M)
+   *Teil gebaut 2026-11-23 (D187, zu prüfen N-131, Spieltest S-45):* drei Trugbilder aus Vanilla-Lauten
+   (Schritte, Rascheln, Tür); `kette-pruefen` prüft Laute (330 Gegenproben). Offen bis WP7.6: Flüstern,
+   Klopfen, Irrlicht, Fackel.
 6. **WP11.6** `[Claude-prüfbar]` **Bedrohungs-Direktor** (B5, Server): die Phase des
    7-Tage-Bogens (GDD.md:143–150) als Zustand, zuerst mit XML-Mitteln; C# nur nach Finding. Ein
    Protokoll der Phasenwechsel für das Kriterium F-17:127. Ereignisse über den Pirscher hinaus sind

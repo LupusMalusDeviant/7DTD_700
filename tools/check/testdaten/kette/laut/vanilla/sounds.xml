@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.5). Erfundene Kennungen, kein Spielinhalt.
+     Vanilla-Stand: zwei Laute. -->
+<Sounds>
+	<SoundDataNode name="pruefLautVanilla"> <AudioSource name="@:Sounds/Prefabs/Pruef.prefab"/>
+	</SoundDataNode>
+	<SoundDataNode name="pruefLautZweit"> <AudioSource name="@:Sounds/Prefabs/Pruef.prefab"/>
+	</SoundDataNode>
+</Sounds>

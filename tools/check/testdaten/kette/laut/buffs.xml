@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.5): Laute im PlaySound. Gruen: ein Vanilla-Laut und ein
+     Name mit '#'. Rot: ein vertippter Laut. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/buffs">
+		<buff name="pruefBuffLaut">
+			<duration value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="PlaySound" sound="pruefLautVanilla" play_in_head="true" />
+				<triggered_effect trigger="onSelfBuffStart" action="PlaySound" sound="pruefLautFehlt" play_in_head="true" />
+				<triggered_effect trigger="onSelfBuffStart" action="PlaySound" sound="pruef#stimme" />
+			</effect_group>
+		</buff>
+	</append>
+</config>
