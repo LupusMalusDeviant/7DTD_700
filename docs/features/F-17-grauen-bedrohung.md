@@ -110,6 +110,17 @@ entfällt überall — der sichere Rückfall.
 **Karte und Marken (D96):** die Stufe „voll" schaltet Karte, Kompass-Leiste und Marken **nicht** ab. Sie
 sind Bedienhilfe (P5); Furcht kommt aus Dunkelheit und Klang, nicht aus Orientierungsverlust.
 
+*Gebaut mit WP11.3 (D185, zu prüfen N-129, Spieltest S-43). Warum nicht C#? Weil jede Zeile oben eine
+vorhandene Buff-Bedingung ist (Säule P5); C# kommt erst für Regler und Direktor.* In `700_60_Welt`:
+`buff700_grauenZaehlen` (der eine Schreiber von `cv700_grauen`, alle 5 s, Zahlen wie oben), die drei
+Stufen mit Abstand, `buff700_grauenPanik`, `buff700_gesellschaftSender`/`buff700_gesellschaft` (andere
+Spieler in 10 m, `selfOtherPlayers` **[verifizieren S-34 (2)]**); in `700_75_Magie`:
+`buff700_grauenSchutz` (Bärenmut 0,25, Hammer/Kreuz 0,15, Kappe 0,5). Gesetzt über Vanillas
+`buffStatusCheck01` wie der Odem. **Noch nicht:** Herzschlag (kein Laut in Vanilla, F-16),
+Schutzzeichen-Aura (eigener Bau), Trugbilder (WP11.5), Regler und `cv700_mitspielerDa` (C#, Vertrag 06) —
+bis dahin gilt „voll", und „allein" zählt nirgends. **Grenze:** die Schwelle „dunkel" (20) hängt an der
+Lesart von `CompareLightLevel` (S-34 (1)).
+
 - Mechanische Effekte sind gewollt (D14). Säule P3 bleibt aber: Nahkampf wird **nicht** unbrauchbar, vor allem Bogen und Zauber leiden
 - Umsetzung: Buffs und CVars per XML; Messung von Licht, Nähe zu Mitspielern und Sichtkontakt braucht wahrscheinlich C# → REA
 - *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 3–7; zu prüfen N-116):* B3 und B4 **XML**

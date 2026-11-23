@@ -53,6 +53,180 @@
 			</effect_group>
 		</buff>
 
+		<!-- ===================================================================
+		     DAS GRAUEN (F-17 B3 "in Zahlen", D184/D185; Plan-0002 WP11.3; Vertrag 07 Nachtrag 4)
+		     ===================================================================
+		     buff700_grauenZaehlen ist der EINE Schreiber von cv700_grauen. Er zaehlt alle
+		     5 Sekunden; die Raten aus F-17 stehen je Minute, hier also durch 12 geteilt:
+		       +1/min = .0833   +2/min = .1667   +3/min = .25   +4/min = .3333
+		     Zuerst .cv700_grauenZuwachs aus den Bedingungen, dann mal (1 - .cv700_grauenSchutz)
+		     (den Schutz rechnet buff700_grauenSchutz in 700_75_Magie, Vertrag 07 N1.3), dann
+		     .cv700_grauenAbbau abziehen, dann kappen. Treffer zaehlt ein Ausloeser in DIESEM Buff
+		     auf .cv700_grauenTreffer; der naechste Takt nimmt sie mit.
+		     Dunkel = CompareLightLevel unter 20. Ob das Spiel in Prozent oder als Bruch
+		     vergleicht, ist ungelesen (S-34 (1)); als Bruch waere es immer dunkel, dann wird
+		     die Zahl hier 0.2 - eine Stelle, drei Zeilen.
+		     Allein zaehlt nur, wenn cv700_mitspielerDa = 1 ist (D118); den setzt der Direktor
+		     (C#). Fehlt er, liest der Wert 0 und "allein" entfaellt.
+		     Die Stufen kommen bei 30/60/85 und gehen bei 25/55/80. -->
+		<buff name="buff700_grauenZaehlen" hidden="true" remove_on_death="false">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onOtherDamagedSelf" action="ModifyCVar" cvar=".cv700_grauenTreffer" operation="add" value="3"/>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="set" value="@.cv700_grauenTreffer"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenTreffer" operation="set" value="0"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value=".0833">
+					<requirement name="IsNight"/>
+					<requirement name="!IsSheltered"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value=".1667">
+					<requirement name="CompareLightLevel" operation="LT" value="20"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value=".0833">
+					<requirement name="CVarCompare" cvar="cv700_mitspielerDa" operation="Equals" value="1"/>
+					<requirement name="!HasBuff" buff="buff700_gesellschaft"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value=".1667">
+					<requirement name="StatComparePercCurrentToMax" stat="health" operation="LT" value=".3"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value=".3333">
+					<requirement name="IsBloodMoon"/>
+				</triggered_effect>
+				<!-- Seuchennacht naht: cv700_grauenDruck (0 bis 30, Direktor) durch 10 je Minute,
+				     je Takt also durch 120. -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenDruckTakt" operation="set" value="@cv700_grauenDruck"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenDruckTakt" operation="divide" value="120"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="add" value="@.cv700_grauenDruckTakt"/>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenFaktor" operation="set" value="1"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenFaktor" operation="subtract" value="@.cv700_grauenSchutz"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenZuwachs" operation="multiply" value="@.cv700_grauenFaktor"/>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenAbbau" operation="set" value="0"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenAbbau" operation="add" value=".25">
+					<requirement name="!IsNight"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenAbbau" operation="add" value=".0833">
+					<requirement name="IsSheltered"/>
+					<requirement name="CompareLightLevel" operation="GTE" value="20"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenAbbau" operation="add" value=".3333">
+					<requirement name="HasBuff" buff="buff700_amfeuer"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenAbbau" operation="add" value=".0833">
+					<requirement name="HasBuff" buff="buff700_gesellschaft"/>
+				</triggered_effect>
+
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_grauen" operation="add" value="@.cv700_grauenZuwachs"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_grauen" operation="subtract" value="@.cv700_grauenAbbau"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_grauen" operation="set" value="100">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="GT" value="100"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_grauen" operation="set" value="0">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="LT" value="0"/>
+				</triggered_effect>
+
+				<!-- Die Stufen, mit Abstand. -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenUnruhig">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="GTE" value="30"/>
+					<requirement name="!HasBuff" buff="buff700_grauenUnruhig"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_grauenUnruhig">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="LT" value="25"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenVeraengstigt">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="GTE" value="60"/>
+					<requirement name="!HasBuff" buff="buff700_grauenVeraengstigt"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_grauenVeraengstigt">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="LT" value="55"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenGrauen">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="GTE" value="85"/>
+					<requirement name="!HasBuff" buff="buff700_grauenGrauen"/>
+				</triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_grauenGrauen">
+					<requirement name="CVarCompare" cvar="cv700_grauen" operation="LT" value="80"/>
+				</triggered_effect>
+
+				<!-- Panik beim Treffer, nur in der Stufe Grauen und nur auf "voll" (Daempfung 0). -->
+				<triggered_effect trigger="onOtherDamagedSelf" action="AddBuff" buff="buff700_grauenPanik">
+					<requirement name="HasBuff" buff="buff700_grauenGrauen"/>
+					<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+				</triggered_effect>
+			</effect_group>
+		</buff>
+
+		<!-- Die drei Stufen. Sichtbar; jede Wirkung fragt die Daempfung (Vertrag 07 3.2):
+		     Mechanik nur bei 0 ("voll"), Bild bei 0 und 1 ("mild"), bei 2 ("aus") nichts.
+		     Der Herzschlag fehlt: Vanilla hat keinen Laut dafuer, er kommt mit F-16.
+		     Trugbilder (B4) lesen buff700_grauenVeraengstigt, kommen mit WP11.5. -->
+		<buff name="buff700_grauenUnruhig" name_key="buff700_grauenUnruhig" description_key="buff700_grauenUnruhigDesc" icon="ui_game_symbol_skull" icon_color="200,200,160" remove_on_death="false">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<effect_group>
+				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.1"/>
+			</effect_group>
+		</buff>
+		<buff name="buff700_grauenVeraengstigt" name_key="buff700_grauenVeraengstigt" description_key="buff700_grauenVeraengstigtDesc" icon="ui_game_symbol_skull" icon_color="220,160,80" remove_on_death="false">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<effect_group>
+				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="Equals" value="0"/>
+				<passive_effect name="SpreadDegreesHorizontal" operation="perc_add" value=".25" tags="ranged,itm700_zauber"/>
+				<passive_effect name="SpreadDegreesVertical" operation="perc_add" value=".25" tags="ranged,itm700_zauber"/>
+			</effect_group>
+		</buff>
+		<buff name="buff700_grauenGrauen" name_key="buff700_grauenGrauen" description_key="buff700_grauenGrauenDesc" icon="ui_game_symbol_skull" icon_color="220,60,40" remove_on_death="false">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<effect_group>
+				<requirement name="CVarCompare" cvar="cv700_grauenDaempfung" operation="LT" value="2"/>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyScreenEffect" effect_name="Dark" intensity=".3" fade="2"/>
+			</effect_group>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffRemove" action="ModifyScreenEffect" effect_name="Dark" intensity="0" fade="2"/>
+			</effect_group>
+		</buff>
+		<buff name="buff700_grauenPanik" name_key="buff700_grauenPanik" description_key="buff700_grauenPanikDesc" icon="ui_game_symbol_run">
+			<stack_type value="replace"/>
+			<duration value="3"/>
+			<effect_group>
+				<passive_effect name="RunSpeed" operation="perc_add" value=".1"/>
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.5"/>
+			</effect_group>
+		</buff>
+
+		<!-- GESELLSCHAFT (F-17 Grundsatz 5; Finding WP9.4): jeder Spieler legt alle 2 s auf
+		     die anderen Spieler in 10 m einen kurzen Buff. selfOtherPlayers statt selfAOE, damit
+		     sich der Sender nicht selbst trifft [verifizieren S-34 (2)]. Im Einzelspiel gibt es
+		     keinen anderen Spieler - der Buff kommt nie, und "allein" zaehlt dort nicht (D118). -->
+		<buff name="buff700_gesellschaftSender" hidden="true" remove_on_death="false">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<update_rate value="2"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" target="selfOtherPlayers" range="10" buff="buff700_gesellschaft"/>
+			</effect_group>
+		</buff>
+		<buff name="buff700_gesellschaft" name_key="buff700_gesellschaft" description_key="buff700_gesellschaftDesc" icon="ui_game_symbol_players">
+			<stack_type value="replace"/>
+			<duration value="3"/>
+		</buff>
+
+	</append>
+
+	<!-- Zaehler und Gesellschaft setzt Vanillas buffStatusCheck01 (laeuft bei jedem Spieler
+	     immer, auch nach dem Tod), wie die Odem-Buffs (Vertrag 07 Nachtrag 2). -->
+	<append xpath="/buffs/buff[@name='buffStatusCheck01']">
+		<effect_group>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenZaehlen"><requirement name="!HasBuff" buff="buff700_grauenZaehlen"/></triggered_effect>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_gesellschaftSender"><requirement name="!HasBuff" buff="buff700_gesellschaftSender"/></triggered_effect>
+		</effect_group>
 	</append>
 
 </config>

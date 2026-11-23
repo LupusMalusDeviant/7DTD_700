@@ -202,6 +202,24 @@
 				</triggered_effect>
 			</effect_group>
 		</buff>
+		<!-- WP11.3 (D185): SCHUTZ VOR GRAUEN (Vertrag 07 N1.3, F-17 "B3 in Zahlen").
+		     buff700_grauenSchutz ALLEIN schreibt .cv700_grauenSchutz: den Anteil, um den der
+		     ZUWACHS des Grauens sinkt (buff700_grauenZaehlen in 700_60_Welt liest ihn).
+		     Baerenmut 0,25; Hammeramulett oder Kreuzanhaenger (Tag amulett700_grauen, nur ein
+		     Amulett zugleich) 0,15; gekappt bei 0,5. Die Schutzzeichen-Aura (0,25) kommt mit
+		     ihrem Bau - ihre Zeile fehlt hier mit Absicht. -->
+		<buff name="buff700_grauenSchutz" hidden="true" remove_on_death="false">
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenSchutz" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenSchutz" operation="add" value=".25"><requirement name="HasBuff" buff="buff700_baerenmut" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenSchutz" operation="add" value=".15"><requirement name="WornItems" tags="amulett700_grauen" operation="GTE" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_grauenSchutz" operation="set" value=".5"><requirement name="CVarCompare" cvar=".cv700_grauenSchutz" operation="GT" value=".5" /></triggered_effect>
+			</effect_group>
+		</buff>
+
 		<buff name="buff700_bannSchwere" hidden="true">
 			<stack_type value="replace" />
 			<duration value="2" />
@@ -230,6 +248,7 @@
 		<effect_group>
 			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_odemStufe"><requirement name="!HasBuff" buff="buff700_odemStufe" /></triggered_effect>
 			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_odemRegen"><requirement name="!HasBuff" buff="buff700_odemRegen" /></triggered_effect>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenSchutz"><requirement name="!HasBuff" buff="buff700_grauenSchutz" /></triggered_effect>
 		</effect_group>
 	</append>
 </config>

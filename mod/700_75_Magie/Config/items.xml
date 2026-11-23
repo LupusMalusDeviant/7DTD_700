@@ -454,7 +454,7 @@
 		     Bannkreis: ein Stecken; der Schlag zieht den Kreis. 30 Odem, 20 s Aura von 5 m um den
 		       Zaubernden (buff700_bannkreis, selfAOE wie Vanillas buffRingOfFire). -->
 		<item name="itm700_glutpfeil">
-			<property name="Tags" value="itm700_zauber,melee,noMods" />
+			<property name="Tags" value="itm700_zauber,noMods" />
 			<property name="DisplayType" value="meleeTorch" />
 			<property name="HoldType" value="2" />
 			<property name="Meshfile" value="@:Other/Items/Weapons/Melee/ClubWood/clubWoodPrefab.prefab" />

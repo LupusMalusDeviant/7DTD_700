@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.3): CVar-Namen. Gruen: ein Wert, der hier
+     geschrieben und gelesen wird; einer, den der Vertrag dem Server gibt; einer, den der Vertrag
+     nennt und der nur geschrieben wird; Namen ohne unsere Vorsilbe. Rot: ein Wert, den nur der
+     Vertrag nennt, aber einem Buff gibt; ein gelesener, den niemand schreibt; ein geschriebener,
+     den niemand liest. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/buffs">
+		<buff name="pruefBuffCvar">
+			<duration value="1" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cv700_pruefIntern" operation="set" value="1" />
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cv700_pruefIntern" operation="add" value="@cv700_pruefLeseFehlt" />
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cv700_pruefSchreibFehlt" operation="set" value="1" />
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".cv700_pruefAnzeige" operation="set" value="1" />
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="t700_pruefFremd" operation="set" value="@$pruefVanilla" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="LogMessage" message="pruef">
+					<requirement name="CVarCompare" cvar="cv700_pruefIntern" operation="GT" value="0" />
+					<requirement name="CVarCompare" cvar="cv700_pruefServer" operation="Equals" value="1" />
+					<requirement name="CVarCompare" cvar="cv700_pruefVertragOhneServer" operation="Equals" value="1" />
+				</triggered_effect>
+			</effect_group>
+		</buff>
+	</append>
+</config>

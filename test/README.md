@@ -5,7 +5,7 @@ Hier liegt, was **nur zum Testen** neben die Mod gelegt wird und **nie im Paket*
 
 | Ordner | Tut |
 |---|---|
-| `700_99_Test/` | verkürzt Uhren: die acht Lichtquellen aus F-08 brennen `GrowthRate` 2 statt 15 bis 60; seit WP9.10 dazu **11 Proben** (8 Buffs, 3 Gegenstände) für S-32 bis S-35, seit WP10.6 **12** (dazu `t700_odemVoll` für S-38 bis S-41) |
+| `700_99_Test/` | verkürzt Uhren: die acht Lichtquellen aus F-08 brennen `GrowthRate` 2 statt 15 bis 60; seit WP9.10 dazu **11 Proben** (8 Buffs, 3 Gegenstände) für S-32 bis S-35, seit WP10.6 **12** (dazu `t700_odemVoll` für S-38 bis S-41), seit WP11.3 **14** (dazu `t700_grauen90`, `t700_grauenZeigen` für S-43) |
 
 ## Benutzen
 
@@ -68,6 +68,7 @@ Danach die Protokolle beider Seiten aufheben; Claude liest die Zeilen `CVarLogVa
 | S-40 *(seit WP10.5d)* | `giveself itm700_reliquienkapsel` (und `bernsteinamulett`, `hammeramulett`, `kreuzanhaenger`), anlegen; zum Vergleich `giveself biomeWeatherItem4` | welcher Platz; verdrängen sich Amulett und Abzeichen; nur ein Amulett zugleich; mit Reliquienkapsel: weniger Schaden von einem Seuchentoten, aber nicht von einem Wolf |
 | S-41 *(seit WP10.6)* | ohne Punkt in Runenkunde ins Spiel; dann `giveselfskillpoints 10`, Runenkunde auf 2, später 5; `buff t700_odemVoll`; an ein Feuer stellen | ohne Runenkunde: keine Leiste über den Balken links unten; ab Stufe 2: Leiste erscheint, füllt sich langsam (20 Odem in rund 80 s), am Feuer doppelt so schnell; nach Segen sinkt sie; Protokoll `CVarLogValue: cv700_odemMax` 20 bzw. 50; nach Tod und nach Neustart: Odem noch da? |
 | S-42 *(seit WP10.9)* | Runenkunde auf 6, Glutzauber 2, Bannkunde 2 (`giveselfskillpoints 20`), `buff t700_odemVoll`; `giveself itm700_glutpfeil`, `itm700_lichtfunke`, `itm700_bannkreis` | Glutpfeil: trifft in 10 m, nicht in 30 m; Brand; Leiste −8; leer: geht nicht. Lichtfunke: Licht wie Fackel, Leiste sinkt beim Halten; leer: „Der Funke zehrt", Leben sinkt, endet beim Weglegen. Bannkreis: ein Schlag, Symbol 20 s, Leiste −30; Seuchentote in 5 m langsamer, außerhalb nicht |
+| S-43 *(seit WP11.3)* | `buff t700_grauenZeigen`; nachts allein ohne Licht im Wald stehen; dann ans Feuer; dann `buff t700_grauen90` | Protokoll: Wert steigt um rund 0,25 je 5 s (nachts draußen ohne Licht), am Feuer sinkt er; „Unruhig" erscheint bei 30; mit 90: alle drei Symbole, Sichtrand dunkler, ein Treffer gibt „Panik"; am Tag gehen die Stufen nacheinander (bei 80, 55, 25); mit Bärenmut: Schutz 0,25 im Protokoll; zu zweit (Dedicated): „Gesellschaft" bei beiden nah, bei keinem allein |
 | S-35 (3) *(seit WP10.3)* | Fertigkeitsfenster öffnen (K), Reihe der Symbole oben | sechs Bäume, „Runenkunde" mit Stern als sechster; passt die Reihe neben das Suchfeld; steht irgendwo ein Rohschlüssel wie `att700_runenkundiger`; einen Punkt hineinsetzen und Perks ansehen |
 
 **Nicht in diesem Lauf** (kein Ersatz durch eine Probe): S-32 (4) „Server setzt einen Wert" braucht

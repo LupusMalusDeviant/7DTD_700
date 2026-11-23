@@ -10,6 +10,8 @@
       buff t700_seuchennacht
       buff t700_odemFuellen       (fuer den Zauberstab aus items.xml)
       buff t700_odemVoll          (echter Odem auf den Hoechstwert, seit WP10.6)
+      buff t700_grauen90          (echtes Grauen auf 90, seit WP11.3)
+      buff t700_grauenZeigen      (Grauen, Zuwachs, Abbau, Schutz ins Protokoll, seit WP11.3)
 
   Was zaehlt, steht im PROTOKOLL: CVarLogValue schreibt "CVarLogValue: name == wert" auf der
   Seite, auf der der Buff laeuft; LogMessage schreibt "MinEventLogMessage: ...". Die Zeilen im
@@ -136,6 +138,28 @@
 				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="cv700_odemMax"/>
 				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_odemRegen"/>
 				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_odemAnteil"/>
+			</effect_group>
+		</buff>
+
+		<!-- S-43 (seit WP11.3): das Grauen. t700_grauen90 setzt den echten Wert auf 90 - alle
+		     drei Stufen muessen binnen 5 s erscheinen und dann mit dem Abbau nacheinander gehen.
+		     t700_grauenZeigen schreibt 10 Minuten lang alle 5 s Wert, Zuwachs, Abbau und Schutz
+		     ins Protokoll. -->
+		<buff name="t700_grauen90" hidden="true">
+			<duration value="1"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cv700_grauen" operation="set" value="90"/>
+				<triggered_effect trigger="onSelfBuffStart" action="LogMessage" message="t700 S-43: Grauen auf 90 gesetzt"/>
+			</effect_group>
+		</buff>
+		<buff name="t700_grauenZeigen" hidden="true">
+			<duration value="600"/>
+			<update_rate value="5"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="cv700_grauen"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_grauenZuwachs"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_grauenAbbau"/>
+				<triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar=".cv700_grauenSchutz"/>
 			</effect_group>
 		</buff>
 

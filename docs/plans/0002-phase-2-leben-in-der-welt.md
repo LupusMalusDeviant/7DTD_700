@@ -701,6 +701,9 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
 3. **WP11.3** `[Claude-prüfbar]` **Grauen, Stufe XML** (P2-E19): CVar, drei Stufen-Buffs, Quellen
    aus den vorhandenen Bedingungen (Nacht, kein Dach, Zufall, Zähler; Kurz-Check:119–127), „Am
    Feuer" senkt, der Regler aus/mild/voll über eine vorhandene Bedingung, soweit belegt. (M)
+   *Gebaut 2026-11-23 (D185, zu prüfen N-129, Spieltest S-43):* Zähler, drei Stufen, Panik,
+   Gesellschaft, Schutz; Regler liest `cv700_grauenDaempfung` (bis C#: „voll"). `kette-pruefen`
+   prüft CVar-Namen gegen Vertrag 07 (328 Gegenproben).
 4. **WP11.4** `[Claude-prüfbar]` **Grauen, C#-Teil** — nur nach der Triage aus WP9.6: Licht und
    Nähe messen und in den CVar schreiben. Reine Logik mit Unit-Tests; Patch mit Finding,
    Soll-Datei, Manifest-Zeile. Die Notiz aus Phase 1 gilt: ein eigener Wert für „dunkel", weil der

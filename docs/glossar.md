@@ -206,6 +206,11 @@ Nutzer D100 abnimmt.
 | `itm700_bannkreis` | Bannkreis | Ban Circle | — (Zauber, Aura) | F-15, D171, D183 — zu prüfen (N-127) |
 | `buff700_bannkreis` | Bannkreis | Ban Circle | — (Aura auf dem Zaubernden) | D183 — zu prüfen (N-127) |
 | `buff700_funkeZehrt` | Der Funke zehrt | The Spark Feeds | — (Lichtfunke ohne Odem) | D183 — zu prüfen (N-127) |
+| `buff700_grauenUnruhig` | Unruhig | Uneasy | — (Grauen ab 30) | F-17 B3, D185 — zu prüfen (N-129) |
+| `buff700_grauenVeraengstigt` | Verängstigt | Afraid | — (Grauen ab 60) | F-17 B3, D185 — zu prüfen (N-129) |
+| `buff700_grauenGrauen` | Grauen | Dread | — (Grauen ab 85) | F-17 B3, D185 — zu prüfen (N-129) |
+| `buff700_grauenPanik` | Panik | Panic | — (Treffer im Grauen) | F-17 B3, D185 — zu prüfen (N-129) |
+| `buff700_gesellschaft` | Gesellschaft | Company | — (Mitspieler in 10 m) | F-17 Grundsatz 5, D185 — zu prüfen (N-129) |
 
 ## 4. Werkstätten und Feuer
 

@@ -1121,6 +1121,27 @@ Test-Script 'kette-pruefen: vertippte Tags in Bedingungen werden rot, bekannte n
     Vanilla      = (Join-Path $data 'kette\tag\vanilla')
 } -MustContain @("Tag 'pruefTagFehlt' in !HoldingItemHasTags steht an keinem Gegenstand", "Tag 'pruefTagGetragenFehlt' in WornItems steht an keinem Gegenstand", 'Tags in Bedingungen: 5', '2 rot') -MustNotContain @("'pruefTagEigen' in", "'pruefTagVanilla' in", "'pruefTagZweit' in", "'pruefWesenTag'")
 
+# WP11.3 (2026-11-23): CVar-Namen. Nur gelesen nur mit Schreiber ausserhalb der XML im Vertrag
+# (Server/C#), nur geschrieben nur, wenn der Vertrag den Namen nennt. Der Name mit "Server" im
+# Wort darf sich nicht selbst freisprechen; Fliesstext im Vertrag zaehlt nicht; t700_ und $ nicht.
+Test-Script 'kette-pruefen: CVar ohne Schreiber oder ohne Leser wird rot, Vertrag und Server nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\cvar\buffs.xml')
+    Vanilla      = (Join-Path $data 'kette\tag\vanilla')
+    Zustaende    = (Join-Path $data 'kette\cvar\zustaende.md')
+} -MustContain @("CVar 'cv700_pruefVertragOhneServer' wird gelesen, aber nirgends geschrieben", "CVar 'cv700_pruefLeseFehlt' wird gelesen, aber nirgends geschrieben", "CVar 'cv700_pruefSchreibFehlt' wird geschrieben, aber nirgends gelesen", 'CVar-Verweise: 8', '3 rot') -MustNotContain @("'cv700_pruefIntern'", "'cv700_pruefServer'", "'.cv700_pruefAnzeige'", 't700_pruefFremd', 'pruefVanilla')
+
+# Ohne Vertrag in Pruefdaten sagt die Regel, dass sie nicht prueft - und wird davon nicht rot.
+Test-Script 'kette-pruefen: ohne Vertrag der Zustaende sind CVars nicht geprueft, gesagt' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\tag\items.xml')
+    Vanilla      = (Join-Path $data 'kette\tag\vanilla')
+} -MustContain @('CVar-Verweise: nicht geprueft', '0 rot')
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen

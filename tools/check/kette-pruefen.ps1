@@ -45,7 +45,11 @@ param(
     # Die NCalc.dll des Spiels, mit der die Bedingungen bedingter Bloecke gelesen werden
     # (seit 2026-11-22). Ohne Angabe <SDTD_PATH>\7DaysToDie_Data\Managed\NCalc.dll.
     # Gebraucht nur, wenn eine Patch-Datei einen <conditional> hat.
-    [string]$NCalc
+    [string]$NCalc,
+    # Der Vertrag der Zustaende (seit WP11.3): jeder unserer CVar-Namen, der nur gelesen oder nur
+    # geschrieben wird, muss dort stehen. Ohne Angabe docs/contracts/07-zustaende-phase-2.md -
+    # aber nur, wenn auch -Rezepte fehlt (echter Lauf); Pruefdaten nennen ihren eigenen.
+    [string]$Zustaende
 )
 
 $ErrorActionPreference = 'Stop'
@@ -1151,6 +1155,74 @@ if (Test-Path $tagVanillaPfad) {
     }
 }
 
+# CVAR-NAMEN (ergaenzt 2026-11-23, Plan-0002 WP11.3). Das Grauen rechnet in einem Buff mit
+# sieben CVars, liest drei, die C# schreiben soll, und den Schutz aus einem zweiten Modlet. Ein
+# vertippter Name liest still 0 - der Schutz wirkte nie, die Rechnung liefe weiter, keine Meldung.
+# Gelesen wird, was mit cv700_ oder .cv700_ beginnt: als Lesen zaehlt cvar="..." in einer
+# <requirement> und jedes @name in einem Attribut (Werte von ModifyCVar, CVarCompare, Eigenschaften)
+# sowie {cvar(name...)} in Oberflaechen-Dateien; als Schreiben cvar="..." in einem ModifyCVar.
+# Regel: ein Name, der nur gelesen oder nur geschrieben wird, muss im Vertrag der Zustaende
+# stehen (Vertrag 07: dort stehen die Werte, die der Server oder C# schreibt, und die, die eine
+# Oberflaeche liest). Ein Name, der in unseren Dateien geschrieben UND gelesen wird, ist gruen.
+$cvarRefs = 0
+$cvarGeprueft = $false
+if (-not $Zustaende -and -not $PSBoundParameters.ContainsKey('Rezepte')) {
+    $Zustaende = Join-Path $repoRoot 'docs\contracts\07-zustaende-phase-2.md'
+    if (-not (Test-Path $Zustaende)) { $unresolved += "Vertrag der Zustaende fehlt: $Zustaende" ; $Zustaende = $null }
+}
+if ($Zustaende -and (Test-Path $Zustaende)) {
+    $cvarGeprueft = $true
+    $vertragText = (Read-Datei $Zustaende)
+    if ($vertragText.Lesefehler) { Stop-Unpruefbar $vertragText.Lesefehler }
+    $imVertrag = @{}
+    foreach ($m in [regex]::Matches($vertragText.Text, '`(\.?cv700_[A-Za-z0-9_]+)')) { $imVertrag[$m.Groups[1].Value] = $true }
+    # Nur gelesen darf ein Name nur sein, wenn ihn der Vertrag einem Schreiber AUSSERHALB der
+    # XML gibt: eine Tabellenzeile, deren erste Spalte den Namen traegt, nennt "Server" oder
+    # "C#". Sonst haette ein umbenannter Schreiber den Vertragsnamen still verwaist (Gegenprobe
+    # beim Bau: .cv700_grauenSchutz ueberall im Schutz-Buff vertippt blieb sonst gruen).
+    $extern = @{}
+    foreach ($zeile in ($vertragText.Text -split "`n")) {
+        if (-not $zeile.StartsWith('|')) { continue }
+        $spalten = $zeile.Split('|')
+        if ($spalten.Count -lt 3) { continue }
+        # Gesucht wird in den Spalten NACH dem Namen: ein Name wie cv700_xyServer saehe sonst
+        # selbst wie ein Schreiber aus (Gegenprobe kette/cvar).
+        $rest = ($spalten[2..($spalten.Count - 1)] -join '|')
+        if ($rest -notmatch 'Server|C#') { continue }
+        foreach ($m in [regex]::Matches($spalten[1], '`(\.?cv700_[A-Za-z0-9_]+)')) { $extern[$m.Groups[1].Value] = $true }
+    }
+    $gelesen = @{}
+    $geschrieben = @{}
+    $cvarMuster = '^\.?cv700_[A-Za-z0-9_]+$'
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        foreach ($n in $xml.SelectNodes('//*[@cvar]')) {
+            $name = $n.GetAttribute('cvar')
+            if ($name -notmatch $cvarMuster) { continue }
+            $cvarRefs++
+            if ($n.LocalName -eq 'triggered_effect' -and $n.GetAttribute('action') -eq 'ModifyCVar') { $geschrieben[$name] = $datei }
+            else { $gelesen[$name] = $datei }
+        }
+        foreach ($a in $xml.SelectNodes('//@*')) {
+            foreach ($m in [regex]::Matches($a.Value, '@(\.?cv700_[A-Za-z0-9_]+)')) { $cvarRefs++; $gelesen[$m.Groups[1].Value] = $datei }
+            foreach ($m in [regex]::Matches($a.Value, '\{cvar\((\.?cv700_[A-Za-z0-9_]+)')) { $cvarRefs++; $gelesen[$m.Groups[1].Value] = $datei }
+        }
+    }
+    foreach ($name in $gelesen.Keys) {
+        if (-not $geschrieben.ContainsKey($name) -and -not $extern.ContainsKey($name)) {
+            $unresolved += "CVar '$name' wird gelesen, aber nirgends geschrieben, und der Vertrag gibt ihm keinen Schreiber ausserhalb der XML  ($($gelesen[$name]))"
+        }
+    }
+    foreach ($name in $geschrieben.Keys) {
+        if (-not $gelesen.ContainsKey($name) -and -not $imVertrag.ContainsKey($name)) {
+            $unresolved += "CVar '$name' wird geschrieben, aber nirgends gelesen und steht nicht im Vertrag  ($($geschrieben[$name]))"
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
@@ -1166,6 +1238,7 @@ Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltunge
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
+Write-Output ("  CVar-Verweise: {0}" -f $(if ($cvarGeprueft) { $cvarRefs } else { 'nicht geprueft (kein Vertrag der Zustaende angegeben)' }))
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

@@ -4141,3 +4141,33 @@ zählt nicht mit (2 rot). Am echten Modlet: `lichtfunk700` zweimal rot.
 **Grenzen:** Tags auf Wesen (`EntityTagCompare`), Block-Tags und `buff_tags` liest die Regel nicht. Groß- und
 Kleinschreibung unterscheidet sie nicht. Der Zweig „nicht geprüft" hat keine eigene Gegenprobe:
 `kette-pruefen` braucht Vanillas `items.xml` schon für die Gegenstände und bricht ohne sie früher ab.
+
+## Nachtrag WP11.3 — CVar-Namen gegen Vertrag 07 in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-129)
+
+Gebaut im autonomen Lauf (Plan-0002 WP11.3, D185).
+
+**Anlass.** Das Grauen rechnet in einem Buff mit sieben CVars, liest drei, die erst C# schreiben soll,
+und den Schutz aus einem anderen Modlet. Ein vertippter Name liest still 0. Die Gegenprobe
+`@.cv700_grauenSchtuz` blieb in `check-all` grün.
+
+**Die Regel.** Gelesen werden Namen, die mit `cv700_` oder `.cv700_` beginnen. Als **Lesen** zählt
+`cvar="…"` außerhalb eines `ModifyCVar` (also in `<requirement>`), jedes `@name` in einem Attribut und
+`{cvar(name…)}` in Oberflächen-Dateien; als **Schreiben** `cvar="…"` eines `ModifyCVar`. Ein Name, der in
+den Patch-Dateien geschrieben **und** gelesen wird, ist grün. **Nur gelesen** ist er grün nur, wenn
+Vertrag 07 ihm in einer Tabellenzeile (erste Spalte: der Name) einen Schreiber außerhalb der XML gibt —
+„Server" oder „C#" in den Spalten danach. **Nur geschrieben** ist er grün, wenn Vertrag 07 ihn irgendwo
+nennt (z. B. ein Wert für die Oberfläche). Neuer Parameter `-Zustaende` (Pfad des Vertrags); im echten
+Lauf `docs/contracts/07-zustaende-phase-2.md`, fehlt er dort, ist das rot. Neue Zeile:
+`CVar-Verweise: N` (am echten Stand 110).
+
+**Gegenproben** (2 neu, 326 → **328**): `kette/cvar` — ein gelesener Name ohne Schreiber, ein
+geschriebener ohne Leser und einer, den der Vertrag nur einem Buff gibt, sind rot; ein Name mit „Server"
+im eigenen Wort spricht sich nicht frei (die Gegenprobe fand diesen Fehler beim Bau); Vertragsname mit
+Server-Schreiber, nur geschriebener Vertragsname, `t700_` und `$` bleiben grün (3 rot). Ohne `-Zustaende`
+in Prüfdaten „nicht geprüft", 0 rot. Am echten Modlet: `@.cv700_grauenSchtuz` rot,
+`{cvar(.cv700_odemAntel` rot, `.cv700_grauenSchutz` im ganzen Schutz-Buff vertippt rot.
+
+**Grenzen:** die Regel prüft Namen, nicht Werte oder Einheiten. Ein Name, der in einer Datei
+geschrieben und in derselben vertippt gelesen wird, fällt nur auf, wenn der Tippfehler nicht auch
+geschrieben wird. Die Test-Überlagerung (`test/`) gehört nicht zu den Patch-Dateien. Die Schreiber-Spalte
+wird als Text gelesen, nicht als Tabelle verstanden.
