@@ -2588,6 +2588,10 @@ werden:
   gehören zu Vanillas Biom-Gefahren (Rauch, Hitze, Kälte, Strahlung), und alle vier Mittel
   dagegen — die vier „Smoothies" und die Ausrüstungs-Zutaten — sind gesperrt. Ob die
   Gefahren in Phase 1 an sind und was dann gegen sie hilft, steht in keinem Dokument.
+  *Stand 2026-11-23 (Plan-0002 WP1.6, D137):* neu gemessen, die 35 stimmen; neun haben ein
+  lebendes Gegenstück bekommen (`700_50_Fortschritt/Config/challenges.xml`), die 16 der
+  Biom-Reihen sind mit der Vorlage „Jahr 700" verborgen (D136), zehn stehen noch. Frage (2)
+  ist weiter offen.
 - **Felder ~~lassen~~ ließen sich nicht bauen** (gefunden ebenda) — **behoben am 2026-11-22
   (D89), im Spiel nicht gesehen.** Vanillas Rezept für das Feld
   (`farmPlotBlockVariantHelper`) verlangt 25 `resourcePotassiumNitratePowder`, und das ist

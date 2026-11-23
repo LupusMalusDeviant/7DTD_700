@@ -6,7 +6,7 @@ Vertrag geändert und erneut abgenommen — nicht umgekehrt.
 
 | Vertrag | Inhalt | Status |
 |---|---|---|
-| [01 — Modlet-Grenzen](01-modlet-grenzen.md) | Acht Modlets, Ladereihenfolge über Zahlenpräfix, was in welches gehört, `ModInfo.xml`, eine Fassung für alle | **abgenommen 2026-11-22**; Nachträge Phase 2 Teil 1 und 1b **Abnahme offen** (Symbole im Modlet, Test-Überlagerung `test/700_99_Test`; Spielvorlage in `700_60_Welt`) |
+| [01 — Modlet-Grenzen](01-modlet-grenzen.md) | Acht Modlets, Ladereihenfolge über Zahlenpräfix, was in welches gehört, `ModInfo.xml`, eine Fassung für alle | **abgenommen 2026-11-22**; Nachträge Phase 2 Teil 1, 1b und 1c **Abnahme offen** (Symbole im Modlet, Test-Überlagerung `test/700_99_Test`; Spielvorlage in `700_60_Welt`; Herausforderungen in `700_50_Fortschritt`) |
 | [02 — Namensraum](02-namensraum.md) | Kennung gegen Anzeigename, Präfixe je Art, Deutsch in Kennungen, `Localization.csv` und ihre Spalten, Ortsnamen (D1) | **abgenommen 2026-11-22** |
 | [03 — XPath-Regeln](03-xpath-regeln.md) | Die elf Patch-Operationen, die 52 patchbaren Dateien, sperren statt löschen, bedingte Blöcke mit `mod_loaded` | **abgenommen 2026-11-22** |
 | [04 — Prüfwerkzeuge](04-pruefwerkzeuge.md) | `mod700check` mit drei Befehlen, `ConfigsDump` als Datenquelle, Exit-Codes, Gegenproben | **abgenommen 2026-11-22** (als Block, mit allen Nachträgen); fünf spätere Nachträge **Abnahme offen** (Dump-Suche, Leermeldung, zweites Review der Vorprüfung, Prüfungen der Phase 2 Teil 1: *Symbole* und *Asset-Register*, Auftragsregeln, Sprachschlüssel einer Spielvorlage) |

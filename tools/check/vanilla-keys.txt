@@ -1360,3 +1360,30 @@ buffSnow_Storm_Recover01Name              # Schneesturm: Abklingen
 drugHerbalAntibiotics                     # Kraeutersud (D99/D133)
 drugHerbalAntibioticsDesc
 medicalT2-2                               # Stufe 2: Kraeutersud
+challengePlaceDewCollector                # D137: neun Herausforderungen mit neuem Ziel, je Titel, Kurztext, Beschreibung
+challengePlaceDewCollectorShort
+challengePlaceDewCollectorDesc
+challengeCraftPipeBomb
+challengeCraftPipeBombShort
+challengeCraftPipeBombDesc
+challengeCraftGasCan
+challengeCraftGasCanShort
+challengeCraftGasCanDesc
+challengeHarvestPipes
+challengeHarvestPipesShort
+challengeHarvestPipesDesc
+challengeHarvestPolymers
+challengeHarvestPolymersShort
+challengeHarvestPolymersDesc
+challengeHarvestCarParts
+challengeHarvestCarPartsShort
+challengeHarvestCarPartsDesc
+challengeHarvestMechanicalParts
+challengeHarvestMechanicalPartsShort
+challengeHarvestMechanicalPartsDesc
+challengeHarvestElectricParts
+challengeHarvestElectricPartsShort
+challengeHarvestElectricPartsDesc
+challengeFarmingChrysanthemum
+challengeFarmingChrysanthemumShort
+challengeFarmingChrysanthemumDesc

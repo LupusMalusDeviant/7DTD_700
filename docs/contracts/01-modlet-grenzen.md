@@ -234,3 +234,28 @@ Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.5, D136). Abnahme: N
 `SandboxCode` in `serverconfig.xml`). Ob das Spiel sie anzeigt und vorwählt, ist nicht gesehen
 (S-11). Der Code ist gerechnet; keine Prüfung im Repository kann ihn gegen das Spiel halten —
 `kette-pruefen` sieht nur, dass der XPath `/sandbox_overrides` in Vanilla trifft.
+
+## Nachtrag Phase 2, Teil 1c — Herausforderungen in `700_50_Fortschritt`, 2026-11-23, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D137). Abnahme: N-12.
+
+1. `700_50_Fortschritt` trägt `Config/challenges.xml`. Eine Herausforderung ist Fortschritt des
+   Spielers, kein Gegenstand und kein Text; kein anderes Modlet fasst die Datei an. Der Purge
+   (`700_10_Purge`) erzeugt sie **nicht**: ein Ziel ist kein Weg zu einem Gegenstand, und was an
+   seine Stelle tritt, ist eine Entscheidung, keine Ableitung aus der Sperrliste.
+2. Die Datei ist von Hand geschrieben (D53) und **biegt Ziele um**: `setattribute` und
+   `removeattribute` an `challenge` und `objective`, `remove` nur an einem einzelnen `objective`.
+   Sie entfernt **keinen** Knoten `challenge` und **keine** Gruppe, solange nicht gelesen ist,
+   was ein alter Spielstand mit einer fehlenden Herausforderung tut (Finding F-18).
+3. Die Kennung einer Herausforderung bleibt Vanillas Kennung, auch wenn das Ziel ein anderes
+   ist (`craftPipeBomb` heißt im Spiel „Webstuhl bauen"). Das ist gewollt: Gruppe, Platz,
+   Belohnung und der Fortschritt alter Spielstände hängen an der Kennung.
+4. Titel, Kurztext und Beschreibung sind Vanillas Schlüssel, überschrieben im Sprach-Modlet;
+   jeder überschriebene Schlüssel steht in `tools/check/vanilla-keys.txt`.
+5. **Reihenfolge je Ziel:** erst alles, was das Ziel über seinen alten Gegenstand findet, zuletzt
+   der Gegenstand selbst. Jede Zeile muss in Vanilla treffen (`kette-pruefen` rechnet jeden XPath
+   einzeln gegen Vanilla) **und** nach den Zeilen davor.
+
+**Grenzen.** Keine Prüfung im Repository weiß, ob ein Ziel erfüllbar ist — weder die neun neuen
+noch die zehn, die stehen bleiben. Die Zahl „35" ist mit einem Skript außerhalb des Repositorys
+gemessen. Ob das Spiel die neuen Ziele zählt, ist nicht gesehen (S-12).

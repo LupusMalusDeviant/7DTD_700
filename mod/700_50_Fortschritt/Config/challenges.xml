@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_50_Fortschritt / challenges.xml
+	     Plan-0002 WP1.6, D104, D137. Die Texte dazu stehen in 700_90_Sprache.
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     ===================================================================
+	     NEUN ZIELE, DIE NACH DEM PURGE NIEMAND MEHR ERFUELLEN KANN,
+	     BEKOMMEN EIN LEBENDES GEGENSTUECK
+	     ===================================================================
+
+	     35 von 148 sichtbaren Herausforderungen nennen als Ziel etwas, das der Purge
+	     gesperrt hat (gemessen am 2026-11-23 gegen Vanilla und die heutige Sperrliste):
+	     Rohrbomben, Benzinkanister, Rohre, Kunststoff, Autoteile. Der Purge sieht sie
+	     nicht, weil ein Ziel kein Weg zu einem Gegenstand ist.
+
+	     Hier steht nur, was sich ERSETZEN laesst (D104: "ein Ziel mit lebendem
+	     Gegenstueck wird ersetzt"). Die Herausforderung behaelt ihren Namen, ihre
+	     Gruppe, ihren Platz und ihre Belohnung - geaendert wird das Ziel, bei fuenf
+	     dazu das Symbol. Kein Knoten 'challenge' wird entfernt: was ein alter
+	     Spielstand mit einer fehlenden Herausforderung tut, ist nicht gelesen.
+
+	     NICHT hier: die 16 Ziele der vier Biom-Reihen (ihr Reiter ist verborgen,
+	     solange der Biom-Fortschritt aus ist - D136) und zehn Ziele ohne Gegenstueck
+	     (Salpeter, Oelschiefer, sechs Feldfruechte, zwei Arzneien). Ueber die
+	     entscheidet D137 erst, wenn gelesen ist, was das Spiel mit einer kleineren
+	     Gruppe macht.
+
+	     REIHENFOLGE JE ZIEL: zuerst alles, was das Ziel ueber seinen ALTEN Gegenstand
+	     findet, zuletzt der Gegenstand selbst. Danach traefe der XPath nichts mehr.
+
+	     'block_tag', 'override_tracker_index' und 'track_distance' fallen an den
+	     umgebogenen Ernte-Zielen weg: sie zeigen auf Vanillas Spuelbecken, Autos und
+	     Lampen, und die Verfolgung fuehrte den Spieler sonst genau dorthin. Ob
+	     'block_tag' nur die Wegmarke speist oder die Zaehlung einschraenkt, ist nicht
+	     gelesen - ohne sie zaehlt in beiden Faellen, was geerntet wird (so wie bei
+	     'gathererWood', das keines der drei Attribute traegt). -->
+
+	<!-- 1. Tausammler platzieren -> Wasser abkochen (Feuerstelle mit Kochtopf, D134).
+	        Die Herausforderung hat genau ein Ziel; der XPath nennt darum keinen Gegenstand.
+	        So trifft jede der drei Zeilen in Vanilla UND nach den Zeilen davor - mit einem
+	        Praedikat auf 'block' traefe die dritte im Spiel, aber nicht in der Pruefung. -->
+	<setattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="type">Craft</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="item">drinkJarBoiledWater</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='placeDewCollector']/objective" name="block" />
+
+	<!-- 2. Rohrbomben fertigen -> an der Zimmermannsbank einen Webstuhl bauen (D57). -->
+	<setattribute xpath="/challenges/challenge[@name='craftPipeBomb']/objective[@item='thrownAmmoPipeBomb']" name="count">1</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='craftPipeBomb']/objective[@item='thrownAmmoPipeBomb']" name="item">blk700_webstuhl</setattribute>
+
+	<!-- 3. Benzinkanister fertigen -> in der Kraeuterkueche Bier brauen. -->
+	<setattribute xpath="/challenges/challenge[@name='craftGasCan']/objective[@item='ammoGasCan']" name="count">10</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='craftGasCan']/objective[@item='ammoGasCan']" name="item">drinkJarBeer</setattribute>
+
+	<!-- 4. Rohre sammeln -> Federn aus Vogelnestern. -->
+	<setattribute xpath="/challenges/challenge[@name='harvestPipes']" name="icon">ui_game_symbol_tracking_chicken</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestPipes']/objective[@item='resourceMetalPipe']" name="item">resourceFeather</setattribute>
+
+	<!-- 5. Kunststoff sammeln -> Stofffetzen. -->
+	<setattribute xpath="/challenges/challenge[@name='harvestPolymers']" name="icon">ui_game_symbol_scrap</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestPolymers']/objective[@item='resourceScrapPolymers']" name="item">resourceCloth</setattribute>
+
+	<!-- 6. Autoteile sammeln -> erlegte Tiere ausnehmen: Knochen und Tierfett.
+	        Drei Ziele werden zwei. 'is_block' wie bei 'harvestAnimals' (Fleisch vom Tier). -->
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']" name="icon">ui_game_symbol_skull</setattribute>
+	<remove xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='resourceRadiator']" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="is_block">false</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="count">10</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='smallEngine']" name="item">resourceBone</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="is_block">false</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="count">10</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='harvestCarParts']/objective[@item='carBattery']" name="item">resourceAnimalFat</setattribute>
+
+	<!-- 7. Mechanische Teile sammeln -> Buntmetall. -->
+	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']" name="icon">ui_game_symbol_forge</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="count">20</setattribute>
+	<setattribute xpath="/challenges/challenge[@name='harvestMechanicalParts']/objective[@item='resourceMechanicalParts']" name="item">resourceScrapBrass</setattribute>
+
+	<!-- 8. Elektrische Teile sammeln -> Schmiedeeisen bergen. -->
+	<setattribute xpath="/challenges/challenge[@name='harvestElectricParts']" name="icon">ui_game_symbol_hammer</setattribute>
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="block_tag" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="override_tracker_index" />
+	<removeattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="track_distance" />
+	<setattribute xpath="/challenges/challenge[@name='harvestElectricParts']/objective[@item='resourceElectricParts']" name="item">resourceForgedIron</setattribute>
+
+	<!-- 9. Chrysanthemen ernten -> Pilze ernten (die vierte Feldfrucht, die lebt). -->
+	<removeattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="block_tag" />
+	<setattribute xpath="/challenges/challenge[@name='farmingChrysanthemum']/objective[@item='resourceCropChrysanthemumPlant']" name="item">foodCropMushrooms</setattribute>
+</config>
