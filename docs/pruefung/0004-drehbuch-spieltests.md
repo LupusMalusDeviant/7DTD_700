@@ -65,7 +65,7 @@ dass ein Schritt den nächsten vorbereitet.
 
 | Block | Zeilen, in dieser Reihenfolge | Dauer | Hinweis |
 |---|---|---|---|
-| B2 Magie | S-41, S-35 (3), S-36, S-37, S-38, S-39, S-40, S-42 | 43 min | S-41 zuerst, ohne Punkt in Runenkunde; dann `giveselfskillpoints 20` einmal für alles |
+| B2 Magie | S-41, S-35 (3), S-36, S-37, S-38, S-39, S-40, S-42 | 43 min | S-41 zuerst, ohne Punkt in Runenkunde; dann `giveselfxp 1000000` einmal für alles |
 | B3 Licht, Nacht, Grauen | S-06, S-19, S-18, S-20, S-43 (1)–(5), S-45 (1)(2) | 36 min | S-06 gleich am Anfang setzen (brennt 2 min, läuft nebenher); S-43 vor S-45, beide nachts draußen |
 | B6 Handwerk und Heilkunde | S-49, S-50, S-52, S-53 | 45 min | *(seit WP12.3)* am Ende des Abends; S-52 (2) im Schnee-Biom, nachts; S-49 (3) und S-50 (3) verlangen Speichern und Neuladen — einmal Laden für beide, das beendet die Sitzung ohnehin |
 
