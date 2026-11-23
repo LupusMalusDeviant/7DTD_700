@@ -19,6 +19,11 @@
 	       A                     Kopf (Version des Formats in V 3.40 b10)
 	       AAJ ABJ ACJ ADJ ARF BNC   Vanillas Vorwahl "Adventurer", unveraendert
 	                             (derselbe Code steht in serverconfig.xml)
+	       EWA                   Haendlerstimmen aus (TraderDialog = 126 = E,W; Ja/Nein,
+	                             Index 0 = aus). Seit 2026-11-23, WP8.5, D164, zu pruefen
+	                             N-109. Beleg: Finding WP8-haendlerstimmen-traderdialog.
+	                             Schaltet die Rede der Figur stumm, NICHT die Ansagen
+	                             am Lautsprecher (Finding, Abschnitt 3).
 	     Ohne die sechs Gruppen stuende die Vorlage auf den rohen Vorgaben und
 	     waere nebenbei eine andere Schwierigkeit als Vanillas Vorwahl.
 
@@ -33,6 +38,6 @@
 	     Die Attribute stehen vollstaendig da wie in Vanillas Beispielzeile; eine
 	     Vorlage ohne Pflichtangabe faellt nach F-17 vermutlich ohne Meldung weg. -->
 	<append xpath="/sandbox_overrides">
-		<preset name="700" localized_name="700_vorlageName" description="Recommended for this mod: default difficulty." description_key="700_vorlageDesc" icon="" code="AAAJABJACJADJARFBNC" default="true" />
+		<preset name="700" localized_name="700_vorlageName" description="Recommended for this mod: default difficulty." description_key="700_vorlageDesc" icon="" code="AAAJABJACJADJARFBNCEWA" default="true" />
 	</append>
 </config>

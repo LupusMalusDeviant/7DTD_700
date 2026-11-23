@@ -120,6 +120,15 @@ die Spieloption `TraderDialog` in der Vorlage „Jahr 700", **sobald belegt ist*
 nimmt und nichts bricht (Finding in WP8.5). Gesprochen wird dann nur im Text: Begrüßung, Abschied,
 „geschlossen", je Händler drei bis fünf kurze Zeilen im schlichten Ton (WP8.5).
 
+*Stand 2026-11-23 (WP8.5 Teil 2, D164, zu prüfen N-109):* belegt im
+[Finding WP8](../rea/findings/WP8-haendlerstimmen-traderdialog.md) — `TraderDialog` ist Ja/Nein,
+Vorgabe ein, und schaltet die **Figur** stumm (`EntityTrader::PlayVoiceSetEntry`). Gebaut: `EWA` im
+Code der Vorlage. **Nicht** stumm werden die Ansagen am Lautsprecher (Öffnen, Warnung, Schließen);
+die ersetzt ein eigener Klang über die Block-Eigenschaften `OpenSound`/`CloseSound`/`WarningSound`
+(Vorschlag N-109) oder das Umkleiden der Orte (WP6.5b). Eigene gesprochene oder geschriebene
+Händlerzeilen über Begrüßung und Gespräch hinaus (D161) gibt es nicht: ein Textfeld ohne Klang
+bietet Vanilla für die Figur nicht — Notiz für Phase 3 (eigene Stimmen, D50).
+
 ### E. Auftragsarten, gedeutet
 
 | Vanilla | DE | EN | Deutung im Angebotstext |
