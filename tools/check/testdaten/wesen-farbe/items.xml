@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz 'wesen-farbe': nur damit die Quelle als Config gilt. Rot macht den Satz allein
+     die fehlende Farbe in entityclasses.xml. -->
+<items>
+	<item name="pruefHolz">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

@@ -1,0 +1,11 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1: eine eigene Wesen-Klasse. Kein Spielinhalt.
+	     Der Anzeigename eines Wesens ist der Name seiner Klasse - das Spiel schlaegt ihn als
+	     Schluessel nach. Die Farbe daneben nennt keinen Schluessel. -->
+	<append xpath="/entity_classes">
+		<color name="col700_pruef" value=".5,.7,1, 0" />
+		<entity_class name="pruef700_wesen" extends="animalZombieDog">
+			<property name="MatColor" value="col700_pruef" />
+		</entity_class>
+	</append>
+</config>

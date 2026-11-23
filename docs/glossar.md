@@ -109,6 +109,7 @@ Nutzer D100 abnimmt.
 | `animalZombieBoar` | Seucheneber | Plague Boar | Zombie Boar | F-06, D147 (Vorschlag) |
 | `animalZombieDog` | Seuchenhund | Plague Hound | Zombie Dog | F-06, D147 (Vorschlag) |
 | `animalZombieVulture` | Seuchengeier | Plague Vulture | Zombie Vulture | F-06, D147 (Vorschlag) |
+| `ent700_spukhund` | Spukhund | Phantom Hound | — (eigene Klasse auf dem Modell des Seuchenhunds) | F-06 §5, D150 (Vorschlag, N-69) |
 | `zombieArlene` | Seuchentote Magd | Plague-dead Maid | Arlene | F-06, D147 (Vorschlag) |
 | `zombieBiker` | Seuchentoter Schmied | Plague-dead Smith | Biker | F-06, D147 (Vorschlag) |
 | `zombieBoe` | Seuchentoter Knecht | Plague-dead Farmhand | Boe | F-06, D147 (Vorschlag) |

@@ -1395,3 +1395,4 @@ zombieYoCharged,entityclasses,Entity,,,,"Ember-Eyed Lad",,"Glutäugiger Bursche"
 zombieYoFeral,entityclasses,Entity,,,,"Blighted Lad",,"Verderbter Bursche",,,,,,,,,,,
 zombieYoInfernal,entityclasses,Entity,,,,"Damned Lad",,"Verdammter Bursche",,,,,,,,,,,
 zombieYoRadiated,entityclasses,Entity,,,,"Festering Lad",,"Schwärender Bursche",,,,,,,,,,,
+ent700_spukhund,entityclasses,Entity,,,,"Phantom Hound",,"Spukhund",,,,,,,,,,,

@@ -334,6 +334,14 @@ function Read-Knoten {
     if ((Test-Gleich $name 'preset') -and $Knoten.HasAttribute('localized_name')) {
         Add-Genannt $Knoten.GetAttribute('localized_name') '<preset> @localized_name' $Datei -Einzeln -Zaehlt $zaehlt
     }
+    # Eine Wesen-Klasse (<entity_class> in entityclasses.xml) nennt ihren Anzeigenamen ueber
+    # ihren eigenen Namen: Entity::get_LocalizedEntityName liest EntityClass::entityClassName
+    # und schlaegt ihn als Schluessel nach (Plan-0002 WP5.5, Vertrag 04 Nachtrag WP5.5). Bei
+    # Vanillas Klassen faellt das nicht auf - Vanilla fuehrt die Schluessel; eine EIGENE Klasse
+    # (ent700_...) stand ohne diese Regel als "wird nicht gelesen" da.
+    if ((Test-Gleich $name 'entity_class') -and $Knoten.HasAttribute('name')) {
+        Add-Genannt $Knoten.GetAttribute('name') '<entity_class> @name' $Datei -Einzeln -Zaehlt $zaehlt
+    }
     foreach ($kind in $Knoten.get_ChildNodes()) { Read-Knoten $kind $Datei $Angewandt }
 }
 

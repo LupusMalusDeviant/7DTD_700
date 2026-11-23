@@ -1,0 +1,10 @@
+# Soll-Signaturen für das Finding „Wesen: Farbe, Größe und Stufen" (Plan-0002 WP5.5), Build Steam 26309840.
+# Format: Typ<TAB>Member<TAB>Signatur  — genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp55.tsv
+# Exit 0 = alle Soll-Signaturen vorhanden, Exit 1 = mindestens eine fehlt oder weicht ab.
+# Kein Patch hängt daran: die Zeilen sichern nur, dass das Finding noch zum Build passt.
+EntityClassesFromXml	Load	static System.Collections.IEnumerator EntityClassesFromXml::Load(XmlFile, bool)
+EntityClassesFromXml	LoadMain	static System.Collections.IEnumerator EntityClassesFromXml::LoadMain(XmlFile)
+EntityClassesFromXml	LoadAppend	static System.Collections.IEnumerator EntityClassesFromXml::LoadAppend(XmlFile)
+EntityClass	Init	EntityClass EntityClass::Init()
+EModelBase	createModel	void EModelBase::createModel(World, EntityClass)

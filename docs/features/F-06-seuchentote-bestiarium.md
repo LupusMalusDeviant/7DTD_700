@@ -61,13 +61,22 @@ jedem Namen ausgeschrieben: 155 Sprachzeilen für die Seuchentoten, 21 für die 
 ~~Stärkestufen „Verderbt" bzw. „Moorleiche" statt Feral/Radiated~~ — „Moorleiche" ist nur noch die
 Sagengestalt im Moor (D100; Prüfung 0003 W-25).
 
-| Vanilla | Deutsch (m / w) | Englisch | Woran man sie erkennt (Vanilla-Verhalten, unverändert — **aus der Erinnerung, nicht nachgemessen**; WP5.5 misst es an den Klassen) |
+| Vanilla | Deutsch (m / w) | Englisch | Was die Stufe ausmacht — **gemessen mit WP5.5** an `zombieBoe…` und den Hand-Gegenständen (V 3.40 b10, unverändert) |
 |---|---|---|---|
-| — | — | — | die Grundfassung |
-| `Feral` | Verderbter / Verderbte | Blighted | läuft immer, Augen leuchten |
-| `Radiated` | Schwärender / Schwärende | Festering | heilt sich |
-| `Charged` | Glutäugiger / Glutäugige | Ember-Eyed | schlägt mit Wirkung (Vanilla: Stromschlag) |
-| `Infernal` | Verdammter / Verdammte | Damned | brennt und steckt an |
+| — | — | — | die Grundfassung: 200 Lebenspunkte, Schlag 10 (Blöcke 8) |
+| `Feral` | Verderbter / Verderbte | Blighted | eigenes Modell (`…Feral.prefab`), 550 Lebenspunkte, Schlag 20 (Blöcke 24), schneller im Angriff, härter zu zerlegen |
+| `Radiated` | Schwärender / Schwärende | Festering | 900 Lebenspunkte; **heilt sich**, sobald er getroffen wird (`buffRadiatedRegen`); Schlag wie der Verderbte; glimmt **grün** |
+| `Charged` | Glutäugiger / Glutäugige | Ember-Eyed | 1100 Lebenspunkte; **schlägt am härtesten** (60, Blöcke 150); wechselndes Tempo; glimmt **blau** |
+| `Infernal` | Verdammter / Verdammte | Damned | 1700 Lebenspunkte; **bricht Blöcke am stärksten** (250, Schlag 45); fällt kaum um; Tempo mit Anläufen; glimmt **rot** |
+
+**Zwei Dinge, die die Messung richtigstellt** (N-69): Ein Stromschlag und ein Brand stehen in
+diesem Build **nicht** an den Stufen — die Hand-Gegenstände `meleeHandZombieCharged` und
+`…Infernal` tragen dieselben Wirkungen wie der gewöhnliche Schlag, nur mehr Schaden. Es gibt also
+keinen Effekt-Text umzudeuten. Und: das Glimmen kommt aus drei `<color>`-Knoten in
+`entityclasses.xml` (`radiated` grün, `charged` blau, `infernal` rot) — **der „Glutäugige" glimmt
+blau, der „Verdammte" rot.** Name und Erscheinung passen bei der dritten Stufe nicht zusammen; die
+Farben sind eine XML-Zeile, die Namen eine Tabellenzeile (Finding
+[`F-06-wesen-farbe-und-stufen`](../rea/findings/F-06-wesen-farbe-und-stufen.md)).
 
 **So entsteht ein Name** (Vertrag 02, Nachtrag Phase 2, Teil B — WP5.2):
 
@@ -88,8 +97,9 @@ sind offen (Glossar §2 und §10).
 eines Wesens wird von `GameManager::GameMessageServer` und `EntityPlayer::Kill` geholt — das sind
 die Meldungen im Chat („… wurde von … getötet") —, dazu von Kartenobjekten und Twitch-Meldungen.
 Über dem Kopf eines Seuchentoten steht kein Name. Die Namen sind also **selten sichtbar**; das
-Aussehen wiegt schwerer (S-26). **Zu prüfen im Spiel:** die Wirkung der dritten Stufe ist in Vanilla ein
-Stromschlag — Name und Text des Effekts gehören zu WP5.5, die Mechanik bleibt (P5).
+Aussehen wiegt schwerer (S-26). ~~**Zu prüfen im Spiel:** die Wirkung der dritten Stufe ist in Vanilla ein
+Stromschlag — Name und Text des Effekts gehören zu WP5.5, die Mechanik bleibt (P5).~~ Gemessen mit
+WP5.5: die dritte Stufe trägt in V 3.40 b10 keinen Stromschlag (siehe die Tabelle oben).
 
 ## 3. Zuordnung der 36 Grundnamen
 
@@ -214,7 +224,7 @@ Auerochse und andere neue Tiere: Phase 3, brauchen Assets.
 | **Nachzehrer** — der Tote, der aus dem Grab heraus die Lebenden auszehrt | `zombieWight*` — nur in Stufen (F R C I), 835 Gruppeneinträge | in vier Landschaftsgruppen mit kleinem Gewicht (0,05 bis 2): Orte und Moorland | Name und Text; zäh, heilt sich (Stufe `Radiated` tut das schon). „Frisst Leichen" ist ohne Code nicht belegt — offen |
 | **Schreiende** — Klageweib, ruft die Toten herbei | `zombieScreamer` (F R C), 7 Gruppen | in keiner Landschaftsgruppe — kommt über die Hitze-Karte (D64) | Name und Text. Ist unsere einzige weibliche Sagengestalt und **kein** Hexenbild (D109) |
 | **Moorleiche** — Wiedergänger aus dem Sumpf | `zombieMutated` (F R C I), 346 Gruppeneinträge; Unterbau `EntityZombieCop` (speit) | **nur** im Moorland, in allen fünf Fassungen | Name und Text. Der Hinterhalt aus Wasser ist ohne Code nicht belegt — offen (Prüfung 0003 W-25 ist damit gelöst: eine Gestalt, ein Ort) |
-| **Spuk-Hund** — der schwarze Hund als Todesbote | `animalZombieDog` ist **häufig** (88 Gruppen, alle fünf Landschaften) und heißt darum Seuchenhund | — | eine **eigene, seltene** Variante auf demselben Modell (dunkel getönt, nur nachts und in der Seuchennacht) |
+| **Spuk-Hund** — der schwarze Hund als Todesbote | `animalZombieDog` ist **häufig** (88 Gruppen, alle fünf Landschaften) und heißt darum Seuchenhund | — | eine **eigene, seltene** Variante auf demselben Modell (~~dunkel getönt~~, nur nachts und in der Seuchennacht). **Gebaut mit WP5.5 (D150):** `ent700_spukhund` — „Spukhund" / „Phantom Hound", 400 Lebenspunkte, Größe 1,2, fahler Schimmer (`col700_spuk`); in `ZombiesNight` (0,03) und `ZombiesWastelandNight` (0,1). **Abdunkeln geht in XML nicht:** `MatColor` ist eine Leuchtfarbe, keine Tönung — der schwarze Hund der Sage braucht ein eigenes Material (WP4.7). Die Seuchennacht folgt mit WP5.6 |
 | **Irrlicht** — Licht im Moor, das in die Irre führt | Flug-Logik von `animalZombieVulture` (`EntityVulture`, 133 Gruppen) | Brandland, Sandheide, Moorland | **nicht in WP5:** braucht ein Licht am Wesen (Asset oder Partikel) — WP7 |
 
 Gegenmittel liefert F-15 (Bannrune, Lichtfunke, Totensegen) über Entity-Tags und Buff-Bedingungen.
@@ -274,7 +284,7 @@ Alles XML (P5) — kein C#, kein Asset:
 |---|---|---|
 | WP5.3 Namen | `mod/700_90_Sprache/Config/Localization.csv`; `tools/check/vanilla-keys.txt` | 155 + 21 Sprachzeilen unter Vanillas Schlüsseln (der Schlüssel ist die Klasse), DE und EN; jede Zeile mit Begründung in der Schlüsselliste |
 | WP5.4 Gruppen — **gebaut** (D149) | `tools/check/denylist.txt` (elf Wesenregeln) → erzeugt `mod/700_10_Purge/Config/entitygroups.xml`; `mod/700_65_Wesen/Config/entitygroups.xml` (neues Modlet nach Vertrag 01, Nachtrag Phase 2: die Nachrücker) | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; elf Wesenregeln. Vanilla-Klassen werden nie entfernt, nur ihr Eintrag in einer Gruppe; keine Gruppe wird leer (Vertrag 03, Nachtrag Teil C) |
-| WP5.5 Sagengestalten | `mod/700_65_Wesen/Config/entityclasses.xml`, `entitygroups.xml`, Sprachzeilen | Spuk-Hund als eigene Klasse `ent700_…` auf Vanillas Modell; Texte |
+| WP5.5 Sagengestalten — **gebaut** (D150) | `mod/700_65_Wesen/Config/entityclasses.xml`, `entitygroups.xml`, eine Sprachzeile, eine Glossarzeile | Spukhund als eigene Klasse `ent700_spukhund` auf Vanillas Modell. Nachzehrer, Schreiende und Moorleiche haben ihre Namen seit WP5.3; mehr als den Namen gibt XML für sie nicht her, ohne Verhalten zu erfinden. Stufen an den Klassen gemessen (§2) |
 | WP5.6 Seuchennacht | `mod/700_65_Wesen/Config/entitygroups.xml` | Gruppen `eg700_…` für Brecher und Anführer, noch von niemandem gerufen |
 
 **Warum kein C#?** Namen, Gruppen und Varianten sind in Vanilla Daten. Was Code bräuchte — Leichen

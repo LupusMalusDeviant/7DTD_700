@@ -24,9 +24,66 @@ internal static class CreatureCheck
     /// <summary>Vanillas Zeichen fuer "hier erscheint nichts" - ein Eintrag, kein Verweis.</summary>
     private const string Nothing = "none";
 
+    /// <summary>
+    /// Farben der Wesen (Vertrag 04, Nachtrag WP5.5). <c>MatColor</c> an einer Klasse nennt
+    /// einen <c>&lt;color name&gt;</c>-Knoten derselben Datei. Das Spiel schlaegt den Namen
+    /// erst nach, wenn es das Modell baut - fehlt der Knoten, bricht es nicht beim Laden,
+    /// sondern beim ERSCHEINEN des Wesens (Finding F-06 Farbe und Stufen). Kein Log beim
+    /// Start zeigt das; darum prueft es dieser Blick.
+    /// </summary>
+    private static void CheckColours(Report report, ConfigSource source)
+    {
+        XDocument? classesDoc = source.Load("entityclasses.xml");
+        if (classesDoc is null)
+        {
+            return;
+        }
+
+        var colours = new HashSet<string>(StringComparer.Ordinal);
+        foreach (XElement colour in classesDoc.Descendants("color"))
+        {
+            if (colour.Attribute("name")?.Value is string name && name.Length > 0
+                && !colours.Add(name))
+            {
+                report.Error("wesen-farbe-doppelt", name,
+                    $"der Farbknoten steht zweimal in entityclasses.xml (zuletzt Zeile "
+                    + $"{((IXmlLineInfo)colour).LineNumber}). Das Spiel legt Farben in ein "
+                    + "Woerterbuch ohne Ersetzen - ein doppelter Name ist ein Ladefehler.");
+            }
+        }
+
+        int missing = 0;
+        foreach (XElement property in classesDoc.Descendants("property"))
+        {
+            if (property.Attribute("name")?.Value != "MatColor"
+                || property.Parent?.Name.LocalName != "entity_class")
+            {
+                continue;
+            }
+
+            string value = property.Attribute("value")?.Value ?? string.Empty;
+            if (colours.Contains(value))
+            {
+                continue;
+            }
+
+            missing++;
+            string className = property.Parent.Attribute("name")?.Value ?? "(ohne Namen)";
+            report.Error("wesen-farbe-fehlt", className,
+                $"MatColor nennt '{value}' (entityclasses.xml:"
+                + $"{((IXmlLineInfo)property).LineNumber}), und die Datei fuehrt keinen "
+                + "<color name> dieses Namens. Das Spiel bricht damit erst, wenn das Wesen "
+                + "erscheint.");
+        }
+
+        report.Count("wesenfarben", colours.Count);
+        report.Count("wesen_farben_fehlend", missing);
+    }
+
     public static void Check(Report report, ConfigSource source, Denylist denylist)
     {
         report.Count("wesenregeln", denylist.CreatureRules);
+        CheckColours(report, source);
 
         XDocument? groupsDoc = source.Load("entitygroups.xml");
         if (groupsDoc is null)

@@ -200,6 +200,7 @@ noch nicht — der Nachtrag steht, bevor die erste entsteht.
 | Bundle | `Resources/` | `b700_` | `b700_wesen.unity3d` |
 | Symbol | `UIAtlases/ItemIconAtlas/` | `ico700_` (Vertrag 05) | `ico700_silberpfennig` |
 | Buff, CVar | `buffs.xml` | `buff700_`, `cv700_` (bestehen) | `buff700_grauen`, `cv700_grauen` |
+| Farbe eines Wesens (`<color>`, genannt von `MatColor`) — **ergänzt am 2026-11-23, WP5.5** | `entityclasses.xml` | `col700_` | `col700_spuk` |
 
 Schreibweise wie §2: Kleinschreibung nach dem Präfix, Binnengroßschreibung, deutsch nach §3.
 

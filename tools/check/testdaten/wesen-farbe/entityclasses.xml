@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz 'wesen-farbe': MatColor nennt einen <color>-Knoten beim Namen. 'pruefFahl' gibt
+     es, 'pruefVergessen' nicht - das Spiel braeche erst, wenn 'pruefOhneFarbe' erscheint.
+     'pruefErbe' nennt selbst keine Farbe und ist kein Befund. -->
+<entity_classes>
+	<color name="pruefFahl" value=".5,.7,1, 0" />
+	<entity_class name="pruefMitFarbe">
+		<property name="MatColor" value="pruefFahl" />
+	</entity_class>
+	<entity_class name="pruefOhneFarbe">
+		<property name="MatColor" value="pruefVergessen" />
+	</entity_class>
+	<entity_class name="pruefErbe" extends="pruefMitFarbe" />
+</entity_classes>

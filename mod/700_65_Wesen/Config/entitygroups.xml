@@ -50,4 +50,18 @@
 	     schon; sein Gewicht waechst um das des Bergloewen (10 + 5, 5 + 10). -->
 	<set xpath="/entitygroups/entitygroup[@name='EnemyAnimalsDesertNight']/e[@n='animalWolf']/@p">15</set>
 	<set xpath="/entitygroups/entitygroup[@name='EnemyAnimalsSnow']/e[@n='animalWolf']/@p">15</set>
+
+	<!-- Der Spukhund (WP5.5, D150; Klasse in entityclasses.xml dieses Modlets).
+	     Nur in den beiden Nachtgruppen der freien Landschaft, und selten:
+	     ZombiesNight (Klosterland, Brandland, Sandheide, Winterhoehen) hat nach
+	     dem Purge ein Gesamtgewicht von 14.81 - mit 0.03 ist er rund jeder
+	     fuenfhundertste Wurf; Vanillas Altwolf steht dort mit 0.01.
+	     ZombiesWastelandNight (Moorland) hat 25 - mit 0.1 rund jeder
+	     zweihundertfuenfzigste. Die Zahlen sind Setzungen (N-69). -->
+	<append xpath="/entitygroups/entitygroup[@name='ZombiesNight']">
+		<e n="ent700_spukhund" p="0.03" />
+	</append>
+	<append xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']">
+		<e n="ent700_spukhund" p="0.1" />
+	</append>
 </config>

@@ -786,6 +786,23 @@ Test-Output 'Quelle ohne entityclasses.xml: gesagt, nicht rot' 0 `
                    (Format-Zahl 'wesengruppen' 1)) `
     -MustNotContain @('wesen-verweis-fehlt')
 
+# W6b. Farben der Wesen (Vertrag 04, Nachtrag WP5.5): MatColor nennt einen <color>-Knoten.
+#      Fehlt er, bricht das Spiel erst beim Erscheinen - kein Start-Log zeigt es. Die Klasse
+#      mit vorhandener Farbe und die Klasse, die nur erbt, sind kein Befund.
+Test-Output 'MatColor ohne Farbknoten ist ein Fehler' 1 `
+    @('anachronisms', (Join-Path $data 'wesen-farbe'), '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesen-farbe-fehlt: pruefOhneFarbe',
+                   (Format-Zahl 'wesenfarben' 1),
+                   (Format-Zahl 'wesen_farben_fehlend' 1)) `
+    -MustNotContain @('wesen-farbe-fehlt: pruefMitFarbe', 'wesen-farbe-fehlt: pruefErbe')
+
+# W6c. Die Gegenrichtung an einem Satz, der Farben richtig fuehrt: der Pruefsatz 'wesen' nennt
+#      keine MatColor - null Fehlende, kein Befund.
+Test-Output 'ohne MatColor meldet die Farbpruefung nichts' 0 `
+    @('anachronisms', $wesen, '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @((Format-Zahl 'wesen_farben_fehlend' 0)) `
+    -MustNotContain @('wesen-farbe-fehlt')
+
 # --- Der Erzeuger: 'purge-patch' nimmt gesperrte Wesen aus den Landschaftsgruppen
 #     (D149, Vertrag 04, Nachtrag WP5.4).
 
@@ -2192,6 +2209,29 @@ Test-Script 'sprachverweise: Anzeigename einer Sandbox-Vorlage ohne Zeile ist ro
     "Schluessel 'pruef700_vorlage' hat keine Zeile",
     'ohne Zeile: 1',
     '== Ergebnis: 1 rot -> RED ==')
+
+# (e3) Seit dem 2026-11-23 (Plan-0002 WP5.5): der Anzeigename eines Wesens ist der Name seiner
+#      Klasse (Entity::get_LocalizedEntityName). Ohne die Regel stand die Zeile der ersten
+#      eigenen Klasse (ent700_spukhund) als "wird nicht gelesen" da. Mit ihr ist sie gelesen;
+#      fehlt sie, ist es ein genannter Schluessel ohne Zeile - und eine Zeile fuer eine Klasse,
+#      die es nicht mehr gibt, bleibt "nicht gelesen". Die Farbe nennt keinen Schluessel.
+Test-Script 'sprachverweise: der Name einer eigenen Wesen-Klasse ist ein gelesener Schluessel' 0 @{
+    Patches     = @(Join-Path $spracheDaten 'wesen\entityclasses.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'wesen\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    'genannte Schluessel: 1 (in unserer Datei: 1, nur in Vanilla: 0, ohne Zeile: 0)',
+    'nicht gelesen: 0',
+    'GREEN') -MustNotContain @("Zeile 'pruef700_wesen' wird nicht gelesen", 'col700_pruef')
+
+Test-Script 'sprachverweise: eigene Wesen-Klasse ohne Zeile ist rot, Zeile ohne Klasse auch' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'wesen\entityclasses.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'wesen\Localization-ohne-name.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruef700_wesen' hat keine Zeile",
+    "Zeile 'pruef700_wesenAlt' wird nicht gelesen",
+    '== Ergebnis: 2 rot -> RED ==')
 
 # (f) Regel 6: nichts gelesen ist nicht gruen. Sieben Eingaenge, jeder Ausgang 2.
 Test-Script 'sprachverweise: Sprachdatei ohne Spalte Key ist nicht pruefbar' 2 @{

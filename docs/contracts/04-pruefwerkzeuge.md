@@ -3981,3 +3981,41 @@ Abschnitt „Wesen" in `gegenproben.ps1`, W7 bis W15, Prüfsatz `testdaten/wesen
   26 734 Einträgen), und der Fall ist bisher nur gelesen.
 - Zwei Regeln, die dieselbe Klasse treffen: die erste gilt als benutzt, die zweite als
   `wesenregel-trifft-nichts` — wie bei den Auftragsregeln.
+
+## Nachtrag WP5.5 — Farben der Wesen in der Prüfung *wesen*, 2026-11-23, **Abnahme offen** (N-69)
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP5.5, D150).
+
+**Anlass.** Die Eigenschaft `MatColor` einer Klasse nennt einen `<color name>`-Knoten in
+`entityclasses.xml` beim Namen. Das Spiel schlägt ihn erst nach, wenn es das Modell baut (Finding
+`F-06-wesen-farbe-und-stufen`): ein Name ohne Knoten bricht nicht beim Laden, sondern beim
+**Erscheinen** des Wesens — kein Start-Log zeigt es. Mit `ent700_spukhund` nennt zum ersten Mal
+eine eigene Klasse eine eigene Farbe.
+
+**Die Regel** (in `anachronisms`, ohne jede Wesenregel, ohne Aufschub):
+
+1. Fehler **`wesen-farbe-fehlt`**: eine `<property name="MatColor" value="X">` direkt an einer
+   `entity_class`, und die Datei führt keinen `<color name="X">`. Eine Klasse, die die Eigenschaft
+   nur erbt, wird nicht eigens gemeldet — gemeldet wird die Stelle, an der der Name steht.
+2. Fehler **`wesen-farbe-doppelt`**: derselbe `<color name>` zweimal (das Spiel füllt ein
+   Wörterbuch ohne Ersetzen; ein doppelter Name ist ein Ladefehler).
+3. Zähler `wesenfarben`, `wesen_farben_fehlend`. Fehlt `entityclasses.xml`, steht keiner von
+   beiden im Bericht.
+
+**Kalibrierung:** Vanilla V 3.40 b10 `wesenfarben 3`, `wesen_farben_fehlend 0`; Vorlauf mit neun
+Modlets `wesenfarben 4`, `wesen_farben_fehlend 0`.
+
+**Gegenproben** (Abschnitt „Wesen", W6b und W6c, Prüfsatz `testdaten/wesen-farbe`): eine Klasse
+mit vorhandener Farbe, eine mit fehlender, eine erbende — Exit 1, genau **eine** Meldung
+(`pruefOhneFarbe`); am Prüfsatz `wesen` ohne `MatColor` Exit 0 und keine Meldung.
+
+**Grenzen:** `wesen-farbe-doppelt` hat keine eigene Gegenprobe. Ob der **Wert** einer Farbe lesbar
+ist (vier Zahlen) und was er am Modell tut, prüft niemand — das zeigt nur das Spiel (S-28).
+
+**Dazu, in `sprachverweise-pruefen.ps1` (Nachtrag WP8.8):** `<entity_class name="X">` in einer
+Patch-Datei **nennt** den Schlüssel `X` — das Spiel holt den Anzeigenamen eines Wesens über
+`Entity::get_LocalizedEntityName`, das den Klassennamen (`EntityClass::entityClassName`) als
+Schlüssel nachschlägt. Ohne die Regel stand die Zeile `ent700_spukhund` als „wird nicht gelesen"
+da (am echten Stand so aufgefallen: 1 rot). Gegenproben (e3), Prüfsatz `testdaten/sprache/wesen`:
+Klasse mit Zeile — Exit 0, `nicht gelesen: 0`; Klasse ohne Zeile und eine Zeile ohne Klasse —
+Exit 1, beide gemeldet. Am echten Stand: 82 genannte Schlüssel, 0 ohne Zeile, 0 nicht gelesen.

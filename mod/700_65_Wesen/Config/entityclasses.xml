@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_65_Wesen / entityclasses.xml
+	     F-06 Abschnitt 5 (Sagengestalten), Plan-0002 WP5.5, D150
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt.
+
+	     ===================================================================
+	     DER SPUKHUND - EINE EIGENE KLASSE AUF VANILLAS MODELL
+	     ===================================================================
+
+	     Vanillas animalZombieDog steht in 88 Gruppen und in allen fuenf
+	     Landschaften; er heisst bei uns Seuchenhund und ist ein Alltagsgegner.
+	     Der Spukhund - der Hund als Todesbote - ist darum eine EIGENE Klasse:
+	     selten, nur nachts (entitygroups.xml), groesser und zaeher.
+
+	     Was XML dafuer hergibt, gelesen am Code (Finding F-06 Farbe und Stufen):
+
+	       extends    erbt Modell, Klaenge, Verhalten und Schlag vom Seuchenhund.
+	                  Kein eigenes Asset, kein Bundle.
+	       SizeScale  die Groesse des Modells. Vanilla benutzt sie beim Altwolf
+	                  (animalDireWolf, 1.4).
+	       MatColor   nennt einen <color>-Knoten dieser Datei beim Namen. Die
+	                  Farbe geht als LEUCHTFARBE an die Materialien des Modells
+	                  (so glimmen Vanillas Stufen gruen, blau und rot). Ein
+	                  Abdunkeln des Fells gibt es in XML nicht - der "schwarze
+	                  Hund" der Sage ist ohne eigenes Material nicht zu haben.
+
+	     NICHT IM SPIEL GESEHEN (S-28). Ob das Hundematerial ueberhaupt leuchtet,
+	     haengt an seinem Shader; tut es das nicht, unterscheidet den Spukhund
+	     nur die Groesse. Fehlt der <color>-Knoten, den MatColor nennt, bricht das
+	     Spiel beim ERSCHEINEN des Wesens - darum stehen Farbe und Klasse in
+	     einem append.
+
+	     DIE ZAHLEN SIND SETZUNGEN (N-69): 400 Lebenspunkte (Seuchenhund 200,
+	     Altwolf 3000), Groesse 1.2, fahles Blauweiss mit einfacher Leuchtkraft.
+	-->
+	<append xpath="/entity_classes">
+		<color name="col700_spuk" value=".55,.75,1, 0" />
+
+		<entity_class name="ent700_spukhund" extends="animalZombieDog">
+			<property name="MatColor" value="col700_spuk" />
+			<property name="SizeScale" value="1.2" />
+			<effect_group name="Base Effects">
+				<passive_effect name="HealthMax" operation="base_set" value="400" />
+				<passive_effect name="BuffResistance" operation="base_set" value="5" tags="buffRadiationPool" />
+			</effect_group>
+		</entity_class>
+	</append>
+</config>
