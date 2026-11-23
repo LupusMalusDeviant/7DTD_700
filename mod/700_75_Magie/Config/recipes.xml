@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_75_Magie / recipes.xml
+	     F-15 Volksmagie, Plan-0002 WP10.4, D177
+
+	     VON HAND GESCHRIEBEN.
+
+	     'learnable' heisst: gesperrt, bis ein Perk die Marke mit dem Rezeptnamen setzt. Das
+	     tut der Perk Runenritzen, Rang 1 (Runenkunde ab Stufe 2), in
+	     700_50_Fortschritt/Config/progression.xml - die Bindung gehoert zum Baum (Vertrag 01
+	     Teil 2b). Runenkreide und Glutstein sind NICHT gesperrt: wer die Bank hat, darf
+	     sie fuellen, und ohne die Bank gibt es sie nicht. So steht die Bank nicht leer
+	     (D57), auch bevor die Runen kommen (WP10.5). -->
+	<append xpath="/recipes">
+
+		<!-- Die Bank: ein Stumpf, Kreide gibt es noch nicht - also Holz, Steine, Naegel. An
+		     der Zimmermannsbank, wie der Webstuhl. -->
+		<recipe name="blk700_runenritzer" count="1" craft_area="workbench" craft_time="45" is_trackable="false" tags="learnable,workbenchCrafting">
+			<ingredient name="resourceWood" count="40" />
+			<ingredient name="resourceRockSmall" count="20" />
+			<ingredient name="resourceNail" count="10" />
+		</recipe>
+
+		<!-- Die Werkzeuge: an der Esse, wie Vanillas Bratrost. -->
+		<recipe name="itm700_ritzmesser" count="1" craft_area="forge" craft_time="30" is_trackable="false" tags="learnable">
+			<ingredient name="resourceForgedIron" count="2" />
+			<ingredient name="resourceWood" count="1" />
+		</recipe>
+		<recipe name="itm700_meissel" count="1" craft_area="forge" craft_time="30" is_trackable="false" tags="learnable">
+			<ingredient name="resourceForgedIron" count="3" />
+		</recipe>
+
+		<!-- Die Grundstoffe: an der Bank selbst. Vier Kreiden aus einem Ansatz. -->
+		<recipe name="itm700_runenkreide" count="4" craft_area="runenritzer" craft_time="10">
+			<ingredient name="resourceCement" count="1" />
+			<ingredient name="resourceClayLump" count="2" />
+			<ingredient name="resourceCoal" count="1" />
+		</recipe>
+		<recipe name="itm700_glutstein" count="2" craft_area="runenritzer" craft_time="10">
+			<ingredient name="resourceCoal" count="3" />
+			<ingredient name="resourceAnimalFat" count="1" />
+		</recipe>
+
+	</append>
+</config>

@@ -61,6 +61,7 @@ Danach die Protokolle beider Seiten aufheben; Claude liest die Zeilen `CVarLogVa
 | S-34 Seuchennacht | `buff t700_seuchennacht`, dann auf den Abend einer Seuchennacht springen | „TEST Seuchennacht läuft" ab Beginn |
 | S-35 (1) | `giveself t700_zauberstab`, `buff t700_odemFuellen`, viermal schlagen | Protokoll 20, 10, 0; der vierte Schlag geht nicht — und wie merkt man es? |
 | S-35 (2) | `giveself t700_amulett`, anlegen; dazu ein `biomeWeatherItem4` | welchen Platz nimmt es, verdrängt es das Abzeichen |
+| S-36 *(seit WP10.4)* | `giveself blk700_runenritzer`, `giveself itm700_ritzmesser`, `giveself itm700_meissel`, setzen und öffnen | Größe und Sitz des Stumpfs; zwei Werkzeugplätze nehmen nur Messer und Meißel; Runenkreide und Glutstein herstellbar; ohne Punkt in Runenritzen sind Stock und Werkzeuge im Rezeptfenster gesperrt |
 | S-35 (3) *(seit WP10.3)* | Fertigkeitsfenster öffnen (K), Reihe der Symbole oben | sechs Bäume, „Runenkunde" mit Stern als sechster; passt die Reihe neben das Suchfeld; steht irgendwo ein Rohschlüssel wie `att700_runenkundiger`; einen Punkt hineinsetzen und Perks ansehen |
 
 **Nicht in diesem Lauf** (kein Ersatz durch eine Probe): S-32 (4) „Server setzt einen Wert" braucht

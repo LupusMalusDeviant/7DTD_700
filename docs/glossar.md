@@ -180,6 +180,8 @@ Nutzer D100 abnimmt.
 | `resourcePaper` | Pergament | Parchment | Papier / Paper | WP7.5 |
 | `resourceSewingKit` | Nähzeug | Sewing Kit | Nähset / Sewing Kit | WP5.5 |
 | `resourceGlue` | Leim | Glue | Kleber / Glue | D78 |
+| `itm700_runenkreide` | Runenkreide | Rune Chalk | — | F-15, D177 — zu prüfen (N-121) |
+| `itm700_glutstein` | Glutstein | Ember Stone | — | F-15, D177 — zu prüfen (N-121) |
 | `medicalFirstAidBandage` | Salbenverband | Salved Bandage | Erste-Hilfe-Verband / First Aid Bandage | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `drugHerbalAntibiotics` | Kräutersud | Herb Decoction | Natürliche Antibiotika / Herbal Antibiotics | Loop 2026-11-23 — Name zu prüfen (D99, D133) |
 
@@ -194,6 +196,7 @@ Nutzer D100 abnimmt.
 | `cementMixer` | Kalkofen | Lime Kiln | Zementmischer / Cement Mixer | GDD 2.3, WP4.3 |
 | `blk700_webstuhl` | Webstuhl | Loom | — | D57 |
 | `blk700_holzfeuer` | Holzfeuer | Wood Fire | — | D64 |
+| `blk700_runenritzer` | Runenritzer-Stock | Rune-Carver's Stump | — (F-15: „Runenritzer-Bank") | D57, D177 — Name zu prüfen (N-121) |
 | `buff700_amfeuerName` | Am Feuer | By the Fire | — | D73 |
 
 ## 5. Waffen und Werkzeug
@@ -201,6 +204,8 @@ Nutzer D100 abnimmt.
 | Kennung | Deutsch | Englisch | Vanilla | Quelle |
 |---|---|---|---|---|
 | `meleeWpnBladeT1HuntingKnife` | Sax | Sax | Jagdmesser / Hunting Knife | D58 |
+| `itm700_ritzmesser` | Ritzmesser | Carving Knife | — (Werkzeugplatz) | F-15, D177 — zu prüfen (N-121) |
+| `itm700_meissel` | Meißel | Chisel | — (Werkzeugplatz) | F-15, D177 — zu prüfen (N-121) |
 | `meleeWpnBladeT3Machete` | Spatha | Spatha | Machete | D58 |
 | `meleeWpnSpearT1IronSpear` | Ango | Ango | Eisenspeer / Iron Spear | WP5.1 |
 | `meleeWpnSpearT3SteelSpear` | Flügellanze | Winged Lance | Stahlspeer / Steel Spear | WP5.1 |

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten (WP10.4): ANGELEGTE Fortschritts-Knoten, deren Verweise aufgehen. Ein neues
+     Attribut, eine Gruppe darunter, ein Perk darunter mit Stufenbedingung und einer
+     Freischaltung auf ein eigenes Rezept (pruefBlockEigen, kette/eigen/recipes.xml).
+     Erwartet: 3 Verweise in angelegten Knoten (Gruppe, Perk, Bedingung), 1 Freischaltung,
+     gruen. Erfundene Kennungen. -->
+<config>
+	<insertAfter xpath="/progression/attributes/attribute[@name='pruefAttB']">
+		<attribute name="pruefAttNeu" name_key="pruefAttNeuName" desc_key="pruefAttNeuDesc" />
+	</insertAfter>
+	<append xpath="/progression/skills">
+		<skill name="pruefBereichNeu" parent="pruefAttNeu" name_key="pruefBereichNeuName" />
+	</append>
+	<append xpath="/progression/perks">
+		<perk name="pruefPerkNeu" parent="pruefBereichNeu" name_key="pruefPerkNeuName">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="pruefAttNeu" operation="GTE" value="2" /></level_requirements>
+			<effect_group>
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1" value="1" tags="pruefBlockEigen" />
+			</effect_group>
+		</perk>
+	</append>
+</config>

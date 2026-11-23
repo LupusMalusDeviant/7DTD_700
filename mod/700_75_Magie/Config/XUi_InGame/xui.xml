@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_75_Magie / XUi_InGame/xui.xml
+	     F-15, Plan-0002 WP10.4, D177
+
+	     VON HAND GESCHRIEBEN. Die Fenstergruppe der Runenritzer-Bank. Das Spiel sucht sie
+	     unter 'workstation_<Blockname>'. Reihenfolge wie Vanillas Feuerstelle (Liste,
+	     Infotafel, Warteschlange, Werkzeuge, Ausgabe, Kopfzeile), ohne Brennstoff - die
+	     Bank brennt nicht. Die drei Attribute am window_group wie beim Webstuhl: ohne
+	     'open_backpack_on_open' sieht der Spieler seinen Beutel nicht. -->
+	<append xpath="/xui">
+		<window_group name="workstation_blk700_runenritzer" controller="XUiC_WorkstationWindowGroup" open_backpack_on_open="true" close_compass_on_open="true" defaultselected="bp.content">
+			<window name="windowCraftingList" />
+			<window name="craftingInfoPanel" />
+			<window name="windowCraftingQueue" />
+			<window name="700_windowToolsRunenritzer" />
+			<window name="windowOutput" />
+			<window name="windowNonPagingHeader" />
+		</window_group>
+	</append>
+</config>

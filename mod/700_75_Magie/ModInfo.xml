@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_75_Magie — F-15 Volksmagie: Runen, Zeichen, Amulette, Segen, Tränke, Zauber,
+  Fallen mit Auslöser, Kraftlinien und ihre Zustände (Vertrag 01 Nachtrag Teil 2 und 2b).
+
+  Angelegt mit Plan-0002 WP10.4 (D177): zuerst die Runenritzer-Bank mit ihren
+  Werkzeugen und den zwei Grundstoffen Runenkreide und Glutstein. Die Runen selbst
+  folgen mit WP10.5.
+
+  Reines XML, keine DLL (Triage WP9.6: Phase 2 ohne Harmony-Patch). Die Freischaltung
+  steht im Baum der Runenkunde in 700_50_Fortschritt — die Bindung gehört zum Baum.
+-->
+<xml>
+	<Name value="700_75_Magie" />
+	<DisplayName value="700 — Volksmagie" />
+	<Description value="Runen, Zeichen und Odem: die Runenritzer-Bank, Runenkreide und Glutstein. Magie ersetzt die Technik, die nicht in die Zeit passt." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

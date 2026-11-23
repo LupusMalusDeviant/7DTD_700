@@ -947,6 +947,67 @@ if (Test-Path $progVanillaPfad) {
     }
 }
 
+# ANGELEGTE FORTSCHRITTS-KNOTEN UND FREISCHALTUNGEN (ergaenzt 2026-11-23, Plan-0002 WP10.4).
+# Bis hierher las die Pruefung nur <set>-Werte. Seit WP10.3 legen wir ganze Knoten an
+# (Attribut, Gruppen, Perks per append/insertAfter): deren @parent und
+# requirement/@progression_name stehen IM angelegten Knoten, nicht in einem <set>.
+# Und ein Perk schaltet Rezepte per passive_effect RecipeTagUnlocked frei: die Marken sind
+# Rezeptnamen. Ein vertippter Name trifft kein Rezept, und das Rezept bleibt fuer immer
+# gesperrt - ohne Meldung. Gefunden beim Bau der Runenritzer-Bank: die Gegenprobe mit
+# 'blk700_runenritzerX' blieb gruen.
+# Rezept-Vorrat: Vanillas recipes.xml (wenn vorhanden) und alle eigenen Rezepte. Gemessen
+# an Vanilla V 3.40 b10: 327 verschiedene Freischalt-Marken, 323 davon Rezeptnamen; die
+# vier anderen (armor*Master) schreiben wir nicht.
+$angelegteRefs = 0
+$freischaltRefs = 0
+$rezeptPool = @{}
+$rezVanillaPfad = Join-Path $Vanilla 'recipes.xml'
+if (Test-Path $rezVanillaPfad) {
+    $kennungen = Get-Kennungen $rezVanillaPfad '<recipe name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $rezeptPool[$n] = 'vanilla' }
+}
+foreach ($path in $Rezepte) {
+    if (-not (Test-Path $path)) { continue }
+    $xml = (Read-XmlDatei $path).Doc
+    if ($null -eq $xml) { continue }
+    foreach ($r in $xml.SelectNodes('//recipe')) { $rezeptPool[$r.GetAttribute('name')] = 'unser' }
+}
+if ($progPool.Count -gt 0) {
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        if ([IO.Path]::GetFileName($path) -ne 'progression.xml') { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        foreach ($n in $xml.SelectNodes('/*/*/descendant-or-self::*[@parent]')) {
+            if ($n.get_ParentNode() -eq $xml.get_DocumentElement()) { continue }
+            $wert = $n.GetAttribute('parent')
+            $angelegteRefs++
+            if (-not $progPool.ContainsKey($wert)) {
+                $unresolved += "Baum-Zuordnung '$wert' im angelegten Knoten '$($n.GetAttribute('name'))' ist kein Fortschritts-Knoten  ($datei)"
+            }
+        }
+        foreach ($n in $xml.SelectNodes('//requirement[@progression_name]')) {
+            $wert = $n.GetAttribute('progression_name')
+            $angelegteRefs++
+            if (-not $progPool.ContainsKey($wert)) {
+                $unresolved += "Stufenbedingung '$wert' in einem angelegten Knoten ist kein Fortschritts-Knoten  ($datei)"
+            }
+        }
+        foreach ($n in $xml.SelectNodes("//passive_effect[@name='RecipeTagUnlocked']")) {
+            foreach ($marke in ($n.GetAttribute('tags') -split ',')) {
+                $marke = $marke.Trim()
+                if ($marke.Length -eq 0) { continue }
+                $freischaltRefs++
+                if (-not $rezeptPool.ContainsKey($marke)) {
+                    $unresolved += "Freischaltung '$marke' trifft kein Rezept  ($datei)"
+                }
+            }
+        }
+    }
+}
+
 Write-Output ("  eigene Rezepte: {0}, davon werkzeuggebunden: {1}" -f $recipeCount, $toolGated)
 Write-Output ("  eingehaengte Zutaten: {0}, Reparaturwerkzeuge: {1}, umgebogene Verweise: {2}" -f $appendedTotal, $repairRefs, $rewiredRefs)
 Write-Output ("  Verweise in eigenen Definitionen: {0}" -f $ownRefs)
@@ -958,6 +1019,7 @@ $modListe = @($genannteMods | Sort-Object -Unique)
 Write-Output ("  in Bedingungen genannte Mods: {0}" -f $(if ($modListe.Count -gt 0) { $modListe -join ', ' } else { 'keine' }))
 Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
+Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltungen: {1}" -f $angelegteRefs, $freischaltRefs)
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }

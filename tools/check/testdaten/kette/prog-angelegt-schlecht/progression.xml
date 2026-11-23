@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten (WP10.4): dieselben angelegten Knoten wie prog-angelegt-gut, mit vier
+     Tippfehlern, die jeder einen XPath-treuen, aber toten Baum ergeben: eine Gruppe an einem
+     Attribut, das es nicht gibt; ein Perk an einer Gruppe, die es nicht gibt; eine
+     Stufenbedingung auf ein fehlendes Attribut; eine Freischaltung, die kein Rezept trifft.
+     Alle XPaths treffen - rot werden darf es nur ueber die Werte. Erfundene Kennungen. -->
+<config>
+	<insertAfter xpath="/progression/attributes/attribute[@name='pruefAttB']">
+		<attribute name="pruefAttNeu" name_key="pruefAttNeuName" desc_key="pruefAttNeuDesc" />
+	</insertAfter>
+	<append xpath="/progression/skills">
+		<skill name="pruefBereichNeu" parent="pruefAttNeuTippfehler" name_key="pruefBereichNeuName" />
+	</append>
+	<append xpath="/progression/perks">
+		<perk name="pruefPerkNeu" parent="pruefBereichFehlt" name_key="pruefPerkNeuName">
+			<level_requirements level="1"><requirement name="ProgressionLevel" progression_name="pruefAttFehlt" operation="GTE" value="2" /></level_requirements>
+			<effect_group>
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1" value="1" tags="pruefBlockEigen,pruefRezeptFehlt" />
+			</effect_group>
+		</perk>
+	</append>
+</config>

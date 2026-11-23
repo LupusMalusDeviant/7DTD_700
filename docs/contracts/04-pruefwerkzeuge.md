@@ -4019,3 +4019,33 @@ Schlüssel nachschlägt. Ohne die Regel stand die Zeile `ent700_spukhund` als �
 da (am echten Stand so aufgefallen: 1 rot). Gegenproben (e3), Prüfsatz `testdaten/sprache/wesen`:
 Klasse mit Zeile — Exit 0, `nicht gelesen: 0`; Klasse ohne Zeile und eine Zeile ohne Klasse —
 Exit 1, beide gemeldet. Am echten Stand: 82 genannte Schlüssel, 0 ohne Zeile, 0 nicht gelesen.
+
+## Nachtrag WP10.4 — `kette-pruefen` liest angelegte Fortschritts-Knoten und Freischaltungen, 2026-11-23, **Abnahme offen** (N-121)
+
+Gebaut im autonomen Lauf (Plan-0002 WP10.4, D177).
+
+**Anlass.** Die Fortschritts-Verweise (WP7.2) las die Prüfung nur in `<set>`-Werten. Seit WP10.3
+legen wir Attribut, Gruppen und Perks **selbst an**; ihre `@parent` und
+`requirement/@progression_name` stehen im angelegten Knoten. Und ein Perk schaltet Rezepte per
+`passive_effect name="RecipeTagUnlocked"` frei, dessen Marken Rezeptnamen sind. Gefunden an der
+Runenritzer-Bank: die Marke `blk700_runenritzerX` blieb grün — die Bank wäre für immer gesperrt
+gewesen, ohne Meldung.
+
+**Die Regel** (in jeder `progression.xml` unter den Patches, auch in `<conditional>`):
+
+1. Rot **„Baum-Zuordnung … im angelegten Knoten … ist kein Fortschritts-Knoten"**: ein `@parent`
+   an einem Element unterhalb einer Patch-Operation zeigt auf keinen Knoten aus Vanilla oder uns.
+2. Rot **„Stufenbedingung … in einem angelegten Knoten …"**: dasselbe für `requirement/@progression_name`.
+3. Rot **„Freischaltung … trifft kein Rezept"**: eine Marke in `RecipeTagUnlocked` ist kein
+   Rezeptname aus Vanillas `recipes.xml` oder unseren Rezepten. *Kalibriert:* Vanilla V 3.40 b10
+   führt 327 verschiedene Freischalt-Marken, 323 sind Rezeptnamen; die vier anderen (`armor*Master`)
+   schreiben wir nicht.
+4. Zähler „Verweise in angelegten Fortschritts-Knoten: N, Freischaltungen: M". Am echten Stand
+   **18** und **16**.
+
+**Gegenproben** (2 neu, 316 → **318**): `testdaten/kette/prog-angelegt-gut` — Exit 0, Zähler 3 und 1;
+`prog-angelegt-schlecht` — vier Tippfehler bei treffenden XPaths, Exit 1, alle vier gemeldet. Am
+echten Stand: `blk700_runenritzerX` → Exit 1, gemeldet.
+
+**Grenzen:** Ob eine Marke **das richtige** Rezept trifft, prüft niemand. Freischaltungen in einem
+`<set>`-Wert werden nicht gelesen (wir schreiben keine).

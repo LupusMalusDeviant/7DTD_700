@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <config>
 	<!-- 700_50_Fortschritt / progression.xml
 	     F-21 Fertigkeitsbäume, Plan-0001 WP7.1 und WP7.3
@@ -526,6 +526,9 @@
 			<level_requirements level="2"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="5" desc_key="att700_runenkundigerStufe5"/></level_requirements>
 			<level_requirements level="3"><requirement name="ProgressionLevel" progression_name="att700_runenkundiger" operation="GTE" value="8" desc_key="att700_runenkundigerStufe8"/></level_requirements>
 			<effect_group>
+				<!-- WP10.4 (D177): Rang 1 oeffnet die Bank und ihre zwei Werkzeuge
+				     (Rezepte in 700_75_Magie, 'learnable'). -->
+				<passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,3" value="1" tags="blk700_runenritzer,itm700_ritzmesser,itm700_meissel"/>
 				<effect_description level="1" desc_key="prk700_runenritzenRank1Desc" long_desc_key="prk700_runenritzenRank1LongDesc"/>
 				<effect_description level="2" desc_key="prk700_runenritzenRank2Desc" long_desc_key="prk700_runenritzenRank2LongDesc"/>
 				<effect_description level="3" desc_key="prk700_runenritzenRank3Desc" long_desc_key="prk700_runenritzenRank3LongDesc"/>

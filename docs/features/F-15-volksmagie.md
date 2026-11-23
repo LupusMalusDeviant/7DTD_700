@@ -198,6 +198,11 @@ Nachzehrer, Lichtfunke gegen Irrlicht-Täuschung usw.
   Klon-Block, XUi-Fenstergruppe, Bau-Rezept, Werkzeugslots Ritzmesser und Meißel — zusammen mit
   den ersten Runen, damit sie nicht leer in der Welt steht. Das Muster dafür liegt vor
   (`mod/700_40_Bauen/Config/XUi_InGame/`, WP4.5)
+  *Gebaut mit WP10.4 (D177, zu prüfen N-121)* in `700_75_Magie`: im Spiel **Runenritzer-Stock** (das
+  geborgte Modell ist Vanillas Baumstumpf), Werkzeugfenster mit **Ritzmesser** und **Meißel**, Bau an der
+  Zimmermannsbank, Werkzeuge an der Esse — alle drei frei mit Runenritzen Rang 1. An der Bank selbst,
+  ohne Sperre: **Runenkreide** (Branntkalk, Lehm, Holzkohle — Lehm statt Ocker, Holzkohle statt Asche)
+  und **Glutstein** (Holzkohle, Tierfett — Fett statt Harz; erbt das Brennen der Holzkohle).
 - Tränke und Salben: Kräuterküche (F-04)
 
 ## Umsetzung

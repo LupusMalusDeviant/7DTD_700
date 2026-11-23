@@ -1037,6 +1037,31 @@ Test-Script 'kette-pruefen: vertippte Fortschritts-Verweise werden rot' 1 @{
     "Baum-Zuordnung 'pruefAttGibtesnicht' ist kein Fortschritts-Knoten",
     "Stufenbedingung 'pruefAttAuchnicht' ist kein Fortschritts-Knoten")
 
+# WP10.4 (2026-11-23): ANGELEGTE Knoten und Freischaltungen. Seit dem Runenkundigen legen wir
+# Attribut, Gruppen und Perks selbst an; ihre Verweise stehen im Knoten, nicht in einem <set>.
+# Und eine Freischaltung (RecipeTagUnlocked) mit vertipptem Rezeptnamen sperrt ein Rezept fuer
+# immer. Vorher blieb 'blk700_runenritzerX' gruen.
+Test-Script 'kette-pruefen: angelegte Fortschritts-Knoten und Freischaltungen, die aufgehen' 0 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-angelegt-gut\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @('Verweise in angelegten Fortschritts-Knoten: 3, Freischaltungen: 1')
+
+Test-Script 'kette-pruefen: vertippte Verweise in angelegten Knoten und Freischaltungen werden rot' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-angelegt-schlecht\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @(
+    "Baum-Zuordnung 'pruefAttNeuTippfehler' im angelegten Knoten 'pruefBereichNeu'",
+    "Baum-Zuordnung 'pruefBereichFehlt' im angelegten Knoten 'pruefPerkNeu'",
+    "Stufenbedingung 'pruefAttFehlt' in einem angelegten Knoten",
+    "Freischaltung 'pruefRezeptFehlt' trifft kein Rezept",
+    '4 rot')
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen

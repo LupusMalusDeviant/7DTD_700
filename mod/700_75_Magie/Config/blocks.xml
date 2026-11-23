@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_75_Magie / blocks.xml
+	     F-15 Volksmagie, Plan-0002 WP10.4, D57, D177
+
+	     VON HAND GESCHRIEBEN.
+
+	     DIE RUNENRITZER-BANK. D57 hat sie aus Phase 1 genommen, weil es dort kein Rezept fuer
+	     sie gab; hier kommt sie mit ihrem Inhalt. Muster: der Webstuhl (700_40_Bauen, WP5.5b)
+	     - voll ausgeschrieben, ohne Extends, eigene Fenstergruppe
+	     'workstation_blk700_runenritzer' in XUi_InGame/xui.xml.
+
+	     ANDERS ALS DER WEBSTUHL hat sie einen Werkzeugplatz: Modules "tools,output". Das
+	     Werkzeugfenster steht in XUi_InGame/windows.xml (700_windowToolsRunenritzer) mit zwei
+	     Plaetzen, Ritzmesser und Meissel (F-15 "Ressourcen und Werkstatt"). Ein Rezept mit
+	     craft_tool="itm700_ritzmesser" geht nur, wenn das Messer im Platz liegt.
+
+	     DAS MODELL IST GEBORGT: Vanillas Baumstumpf (treeStumpPOI). Ein Stumpf ist ein
+	     Ritzstock - man ritzt auf ihm, im Freien. Ein eigenes Modell kommt mit F-16;
+	     Groesse und Sitz prueft der Spieltest (N-121). -->
+	<append xpath="/blocks">
+
+		<block name="blk700_runenritzer">
+			<property name="Class" value="Workstation" />
+			<property class="Workstation">
+				<property name="Modules" value="tools,output" />
+				<property name="CraftingAreaRecipes" value="runenritzer" />
+			</property>
+
+			<property name="CreativeMode" value="Player" />
+			<property name="DescriptionKey" value="blk700_runenritzerDesc" />
+			<property name="DisplayType" value="blockMulti" />
+			<property name="WorkstationIcon" value="ui_game_symbol_star" />
+			<property name="CraftIcon" value="ui_game_symbol_star" />
+			<property name="Stacknumber" value="1" />
+
+			<property name="Material" value="Mwood" />
+			<property name="Shape" value="ModelEntity" />
+			<property name="Model" value="#Entities/Trees?Prefabs/Stump.prefab" />
+			<property name="ModelOffset" value="0,0,0" />
+			<property name="ImposterDontBlock" value="true" />
+			<property name="WaterFlow" value="permitted" />
+
+			<property name="Place" value="TowardsPlacerInverted" />
+			<property name="OnlySimpleRotations" value="true" />
+			<property name="IsTerrainDecoration" value="true" />
+			<property name="StabilitySupport" value="false" />
+
+			<property name="Weight" value="0" />
+			<property name="EconomicValue" value="400" />
+
+			<property name="MaxDamage" value="400" />
+			<property name="OpenSound" value="open_workbench" />
+			<property name="CloseSound" value="close_workbench" />
+			<property name="TakeDelay" value="15" />
+
+			<!-- Geflickt mit Holz und Kreide. -->
+			<property class="RepairItems">
+				<property name="resourceWood" value="20" />
+				<property name="itm700_runenkreide" value="2" />
+			</property>
+
+			<drop event="Harvest" name="resourceWood" count="15" tag="allHarvest,lumberjackHarvest,perkJunkMiner" />
+			<drop event="Destroy" count="0" />
+			<drop event="Fall" name="terrDestroyedWoodDebris" count="1" prob="0.75" stick_chance="1" />
+
+			<property name="SortOrder1" value="B282" />
+			<property name="SortOrder2" value="0310" />
+			<property name="Group" value="Limited,Building,advBuilding" />
+			<property name="Tags" value="workstationSkill" />
+			<property name="FilterTags" value="MC_playerBlocks,SC_decor" />
+			<property name="SoundPickup" value="workbench_grab" />
+			<property name="SoundPlace" value="workbench_place" />
+		</block>
+
+	</append>
+</config>

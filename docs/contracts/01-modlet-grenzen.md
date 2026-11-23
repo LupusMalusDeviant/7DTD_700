@@ -313,8 +313,13 @@ Modlets gibt es weiter nicht.~~
 
 **Stand 2026-11-23 (Plan-0002 WP6.7, D158):** das zweite steht — `mod/700_70_Handel` mit
 `ModInfo.xml`, `Config/items.xml` (zwölf Fundschriften) und `Config/loot.xml` (eine Beute-Gruppe,
-sieben Anhänge). Es sind **zehn** Modlets; `smoke.ps1` erwartet zehn. `45_Leben` und `75_Magie`
-gibt es weiter nicht.
+sieben Anhänge). Es sind **zehn** Modlets; `smoke.ps1` erwartet zehn. ~~`45_Leben` und `75_Magie`
+gibt es weiter nicht.~~
+
+**Stand 2026-11-23 (Plan-0002 WP10.4, D177):** das dritte steht — `mod/700_75_Magie` mit
+`ModInfo.xml`, `Config/blocks.xml` (Runenritzer-Bank), `items.xml` (Runenkreide, Glutstein,
+Ritzmesser, Meißel), `recipes.xml` und `XUi_InGame/` (Fenstergruppe, Werkzeugfenster). Es sind **elf**
+Modlets; `smoke.ps1` erwartet elf. `45_Leben` gibt es weiter nicht.
 
 ### A. Vier neue Modlets, zwölf insgesamt
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_75_Magie / items.xml
+	     F-15 Volksmagie, Plan-0002 WP10.4, D177
+
+	     VON HAND GESCHRIEBEN.
+
+	     ZWEI GRUNDSTOFFE (F-15 "Ressourcen und Werkstatt"), aus dem, was es schon gibt (P5):
+	     - Runenkreide: F-15 sagt "Kalk + Ocker + Asche". Ocker gibt es nicht als Stoff; der
+	       Lehm (resourceClayLump) ist die rote Erde, aus der man Ocker schlaemmt. Asche gibt es
+	       auch nicht; Holzkohle gibt das Schwarz. Also Branntkalk, Lehm, Holzkohle.
+	     - Glutstein: F-15 sagt "Holzkohle + Harz". Harz gibt es nicht; Tierfett bindet die
+	       Kohle ebenso und brennt. Erbt von der Holzkohle und brennt darum wie sie - das
+	       braucht der Kraftstein spaeter (D37, WP10.7).
+	     Beide Abweichungen sind zu pruefen (N-121).
+
+	     ZWEI WERKZEUGE fuer die Plaetze der Bank. Voll ausgeschrieben nach Vanillas
+	     Bratrost (toolCookingGrill), OHNE Extends: der Rost traegt die Marke
+	     toolCookingGrill, und geerbt waere unser Messer an der Feuerstelle ein Rost. -->
+	<append xpath="/items">
+
+		<item name="itm700_runenkreide">
+			<property name="Extends" value="resourceCement" />
+			<property name="CustomIcon" value="resourceCement" />
+			<property name="CustomIconTint" value="e6d3a8" />
+			<property name="EconomicValue" value="12" />
+			<property name="EconomicBundleSize" value="1" />
+			<property name="Stacknumber" value="250" />
+			<property name="CraftingIngredientTime" value="2" />
+		</item>
+
+		<item name="itm700_glutstein">
+			<property name="Extends" value="resourceCoal" />
+			<property name="CustomIcon" value="resourceCoal" />
+			<property name="CustomIconTint" value="d9784a" />
+			<property name="EconomicValue" value="10" />
+			<property name="EconomicBundleSize" value="1" />
+			<property name="Stacknumber" value="250" />
+			<property name="CraftingIngredientTime" value="2" />
+		</item>
+
+		<item name="itm700_ritzmesser">
+			<property name="CreativeMode" value="Player" />
+			<property name="Tags" value="itm700_ritzmesser,scrap100" />
+			<property name="HoldType" value="45" />
+			<property name="Meshfile" value="@:Other/Items/Misc/sackPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Miron" />
+			<property name="Stacknumber" value="1" />
+			<property name="EconomicValue" value="120" />
+			<property name="EconomicSellScale" value=".5" />
+			<property name="Group" value="Tools/Traps" />
+			<property name="CustomIcon" value="meleeWpnBladeT0BoneKnife" />
+			<property name="CustomIconTint" value="c8c8c8" />
+			<property name="DescriptionKey" value="itm700_ritzmesserDesc" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+		</item>
+
+		<item name="itm700_meissel">
+			<property name="CreativeMode" value="Player" />
+			<property name="Tags" value="itm700_meissel,scrap100" />
+			<property name="HoldType" value="45" />
+			<property name="Meshfile" value="@:Other/Items/Misc/sackPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Miron" />
+			<property name="Stacknumber" value="1" />
+			<property name="EconomicValue" value="120" />
+			<property name="EconomicSellScale" value=".5" />
+			<property name="Group" value="Tools/Traps" />
+			<property name="CustomIcon" value="resourceNail" />
+			<property name="CustomIconTint" value="a0a0a0" />
+			<property name="DescriptionKey" value="itm700_meisselDesc" />
+			<effect_group>
+				<passive_effect name="ModSlots" operation="base_set" value="0" />
+			</effect_group>
+		</item>
+
+	</append>
+</config>
