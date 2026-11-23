@@ -47,4 +47,29 @@
 			</effect_group>
 		</entity_class>
 	</append>
+
+	<!-- ===================================================================
+	     DER LAUSCHER (F-17 B6, D188; Plan-0002 WP11.7)
+	     ===================================================================
+	     "Reagiert stark auf Geraeusche, schwach auf Sicht." Der Lauscher ist keine neue
+	     Klasse, sondern ein Wesen, das es schon gibt: der Seuchentote Aussaetzige
+	     (zombieMaleHazmat, D147) - unter der Kapuze sieht er schlecht. Seine vier Stufen
+	     (verderbt, schwaerend, glutaeugig, verdammt) erben von ihm (extends).
+	     Er traegt die Werte bisher nicht selbst, sondern erbt sie von zombieTemplateMale;
+	     darum werden sie ANGEHAENGT, nicht gesetzt. Vanillas eigene Kommentare sagen,
+	     was sie heissen:
+	       SightRange            30 -> 12   Meter, so weit er sieht
+	       SleeperNoiseToSense  3,8 -> 2,5  ab welchem Geraeusch ein Schlaefer etwas hoert
+	       SleeperNoiseToWake  9,12 -> 6,8  ab welchem Geraeusch er aufwacht
+	       SleeperSightToWakeMax 340,480 -> 500,640  wie hell man am Rand der Sicht sein muss
+	     Dazu AINoiseSeekDist 6 -> 12 (gesetzt, er traegt ihn selbst). Was der Wert genau
+	     misst, ist nicht gelesen - der Name sagt "wie weit er einem Geraeusch nachgeht"
+	     [verifizieren S-46]. Alle Zahlen sind Setzungen (N-132). -->
+	<append xpath="/entity_classes/entity_class[@name='zombieMaleHazmat']">
+		<property name="SightRange" value="12" />
+		<property name="SleeperNoiseToSense" value="2,5" />
+		<property name="SleeperNoiseToWake" value="6,8" />
+		<property name="SleeperSightToWakeMax" value="500,640" />
+	</append>
+	<set xpath="/entity_classes/entity_class[@name='zombieMaleHazmat']/property[@name='AINoiseSeekDist']/@value">12</set>
 </config>

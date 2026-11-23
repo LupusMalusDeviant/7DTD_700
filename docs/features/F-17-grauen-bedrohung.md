@@ -163,6 +163,14 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 - **Lauscher:** reagiert stark auf Geräusche (Sprint, Kampf), schwach auf Sicht
 - Sagengestalten (Irrlicht lockt, Nachzehrer frisst Leichen) nach F-06
 
+*Stand WP11.7 (D188, zu prüfen N-132, Spieltest S-46):*
+
+| Verhalten | Stand | Warum |
+|---|---|---|
+| **Lauscher** | **gebaut (XML):** der Seuchentote Aussätzige samt seinen vier Stufen sieht 12 statt 30 m, wacht als Schläfer schon bei leiseren Geräuschen auf (6–8 statt 9–12), schwerer durch Sicht, und geht Geräuschen doppelt so weit nach (`AINoiseSeekDist` 12, Bedeutung **[verifizieren S-46]**) | lauter Vanilla-Eigenschaften der Wesen, `700_65_Wesen/Config/entityclasses.xml` |
+| **Pirscher** | **nicht gebaut** | „Abstand halten, bis der Spieler allein oder verwundet ist" ist eine eigene KI-Aufgabe; Vanillas `AITask`-Liste hat keine, die Abstand hält. Braucht ein REA-Finding zu den KI-Aufgaben und dann C# (Regel 2) — gehört zum Direktor (WP11.6) |
+| **Totsteller** | **nicht gebaut** | liegende Leichen, die aufstehen, sind Vanillas Schläfer-Volumen in Orten (Finding WP9.4 Nr. 8) — Prefab-Arbeit an eigenen Orten (F-07, WP6.6), kein XML-Wert |
+
 ### B7 — Erzählende Umgebung (P2, X/Prefabs, an F-07)
 - Pestgruben, Leichenkarren, Grabkreuze mit Bannzeichen, verriegelte Türen *von außen*
 - Kurze Notizen und Inschriften (DE/EN): letzte Gebete, Warnungen, Aufzeichnungen eines Mönchs

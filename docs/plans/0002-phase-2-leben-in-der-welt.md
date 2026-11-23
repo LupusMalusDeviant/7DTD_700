@@ -719,6 +719,8 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Streichposten. (L)
 7. **WP11.7** `[Claude-prüfbar]` **Verhalten** (B6): Totsteller, Lauscher, Pirscher — Werte per
    XML, Verhalten nur nach Finding. (M)
+   *Teil gebaut 2026-11-23 (D188, zu prüfen N-132, Spieltest S-46):* der Lauscher als Werte am
+   Aussätzigen. Offen: Pirscher (KI-Finding, C#, mit WP11.6), Totsteller (Schläfer in eigenen Orten, WP6.6).
 8. **WP11.8** `[Claude-prüfbar]` **Klang** (B2): Stille-Logik und ferne Klänge, diese nur als
    Trugbild (D74). (M)
 9. **WP11.9** `[Claude-prüfbar]` **Seuchennacht:** eigene Texte und Optik nach WP9.4, Wellen aus

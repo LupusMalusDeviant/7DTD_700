@@ -295,6 +295,8 @@ Spielstufe ruft, entscheidet F-09 beim Einbau (WP11).**
 
 Totsteller (liegende Leichen in Orten, die aufstehen), Pirscher (folgt auf Abstand im Nebel),
 Lauscher (reagiert stark auf Geräusche). Seuchentote sind leiser als Vanilla-Zombies (D74, gebaut).
+*Seit WP11.7 (D188, zu prüfen N-132):* der **Seuchentote Aussätzige** ist der Lauscher — schlechte Sicht,
+feines Gehör; Pirscher und Totsteller warten auf KI-Finding bzw. eigene Orte (F-17 B6).
 
 ## Umsetzung
 
