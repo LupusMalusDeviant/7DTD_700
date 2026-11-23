@@ -62,4 +62,75 @@
 	<append xpath="/lootcontainers/lootgroup[@name='groupZpackReg']">
 		<item group="lg700_schriften" loot_prob_template="veryLow" force_prob="true" />
 	</append>
+
+	<!-- ================================================================
+	     BEUTE IN 700 (Plan-0002 WP8.6, D121, D165; F-05 "Beute in 700"). Zu pruefen (N-110).
+
+	     Gemessen am Vorlauf (stand-r): 240 von 1017 Beutegruppen geben nach dem Purge
+	     nichts mehr her. Die meisten sind Twitch, Fahrzeug, Strom, Schusswaffe - dort
+	     gehoert nichts hin. Sechs leere Gruppen tragen aber Vanillas Alltagsbeute und
+	     werden von vielen Behaeltern gezogen; sie bekommen Dinge der Zeit. Die Gruppe
+	     bleibt, Eintraege kommen dazu (wie 700_20_Material bei den Belohnungen).
+
+	       Gruppe              Verweise  vorher (Vanilla)          jetzt
+	       groupMedicalRare        23    Verbandskasten, Pillen     Salbenverband, Kraeutersud, Schiene
+	       groupFoodUncommon       21    Konserven                  Honig, Eintoepfe, gekochtes Fleisch
+	       groupAmmoLarge          20    Patronen (Gruppen leer)    Pfeile und Bolzen, selten ein Buendel
+	       groupDrinksRare         10    Kaffee, Limonade, Schnaps  Bier, Goldruten- und roter Tee
+	       groupAllArmor            5    60 Ruestungsteile          unsere zwoelf (Leder, Stepp, Kette)
+	       groupScrapRare           3    Kuehler                    Buntmetall
+
+	     groupAllArmor ziehen groupArmorScaled und groupArmorChests - also Kleiderschrank,
+	     Kleiderstaender, Ruestungsstaender, Truhen der Soldaten. Vorher stand unsere
+	     Ruestung in KEINER Beute. Kette ist selten (veryLow), Eisen ist knapp (D31).
+
+	     Leer bleiben bewusst: foodCandy (Suessigkeiten mit Wirkung, kein Gegenstueck),
+	     groupToolsT3 (Motorsaege, Bohrer - Werkzeug der dritten Stufe gibt es in 700 nicht).
+	     Alle Mengen und Chancen sind Setzungen fuer das Balancing (WP14.3). -->
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupMedicalRare']">
+		<item name="medicalFirstAidBandage" />
+		<item name="drugHerbalAntibiotics" loot_prob_template="low" />
+		<item name="medicalSplint" />
+	</append>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupFoodUncommon']">
+		<item name="foodHoney" />
+		<item name="foodMeatStew" />
+		<item name="foodVegetableStew" />
+		<item name="foodBoiledMeat" />
+	</append>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupAmmoLarge']">
+		<item name="ammoArrowStone" count="15,25" loot_stage_count_mod="0.01" />
+		<item name="ammoArrowIron" count="10,20" loot_stage_count_mod="0.01" loot_prob_template="low" />
+		<item name="ammoCrossbowBoltStone" count="10,20" loot_stage_count_mod="0.01" />
+		<item name="ammoCrossbowBoltIron" count="8,15" loot_stage_count_mod="0.01" loot_prob_template="low" />
+		<item name="ammoBundleArrowStone" count="1" loot_prob_template="veryLow" />
+	</append>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupDrinksRare']">
+		<item name="drinkJarBeer" />
+		<item name="drinkJarGoldenRodTea" />
+		<item name="drinkJarRedTea" />
+	</append>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupAllArmor']">
+		<item name="itm700_lederwams" />
+		<item name="itm700_lederkappe" />
+		<item name="itm700_wollhandschuhe" />
+		<item name="itm700_wickelschuhe" />
+		<item name="itm700_gambeson" loot_prob_template="low" />
+		<item name="itm700_stepphaube" loot_prob_template="low" />
+		<item name="itm700_stepphandschuhe" loot_prob_template="low" />
+		<item name="itm700_steppschuhe" loot_prob_template="low" />
+		<item name="itm700_kettenhemd" loot_prob_template="veryLow" />
+		<item name="itm700_spangenhelm" loot_prob_template="veryLow" />
+		<item name="itm700_armschienen" loot_prob_template="veryLow" />
+		<item name="itm700_beinschienen" loot_prob_template="veryLow" />
+	</append>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupScrapRare']">
+		<item name="resourceScrapBrass" count="2,5" />
+	</append>
 </config>
