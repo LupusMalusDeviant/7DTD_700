@@ -392,3 +392,35 @@ die neuen wie in §4.
   Start mit acht.
 - Die Zuordnung der Features folgt Plan-0002 (WP5 bis WP13). Verschiebt sich dort ein Feature,
   folgt dieser Nachtrag — nicht umgekehrt gebaut und nachgetragen.
+
+## Nachtrag Phase 2, Teil 2b — was von der Volksmagie wohin gehört, 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (Plan-0002 WP10.2, nach D174); **zu prüfen durch den Nutzer** (N-119).
+Teil 2 A nennt für `700_75_Magie` „Runen, Schutzzeichen, Amulette, ihre Zustände und Rezepte". F-15
+hat seit WP10.1 mehr: Tränke, Fallen, eine Werkstatt, eine Leiste, die Kraftlinien. Die Regel bleibt
+§3 — *Modlet weg → genau dieses Feature weg*; diese Tabelle wendet sie an.
+
+| Fall | Gehört nach | Grund |
+|---|---|---|
+| Runen, Amulette, Segen, Flüche, Zauber, Runenstein: Gegenstand, Rezept, Zustand | `75_Magie` | Teil 2 A |
+| **Tränke und Salben aus F-15** (Eulenauge, Bärenmut, Wolfsbalsam, Quellsud) | `75_Magie` | F-15 führt sie; ohne `75` gibt es sie nicht. Arzneien aus **F-11** bleiben in `45_Leben` (Teil 2 A, Grenzfall „Wirkung einer Arznei") |
+| **Runenritzer-Bank** (Block, Fenstergruppe, Rezept) | `75_Magie` | D57: gebaut mit ihrem Inhalt. Die Werkstätten der Phase 1 bleiben in `40_Bauen`; das Muster wird kopiert, nicht verschoben |
+| **Fallen mit Auslöser** (Schwingbalken, Trittbrett, Stolperschnur, Glutzeichen) und der **Pechtopf** | `75_Magie` | D115 hängt sie an F-15; der Pechtopf ist mechanisch, aber ohne F-15 gibt es ihn nicht |
+| **Kraftlinien** (umgedeutete Strom-Blöcke: Name, Rezept, Brennstoff) | `75_Magie` | F-15 D37 |
+| **Freigabe** der Strom-Kennungen aus der Sperre | `tools/check/denylist.txt`, erzeugt in `10_Purge` | wie §3 und Teil 2 Grenzfall „Herausnehmen": Sperren und Freigeben ist Purge, nie von Hand in `75` |
+| Odem-Leiste und jede andere Anzeige der Magie (XUi) | `75_Magie` | additiv (D5); `75` weg → Leiste weg |
+| Das **sechste Attribut**, seine Perks, Abschriften; das Fertigkeitsfenster mit 9 Feldern | `50_Fortschritt` | Teil 2 A („der Baum des Runenkundigen"); die Bindung gehört zum Baum (Grenzfall „Perk, der … freischaltet") |
+| Der Grauen-Buff, der `.cv700_grauenSchutz` **liest** | `60_Welt` | Zustand „Grauen" (Teil 2 Grenzfall); `75` schreibt, `60` liest — kein XPath über die Grenze (Vertrag 07 Nachtrag 1, N1.3) |
+| Reliquienkapsel in Kloster-Truhen, Kreuzanhänger beim Händler | `70_Handel` | Beute und Ware (Teil 2 Grenzfälle); der Gegenstand selbst steht in `75` |
+| Jeder Name und jeder Text der Magie | `90_Sprache` | ausnahmslos |
+
+**Reihenfolge je Datei** (Teil 2 A): `75` liegt nach `50`, `60` und `70`. Ein Perk in `50` darf ein
+Rezept aus `75` nennen, eine Beute-Gruppe in `70` einen Gegenstand aus `75` — beides sind Namen, keine
+XPath-Ziele. Kein `<set>` und kein `<append>` in `50`, `60` oder `70` zielt auf einen Knoten, den erst
+`75` anlegt.
+
+**Grenze.** Fehlt `75`, nennt ein Perk in `50` ein Rezept, das es nicht gibt, und eine Beute-Gruppe in
+`70` einen fehlenden Gegenstand. Ob das Spiel das als Fehler ins Protokoll schreibt, ist nicht gemessen
+**[verifizieren beim ersten Bau von `75`, WP10.4: einmal ohne `75` starten]**. Schreibt es Fehler, ist
+die Folgerung nicht falsch, aber `50` und `70` müssen dann die Zeilen in `75` anlegen lassen
+(`75` hängt an, statt `50` zu nennen).

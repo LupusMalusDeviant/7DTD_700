@@ -187,3 +187,66 @@ Akzeptanz F-21 („bleibt nach Server-Neustart") und F-08 hängen an „bleibt":
 | b | Direktor-Phase nach Neustart: Ruhe (N-112) | ja, keine eigene Speicherdatei |
 | c | Lesart §2 (`.` lokal, `_`/`%` nicht gesendet) | S-32 (1)–(3) |
 | d | Erreicht `SetCustomVarNetwork` vom Server einen Spieler auf einem anderen Rechner? | S-32 (4) |
+
+## Nachtrag 1 — Odem, Abklingzeiten, Schutz vor Grauen (Plan-0002 WP10.2), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf nach D174 (F-15 „Der Kern der Phase 2 in Zahlen"); **zu prüfen durch den
+Nutzer** (N-119). Noch nichts davon ist gebaut. Der Nachtrag nennt nur Namen, Schreiber und Neustart;
+die Zahlen stehen in F-15 (§7 dieses Vertrags).
+
+### N1.1 Ergänzt §3.4 Odem
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `cv700_odemMax` | wie §3.4 | 0 unter Stufe 2 des Runenkundigen, sonst aus der Stufe | **ein** Buff `buff700_odemStufe`, der je Stufe per `ProgressionLevel`-Bedingung setzt | abgeleitet | Regeneration, HUD |
+| `.cv700_odemRegen` | lokaler CVar | Odem je Sekunde | **allein** `buff700_odemStufe`: er liest `buff700_amfeuer` (`HasBuff`) und das Bernsteinamulett (Ausrüstungs-Bedingung) und setzt daraus den Wert | abgeleitet | `buff700_odemRegen` |
+| `buff700_odemRegen` | Buff (§3.4) | dauernd | — | neu gesetzt | addiert `.cv700_odemRegen` auf `cv700_odem`, kappt bei `cv700_odemMax` |
+| Abzug je Auslösen | — | — | der **Gegenstand** (Segen, Zauber, Fluchtopf): `<requirement>` in der `<action>` sperrt, `ModifyCVar` zieht ab | — | — |
+| Lichtfunke | — | Abzug solange gehalten | Buff des gehaltenen Gegenstands `buff700_lichtfunke` | neu gesetzt | das Licht des Gegenstands per Bedingung `cv700_odem` > 0 **[verifizieren in WP10.9: ob eine Licht-Wirkung am Gegenstand eine Bedingung trägt]** |
+| Quellsud | — | +20 einmal | der Trank (`ModifyCVar` beim Trinken) | — | — |
+
+**Ein Schreiber trotz vieler Quellen:** `cv700_odem` hat zwei Arten Schreiber — die Regeneration und
+die Abzüge. Das ist kein Verstoß gegen §1 Nr. 2, solange **alle** Schreiber Effekte des Spielers sind
+(§4, erster Weg) und keiner vom Server kommt; der Wert ist ein Vorrat, der von einer Seite gefüllt und
+geleert wird. Ein Patch oder der Server schreibt `cv700_odem` nie.
+
+### N1.2 Abklingzeiten
+
+| Name | Art | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|
+| `buff700_<segen>Abklingen`, z. B. `buff700_segenWehrAbklingen` | Buff, Dauer = Abklingzeit aus F-15 | der Segen beim Auslösen | **bleibt** — Vanilla speichert laufende Buffs mit Restzeit **[verifizieren in WP10.5]** | Bedingung `NotHasBuff` in der `<action>` |
+| `buff700_quellsudAbklingen` | ebenso | der Quellsud | ebenso | ebenso |
+
+Abklingzeit als Buff, nicht als CVar mit Zeitstempel: das Spiel zählt die Zeit selbst herunter (P5),
+und der Spieler sieht sie als Symbol.
+
+### N1.3 Schutz vor Grauen (Naht F-15 → F-17)
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `.cv700_grauenSchutz` | lokaler CVar | Anteil, um den der **Zuwachs** sinkt; gekappt | **ein** Buff `buff700_grauenSchutz` (`700_75_Magie`), der die Quellen per `HasBuff` und Ausrüstungs-Bedingung zusammenzählt: Schutzzeichen-Aura, Bärenmut, Hammeramulett, Kreuzanhänger | abgeleitet | der Grauen-Buff (`700_60_Welt`, F-17 B3) beim Zuwachs |
+
+Ändert §5, Zeile „F-15 Segen, Bärenmut, Schutzzeichen → F-17 B3": nicht jeder Buff senkt
+`cv700_grauen` selbst, sondern **ein** Wert sagt, um wie viel der Zuwachs kleiner ist. Grund: §1 Nr. 2 —
+sonst schrieben vier Magie-Buffs in den Grauen-Wert, und keiner wüsste von der Kappung. Die Obergrenze
+ist eine Zahl und gehört nach F-17 (WP11.1).
+
+**Der Punkt vor dem Namen** folgt §1 Nr. 4 (abgeleitet → lokal) und hängt an der Lesart aus §2. Zeigt
+S-32 (1), dass `.` nicht lokal heißt, oder laufen die Buffs des Spielers auf dem Server, fällt der Punkt
+weg — ein Wort, kein neuer Nachtrag.
+
+### N1.4 Auf anderen Wesen
+
+| Name | Art | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|
+| `buff700_fluchSchwere` | Buff auf dem getroffenen Wesen | Wurf des Fluchtopfs (`Explosion.Buff`) bzw. Bannkreis-Aura | geht verloren (30 s) | Tempo des Wesens |
+| `buff700_brand` | Buff auf dem Wesen | Glutrune, Glutpfeil, Glutzeichen | geht verloren | Schaden je Sekunde |
+
+Ob ein Buff auf einem Seuchentoten vom Server oder vom Werfer gesetzt wird, ist nicht gelesen —
+gleich, weil kein CVar daran hängt; der Dedicated-Test in WP10.10 zeigt, ob beide Clients ihn sehen.
+
+### N1.5 Neustart — ergänzt §6
+
+| bleibt | wird neu gesetzt | geht verloren |
+|---|---|---|
+| `cv700_odem`, laufende Abklingzeiten (Indiz) | `cv700_odemMax`, `.cv700_odemRegen`, `.cv700_grauenSchutz`, `buff700_odemStufe`, `buff700_grauenSchutz`, `buff700_lichtfunke` | `buff700_fluchSchwere`, `buff700_brand` |
