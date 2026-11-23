@@ -32,6 +32,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 
 | Schritt | Stand | Wo |
 |---|---|---|
+| WP1.1 Übernahme-Inventar | geschrieben: 101 Zeilen gelesen (Plan-0001 Prüfliste und „Offene Punkte", N-01 bis N-51), jede hat ein Ziel. Neu dafür: zehn Zeilen im Spieltest (S-14 bis S-23, Teil B) und sieben Entscheidungen, die nur in Plan-0001 standen (N-52 bis N-58); S-08 berichtigt (braucht keinen Mitspieler); fünf Punkte ohne Ziel haben einen Vorschlag. WP1.7 bis WP1.9 hier nachgezogen | 0000-entscheidungen Abschnitt 8, Abschnitt 6 |
 | WP1.2 Vertrag 01, Nachtrag „Test-Überlagerung" | geschrieben (Abnahme offen); abweichend vom Schritt liegt das Modlet unter `test/`, nicht unter `mod/` — so kann es nicht ins Paket geraten | Vertrag 01 „Nachtrag Phase 2, Teil 1", N-19 |
 | WP1.3 Test-Überlagerung für T0 | gebaut: acht Lichtquellen auf `GrowthRate` 2; `build.ps1 -MitTest`, `smoke.ps1 -MitTest`, zehnte Prüfung, 18 Gegenproben. Installation nicht ausgeführt | `test/README.md`, S-06 |
 | WP1.4 Textlücken, erster Stapel | gebaut (241 Zeilen) | `a3335ef`, D129 |
@@ -156,13 +157,13 @@ Dieser Plan baut beide darum in **einem** Paket (WP11).
 
 Der Nutzer ist während der Umsetzung nicht erreichbar. Daraus sieben Regeln für jeden Schritt:
 
-1. **Drei Tore öffnet Claude nie selbst:** Push (0000-entscheidungen:44), Installation in den
-   Spielordner und Spielstart (0000-entscheidungen:45), Änderung einer abgenommenen D-Zeile oder
+1. **Drei Tore öffnet Claude nie selbst:** Push (0000-entscheidungen, N-10), Installation in den
+   Spielordner und Spielstart (0000-entscheidungen, N-11), Änderung einer abgenommenen D-Zeile oder
    eines schon gebauten Namens (Projektregel 4; „Kein gebauter Name ist geändert", GDD.md:432).
 2. **Fehlt eine Entscheidung, wird nach der Empfehlung aus `P2-E…` gebaut** und der Bau trägt
    „zu prüfen": eigener Commit je Entscheidung, damit er einzeln zurückgenommen werden kann; eine
    Vorschlagszeile im GDD nach dem Muster von Abschnitt 7.8; ein Eintrag in der einen Liste
-   (0000-entscheidungen:108–109, dort N-60 ff.).
+   (0000-entscheidungen Abschnitt 7, dort N-60 ff.).
 3. **Verträge zuerst, Abnahme nachgereicht** (P2-E02): der Vertrag wird geschrieben, bevor gebaut
    wird; fehlt die Abnahme, trägt er „Abnahme offen" und der Bau darauf „auf Vertragsentwurf".
 4. **Ein Vorlauf ist kein Nachweis.** Ein Schritt mit `[Claude-prüfbar]` endet am Prüfbefehl mit
@@ -207,7 +208,7 @@ baut.
    `smoke.ps1` meldet rot, wenn es im Paket steckt (Gegenprobe). Plan-0001 nennt genau das „nicht
    entworfen" (Plan-0001:2349–2350). (S)
 3. **WP1.3** `[Claude-prüfbar]` Test-Überlagerung für T0 bauen: Wandfackel und Kerzenstumpf mit
-   kurzem Timer (0000-entscheidungen:102; Q33). (S)
+   kurzem Timer (0000-entscheidungen, S-06; Q33). (S)
 4. **WP1.4** `[Claude-prüfbar]` **Textlücken:** erst messen, welche Zeilen aus D129 gebaut sind
    (N-26 nennt sie „folgt"; D129 hat in GDD 7.8 keine eigene Zeile — siehe Offene Punkte). Dann
    übernehmen, was keinen neuen Namen trägt: Unterkleidung und Aufsätze (ruestung.md:741–742),
@@ -224,15 +225,20 @@ baut.
    Teile?), Infektion (D99: ist `drugHerbalAntibiotics` nach dem Purge herstellbar?), Stromaufträge
    aus den Händlerlisten (D103), unerfüllbare Herausforderungen (D104: was tut das Spiel mit einer
    Gruppe unter zehn — aus den Dateien, sonst T0). Je Lücke ein eigener Commit. (M)
-7. **WP1.7** `[braucht Nutzer]` **Testlauf T0 — Sammellauf Phase 1** (rund 30 Minuten,
-   0000-entscheidungen:93–104): installieren, starten, Dump entsteht; S-01 bis S-07, dazu die
-   Bauten aus WP1.4 bis WP1.6.
-8. **WP1.8** `[Claude-prüfbar]` Nach T0: `check-all.ps1` gegen den neuen Dump. Erwartet 7
-   Prüfungen, 0 rot (0000-entscheidungen:35) — **ist es anders, wird zuerst die Ursache benannt**,
-   bevor irgendein Phase-2-Schritt als belegt gilt. Stände in Plan-0001 nachziehen. (S)
-9. **WP1.9** `[braucht Nutzer]` **Abnahmen und Urteile:** Vertrag 04, drei Nachträge
-   ([04-pruefwerkzeuge.md](../contracts/04-pruefwerkzeuge.md):3245, :3294, :3347; N-15 bis N-17);
-   die Bauten N-20 bis N-27; P2-E01 (was aus dem Phase-1-Playtest wird).
+7. **WP1.7** `[braucht Nutzer]` **Testlauf T0 — Sammellauf Phase 1** (0000-entscheidungen
+   Abschnitt 6): installieren, starten, Dump entsteht. *Nachgezogen am 2026-11-23 (WP1.1):* T0 hat
+   zwei Teile — **Teil A** S-01 bis S-13 (die Bauten seit dem 22.11., rund 60 Minuten; das Nötigste
+   ist S-01) und **Teil B** S-14 bis S-23 (Fenster und Texte der Phase 1, die noch niemand im
+   Spiel gesehen hat, rund 45 Minuten; Empfehlung: mit dem Phase-1-Playtest zusammenlegen, N-58).
+   ~~rund 30 Minuten, S-01 bis S-07, dazu die Bauten aus WP1.4 bis WP1.6~~
+8. **WP1.8** `[Claude-prüfbar]` Nach T0: `check-all.ps1` gegen den neuen Dump. Erwartet ~~7~~ 10
+   Prüfungen, 0 rot (0000-entscheidungen, N-01) — **ist es anders, wird zuerst die Ursache benannt**,
+   bevor irgendein Phase-2-Schritt als belegt gilt. Stände in Plan-0001 nachziehen (vier Stellen
+   nennt 0000-entscheidungen Abschnitt 8.4). (S)
+9. **WP1.9** `[braucht Nutzer]` **Abnahmen und Urteile:** die offenen Nachträge der Verträge 01
+   und 04 (~~N-15 bis N-17~~ N-12 bis N-19, N-34, N-36; die Nachträge für Phase 2 selbst — N-35 —
+   gehören zu WP2.8); die Bauten ~~N-20 bis N-27~~ N-20 bis N-33; die sieben Entscheidungen, die
+   bisher nur in Plan-0001 standen (N-52 bis N-58); P2-E01 (was aus dem Phase-1-Playtest wird).
 
 **Ergebnis:** Ein grüner Prüfbefehl an einem Dump des aktuellen Standes — oder eine benannte
 Ursache; eine Liste, in der jeder offene Phase-1-Punkt ein Ziel hat.
@@ -307,7 +313,7 @@ Ursache; eine Liste, in der jeder offene Phase-1-Punkt ein Ziel hat.
    Bedingungen von Meshy lesen und mit Datum zitieren; festhalten, was am Tarif hängt und was
    Claude nicht wissen kann (welcher Tarif gebucht ist). Ergebnis im Kopf von `assets/ASSETS.md`. (S)
 4. **WP3.4** `[Claude-prüfbar]` **Symbol-Durchstich:** ein eigenes Bild (Vorschlag: Silberpfennig —
-   er sieht nach dem Umbiegen dem Silberbrocken ähnlich, 0000-entscheidungen:67) vom Quellbild bis
+   er sieht nach dem Umbiegen dem Silberbrocken ähnlich, 0000-entscheidungen N-23) vom Quellbild bis
    ins Modlet, per `CustomIcon` gewählt; Prüfung *symbole* grün. (S)
 5. **WP3.5** `[Claude-prüfbar]` **Umbiegen, zweite Welle:** die 100 Abschriften und Lehrblätter auf
    ein Papierbild mit Farbton je Reihe (D130, nicht gebaut; 0002 §8 Nr. 1). (M)
@@ -776,7 +782,7 @@ Fünf Läufe für die ganze Phase. Die Dauer von T0 steht in der Liste des Nutze
 
 | Lauf | Wann | Was (Auszug; vollständig im Drehbuch, WP14.2) | Dauer |
 |---|---|---|---|
-| **T0** | sofort | Sammellauf Phase 1: S-01 bis S-07 (0000-entscheidungen:97–103), dazu WP1.4–1.6 | rund 30 min (0000-entscheidungen:93) |
+| **T0** | sofort | Sammellauf Phase 1 (0000-entscheidungen Abschnitt 6): Teil A S-01 bis S-13, Teil B S-14 bis S-23 ~~S-01 bis S-07, dazu WP1.4–1.6~~ | Teil A rund 60 min, Teil B rund 45 min ~~rund 30 min~~ |
 | **T1** | nach WP3 und WP4 | eigene Symbole im Beutel; Modell in der Hand; Landschaft ohne Wracks und Minen; ein erster Rauchtest der C#-Seite, sobald ein Patch existiert | geschätzt 30–45 min |
 | **T2** | Ende 2a | neue Zufallswelt erzeugen; fünf Landschaften je wenige Minuten; Biom-Fortschritt; Gegner im Startgebiet; zwei eigene Orte; ein Handelsposten; Waffen und Rüstung aus WP7 | geschätzt 60–90 min |
 | **T3** | Ende 2b | mit Test-Überlagerung: Seuchennacht jeden Tag, kurze Tage, kurzer Verderb; Runenstein, Odem, Grauen in drei Stufen, Regler, Schild, Lernen, Heilen | geschätzt 90–120 min |

@@ -23,6 +23,11 @@ seit dem 23.11. dreimal `gesperrter-auftrag` (die Stromaufträge, N-31) und 19-m
 sieben Prüfungen grün; ein Vorlauf ist kein Nachweis. **Grün wird der Prüfbefehl erst mit einem Spielstart
 mit dem neuen Stand** (N-01).
 
+**Neu am 2026-11-23, spät:** das **Übernahme-Inventar** (Abschnitt 8) — jeder offene Punkt aus Phase 1 hat
+jetzt ein Ziel. Dabei aufgefallen: 15 Blicke ins Spiel aus Plan-0001 standen in keinem Testlauf (jetzt
+Teil B des Spieltests, S-14 bis S-23), und sieben Entscheidungen standen nur in Plan-0001 (jetzt N-52 bis
+N-58). Der Spieltest dauert damit ehrlich gerechnet **rund 60 Minuten für Teil A** und 45 für Teil B, nicht 30.
+
 Die fünf Punkte, die am meisten bewegen:
 
 1. **N-01** — einmal installieren und starten, damit ein neuer Dump entsteht (ohne ihn bleibt der Prüfbefehl rot).
@@ -38,7 +43,7 @@ Die fünf Punkte, die am meisten bewegen:
 
 | Nr. | Art | Was | Empfehlung / wonach gebaut wurde |
 |---|---|---|---|
-| N-01 | [P] [S] | **Installieren und einmal starten** (`tools\build\build.ps1 -Install`, Spielstart ohne EAC wie am 22.11.), neue Welt oder vorhandene laden, bis der `ConfigsDump` geschrieben ist. Danach `check-all.ps1`. | Erwartet: 7 Prüfungen, 0 rot. Die Mod bleibt bis zu deinem Ja aus dem Spielordner. |
+| N-01 | [P] [S] | **Installieren und einmal starten** (`tools\build\build.ps1 -Install`, Spielstart ohne EAC wie am 22.11.), neue Welt oder vorhandene laden, bis der `ConfigsDump` geschrieben ist. Danach `check-all.ps1`. | Erwartet: ~~7~~ 10 Prüfungen, 0 rot (seit dem 23.11. sind es zehn). Die Mod bleibt bis zu deinem Ja aus dem Spielordner. |
 | N-02 | [E] [S] | **Biom-Fortschritt:** je Reihe nennen 4 von 7 Aufgaben gesperrte Kennungen, alle Gegenmittel und Schutzstücke sind gesperrt. Außerhalb des Kiefernwalds läuft unter freiem Himmel eine Frist ab, danach verliert man Leben bis unter ein Dach. Gemessen aus XML und Spielprotokoll, **im Spiel nicht gesehen** ([`konzept/biome.md`](../konzept/biome.md) §1.10). | **Weg A: in Phase 1 abschalten** — Spieloption „Biom-Fortschritt" beim Anlegen der Welt auf Aus. Umdeuten und zurückholen (Weg B) mit F-07 in Phase 2. ~~Gebaut ist nichts.~~ *Stand 2026-11-23: gebaut ist eine vorgewählte Vorlage „Jahr 700" ohne Biom-Fortschritt (N-32, D136) — sie wählt nur vor, erzwingt nichts.* |
 | N-03 | [E] | **Kerzenstumpf** hängt nach dem Ausbrennen ohne Text an der Wand, lässt sich nicht aufnehmen, gibt beim Abschlagen nichts (dein Befund vom 22.11.). | Offen. Vorschlag: Name und Beschreibung für den Stumpf, Abschlagen gibt 1 Talg zurück; Zahlen mit dem nächsten Test. |
 | N-04 | [E] | **Armbrust vor dem Langbogen:** D8 will die Armbrust „selten, T4"; Vanilla schaltet sie bei Bogenbau 21 frei, den Langbogen bei 36 (D125). | Freischaltstufen tauschen, wie D88 bei den Äxten — **oder** die einfache Armbrust als Jagdwaffe der Mitte tragen. Nicht gebaut. |
@@ -108,10 +113,37 @@ Marke; sonst wird es zurückgebaut.
 | N-50 | [E] | Übrige Vorschläge D110, D111, D113, D115 bis D122, D124. | GDD 7.8 |
 | N-51 | — | `CLAUDE.md` nennt „Entscheidungen D1–D50"; es sind D1–D91 (plus Vorschläge bis D130). Regeldatei — von Claude nicht geändert. | `CLAUDE.md:8` |
 
+**Aus Plan-0001 übernommen (Übernahme-Inventar, Abschnitt 8):** sieben Entscheidungen, die bisher nur dort
+standen — ohne Nummer, ohne Stelle in Plan-0002. Nichts davon ist gebaut.
+
+| Nr. | Art | Was | Wo es steht · Empfehlung |
+|---|---|---|---|
+| N-52 | [E] | **Dürfen Fackeln weiter Schreier anziehen?** Seit D64 brennt die Wandfackel ab (`PlantGrowing`), und damit meldet sie keine Hitze mehr an die Karte — eine zweite Entlastung neben D29, die niemand gewollt hat. Zurückholen ginge nur mit C#. | Plan-0001 Prüfliste 12. **Empfehlung:** so lassen, bis die Furcht (WP11) gebaut ist; die Fackel-Zahl erst danach festziehen. |
+| N-53 | [E] [A] | **Glossar und Wortlaut:** das Glossar abnehmen (vor allem §9 „Spielerdeutsch"); der Wortlaut der Startnotiz; die sieben offenen Begriffe (englisch für Verderbte, Moorleichen, Wanderhändler, Klostermarkt, Fürstenhof; „Schlagringe"; „Scrap Bronze"); „Totenpfennig" (gesetzt) und „Grenzstein" (nur vorgeschlagen). | Plan-0001 Prüfliste 21 b–e; `docs/glossar.md` §9, §10. Kein gebauter Name wird ohne dich geändert (N-80). |
+| N-54 | [E] | **15 Rang-Texte versprechen nur Gesperrtes, und der Rang lässt sich weiter kaufen:** `perkInfiltrator` 1–4 (Landminen), `perkPenetrator` 2–5 (panzerbrechende Munition, Scharfschützengewehre), „Wundarznei" 5 (Schockstab), zwei Meisterschafts-Ränge (Handfeuerwaffen, Gewehrschüsse), zwei Blätter (Landminen, Säure aus Autos). Eine Entscheidung über die **Wirkung**, nicht über Worte. | Plan-0001 „Offene Punkte". **Empfehlung:** Rang verbergen, wo er nichts mehr bringt; Wundarznei 5 bekommt eine eigene Wirkung mit F-11 (WP13). |
+| N-55 | [E] | **Plasmastab und Schleuder:** `meleeWpnBatonT3PlasmaBaton` trägt „erlaubt", weil keine Regel ihn trifft (die Denylist ist deine Sache); über die Schleuder (T0) ist nie entschieden worden. | Plan-0001 „Offene Punkte", D54. **Empfehlung:** Plasmastab sperren (eine Zeile, mit WP3.7); Schleuder mit WP7 als eigenes Stück oder streichen. |
+| N-56 | [E] | **Dritte Sprachspalte gefüllt:** soll `mod700check localization` daraus einen Fehler machen statt eines Hinweises? F-12 sagt beides („leer lassen" und „später über die Community"). | Plan-0001 „Offene Punkte". **Empfehlung:** Hinweis lassen. |
+| N-57 | [E] | **Referenz-UI-Mods:** E C H O bringt auf V 3.40 schon allein sieben Patch-Warnungen mit. Zählen sie als Fehlerzeile, zählt der dritte Lauf der Testmatrix nie. | Plan-0001 Prüfliste 24 e/f. **Empfehlung:** Warnungen der fremden Mod über ihre eigenen Dateien zählen nicht; die Matrix läuft einmal, am Ende von 2a (WP14.5). |
+| N-58 | [E] | **Durchsatz und Phase-1-Playtest:** die Annahme „Arbeitstage je Woche" ist nie bestätigt; die sieben Spieltest-Urteile der Phase 1 (Waffenzweck, Rüstung, Bäume bis T4, Fackel-Last, T3-Basis in der Seuchennacht, drei Tage ohne Anachronismus, Durchlauf bis zur ersten Seuchennacht) und die Release-Entscheidung danach haben keinen Termin. | Plan-0001 Prüfliste 5, 6, 7; N-70. **Empfehlung:** der Playtest fällt mit Testlauf T2 zusammen (ein langer Spielabend statt zweier); bis dahin kein Release. |
+
 ## 6. Gesammelter Spieltest (ein Lauf, nicht viele)
 
-Nach deiner Vorgabe vom 22.11.: keine langen Wartetests für Einzelfragen, kurze Timer, alles in einem Lauf.
-Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
+Nach deiner Vorgabe vom 22.11.: keine langen Wartetests für Einzelfragen, kurze Timer, alles gesammelt.
+Seit dem Übernahme-Inventar (Abschnitt 8) sind es **zwei Teile**, die sich in einer Sitzung oder getrennt
+fahren lassen:
+
+- **Teil A — was die Läufe seit dem 22.11. gebaut haben** (S-01 bis S-13): zusammen **rund 60 Minuten**
+  (die Zeiten unten ergeben 58; die früher genannten „rund 30 Minuten" stimmten seit S-10 bis S-13 nicht mehr).
+  Das Nötigste, wenn die Zeit knapp ist: **S-01** (5 Minuten) — damit wird der Prüfbefehl grün.
+- **Teil B — Fenster und Texte der Phase 1, die noch niemand im Spiel gesehen hat** (S-14 bis S-23,
+  aus Plan-0001 Prüfliste 13 bis 23 und 25 e): **rund 45 Minuten**, fast alles im Kreativmodus.
+  **Empfehlung:** Teil B mit dem Phase-1-Playtest zusammenlegen (N-58), nicht vor Teil A.
+
+Was **nicht** in einen Sammellauf passt und darum beim Playtest bleibt: Nebelwetter über zwei, drei
+Spieltage (Prüfliste 18 d), die sieben Urteile aus Prüfliste 6, die drei Läufe mit fremden UI-Mods
+(Prüfliste 24, N-57).
+
+**Teil A**
 
 | Nr. | Was | Wie lange |
 |---|---|---|
@@ -122,12 +154,28 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-05 | Biom-Fortschritt (N-02): neue Welt mit Option „Aus" **oder** fünf Minuten im Brandwald mit „An" — Zähler, Text, Schaden ansehen. | 5 min |
 | S-06 | Wandfackel und Kerzenstumpf mit **kurzem Test-Timer** ~~(Testbau mit verkürzter Brenndauer, von Claude vorbereitet, sobald du den Test ansetzt)~~ (N-03). **Vorbereitet am 2026-11-23:** `tools\build\build.ps1 -Install -MitTest` legt die Test-Überlagerung dazu — alle acht Lichtquellen brennen dann rund 2 Minuten. Ablauf in sechs Schritten: [`test/README.md`](../../test/README.md). Bitte die Zeit vom Setzen bis zum Erlöschen notieren (daraus folgt die echte Brenndauer). Danach `build.ps1 -Install` ohne den Schalter. | 5 min |
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
-| S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
+| S-08 | **Rezepte und Belohnungen** (Plan-0001 Prüfliste 25 b–e; D89) — ~~zweiter Mitspieler, Dedicated — nur wenn ein Mitspieler da ist~~ *berichtigt am 2026-11-23: die Punkte brauchen keinen Mitspieler; der steht jetzt in S-23.* Im Handwerksfenster: Eisenspitzhacke und Holzbogen (Leder statt Klebeband), Stahlspitzhacke (Leder 3 in der Liste), **Feld** (5 Knochen, kein Salpeter — eines bauen und setzen); keine graue Zutat. Einen Auftrag der Stufe 1 abschließen: „Lehrblatt-Bündel" unter den Belohnungen, geöffnet drei Sorten. Im Kreativmenü „Feldbündel 2" und „Aufsatz-Bündel Fernkampf 1" öffnen: es kommt etwas heraus. (Die 300 Silberpfennige am Abschluss der Stufe 1 nur, wenn es sich ergibt.) | 8 min |
 | S-10 | **Wasser und Sud:** ein leeres Gefäß am Fluss oder Tümpel benutzen — wird es zu trübem Wasser (D134)? Kräutersud im Kreativmenü ansehen (Name, Bild) und an der Feuerstelle mit Topf suchen (N-30). | 3 min |
 | S-11 | **Spielvorlage** (N-32), im Hauptmenü ohne Welt: „Neues Spiel" öffnen — steht „Jahr 700" unter „Gemoddet" und ist vorgewählt? Steht darin „Biomfortschritt" auf „Nein"? Dann Luftabwurf auf „nie", Händlerstimmen und Automaten aus stellen, „Code kopieren" und den Code nennen. | 3 min |
 | S-12 | **Herausforderungen** (N-33): das Fenster öffnen und die neun ansehen — stimmen Name, Text und Symbol? Dann drei kurz anstoßen: ein Vogelnest zerlegen (zählt „Federn sammeln"?), ein Tier ausnehmen (zählen Knochen und Tierfett?), Wasser abkochen (zählt es?). Zeigt die Verfolgung noch auf Spülbecken oder Autos? | 5 min |
 | S-13 | **Alter Spielstand und geänderte Herausforderungen** (Finding F-18, „Offen" 1 bis 4; N-33): einen Spielstand laden, der **vor** der neuen `challenges.xml` angelegt wurde — kein `ERR`/`EXC` im Protokoll? Im Konsolenfenster `challenges list Harvesting` — stehen die neuen Ziele da, mit welchem Zählerstand? Die zehn entfernten (N-33): fehlen sie, und lässt sich die Gruppe „Bauer" mit vier abschließen (`challenges complete challenge <Name> r`)? | 10 min |
 | S-09 | **Eigenes Bild im Beutel** (N-28, N-29, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes; dazu Schmiedeeisen, Tiegelstahl, Klinge, Schmiedeflicken. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
+
+**Teil B — Phase 1, noch nie im Spiel gesehen** (neu am 2026-11-23 aus dem Übernahme-Inventar; die
+Einzelheiten und die Rückwege stehen je Punkt in Plan-0001, Prüfliste)
+
+| Nr. | Was | Wie lange |
+|---|---|---|
+| S-14 | **Fertigkeitsfenster** (Prüfliste 13, 14, 15, 21 i): stehen die fünf Bäume **Handwerker, Krieger, Jäger, Heiler, Fuhrmann** da? Sind die zwanzig verborgenen Zweige weg (Scharfschütze, Elektriker, Geschütztürme … und zehn Handwerks-Stufen)? Stehen die 14 Stufen mit deutschen Namen unter den Bäumen? Zwei, drei Rang-Texte anlesen — klingt einer nach Neuzeit, wird einer abgeschnitten? | 5 min |
+| S-15 | **Werkbänke** (Prüfliste 15, 22 d): Kategorie-Leiste an Zimmermannsbank, Rennofen und Esse wie in Vanilla, mit unseren fünf Wörtern? Feuerstelle (zwei Werkzeugslots), Kalkofen (Brennstoffkammer), Webstuhl (Fenster) öffnen. **Fehlt die Leiste, kippt D68.** | 4 min |
+| S-16 | **Abschriften** (Prüfliste 16), Kreativmodus: 13 Reihen, keine tote, kein Vanilla-Name; „Bergmannskunde" zeigt 5 Blätter, nach dem fünften kommt der Abschluss mit Klang; die Nummer im Fenster ist die im Namen („Blatt 2 von 5"). | 5 min |
+| S-17 | **Gebundene Rezepte** (Prüfliste 17), **neues Spiel:** Sax, Lederwams, Webstuhl gesperrt; Luppe, Schmiedeeisen, Palisade offen. „Lehrblatt: Klingenschmiede" lesen — steigt die Stufe um eins? Soweit es schnell geht: wird der Sax mit höherer Stufe besser als „grob"? Unter Rüstungsbau „Lumpen", „Wolle und Leder", „Gambeson", „Kettenzeug". | 6 min |
+| S-18 | **Nacht und Nebel** (Prüfliste 18 a–c, e, f), Zeit über die Konsole stellen: Mitternacht im Wald ohne und mit Fackel — zu dunkel, zu hell? Vollmond gegen Neumond: deutlich? Drinnen heller als draußen? Im Ödland dauerhaft diesig, noch kämpfbar? Bildrate im Nebel? **Urteil, nicht richtig oder falsch.** | 6 min |
+| S-19 | **Am Feuer** (Prüfliste 19 a–d): an brennender Feuerstelle und Esse erscheint „Am Feuer", die Ausdauer kommt schneller; aus heißt weg. Am Holzfeuer **keine** Wirkung. Und an der Wandfackel — erscheint „Wärmendes Feuer"? | 4 min |
+| S-20 | **Hinhören** (Prüfliste 20): nachts mit Seuchentoten in Hörweite, die einen nicht bemerkt haben — still genug, doch nicht leer? Hört man einen Verfolger rechtzeitig? Kommt der Laut beim Bemerken zu früh (`SoundSense`)? | 4 min |
+| S-21 | **Lesen** (Prüfliste 21 a, f, g, h; 23): Startnotiz heißt „Pergamentfetzen", nirgends „Duke"; Ladebildschirm zeigt unsere Tipps („Am Feuer", „Lehrblätter"); in den Spieloptionen „Seuchennacht", kein Name abgeschnitten; im Herausforderungs-Fenster „Seuchentote töten". Ein Bruchstück im Kreativmenü: unser Text („Zerbrochener Klingenstahl …") oder Vanillas? Dazu die Fernkampf-Namen und die getauschten Äxte (D87, D88) ansehen. | 6 min |
+| S-22 | **Hauptmenü** (Prüfliste 22 b, c): steht unten links „7DTD_700"? Wirken die Fenster warm getönt, ist Ausgegrautes lesbar? — Das **Protokoll** dazu liest Claude nach dem Lauf (22 a: neunmal drei Zeilen mit `Conditional`, keine Fehlzeile; dazu die 43 Warnungen ungeprüfter Herkunft aus dem Lauf vom 21.11.). | 2 min |
+| S-23 | **Mit einem Mitspieler**, nur wenn einer da ist (N-94): „Am Feuer" tragen beide unabhängig (Prüfliste 19); der Mitspieler öffnet das Fenster zur Auftragsabgabe — kommt die Ausnahme `rewardicon` vom 21.11. wieder? Sein Protokoll aufheben. | offen |
 
 ## 7. Phase 2 — Entscheidungen aus dem Loop
 
@@ -190,3 +238,71 @@ wird nur bis zum Dokument oder Vertragsentwurf geführt.
 **Was ohne dich steht** (Plan-0002, Risiko R3 und R5): jedes eigene 3D-Modell im Spiel (Unity, N-60), jeder
 Nachweis im Spiel (fünf gebündelte Testläufe T0 bis T4), CC0-Downloads (N-78) und womöglich der Bau eigener
 Orte, falls er nur im Editor des Spiels geht.
+
+## 8. Übernahme-Inventar — wohin jeder offene Punkt aus Phase 1 gehört (Plan-0002 WP1.1)
+
+Gelesen am 2026-11-23 am Stand `eb1ab09`: Plan-0001 Prüfliste 2, 5–7, 11–25, jeder Spiegelstrich der
+„Offenen Punkte" dort und jede Zeile N-01 bis N-51 — zusammen 101 Zeilen. Jede bekommt ein Ziel: eine
+S-Zeile (Abschnitt 6), ein Paket von Plan-0002, eine N-Zeile (deine Entscheidung) oder „bleibt in
+Plan-0001". **Vorher** hatten 15 Blicke ins Spiel keine S-Zeile, und 5 Punkte hatten gar kein Ziel; dafür
+sind S-14 bis S-23 und N-52 bis N-58 neu. Die Ziele ohne Fundstelle im Plan sind **mein Vorschlag, zu prüfen**.
+
+### 8.1 Plan-0001, Prüfliste
+
+| Punkt | Worum es geht | Ziel |
+|---|---|---|
+| 2 | Dedicated Server installieren oder das Ziel streichen | N-94 |
+| 5 | Durchsatz-Annahme | N-58 |
+| 6, 7 | Sieben Spieltest-Urteile; Release-Entscheidung | N-58 (Playtest mit T2), sonst bleibt in Plan-0001 |
+| 11 | Wandfackel im geschlossenen Raum | S-06 |
+| 12 | Fackeln und Schreier | N-52 |
+| 13, 14 | Fünf Bäume; zwanzig verborgene Zweige | S-14 |
+| 15 | Kategorie-Knöpfe der Werkbänke; 14 Stufen | S-15, S-14 |
+| 16 | Abschriften-Fenster | S-16 |
+| 17 | Gebundene Rezepte, Lehrblatt, Qualitätsleiter | S-17 |
+| 18 | Nacht, Mond, Innenlicht, Nebel, Bildrate | S-18; 18 d (zwei, drei Spieltage) beim Playtest |
+| 19 | Am Feuer | S-19; die Wiederholung mit Mitspieler S-23 |
+| 20 | Hinhören | S-20 |
+| 21 | Lesen im Spiel (a, f, g, h, i); Wortlaut und Begriffe (b–e) | S-21, S-14; N-53 |
+| 22 | Protokoll, Hauptmenü, Farben, drei Werkstatt-Fenster | S-22 (das Protokoll liest Claude), S-15 |
+| 23 | Beschreibung eines Bruchstücks | S-21 |
+| 24 | Testmatrix mit zwei fremden UI-Mods | a erledigt; b–f bleibt in Plan-0001 (WP8.9), Wiederholung Plan-0002 WP14.5; die Frage dazu N-57 |
+| 25 | Sackgassen und Belohnungen | a erledigt am 22.11. (seither wieder rot: N-01, S-01); b–e S-08 |
+
+### 8.2 Plan-0001, „Offene Punkte"
+
+| Ziel | Punkte |
+|---|---|
+| **Teil A des Spieltests** | Lichtquellen und Fackel-Zahl (S-06, N-03) · Bauten vom 22.11.: Bogenzeug, Werkzeug-Flicken, Kit (S-03, S-04) · Bilder im Beutel (S-02) · Sackgassen, leere Belohnungen, Felder (S-08) · Herausforderungen (S-12, S-13) · Stromaufträge (S-01) · Infektion nur mit Honig (S-10; fertig gebaut in WP13) |
+| **Teil B des Spieltests** | Fernkampf-Namen und Axt-Tausch (S-21) · XUi-Patches ohne `conditional` (S-22; die Umstellung danach bleibt Plan-0001 WP8.7) · `SoundSense` streichen? (S-20) · Reste des Laufs vom 21.11.: 43 Warnungen, Ausnahme `rewardicon` beim Mitspieler (S-22, S-23) |
+| **Deine Entscheidung** | Dump-Suche (N-15) · zweites Review der Vorprüfung (N-17) · Vorprüfung WP8.9, Punkt 2 (N-57) · Rang-Texte (N-54) · Plasmastab, Schleuder (N-55) · dritte Sprachspalte (N-56) · sieben Glossar-Begriffe (N-53) · Biomnamen und Umfang von Learning by Doing (N-82, N-87) |
+| **Paket von Plan-0002** | Ferne Klänge und Stille-Logik (WP11.8; Findings in WP9.4) · Händler sprechen modernes Englisch (WP8.5, N-84) · Flusstal-Nebel (WP6.1) · Helligkeitsregler (WP11.4, WP9.4) · D24, zweiter Weg (WP12.1) |
+| **Bleibt in Plan-0001** | Vorprüfung WP8.9, Punkte 3 und 4 (`game_version()`, Groß- und Kleinschreibung) · Zahnrad-Fertigkeiten in einen Baum? (WP9) · drei ruhende Befunde an `sprachverweise-pruefen.ps1` · drei Zahlen aus Vanilla (WP9) · Patch-Manifest leer (Feststellung) |
+| **Erledigt** | Viertes Review (fünf Befunde behoben) |
+| **Bisher ohne Ziel — Vorschlag, zu prüfen** | **Kohlenerz** ohne Namen und Platz → Frage im Feature-Dokument der Welt (WP6.1) · **`armorParts` und Bogenteile ohne Beschreibung** → nächster Textstapel (WP3.9) · **Reichweite von `sprachverweise-pruefen.ps1`** (Buffs, Fertigkeiten, Aufträge) und die **Dauerprüfung „Text rät zu Gesperrtem"** → Prüfung *textluecken* (WP2.6 e) · **Bündel-Inhalt ist kein Weg** im Prüfwerkzeug (ein freigegebenes Bündel mit Gesperrtem bliebe grün) → eigener Nachtrag zu Vertrag 04, zusammen mit Wesen-Abwürfen und Spielereignissen, die ebenfalls keine Wege sind (WP2.7) · **`fogPower`-Versuch** („abends dichter") → eine Zeile der Test-Überlagerung, wenn der Nebel in WP6.1 neu gefasst wird |
+
+### 8.3 Die Zeilen N-01 bis N-51
+
+| Ziel | Zeilen |
+|---|---|
+| **Teil A des Spieltests** | N-01, N-31 (S-01) · N-02 (S-05; Weg B in WP6.3) · N-03 (S-06) · N-20, N-21 (S-03) · N-22 (S-04) · N-23 (S-02) · N-26 (S-07) · N-28, N-29 (S-09) · N-30 (S-10) · N-32 (S-11) · N-33 (S-12, S-13) |
+| **Abnahme am Papier** | N-12 bis N-19, N-34, N-35, N-36 (Verträge) · N-24, N-25, N-27 (Stichprobe) |
+| **Tore** | N-10 (Push), N-11 (Installation, Spielstart) |
+| **Paket von Plan-0002** | N-43 → WP5.1 (N-81) · N-44 → WP8.1 (N-84) · N-48 → WP6.1, WP6.3 (N-82) · N-49 → WP3.5, WP3.7, WP3.8, WP5.4 · N-45, N-46, N-47 → Entwurfsstapel (N-80); berührt WP7.2, WP7.3, WP13.6 |
+| **N-40, sechs Kernfragen** | Tod → N-89 · Seuchennacht → N-90, WP11.1 · Religion → WP6.7 · Figuren → N-81, WP5.1 · Schwierigkeit → N-95 · **das Spielziel (D106) nennt kein Paket von Plan-0002** |
+| **Ohne Stelle in Plan-0002 — Vorschlag, zu prüfen** | N-04 Armbrust vor dem Langbogen → mit den Waffen der Phase 2 (WP7.2 baut den Langbogen) · N-41 getragene Lücken (D93) → mit der Abnahme an M1 · aus N-42: Luftabwurf (D95) → S-11 und die Voreinstellung; „Tonkrug" → Textstapel (WP3.9) · aus N-45: Heidelbeere → Nahrung (WP13) · aus N-50: D116, D117, D120, D124 nennt kein Paket — sie warten auf dein Urteil zu N-50 · N-51 (Regeldatei, nur du) |
+
+### 8.4 Wo die Pläne hinter dieser Liste waren
+
+- **Plan-0002 nannte einen älteren Stand:** T0 als „S-01 bis S-07, rund 30 Minuten", „7 Prüfungen", die
+  Abnahmen „N-15 bis N-17", die Bauten „N-20 bis N-27", dazu Zeilenverweise auf diese Liste, die seit
+  ihrem Wachsen ins Leere zeigten. **Nachgezogen am 2026-11-23** in WP1.7 bis WP1.9 und in den Regeln 1
+  und 2 der Arbeitsweise; verwiesen wird jetzt auf Nummern, nicht auf Zeilen.
+- **Plan-0001 ist an vier Stellen hinter sich selbst** (Fernkampf-Namen „tragen weiter Vanillas Namen",
+  Einheit von `GrowthRate` „noch nicht belegt", „Infektion hat nur noch Honig", „nicht gebaut:
+  Schmiedeeisen, Tiegelstahl"). Das Nachziehen ist WP1.8, nach dem Spieltest — bis dahin gilt diese Liste.
+- **Zwei Zeitpunkte für den Push:** N-10 sagt „nach N-01", Plan-0002 „nach der Abnahme von Phase 2".
+  **Empfehlung:** N-10 gilt — früh pushen, sobald der Prüfbefehl grün ist; sonst wächst der ungesicherte
+  lokale Stand weiter. Deine Entscheidung.
+- **Eigene Bilder im Beutel** stehen hier in Teil A (S-09), im Plan in Testlauf T1. Kein Widerspruch in
+  der Sache: ein Blick von einer Minute, wann immer das Spiel zuerst läuft.
