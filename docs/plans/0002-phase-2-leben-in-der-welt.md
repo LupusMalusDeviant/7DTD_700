@@ -100,6 +100,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP11.5 Trugbilder, Teil | **gebaut** (D187, N-131, S-45): Schritte, Rascheln, Tür aus Vanilla-Lauten; `kette-pruefen` prüft Laute. Offen bis WP7.6: eigene Laute. | 60_Welt, tools/check |
 | WP11.7 Verhalten, Teil | **gebaut** (D188, N-132, S-46): der Lauscher als Werte am Aussätzigen. Offen: Pirscher (C#, WP11.6), Totsteller (WP6.6). | 65_Wesen |
 | WP11.8 Klang | **gelesen, nichts gebaut** (D189, N-133): Finding „Stille und Umgebungslaute", Soll-Datei `wp118.tsv` (11 Zeilen, `verify` Exit 0, Gegenprobe Exit 1); Triage-Zeile 21 entschieden: C# beim Client, Patch vielleicht. | rea/findings, tools/meta, triage |
+| WP14.2 Drehbücher, Teil | **geschrieben** (D191, N-135): `docs/pruefung/0004-drehbuch-spieltests.md` — alle 47 S-Zeilen in fünf Sitzungen (A 15, B 160, C 25, D 60 min, E wartet), T1–T3 abgebildet, T4 bleibt Playtest. Elfte Prüfung `drehbuch-pruefen` (Vertrag 04 Nachtrag WP14.2), Gegenproben 330 → **337**. | pruefung, tools/check |
 | WP11.9 Deutungs-Texte | **gebaut** (D190, N-134, S-47): sechs Fundschriften (Strafe, Fluch, Krankheit je zwei), 12 Sprachzeilen, 6 Glossarzeilen, Beute-Gruppe 12 → 18. Im Spiel ungelesen. | 70_Handel, 90_Sprache, glossar, lore |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
@@ -831,6 +832,8 @@ mit eigenem Gesicht und Vorboten.
 2. **WP14.2** `[Claude-prüfbar]` **Drehbücher T1 bis T4** unter `docs/pruefung/`: je Zeile was, wie,
    erwartetes Ergebnis, Dauer; dazu die Test-Überlagerung je Lauf. Sie entstehen mit den Paketen
    und sind fertig, bevor der Nutzer den Lauf ansetzt. (M)
+   *Teil geschrieben 2026-11-23 (D191, zu prüfen N-135):* ein Drehbuch für alle S-Zeilen in fünf
+   Sitzungen, mit Prüfung `drehbuch-pruefen`. Offen: das Drehbuch wächst mit jeder neuen S-Zeile.
 3. **WP14.3** `[Claude-prüfbar]` **Balancing Phase 2** in `docs/balancing/`, jede Zahl mit
    Begründung; „ungemessen", bis ein Lauf sie gesehen hat. (M)
 4. **WP14.4** `[braucht Nutzer]` **Testlauf T4 — Playtest Phase 2**, mit einem Mitspieler beim

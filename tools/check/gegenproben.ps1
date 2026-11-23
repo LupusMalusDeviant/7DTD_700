@@ -1288,7 +1288,7 @@ Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 
     'kette-pruefen: SDTD_PATH ist nicht gesetzt',
     'sprachverweise-pruefen: SDTD_PATH ist nicht gesetzt',
     '-> nicht geprueft, zaehlt als rot',
-    '10 Pruefungen, 6 rot')
+    '11 Pruefungen, 6 rot')
 
 # Der Nachbarfall aus dem zweiten Review (2026-11-20): SDTD_PATH ist GESETZT, zeigt aber auf
 # einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
@@ -1303,7 +1303,7 @@ Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Ab
 } -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
     'den Vanilla-Ordner',
     '-> nicht geprueft, zaehlt als rot',
-    '10 Pruefungen, 6 rot')
+    '11 Pruefungen, 6 rot')
 
 # Und der Fall, der seit WP8.1 nur aufgeschrieben war (Vertrag 04): ein GENANNTER Pfad,
 # den es nicht gibt, meldete "0 XPaths, GREEN".
@@ -1408,7 +1408,7 @@ else {
         'purge-patch (sind die Patches aktuell?)',
         'den Vanilla-Ordner',
         '-> nicht geprueft, zaehlt als rot',
-        '10 Pruefungen, 6 rot')
+        '11 Pruefungen, 6 rot')
 }
 
 # ------------------------------------------------- Viertes Review (2026-11-21)
@@ -1942,7 +1942,7 @@ Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile'
     Configuration   = $Configuration
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -MustContain @(
     '-> nicht geprueft, zaehlt als rot',
-    '10 Pruefungen, 6 rot')
+    '11 Pruefungen, 6 rot')
 
 # (6) Dasselbe OHNE -Source und ohne ConfigsDump: %APPDATA% zeigt fuer diesen Lauf auf einen
 #     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
@@ -1959,7 +1959,7 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $glossarDaten -MustContain @(
     'Quelle: KEINE',
     'NICHT GEPRUEFT: keine Quelle',
-    '10 Pruefungen, 7 rot')
+    '11 Pruefungen, 7 rot')
 
 # ------------------------------------------------- Dump-Suche kennt -UserDataFolder (2026-11-22)
 # Mit '-UserDataFolder=<Ordner>' legt das Spiel Spielstaende unter <Ordner>\Saves ab, nicht
@@ -2004,7 +2004,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $aAppdata -MustContain @(
         "Quelle: $aDump",
-        '10 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
+        '11 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
 
     # (b) Zwei Dumps, der unter %APPDATA% ist JUENGER: er gewinnt, nicht der Ort.
     $bAppdata = Join-Path $dumpBaum 'b\appdata'
@@ -2017,7 +2017,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $bAppdata -MustContain @(
         "Quelle: $bDumpAppdata",
-        '10 Pruefungen, 6 rot') -MustNotContain @("Quelle: $bDumpNutzer")
+        '11 Pruefungen, 6 rot') -MustNotContain @("Quelle: $bDumpNutzer")
 
     # (c) launchersettings.json ist kaputt: Hinweis, kein Abbruch, und ohne anderen Dump
     #     bleibt es bei "keine Quelle" mit Ergebniszeile.
@@ -2029,7 +2029,7 @@ try {
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $cAppdata -MustContain @(
         'launchersettings.json ist nicht lesbar',
         'Quelle: KEINE',
-        '10 Pruefungen, 7 rot')
+        '11 Pruefungen, 7 rot')
 
     # (d) Kein Startprogramm, aber SDTD_USERDATA zeigt auf den Ordner.
     $dAppdata = Join-Path $dumpBaum 'd\appdata'
@@ -2042,7 +2042,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $dAppdata -MustContain @(
         "Quelle: $dDump",
-        '10 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
+        '11 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
 }
 finally {
     if ($userdataVorher) { $env:SDTD_USERDATA = $userdataVorher }
@@ -3501,6 +3501,34 @@ try {
 finally {
     if (Test-Path -LiteralPath $ueberBaum) { Remove-Item -LiteralPath $ueberBaum -Recurse -Force }
 }
+
+# ------------------------------------------ Drehbuch der Spieltests (WP14.2, 2026-11-23)
+# drehbuch-pruefen.ps1 haelt jede S-Zeile der Entscheidungsliste gegen das Drehbuch
+# (Vertrag 04, "Nachtrag WP14.2"). Der erste echte Lauf von Hand fand S-33 nur in einem
+# Bereich "S-32 bis S-35" - genau dieser Fall steht unten als Probe.
+Write-Output ""
+Write-Output "== Gegenproben: Drehbuch der Spieltests =="
+$dbDaten = Join-Path $data 'drehbuch'
+Test-Script 'drehbuch-pruefen: jede Zeile hat einen Platz, gestrichene brauchen keinen' 0 @{
+    Liste = (Join-Path $dbDaten 'liste.md'); Drehbuch = (Join-Path $dbDaten 'gut.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('5 S-Zeilen, 0 ohne Platz, 0 unbekannt, 1 gestrichen')
+Test-Script 'drehbuch-pruefen: fehlende Zeile und Zeile nur im Bereich "S-32 bis S-35" werden rot' 1 @{
+    Liste = (Join-Path $dbDaten 'liste.md'); Drehbuch = (Join-Path $dbDaten 'fehlt.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('[ROT] S-02 hat keinen Platz', '[ROT] S-33 hat keinen Platz')
+Test-Script 'drehbuch-pruefen: S-3 ist nicht S-33, und eine erfundene Nummer wird rot' 1 @{
+    Liste = (Join-Path $dbDaten 'liste.md'); Drehbuch = (Join-Path $dbDaten 'verwechslung.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('[ROT] S-33 hat keinen Platz', '[ROT] S-3 steht im Drehbuch, aber nicht in der Liste')
+Test-Script 'drehbuch-pruefen: Nummer im Drehbuch, die die Liste nicht kennt' 1 @{
+    Liste = (Join-Path $dbDaten 'liste.md'); Drehbuch = (Join-Path $dbDaten 'unbekannt.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('[ROT] S-36 steht im Drehbuch') -MustNotContain @('S-04 steht im Drehbuch')
+Test-Script 'drehbuch-pruefen: Liste ohne S-Zeile ist nicht pruefbar, nicht gruen' 2 @{
+    Liste = (Join-Path $dbDaten 'leer.md'); Drehbuch = (Join-Path $dbDaten 'gut.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('nicht pruefbar')
+Test-Script 'drehbuch-pruefen: fehlendes Drehbuch ist nicht pruefbar' 2 @{
+    Liste = (Join-Path $dbDaten 'liste.md'); Drehbuch = (Join-Path $dbDaten 'gibt-es-nicht.md') } `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('Datei fehlt')
+Test-Script 'drehbuch-pruefen ohne Parameter: echte Liste und echtes Drehbuch sind gruen' 0 @{} `
+    -Skript 'drehbuch-pruefen.ps1' -MustContain @('0 ohne Platz, 0 unbekannt')
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

@@ -389,6 +389,27 @@ else {
     Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
+# ---------------------------------------------------- Drehbuch der Spieltests
+# Jede Spieltest-Zeile S-NN der Entscheidungsliste hat einen Platz in einer Sitzung des
+# Drehbuchs (docs\pruefung\0004-drehbuch-spieltests.md; Vertrag 04 "Nachtrag WP14.2",
+# Plan-0002 WP14.2). Braucht keinen Spielpfad.
+$drehbuchSkript = Join-Path $here 'drehbuch-pruefen.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Drehbuch der Spieltests ----"
+if (Test-Path $drehbuchSkript) {
+    Invoke-Pruefskript $drehbuchSkript
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  drehbuch-pruefen.ps1 fehlt: $drehbuchSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
 # ---------------------------------------------------- Asset-Register
 # Jedes ausgelieferte Stueck hat eine Zeile in assets/ASSETS.md, und jedes fertige Bild ist
 # das, was aus seinem Quellbild entsteht (Vertrag 05 Abschnitte 4 und 5). Das Werkzeug, das

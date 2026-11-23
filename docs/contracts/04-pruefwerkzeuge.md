@@ -4214,3 +4214,33 @@ rot; Vanilla-Laute, `#`, die Zahl und der leere Wert nicht (2 rot). Am echten Mo
 
 **Grenzen:** eigene Laute (F-16) gibt es noch nicht; kommen sie, muss die Regel deren Liste kennen.
 Laute, die der Spielcode aus Teilen zusammensetzt, liest sie nicht.
+
+## Nachtrag WP14.2 — Prüfung `drehbuch-pruefen`, 2026-11-23, **Abnahme offen** (N-135)
+
+Gebaut im autonomen Lauf (Plan-0002 WP14.2 Teil, D191).
+
+**Anlass.** Die Spieltests (S-01 bis S-47) stehen als Tabellenzeilen in der Entscheidungsliste §6; das
+Drehbuch `docs/pruefung/0004-drehbuch-spieltests.md` ordnet sie fünf Sitzungen zu. Wächst die Liste und
+das Drehbuch nicht mit, fällt ein Test still heraus. Der erste Abgleich von Hand fand genau das: S-33
+stand nur im Bereich „S-32 bis S-35".
+
+**Die Regel.** `tools/check/drehbuch-pruefen.ps1` (Parameter `-Liste`, `-Drehbuch`, Vorgaben die beiden
+echten Dateien) liest jede Tabellenzeile der Liste, die mit `| S-NN` beginnt, und sucht die Nummer im
+Drehbuch als **eigene Nummer** (davor kein Buchstabe, keine Ziffer, kein Bindestrich; danach keine
+Ziffer). Bereiche zählen nicht. Rot ist (1) eine Zeile ohne Platz und (2) eine Nummer im Drehbuch, die
+die Liste nicht kennt. Eine ganz gestrichene Zeile (`| ~~S-NN`) braucht keinen Platz und darf genannt
+werden. Ausgang 0/1/2; 2 heißt nicht prüfbar (Datei fehlt, keine S-Zeile). Ausgabe: `Drehbuch: N
+S-Zeilen, M ohne Platz, K unbekannt, G gestrichen` (am echten Stand 47, 0, 0, 0).
+
+**In `check-all.ps1`** als **elfte** Prüfung, ohne Spielpfad. Die neun Gegenproben, die die Ergebniszeile
+von `check-all` lesen, erwarten jetzt „11 Prüfungen".
+
+**Gegenproben** (7 neu, 330 → **337**), Testdaten `testdaten/drehbuch/`: sauber (0); eine Zeile fehlt
+und eine steckt nur in einem Bereich (1, beide genannt); `S-3` gegen `S-33` und eine zu kurze Nummer (1);
+eine erfundene Nummer, die gestrichene darf stehen (1); Liste ohne S-Zeile (2); Drehbuch fehlt (2); ohne
+Parameter am echten Stand (0). Beim Bau fand die Gegenprobe einen Fehler in den eigenen Testdaten: die
+Überschrift nannte die fehlenden Nummern und machte sie so „platziert" — jede Nennung zählt, auch im
+Fließtext. Das ist gewollt (das Drehbuch nennt Zeilen auch in Sätzen); die Testdaten sind berichtigt.
+
+**Grenzen:** die Prüfung sieht nicht, ob ein Teilpunkt (S-31 (3)–(8)) seinen Platz hat — nur die Zeile.
+Ob die Minuten stimmen, prüft sie nicht.
