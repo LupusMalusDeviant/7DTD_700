@@ -275,7 +275,7 @@ Im Spiel ungesehen → Prüfliste 19 im Plan. Messungen: Befund §8.
 | Seuchentote leiser | **nicht als Pegel** — der liegt in Unity-Vorlagen. Gebaut: sie geben **seltener** Laut (ohne Ziel ein Drittel so oft, in der Verfolgung gut halb so oft) |
 | ihr erster Laut ist oft schon nah | zur Hälfte: Schläfer stöhnen selten auf; der Laut beim Bemerken (`SoundSense`) ist nicht angefasst |
 | ferne Klänge | **nicht gebaut** — siehe unten |
-| Stille als Werkzeug (Tiere verstummen) | Phase 2, C# |
+| Stille als Werkzeug (Tiere verstummen) | Phase 2, C# — *seit WP11.8 gelesen (D189, N-133):* nicht XML; die Landschaftslaute liegen in einer Unity-Vorlage, C# beim Client im Direktor (WP11.6), vielleicht mit einem Postfix ([Finding](../rea/findings/WP11-stille-und-umgebungslaute.md)). `SetAudioMixerState` „Deafened" wäre XML, nimmt aber **jeden** Laut — verworfen, weil es den Lauscher (D188) entwertet |
 
 **B2 und B4 widersprechen sich, und D74 folgt B4.** B2 nennt ferne Klänge „MVP", B4 nennt
 einen Laut ohne Quelle ein Trugbild: Phase 2, erst ab „Verängstigt", nur beim Betroffenen,

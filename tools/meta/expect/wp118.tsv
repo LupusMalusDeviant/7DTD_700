@@ -1,0 +1,18 @@
+# Soll-Signaturen fuer das Finding WP11-stille-und-umgebungslaute (Plan-0002 WP11.8).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran. Die Datei meldet ein Spiel-Update, das den spaeteren C#-Weg der "Stille"
+# (F-17 B2: Tiere verstummen) ungueltig machen koennte: Zugriff ueber die oeffentliche Instanz auf die
+# Landschafts-Klaenge, ohne Harmony.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp118.tsv
+EnvironmentAudioManager	Instance	static EnvironmentAudioManager EnvironmentAudioManager::Instance
+EnvironmentAudioManager	audioBiomes	AudioBiome[] EnvironmentAudioManager::audioBiomes
+EnvironmentAudioManager	GlobalEnvironmentVolumeScale	static float EnvironmentAudioManager::GlobalEnvironmentVolumeScale
+EnvironmentAudioManager	FixedUpdate	void EnvironmentAudioManager::FixedUpdate()
+EnvironmentAudioManager	Pause	void EnvironmentAudioManager::Pause()
+EnvironmentAudioManager	UnPause	void EnvironmentAudioManager::UnPause()
+AudioBiome	TransitionTo	void AudioBiome::TransitionTo(float)
+AudioBiome	triggers	AudioTrigger[] AudioBiome::triggers
+AudioTrigger	SetVolume	void AudioTrigger::SetVolume(float)
+AudioObject	SetVolume	void AudioObject::SetVolume(float)
+MinEventActionSetAudioMixerState	Execute	void MinEventActionSetAudioMixerState::Execute(MinEventParams)

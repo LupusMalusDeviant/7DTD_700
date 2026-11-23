@@ -93,6 +93,13 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP10.5c Segen und Fluch | **gebaut** (D180, N-124, S-39): `700_75_Magie` — Geweihtes Wasser (Feuerstelle, frei), Segen der Wehr und Totensegen (Beutel, Bannkunde 1 bzw. 2), Fluchtopf (Runenritzer-Bank, Bannkunde 1; Wurf ohne Schaden, `Explosion.Buff`); 5 Buffs (2 Wirkungen, 2 Abklingzeiten, `buff700_fluchSchwere` auf Wesen); Odem und Abklingzeit als Bedingungen in der Aktion. Bannkunde-Texte nennen die Segen; 14 Sprachzeilen neu, 2 geändert, 6 Glossarzeilen. Finding WP9.5 berichtigt (Vanilla nutzt die Bedingung in der Aktion einmal, Molotow). **Hängt an:** `cv700_odem` (WP10.6). Im Spiel ungeprüft. | 75_Magie, 50_Fortschritt, 90_Sprache |
 | WP10.5d Amulette | **gebaut** (D181, N-125, S-40): `700_75_Magie` — 4 Amulette auf `BiomeBadge4` (Bernstein, Hammer, Kreuz, Reliquienkapsel), 2 Rezepte an der Bank (Odemtiefe 1, Runenritzen 1); `700_20_Material` — `itm700_bernstein`; `700_70_Handel` — Kreuzanhänger am Klostermarkt, Bernstein am Marktflecken, Reliquienkapsel in Särgen und Totenladen. Wirkung der Reliquie selbst, die anderen drei über Marken für WP10.6/WP11. **Prüfung erweitert:** `kette-pruefen` liest Namen in Beute und Ware (Vertrag 04 Nachtrag WP10.5d), Gegenproben 322 → **323**. 10 Sprachzeilen neu, 2 geändert, 5 Glossarzeilen. Im Spiel ungeprüft. **WP10.5 damit fertig** bis auf das Schutzzeichen (WP11). | 75_Magie, 20_Material, 70_Handel, 50_Fortschritt, tools/check |
 | WP10.6 Odem | **gebaut** (D182, N-126, S-41): `700_75_Magie/Config/buffs.xml` — `buff700_odemStufe`, `buff700_odemRegen`, gesetzt über Vanillas `buffStatusCheck01`; `XUi_InGame/windows.xml` — Odem-Leiste über den HUD-Balken (`{cvar(…)}`, [Finding WP10.6](../rea/findings/WP10-odem-leiste.md), Soll-Datei `wp106.tsv` 4× ok, Gegenprobe Exit 1). Kosten per XML (WP9.5), **kein Patch**. Vertrag 07 Nachtrag 2. **Prüfung erweitert:** Buff-Namen (Vertrag 04 Nachtrag WP10.6), Gegenproben 323 → **325**. Probe `t700_odemVoll` neu; S-39 berichtigt. Im Spiel ungeprüft. | 75_Magie, test, tools/check, tools/meta |
+| WP10.9 Zauber | **gebaut** (D183, N-127, S-42): Glutpfeil, Lichtfunke, Bannkreis in `700_75_Magie`, Freischaltung in Glutzauber und Bannkunde; `kette-pruefen` liest Tags in Bedingungen (Vertrag 04 Nachtrag WP10.9). Im Spiel ungeprüft. | 75_Magie, 50_Fortschritt, tools/check |
+| WP11.1/11.2 F-09, F-17 ausgearbeitet | **geschrieben** (D184, N-128): Deutungen, Wellen-Tabelle, stiller Beginn, Vorboten; Grauen in Zahlen mit Hysterese; Vertrag 07 Nachtrag 4 (Abnahme offen). Nichts gebaut. | F-09, F-17, Vertrag 07 |
+| WP11.3 Grauen, XML | **gebaut** (D185, N-129, S-43): Zähler, drei Stufen, Panik, Gesellschaft, Schutz; `kette-pruefen` prüft CVar-Namen gegen Vertrag 07. Im Spiel ungeprüft. | 60_Welt, 75_Magie, test, tools/check |
+| WP11.9 Seuchennacht, Teil XML | **gebaut** (D186, N-130, S-44): Brecher und Anführer in Vanillas Wellen, stiller Beginn mit Glocke; `kette-pruefen` prüft Wesen-Gruppen. Offen: Himmel, Vorboten, Deutungs-Texte. | 65_Wesen, 60_Welt, tools/check |
+| WP11.5 Trugbilder, Teil | **gebaut** (D187, N-131, S-45): Schritte, Rascheln, Tür aus Vanilla-Lauten; `kette-pruefen` prüft Laute. Offen bis WP7.6: eigene Laute. | 60_Welt, tools/check |
+| WP11.7 Verhalten, Teil | **gebaut** (D188, N-132, S-46): der Lauscher als Werte am Aussätzigen. Offen: Pirscher (C#, WP11.6), Totsteller (WP6.6). | 65_Wesen |
+| WP11.8 Klang | **gelesen, nichts gebaut** (D189, N-133): Finding „Stille und Umgebungslaute", Soll-Datei `wp118.tsv` (11 Zeilen, `verify` Exit 0, Gegenprobe Exit 1); Triage-Zeile 21 entschieden: C# beim Client, Patch vielleicht. | rea/findings, tools/meta, triage |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
@@ -723,6 +730,10 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Aussätzigen. Offen: Pirscher (KI-Finding, C#, mit WP11.6), Totsteller (Schläfer in eigenen Orten, WP6.6).
 8. **WP11.8** `[Claude-prüfbar]` **Klang** (B2): Stille-Logik und ferne Klänge, diese nur als
    Trugbild (D74). (M)
+   *Gelesen 2026-11-23 (D189, zu prüfen N-133):* Finding „Stille und Umgebungslaute" mit Soll-Datei
+   `wp118.tsv` — die Stille ist **nicht XML**, sondern C# beim Client (mit WP11.6), ein Postfix nur,
+   wenn der Versuch es verlangt. Ferne Klänge bleiben Trugbilder (D74) und warten auf eigene Laute
+   (WP7.6). Nichts gebaut.
 9. **WP11.9** `[Claude-prüfbar]` **Seuchennacht:** eigene Texte und Optik nach WP9.4, Wellen aus
    den Gruppen von WP5.6, Vorboten am Vortag, der stille Beginn (F-09:12–15). (L)
    *Teil XML gebaut 2026-11-23 (D186, zu prüfen N-130, Spieltest S-44):* Wellen-Zeilen für Brecher

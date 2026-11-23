@@ -42,7 +42,7 @@ ein viertes, das zwischen den ersten beiden liegt:
 | 18 | Wurfspeer | F-02 | **XML reicht** | `ItemActionThrownWeapon` (Vanilla, auskommentiert) | S-33 (4) |
 | 19 | Schild blockt von vorn | F-02 | **ein Patch — Phase 3** | Postfix auf `EntityAlive::DamageEntity`, beim Besitzer des Getroffenen | Phase 3 (D50) |
 | 20 | Seuchennacht-Sperre für Wegsteine | F-13 | **XML reicht** | Buff setzt `cv700_…` während `IsBloodMoon`; Ereignis-Kette prüft `RequirementCVar` | Phase 3 |
-| 21 | Tiere verstummen (Stille) | F-09, F-17 B2 | **offen** — nicht gelesen | Tierlaute liegen bei den Wesen (`entityclasses.xml`, `SoundRandom…`) | eigenes Finding vor WP11.9 |
+| 21 | Tiere verstummen (Stille) | F-09, F-17 B2 | ~~**offen** — nicht gelesen~~ *seit WP11.8 (D189, zu prüfen N-133):* **C# beim Client, Patch vielleicht** — nicht XML | ~~Tierlaute liegen bei den Wesen (`entityclasses.xml`, `SoundRandom…`)~~ Landschaftslaute kommen aus einer Unity-Vorlage über `EnvironmentAudioManager` (öffentlich); Vanilla setzt die Lautstärke jeden Takt neu — hält ein Senken von außen nicht, wäre ein Postfix auf `FixedUpdate` nötig ([Finding](findings/WP11-stille-und-umgebungslaute.md), `wp118.tsv`) | Direktor (WP11.6), Versuch |
 
 ## Was daraus folgt
 
