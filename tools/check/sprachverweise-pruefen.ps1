@@ -326,6 +326,14 @@ function Read-Knoten {
     if (-not $Angewandt -and (Test-Gleich $name 'property') -and (Test-Gleich $Knoten.GetAttribute('name') 'DescriptionKey')) {
         Add-Genannt $Knoten.GetAttribute('value') 'Eigenschaft DescriptionKey' $Datei -Einzeln -Zaehlt $zaehlt
     }
+    # Eine Sandbox-Vorlage (<preset> in sandbox_overrides.xml) nennt ihren Anzeigenamen im
+    # Attribut 'localized_name'. Es endet nicht auf '_key' und faellt darum nicht unter die
+    # Regel oben; das Spiel liest es trotzdem als Schluessel (Finding F-17, Abschnitt 1:
+    # SandboxOptionPreset::get_DisplayName). EIN Schluessel, keine Kommaliste. Ein leerer
+    # Wert nennt nichts (Vanillas Beispielzeile traegt localized_name="").
+    if ((Test-Gleich $name 'preset') -and $Knoten.HasAttribute('localized_name')) {
+        Add-Genannt $Knoten.GetAttribute('localized_name') '<preset> @localized_name' $Datei -Einzeln -Zaehlt $zaehlt
+    }
     foreach ($kind in $Knoten.get_ChildNodes()) { Read-Knoten $kind $Datei $Angewandt }
 }
 

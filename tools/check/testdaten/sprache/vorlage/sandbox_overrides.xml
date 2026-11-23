@@ -1,0 +1,9 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1: eine Sandbox-Vorlage. Kein Spielinhalt.
+	     Der Anzeigename steht in 'localized_name' - einem Attribut, das nicht auf '_key'
+	     endet. Die zweite Vorlage traegt es leer und nennt damit nichts. -->
+	<append xpath="/sandbox_overrides">
+		<preset name="pruef" localized_name="pruef700_vorlage" description="Test" description_key="pruef700_vorlageText" icon="" code="A" default="true" />
+		<preset name="pruefLeer" localized_name="" description="Test" description_key="" icon="" code="A" />
+	</append>
+</config>

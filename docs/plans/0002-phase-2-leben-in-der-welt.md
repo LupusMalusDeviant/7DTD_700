@@ -35,6 +35,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP1.2 Vertrag 01, Nachtrag „Test-Überlagerung" | geschrieben (Abnahme offen); abweichend vom Schritt liegt das Modlet unter `test/`, nicht unter `mod/` — so kann es nicht ins Paket geraten | Vertrag 01 „Nachtrag Phase 2, Teil 1", N-19 |
 | WP1.3 Test-Überlagerung für T0 | gebaut: acht Lichtquellen auf `GrowthRate` 2; `build.ps1 -MitTest`, `smoke.ps1 -MitTest`, zehnte Prüfung, 18 Gegenproben. Installation nicht ausgeführt | `test/README.md`, S-06 |
 | WP1.4 Textlücken, erster Stapel | gebaut (241 Zeilen) | `a3335ef`, D129 |
+| WP1.5 Biom-Fortschritt, Weg A | gemessen (Finding F-17: `sandbox_override` setzt keinen Wert, der Optionscode ist rechenbar) und gebaut: eine vorgewählte Vorlage „Jahr 700" mit genau einer geänderten Einstellung; die Voreinstellung als Dokument | `docs/konzept/voreinstellung-700.md`, D136, N-32, N-13, S-11 |
 | WP1.6 Vier Phase-1-Lücken | **drei von vier:** Wasser gemessen — erreichbar, nichts gebaut (D134); Infektion gemessen und gebaut — Kräutersud (D133, N-30); Stromaufträge gemessen und gebaut — neue Auftragsregel der Sperrliste, drei Patchzeilen, acht Gegenproben (D135, N-31, N-14). Offen: Herausforderungen (D104) | S-10, S-01 |
 | WP2.2 Vertrag 05 (Entwurf) | geschrieben, am 2026-11-23 in drei Punkten präzisiert | `b2ddada`, N-71, N-18 |
 | WP2.6 c/d, WP2.7 Prüfungen *symbole* und *asset-register* | gebaut, 27 Gegenproben | Vertrag 04 „Nachtrag Prüfungen der Phase 2, Teil 1" |

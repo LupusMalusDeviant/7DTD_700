@@ -1894,6 +1894,29 @@ Test-Script 'sprachverweise: Attribute und Kinder, die Knoten-Eigenschaften verd
     "Schluessel 'pruef700_adapterLies' hat keine Zeile",
     '== Ergebnis: 3 rot -> RED ==')
 
+# (e2) Seit dem 2026-11-23 (Plan-0002 WP1.5): eine Sandbox-Vorlage nennt ihren Anzeigenamen
+#      in 'localized_name', und das endet nicht auf '_key'. Ohne die Regel dafuer stand die
+#      Zeile des Namens als "wird nicht gelesen" da (so fiel es am echten Stand auf); mit
+#      ihr ist sie gelesen, und fehlt sie, ist es ein genannter Schluessel ohne Zeile. Die
+#      zweite Vorlage im Satz traegt das Attribut leer und darf nichts nennen.
+Test-Script 'sprachverweise: der Anzeigename einer Sandbox-Vorlage ist ein gelesener Schluessel' 0 @{
+    Patches     = @(Join-Path $spracheDaten 'vorlage\sandbox_overrides.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'vorlage\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    'genannte Schluessel: 2 (in unserer Datei: 2, nur in Vanilla: 0, ohne Zeile: 0)',
+    'nicht gelesen: 0',
+    'GREEN') -MustNotContain @("Zeile 'pruef700_vorlage' wird nicht gelesen")
+
+Test-Script 'sprachverweise: Anzeigename einer Sandbox-Vorlage ohne Zeile ist rot' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'vorlage\sandbox_overrides.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'vorlage\Localization-ohne-name.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruef700_vorlage' hat keine Zeile",
+    'ohne Zeile: 1',
+    '== Ergebnis: 1 rot -> RED ==')
+
 # (f) Regel 6: nichts gelesen ist nicht gruen. Sieben Eingaenge, jeder Ausgang 2.
 Test-Script 'sprachverweise: Sprachdatei ohne Spalte Key ist nicht pruefbar' 2 @{
     Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')

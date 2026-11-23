@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / sandbox_overrides.xml
+	     Plan-0002 WP1.5, D128 Weg A, D136. Beleg: Finding F-17 (statisch gelesen).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     EINE Vorlage, EINE geaenderte Einstellung: der Biom-Fortschritt ist aus.
+	     Mit unserer Mod ist er nicht loesbar (D128): je Reihe nennen vier von sieben
+	     Aufgaben gesperrte Kennungen, alle Gegenmittel und Schutzstuecke sind gesperrt.
+
+	     Der Code ist GERECHNET, nicht aus dem Optionsfenster kopiert, und im Spiel
+	     nicht geprueft (Pruefliste S-11):
+	       A                     Kopf (Version des Formats in V 3.40 b10)
+	       AAJ ABJ ACJ ADJ ARF BNC   Vanillas Vorwahl "Adventurer", unveraendert
+	                             (derselbe Code steht in serverconfig.xml)
+	       CDA                   BiomeProgression (Wert 55 = C,D) auf Index 0 = aus
+	     Ohne die sechs Gruppen davor stuende die Vorlage auf den rohen Vorgaben und
+	     waere nebenbei eine andere Schwierigkeit als Vanillas Vorwahl.
+
+	     default="true" WAEHLT NUR VOR, wenn "Neues Spiel" aufgeht. Es erzwingt nichts,
+	     und auf einem Dedicated Server wirkt es gar nicht: dort gehoert der Code in
+	     serverconfig.xml unter SandboxCode.
+
+	     Bewusst KEIN <sandbox_override option="BiomeProgression" />: das schaltet
+	     nichts aus, es sperrt nur das Bedienfeld - auf "ein", sobald jemand eine
+	     andere Vorlage waehlt (F-17, Abschnitt 2).
+
+	     Die Attribute stehen vollstaendig da wie in Vanillas Beispielzeile; eine
+	     Vorlage ohne Pflichtangabe faellt nach F-17 vermutlich ohne Meldung weg. -->
+	<append xpath="/sandbox_overrides">
+		<preset name="700" localized_name="700_vorlageName" description="Recommended for this mod: default difficulty, biome progression off." description_key="700_vorlageDesc" icon="" code="AAAJABJACJADJARFBNCCDA" default="true" />
+	</append>
+</config>

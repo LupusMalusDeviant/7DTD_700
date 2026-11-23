@@ -14,7 +14,7 @@ Marken: **[E]** Entscheidung · **[A]** Abnahme eines Vertrags · **[S]** nur im
 **Stand 2026-11-23, früh:** Phase 1 ist gebaut, aber **nicht abgenommen**; Phase 2 läuft im Loop (Plan-0002,
 Entwurf); nichts ist gepusht (HEAD lokal vor `origin`), die Mod liegt **nicht** im Spielordner.
 
-Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **278 Gegenproben, 0 fehlgeschlagen;
+Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **280 Gegenproben, 0 fehlgeschlagen;
 10 Prüfungen, 1 rot (Exit 1)** — drei Prüfungen sind neu (*Symbole*, *Asset-Register*, *Test-Überlagerung*;
 N-18, N-19). Rot ist *anachronisms* mit vier Fehlern: `erreichbarer-anachronismus: resourceRepairKit` und
 seit dem 23.11. dreimal `gesperrter-auftrag` (die Stromaufträge, N-31) — der Spiel-Dump von
@@ -38,7 +38,7 @@ Die fünf Punkte, die am meisten bewegen:
 | Nr. | Art | Was | Empfehlung / wonach gebaut wurde |
 |---|---|---|---|
 | N-01 | [P] [S] | **Installieren und einmal starten** (`tools\build\build.ps1 -Install`, Spielstart ohne EAC wie am 22.11.), neue Welt oder vorhandene laden, bis der `ConfigsDump` geschrieben ist. Danach `check-all.ps1`. | Erwartet: 7 Prüfungen, 0 rot. Die Mod bleibt bis zu deinem Ja aus dem Spielordner. |
-| N-02 | [E] [S] | **Biom-Fortschritt:** je Reihe nennen 4 von 7 Aufgaben gesperrte Kennungen, alle Gegenmittel und Schutzstücke sind gesperrt. Außerhalb des Kiefernwalds läuft unter freiem Himmel eine Frist ab, danach verliert man Leben bis unter ein Dach. Gemessen aus XML und Spielprotokoll, **im Spiel nicht gesehen** ([`konzept/biome.md`](../konzept/biome.md) §1.10). | **Weg A: in Phase 1 abschalten** — Spieloption „Biom-Fortschritt" beim Anlegen der Welt auf Aus. Umdeuten und zurückholen (Weg B) mit F-07 in Phase 2. Gebaut ist nichts. |
+| N-02 | [E] [S] | **Biom-Fortschritt:** je Reihe nennen 4 von 7 Aufgaben gesperrte Kennungen, alle Gegenmittel und Schutzstücke sind gesperrt. Außerhalb des Kiefernwalds läuft unter freiem Himmel eine Frist ab, danach verliert man Leben bis unter ein Dach. Gemessen aus XML und Spielprotokoll, **im Spiel nicht gesehen** ([`konzept/biome.md`](../konzept/biome.md) §1.10). | **Weg A: in Phase 1 abschalten** — Spieloption „Biom-Fortschritt" beim Anlegen der Welt auf Aus. Umdeuten und zurückholen (Weg B) mit F-07 in Phase 2. ~~Gebaut ist nichts.~~ *Stand 2026-11-23: gebaut ist eine vorgewählte Vorlage „Jahr 700" ohne Biom-Fortschritt (N-32, D136) — sie wählt nur vor, erzwingt nichts.* |
 | N-03 | [E] | **Kerzenstumpf** hängt nach dem Ausbrennen ohne Text an der Wand, lässt sich nicht aufnehmen, gibt beim Abschlagen nichts (dein Befund vom 22.11.). | Offen. Vorschlag: Name und Beschreibung für den Stumpf, Abschlagen gibt 1 Talg zurück; Zahlen mit dem nächsten Test. |
 | N-04 | [E] | **Armbrust vor dem Langbogen:** D8 will die Armbrust „selten, T4"; Vanilla schaltet sie bei Bogenbau 21 frei, den Langbogen bei 36 (D125). | Freischaltstufen tauschen, wie D88 bei den Äxten — **oder** die einfache Armbrust als Jagdwaffe der Mitte tragen. Nicht gebaut. |
 
@@ -53,6 +53,7 @@ Die fünf Punkte, die am meisten bewegen:
 
 | Nr. | Art | Was |
 |---|---|---|
+| N-13 | [A] | Zwei kleine Nachträge zur Spielvorlage (N-32): **Vertrag 01, Teil 1b** — `700_60_Welt` trägt `sandbox_overrides.xml` mit genau einer Vorlage und keinem `sandbox_override`; **Vertrag 04, Sprachschlüssel einer Spielvorlage** — `localized_name` an einem `preset` zählt als genannter Schlüssel (zwei Gegenproben). Gebaut am 2026-11-23. |
 | N-14 | [A] | Vertrag 04, **Nachtrag Auftragsregeln** — eine Zeile `auftrag:<Muster>` in `denylist.txt` urteilt über Aufträge in den Händlerlisten; `purge-patch` nimmt sie aus den Listen (die Definition bleibt), `anachronisms` meldet sie; eine Auftragsregel ohne Treffer ist beim Erzeugen ein Fehler. Acht Gegenproben. Gebaut am 2026-11-23 für N-31. |
 | N-15 | [A] | Vertrag 04, **Nachtrag Dump-Suche** (`check-all.ps1` kennt `-UserDataFolder`). |
 | N-16 | [A] | Vertrag 04, **Nachtrag Leermeldung** (`=kein-aufschub` in `aufschub.txt`). |
@@ -82,6 +83,7 @@ Marke; sonst wird es zurückgebaut.
 | N-29 | [E] [S] | **Drei weitere eigene Bilder** statt Vanillas Barren mit dem Stempel „Fe 26": **Schmiedeeisen** (auch Schmiedeflicken, getönt), **Tiegelstahl**, **Klinge**. Alle aus Blender, alle im Register. Quellbilder unter `assets/quelle/symbole/`. | D132, Plan-0002 WP3.6 | die Bilder selbst (einfach gehalten — Stäbe und eine rohe Klinge); im Spiel S-09. |
 | N-30 | [E] [S] | **Kräutersud** gegen Infektion: `drugHerbalAntibiotics` ist von der Denylist genommen (die Denylist ist deine Sache — darum ausdrücklich hier), heißt „Kräutersud / Herb Decoction" und hat ein Rezept ohne Chrysantheme, Salpeter und Blaubeeren: Pilze 3, Goldrute 3, Aloe-Blatt 2, abgekochtes Wasser 1, an der Feuerstelle mit Topf. Freischaltung über Wundversorgung 30 wie in Vanilla; er liegt auch wieder in der Beute. Vorher gab es gegen eine Infektion nur Honig. | D133 | Freigabe der Kennung; Name; Rezept und Mengen; ob Aloe als Zutat passt. Im Spiel: S-10. |
 | N-31 | [E] | **Stromaufträge heraus:** „Strom wiederherstellen" (Stufe 2 bis 4) steht bei keinem der fünf Händler mehr in der Auftragsliste — 15 Einträge, drei Patchzeilen. Die Sperrliste hat dafür eine neue Regelart bekommen (`auftrag:tier*_restore_power`; die Denylist ist deine Sache, darum ausdrücklich hier). Der Auftrag selbst bleibt im Spiel stehen, damit er als „Brunnen wiederherstellen" zurückkommen kann (F-10, WP8); bis dahin hat Stufe 4 drei Auftragsarten statt vier. | D135, N-14 | die Regel in der Sperrliste; ob der Auftrag bis WP8 ganz fehlen darf oder lieber sofort umgedeutet werden soll. Im Spiel nichts zu tun: der Prüfbefehl liest die Listen im nächsten Dump (S-01). |
+| N-32 | [E] [S] | **Spielvorlage „Jahr 700"** (englisch „Year 700"): beim Anlegen einer Welt vorgewählt, Schwierigkeit wie Vanillas „Adventurer", **Biom-Fortschritt aus**. Der Optionscode ist **gerechnet, nicht kopiert** (`AAAJABJACJADJARFBNCCDA`; Finding F-17). Gemessen dabei: `sandbox_override` taugt nicht — es sperrt nur das Bedienfeld. Die Vorlage wählt nur vor; auf einem Dedicated Server muss der Code in `serverconfig.xml`. Weitere Optionen (Luftabwurf nie, Händlerstimmen aus, Automaten aus, Technikstufe) sind **Empfehlung, nicht gebaut**: [`konzept/voreinstellung-700.md`](../konzept/voreinstellung-700.md). | D136, N-13 | Name der Vorlage; ob sie vorgewählt sein soll; welche der weiteren Optionen hinein sollen. Im Spiel: S-11. |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut
 
@@ -116,6 +118,7 @@ Erwartete Dauer: **rund 30 Minuten**, wenn N-01 ohnehin läuft.
 | S-07 | Neue Texte (N-26): Unterkleidung, ein Aufsatz, Haselbogen im Beutel lesen. | 3 min |
 | S-08 | Prüfliste 25 b–d aus Plan-0001 (zweiter Mitspieler, Dedicated) — nur wenn ein Mitspieler da ist. | offen |
 | S-10 | **Wasser und Sud:** ein leeres Gefäß am Fluss oder Tümpel benutzen — wird es zu trübem Wasser (D134)? Kräutersud im Kreativmenü ansehen (Name, Bild) und an der Feuerstelle mit Topf suchen (N-30). | 3 min |
+| S-11 | **Spielvorlage** (N-32), im Hauptmenü ohne Welt: „Neues Spiel" öffnen — steht „Jahr 700" unter „Gemoddet" und ist vorgewählt? Steht darin „Biomfortschritt" auf „Nein"? Dann Luftabwurf auf „nie", Händlerstimmen und Automaten aus stellen, „Code kopieren" und den Code nennen. | 3 min |
 | S-09 | **Eigenes Bild im Beutel** (N-28, N-29, N-62): Silberpfennig im Kreativmenü ansehen — drei graue Scheiben statt eines leeren Feldes; dazu Schmiedeeisen, Tiegelstahl, Klinge, Schmiedeflicken. Im Protokoll steht dann eine Zeile `[MODS] Creating new atlas 'ItemIconAtlas' for mod '700_20_Material'` oder ähnlich (Finding F-16). | 1 min |
 
 ## 7. Phase 2 — Entscheidungen aus dem Loop
@@ -174,7 +177,7 @@ wird nur bis zum Dokument oder Vertragsentwurf geführt.
 | N-92 | P2-E23 | Ansteckung zwischen Spielern (Q10) | Nein. |
 | N-93 | P2-E24 | Verderb ohne Vanilla-Verfallssystem | Nur bei kleinem Patch ohne eigene Netzpakete; sonst rutscht er nach Phase 3. |
 | N-94 | P2-E25 | „Host + 1 Mitspieler" statt „Dedicated + 2 Clients" (D113) | Ja, so markiert; Dedicated bleibt Bedingung für einen öffentlichen Release. |
-| N-95 | P2-E26 | Voreinstellung „700" und Musik | Dokument sofort, Datei nach kopiertem Optionscode; Vanilla-Musik aus, keine eigene Musik in Phase 2. |
+| N-95 | P2-E26 | Voreinstellung „700" und Musik | Dokument sofort, Datei nach kopiertem Optionscode; Vanilla-Musik aus, keine eigene Musik in Phase 2. *Stand 2026-11-23: Dokument und Datei sind da (N-32) — der Code für Ja/Nein-Optionen ließ sich rechnen; für Luftabwurf und Technikstufe braucht es weiter den kopierten Code (S-11). Musik ist keine Sandbox-Option und über die Vorlage nicht abstellbar.* |
 
 **Was ohne dich steht** (Plan-0002, Risiko R3 und R5): jedes eigene 3D-Modell im Spiel (Unity, N-60), jeder
 Nachweis im Spiel (fünf gebündelte Testläufe T0 bis T4), CC0-Downloads (N-78) und womöglich der Bau eigener

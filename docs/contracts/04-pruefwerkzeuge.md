@@ -3558,3 +3558,34 @@ jenem Spielstand noch in den Listen standen — die neue Regel sieht am alten St
 sie gebaut ist. Gegen Vanilla: 131 Aufträge in Listen, 3 gesperrt, 3 Patchzeilen, 15 Einträge
 fallen. Vorlauf ohne Spiel (kein Nachweis): 2696 Operationen, 0 ohne Treffer; 116 Aufträge in
 Listen, 0 gesperrt.
+
+---
+
+## Nachtrag Sprachschlüssel einer Spielvorlage, 2026-11-23 — `localized_name`, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.5, D136). Abnahme: N-13.
+
+**Anlass.** Eine Sandbox-Vorlage (`<preset>` in `sandbox_overrides.xml`) nennt ihren Anzeigenamen
+im Attribut `localized_name`. `sprachverweise-pruefen.ps1` sammelt Schlüssel aus Attributen, die
+auf `_key` enden; dieses endet nicht so. Am echten Stand fiel es sofort auf: die Zeile
+`700_vorlageName` stand als „wird nicht gelesen" da, während `700_vorlageDesc` (aus
+`description_key`) grün war.
+
+**Regel.** An einem Element `preset` ist `localized_name` ein genannter Schlüssel — **einer**, keine
+Kommaliste; ein leerer Wert nennt nichts. Beleg, dass das Spiel ihn liest: Finding F-17,
+Abschnitt 1 (`SandboxOptionPreset::get_DisplayName`), statisch gelesen. Es gelten dieselben Regeln
+wie für jeden genannten Schlüssel (Regel 1: er hat eine Zeile; Regel 2: die Zeile gilt als gelesen).
+
+**Grenze.** Die Regel hängt am Elementnamen `preset`, nicht an der Datei. Ein anderes Element
+dieses Namens mit einem Attribut `localized_name`, das kein Schlüssel wäre, gäbe einen falschen
+Befund; in Vanillas Dateien ist keines bekannt (nicht durchsucht).
+
+**Gegenproben (Projektregel 5).** Zwei neue in `gegenproben.ps1`, Prüfsatz
+`testdaten/sprache/vorlage`: Vorlage mit beiden Zeilen — Exit 0, „genannte Schluessel: 2", die
+Namenszeile gilt als gelesen, die zweite Vorlage mit leerem Attribut nennt nichts; dieselbe Vorlage
+ohne die Namenszeile — Exit 1, „Schluessel 'pruef700_vorlage' hat keine Zeile". Ohne die Regel wäre
+die erste Probe rot (so wie der echte Stand es war).
+
+Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **280 Gegenproben, 0
+fehlgeschlagen; 10 Prüfungen, 1 rot** (weiter `anachronisms` am Dump vom 22.11., vier Fehler).
+Sprachschlüssel: 76 genannte, 0 ohne Zeile. Eigene Kette: 774 XPaths, 0 ohne Treffer.

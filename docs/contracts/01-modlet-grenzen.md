@@ -212,3 +212,25 @@ Gegenproben, 0 fehlgeschlagen; 10 Prüfungen, 1 rot** (rot bleibt `resourceRepai
 Paket, Signatur `Valid`; `build.ps1 -MitTest` ohne `-Install` bricht ab. **Nicht gelaufen:**
 `-Install` und `-Install -MitTest` (keine Installation ohne Freigabe, N-11) — der
 Installationszweig ist gelesen, nicht ausgeführt.
+
+---
+
+## Nachtrag Phase 2, Teil 1b — die Spielvorlage in `700_60_Welt`, 2026-11-23, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.5, D136). Abnahme: N-13.
+
+1. `700_60_Welt` trägt `Config/sandbox_overrides.xml`. Die Datei gehört zur Welt, weil sie
+   festlegt, unter welchen Regeln eine Welt angelegt wird; kein anderes Modlet fasst sie an.
+2. Sie enthält **genau eine** Vorlage (`<preset name="700" … default="true" />`) und **kein**
+   `<sandbox_override>` (Finding F-17: es sperrt nur das Bedienfeld und setzt keinen Wert).
+3. Der Code der Vorlage besteht aus Vanillas Vorwahl und den Gruppen, die
+   [`docs/konzept/voreinstellung-700.md`](../konzept/voreinstellung-700.md) §2 als gebaut führt.
+   Eine weitere Gruppe kommt erst hinein, wenn sie dort steht und abgenommen ist.
+4. Name und Beschreibung der Vorlage sind Sprachschlüssel im Sprach-Modlet (`700_vorlageName`,
+   `700_vorlageDesc`); das Attribut `description` trägt denselben englischen Satz als Rückfall,
+   weil eine Vorlage ohne Pflichtangabe nach F-17 vermutlich ohne Meldung wegfällt.
+
+**Grenzen.** Die Vorlage wählt nur vor und wirkt auf einem Dedicated Server nicht (dort
+`SandboxCode` in `serverconfig.xml`). Ob das Spiel sie anzeigt und vorwählt, ist nicht gesehen
+(S-11). Der Code ist gerechnet; keine Prüfung im Repository kann ihn gegen das Spiel halten —
+`kette-pruefen` sieht nur, dass der XPath `/sandbox_overrides` in Vanilla trifft.
