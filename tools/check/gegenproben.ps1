@@ -706,6 +706,87 @@ Test-Output 'Verweise auf fehlende Herausforderung und Gruppe, leere Gruppe' 1 `
                       'gruppe-ohne-herausforderung: pruefGruppe ')
 
 Write-Output ""
+Write-Output "== Gegenproben: Wesen - eine Klasse im Gelaende ist kein Gegenstand (D142) =="
+# Vertrag 04, Nachtrag Pruefungen der Phase 2, Teil 2. Welche Klassen im Gelaende erscheinen,
+# steht in entitygroups.xml, und wer eine Gruppe ruft, in spawning.xml und gamestages.xml.
+# Keiner der sechs Wege fuehrt dorthin: 26 dem Namen nach neuzeitliche Klassen stehen in
+# Vanillas Landschaftsgruppen, waehrend 'anachronisms' gruen ist.
+$wesen = Join-Path $data 'wesen'
+$wesenliste = Join-Path $data 'denylist-wesen.txt'
+$wesenlisteOhne = Join-Path $data 'denylist-wesen-ohne.txt'
+
+# W1. Die gesperrte Klasse in der Landschaftsgruppe MUSS rot werden, mit Gruppe und
+#     Landschaft. Dieselbe Klasse steht auch in der Gruppe, die nur die Spielstufen rufen -
+#     die wird nicht genannt, und 'pruefSchreiberWild', das NUR dort steht, auch nicht
+#     (Rollentraeger der Seuchennacht, P2-E12). Die Regelsaetze sind getrennt: die Wesenregel
+#     urteilt nicht ueber den herstellbaren Gegenstand gleichen Namensanfangs, die
+#     Gegenstandsregel nicht ueber die Klasse 'pruefGanzAnderesWesen'.
+Test-Output 'gesperrte Klasse in einer Landschaftsgruppe faellt auf' 1 `
+    @('anachronisms', $wesen, '--denylist', $wesenliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('gesperrtes-wesen: pruefSchreiber',
+                   '(pruefTagWald); gerufen in pruefWald',
+                   (Format-Zahl 'wesenregeln' 1),
+                   (Format-Zahl 'wesenklassen' 4),
+                   (Format-Zahl 'wesengruppen' 3),
+                   (Format-Zahl 'landschaftsgruppen' 2),
+                   (Format-Zahl 'klassen_in_landschaftsgruppen' 3),
+                   (Format-Zahl 'gesperrte_wesen_in_landschaftsgruppen' 1),
+                   (Format-Zahl 'wesen_verweise_auf_fehlendes' 0),
+                   (Format-Zahl 'leere_wesengruppen' 0)) `
+    -MustNotContain @('gesperrtes-wesen: pruefSchreiberWild',
+                      'gesperrtes-wesen: pruefGanzAnderesWesen',
+                      'gesperrtes-wesen: pruefSeuchentoter',
+                      'pruefSeuchennacht',
+                      'pruefAuskommentiert',
+                      'erreichbarer-anachronismus')
+
+# W2. Rot wird es durch die REGEL, nicht durch die Daten: dieselbe Quelle ohne die Zeile.
+Test-Output 'ohne die Wesenregel ist dieselbe Quelle gruen' 0 `
+    @('anachronisms', $wesen, '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @((Format-Zahl 'wesenregeln' 0),
+                   (Format-Zahl 'gesperrte_wesen_in_landschaftsgruppen' 0)) `
+    -MustNotContain @('gesperrtes-wesen')
+
+# W3. Verweise ins Leere, ohne jede Wesenregel: ein Eintrag ohne Klasse, eine fehlende Gruppe
+#     in spawning.xml, eine in gamestages.xml, eine gerufene leere Gruppe - vier Fehler.
+#     'none' ist kein Verweis, und die leere Gruppe, die niemand ruft, ist ein Hinweis.
+Test-Output 'Eintrag ohne Klasse, fehlende Gruppen, gerufene leere Gruppe' 1 `
+    @('anachronisms', (Join-Path $data 'wesen-verweise'), '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesen-verweis-fehlt: pruefFortgenommen',
+                   "die Gruppe 'pruefTag' nennt diese Klasse",
+                   '[ROT]  wesen-verweis-fehlt: pruefGruppeFort',
+                   '[ROT]  wesen-verweis-fehlt: pruefStufeFort',
+                   '[ROT]  wesengruppe-leer: pruefLeerGerufen',
+                   '[Hinw] wesengruppe-leer: pruefLeerUngerufen',
+                   (Format-Zahl 'wesen_verweise_auf_fehlendes' 3),
+                   (Format-Zahl 'leere_wesengruppen' 2),
+                   '== Ergebnis: 4 rot') `
+    -MustNotContain @('wesen-verweis-fehlt: none',
+                      'wesen-verweis-fehlt: pruefSeuchentoter',
+                      'wesen-verweis-fehlt: pruefTag',
+                      '[ROT]  wesengruppe-leer: pruefLeerUngerufen',
+                      'gesperrtes-wesen')
+
+# W4. 'wesen:' ohne Muster ist ein Benutzungsfehler, keine Regel, die alles oder nichts trifft.
+Test-Case 'Wesenregel ohne Muster' 2 @(
+    'anachronisms', $wesen, '--denylist', (Join-Path $data 'denylist-wesen-ohne-muster.txt'))
+
+# W5. Eine Quelle ohne entitygroups.xml kann ueber Wesen nichts sagen. Kein Fehler (sonst
+#     waeren alle kleinen Pruefsaetze rot), aber gesagt.
+Test-Output 'Quelle ohne entitygroups.xml: gesagt, nicht rot' 0 `
+    @('anachronisms', $zieleVorher, '--denylist', (Join-Path $data 'denylist-ziele-ohne.txt'), '--aufschub', $ohneAufschub) `
+    -MustContain @('keine entitygroups.xml - Wesen nicht geprueft') `
+    -MustNotContain @('wesen-verweis-fehlt', 'wesengruppe-leer')
+
+# W6. Gruppen ohne entityclasses.xml: die Eintraege lassen sich gegen nichts halten. Der
+#     Befehl erfindet daraus keinen Fehler - und schweigt nicht darueber.
+Test-Output 'Quelle ohne entityclasses.xml: gesagt, nicht rot' 0 `
+    @('anachronisms', (Join-Path $data 'wesen-ohne-klassen'), '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @('Die Quelle hat keine entityclasses.xml',
+                   (Format-Zahl 'wesengruppen' 1)) `
+    -MustNotContain @('wesen-verweis-fehlt')
+
+Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="
 Test-Case 'unbekannter Befehl' 2 @('gibtesnicht', $data)
 Test-Case 'fehlender Pfad' 2 @('recipes')

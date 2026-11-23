@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<spawning>
+	<biome name="pruefWald">
+		<spawn id="pruefTag" maxcount="1" respawndelay="1" time="Day" entitygroup="pruefTag" />
+		<spawn id="pruefLeer" maxcount="1" respawndelay="1" time="Day" entitygroup="pruefLeerGerufen" />
+		<!-- die Gruppe gibt es nicht -->
+		<spawn id="pruefFort" maxcount="1" respawndelay="1" time="Night" entitygroup="pruefGruppeFort" />
+	</biome>
+</spawning>

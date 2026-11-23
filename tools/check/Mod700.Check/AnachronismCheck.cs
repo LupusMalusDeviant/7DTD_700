@@ -248,6 +248,11 @@ internal static class AnachronismCheck
         // nach Kennungen, die auf keinem Weg mehr liegen, und schreibt ihr damit Treffer zu.
         ChallengeTargets.Check(report, source, definitions, judgement, deferrals);
 
+        // Wesen (Vertrag 04, Nachtrag Pruefungen der Phase 2, Teil 2): Klassen in den
+        // Landschaftsgruppen gegen die Wesenregeln, und die Verweise zwischen Gruppen,
+        // Klassen, Spawning und Spielstufen.
+        CreatureCheck.Check(report, source, denylist);
+
         foreach ((string name, string rule, string detail) in judgement.ModsUnjudged)
         {
             report.Hint(rule, name, detail);

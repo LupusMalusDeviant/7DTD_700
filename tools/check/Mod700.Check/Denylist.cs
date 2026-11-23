@@ -63,6 +63,16 @@ internal sealed class Denylist
 
                 list._quests.Add((Compile(pattern), $"{Path.GetFileName(path)}:{i + 1}", pattern));
             }
+            else if (rule.StartsWith(CreaturePrefix, StringComparison.Ordinal))
+            {
+                string pattern = rule[CreaturePrefix.Length..].Trim();
+                if (pattern.Length == 0)
+                {
+                    throw new UsageException($"{path}:{i + 1}: Wesenregel ohne Muster.");
+                }
+
+                list._creatures.Add((Compile(pattern), $"{Path.GetFileName(path)}:{i + 1}", pattern));
+            }
             else if (rule.StartsWith('!'))
             {
                 string pattern = rule[1..].Trim();
@@ -168,6 +178,32 @@ internal sealed class Denylist
     public IEnumerable<string> UnusedQuestRules => _quests
         .Where(q => !_questUsed.Contains(q.Source))
         .Select(q => $"{q.Text}  ({q.Source})");
+
+    // --- Wesenregeln (Vertrag 04, Nachtrag Pruefungen der Phase 2, Teil 2) ---------------
+    // Eigener Regelsatz wie die Auftragsregeln: ein Wesen ist kein Gegenstand, und 'zombie*'
+    // als Gegenstandsregel soll nie ueber eine Klasse urteilen.
+    private readonly List<(Regex Pattern, string Source, string Text)> _creatures = new();
+
+    /// <summary>Vorsatz einer Zeile, die ueber Wesen-Klassen in Landschaftsgruppen urteilt.</summary>
+    public const string CreaturePrefix = "wesen:";
+
+    public int CreatureRules => _creatures.Count;
+
+    /// <summary>
+    /// Liefert die Wesenregel, die auf den Namen einer Klasse passt - oder null.
+    /// </summary>
+    public string? MatchCreature(string className)
+    {
+        foreach ((Regex pattern, string source, string text) in _creatures)
+        {
+            if (pattern.IsMatch(className))
+            {
+                return $"{text}  ({source})";
+            }
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// Verbotsregeln, die in diesem Lauf auf keine einzige Kennung gepasst haben.

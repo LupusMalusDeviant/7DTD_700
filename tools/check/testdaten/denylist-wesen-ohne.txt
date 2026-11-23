@@ -1,0 +1,2 @@
+# Wie denylist-wesen.txt, ohne die Wesenregel: dieselbe Quelle muss damit gruen sein.
+pruefGanzAnderes*

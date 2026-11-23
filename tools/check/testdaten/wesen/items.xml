@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz fuer die Pruefung 'wesen' (Vertrag 04, Nachtrag Pruefungen der Phase 2, Teil 2).
+     Erfundene Kennungen. 'pruefSchreiberFeder' traegt denselben Namensanfang wie die gesperrte
+     Klasse und ist herstellbar: eine Wesenregel urteilt nicht ueber Gegenstaende. -->
+<items>
+	<item name="pruefHolz">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+	<item name="pruefSchreiberFeder">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

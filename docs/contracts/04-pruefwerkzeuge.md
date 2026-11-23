@@ -3743,3 +3743,108 @@ Lauf nach D139 (zehn Herausforderungen entfernt, zehn Zielaufschübe eingelöst,
 mit 23 Fehlern (die vier alten und 19 Ziele: der Dump kennt weder die neun umgebogenen noch die
 zehn entfernten). Am Vorlauf: `herausforderungen 165`, `unerfuellbare_herausforderungen 16`,
 `davon_aufgeschoben 16`, `verweise_auf_fehlendes 0`, `kleinste_gruppe 4`, 0 rot.
+
+## Nachtrag Prüfungen der Phase 2, Teil 2 — *wesen*, 2026-11-23, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP2.6 a, WP2.7). Abnahme: N-36 der
+Entscheidungsliste. Die Prüfung ist **kein eigener Befehl**: sie läuft in `anachronisms`, wie die
+Aufträge und die Ziele der Herausforderungen — eine Quelle, ein Bericht, ein Ausgang.
+
+### Anlass
+
+Ein Wesen ist kein Gegenstand. Welche Klassen im Gelände erscheinen, steht in
+`entitygroups.xml` (Gruppen mit Einträgen `<e n="Klasse">`), und wer eine Gruppe ruft, in
+`spawning.xml` (je Landschaft) und `gamestages.xml` (Spielstufen, Schläfer, Seuchennacht). Keiner
+der sechs Wege aus Abschnitt 3 führt dorthin; `zombieNurse` und `zombieBusinessMan` stehen je in
+sieben Landschaftsgruppen und werden in allen fünf Landschaften gerufen, während die Prüfung grün
+ist. Und sobald `700_65_Wesen` Gruppen
+ändert (Vertrag 03, Nachtrag Phase 2 C), kann ein Name ins Leere zeigen.
+
+### Die Regel
+
+1. Eine Zeile `wesen:<Muster>` in `denylist.txt` ist eine **Wesenregel** (Muster wie überall).
+   Sie urteilt über den **Namen einer Klasse in einer Landschaftsgruppe** — einer Gruppe, die
+   `spawning.xml` in einem `<spawn entitygroup="…">` nennt — und über nichts sonst. Gruppen, die
+   nur die Spielstufen rufen (Schläfer, Horden, Seuchennacht), bleiben unberührt: dort dürfen die
+   Rollenträger stehen (P2-E12).
+2. Jede Klasse in einer Landschaftsgruppe, auf die eine Wesenregel passt, ist ein Fehler
+   **`gesperrtes-wesen`**, mit den Gruppen, in denen sie steht, und den Landschaften, die sie rufen.
+3. Wesenregeln sind ein **eigener Regelsatz** wie die Auftragsregeln: keine Freigabe mit `!`,
+   kein Urteil über Gegenstände, und sie zählen nicht als Verbotsregel. `wesen:` ohne Muster ist
+   ein Benutzungsfehler (Exit 2).
+4. Unabhängig von den Regeln prüft der Befehl die **Verweise** — Fehler **`wesen-verweis-fehlt`**:
+   - ein Eintrag `<e n="X">`, und `entityclasses.xml` kennt keine Klasse `X` (der Sonderwert
+     `none` ist Vanillas Zeichen für „hier erscheint nichts" und kein Verweis);
+   - ein `<spawn entitygroup="G">` in `spawning.xml` oder ein `<spawn group="G">` in
+     `gamestages.xml`, und es gibt keine Gruppe `G`.
+5. Fehler **`wesengruppe-leer`**: eine Gruppe ohne Eintrag, die `spawning.xml` oder
+   `gamestages.xml` ruft. Eine leere Gruppe, die niemand ruft, ist ein Hinweis gleichen Namens.
+6. Zähler: `wesenregeln`, `wesenklassen`, `wesengruppen`, `landschaftsgruppen`,
+   `klassen_in_landschaftsgruppen`, `gesperrte_wesen_in_landschaftsgruppen`,
+   `wesen_verweise_auf_fehlendes`, `leere_wesengruppen`.
+7. Fehlt `entitygroups.xml` in der Quelle, steht `wesengruppen: keine entitygroups.xml - Wesen
+   nicht geprueft` im Bericht; kein Fehler. Fehlt nur `entityclasses.xml`, werden die Einträge
+   gegen nichts gehalten, und der Bericht sagt das unter den Grenzen; kein Fehler.
+8. Für `wesen-verweis-fehlt` und `wesengruppe-leer` gibt es **keinen Aufschub**. Für
+   `gesperrtes-wesen` in dieser Fassung auch nicht: eine Wesenregel kommt in die Sperrliste, wenn
+   der Patch, der die Klasse aus den Landschaftsgruppen nimmt, gebaut ist (WP5.4) — nicht vorher.
+   Darum führt `denylist.txt` heute **keine** Wesenregel.
+
+### Was die Prüfung noch nicht tut
+
+- `purge-patch` erzeugt aus Wesenregeln **keine** Entfernungen. Vertrag 01 (Teil 2) legt das
+  Herausnehmen nach `10_Purge`, „sobald die Sperrliste Wesen kennt"; die Regelart gibt es jetzt,
+  der Erzeuger folgt mit WP5.4. Bis dahin stehen Entfernungen von Hand in `65_Wesen`.
+- Der **Anzeigename** einer Klasse (Plan-0002 WP5.3: „jede Klasse in einer Gruppe hat eine
+  Sprachzeile") ist Sache der Sprachprüfung, nicht dieser.
+
+### Kalibrierung
+
+Unverändertes `Data/Config` von V 3.40 b10, heutige Sperrliste (ohne Wesenregel):
+`wesenklassen 293`, `wesengruppen 1875`, `landschaftsgruppen 29`,
+`klassen_in_landschaftsgruppen 78`, `wesen_verweise_auf_fehlendes 0`, `leere_wesengruppen 0`
+(Lauf vom 23.11.2026; derselbe Stand am Vorlauf mit unseren acht Modlets — kein Modlet fasst
+diese Dateien heute an). Der einzige Eintrag ohne Klasse ist `none`. Eine Textsuche nach
+`<entity_class ` und `<entitygroup ` zählt 315 und 1892: die Differenz steht in Kommentaren, und
+das Werkzeug liest keine Kommentare.
+
+**Messung für WP5.4, keine Projektregel:** mit siebzehn Wesenregeln nach den Grundnamen aus
+`docs/pruefung/0002-erscheinung.md` (PartyGirl, Nurse, BusinessMan, MaleHazmat, Janitor, Inmate,
+Lab, UtilityWorker, Biker, FatHawaiian, Bowler, FatCop, Skateboarder, Soldier, Demolition,
+Rancher, Lumberjack; Messliste nur im Scratchpad) meldet der Befehl an Vanilla
+`gesperrte_wesen_in_landschaftsgruppen 26` — 26 der 78 Klassen, in 13 Landschaftsgruppen, in allen
+fünf Landschaften. `Inmate` und `Lab` stehen in keiner Landschaftsgruppe. Das ist der Umfang, den
+WP5.4 herausnehmen muss.
+
+### Grenzen
+
+- **Schläfer in Orten** nennt das Prefab, nicht eine dieser Dateien; gesehen werden Gruppen,
+  keine Orte (wie die Kisteninhalte: die bekannte Lücke von F-07).
+- Was ein **Spielereignis**, ein **Auftrag** oder ein **Block** erscheinen lässt
+  (`gameevents.xml`, `quests.xml`, Klassen mit eigenem Spawn), steht nicht darin.
+- Der Name sagt nicht, wie ein Wesen **aussieht**. `zombieJoe` trägt Jeans; keine Regel über
+  Namen findet das.
+- Geprüft wird die Quelle, die der Befehl bekommt — am Dump unser Stand nach einem Spielstart,
+  am Vorlauf eine Rechnung ohne Spiel.
+
+### Gegenproben (Projektregel 5)
+
+Abschnitt „Wesen" in `gegenproben.ps1`, Prüfsätze `testdaten/wesen`, `wesen-verweise`,
+`wesen-ohne-klassen` (erfundene Kennungen), Prüflisten `denylist-wesen*.txt`:
+
+1. Eine gesperrte Klasse in einer Landschaftsgruppe ist rot, mit Gruppe und Landschaft; die
+   Gruppe, die nur die Spielstufen rufen, wird nicht genannt, und eine gesperrte Klasse, die nur
+   dort steht, auch nicht. Die Wesenregel urteilt nicht über einen herstellbaren Gegenstand
+   gleichen Namensanfangs, die Gegenstandsregel nicht über eine Klasse; eine auskommentierte
+   Klasse zählt nicht.
+2. Dieselbe Quelle ohne die Wesenregel: grün.
+3. Eintrag ohne Klasse, `spawning.xml` und `gamestages.xml` mit fehlender Gruppe, gerufene leere
+   Gruppe: vier Fehler; `none` ist keiner, die ungerufene leere Gruppe ist ein Hinweis.
+4. `wesen:` ohne Muster: Exit 2.
+5. Quelle ohne `entitygroups.xml`: gesagt, nicht rot.
+6. Quelle ohne `entityclasses.xml`: gesagt, nicht rot.
+
+### Lauf
+
+23.11.2026, `tools/check/check-all.ps1` mit gesetztem `SDTD_PATH`: Zahlen im Commit und in der
+Entscheidungsliste (N-36).

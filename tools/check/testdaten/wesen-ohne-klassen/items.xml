@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz 'wesen-ohne-klassen': Gruppen, aber keine entityclasses.xml. Der Befehl kann
+     die Eintraege gegen nichts halten - und muss das sagen, statt gruen zu schweigen. -->
+<items>
+	<item name="pruefHolz">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

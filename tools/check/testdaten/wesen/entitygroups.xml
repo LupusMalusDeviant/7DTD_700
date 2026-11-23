@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Zwei Landschaftsgruppen (spawning.xml ruft sie) und eine Gruppe, die nur die Spielstufen
+     rufen. 'pruefSchreiber' steht in einer Landschaftsgruppe UND in der Stufengruppe;
+     'pruefSchreiberWild' nur in der Stufengruppe - dort ist es kein Befund (P2-E12). -->
+<entitygroups>
+	<entitygroup name="pruefTagWald">
+		<e n="pruefSeuchentoter" />
+		<e n="pruefSchreiber" p="0.3" />
+		<e n="pruefGanzAnderesWesen" p="0.1" />
+		<e n="none" p="0.5" />
+	</entitygroup>
+	<entitygroup name="pruefNachtWald">
+		<e n="pruefSeuchentoter" />
+	</entitygroup>
+	<entitygroup name="pruefSeuchennacht">
+		<e n="pruefSeuchentoter" />
+		<e n="pruefSchreiber" />
+		<e n="pruefSchreiberWild" />
+	</entitygroup>
+</entitygroups>

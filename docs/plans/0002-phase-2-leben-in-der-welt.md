@@ -41,12 +41,13 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP2.3 bis WP2.5 Nachträge zu den Verträgen 01, 02, 03 | geschrieben (Abnahme offen), nichts gebaut: vier neue Modlets und die Ablage der Assets; Präfixe und Namensmuster; die 52 Stammdateien vollständig gelesen, „sperren statt löschen" für Wesen. Fünf Stellen tragen `[verifizieren]` | D141, N-35 |
 | WP2.2 Vertrag 05 (Entwurf) | geschrieben, am 2026-11-23 in drei Punkten präzisiert | `b2ddada`, N-71, N-18 |
 | WP2.6 c/d, WP2.7 Prüfungen *symbole* und *asset-register* | gebaut, 27 Gegenproben | Vertrag 04 „Nachtrag Prüfungen der Phase 2, Teil 1" |
+| WP2.6 a, WP2.7 Prüfung *wesen* | gebaut, in `anachronisms`: Wesenregeln `wesen:<Muster>` für Landschaftsgruppen, Verweise ins Leere, leere Gruppen; sechs Gegenproben. Die Sperrliste trägt noch keine Wesenregel (kommt mit WP5.4). Messung für WP5.4: 26 von 78 Klassen in den Landschaftsgruppen tragen einen der 17 neuzeitlichen Grundnamen | Vertrag 04 „Nachtrag Prüfungen der Phase 2, Teil 2", D142, N-36 |
 | WP3.2 Beleg: Symbole aus dem Modlet | geschrieben | `57f721d`, Finding F-16 |
 | WP3.3 Lizenzlage Meshy | gelesen; **Meshy gesperrt** (HTTP 402 auf dem Gratis-Tarif) | Vertrag 05 §5.1, N-64 |
 | WP3.4 Symbol-Durchstich Silberpfennig | gebaut (Blender statt Meshy) | `f174d69`, D131, N-28, S-09 |
 | WP3.6 Eigene Symbole, Rang 0 | **begonnen:** Schmiedeeisen, Tiegelstahl, Klinge (3 von rund 40). Offen: Trinkglas, die umgedeuteten Waffen, zwölf Rüstungsteile — organische Formen warten auf Meshy (N-64) | D132, N-29 |
 
-Offen aus WP2.6/WP2.7: *wesen*, *welt*, *textluecken*.
+Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
 ## Kontext / Motivation
 

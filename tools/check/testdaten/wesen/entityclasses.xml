@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Vier erfundene Klassen. 'pruefSchreiber' und 'pruefSchreiberWild' trifft die Wesenregel
+     'wesen:pruefSchreiber*'; 'pruefGanzAnderesWesen' traegt den Namensanfang der
+     GEGENSTANDS-Regel der Pruefliste - die urteilt nicht ueber Klassen. -->
+<entity_classes>
+	<entity_class name="pruefSeuchentoter" />
+	<entity_class name="pruefSchreiber" extends="pruefSeuchentoter" />
+	<entity_class name="pruefSchreiberWild" extends="pruefSchreiber" />
+	<entity_class name="pruefGanzAnderesWesen" extends="pruefSeuchentoter" />
+	<!-- <entity_class name="pruefAuskommentiert" /> -->
+</entity_classes>

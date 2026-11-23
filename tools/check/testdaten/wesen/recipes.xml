@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<recipes>
+	<recipe name="pruefSchreiberFeder" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+</recipes>

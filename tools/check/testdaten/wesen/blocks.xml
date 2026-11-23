@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blocks>
+	<!-- Gibt Holz beim Ernten: der Weg zu 'pruefHolz'. -->
+	<block name="pruefBaum">
+		<drop event="Harvest" name="pruefHolz" count="2" />
+	</block>
+</blocks>

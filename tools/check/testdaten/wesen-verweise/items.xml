@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz 'wesen-verweise': Namen, die ins Leere zeigen, und Gruppen ohne Eintrag - so
+     sieht es aus, wenn ein Modlet Klassen aus Gruppen nimmt und vergisst, wer sie nennt.
+     Keine Wesenregel greift hier; rot machen den Satz allein die Verweise. -->
+<items>
+	<item name="pruefHolz">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

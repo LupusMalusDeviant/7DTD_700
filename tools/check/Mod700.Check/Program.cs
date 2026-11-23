@@ -92,6 +92,12 @@ internal static class Program
             Fehler 'unerfuellbares-ziel'. 'ziel:<kennung>  # WP...' in aufschub.txt schiebt
             eine solche Herausforderung auf - umgebucht und gezaehlt, nicht verschwiegen.
 
+            anachronisms liest auch die Wesen (entitygroups.xml, entityclasses.xml,
+            spawning.xml, gamestages.xml): 'wesen:<muster>' in der Sperrliste urteilt ueber
+            Klassen in Gruppen, die spawning.xml ruft (Fehler 'gesperrtes-wesen'); ein
+            Eintrag ohne Klasse oder eine gerufene Gruppe, die es nicht gibt, ist
+            'wesen-verweis-fehlt', eine gerufene Gruppe ohne Eintrag 'wesengruppe-leer'.
+
             --no-extends und --ohne-regel sind GEGENPROBEN, kein Nachweis: sie schalten die
             Vererbung bzw. eine Regel ab, damit sichtbar wird, dass sie wirklich etwas
             beitragen. Beide Laeufe sagen das in ihren Grenzen auch selbst.

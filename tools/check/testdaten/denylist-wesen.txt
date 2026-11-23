@@ -1,0 +1,5 @@
+# Pruefliste fuer die Pruefung 'wesen'. Eine Gegenstandsregel (ohne sie ist die Liste keine
+# Sperrliste) und eine Wesenregel. Die Gegenstandsregel traegt den Namensanfang der Klasse
+# 'pruefGanzAnderesWesen' - und urteilt trotzdem nicht ueber sie.
+pruefGanzAnderes*
+wesen:pruefSchreiber*

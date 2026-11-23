@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entitygroups>
+	<!-- nennt eine Klasse, die es nicht gibt; 'none' ist kein Verweis -->
+	<entitygroup name="pruefTag">
+		<e n="pruefSeuchentoter" />
+		<e n="pruefFortgenommen" />
+		<e n="none" p="0.5" />
+	</entitygroup>
+	<!-- allen Eintraegen beraubt, und spawning.xml ruft sie noch -->
+	<entitygroup name="pruefLeerGerufen">
+	</entitygroup>
+	<!-- leer, aber niemand ruft sie: ein Hinweis, kein Fehler -->
+	<entitygroup name="pruefLeerUngerufen">
+	</entitygroup>
+</entitygroups>

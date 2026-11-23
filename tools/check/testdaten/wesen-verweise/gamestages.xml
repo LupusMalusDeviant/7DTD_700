@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gamestages>
+	<spawner name="pruefHorde">
+		<gamestage stage="1">
+			<spawn group="pruefTag" num="4" maxAlive="4" duration="2" />
+		</gamestage>
+		<gamestage stage="2">
+			<!-- die Gruppe gibt es nicht -->
+			<spawn group="pruefStufeFort" num="4" maxAlive="4" duration="2" />
+		</gamestage>
+	</spawner>
+</gamestages>

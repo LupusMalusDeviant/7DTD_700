@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gamestages>
+	<spawner name="pruefHorde">
+		<gamestage stage="1">
+			<spawn group="pruefSeuchennacht" num="4" maxAlive="4" duration="2" />
+		</gamestage>
+	</spawner>
+</gamestages>
