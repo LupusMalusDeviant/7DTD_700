@@ -439,7 +439,7 @@ def backen(ob):
 
 
 def fertiger_stoff(ob, bilder):
-    m = bpy.data.materials.new('m700_' + NAME)
+    m = bpy.data.materials.new('mat700_' + NAME)
     m.use_nodes = True
     nt = m.node_tree
     bsdf = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')

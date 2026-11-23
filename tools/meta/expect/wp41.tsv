@@ -1,0 +1,18 @@
+# Soll-Signaturen für das Finding „Asset-Referenzen" (Plan-0002 WP4.1), Build Steam 26309840.
+# Format: Typ<TAB>Member<TAB>Signatur  — genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp41.tsv
+# Exit 0 = alle Soll-Signaturen vorhanden, Exit 1 = mindestens eine fehlt oder weicht ab.
+# Kein Patch hängt daran: die Zeilen sichern nur, dass das Finding noch zum Build passt.
+DataLoader	ParseDataPathIdentifier	static DataLoader/DataPathIdentifier DataLoader::ParseDataPathIdentifier(string)
+DataLoader	PreloadBundle	static void DataLoader::PreloadBundle(DataLoader/DataPathIdentifier)
+DataLoader	IsInResources	static bool DataLoader::IsInResources(string)
+ModManager	TryPatchModPathString	static bool ModManager::TryPatchModPathString(string, string&)
+ModManager	PatchModPathString	static string ModManager::PatchModPathString(string)
+XmlPatcher	ReadPatchXmlWithFixedModFolders	static XmlFile XmlPatcher::ReadPatchXmlWithFixedModFolders(Mod, string)
+AssetBundleManager	LoadAssetBundle	void AssetBundleManager::LoadAssetBundle(string, bool)
+ItemClass	GetMeshfilePath	string ItemClass::GetMeshfilePath(BlockShape/MeshPurpose, ItemValue)
+ItemClass	CreateModelInstance	UnityEngine.GameObject ItemClass::CreateModelInstance(ItemValue, UnityEngine.Transform, BlockShape/MeshPurpose)
+ItemClass	InitializeModel	bool ItemClass::InitializeModel(UnityEngine.GameObject, ItemValue, UnityEngine.Transform, BlockShape/MeshPurpose)
+EntityClass	Init	EntityClass EntityClass::Init()
+EModelBase	createModel	void EModelBase::createModel(World, EntityClass)
+BlockShapeModelEntity	getPrefab	UnityEngine.Transform BlockShapeModelEntity::getPrefab()

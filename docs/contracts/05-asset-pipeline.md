@@ -7,6 +7,7 @@
 - **Datum:** 2026-11-23
 - **Gilt ab:** Phase 2 (Plan-0002 WP3, WP4, WP7)
 - **Belege:** [F-16-symbole-aus-dem-modlet.md](../rea/findings/F-16-symbole-aus-dem-modlet.md) ·
+  [F-16-asset-referenzen.md](../rea/findings/F-16-asset-referenzen.md) ·
   Spec 01 §6 (Assets, Recht) · F-16 · D84 (Asset-Quellen) ·
   [0000-entscheidungen](../pruefung/0000-entscheidungen-fuer-den-nutzer.md) N-60 bis N-65, N-75 bis N-79
 
@@ -185,6 +186,24 @@ als Annahme:
 5. Budgets je Stück (Dreiecke, Texturgröße) — Spec 01 nennt Richtwerte;
 6. wo Bundles liegen, wenn das Kern-Modlet mit EAC nicht lädt (Vertrag 01, Nachtrag — offen).
 
+**Stand 2026-11-23** nach dem Finding
+[F-16-asset-referenzen.md](../rea/findings/F-16-asset-referenzen.md) (statisch gelesen, **nichts
+davon im Spiel gesehen**):
+
+| Nr. | Stand | Was gelesen ist |
+|---|---|---|
+| 1 | **statisch belegt** | `#@modfolder:<Pfad>/<Datei>?<Asset>` in der Patch-Datei des Modlets, das das Bundle trägt; aus einem anderen Modlet `#@modfolder(<Name>):…`. Die Endung ist frei, gefragt wird nach dem bloßen Asset-Namen — er muss im Bundle eindeutig sein. Gilt für Gegenstände, Blöcke (`ModelEntity`) und Wesen. |
+| 2 | **offen** | Belegt ist nur die eingebaute Render-Pipeline. Ob Unitys `Standard`-Shader aus unserem Bundle im Spiel stimmt, zeigt der Durchstich. |
+| 3 | **halb** | Das Modell hängt ohne Versatz und ohne Drehung unter `Gunjoint`; die Haltung kommt aus `HoldType`. Achsen und Drehung stehen nicht im Code. |
+| 4 | offen | braucht den Editor (N-60) |
+| 5 | Richtwert gesetzt | §7.1 Nr. 7 (N-65) |
+| 6 | **im Grundsatz belegt** | Ein Bundle darf in einem reinen XML-Modlet liegen und von jedem anderen Modlet beim Namen genannt werden. Vorschlag: Bundles liegen im Modlet ihres Gegenstands (§2), nie im Code-Modlet. |
+
+**Regel daraus (Abnahme offen, N-66):** der Name eines Assets in einem Bundle ist
+`<art>700_<wort>` in Kleinbuchstaben (`mdl700_rundschild` für ein Prefab, `mat700_…` für ein
+Material) und im Bundle eindeutig; Bundle-Dateien heißen `700_<modlet-kurzname>.unity3d` und liegen
+unter `mod/<Modlet>/Resources/`.
+
 Bis dahin gilt für Modelle nur: Quellen dürfen entstehen und im Register stehen (`Stand` =
 `zu prüfen`), **ausgeliefert wird keines**.
 
@@ -205,7 +224,7 @@ Unity liegt; die sechs Punkte oben bleiben offen.
 4. **Git LFS wird damit noch nicht gebraucht** und ist nicht eingerichtet. Nötig wird es erst
    für ein Modell, dessen Quelle **kein** Skript ist (ein Meshy-Ergebnis, eine von Hand gebaute
    `.blend`-Datei) — dann liegt die Datei selbst unter `assets/quelle/modelle/<stueck>/` (N-65).
-5. **Form eines Quell-Modells:** ein Netz, ein Stoff (`m700_<stueck>`), eine UV-Abwicklung ohne
+5. **Form eines Quell-Modells:** ein Netz, ein Stoff (`mat700_<stueck>`), eine UV-Abwicklung ohne
    Überlappung, drei Texturen — `_farbe` (sRGB), `_orm` (nach glTF: Grün = Rauheit, Blau =
    Metall; Rot ist frei und steht auf 1), `_normal` (Tangentenraum, +Y). Die Texturen sind aus
    dem Aufbau des Skripts **gebacken**, nicht gemalt. Einheit Meter, Maßstab 1. Was Unitys

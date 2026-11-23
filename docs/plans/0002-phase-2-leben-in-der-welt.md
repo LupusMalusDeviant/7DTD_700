@@ -50,6 +50,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP3.7 Denylist ergänzen | **gemessen, nichts gebaut:** alle sechs Kandidaten aus Prüfung 0002 §8 Nr. 2 sind ausdrückliche Freigaben der Sperrliste (D54 bis D56, abgenommen) — der Schritt braucht den Nutzer. Je Kennung Stand und Empfehlung; der Plasmastab existiert in V 3.40 nicht mehr | N-38, N-55 |
 | WP3.8 Dekor der freien Landschaft | gebaut: 55 Dekor-Zeilen entfernt (12 Minen, 10 Wracks, Radkappen, Reifen, Schlackensteine, Schrotthaufen, Fässer, Müll) mit 30 Patchzeilen; gezählt an der Datei sind es 55, nicht 63. Angesehen und nicht angefasst: die 28 Zeilen `cnt…RandomLootHelper` (der Code entscheidet, was sie hinstellen), Kakteen, Straßen | D144, N-39, S-24 |
 | WP3.9 Texte, nächste Stapel | **begonnen:** sechs Beschreibungen, die auf einen fremden Text zeigten (Schwere Armbrust, Feuertopfbolzen, Lamellenbesatz, Bogenteile, Rüstungsteile, leerer Wasserkrug) — fünf Patchzeilen, sechs Sprachzeilen. Offen: Rangtitel mit altem Perk-Namen; Behälter | D143, N-37, N-59, S-07 |
+| WP4.1 Finding „Asset-Referenzen" | geschrieben (statisch): Bundle-Form `#@modfolder:…?<Asset>` und `#@modfolder(<Name>):…`, Endung frei, Asset-Name ohne Ordner; Gegenstände, Blöcke und Wesen laden über denselben Lader; **kein Material für Gegenstände aus XML**, für Wesen `AltMats`/`SwapMats`; Modell hängt ohne Versatz unter `Gunjoint`. Offen und nur im Spiel zu klären: Shader, Achsen in der Hand, Verhalten eines Wesens ohne `Game/Character`. 13 Soll-Signaturen in `tools/meta/expect/wp41.tsv` | `docs/rea/findings/F-16-asset-referenzen.md`, D146, N-66, S-25, Vertrag 05 §7 |
 | WP4.2 Quell-Modelle ohne Unity | **Rundschild gebaut** (Blender-Skript, 1994 Dreiecke, drei gebackene Texturen 1024², GLB und FBX unter `dist/modelle/rundschild/`, zwei Ansichten im Repository); zwei Läufe ergeben dasselbe GLB Byte für Byte. Nicht in Unity und nicht im Spiel gesehen. **Offen:** das Meshy-Requisit (Meshy gesperrt, N-64) | D145, Vertrag 05 §7.1, N-65 |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
@@ -374,6 +375,8 @@ ohne Wracks und Minen — alles bis zum Vorlauf geprüft, im Spiel gesehen erst 
 5. **WP4.5** `[Claude-prüfbar]` XML-Anbindung: der Rundschild als gehaltenes Schaustück ohne
    Blockmechanik (die Mechanik ist WP12), dazu die Keule mit eigener Textur — **nur wenn** WP4.1
    einen Weg ohne Vanilla-Mesh im Bundle zeigt (P2-E07). (S)
+   *Stand 2026-11-23:* WP4.1 zeigt für die Keule **keinen** solchen Weg; der Retextur-Teil geht an
+   einen Seuchentoten mit eigenem Material (D146, N-66, S-25).
 6. **WP4.6** `[braucht Nutzer]` Testlauf T1, Teil B: Modell in der Hand, Symbol im Beutel; mit
    einem Mitspieler, falls einer da ist (F-16:53; D113).
 7. **WP4.7** `[Claude-prüfbar]` Auswertung: die offenen Fragen in F-16 (F-16:69–75) beantwortet
