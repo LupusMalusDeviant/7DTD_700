@@ -176,8 +176,10 @@ Der Nutzer ist während der Umsetzung nicht erreichbar. Daraus sieben Regeln fü
    **Test-Überlagerung** mit verkürzten Werten (WP1.2), die nie ins Paket kommt. Jeder Lauf hat ein
    Drehbuch mit erwarteter Dauer.
 6. **Kein Python im Projekt.** Werkzeuge in C# (.NET) oder PowerShell wie bisher; Unity-Editor-Skripte
-   sind C#. Blender-Automatisierung ist Python und bleibt Claudes eigenes Werkzeug außerhalb des
-   Repositorys, bis der Nutzer anders entscheidet (P2-E08).
+   sind C#. ~~Blender-Automatisierung ist Python und bleibt Claudes eigenes Werkzeug außerhalb des
+   Repositorys, bis der Nutzer anders entscheidet (P2-E08).~~ *Entschieden am 2026-11-23:* Python
+   ist für Blender-Skripte erlaubt; sie liegen unter `tools/assets/blender/` (N-61). Sonst bleibt
+   das Verbot.
 7. **Spieldateien nie ins Repo und nie ins Paket** — das gilt neu auch für Bundles: kein
    Vanilla-Mesh, keine veränderte Vanilla-Textur, kein Vanilla-Prefab in unseren Dateien (Spec 01
    §6; D84 b, GDD.md:335).

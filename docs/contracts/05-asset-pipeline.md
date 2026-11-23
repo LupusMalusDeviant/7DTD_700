@@ -22,8 +22,11 @@
 3. **XML vor C# vor Assets** (Säule P5): ein eigenes Bild entsteht erst, wenn kein vorhandenes
    Vanilla-Bild passt (Umbiegen, D130).
 4. **Reproduzierbar ohne Handarbeit:** vom Quellbild zum Bild im Modlet führt **ein** Befehl (§4).
-5. **Kein Python im Repository.** Werkzeuge sind PowerShell oder C#. Blender-Skripte sind Python und
-   liegen nicht im Repository, solange der Nutzer nichts anderes entscheidet (N-61).
+5. **Kein Python im Repository — mit einer Ausnahme.** Werkzeuge sind PowerShell oder C#.
+   ~~Blender-Skripte sind Python und liegen nicht im Repository, solange der Nutzer nichts anderes
+   entscheidet (N-61).~~ **Entschieden vom Nutzer am 2026-11-23** („Du darfst Python für Blender
+   nutzen"): Blender-Skripte liegen unter `tools/assets/blender/`. Sie laufen nur in Blender, nie im
+   Spiel, nie im Paket und nie im Prüfbefehl; sonst bleibt das Verbot.
 
 ## 2. Ordner
 
@@ -32,6 +35,7 @@
 | `assets/ASSETS.md` | das Register (§5) | ja | nein |
 | `assets/quelle/symbole/<Name>.png` | Quellbild eines Symbols, so wie es entstanden ist (beliebige Größe, freigestellt) | ja | nein |
 | `assets/quelle/modelle/<Name>/` | Quell-Modell (GLB), Texturen, ggf. Referenzbild | ja (Git LFS, sobald das erste Modell kommt — Teil B) | nein |
+| `tools/assets/blender/*.py` | Blender-Skripte, aus denen Quellbilder (und später Quell-Modelle) entstehen — die einzige Stelle mit Python (§1 Nr. 5) | ja | nein |
 | `mod/<Modlet>/UIAtlases/ItemIconAtlas/<Name>.png` | das fertige Symbol, **erzeugt**, nicht von Hand bearbeitet | ja | ja |
 | `unity/` | Unity-Projekt für Bundles | Teil B | nein |
 | `mod/<Modlet>/Resources/*.unity3d` | Bundles | Teil B | ja |
@@ -69,8 +73,9 @@ Dateien, kein Code.
    Ansicht des Modells und ersetzt ein vorläufiges.
 3. **Eigenes Bild aus Grundformen** (`eigen:blender`): harte, einfache Dinge — Barren, Münze,
    Nagel, Klinge — in Blender aus Grundformen gebaut und freigestellt gerendert (D84). Das
-   Blender-Skript ist Python und liegt nicht im Repository (N-61); im Repository liegt das
-   Quellbild. *(Ergänzt 2026-11-23; so entstand das erste Symbol.)*
+   Blender-Skript liegt seit dem 2026-11-23 unter `tools/assets/blender/` (`symbole.py`, Starter
+   `lauf.py`; N-61), das Quellbild unter `assets/quelle/symbole/`. Aufruf:
+   `blender -b --factory-startup --python tools/assets/blender/lauf.py -- <stueck> <ziel.png>`. *(Ergänzt 2026-11-23; so entstand das erste Symbol.)*
 4. **Erzeugtes Bild** (Meshy, Text zu Bild, freigestellt) als vorläufiges oder bleibendes Symbol.
    Freigabe des Nutzers vom 2026-11-22 (N-63). Der Beschreibungstext (Prompt) nennt nur das Ding
    und den Stil aus §3.1 — **keinen** Namen eines Spiels, einer Marke, eines Künstlers.

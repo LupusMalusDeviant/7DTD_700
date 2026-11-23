@@ -24,7 +24,8 @@ Strich (`—`) nur in `Beleg`, `Beschreibung` und `Kosten` und nur bei eigenen S
 - **`ico700_silberpfennig`** — drei gehämmerte Silberscheiben mit Perlkreis, ohne Schrift und ohne
   Zeichen; in Blender aus Grundformen gebaut und gerendert (2026-11-23). Erstes eigenes Symbol,
   Durchstich für den Weg vom Quellbild ins Spiel (Plan-0002 WP3.4). **Im Spiel nicht gesehen** (S-09).
-  Das Blender-Skript liegt nicht im Repository (Python, N-61).
+  Das Blender-Skript für alle vier Bilder liegt seit dem 2026-11-23 unter `tools/assets/blender/`
+  (Freigabe des Nutzers, N-61).
 - **`ico700_schmiedeeisen`**, **`ico700_tiegelstahl`** — ausgeschmiedete Stäbe, dunkel und rostfleckig
   (Eisen) bzw. bläulich und glatter (Stahl). Ersetzen Vanillas gegossenen Barren mit dem Stempel
   „Fe 26" (Schrift, Ordnungszahl). Gebaut 2026-11-23 in Blender (Plan-0002 WP3.6).
