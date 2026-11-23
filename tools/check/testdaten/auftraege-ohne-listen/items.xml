@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz fuer die Auftragsregeln: eine Quelle OHNE quests.xml und damit ohne
+     Auftragslisten. Der Erzeuger darf hier nicht rot werden, muss es aber sagen. -->
+<items>
+	<item name="pruefRohstoff">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

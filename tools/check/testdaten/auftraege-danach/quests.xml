@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Derselbe Pruefsatz wie 'auftraege', NACH dem Patch: die beiden Strom-Auftraege stehen in
+  keiner Liste mehr, ihre Definitionen stehen weiter da. Die Pruefung muss hier gruen sein -
+  wird sie rot, zaehlt sie die Definition als Angebot.
+-->
+<quests>
+
+	<quest id="pruefStufe2_strom">
+		<property name="name_key" value="pruefStromName" />
+	</quest>
+
+	<quest id="pruefStufe3_strom">
+		<property name="name_key" value="pruefStromName" />
+	</quest>
+
+	<quest id="pruefStufe2_raeumen">
+		<property name="name_key" value="pruefRaeumenName" />
+	</quest>
+
+	<quest_list id="pruefHaendlerA">
+		<quest id="pruefStufe2_raeumen" />
+	</quest_list>
+
+	<quest_list id="pruefHaendlerB">
+		<quest id="pruefStufe2_raeumen" />
+	</quest_list>
+
+</quests>

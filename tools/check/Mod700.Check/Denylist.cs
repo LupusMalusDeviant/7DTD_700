@@ -25,6 +25,7 @@ internal sealed class Denylist
 {
     private readonly List<(Regex Pattern, string Source, string Text)> _deny = new();
     private readonly List<(Regex Pattern, string Reason, string Text, string Source)> _allow = new();
+    private readonly List<(Regex Pattern, string Source, string Text)> _quests = new();
 
     public int DenyRules => _deny.Count;
 
@@ -52,7 +53,17 @@ internal sealed class Denylist
                 continue;
             }
 
-            if (rule.StartsWith('!'))
+            if (rule.StartsWith(QuestPrefix, StringComparison.Ordinal))
+            {
+                string pattern = rule[QuestPrefix.Length..].Trim();
+                if (pattern.Length == 0)
+                {
+                    throw new UsageException($"{path}:{i + 1}: Auftragsregel ohne Muster.");
+                }
+
+                list._quests.Add((Compile(pattern), $"{Path.GetFileName(path)}:{i + 1}", pattern));
+            }
+            else if (rule.StartsWith('!'))
             {
                 string pattern = rule[1..].Trim();
                 if (pattern.Length == 0)
@@ -112,6 +123,51 @@ internal sealed class Denylist
 
     private readonly HashSet<string> _denyUsed = new(StringComparer.Ordinal);
     private readonly HashSet<string> _allowUsed = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _questUsed = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Der Anfang einer Auftragsregel: <c>auftrag:tier*_restore_power</c>.
+    ///
+    /// <para>Ein Auftrag ist kein Gegenstand. "Geh hin und wirf die Generatoren wieder an"
+    /// ist ein Anachronismus, den keine Namensregel fuer Gegenstaende trifft, weil er keinen
+    /// Gegenstand in die Hand gibt (D103, Vertrag 04, Nachtrag Auftragsregeln). Die Regeln
+    /// stehen trotzdem in derselben Datei: eine zweite Liste waere eine zweite Stelle, an
+    /// der Sperrliste und Modlet auseinanderlaufen koennen.</para>
+    ///
+    /// <para>Sie sind ein EIGENER Regelsatz und mischen sich nicht mit den anderen: eine
+    /// Auftragsregel urteilt nie ueber einen Gegenstand, eine Gegenstandsregel nie ueber
+    /// einen Auftrag, und eine Freigabe ('!') gibt es fuer Auftraege nicht - was bleiben
+    /// soll, bekommt einfach keine Regel.</para>
+    /// </summary>
+    public const string QuestPrefix = "auftrag:";
+
+    public int QuestRules => _quests.Count;
+
+    /// <summary>
+    /// Liefert die Auftragsregel, die auf die Kennung eines Auftrags passt - oder null.
+    /// </summary>
+    public string? MatchQuest(string questId)
+    {
+        foreach ((Regex pattern, string source, string text) in _quests)
+        {
+            if (pattern.IsMatch(questId))
+            {
+                _questUsed.Add(source);
+                return $"{text}  ({source})";
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Auftragsregeln, die in diesem Lauf auf keinen einzigen Auftrag gepasst haben. Gegen
+    /// Vanilla ist das ein Tippfehler; gegen einen Stand, in dem unsere Modlets schon
+    /// geladen sind, ist es das Ziel - darum entscheidet der Aufrufer, was es bedeutet.
+    /// </summary>
+    public IEnumerable<string> UnusedQuestRules => _quests
+        .Where(q => !_questUsed.Contains(q.Source))
+        .Select(q => $"{q.Text}  ({q.Source})");
 
     /// <summary>
     /// Verbotsregeln, die in diesem Lauf auf keine einzige Kennung gepasst haben.

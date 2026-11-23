@@ -506,6 +506,78 @@ Test-Output 'Startausruestung gekuerzt, Stueckzahl bleibt' 0 `
 Test-Case 'purge-patch ohne Ziel' 2 @('purge-patch', $purge)
 
 Write-Output ""
+Write-Output "== Gegenproben: Auftragsregeln - ein Auftrag ist kein Gegenstand (D103) =="
+# Vertrag 04, Nachtrag Auftragsregeln. "Strom wiederherstellen" stand in allen fuenf
+# Haendlerlisten, waehrend 'anachronisms' gruen war: ein Auftrag gibt nichts in die Hand
+# und steht in keinem der sechs Wege. Die Regel 'auftrag:<muster>' urteilt ueber die
+# Eintraege der Auftragslisten - und NUR ueber die, nicht ueber die Definition gleichen
+# Namens eine Ebene hoeher.
+$auftraege = Join-Path $data 'auftraege'
+$auftragsliste = Join-Path $data 'denylist-auftrag.txt'
+
+# A1. Der gesperrte Auftrag in einer Liste MUSS rot werden, und zwar jeder, der passt, mit
+#     den Listen, in denen er steht. Der erlaubte daneben bleibt ungenannt.
+Test-Output 'gesperrter Auftrag in einer Haendlerliste faellt auf' 1 `
+    @('anachronisms', $auftraege, '--denylist', $auftragsliste) `
+    -MustContain @('gesperrter-auftrag: pruefStufe2_strom',
+                   'gesperrter-auftrag: pruefStufe3_strom',
+                   'pruefHaendlerA, pruefHaendlerB',
+                   'gesperrte_auftraege_in_listen      2') `
+    -MustNotContain @('gesperrter-auftrag: pruefStufe2_raeumen')
+
+# A2. Rot wird es durch die REGEL, nicht durch die Daten: dieselbe Quelle, dieselbe Liste
+#     ohne die Auftragszeile - gruen.
+Test-Output 'ohne Auftragsregel ist dieselbe Quelle gruen' 0 `
+    @('anachronisms', $auftraege, '--denylist', (Join-Path $data 'denylist-auftrag-keine.txt')) `
+    -MustContain @('auftragsregeln                     0') `
+    -MustNotContain @('gesperrter-auftrag')
+
+# A3. Nach dem Patch stehen die Definitionen der Strom-Auftraege weiter da, nur die
+#     Listeneintraege fehlen. Zaehlte die Pruefung die Definition als Angebot, waere sie
+#     hier rot - fuer immer, weil Definitionen nie entfernt werden (Vertrag 03 Abschnitt 4).
+Test-Output 'die Definition eines gesperrten Auftrags ist kein Angebot' 0 `
+    @('anachronisms', (Join-Path $data 'auftraege-danach'), '--denylist', $auftragsliste) `
+    -MustContain @('auftragsregeln                     1',
+                   'gesperrte_auftraege_in_listen      0') `
+    -MustNotContain @('gesperrter-auftrag')
+
+# A4. Der Erzeuger schreibt eine Zeile je Auftrag, ohne Praedikat an der Liste (er faellt
+#     aus jeder), und KEINE Zeile auf die Definition.
+Test-Output 'purge-patch nimmt den Auftrag aus den Listen, nicht die Definition' 0 `
+    @('purge-patch', $auftraege, '--trocken', '--zeigen', '--denylist', $auftragsliste) `
+    -MustContain @(
+        "<remove xpath=""/quests/quest_list/quest[@id='pruefStufe2_strom']"" />",
+        "<remove xpath=""/quests/quest_list/quest[@id='pruefStufe3_strom']"" />",
+        'gesperrte_auftraege_noch_in_listen 0',
+        'remove_auf_definition              0') `
+    -MustNotContain @("/quests/quest[@id=", "pruefStufe2_raeumen']")
+
+# A5. Und der Nachweis, dass die Nachprobe etwas prueft: ohne die Entfernungen bleiben die
+#     Auftraege in den Listen, und beide Proben muessen es sagen.
+Test-Output 'ohne die Entfernungen bleibt der Auftrag in der Liste' 1 `
+    @('purge-patch', $auftraege, '--trocken', '--ohne-entfernen', '--denylist', $auftragsliste) `
+    -MustContain @('weg-bleibt-offen: quests.xml [quest]',
+                   'auftrag-trotz-patch: pruefStufe2_strom')
+
+# A6. Der stille Tippfehler. Eine Auftragsregel, die nichts trifft, laesst den Auftrag beim
+#     Haendler - und 'anachronisms' kann das nicht melden, weil eine Regel ohne Treffer bei
+#     einem gepatchten Stand das Ziel ist. Darum ist es beim Erzeugen ein FEHLER.
+Test-Output 'falsch geschriebene Auftragsregel ist ein Fehler, kein Hinweis' 1 `
+    @('purge-patch', $auftraege, '--trocken', '--denylist', (Join-Path $data 'denylist-auftrag-tippfehler.txt')) `
+    -MustContain @('auftragsregel-trifft-nichts: pruefStuffe*_strom')
+
+# A7. Eine Quelle ohne Auftragslisten kann ueber die Regel nichts sagen. Das ist kein
+#     Fehler (sonst waeren alle kleinen Pruefsaetze rot) und kein Schweigen: es steht da.
+Test-Output 'Quelle ohne Auftragslisten: gesagt, nicht rot' 0 `
+    @('purge-patch', (Join-Path $data 'auftraege-ohne-listen'), '--trocken', '--denylist', $auftragsliste) `
+    -MustContain @('hat keine Auftragslisten') `
+    -MustNotContain @('auftragsregel-trifft-nichts')
+
+# A8. 'auftrag:' ohne Muster ist ein Benutzungsfehler, keine Regel, die alles oder nichts trifft.
+Test-Case 'Auftragsregel ohne Muster' 2 @(
+    'anachronisms', $auftraege, '--denylist', (Join-Path $data 'denylist-auftrag-ohne-muster.txt'))
+
+Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="
 Test-Case 'unbekannter Befehl' 2 @('gibtesnicht', $data)
 Test-Case 'fehlender Pfad' 2 @('recipes')

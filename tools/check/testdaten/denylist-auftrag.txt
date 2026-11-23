@@ -1,0 +1,4 @@
+# Pruefliste fuer die Auftragsregeln. Eine Gegenstandsregel muss dabei sein, sonst
+# gilt die Datei als leer; sie trifft im Pruefsatz 'auftraege' nichts.
+pruefFeuerrohr*
+auftrag:pruefStufe*_strom     # beide Strom-Auftraege, nicht 'pruefStufe2_raeumen'

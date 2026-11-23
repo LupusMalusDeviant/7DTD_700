@@ -1,0 +1,4 @@
+# Wie denylist-auftrag.txt, aber die Auftragsregel ist falsch geschrieben ('Stuffe').
+# Sie trifft keinen Auftrag; 'purge-patch' muss das als Fehler melden, nicht als Ruhe.
+pruefFeuerrohr*
+auftrag:pruefStuffe*_strom

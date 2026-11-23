@@ -94,6 +94,45 @@ internal static class Reachability
         .OrderBy(n => n, StringComparer.Ordinal)
         .ToList();
 
+    /// <summary>
+    /// Die Auftraege, die ein Haendler anbieten kann: jeder <c>&lt;quest id&gt;</c> unter einer
+    /// <c>&lt;quest_list&gt;</c> in quests.xml, mit dem Namen der Liste.
+    ///
+    /// <para>Das ist absichtlich KEIN Weg in <see cref="Ways"/>. Ein Auftrag ist kein
+    /// Gegenstand; stuende seine Kennung zwischen den Gegenstaenden, landete jeder der rund
+    /// vierzig Auftraege unter 'unaufloesbar' und 'ungeprueft', und eine Gegenstandsregel wie
+    /// 'test*' faellte ein Urteil ueber etwas, wofuer sie nie geschrieben wurde. Geurteilt
+    /// wird ueber Auftraege allein mit den Auftragsregeln der Sperrliste.</para>
+    ///
+    /// <para>Nur Kinder einer Liste: derselbe Elementname <c>quest</c> steht eine Ebene
+    /// hoeher fuer die DEFINITION des Auftrags, und die bleibt stehen wie jede Definition
+    /// (Vertrag 03 §4).</para>
+    /// </summary>
+    public static List<(string Quest, string List, int Line)> ListedQuests(ConfigSource source)
+    {
+        var listed = new List<(string Quest, string List, int Line)>();
+        var document = source.Load("quests.xml");
+        if (document is null)
+        {
+            return listed;
+        }
+
+        foreach (var list in document.Descendants("quest_list"))
+        {
+            string listId = list.Attribute("id")?.Value ?? "(ohne id)";
+            foreach (var entry in list.Elements("quest"))
+            {
+                string? id = entry.Attribute("id")?.Value;
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    listed.Add((id, listId, ((System.Xml.IXmlLineInfo)entry).LineNumber));
+                }
+            }
+        }
+
+        return listed;
+    }
+
     private static IEnumerable<(string Value, int Line)> StartingItems(ConfigSource source)
     {
         var document = source.Load("entityclasses.xml");

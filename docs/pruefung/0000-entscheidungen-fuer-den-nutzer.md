@@ -14,10 +14,11 @@ Marken: **[E]** Entscheidung · **[A]** Abnahme eines Vertrags · **[S]** nur im
 **Stand 2026-11-23, früh:** Phase 1 ist gebaut, aber **nicht abgenommen**; Phase 2 läuft im Loop (Plan-0002,
 Entwurf); nichts ist gepusht (HEAD lokal vor `origin`), die Mod liegt **nicht** im Spielordner.
 
-Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **270 Gegenproben, 0 fehlgeschlagen;
+Der Prüfbefehl `powershell -File tools/check/check-all.ps1` endet mit **278 Gegenproben, 0 fehlgeschlagen;
 10 Prüfungen, 1 rot (Exit 1)** — drei Prüfungen sind neu (*Symbole*, *Asset-Register*, *Test-Überlagerung*;
-N-18, N-19). Rot ist `erreichbarer-anachronismus: resourceRepairKit`: der Spiel-Dump von
-22:08 stammt aus einem Start **vor** der Sperre des Reparatur-Kits. Am Vorlauf des neuen Standes sind alle
+N-18, N-19). Rot ist *anachronisms* mit vier Fehlern: `erreichbarer-anachronismus: resourceRepairKit` und
+seit dem 23.11. dreimal `gesperrter-auftrag` (die Stromaufträge, N-31) — der Spiel-Dump von
+22:08 stammt aus einem Start **vor** der Sperre des Reparatur-Kits und vor der Auftragsregel. Am Vorlauf des neuen Standes sind alle
 sieben Prüfungen grün; ein Vorlauf ist kein Nachweis. **Grün wird der Prüfbefehl erst mit einem Spielstart
 mit dem neuen Stand** (N-01).
 
@@ -52,6 +53,7 @@ Die fünf Punkte, die am meisten bewegen:
 
 | Nr. | Art | Was |
 |---|---|---|
+| N-14 | [A] | Vertrag 04, **Nachtrag Auftragsregeln** — eine Zeile `auftrag:<Muster>` in `denylist.txt` urteilt über Aufträge in den Händlerlisten; `purge-patch` nimmt sie aus den Listen (die Definition bleibt), `anachronisms` meldet sie; eine Auftragsregel ohne Treffer ist beim Erzeugen ein Fehler. Acht Gegenproben. Gebaut am 2026-11-23 für N-31. |
 | N-15 | [A] | Vertrag 04, **Nachtrag Dump-Suche** (`check-all.ps1` kennt `-UserDataFolder`). |
 | N-16 | [A] | Vertrag 04, **Nachtrag Leermeldung** (`=kein-aufschub` in `aufschub.txt`). |
 | N-17 | [A] | Vertrag 04, **Nachtrag zweites Review der Vorprüfung** (zwei Befunde an `vertraeglichkeit-pruefen.ps1` behoben). |
@@ -79,6 +81,7 @@ Marke; sonst wird es zurückgebaut.
 | N-28 | [E] [S] | **Erstes eigenes Bild:** der Silberpfennig zeigt `ico700_silberpfennig` — drei gehämmerte Silberscheiben mit Perlkreis, in Blender gebaut — statt des umgebogenen Silberbrockens (N-23). Dazu das Werkzeug `tools/assets/symbole.ps1`, das Register `assets/ASSETS.md` und zwei Prüfungen. Quellbild: `assets/quelle/symbole/ico700_silberpfennig.png`. | D131, Plan-0002 WP3.4 | ob dir das Bild gefällt; ob es im Beutel erscheint (S-09). Bleibt das Feld leer, ist es eine Zeile zurück auf den Silberbrocken. |
 | N-29 | [E] [S] | **Drei weitere eigene Bilder** statt Vanillas Barren mit dem Stempel „Fe 26": **Schmiedeeisen** (auch Schmiedeflicken, getönt), **Tiegelstahl**, **Klinge**. Alle aus Blender, alle im Register. Quellbilder unter `assets/quelle/symbole/`. | D132, Plan-0002 WP3.6 | die Bilder selbst (einfach gehalten — Stäbe und eine rohe Klinge); im Spiel S-09. |
 | N-30 | [E] [S] | **Kräutersud** gegen Infektion: `drugHerbalAntibiotics` ist von der Denylist genommen (die Denylist ist deine Sache — darum ausdrücklich hier), heißt „Kräutersud / Herb Decoction" und hat ein Rezept ohne Chrysantheme, Salpeter und Blaubeeren: Pilze 3, Goldrute 3, Aloe-Blatt 2, abgekochtes Wasser 1, an der Feuerstelle mit Topf. Freischaltung über Wundversorgung 30 wie in Vanilla; er liegt auch wieder in der Beute. Vorher gab es gegen eine Infektion nur Honig. | D133 | Freigabe der Kennung; Name; Rezept und Mengen; ob Aloe als Zutat passt. Im Spiel: S-10. |
+| N-31 | [E] | **Stromaufträge heraus:** „Strom wiederherstellen" (Stufe 2 bis 4) steht bei keinem der fünf Händler mehr in der Auftragsliste — 15 Einträge, drei Patchzeilen. Die Sperrliste hat dafür eine neue Regelart bekommen (`auftrag:tier*_restore_power`; die Denylist ist deine Sache, darum ausdrücklich hier). Der Auftrag selbst bleibt im Spiel stehen, damit er als „Brunnen wiederherstellen" zurückkommen kann (F-10, WP8); bis dahin hat Stufe 4 drei Auftragsarten statt vier. | D135, N-14 | die Regel in der Sperrliste; ob der Auftrag bis WP8 ganz fehlen darf oder lieber sofort umgedeutet werden soll. Im Spiel nichts zu tun: der Prüfbefehl liest die Listen im nächsten Dump (S-01). |
 
 ## 5. Vorschläge auf dem Papier — nichts davon ist gebaut
 
@@ -88,7 +91,7 @@ Marke; sonst wird es zurückgebaut.
 | N-41 | [E] | **Was darf in Phase 1 modern bleiben?** Geschlossene Liste getragener Lücken (D93) — sonst ist das MVP-Ziel „ohne Anachronismus in Texten" nie erfüllbar. | GDD 7.8 |
 | N-42 | [E] | ~~**Wasser** (D98: Tausammler als Regentonne), **Infektion** (D99: Kräutersud),~~ *Stand 2026-11-23: Wasser ist gemessen und erreichbar — ein leeres Gefäß füllt sich in V 3.40 am Gewässer, nichts zu bauen, die Regentonne ist Kür (D134); der Kräutersud ist gebaut (N-30). Offen bleibt daraus nur der Name „Tonkrug" für das Schraubglas.* Weiter offen: **Luftabwurf** (D95: aus), **Stürme** (D97), **Karte und Kompass** (D96), **Musik** (D114). | GDD 7.8 |
 | N-43 | [E] | **Gegner:** vier Stufennamen, Sprenger als platzende Fäulnis (D100); vollständige Zuordnungstabelle (D101). | GDD 7.8, F-06 |
-| N-44 | [E] | **Händler:** Zuordnung, Namen, Stimmen stumm (D102); Stromaufträge heraus (D103); 35 unerfüllbare Herausforderungen (D104). | GDD 7.8 |
+| N-44 | [E] | **Händler:** Zuordnung, Namen, Stimmen stumm (D102); ~~Stromaufträge heraus (D103)~~ *gebaut am 2026-11-23, N-31*; 35 unerfüllbare Herausforderungen (D104). | GDD 7.8 |
 | N-45 | [E] | **Begriffe, die später als 700 sind** (D123): Tiegelstahl, Motte, Geselle, Destillierhelm, Weberschiffchen, Tee, Hexenbesen, Kraftlinien, Damast; Heidelbeere freigeben. | GDD 7.8, Prüfung 0003 §5 |
 | N-46 | [E] | **Waffen, 22 Empfehlungen** — die gewichtigsten: Machete → Langsax und Spatha als eigenes Stück (ändert D58); Eisenspeer → Ger; Streitkolben → Beschlagene Keule; Streithammer → Zuschlaghammer; „wurmbunt" statt Damast. | [`konzept/waffen.md`](../konzept/waffen.md) §6, D126 |
 | N-47 | [E] | **Rüstung, 15 Fragen** — Gambeson / Polsterrock, Kettenhemd / Brünne, Spangenhelm als Erbstück, Kopf-Aufsätze, Wärme nur aus Unterkleidung. | [`konzept/ruestung.md`](../konzept/ruestung.md) §5.4, D127 |

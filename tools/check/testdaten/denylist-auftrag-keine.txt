@@ -1,0 +1,3 @@
+# Wie denylist-auftrag.txt, aber OHNE die Auftragsregel. Gegen den Pruefsatz 'auftraege'
+# muss 'anachronisms' damit gruen sein: rot wird es durch die Regel, nicht durch die Daten.
+pruefFeuerrohr*

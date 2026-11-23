@@ -3477,3 +3477,84 @@ Beim Bau gefunden, weil der zweite Lauf des Werkzeugs das Bild noch einmal schri
 über „Zeichnen" verändert fast durchsichtige Bildpunkte (Unterschied 124 bei einem Bild gegen
 sich selbst). Bilder werden darum als Bytes gelesen, und verglichen wird, was man sieht
 (Deckkraft und Farbe mal Deckkraft).
+
+---
+
+## Nachtrag Auftragsregeln, 2026-11-23 — `auftrag:` in `denylist.txt`, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D103, D135). Abnahme: N-14 der
+Entscheidungsliste.
+
+### Anlass
+
+Die Händler bieten „Strom wiederherstellen" an (`tier2_restore_power` bis `tier4_restore_power`,
+in allen fünf Händlerlisten, 15 Einträge). `anachronisms` war dabei grün: ein Auftrag gibt
+nichts in die Hand und steht in keinem der sechs Wege aus Abschnitt 3. Die Sperrliste konnte ihn
+nicht nennen, der Erzeuger konnte ihn nicht entfernen.
+
+### Die Regel
+
+1. Eine Zeile `auftrag:<Muster>` in `denylist.txt` ist eine **Auftragsregel**. Das Muster folgt
+   denselben Regeln wie alle anderen (`*`, Groß- und Kleinschreibung zählt, `#` beginnt den
+   Kommentar).
+2. Sie urteilt über die **Kennung eines Auftrags in einer Auftragsliste** — jedes
+   `<quest id="…">` unmittelbar unter einer `<quest_list>` in `quests.xml` — und über nichts
+   sonst. Auftragsregeln und Gegenstandsregeln mischen sich nicht: eine Auftragsregel fällt kein
+   Urteil über einen Gegenstand, eine Gegenstandsregel keines über einen Auftrag. Aufträge
+   stehen darum auch nicht unter `erreichbarkeitswege`, `unaufloesbar` oder `ungeprueft`.
+3. Eine **Freigabe** (`!`) gibt es für Aufträge nicht. Was bleiben soll, bekommt keine Regel.
+4. `auftrag:` ohne Muster ist ein Benutzungsfehler (Exit 2).
+5. Auftragsregeln zählen nicht als Verbotsregel: eine Sperrliste, die nur Auftragsregeln führt,
+   gilt weiter als leer (Exit 2).
+
+### Was die Befehle damit tun
+
+| Befehl | Verhalten |
+|---|---|
+| `anachronisms` | Neue Zähler `auftragsregeln`, `auftraege_in_listen`, `gesperrte_auftraege_in_listen`. Jeder Auftrag in einer Liste, auf den eine Auftragsregel passt, ist ein Fehler `gesperrter-auftrag` mit den Listen, in denen er steht. Eine Regel ohne Treffer ist hier **kein** Befund: bei einem Stand mit unseren Modlets ist das das Ziel. |
+| `purge-patch` | Schreibt in `quests.xml` einen zweiten Teil: je gesperrtem Auftrag **eine** Zeile `<remove xpath="/quests/quest_list/quest[@id='…']" />` — ohne Prädikat an der Liste, der Auftrag fällt aus jeder. Die Definition `/quests/quest[@id='…']` bleibt stehen (Vertrag 03 §4); ein `remove` darauf zählt unter `remove_auf_definition` und ist rot. Der Teil entsteht nur, wenn die Sperrliste Auftragsregeln führt **und** die Quelle Auftragslisten hat; sonst ist die Datei Zeichen für Zeichen wie zuvor. |
+| `purge-patch`, Nachprobe | `wege_uebrig_quests.xml [quest]` (je Teil) und `gesperrte_auftraege_noch_in_listen` (Gesamtprobe auf dem gepatchten Stand, mit derselben Lesart wie `anachronisms`); beide müssen 0 sein, sonst `weg-bleibt-offen` bzw. `auftrag-trotz-patch`. |
+| `purge-patch`, Tippfehler | Eine Auftragsregel, auf die in einer Quelle **mit** Auftragslisten kein Auftrag passt, ist ein **Fehler** `auftragsregel-trifft-nichts` — nicht ein Hinweis wie bei den Gegenstandsregeln, weil `anachronisms` diesen Tippfehler nie sehen kann. Hat die Quelle keine Auftragslisten, steht das als Grenze im Bericht und ist nicht rot. |
+
+`check-all.ps1` ändert sich nicht: beide Befehle bekommen `--denylist` schon heute.
+
+### Grenzen
+
+- Gesehen werden **nur die Auftragslisten**. Ein Auftrag, den ein Dialog unmittelbar vergibt
+  (`dialogs.xml`, `quest_entry`), und der Startauftrag stehen nicht darin. In V 3.40 b10 vergibt
+  ein Dialog so nur `test_restorepower` und die anderen Prüfaufträge der Entwickler; sie bleiben
+  unberührt (auch die Liste `test_quests`, auf die das Muster `tier*_restore_power` nicht passt).
+- Was der Auftrag im Gelände benutzt, bleibt stehen: der Block mit `QuestRestorePower`, die
+  Marke `restore_power`, die zwei Klänge, die Ereignisfolge `quest_restorepower_generator`. Ohne
+  Auftrag ruft sie niemand; **gelesen, nicht gemessen**.
+- Ob ein Händler in einer Stufe weiter genug Aufträge hat, prüft diese Fassung nicht. Stufe 4
+  behält drei Arten (Räumen, verseuchtes Räumen, Holen und Räumen) — so viele wie Stufe 5 in
+  Vanilla.
+- Ein **laufender** Stromauftrag in einem alten Spielstand: was das Spiel damit macht, wenn er
+  nicht mehr in der Liste steht, ist ungelesen. Die Definition bleibt, also bricht er vermutlich
+  nicht.
+
+### Gegenproben (Projektregel 5)
+
+Acht neue Gegenproben in `gegenproben.ps1` (Abschnitt „Auftragsregeln"), Prüfsätze
+`testdaten/auftraege`, `auftraege-danach`, `auftraege-ohne-listen` und vier Prüflisten
+`denylist-auftrag*.txt` (erfundene Kennungen):
+
+| Eingang | Erwartung |
+|---|---|
+| gesperrter Auftrag in zwei Händlerlisten | Exit 1, `gesperrter-auftrag` je Auftrag, beide Listen genannt, der erlaubte Auftrag ungenannt |
+| dieselbe Quelle, Sperrliste ohne Auftragsregel | Exit 0, `auftragsregeln 0` — rot macht die Regel, nicht die Daten |
+| Stand nach dem Patch: Definitionen stehen, Listeneinträge fehlen | Exit 0 — die Definition ist kein Angebot |
+| `purge-patch --zeigen` | Exit 0, zwei `remove`-Zeilen auf `quest_list/quest`, keine auf `/quests/quest[@id=`, der erlaubte Auftrag in keiner Zeile |
+| `purge-patch --ohne-entfernen` | Exit 1, `weg-bleibt-offen: quests.xml [quest]` und `auftrag-trotz-patch` |
+| falsch geschriebene Auftragsregel | Exit 1, `auftragsregel-trifft-nichts` |
+| Quelle ohne Auftragslisten | Exit 0, „hat keine Auftragslisten" steht im Bericht |
+| `auftrag:` ohne Muster | Exit 2 |
+
+Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **278 Gegenproben, 0
+fehlgeschlagen; 10 Prüfungen, 1 rot.** Rot ist weiter `anachronisms` am Dump vom 22.11., jetzt
+mit **vier** Fehlern statt einem: `resourceRepairKit` (N-01) und die drei Stromaufträge, die in
+jenem Spielstand noch in den Listen standen — die neue Regel sieht am alten Stand genau das, wofür
+sie gebaut ist. Gegen Vanilla: 131 Aufträge in Listen, 3 gesperrt, 3 Patchzeilen, 15 Einträge
+fallen. Vorlauf ohne Spiel (kein Nachweis): 2696 Operationen, 0 ohne Treffer; 116 Aufträge in
+Listen, 0 gesperrt.

@@ -199,6 +199,65 @@ internal static class PurgePatch
                 skipRemovals, parentClass: "ItemsOnEnterGame")
         };
 
+        // Auftraege (D103, Vertrag 04, Nachtrag Auftragsregeln). Ein eigener Regelsatz und
+        // ein eigener Teil von quests.xml: die Kennungen sind keine Gegenstaende, also
+        // stehen sie nicht in 'blockedNames' und gehen durch keine der Proben oben.
+        //
+        // Der Teil entsteht NUR, wenn die Sperrliste Auftragsregeln fuehrt. Ohne Regeln
+        // sieht quests.xml aus wie vor diesem Nachtrag - Kopf, Zeilenzahl, alles.
+        var listedQuests = Reachability.ListedQuests(source);
+        var blockedQuests = new HashSet<string>(
+            listedQuests
+                .Select(q => q.Quest)
+                .Distinct(StringComparer.Ordinal)
+                .Where(q => denylist.MatchQuest(q) is not null),
+            StringComparer.Ordinal);
+
+        report.Count("auftragsregeln", denylist.QuestRules);
+        report.Count("auftraege_in_listen", listedQuests.Count);
+        report.Count("gesperrte_auftraege", blockedQuests.Count);
+
+        if (denylist.QuestRules > 0)
+        {
+            foreach (string quest in blockedQuests.Where(q => q.Contains('\'')))
+            {
+                throw new UsageException(
+                    $"Der Auftrag '{quest}' enthaelt ein Apostroph. Daraus laesst sich kein "
+                    + "XPath-Literal bauen; dieser Fall braucht Handarbeit.");
+            }
+
+            if (listedQuests.Count > 0)
+            {
+                files.Add(Removals(source, blockedQuests, "quests.xml", "quest", "id",
+                    "Auftraege (D103): ein gesperrter Auftrag faellt aus JEDER Auftragsliste, "
+                    + "darum traegt die Zeile kein Praedikat an der Liste. Getroffen wird nur "
+                    + "der Eintrag unter 'quest_list' - die Definition des Auftrags eine Ebene "
+                    + "hoeher bleibt stehen wie jede Definition (Vertrag 03 §4), und die "
+                    + "Bloecke, Marken und Klaenge, die er im Gelaende benutzt, ebenso.",
+                    skipRemovals, parentElement: "quest_list",
+                    reason: "gesperrter Auftrag in einer Auftragsliste"));
+
+                // Gegen Vanilla ist eine Auftragsregel ohne Treffer ein Tippfehler, und zwar
+                // der stille: der Auftrag bleibt beim Haendler, und nichts wird rot, weil
+                // 'anachronisms' eine Regel ohne Treffer bei einem gepatchten Stand fuer das
+                // Ziel halten muss. Darum ist es HIER ein Fehler und kein Hinweis.
+                foreach (string rule in denylist.UnusedQuestRules)
+                {
+                    report.Error("auftragsregel-trifft-nichts", rule,
+                        "auf diese Auftragsregel passt kein einziger Auftrag in einer "
+                        + "Auftragsliste dieser Quelle. Entweder ist sie falsch geschrieben, "
+                        + "oder die Spielfassung fuehrt den Auftrag nicht mehr.");
+                }
+            }
+            else
+            {
+                report.Limitation(
+                    "Diese Quelle hat keine Auftragslisten (quest_list in quests.xml). Ob die "
+                    + $"{denylist.QuestRules} Auftragsregeln der Sperrliste etwas treffen, "
+                    + "laesst sich hier nicht sagen; geprueft wird das gegen Vanilla.");
+            }
+        }
+
         int lines = 0;
         int withoutHit = 0;
 
@@ -240,12 +299,18 @@ internal static class PurgePatch
         foreach (PatchFile file in files.Where(f => f.ElementName is not null))
         {
             int remaining = WaysLeft(source, file, blockedNames);
-            report.Count($"wege_uebrig_{file.FileName}", remaining);
+
+            // Der Auftragsteil teilt sich die Datei mit den Belohnungen. Er bekommt seine
+            // eigene Zahl; die der Belohnungen behaelt ihren Namen.
+            string leftLabel = file.ParentElement is null
+                ? file.FileName
+                : $"{file.FileName} [{file.ElementName}]";
+            report.Count($"wege_uebrig_{leftLabel}", remaining);
             left += remaining;
 
             if (remaining > 0)
             {
-                report.Error("weg-bleibt-offen", file.FileName,
+                report.Error("weg-bleibt-offen", leftLabel,
                     $"nach den erzeugten Entfernungen sind in {file.FileName} noch {remaining} "
                     + $"<{file.ElementName} {file.Attribute}='...'> auf gesperrte Kennungen "
                     + "uebrig. Die Patches dieser Datei decken nicht, was die Pruefung findet.");
@@ -268,7 +333,8 @@ internal static class PurgePatch
             .Count(o => o.Xml.StartsWith("<remove", StringComparison.Ordinal)
                         && (o.VerifyXPath.StartsWith("/items/item[", StringComparison.Ordinal)
                             || o.VerifyXPath.StartsWith("/blocks/block[", StringComparison.Ordinal)
-                            || o.VerifyXPath.StartsWith("/item_modifiers/item_modifier[", StringComparison.Ordinal)));
+                            || o.VerifyXPath.StartsWith("/item_modifiers/item_modifier[", StringComparison.Ordinal)
+                            || o.VerifyXPath.StartsWith("/quests/quest[", StringComparison.Ordinal)));
 
         report.Count("remove_auf_definition", onDefinition);
 
@@ -331,6 +397,27 @@ internal static class PurgePatch
             report.Error("gesperrt-trotz-patch", name,
                 "diese Kennung ist auch nach allen erzeugten Patchzeilen noch erreichbar. "
                 + "Der Patch-Satz deckt nicht, was die Pruefung findet.");
+        }
+
+        // Dieselbe Gesamtprobe fuer die Auftraege, mit derselben Lesart wie 'anachronisms'
+        // (Reachability.ListedQuests) und auf demselben gepatchten Stand.
+        if (denylist.QuestRules > 0)
+        {
+            var stillListed = Reachability.ListedQuests(patchedSource)
+                .Where(q => blockedQuests.Contains(q.Quest))
+                .Select(q => q.Quest)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(q => q, StringComparer.Ordinal)
+                .ToList();
+
+            report.Count("gesperrte_auftraege_noch_in_listen", stillListed.Count);
+
+            foreach (string quest in stillListed)
+            {
+                report.Error("auftrag-trotz-patch", quest,
+                    "dieser Auftrag steht auch nach allen erzeugten Patchzeilen noch in einer "
+                    + "Auftragsliste. Der Patch-Satz deckt nicht, was die Pruefung findet.");
+            }
         }
 
         // Dieselbe Frage wie bei den Loot-Gruppen, nur fuer Bloecke: wie viele geben nach dem
@@ -514,7 +601,9 @@ internal static class PurgePatch
         report.Limitation(
             $"{Stufe} schreibt sieben Dateien: items.xml und blocks.xml (CreativeMode), "
             + "blocks.xml zusaetzlich die Abwuerfe, recipes.xml, loot.xml, traders.xml "
-            + "(Wege entfernt), quests.xml und entityclasses.xml (Listen gekuerzt). Was dem "
+            + "(Wege entfernt), quests.xml und entityclasses.xml (Listen gekuerzt); "
+            + "quests.xml nimmt dazu gesperrte Auftraege aus den Auftragslisten, wenn die "
+            + "Sperrliste Auftragsregeln fuehrt (D103). Was dem "
             + "Spieler dafuer gegeben wird, "
             + "steht nicht hier - dieses Modlet nimmt nur weg (D53: 700_10_Purge laeuft vor "
             + "allen anderen).");
@@ -602,20 +691,33 @@ internal static class PurgePatch
     /// </summary>
     private static PatchFile Removals(
         ConfigSource source, HashSet<string> blocked, string fileName, string elementName,
-        string attribute, string why, bool skip = false)
+        string attribute, string why, bool skip = false, string? parentElement = null,
+        string reason = "Weg zu einer gesperrten Kennung")
     {
         XDocument? document = source.Load(fileName);
         var operations = new List<PatchOperation>();
 
+        // Mit 'parentElement' gehoert dem Teil eine eigene Sperrmenge: die Nachprobe darf
+        // die Auftraege nicht gegen die gesperrten GEGENSTAENDE zaehlen.
+        HashSet<string>? own = parentElement is null ? null : blocked;
+
         if (document is null || skip)
         {
-            return new PatchFile(fileName, why, operations, elementName, attribute);
+            return new PatchFile(fileName, why, operations, elementName, attribute,
+                ParentElement: parentElement, OwnBlocked: own);
         }
 
         var seen = new HashSet<string>(StringComparer.Ordinal);
 
         foreach (XElement element in document.Descendants(elementName))
         {
+            // 'quest' heisst sowohl der Eintrag einer Auftragsliste als auch die Definition
+            // des Auftrags. Ohne diese Zeile entstuende ein 'remove' auf die Definition.
+            if (parentElement is not null && element.Parent?.Name.LocalName != parentElement)
+            {
+                continue;
+            }
+
             string? value = element.Attribute(attribute)?.Value;
             if (value is null || !blocked.Contains(value))
             {
@@ -630,11 +732,12 @@ internal static class PurgePatch
 
             operations.Add(new PatchOperation(
                 value, $"<remove xpath=\"{xpath}\" />", xpath, Count(document, xpath),
-                "Weg zu einer gesperrten Kennung"));
+                reason));
         }
 
         operations.Sort((a, b) => string.CompareOrdinal(a.VerifyXPath, b.VerifyXPath));
-        return new PatchFile(fileName, why, operations, elementName, attribute);
+        return new PatchFile(fileName, why, operations, elementName, attribute,
+            ParentElement: parentElement, OwnBlocked: own);
     }
 
     /// <summary>
@@ -687,6 +790,14 @@ internal static class PurgePatch
             candidates = candidates.Where(
                 e => e.Parent?.Attribute("class")?.Value == file.ParentClass);
         }
+
+        if (file.ParentElement is not null)
+        {
+            candidates = candidates.Where(
+                e => e.Parent?.Name.LocalName == file.ParentElement);
+        }
+
+        blocked = file.OwnBlocked ?? blocked;
 
         return candidates
             .Select(e => e.Attribute(file.Attribute)?.Value)
@@ -1068,7 +1179,8 @@ internal static class PurgePatch
     private sealed record PatchFile(
         string FileName, string Why, List<PatchOperation> Operations,
         string? ElementName = null, string? Attribute = null,
-        bool ValuesAreLists = false, string? ParentClass = null);
+        bool ValuesAreLists = false, string? ParentClass = null,
+        string? ParentElement = null, HashSet<string>? OwnBlocked = null);
 
     private sealed record PatchOperation(
         string Target, string Xml, string VerifyXPath, int Matches, string Reason,

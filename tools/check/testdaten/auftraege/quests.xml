@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Pruefsatz fuer die Auftragsregeln (D103; Vertrag 04, Nachtrag Auftragsregeln).
+  Erfundene Kennungen, kein Spielinhalt.
+
+  Zwei Haendlerlisten. In beiden steht 'pruefStufe2_strom', in einer dazu
+  'pruefStufe3_strom'; 'pruefStufe2_raeumen' ist erlaubt und muss ueberall bleiben.
+
+  Der Fehler, den dieser Satz ausschliesst: 'quest' heisst sowohl der EINTRAG einer Liste
+  als auch die DEFINITION des Auftrags eine Ebene hoeher. Ein Werkzeug, das nur auf den
+  Elementnamen sieht, entfernt die Definition - und zaehlt sie in der Pruefung als Angebot.
+-->
+<quests>
+
+	<quest id="pruefStufe2_strom">
+		<property name="name_key" value="pruefStromName" />
+	</quest>
+
+	<quest id="pruefStufe3_strom">
+		<property name="name_key" value="pruefStromName" />
+	</quest>
+
+	<quest id="pruefStufe2_raeumen">
+		<property name="name_key" value="pruefRaeumenName" />
+	</quest>
+
+	<quest_list id="pruefHaendlerA">
+		<quest id="pruefStufe2_raeumen" />
+		<quest id="pruefStufe2_strom" />
+		<quest id="pruefStufe3_strom" />
+	</quest_list>
+
+	<quest_list id="pruefHaendlerB">
+		<quest id="pruefStufe2_strom" />
+		<quest id="pruefStufe2_raeumen" />
+	</quest_list>
+
+</quests>

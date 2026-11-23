@@ -204,6 +204,45 @@ internal static class AnachronismCheck
                 $"erreichbar ueber {ways}; verboten nach {v.By} [{v.Rule}]: {v.Reason}");
         }
 
+        // Auftraege (D103, Vertrag 04, Nachtrag Auftragsregeln). Ein Auftrag gibt nichts in
+        // die Hand und steht darum in keinem der sechs Wege oben - "wirf die Generatoren
+        // wieder an" blieb in allen fuenf Haendlerlisten, waehrend die Pruefung gruen war.
+        // Geurteilt wird mit einem eigenen Regelsatz, nicht mit den Gegenstandsregeln.
+        var listedQuests = Reachability.ListedQuests(source);
+        report.Count("auftragsregeln", denylist.QuestRules);
+        report.Count("auftraege_in_listen", listedQuests.Count);
+
+        int blockedQuests = 0;
+        foreach (var group in listedQuests
+            .GroupBy(q => q.Quest, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal))
+        {
+            if (denylist.MatchQuest(group.Key) is not string questRule)
+            {
+                continue;
+            }
+
+            blockedQuests++;
+            string lists = string.Join(", ", group.Select(q => q.List).Distinct(StringComparer.Ordinal));
+            report.Error("gesperrter-auftrag", group.Key,
+                $"steht in {group.Count()} Auftragsliste(n) ({lists}; zuerst quests.xml:"
+                + $"{group.First().Line}); verboten nach Auftragsregel [{questRule}]. Ein "
+                + "Haendler kann diesen Auftrag anbieten.");
+        }
+
+        report.Count("gesperrte_auftraege_in_listen", blockedQuests);
+
+        if (denylist.QuestRules > 0)
+        {
+            report.Limitation(
+                "Auftragsregeln sehen nur die Auftragslisten in quests.xml (quest_list/quest). "
+                + "Ein Auftrag, den ein Dialog unmittelbar vergibt (dialogs.xml, quest_entry), "
+                + "der Startauftrag und alles, was ein Auftrag im Gelaende zeigt (Bloecke, "
+                + "Marken, Klaenge), stehen nicht darin. Und dass eine Regel hier nichts "
+                + "trifft, ist bei einem Stand mit unseren Modlets das Ziel, kein Tippfehler - "
+                + "den Tippfehler meldet 'purge-patch' gegen Vanilla.");
+        }
+
         foreach ((string name, string rule, string detail) in judgement.ModsUnjudged)
         {
             report.Hint(rule, name, detail);

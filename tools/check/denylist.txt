@@ -740,3 +740,12 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 !questRewardT2RangedModsBundle              # nur Pfeilauflage und 'Laehmschuss'
 !questRewardT1TrapsBundle                   # nur Holzspiesse
 !questRewardT2TrapsBundle                   # nur Eisenspiesse
+
+# --- Auftraege (D103; Vertrag 04, Nachtrag Auftragsregeln) -----------------------
+# Eine Zeile mit 'auftrag:' am Anfang urteilt ueber die Kennung eines AUFTRAGS, nicht
+# ueber einen Gegenstand: der Auftrag faellt aus jeder Auftragsliste in quests.xml
+# (quest_list/quest). Seine Definition bleibt stehen. Eine Freigabe gibt es hier nicht -
+# was bleiben soll, bekommt keine Regel. Gegen Vanilla muss jede dieser Regeln treffen,
+# sonst wird 'purge-patch' rot.
+auftrag:tier*_restore_power   # "Strom wiederherstellen", Stufe 2 bis 4, bei allen fuenf Haendlern.
+                              # Die Umdeutung als "Brunnen wiederherstellen" ist F-10 (WP8).

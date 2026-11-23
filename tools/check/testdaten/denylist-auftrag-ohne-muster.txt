@@ -1,0 +1,3 @@
+# Eine Auftragsregel ohne Muster ist ein Benutzungsfehler (Exit 2), keine Regel.
+pruefFeuerrohr*
+auftrag:

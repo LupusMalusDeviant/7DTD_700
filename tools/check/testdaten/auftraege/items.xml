@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz fuer die Auftragsregeln. Ein Gegenstand, damit der Ordner als Quelle gilt;
+     er ist auf keinem Weg erreichbar und spielt in den Proben keine Rolle. -->
+<items>
+	<item name="pruefRohstoff">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

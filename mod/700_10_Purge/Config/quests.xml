@@ -9,13 +9,19 @@
 	     hier blind 'remove' nimmt, nimmt dem Spieler drei erlaubte Belohnungen
 	     mit, weil eine gesperrte in derselben Liste stand.
 
+	     Auftraege (D103): ein gesperrter Auftrag faellt aus JEDER Auftragsliste,
+	     darum traegt die Zeile kein Praedikat an der Liste. Getroffen wird nur
+	     der Eintrag unter 'quest_list' - die Definition des Auftrags eine Ebene
+	     hoeher bleibt stehen wie jede Definition (Vertrag 03 §4), und die
+	     Bloecke, Marken und Klaenge, die er im Gelaende benutzt, ebenso.
+
 	     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und
 	     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung
 	     ueberschreibt die Aenderung lautlos, und check-all.ps1 meldet
 	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
 	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
 	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
-	     50 Zeilen. -->
+	     53 Zeilen aus 2 Teilen. -->
 
 	<remove xpath="/quests/quest/reward[@id='ammo762mmBulletAP']" />  <!-- nur gesperrte Kennungen in der Liste -->
 	<remove xpath="/quests/quest/reward[@id='ammo762mmBulletBall']" />  <!-- nur gesperrte Kennungen in der Liste -->
@@ -67,4 +73,7 @@
 	<remove xpath="/quests/quest/reward[@id='toolBeaker']" />  <!-- nur gesperrte Kennungen in der Liste -->
 	<remove xpath="/quests/quest/reward[@id='toolDewFilter']" />  <!-- nur gesperrte Kennungen in der Liste -->
 	<remove xpath="/quests/quest/reward[@id='toolDewGatherer']" />  <!-- nur gesperrte Kennungen in der Liste -->
+	<remove xpath="/quests/quest_list/quest[@id='tier2_restore_power']" />  <!-- gesperrter Auftrag in einer Auftragsliste -->
+	<remove xpath="/quests/quest_list/quest[@id='tier3_restore_power']" />  <!-- gesperrter Auftrag in einer Auftragsliste -->
+	<remove xpath="/quests/quest_list/quest[@id='tier4_restore_power']" />  <!-- gesperrter Auftrag in einer Auftragsliste -->
 </config>

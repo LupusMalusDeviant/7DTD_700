@@ -2602,7 +2602,9 @@ werden:
   bis `tier4_restore_power` stehen in allen fünf Händlerlisten von Vanillas `quests.xml`
   (15 Einträge); unser Purge-Patch für `quests.xml` kürzt nur Belohnungen. „Geh hin und
   wirf die Generatoren wieder an" ist ein Anachronismus, den keine Regel trifft, weil er
-  kein Gegenstand ist. → F-10 oder eine Purge-Regel für Auftragsarten.
+  kein Gegenstand ist. → F-10 oder eine Purge-Regel für Auftragsarten. **Behoben am
+  2026-11-23 (D135), im Spiel nicht gesehen:** die Sperrliste kennt Auftragsregeln, die
+  drei Aufträge fallen aus allen Listen, die Definitionen bleiben.
 - **Im Spielordner liegen die leeren Gerüste vom 7. November — der neue Dump beweist
   nichts** (gefunden am 2026-11-21 beim Prüflauf zu WP8.6). `check-all.ps1` liest seit
   heute einen ConfigsDump vom 2026-11-21 15:37 UTC (Welt „West Xuyofu Territory", Spielstand
