@@ -32,6 +32,10 @@ param(
     [string[]]$Gegenstaende,
     # Ordner mit unseren Block-Patches.
     [string[]]$Bloecke,
+    # Unsere Aufsatz-Dateien (item_modifiers.xml, seit WP10.5a). Ohne Angabe unter mod/
+    # gefunden - aber nur, wenn auch -Rezepte fehlt: Pruefdaten sollen nicht die echten
+    # Aufsaetze des Projekts mitlesen.
+    [string[]]$AufsatzDateien,
     # Alle unsere Patch-Dateien, fuer die XPath-Pruefung. Ohne Angabe gefunden unter mod/.
     # Als Parameter, damit die Gegenproben dieselbe Pruefung an Testdaten fahren koennen:
     # ein Pruefer, der seine Dateien selbst sucht, laesst sich nicht gegenpruefen.
@@ -252,7 +256,31 @@ foreach ($file in @('items.xml', 'blocks.xml')) {
     if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
     foreach ($n in $kennungen.Namen) { $defined[$n] = 'vanilla' }
 }
+# AUFSAETZE (ergaenzt 2026-11-23, Plan-0002 WP10.5a). Ein <item_modifier> ist fuer das Spiel
+# ein Gegenstand (ItemClassModifier erbt ItemClass); ein Rezept kann ihn herstellen, wie
+# Vanilla es mit seinen Aufsaetzen tut. Vorher kannte dieses Skript nur items.xml und
+# blocks.xml, und die ersten eigenen Rezepte fuer Aufsaetze (die Runen) standen als "nirgends
+# definiert" da. Vanillas item_modifiers.xml ist nicht Pflicht: fehlt sie (Pruefdaten), bleibt
+# es bei items und blocks.
+$modVanillaPfad = Join-Path $Vanilla 'item_modifiers.xml'
+if (Test-Path -LiteralPath $modVanillaPfad) {
+    $kennungen = Get-Kennungen $modVanillaPfad '<item_modifier name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $defined[$n] = 'vanilla' }
+}
 $vanillaCount = $defined.Count
+if ($PSBoundParameters.ContainsKey('AufsatzDateien')) { $Aufsaetze = @($AufsatzDateien) }
+elseif ($PSBoundParameters.ContainsKey('Rezepte')) { $Aufsaetze = @() }
+else {
+    $Aufsaetze = @(Get-ChildItem (Join-Path $repoRoot 'mod') -Recurse -Filter 'item_modifiers.xml' -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -notmatch '700_10_Purge' } | Select-Object -ExpandProperty FullName)
+}
+foreach ($path in $Aufsaetze) {
+    if (-not (Test-Path $path)) { continue }
+    $kennungen = Get-Kennungen $path '<item_modifier name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $defined[$n] = 'unser' }
+}
 
 foreach ($path in $Gegenstaende) {
     if (-not (Test-Path $path)) { continue }

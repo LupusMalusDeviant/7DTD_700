@@ -4049,3 +4049,30 @@ echten Stand: `blk700_runenritzerX` → Exit 1, gemeldet.
 
 **Grenzen:** Ob eine Marke **das richtige** Rezept trifft, prüft niemand. Freischaltungen in einem
 `<set>`-Wert werden nicht gelesen (wir schreiben keine).
+
+## Nachtrag WP10.5a — Aufsätze (`item_modifier`) in `kette-pruefen` und `sprachverweise-pruefen`, 2026-11-23, **Abnahme offen** (N-122)
+
+Gebaut im autonomen Lauf (Plan-0002 WP10.5a, D178).
+
+**Anlass.** Die Runen sind die ersten **eigenen Aufsätze** (`<item_modifier>`). Ein Aufsatz ist für das
+Spiel ein Gegenstand (`ItemClassModifier` erbt `ItemClass`): ein Rezept stellt ihn her, und sein
+Anzeigename ist sein Name als Schlüssel. Beide Prüfungen kannten nur `items.xml` und `blocks.xml` — am
+echten Stand fünfmal „Ergebnis … nirgends definiert" und fünfmal „Zeile … wird nicht gelesen".
+
+**Die Regeln:**
+
+1. `kette-pruefen`: Definitionen sind auch die `<item_modifier name>` aus Vanillas
+   `item_modifiers.xml` (wenn vorhanden) und aus unseren `item_modifiers.xml` (neuer Parameter
+   `-AufsatzDateien`; ohne Angabe unter `mod/` gefunden — aber nur, wenn auch `-Rezepte` fehlt, damit
+   Prüfdaten nicht die echten Aufsätze mitlesen).
+2. `sprachverweise-pruefen`: ein `<item_modifier name="X">` **nennt** den Schlüssel `X`, wie eine
+   Wesen-Klasse (Nachtrag WP5.5). Seine Beschreibung nennt er wie bisher über `DescriptionKey`.
+
+**Gegenproben** (4 neu, 318 → **322**; eine angepasst): `kette/aufsatz` — mit der Aufsatz-Datei ist
+nur das fehlende Ergebnis rot (1 rot), ohne sie beide (2 rot); `sprache/aufsatz` — Aufsatz mit Zeile
+grün, ohne Zeile rot und die fremde Zeile „nicht gelesen". Angepasst: die Gegenprobe „DescriptionKey mit
+Komma" findet jetzt **drei** statt zwei Befunde — ihr Prüfsatz `komma/buffs.xml` trägt einen Aufsatz
+ohne Namenszeile, und das ist nach der neuen Regel richtig rot.
+
+**Grenzen:** Ob `installable_tags`, `modifier_tags` und Wirkungen eines Aufsatzes im Spiel greifen,
+prüft keine statische Prüfung (S-37).

@@ -1062,6 +1062,25 @@ Test-Script 'kette-pruefen: vertippte Verweise in angelegten Knoten und Freischa
     "Freischaltung 'pruefRezeptFehlt' trifft kein Rezept",
     '4 rot')
 
+# WP10.5a (2026-11-23): ein Rezept darf einen eigenen AUFSATZ herstellen. Gruen nur, wenn die
+# Aufsatz-Datei gelesen wird; das fehlende Ergebnis bleibt in beiden Laeufen rot.
+Test-Script 'kette-pruefen: Rezept fuer einen eigenen Aufsatz ist definiert, ein fehlender nicht' 1 @{
+    Rezepte        = @(Join-Path $data 'kette\aufsatz\recipes.xml')
+    Gegenstaende   = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke        = @(Join-Path $data 'kette\eigen\blocks.xml')
+    AufsatzDateien = @(Join-Path $data 'kette\aufsatz\item_modifiers.xml')
+    Patches        = @(Join-Path $data 'kette\prog-gut\progression.xml')
+    Vanilla        = (Join-Path $data 'kette\vanilla')
+} -MustContain @("Ergebnis 'pruefAufsatzFehlt' ist nirgends definiert", '1 rot') -MustNotContain @("Ergebnis 'pruefAufsatzEigen'")
+
+Test-Script 'kette-pruefen: ohne Aufsatz-Datei ist auch der eigene Aufsatz nicht definiert' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\aufsatz\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @(Join-Path $data 'kette\prog-gut\progression.xml')
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+} -MustContain @("Ergebnis 'pruefAufsatzEigen' ist nirgends definiert", "Ergebnis 'pruefAufsatzFehlt' ist nirgends definiert", '2 rot')
+
 # ------------------------------------------------------------ glossar-pruefen.ps1 (WP8.5)
 # Das Glossar ist die Begriffsquelle (F-12), und glossar-pruefen.ps1 haelt es gegen unsere
 # Sprachdatei. Drei Dinge muss die Pruefung koennen, und jedes hat hier seinen falschen
@@ -2258,6 +2277,27 @@ Test-Script 'sprachverweise: eigene Wesen-Klasse ohne Zeile ist rot, Zeile ohne 
     "Zeile 'pruef700_wesenAlt' wird nicht gelesen",
     '== Ergebnis: 2 rot -> RED ==')
 
+# (e4) Seit dem 2026-11-23 (Plan-0002 WP10.5a): ein Aufsatz (<item_modifier>) heisst im Spiel,
+#      wie sein Name als Schluessel nachgeschlagen wird - wie ein Gegenstand. Ohne die Regel
+#      standen die Zeilen der Runen als "wird nicht gelesen" da.
+Test-Script 'sprachverweise: der Name eines eigenen Aufsatzes ist ein gelesener Schluessel' 0 @{
+    Patches     = @(Join-Path $spracheDaten 'aufsatz\item_modifiers.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'aufsatz\Localization.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    'genannte Schluessel: 1 (in unserer Datei: 1, nur in Vanilla: 0, ohne Zeile: 0)',
+    'nicht gelesen: 0',
+    'GREEN') -MustNotContain @("Zeile 'pruef700_aufsatz' wird nicht gelesen")
+
+Test-Script 'sprachverweise: eigener Aufsatz ohne Zeile ist rot, Zeile ohne Aufsatz auch' 1 @{
+    Patches     = @(Join-Path $spracheDaten 'aufsatz\item_modifiers.xml')
+    Sprachdatei = (Join-Path $spracheDaten 'aufsatz\Localization-ohne-name.csv')
+    Vanilla     = $spracheVanilla
+} -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
+    "Schluessel 'pruef700_aufsatz' hat keine Zeile",
+    "Zeile 'pruef700_aufsatzAlt' wird nicht gelesen",
+    '== Ergebnis: 2 rot -> RED ==')
+
 # (f) Regel 6: nichts gelesen ist nicht gruen. Sieben Eingaenge, jeder Ausgang 2.
 Test-Script 'sprachverweise: Sprachdatei ohne Spalte Key ist nicht pruefbar' 2 @{
     Patches     = @(Join-Path $spracheDaten 'nicht-anwendbar\items.xml')
@@ -2352,7 +2392,11 @@ Test-Script 'sprachverweise: DescriptionKey mit Komma ist ein Schluessel, nicht 
 } -Skript 'sprachverweise-pruefen.ps1' -MustContain @(
     "Schluessel 'pruefLies,pruefGruppeDesc' hat keine Zeile",
     "Schluessel 'pruefLies,pruefDingDesc' hat keine Zeile",
-    '== Ergebnis: 2 rot -> RED ==')
+    # Seit WP10.5a (Regel fuer <item_modifier> @name) nennt der Aufsatz in komma/buffs.xml
+    # auch seinen eigenen Namen; die Pruefdaten haben fuer ihn keine Zeile - ein dritter,
+    # richtiger Befund.
+    "Schluessel 'pruef700_mod' hat keine Zeile",
+    '== Ergebnis: 3 rot -> RED ==')
 
 # (k) Befund 5: jede Vanilla-Datei fuer sich. Eine leere blocks.xml und eine mit falscher
 #     Wurzel - mit dem sauberen Satz, der gegen die echte Testvorlage gruen ist.

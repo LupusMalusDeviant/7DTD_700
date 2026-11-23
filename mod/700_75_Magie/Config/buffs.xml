@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_75_Magie / buffs.xml
+	     F-15 Volksmagie, Plan-0002 WP10.5a, D178; Vertrag 07 Nachtrag 1 (N1.4)
+
+	     VON HAND GESCHRIEBEN.
+
+	     buff700_brand: der Brand der Glutrune (spaeter auch Glutpfeil, Glutzeichen). Drei
+	     Sekunden, 4 Leben je Sekunde = 12. Nach dem Muster von Vanillas buffBurningMolotov
+	     (damage_type heat, HealthChangeOT), aber OHNE dessen Flammenbild (buffIsOnFire) -
+	     D10: dezent. Ein eigenes Glimmen kommt mit F-16. Haelt der Brand noch, setzt ein neuer
+	     Treffer die Zeit neu (stack_type replace). -->
+	<append xpath="/buffs">
+
+		<buff name="buff700_brand" hidden="true">
+			<damage_type value="heat" />
+			<stack_type value="replace" />
+			<duration value="3" />
+			<effect_group>
+				<passive_effect name="HealthChangeOT" operation="base_subtract" value="4" />
+			</effect_group>
+		</buff>
+
+	</append>
+</config>

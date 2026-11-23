@@ -108,6 +108,14 @@ Runenkundigen steckt, trotzdem Zugang zur Volksmagie — er kauft oder braut sie
 | **Wanderrune** / Wayfarer's Rune | Rüstung, Füße | −12 % Ausdauer beim Laufen | Runenkreide 2, Leder 1 | — |
 | **Schutzzeichen** / Warding Sign | Block am Haus | im Umkreis 8 m: −15 % Grauen-Zuwachs | Runenkreide 4, Stein | Block mit Aura-Buff; Naht zu WP11 (`cv700_grauenDaempfung`) |
 
+*Gebaut mit WP10.5a (D178, zu prüfen N-122)* in `700_75_Magie/Config/item_modifiers.xml`: die fünf
+Runen der Tabelle (ohne Schutzzeichen — das ist ein Block mit Aura und hängt am Grauen, WP11). Eine
+Rune je Gegenstand über `modifier_tags="rune700"`; Brand als `buff700_brand` (3 s, 4 Leben je Sekunde,
+ohne Flammenbild). **Ersatzstoffe:** Bannrune mit Knochen statt Bernstein (es gibt noch keinen),
+Wetterrune mit Nesselfaser statt Fell. Die Wanderrune folgt Vanillas Laufausdauer-Perk: Ausdauer kommt
+beim Laufen um 12 % besser zurück. **[verifizieren, S-37]:** ob `perc_add` eines Aufsatzes auf den Wert
+des Teils rechnet (Schutz-, Wetterrune) und ob Runenritzen Rang 2 die Kreide wirklich mindert.
+
 ### Segen und Flüche (Odem + Gegenstand)
 
 | Name (DE / EN, Vorschlag) | Wirkung | Dauer | Odem | Gegenstand | Abklingzeit |

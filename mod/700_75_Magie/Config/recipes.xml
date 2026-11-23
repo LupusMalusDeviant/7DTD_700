@@ -41,5 +41,31 @@
 			<ingredient name="resourceAnimalFat" count="1" />
 		</recipe>
 
+		<!-- WP10.5a (D178): die fuenf Runen. An der Bank, mit dem Ritzmesser im Platz,
+		     'learnable' - frei mit Runenritzen Rang 1 (Glut, Schutz, Wetter, Wanderschaft)
+		     bzw. Bannkunde Rang 1 (Bann). Zutaten nach F-15 (D174), mit zwei Ersatzstoffen:
+		     Bernstein gibt es noch nicht (F-05, Kennung offen) - die Bannrune nimmt Knochen;
+		     Fell gibt es nicht - die Wetterrune nimmt Nesselfaser. Zu pruefen (N-122). -->
+		<recipe name="itm700_glutrune" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="20" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_runenkreide" count="2" />
+			<ingredient name="itm700_glutstein" count="1" />
+		</recipe>
+		<recipe name="itm700_bannrune" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="20" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_runenkreide" count="2" />
+			<ingredient name="resourceBone" count="2" />
+		</recipe>
+		<recipe name="itm700_schutzrune" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="20" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_runenkreide" count="2" />
+			<ingredient name="resourceForgedIron" count="1" />
+		</recipe>
+		<recipe name="itm700_wetterrune" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="20" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_runenkreide" count="2" />
+			<ingredient name="resourceYuccaFibers" count="2" />
+		</recipe>
+		<recipe name="itm700_wanderrune" count="1" craft_area="runenritzer" craft_tool="itm700_ritzmesser" craft_time="20" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_runenkreide" count="2" />
+			<ingredient name="resourceLeather" count="1" />
+		</recipe>
+
 	</append>
 </config>

@@ -342,6 +342,15 @@ function Read-Knoten {
     if ((Test-Gleich $name 'entity_class') -and $Knoten.HasAttribute('name')) {
         Add-Genannt $Knoten.GetAttribute('name') '<entity_class> @name' $Datei -Einzeln -Zaehlt $zaehlt
     }
+    # Ein Aufsatz (<item_modifier> in item_modifiers.xml) ist fuer das Spiel ein Gegenstand
+    # wie jeder andere (ItemClassModifier erbt ItemClass) und heisst im Spiel, wie sein Name
+    # als Schluessel nachgeschlagen wird. Ergaenzt 2026-11-23 (Plan-0002 WP10.5a, Vertrag 04
+    # Nachtrag WP10.5a): ohne die Regel standen die Zeilen der ersten eigenen Aufsaetze, der
+    # Runen, als "wird nicht gelesen" da. Seine Beschreibung nennt er wie ein Gegenstand ueber
+    # die Eigenschaft DescriptionKey (oben).
+    if ((Test-Gleich $name 'item_modifier') -and $Knoten.HasAttribute('name')) {
+        Add-Genannt $Knoten.GetAttribute('name') '<item_modifier> @name' $Datei -Einzeln -Zaehlt $zaehlt
+    }
     foreach ($kind in $Knoten.get_ChildNodes()) { Read-Knoten $kind $Datei $Angewandt }
 }
 

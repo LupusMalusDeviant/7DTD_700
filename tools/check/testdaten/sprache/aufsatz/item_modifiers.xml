@@ -1,0 +1,8 @@
+<config>
+	<!-- Testdaten fuer sprachverweise-pruefen.ps1 (WP10.5a): ein eigener Aufsatz. Kein
+	     Spielinhalt. Sein Name ist sein Anzeigename - das Spiel schlaegt ihn als Schluessel
+	     nach wie bei jedem Gegenstand. -->
+	<append xpath="/item_modifiers">
+		<item_modifier name="pruef700_aufsatz" installable_tags="melee" modifier_tags="pruef" type="attachment" />
+	</append>
+</config>

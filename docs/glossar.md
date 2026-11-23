@@ -206,6 +206,11 @@ Nutzer D100 abnimmt.
 | `meleeWpnBladeT1HuntingKnife` | Sax | Sax | Jagdmesser / Hunting Knife | D58 |
 | `itm700_ritzmesser` | Ritzmesser | Carving Knife | — (Werkzeugplatz) | F-15, D177 — zu prüfen (N-121) |
 | `itm700_meissel` | Meißel | Chisel | — (Werkzeugplatz) | F-15, D177 — zu prüfen (N-121) |
+| `itm700_glutrune` | Glutrune | Ember Rune | — (Aufsatz, Nahkampf) | F-15, D174, D178 — zu prüfen (N-122) |
+| `itm700_bannrune` | Bannrune | Ward Rune | — (Aufsatz, Waffe) | F-15, D174, D178 — zu prüfen (N-122) |
+| `itm700_schutzrune` | Schutzrune | Shield Rune | — (Aufsatz, Rumpf) | F-15, D174, D178 — zu prüfen (N-122) |
+| `itm700_wetterrune` | Wetterrune | Weather Rune | — (Aufsatz, Kopf) | F-15, D174, D178 — zu prüfen (N-122) |
+| `itm700_wanderrune` | Wanderrune | Wayfarer's Rune | — (Aufsatz, Füße) | F-15, D174, D178 — zu prüfen (N-122) |
 | `meleeWpnBladeT3Machete` | Spatha | Spatha | Machete | D58 |
 | `meleeWpnSpearT1IronSpear` | Ango | Ango | Eisenspeer / Iron Spear | WP5.1 |
 | `meleeWpnSpearT3SteelSpear` | Flügellanze | Winged Lance | Stahlspeer / Steel Spear | WP5.1 |

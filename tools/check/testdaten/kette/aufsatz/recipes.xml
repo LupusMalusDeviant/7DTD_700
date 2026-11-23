@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten (WP10.5a): zwei Rezepte fuer Aufsaetze. pruefAufsatzEigen ist in
+     aufsatz/item_modifiers.xml angelegt und darf nur dann gruen sein, wenn das Skript diese
+     Datei liest; pruefAufsatzFehlt gibt es nirgends und muss immer rot sein. Die Zutat ist
+     in eigen/items.xml definiert (itm700_pruefteil). -->
+<config>
+	<append xpath="/recipes">
+		<recipe name="pruefAufsatzEigen" count="1">
+			<ingredient name="itm700_pruefteil" count="1" />
+		</recipe>
+		<recipe name="pruefAufsatzFehlt" count="1">
+			<ingredient name="itm700_pruefteil" count="1" />
+		</recipe>
+	</append>
+</config>

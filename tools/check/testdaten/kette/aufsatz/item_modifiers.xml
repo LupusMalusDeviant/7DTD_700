@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten (WP10.5a): ein eigener Aufsatz. Erfundene Kennung. -->
+<config>
+	<append xpath="/item_modifiers">
+		<item_modifier name="pruefAufsatzEigen" installable_tags="melee" modifier_tags="pruef" type="attachment" />
+	</append>
+</config>
