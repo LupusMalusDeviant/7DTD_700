@@ -538,6 +538,16 @@ internal static class Program
 
             string type = parts[0].Trim(), member = parts[1].Trim(), expected = parts[2].Trim();
 
+            // Spalte und Signatur muessen dasselbe Member meinen (ergaenzt 2026-11-23, Plan-0002 WP9.7).
+            // Vorher entschied allein die Signatur; eine Zeile "PlayWarnung<TAB>...::PlayWarning(...)"
+            // lief gruen durch, und die Meldung bei einer Abweichung suchte nach dem falschen Namen.
+            if (!expected.Contains($"{type}::{member}(", StringComparison.Ordinal))
+            {
+                failed++;
+                results.Add(new { type, member, expected, verdict = "member-mismatch", detail = $"Typ- oder Member-Spalte passt nicht zur Signatur: erwartet '{type}::{member}(' in der Signatur" });
+                continue;
+            }
+
             if (!actual.TryGetValue(type, out var signatures))
             {
                 failed++;

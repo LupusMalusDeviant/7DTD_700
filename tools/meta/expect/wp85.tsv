@@ -1,0 +1,15 @@
+# Soll-Signaturen fuer das Finding WP8-haendlerstimmen-traderdialog (Plan-0002 WP8.5, D164).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran; die Datei meldet ein Spiel-Update, das die Lesart des Findings
+# (wer die Option TraderDialog liest, wer die Lautsprecher spielt) ungueltig machen koennte.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp85.tsv
+SandboxOptions.SandboxOptionManager	UpdateInGameValuesWithSandboxOptions	void SandboxOptions.SandboxOptionManager::UpdateInGameValuesWithSandboxOptions(bool)
+SandboxOptions.SandboxOptionManager	GetBool	static bool SandboxOptions.SandboxOptionManager::GetBool(SandboxOptions.SandboxOptions)
+EntityNPC	PlayVoiceSetEntry	void EntityNPC::PlayVoiceSetEntry(string, EntityPlayer, bool, bool)
+EntityTrader	PlayVoiceSetEntry	void EntityTrader::PlayVoiceSetEntry(string, EntityPlayer, bool, bool)
+EntityTrader	OnUpdateLive	void EntityTrader::OnUpdateLive()
+BlockSpeakerTrader	Init	void BlockSpeakerTrader::Init()
+BlockSpeakerTrader	PlayOpen	void BlockSpeakerTrader::PlayOpen(Vector3i, EntityTrader)
+BlockSpeakerTrader	PlayClose	void BlockSpeakerTrader::PlayClose(Vector3i, EntityTrader)
+BlockSpeakerTrader	PlayWarning	void BlockSpeakerTrader::PlayWarning(Vector3i, EntityTrader)

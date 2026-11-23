@@ -23,7 +23,18 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 
 | Feature | Soll-Datei | Zeilen | Letzter Lauf |
 |---|---|---|---|
-| F-00 | `tools/meta/expect/f00.tsv` | 12 | 2026-11-07, grün (0 Abweichungen), Build Steam 26309840 |
+| F-00 | `tools/meta/expect/f00.tsv` | 12 | 2026-11-07, grün (0 Abweichungen), Build Steam 26309840; 2026-11-23 grün an V 3.40 b10 |
+| F-16 Assets | `tools/meta/expect/wp41.tsv` | 13 | 2026-11-23, grün, V 3.40 b10 |
+| F-06 Wesengruppen | `tools/meta/expect/wp54.tsv` | 10 | 2026-11-23, grün, V 3.40 b10 |
+| F-06 Wesen, Farbe | `tools/meta/expect/wp55.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 |
+| F-07 Zufallswelt | `tools/meta/expect/wp62.tsv` | 15 | 2026-11-23, grün, V 3.40 b10 |
+| F-10 Händlerstimmen | `tools/meta/expect/wp85.tsv` | 9 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.7) |
+
+**Gegenprobe des Signatur-Checks (WP9.7, 2026-11-23):** an `wp85.tsv` je eine absichtlich falsche
+Fassung — Signatur geändert, Member-Spalte vertippt, Typ fehlt, Member fehlt — alle vier Exit 1.
+Die vertippte Member-Spalte lief **vorher grün durch**; `verify` prüft das seit diesem Tag
+(`member-mismatch`, [tools/meta/README.md](../../../tools/meta/README.md)). Erst damit zählt
+`verify` als Nachweis im Sinne von Projektregel 5.
 
 ## Künftige Patch-Ziele (noch kein Patch, noch keine Soll-Datei)
 

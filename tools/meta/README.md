@@ -78,6 +78,14 @@ passen; was nicht passt, steht in `selection.unmatched_type_names`.
 Liest Zeilen `Typ<TAB>Member<TAB>Signatur` und endet mit **Exit 1**, sobald eine Soll-Signatur
 fehlt oder abweicht. Unterschieden werden `type-missing`, `member-missing` und
 `signature-changed`; bei letzterem nennt die Ausgabe die tatsächlich vorhandenen Überladungen.
+Dazu `member-mismatch` (seit 2026-11-23, Plan-0002 WP9.7): Typ- und Member-Spalte müssen in der
+Signatur als `Typ::Member(` stehen. Vorher entschied allein die Signatur, und eine Zeile mit
+vertipptem Member lief grün durch — gefunden mit der Gegenprobe, die WP9.7 verlangt.
+
+**Gegenprobe (Projektregel 5), 2026-11-23, an `expect/wp85.tsv`:** je eine absichtlich falsche
+Fassung — Signatur geändert (`signature-changed`, Exit 1), Member-Spalte passt nicht
+(`member-mismatch`, Exit 1), Typ fehlt (`type-missing`, Exit 1), Member fehlt (`member-missing`,
+Exit 1). Die echten Soll-Dateien: 6 Dateien, 64 Zeilen, Exit 0.
 
 Das tritt an die Stelle von `tools/rea/discover.sh compare` nach einem Spiel-Update: Soll-Datei
 gegen die neue DLL laufen lassen, rot heißt Release blockiert.

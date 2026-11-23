@@ -44,6 +44,9 @@ Gelesen werden Metadaten und IL-Bytes; die Assembly wird nicht geladen, nicht au
 nicht dekompiliert. Was der IL-Auszug zeigt und was nicht, steht in F-17 („Was der Auszug zeigt");
 dieselben Grenzen gelten hier: keine Sprünge, also ist jedes „wenn — dann" **geschlossen**.
 
+**Soll-Signaturen:** `tools/meta/expect/wp85.tsv` (9 Zeilen). `mod700meta verify`: Exit 0 am
+2026-11-23; Gegenprobe mit vier falschen Fassungen je Exit 1 (WP9.7, patch-manifest.md).
+
 **Daneben gelesene lose Dateien** (nichts davon liegt im Repository): `Data\Config\blocks.xml`
 (Block `loudspeaker`), `npc.xml` (`voice_set` je Händler), `Localization.csv` (Untertitel und
 Ansagen), `sandbox_overrides.xml`.
