@@ -190,6 +190,12 @@ Nutzer D100 abnimmt.
 | `itm700_quellsud` | Quellsud | Spring Brew | — (Trank, Odem) | F-15, D174, D179 — zu prüfen (N-123) |
 | `buff700_baerenmutNach` | Verbrauchter Mut | Spent Courage | — (Nachwirkung) | D179 — zu prüfen (N-123) |
 | `buff700_quellsudAbklingen` | Quellsud: Nachklang | Spring Brew: Fading | — (Abklingzeit) | D179 — zu prüfen (N-123) |
+| `itm700_weihwasser` | Geweihtes Wasser | Holy Water | — (Grundstoff der Segen) | F-15, D180 — zu prüfen (N-124) |
+| `itm700_segenWehr` | Segen der Wehr | Blessing of Warding | — (Segen) | F-15, D174, D180 — zu prüfen (N-124) |
+| `itm700_totensegen` | Totensegen | Blessing of the Dead | — (Segen) | F-15, D174, D180 — zu prüfen (N-124) |
+| `itm700_fluchtopf` | Fluchtopf | Curse Pot | — (Wurf, Fluch der Schwere) | F-15, D115, D174, D180 — zu prüfen (N-124) |
+| `buff700_segenWehrAbklingen` | Wehr: Ruhe | Warding: Resting | — (Abklingzeit) | D180 — zu prüfen (N-124) |
+| `buff700_totensegenAbklingen` | Totensegen: Ruhe | Blessing of the Dead: Resting | — (Abklingzeit) | D180 — zu prüfen (N-124) |
 
 ## 4. Werkstätten und Feuer
 

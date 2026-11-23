@@ -98,5 +98,30 @@
 			<ingredient name="itm700_runenkreide" count="1" />
 		</recipe>
 
+		<!-- WP10.5c (D180): Segen und Fluch.
+		     - Geweihtes Wasser: an der Feuerstelle im Topf, fuer jeden, ohne Sperre - wie das
+		       abgekochte Wasser, aus dem es wird. Die Kerze brennt beim Segnen herunter.
+		     - Die zwei Segen: "gesprochen, nicht gebaut" - im Beutel, ohne Werkstatt,
+		       'learnable', frei mit Bannkunde 1 (Segen der Wehr) bzw. 2 (Totensegen).
+		     - Fluchtopf: an der Runenritzer-Bank, frei mit Bannkunde 1. Ein Tontopf aus Lehm,
+		       mit Kreide bezeichnet, ein Knochen darin.
+		     Mengen sind Vorschlag (N-124). -->
+		<recipe name="itm700_weihwasser" count="1" craft_area="campfire" craft_tool="toolCookingPot" craft_time="15" is_trackable="false" tags="cookingPotFood">
+			<ingredient name="drinkJarBoiledWater" count="1" />
+			<ingredient name="candle" count="1" />
+		</recipe>
+		<recipe name="itm700_segenWehr" count="1" craft_time="5" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_weihwasser" count="1" />
+		</recipe>
+		<recipe name="itm700_totensegen" count="1" craft_time="5" is_trackable="false" tags="learnable">
+			<ingredient name="itm700_weihwasser" count="1" />
+			<ingredient name="candle" count="1" />
+		</recipe>
+		<recipe name="itm700_fluchtopf" count="1" craft_area="runenritzer" craft_time="15" is_trackable="false" tags="learnable">
+			<ingredient name="resourceClayLump" count="2" />
+			<ingredient name="itm700_runenkreide" count="1" />
+			<ingredient name="resourceBone" count="1" />
+		</recipe>
+
 	</append>
 </config>

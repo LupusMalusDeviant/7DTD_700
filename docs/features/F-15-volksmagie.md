@@ -124,6 +124,17 @@ des Teils rechnet (Schutz-, Wetterrune) und ob Runenritzen Rang 2 die Kreide wir
 | **Totensegen** / Blessing of the Dead | Seuchentote nehmen dich schlechter wahr (−15 %) **[verifizieren in WP10.5: welcher Wert die Wahrnehmung senkt]**; ohne Meide-Zone (Finding WP9.5) | 60 s | 25 | Kerze, geweihtes Wasser | 240 s |
 | **Fluch der Schwere** / Curse of Heaviness | Gegner im Umkreis 3 m −15 % Tempo | 30 s | 10 | **Fluchtopf** (geworfen, siehe Fallen) | — |
 
+*Gebaut mit WP10.5c (D180, zu prüfen N-124)* in `700_75_Magie`: **Geweihtes Wasser** (Feuerstelle,
+Topf: abgekochtes Wasser und eine Kerze, für jeden), daraus im Beutel **Segen der Wehr** und
+**Totensegen** (`learnable`, Bannkunde Rang 1 bzw. 2), an der Runenritzer-Bank der **Fluchtopf**
+(Bannkunde Rang 1). Odem und Abklingzeit stehen als Bedingungen in der Aktion; Abzug beim Auslösen.
+Totensegen senkt Vanillas `LightMultiplier` und `NoiseMultiplier` je um 15 % — das ist die
+Wahrnehmung, die Vanillas Schleich-Perk senkt **[verifizieren, S-39]**. Fluchtopf: Wurf nach Vanillas
+Kontaktgranate, Schaden 0, Buff im Umkreis 3 m **[verifizieren, S-39: ob der Buff ohne Schaden gelegt
+wird, Größe des Bildes, ob der Wurf den Odem abzieht]**. **Abweichung:** F-15 sagt „Runenkundiger ab
+Stufe 2"; Bannkunde beginnt mit Stufe 3, die Segen also auch. Wer segnet — Heiler oder
+Runenkundiger — bleibt N-120 (4).
+
 ### Tränke und Salben (Kräuterküche, kein Odem)
 
 | Name (DE / EN, Vorschlag) | Wirkung | Dauer | Danach |

@@ -205,5 +205,146 @@
 			</effect_group>
 		</item>
 
+		<!-- WP10.5c (D180): SEGEN UND FLUCH (F-15 "Segen und Fluesche").
+		     Ein Segen kostet Odem UND den Gegenstand (F-15 Abgrenzung). Beides steht in der
+		     Aktion (ExecutionRequirements, Finding WP9.5; Vanilla selbst tut es einmal, beim
+		     Anzuenden des Molotows mit _underwater): ohne genug Odem oder waehrend der
+		     Abklingzeit wird nicht gesprochen, der Gegenstand bleibt. Beim Sprechen zieht der
+		     Gegenstand den Odem ab - Schreiber bleiben die Effekte des Spielers (Vertrag 07
+		     N1.1), Abklingzeit als Buff (N1.2). -->
+
+		<!-- Geweihtes Wasser: der Grundstoff der Segen. Jeder kann es an der Feuerstelle
+		     sieden - ueber einer Kerze, die dabei herunterbrennt. Christliche Tradition
+		     (Leitplanke 5), darum keine Runenkreide darin. -->
+		<item name="itm700_weihwasser">
+			<property name="Tags" value="itm700_segen" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarWaterPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="40" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarBoiledWater" />
+			<property name="CustomIconTint" value="e8eef8" />
+			<property name="DescriptionKey" value="itm700_weihwasserDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+		</item>
+
+		<!-- Segen der Wehr: 20 Odem, 90 s -12 % erlittener Schaden, 180 s Abklingzeit. -->
+		<item name="itm700_segenWehr">
+			<property name="Tags" value="itm700_segen" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarWaterPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="80" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarBoiledWater" />
+			<property name="CustomIconTint" value="f0d890" />
+			<property name="DescriptionKey" value="itm700_segenWehrDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="2" />
+				<property name="Sound_start" value="player_ointment" />
+				<property name="Create_item" value="drinkJarEmpty" />
+				<property name="Use_jar_refund" value="true" />
+				<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="20" />
+				<requirement name="!HasBuff" buff="buff700_segenWehrAbklingen" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="subtract" value="20" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_segenWehr" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_segenWehrAbklingen" />
+			</effect_group>
+		</item>
+
+		<!-- Totensegen: 25 Odem, 60 s schlechter wahrgenommen, 240 s Abklingzeit. -->
+		<item name="itm700_totensegen">
+			<property name="Tags" value="itm700_segen" />
+			<property name="HoldType" value="3" />
+			<property name="Meshfile" value="@:Other/Items/Food/masonJarWaterPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mglass" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="100" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drinkJarBoiledWater" />
+			<property name="CustomIconTint" value="a8a8b8" />
+			<property name="DescriptionKey" value="itm700_totensegenDesc" />
+			<property name="SoundPickup" value="jars_grab" />
+			<property name="SoundPlace" value="jars_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="2" />
+				<property name="Sound_start" value="player_ointment" />
+				<property name="Create_item" value="drinkJarEmpty" />
+				<property name="Use_jar_refund" value="true" />
+				<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="25" />
+				<requirement name="!HasBuff" buff="buff700_totensegenAbklingen" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="subtract" value="25" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_totensegen" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buff700_totensegenAbklingen" />
+			</effect_group>
+		</item>
+
+		<!-- Fluchtopf: Traeger des Fluchs der Schwere (D115, F-15 Fallen). Geworfen wie
+		     Vanillas Kontaktgranate (ItemClassTimeBomb, ExplodeOnHit), aber OHNE Schaden:
+		     EntityDamage, BlockDamage und BlastPower 0, RadiusBlocks 0. Im Umkreis 3 m legt
+		     die Explosion buff700_fluchSchwere (Vertrag 07 N1.4). Partikel 11 ist Vanillas
+		     kleinste Explosion (Sprengpfeil). [verifizieren, S-39]: ob der Buff ohne Schaden
+		     ueberhaupt gelegt wird, wie gross das Bild ist, und ob onSelfPrimaryActionEnd
+		     beim Werfen ausloest (sonst kostet der Wurf keinen Odem). Das Modell ist Vanillas
+		     Granate, tonbraun getoent, bis ein Topf kommt (F-16). -->
+		<item name="itm700_fluchtopf">
+			<property name="Tags" value="itm700_fluch,ammo" />
+			<property name="Class" value="ItemClassTimeBomb" />
+			<property name="HoldType" value="57" />
+			<property name="Meshfile" value="@:Other/Items/Weapons/Ranged/Grenade/GrenadePrefab.prefab" />
+			<property name="TintColor" value="140,90,60" />
+			<property name="DropScale" value="2.5" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="60" />
+			<property name="Weight" value="0" />
+			<property name="CustomIcon" value="thrownGrenadeContact" />
+			<property name="CustomIconTint" value="8c5a3c" />
+			<property name="DescriptionKey" value="itm700_fluchtopfDesc" />
+			<property name="FuseTime" value="6" />
+			<property name="FusePrimeOnActivate" value="true" />
+			<property name="ExplodeOnHit" value="true" />
+			<property name="StickPercent" value="0" />
+			<property name="Group" value="Ammo/Weapons,Ammo" />
+			<property name="SoundPickup" value="grenade_grab" />
+			<property name="SoundPlace" value="grenade_place" />
+			<property class="Explosion">
+				<property name="BlockDamage" value="0" />
+				<property name="EntityDamage" value="0" />
+				<property name="ParticleIndex" value="11" />
+				<property name="RadiusBlocks" value="0" />
+				<property name="RadiusEntities" value="3" />
+				<property name="BlastPower" value="0" />
+				<property name="Buff" value="buff700_fluchSchwere" />
+			</property>
+			<property class="Action0">
+				<property name="Class" value="ThrowAway" />
+				<property name="Delay" value="1.2" />
+				<property name="Throw_strength_default" value="8" />
+				<property name="Throw_strength_max" value="30" />
+				<property name="Max_strain_time" value="1.25" />
+				<property name="Sound_start" value="swoosh" />
+				<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="10" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_odem" operation="subtract" value="10" />
+			</effect_group>
+		</item>
+
 	</append>
 </config>

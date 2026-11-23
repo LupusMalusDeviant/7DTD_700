@@ -75,5 +75,49 @@
 			<duration value="600" />
 		</buff>
 
+		<!-- WP10.5c (D180): Segen und Fluch (F-15 "Segen und Flueche"). -->
+
+		<!-- Segen der Wehr, 90 s: -12 % erlittener Schaden, nach Vanillas Fort-Bites
+		     (GeneralDamageResist base_add). -->
+		<buff name="buff700_segenWehr" name_key="itm700_segenWehr" description_key="buff700_segenWehrDesc" icon="ui_game_symbol_defense">
+			<stack_type value="replace" />
+			<duration value="90" />
+			<effect_group>
+				<passive_effect name="GeneralDamageResist" operation="base_add" value=".12" />
+			</effect_group>
+		</buff>
+		<buff name="buff700_segenWehrAbklingen" name_key="buff700_segenWehrAbklingen" description_key="buff700_segenAbklingenDesc" icon="ui_game_symbol_clock">
+			<stack_type value="ignore" />
+			<duration value="180" />
+		</buff>
+
+		<!-- Totensegen, 60 s: Seuchentote nehmen dich schlechter wahr. Die Wahrnehmung der
+		     Wesen lesen Vanillas Werte LightMultiplier und NoiseMultiplier (Perk
+		     "Aus dem Schatten", Schleich-Ruestung): je -15 %. Keine Meide-Zone (Finding WP9.5).
+		     [verifizieren, S-39]: merkt man es? -->
+		<buff name="buff700_totensegen" name_key="itm700_totensegen" description_key="buff700_totensegenDesc" icon="ui_game_symbol_specters_grace">
+			<stack_type value="replace" />
+			<duration value="60" />
+			<effect_group>
+				<passive_effect name="LightMultiplier" operation="perc_add" value="-.15" />
+				<passive_effect name="NoiseMultiplier" operation="perc_add" value="-.15" />
+			</effect_group>
+		</buff>
+		<buff name="buff700_totensegenAbklingen" name_key="buff700_totensegenAbklingen" description_key="buff700_segenAbklingenDesc" icon="ui_game_symbol_clock">
+			<stack_type value="ignore" />
+			<duration value="240" />
+		</buff>
+
+		<!-- Fluch der Schwere, 30 s, auf dem getroffenen Wesen (Vertrag 07 N1.4): -15 % Tempo.
+		     Verborgen: ein Seuchentoter zeigt keine Symbole. Geht beim Neustart verloren. -->
+		<buff name="buff700_fluchSchwere" hidden="true">
+			<stack_type value="replace" />
+			<duration value="30" />
+			<effect_group>
+				<passive_effect name="WalkSpeed" operation="perc_add" value="-.15" />
+				<passive_effect name="RunSpeed" operation="perc_add" value="-.15" />
+			</effect_group>
+		</buff>
+
 	</append>
 </config>

@@ -23,7 +23,11 @@
   `ItemAction::CanExecute(ItemActionData)` liest es.
 - Gefüllt wird es in `ItemClassesFromXml::parseItem` über `RequirementBase::ParseRequirementGroup` —
   also aus `<requirement>`-Zeilen **innerhalb** einer `<action>` in `items.xml`.
-- Vanilla benutzt das nicht (0 Bedingungen in einer `<action>`), darum stand es nirgends.
+- ~~Vanilla benutzt das nicht (0 Bedingungen in einer `<action>`), darum stand es nirgends.~~
+  *Berichtigt mit WP10.5c (2026-11-23):* Vanilla benutzt es **einmal** — `thrownAmmoMolotovCocktail`,
+  `Action1` (Anzünden), `<requirement name="CVarCompare" cvar="_underwater" operation="LT" value="1"/>`.
+  Die erste Zählung suchte `<action>`; Vanilla schreibt Aktionen als `<property class="Action0">`. Das
+  stützt die Bau-Skizze: dieselbe Form an derselben Stelle.
 
 **Bau-Skizze:** Zauber-Gegenstand mit `<requirement name="CVarCompare" cvar="cv700_odem" operation="GTE" value="…"/>`
 in der Aktion und einem `triggered_effect` beim Auslösen, der `cv700_odem` per `ModifyCVar` senkt.
