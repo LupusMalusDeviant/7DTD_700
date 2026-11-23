@@ -60,4 +60,87 @@
 	<set xpath="/worldgeneration/biomes/biome[@name='wasteland']/weather[@name='cold']/Fog/@range">6,14</set>
 	<set xpath="/worldgeneration/biomes/biome[@name='wasteland']/weather[@name='hot']/Fog/@range">6,14</set>
 
+	<!-- ===================================================================
+	     DEKOR DER FREIEN LANDSCHAFT: MINEN, WRACKS, REIFEN, FAESSER, MUELL
+	     (Plan-0002 WP3.8, 23. November 2026, D144 - ZU PRUEFEN)
+	     ===================================================================
+
+	     Vanilla streut ausserhalb aller Orte Dinge ins Gelaende, die 700 nicht kennt.
+	     GEZAEHLT an biomes.xml von V 3.40 b10 (je Zeile <decoration type="block">):
+
+	       Moor (wasteland)      48   Radkappen- und Bonbondosen-Minen 12, Autowracks 8,
+	                                  Radkappen 4, Reifen 1, Schlackensteine 12,
+	                                  Schrotthaufen 4, Faesser 7
+	       unter Wasser           4   Wrack, Radkappe, Reifen, Schlackenstein
+	       Kueste (desert)        1   Autowrack
+	       Brandland              2   Muellhaufen
+	                             55   Zeilen, getroffen von den 30 Pfaden unten
+
+	     Die Minen zuerst (Saeule P1: Sprengstoff): eine Tretmine im Moor ist kein
+	     Folk-Horror, sondern ein Kriegsrest der Neuzeit.
+
+	     <remove> auf eine Dekor-Zeile, nicht auf einen Block: die Zeile ist ein WEG
+	     ins Gelaende, keine Definition (Vertrag 03 §4, wie die Abwuerfe). Jeder Block
+	     bleibt stehen - in Orten, an Strassen und im Kreativmenue ist er weiter da.
+	     Pfade absolut, ohne '//' (Vertrag 03 §8.2); ein Pfad trifft mit Absicht
+	     mehrere Zeilen (je Unterbiom eine).
+
+	     WAS DAS NICHT TUT
+	       - Strassen und Orte bleiben, wie sie sind: die drei Strassen-'poi' in
+	         dieser Datei streuen weiter Autos (carsRandomHelper), Reifen und
+	         Schlackensteine. Das ist F-07 (Welt), nicht dieser Schritt.
+	       - Die 28 Zeilen cnt...RandomLootHelper (ein zufaelliger Beutebehaelter je
+	         Landschaft) sind nicht angefasst: was sie hinstellen, entscheidet der
+	         Code (Klasse CompositeTileEntity), nicht diese Datei - nicht gelesen.
+	       - Die 18 Kaktus-Zeilen der Kueste bleiben bis F-07.
+
+	     FOLGE FUER DAS EISEN: Wracks (Ernte: Raseneisenerz, Tiegelstahl) und
+	     Schrotthaufen (15 Raseneisenerz) fallen im offenen Moor weg. Strassen und
+	     Orte fuehren sie weiter, Erzbrocken auch. Ob das Moor damit zu arm wird, ist
+	     eine Balance-Frage und nicht gemessen (Entscheidungsliste N-39).
+
+	     ANNAHME, im Spiel nicht gesehen: Dekor wird beim Erzeugen eines
+	     Gelaendestuecks gesetzt; schon erzeugtes Gelaende eines alten Spielstands
+	     behaelt, was dort steht. -->
+
+	<!-- Moor: Minen -->
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='mineHubcap']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='mineCandyTin']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='mineHubcap']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='mineCandyTin']" />
+
+	<!-- Moor: Wracks, Radkappen, Reifen -->
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='carWrecksRandomHelper']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='hubcapNoMine']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='carWrecksRandomHelper']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='carsRandomHelper']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='hubcapNoMine']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='decoCarTireSmallFlat']" />
+
+	<!-- Moor: Schlackensteine, Schrotthaufen, Faesser -->
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='cinderBlocks01']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='cinderBlocks02']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='cinderBlocks03']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='scrapMetalPile']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='cntBarrelRadiatedSingle45']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/decorations/decoration[@blockname='cntBarrelAcidSingle45']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cinderBlocks01']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cinderBlocks02']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cinderBlocks03']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='scrapMetalPile']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cntBarrelGenericSingle45']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cntBarrelWhiteSingle45']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='wasteland']/subbiome/decorations/decoration[@blockname='cntBarrelPlasticSingle45']" />
+
+	<!-- Unter Wasser -->
+	<remove xpath="/worldgeneration/biomes/biome[@name='underwater']/decorations/decoration[@blockname='carWrecksRandomHelper']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='underwater']/decorations/decoration[@blockname='hubcapNoMine']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='underwater']/decorations/decoration[@blockname='decoCarTireSmallFlat']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='underwater']/decorations/decoration[@blockname='cinderBlocks01']" />
+
+	<!-- Kueste und Brandland -->
+	<remove xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='carsRandomHelper']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='burnt_forest']/subbiome/decorations/decoration[@blockname='cntTrashPile01']" />
+	<remove xpath="/worldgeneration/biomes/biome[@name='burnt_forest']/subbiome/decorations/decoration[@blockname='cntTrashPile08']" />
+
 </config>
