@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_70_Handel / loot.xml
+	     Plan-0002 WP6.7, erzaehlende Umgebung (F-17 B7), D158. Zu pruefen durch den Nutzer (N-103).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Eine Beute-Gruppe lg700_schriften zieht genau EINE der zwoelf Fundschriften. Sie steht
+	     vor Vanillas erster Gruppe, damit jeder Verweis auf sie nach ihr kommt.
+
+	     Angehaengt wird sie an sieben Vanilla-Gruppen, alle mit count="all": dort ist jeder
+	     Eintrag ein eigener Wurf, ein neuer Eintrag nimmt den anderen nichts weg. Die Chance
+	     kommt aus Vanillas Wahrscheinlichkeits-Vorlagen (force_prob, so schreibt Vanilla
+	     seine eigenen Zusatzwuerfe):
+
+	       groupDesks        Schreibpulte       lower   10 %
+	       groupBookcase     Buecherborde       low     20 %
+	       groupBookPile     Buecherstapel      low     20 %
+	       groupCoffins      Saerge             low     20 %
+	       groupCaskets      Totenladen         low     20 %
+	       groupRottenChest  morsche Truhen     veryLow  5 %
+	       groupZpackReg     Beutel der Toten   veryLow  5 %
+
+	     Alle Zahlen sind Setzungen fuer das Balancing (WP14.3). Keine der sieben Gruppen
+	     nimmt 700_10_Purge weg (gezaehlt: 0 Treffer in dessen loot.xml). -->
+
+	<insertBefore xpath="/lootcontainers/lootgroup[@name='groupScrapCommon']">
+		<lootgroup name="lg700_schriften" count="1">
+			<item name="itm700_schriftMoench1" />
+			<item name="itm700_schriftMoench2" />
+			<item name="itm700_schriftMoench3" />
+			<item name="itm700_schriftKerbholz" />
+			<item name="itm700_schriftBrunnen" />
+			<item name="itm700_schriftHaendler" />
+			<item name="itm700_schriftBann" />
+			<item name="itm700_schriftHirte" />
+			<item name="itm700_schriftKoehler" />
+			<item name="itm700_schriftSiebteNacht" />
+			<item name="itm700_schriftBitte" />
+			<item name="itm700_schriftKarren" />
+		</lootgroup>
+	</insertBefore>
+
+	<append xpath="/lootcontainers/lootgroup[@name='groupDesks']">
+		<item group="lg700_schriften" loot_prob_template="lower" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupBookcase']">
+		<item group="lg700_schriften" loot_prob_template="low" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupBookPile']">
+		<item group="lg700_schriften" loot_prob_template="low" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupCoffins']">
+		<item group="lg700_schriften" loot_prob_template="low" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupCaskets']">
+		<item group="lg700_schriften" loot_prob_template="low" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupRottenChest']">
+		<item group="lg700_schriften" loot_prob_template="veryLow" force_prob="true" />
+	</append>
+	<append xpath="/lootcontainers/lootgroup[@name='groupZpackReg']">
+		<item group="lg700_schriften" loot_prob_template="veryLow" force_prob="true" />
+	</append>
+</config>

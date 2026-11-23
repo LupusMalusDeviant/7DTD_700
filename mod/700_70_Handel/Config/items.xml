@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_70_Handel / items.xml
+	     Plan-0002 WP6.7, erzaehlende Umgebung (F-17 B7), D158. Zu pruefen durch den Nutzer (N-103).
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Zwoelf Fundschriften. Jede erbt von Vanillas blankNoteMaster (Buch-Modell in der Hand,
+	     Gruppe Sondergegenstaende, nicht verkaeuflich) und traegt ihren Text als Beschreibung:
+	     gelesen wird im Info-Fenster des Gegenstands, die Schrift bleibt erhalten. Anders als
+	     der Pergamentfetzen (noteDuke01) hat sie keine Aktion, die sie verbraucht.
+
+	     Symbol: das des Pergamentfetzens, bis eigene Symbole kommen (WP3.6).
+	     Keine realen Gebete, Heiligen oder Orden (D108). -->
+
+	<append xpath="/items">
+		<!-- Klosterbuch, drei Blaetter: der Verlauf an einem Ort -->
+		<item name="itm700_schriftMoench1">
+			<property name="Extends" value="blankNoteMaster" />
+			<property name="DescriptionKey" value="itm700_schriftMoench1Desc" />
+			<property name="CustomIcon" value="challengeQuestMaster" />
+			<property name="NoScrapping" value="true" />
+			<property name="SoundPickup" value="map_grab" />
+			<property name="SoundPlace" value="map_place" />
+		</item>
+		<item name="itm700_schriftMoench2">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftMoench2Desc" />
+		</item>
+		<item name="itm700_schriftMoench3">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftMoench3Desc" />
+		</item>
+		<!-- Warnungen und letzte Worte -->
+		<item name="itm700_schriftKerbholz">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftKerbholzDesc" />
+		</item>
+		<item name="itm700_schriftBrunnen">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftBrunnenDesc" />
+		</item>
+		<item name="itm700_schriftHaendler">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftHaendlerDesc" />
+		</item>
+		<item name="itm700_schriftBann">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftBannDesc" />
+		</item>
+		<item name="itm700_schriftHirte">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftHirteDesc" />
+		</item>
+		<item name="itm700_schriftKoehler">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftKoehlerDesc" />
+		</item>
+		<item name="itm700_schriftSiebteNacht">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftSiebteNachtDesc" />
+		</item>
+		<item name="itm700_schriftBitte">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftBitteDesc" />
+		</item>
+		<item name="itm700_schriftKarren">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftKarrenDesc" />
+		</item>
+	</append>
+</config>

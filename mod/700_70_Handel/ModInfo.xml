@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_70_Handel - F-10 Handel, Auftraege, Beute; die Schriftstuecke des Lore-Rahmens
+  (Vertrag 01, Nachtrag Phase 2 Teil 2, Abnahme offen).
+
+  Reines XML, keine DLL. Seit Plan-0002 WP6.7 (D158) stehen hier die Fundschriften der
+  erzaehlenden Umgebung (F-17 B7): zwoelf lesbare Funde und die Beute-Gruppe, die sie in
+  Schreibpulte, Buecherborde, Saerge und Truhen legt. Haendler, Ware und Auftraege folgen
+  mit WP8.
+
+  Die Texte sind Sprachzeilen und liegen in 700_90_Sprache.
+-->
+<xml>
+	<Name value="700_70_Handel" />
+	<DisplayName value="700 — Handel und Fundschriften" />
+	<Description value="Was man findet und was man tauscht: lesbare Fundschriften aus der Zeit der Seuche in Truhen, Pulten und Särgen; später Händler, Ware und Aufträge." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

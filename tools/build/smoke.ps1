@@ -61,8 +61,8 @@ if (-not $env:SDTD_PATH) {
 }
 
 # ---------------------------------------------------------------- Teil 1: Paket
-# Seit D53 acht Modlets statt einem, seit D149 neun (700_65_Wesen, Vertrag 01, Nachtrag
-# Phase 2 Teil 2). Geprueft wird jedes einzeln, dazu die Dinge, die
+# Seit D53 acht Modlets statt einem, seit D149 neun (700_65_Wesen), seit D158 zehn
+# (700_70_Handel; beide Vertrag 01, Nachtrag Phase 2 Teil 2). Geprueft wird jedes einzeln, dazu die Dinge, die
 # nur im Zusammenspiel gelten: eine einzige DLL, und die liegt im Kern-Modlet; alle
 # Modlets tragen dieselbe Fassung. Siehe docs/contracts/01-modlet-grenzen.md.
 Write-Output "== Paket =="
@@ -71,7 +71,7 @@ $coreModlet = '700_00_Core'
 $modsRoot = Join-Path $env:SDTD_PATH 'Mods'
 $expected = @($coreModlet, '700_10_Purge', '700_20_Material', '700_30_Ausruestung',
               '700_40_Bauen', '700_50_Fortschritt', '700_60_Welt', '700_65_Wesen',
-              '700_90_Sprache')
+              '700_70_Handel', '700_90_Sprache')
 
 Test-Item 'Mods-Ordner vorhanden' (Test-Path $modsRoot) $modsRoot
 

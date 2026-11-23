@@ -85,6 +85,10 @@ Steuert die Spannungskurve zwischen den Seuchennächten:
 - Pestgruben, Leichenkarren, Grabkreuze mit Bannzeichen, verriegelte Türen *von außen*
 - Kurze Notizen und Inschriften (DE/EN): letzte Gebete, Warnungen, Aufzeichnungen eines Mönchs
 - Verlassene Schutzorte mit gebrochenen Bannzeichen: Was hier geschützt hat, hat versagt
+- **Stand 2026-11-23 (Plan-0002 WP6.7, D158, zu prüfen N-103):** zwölf Fundschriften gebaut
+  (`700_70_Handel`, `itm700_schrift…`), als Beute in Pult, Bücherbord, Sarg, Truhe und Totenbeutel.
+  Im Text heißt das Zeichen **Schutzzeichen** / ward sign (wie F-15). Pestgruben, Leichenkarren,
+  Grabkreuze und verriegelte Türen brauchen eigene Orte (WP6.6, N-98).
 
 ### B8 — Sichere Orte (MVP, X)
 - Feuerstelle, befestigtes Heim mit Schutzzeichen, geweihter Boden (Kloster) senken Grauen

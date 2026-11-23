@@ -279,8 +279,13 @@ Nachtrag legt fest, wohin die Features der Phase 2 gehören, bevor das erste ent
 mit `ModInfo.xml` und `Config/entitygroups.xml` (fünf Zeilen, nur Nachrücker). Es sind damit
 **neun** Modlets; `tools/build/smoke.ps1` erwartet neun. Die Sperrliste kennt seit demselben
 Schritt Wesen (elf Wesenregeln): das **Herausnehmen** steht darum, wie Teil B es verlangt, in
-`700_10_Purge/Config/entitygroups.xml` (erzeugt), nicht von Hand in `65_Wesen`. Die drei anderen
-Modlets gibt es weiter nicht.
+`700_10_Purge/Config/entitygroups.xml` (erzeugt), nicht von Hand in `65_Wesen`. ~~Die drei anderen
+Modlets gibt es weiter nicht.~~
+
+**Stand 2026-11-23 (Plan-0002 WP6.7, D158):** das zweite steht — `mod/700_70_Handel` mit
+`ModInfo.xml`, `Config/items.xml` (zwölf Fundschriften) und `Config/loot.xml` (eine Beute-Gruppe,
+sieben Anhänge). Es sind **zehn** Modlets; `smoke.ps1` erwartet zehn. `45_Leben` und `75_Magie`
+gibt es weiter nicht.
 
 ### A. Vier neue Modlets, zwölf insgesamt
 
