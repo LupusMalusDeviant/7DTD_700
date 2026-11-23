@@ -198,12 +198,26 @@ internal sealed class Denylist
         {
             if (pattern.IsMatch(className))
             {
+                _creatureUsed.Add(source);
                 return $"{text}  ({source})";
             }
         }
 
         return null;
     }
+
+    private readonly HashSet<string> _creatureUsed = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Wesenregeln, die in diesem Lauf auf keine einzige Klasse gepasst haben, nach der
+    /// gefragt wurde. Wie bei den Auftraegen entscheidet der Aufrufer, was das bedeutet:
+    /// 'purge-patch' fragt nur nach Klassen in Landschaftsgruppen und rechnet gegen
+    /// Vanilla - dort ist eine Regel ohne Treffer ein Tippfehler (Vertrag 04, Nachtrag
+    /// WP5.4).
+    /// </summary>
+    public IEnumerable<string> UnusedCreatureRules => _creatures
+        .Where(c => !_creatureUsed.Contains(c.Source))
+        .Select(c => $"{c.Text}  ({c.Source})");
 
     /// <summary>
     /// Verbotsregeln, die in diesem Lauf auf keine einzige Kennung gepasst haben.

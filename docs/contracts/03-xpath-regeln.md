@@ -391,3 +391,21 @@ wird gelesen und geprüft, nicht gepatcht; Vertrag 04, Prüfung *welt*), Bundles
 **[verifizieren, WP5 / WP9]** Punkt 1 und 3 sind Übertragungen aus §4, nicht gelesen: ob eine
 fehlende Klasse wirklich bricht und was eine leere Gruppe tut, gehört in das Finding, das vor
 dem ersten Patch an `entitygroups.xml` steht.
+
+**Beantwortet am 2026-11-23 (WP5.4, statisch gelesen, nicht im Spiel gesehen):**
+[`docs/rea/findings/F-06-wesengruppen-laden.md`](../rea/findings/F-06-wesengruppen-laden.md).
+Punkt 1 und Punkt 3 sind belegt und werden schärfer:
+
+- Eine Gruppe, die eine Klasse nennt, die es nicht gibt, ist ein **Ladefehler** (`Entity with name
+  '…' not found`); der Sonderwert `none` ist ausgenommen.
+- Eine **leere Gruppe ist ein Ladefehler** (`Empty entity groups not allowed!`), nicht „unbekannt".
+  Punkt 3 heißt darum genauer: **nach allen Modlets** hat jede Gruppe mindestens einen Eintrag. Ein
+  eigener Eintrag ist dafür nicht nötig — es genügt, dass einer bleibt.
+- Eine Gruppe, die `spawning.xml` oder `gamestages.xml` ruft, wird **nie entfernt**; auch das ist
+  ein Ladefehler.
+- Neu, **Punkt 6: `none` rückt nie an die erste Stelle einer Gruppe.** Den ersten Eintrag liest das
+  Spiel, um zu entscheiden, ob die Gruppe Feinde führt; in Vanilla steht `none` nie vorn, und was
+  das Spiel dann tut, ist nicht gelesen.
+
+`purge-patch` rechnet Punkt 3 und Punkt 6 für die Landschaftsgruppen nach, bevor es eine Datei
+schreibt (Vertrag 04, Nachtrag WP5.4).

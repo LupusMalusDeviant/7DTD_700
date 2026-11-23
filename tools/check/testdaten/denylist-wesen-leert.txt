@@ -1,0 +1,5 @@
+# Pruefliste: eine Wesenregel, die eine Landschaftsgruppe LEERT.
+# 'pruefNachtWald' fuehrt nur 'pruefSeuchentoter'. Faellt der, ist die Gruppe leer, und das
+# Spiel bricht das Laden ab (Finding WP5.4). 'purge-patch' muss das melden und nichts schreiben.
+pruefGanzAnderes*
+wesen:pruefSeuchentoter

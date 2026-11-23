@@ -1,0 +1,6 @@
+# Pruefliste: eine Wesenregel, die in KEINER Landschaftsgruppe etwas trifft.
+# 'pruefSchreiberWild' steht nur in der Stufengruppe 'pruefSeuchennacht' - dort urteilt keine
+# Wesenregel. 'purge-patch' muss das als Fehler melden (wesenregel-trifft-nichts): eine Regel,
+# die nichts herausnimmt, fuehlt sich sonst an wie eine, die nichts zu tun hatte.
+pruefGanzAnderes*
+wesen:pruefSchreiberWild

@@ -1,0 +1,6 @@
+# Pruefliste: eine Wesenregel, die jede Klasse trifft.
+# In 'pruefTagWald' bleibt dann nur 'none' - an erster Stelle. Den ersten Eintrag liest das
+# Spiel, um zu entscheiden, ob die Gruppe Feinde fuehrt (Finding WP5.4); in Vanilla steht
+# 'none' nie vorn. 'purge-patch' muss das melden.
+pruefGanzAnderes*
+wesen:pruef*

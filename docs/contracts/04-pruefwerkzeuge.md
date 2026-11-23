@@ -3887,3 +3887,97 @@ die 55 Grundnamen danach Zeichen für Zeichen gegen die Sprachdatei.
 
 **Grenze:** der Erzeuger prüft, dass jede Klasse einen Namen hat — nicht, ob der Name passt, und
 nicht, ob das Spiel ihn je zeigt (F-06 §2: gelesen sind die Meldungen im Chat; S-26).
+
+## Nachtrag WP5.4 — `purge-patch` kennt Wesenregeln, 2026-11-23, **Abnahme offen** (N-68)
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP5.4, D149). Der Nachtrag *wesen* oben
+hat es angekündigt („der Erzeuger folgt mit WP5.4"); Vertrag 01 (Nachtrag Phase 2, Teil 2) legt
+das Herausnehmen nach `10_Purge`.
+
+### Die Regel
+
+1. Führt die Sperrliste **keine** Wesenregel, erzeugt `purge-patch` nichts für
+   `entitygroups.xml`; das Erzeugnis sieht aus wie vor diesem Nachtrag. Der Zähler `wesenregeln`
+   steht in jedem Bericht.
+2. Mit Wesenregeln entsteht ein Teil `entitygroups.xml`: je **Landschaftsgruppe** (eine Gruppe, die
+   `spawning.xml` ruft) und je gesperrter Klasse eine Zeile
+   `<remove xpath="/entitygroups/entitygroup[@name='G']/e[@n='X']" />`. Der Name der Gruppe steht
+   **immer** im XPath: Gruppen, die nur die Spielstufen rufen, bleiben unberührt (P2-E12).
+   Getroffen wird der Eintrag, nie die Klasse, nie die Gruppe (Vertrag 03, Nachtrag Phase 2 C).
+3. **Nachprobe** auf einer Kopie, vor dem Schreiben. Jeder dieser Befunde ist ein Fehler, und bei
+   einem Fehler wird **keine** Datei geschrieben:
+   - `wesen-trotz-patch` — eine gesperrte Klasse steht nach den Zeilen noch in einer
+     Landschaftsgruppe;
+   - `wesengruppe-leer-durch-patch` — eine Landschaftsgruppe hätte keinen Eintrag mehr (das Spiel
+     bricht das Laden ab, Finding F-06 Wesen-Gruppen);
+   - `wesengruppe-beginnt-mit-none` — `none` stünde an erster Stelle (das Spiel liest den ersten
+     Eintrag; in Vanilla steht `none` nie vorn);
+   - `wesenregel-trifft-nichts` — eine Wesenregel passt auf keine Klasse in einer
+     Landschaftsgruppe der Quelle (gegen Vanilla ein Tippfehler);
+   - `wesengruppe-andere-form` — eine Landschaftsgruppe führt Einträge, die nicht `<e n>` heißen
+     (`<entity name>` oder eine Textliste; das Spiel liest sie, das Werkzeug nicht).
+4. Zähler: `landschaftsgruppen`, `gesperrte_wesen_in_landschaftsgruppen`,
+   `gesperrte_wesen_noch_in_landschaftsgruppen`, `landschaftsgruppen_leer_danach`,
+   `landschaftsgruppen_beginnen_mit_none`, `patchzeilen_entitygroups.xml`.
+5. `--vergleiche`: fehlt die Datei im Modlet, `patchdatei-fehlt`; weicht sie ab,
+   `patchdatei-veraltet` (wie bei jeder erzeugten Datei). Neu ist die Gegenrichtung
+   **`patchdatei-ohne-regel`**: im Modlet liegt eine `entitygroups.xml`, und die Sperrliste führt
+   keine Wesenregel mehr.
+6. Fehlt der Quelle `entitygroups.xml` oder `spawning.xml`, steht das unter den Grenzen; kein
+   Fehler, kein Teil.
+7. `--ohne-entfernen` lässt die Zeilen weg; die Nachprobe muss dann rot sein
+   (`wesen-trotz-patch`).
+
+### Was der Erzeuger nicht tut
+
+- Er setzt nichts ein. Nachrücker und Ersatz (der Wolf für Kojote und Berglöwe) stehen von Hand in
+  `700_65_Wesen`. Die Nachprobe rechnet **ohne** dieses Modlet: `10_Purge` allein darf keine
+  Gruppe leeren (Vertrag 01 §3: jedes Modlet für sich).
+- Die Mindestzahl aus F-06 §3.1 („fällt eine Gruppe unter drei Einträge, rückt eine Klasse nach")
+  prüft er nicht; sie ist eine Regel des Features, kein Ladefehler.
+- Schläfer in Orten, Horden, Seuchennacht, Spielereignisse und Aufträge sieht er nicht — dieselbe
+  Grenze wie die Prüfung *wesen*.
+
+### Kalibrierung
+
+`mod700check purge-patch "<SDTD_PATH>/Data/Config" --out mod/700_10_Purge/Config --denylist
+tools/check/denylist.txt` am 23.11.2026, V 3.40 b10, elf Wesenregeln: `landschaftsgruppen 29`,
+`gesperrte_wesen_in_landschaftsgruppen 17`, `gesperrte_wesen_noch_in_landschaftsgruppen 0`,
+`landschaftsgruppen_leer_danach 0`, `landschaftsgruppen_beginnen_mit_none 0`,
+`patchzeilen_entitygroups.xml 72`, `patchzeilen 2007`; 0 rot. Die sieben übrigen erzeugten
+Dateien sind dabei Zeichen für Zeichen gleich geblieben (`git status`: nur `entitygroups.xml`
+neu).
+
+Am Vorlauf mit neun Modlets (2863 Operationen, 0 ohne Treffer) meldet `anachronisms`:
+`klassen_in_landschaftsgruppen 61` (vorher 78), `gesperrte_wesen_in_landschaftsgruppen 0`,
+`wesen_verweise_auf_fehlendes 0`, `leere_wesengruppen 0`; 0 rot. An unverändertem Vanilla und am
+Dump vom 22.11.: `gesperrte_wesen_in_landschaftsgruppen 17` — **der Prüfbefehl ist am alten Dump
+damit um 17 Zeilen röter**, bis ein Spielstart einen neuen schreibt (N-01).
+
+### Gegenproben (Projektregel 5)
+
+Abschnitt „Wesen" in `gegenproben.ps1`, W7 bis W15, Prüfsatz `testdaten/wesen`, Prüflisten
+`denylist-wesen.txt`, `-ohne`, `-tippfehler`, `-leert`, `-alles`:
+
+| | Fall | Erwartung |
+|---|---|---|
+| W7 | eine Regel, Klasse in Landschafts- **und** Stufengruppe | eine Zeile mit dem Namen der Landschaftsgruppe; keine für die Stufengruppe; Exit 0 |
+| W8 | `--ohne-entfernen` | `wesen-trotz-patch`; Exit 1 |
+| W9 | Regel trifft nur eine Klasse in einer Stufengruppe | `wesenregel-trifft-nichts`; Exit 1 |
+| W10 | Regel leert eine Landschaftsgruppe | `wesengruppe-leer-durch-patch`; Exit 1 |
+| W11 | Regel trifft alles, `none` bleibt allein | `wesengruppe-beginnt-mit-none`; Exit 1 |
+| W12 | keine Wesenregel | kein Wort von `entitygroups.xml`; Exit 0 |
+| W13 | `--vergleiche` gegen einen Ordner ohne die Datei | `patchdatei-fehlt: entitygroups.xml`; Exit 1 |
+| W14 | `--vergleiche`, Datei da, keine Regel | `patchdatei-ohne-regel`; Exit 1 |
+| W15 | Quelle ohne `entitygroups.xml` | gesagt, nicht rot; Exit 0 |
+
+`check-all.ps1`: 307 Gegenproben, 0 fehlgeschlagen (vorher 298).
+
+### Grenzen
+
+- Die Nachprobe rechnet mit `XDocument` und XPath des Werkzeugs, im Spiel rechnet der Patcher des
+  Spiels. Der Nachweis ist der Weg über das Spiel: Start, Dump, `anachronisms` (S-27, N-01).
+- `wesengruppe-andere-form` hat **keine** eigene Gegenprobe; Vanilla führt die Form nicht (0 von
+  26 734 Einträgen), und der Fall ist bisher nur gelesen.
+- Zwei Regeln, die dieselbe Klasse treffen: die erste gilt als benutzt, die zweite als
+  `wesenregel-trifft-nichts` — wie bei den Auftragsregeln.

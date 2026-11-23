@@ -258,6 +258,23 @@ internal static class PurgePatch
             }
         }
 
+        // Wesen (D149, Vertrag 04, Nachtrag WP5.4). Der dritte eigene Regelsatz: eine
+        // Klasse ist kein Gegenstand, also steht sie nicht in 'blockedNames'. Wie bei den
+        // Auftraegen entsteht der Teil NUR, wenn die Sperrliste Wesenregeln fuehrt - ohne
+        // Regeln gibt es keine entitygroups.xml im Erzeugnis.
+        int creatureTrouble = 0;
+        report.Count("wesenregeln", denylist.CreatureRules);
+
+        if (denylist.CreatureRules > 0)
+        {
+            PatchFile? creatureFile = Creatures(
+                report, source, denylist, skipRemovals, ref creatureTrouble);
+            if (creatureFile is not null)
+            {
+                files.Add(creatureFile);
+            }
+        }
+
         int lines = 0;
         int withoutHit = 0;
 
@@ -560,9 +577,23 @@ internal static class PurgePatch
                 }
             }
 
+            // Die Gegenrichtung fuer den Teil, den es nur mit Regeln gibt: liegt eine
+            // entitygroups.xml im Modlet und die Sperrliste fuehrt keine Wesenregel mehr,
+            // dann nimmt das Modlet Klassen aus dem Gelaende, von denen keine Regel weiss.
+            if (denylist.CreatureRules == 0 && File.Exists(Path.Combine(outDir, CreatureFileName)))
+            {
+                different++;
+                report.Error("patchdatei-ohne-regel", CreatureFileName,
+                    $"{Path.GetFullPath(Path.Combine(outDir, CreatureFileName))} liegt im Modlet, "
+                    + "und die Sperrliste fuehrt keine Wesenregel. Die Datei stammt aus einer "
+                    + "aelteren Sperrliste; entweder kommen die Regeln zurueck, oder die Datei "
+                    + "wird geloescht.");
+            }
+
             report.Count("patchdateien_abweichend", different);
         }
-        else if (withoutHit == 0 && left == 0 && !skipRemovals && !dryRun && outDir is not null)
+        else if (withoutHit == 0 && left == 0 && creatureTrouble == 0
+                 && !skipRemovals && !dryRun && outDir is not null)
         {
             Directory.CreateDirectory(outDir);
             foreach ((string name, IReadOnlyList<PatchFile> parts) in groups)
@@ -738,6 +769,216 @@ internal static class PurgePatch
         operations.Sort((a, b) => string.CompareOrdinal(a.VerifyXPath, b.VerifyXPath));
         return new PatchFile(fileName, why, operations, elementName, attribute,
             ParentElement: parentElement, OwnBlocked: own);
+    }
+
+    private const string CreatureFileName = "entitygroups.xml";
+
+    /// <summary>Vanillas Zeichen fuer "hier erscheint nichts" - ein Eintrag, keine Klasse.</summary>
+    private const string NoCreature = "none";
+
+    /// <summary>
+    /// Nimmt gesperrte Wesen aus den Landschaftsgruppen (D149, Vertrag 04, Nachtrag WP5.4).
+    ///
+    /// <para><b>Nur Landschaftsgruppen.</b> Eine Wesenregel urteilt ueber Gruppen, die
+    /// <c>spawning.xml</c> ruft, und ueber nichts sonst - dieselbe Lesart wie
+    /// <see cref="CreatureCheck"/>. Darum traegt jede Zeile den Namen der Gruppe: ein
+    /// <c>remove</c> ohne dieses Praedikat naehme die Klasse auch den Schlaefern und der
+    /// Seuchennacht, wo die Rollentraeger stehen duerfen (P2-E12).</para>
+    ///
+    /// <para><b>Getroffen wird der Eintrag, nie die Klasse und nie die Gruppe</b>
+    /// (Vertrag 03, Nachtrag Phase 2 C). Das Spiel bricht das Laden ab, wenn eine Gruppe
+    /// eine Klasse nennt, die es nicht gibt, wenn eine Gruppe keinen Eintrag hat oder wenn
+    /// spawning.xml eine Gruppe ruft, die fehlt (Finding WP5.4, statisch gelesen). Die
+    /// Nachprobe hier rechnet darum auf einer Kopie nach, dass keine Landschaftsgruppe leer
+    /// wird und keine mit 'none' beginnt - den ersten Eintrag liest das Spiel, um zu
+    /// entscheiden, ob die Gruppe Feinde fuehrt.</para>
+    ///
+    /// <para>Der Teil hat keine <c>ElementName</c>-Nachprobe (<see cref="WaysLeft"/>): die
+    /// zaehlte gesperrte Klassen in ALLEN Gruppen und waere bei jedem Schlaefer rot.</para>
+    /// </summary>
+    private static PatchFile? Creatures(
+        Report report, ConfigSource source, Denylist denylist, bool skip, ref int trouble)
+    {
+        XDocument? groupsDoc = source.Load(CreatureFileName);
+        XDocument? spawning = source.Load("spawning.xml");
+
+        if (groupsDoc is null || spawning is null)
+        {
+            report.Limitation(
+                "Diese Quelle hat keine entitygroups.xml oder keine spawning.xml. Ob die "
+                + $"{denylist.CreatureRules} Wesenregeln der Sperrliste etwas treffen, laesst "
+                + "sich hier nicht sagen; geprueft wird das gegen Vanilla.");
+            return null;
+        }
+
+        var called = new HashSet<string>(StringComparer.Ordinal);
+        foreach (XElement spawn in spawning.Descendants("spawn"))
+        {
+            if (spawn.Attribute("entitygroup")?.Value is string group
+                && !string.IsNullOrWhiteSpace(group))
+            {
+                called.Add(group);
+            }
+        }
+
+        static bool IsLandscape(XElement group, HashSet<string> called) =>
+            group.Attribute("name")?.Value is string name && called.Contains(name);
+
+        var operations = new List<PatchOperation>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var blockedClasses = new SortedSet<string>(StringComparer.Ordinal);
+        int landscapeGroups = 0;
+
+        foreach (XElement group in groupsDoc.Descendants("entitygroup"))
+        {
+            if (!IsLandscape(group, called))
+            {
+                continue;
+            }
+
+            landscapeGroups++;
+            string groupName = group.Attribute("name")!.Value;
+
+            // Das Spiel liest drei Formen: <e n>, <entity name> und eine Textliste. Vanilla
+            // benutzt nur die erste (26734 Eintraege, gemessen an V 3.40 b10), und nur die
+            // rechnet dieses Werkzeug. Eine Gruppe in anderer Form waere hier unsichtbar -
+            // also wird sie gesagt statt uebersehen.
+            bool otherForm = group.Elements().Any(e => e.Name.LocalName != "e")
+                             || group.Nodes().OfType<XText>().Any(t => t.Value.Trim().Length > 0);
+            if (otherForm)
+            {
+                trouble++;
+                report.Error("wesengruppe-andere-form", groupName,
+                    "diese Landschaftsgruppe fuehrt Eintraege, die nicht <e n='...'> heissen "
+                    + "(<entity name> oder eine Textliste). Das Spiel liest sie, dieses Werkzeug "
+                    + "nicht - ob eine gesperrte Klasse darin steht, ist nicht geprueft.");
+            }
+
+            foreach (XElement entry in group.Elements("e"))
+            {
+                string? className = entry.Attribute("n")?.Value;
+                if (string.IsNullOrEmpty(className) || className == NoCreature
+                    || denylist.MatchCreature(className) is null)
+                {
+                    continue;
+                }
+
+                blockedClasses.Add(className);
+
+                if (groupName.Contains('\'') || className.Contains('\''))
+                {
+                    throw new UsageException(
+                        $"Die Gruppe '{groupName}' oder die Klasse '{className}' enthaelt ein "
+                        + "Apostroph. Daraus laesst sich kein XPath-Literal bauen; dieser Fall "
+                        + "braucht Handarbeit.");
+                }
+
+                if (skip)
+                {
+                    continue;
+                }
+
+                string xpath = $"{Chain(group)}[@name='{groupName}']/e[@n='{className}']";
+                if (!seen.Add(xpath))
+                {
+                    continue;
+                }
+
+                operations.Add(new PatchOperation(
+                    className, $"<remove xpath=\"{xpath}\" />", xpath, Count(groupsDoc, xpath),
+                    "gesperrtes Wesen in einer Landschaftsgruppe"));
+            }
+        }
+
+        operations.Sort((a, b) => string.CompareOrdinal(a.VerifyXPath, b.VerifyXPath));
+
+        report.Count("landschaftsgruppen", landscapeGroups);
+        report.Count("gesperrte_wesen_in_landschaftsgruppen", blockedClasses.Count);
+
+        // Gegen Vanilla ist eine Wesenregel ohne Treffer ein Tippfehler, und zwar der stille:
+        // die Klasse bleibt im Gelaende, und 'anachronisms' muss eine Regel ohne Treffer bei
+        // einem gepatchten Stand fuer das Ziel halten.
+        foreach (string rule in denylist.UnusedCreatureRules)
+        {
+            trouble++;
+            report.Error("wesenregel-trifft-nichts", rule,
+                "auf diese Wesenregel passt keine einzige Klasse in einer Landschaftsgruppe "
+                + "dieser Quelle. Entweder ist sie falsch geschrieben, oder die Klasse steht "
+                + "nur in Gruppen, die spawning.xml nicht ruft - dort urteilt keine Wesenregel.");
+        }
+
+        // Nachprobe auf einer Kopie, mit derselben Lesart wie oben.
+        var copy = new XDocument(groupsDoc);
+        foreach (PatchOperation op in operations)
+        {
+            foreach (XElement hit in copy.XPathSelectElements(op.VerifyXPath).ToList())
+            {
+                hit.Remove();
+            }
+        }
+
+        int still = 0;
+        int emptied = 0;
+        int startsWithNothing = 0;
+
+        foreach (XElement group in copy.Descendants("entitygroup"))
+        {
+            if (!IsLandscape(group, called))
+            {
+                continue;
+            }
+
+            string groupName = group.Attribute("name")!.Value;
+            var entries = group.Elements("e")
+                .Select(e => e.Attribute("n")?.Value ?? string.Empty)
+                .ToList();
+
+            foreach (string className in entries
+                         .Where(c => c.Length > 0 && c != NoCreature
+                                     && denylist.MatchCreature(c) is not null)
+                         .Distinct(StringComparer.Ordinal))
+            {
+                still++;
+                report.Error("wesen-trotz-patch", className,
+                    $"diese Klasse steht auch nach allen erzeugten Patchzeilen noch in der "
+                    + $"Landschaftsgruppe '{groupName}'. Der Patch-Satz deckt nicht, was die "
+                    + "Pruefung findet.");
+            }
+
+            if (entries.Count == 0)
+            {
+                emptied++;
+                report.Error("wesengruppe-leer-durch-patch", groupName,
+                    "nach den erzeugten Entfernungen hat diese Landschaftsgruppe keinen Eintrag "
+                    + "mehr. Das Spiel bricht das Laden einer leeren Gruppe ab ('Empty entity "
+                    + "groups not allowed', statisch gelesen, Finding WP5.4). Eine Regel "
+                    + "weniger, oder die Gruppe bekommt vorher einen Eintrag, der bleibt.");
+            }
+            else if (entries[0] == NoCreature)
+            {
+                startsWithNothing++;
+                report.Error("wesengruppe-beginnt-mit-none", groupName,
+                    "nach den erzeugten Entfernungen steht 'none' an erster Stelle dieser "
+                    + "Landschaftsgruppe. Den ersten Eintrag liest das Spiel, um zu entscheiden, "
+                    + "ob die Gruppe Feinde fuehrt; in Vanilla steht 'none' nie vorn, und was "
+                    + "das Spiel dann tut, ist nicht gelesen (Finding WP5.4).");
+            }
+        }
+
+        trouble += still + emptied + startsWithNothing;
+
+        report.Count("gesperrte_wesen_noch_in_landschaftsgruppen", still);
+        report.Count("landschaftsgruppen_leer_danach", emptied);
+        report.Count("landschaftsgruppen_beginnen_mit_none", startsWithNothing);
+
+        return new PatchFile(CreatureFileName,
+            "Wesen (D149): eine gesperrte Klasse faellt aus den LANDSCHAFTSGRUPPEN - den "
+            + "Gruppen, die spawning.xml ruft. Darum traegt jede Zeile den Namen der Gruppe. "
+            + "Getroffen wird der Eintrag; die Klasse bleibt stehen wie jede Definition "
+            + "(Vertrag 03, Nachtrag Phase 2 C), und in Schlaefer-Gruppen, Horden und der "
+            + "Seuchennacht bleibt sie auch (P2-E12). Was an ihrer Stelle erscheint, steht in "
+            + "700_65_Wesen - dieses Modlet nimmt nur weg.",
+            operations);
     }
 
     /// <summary>

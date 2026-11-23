@@ -786,6 +786,73 @@ Test-Output 'Quelle ohne entityclasses.xml: gesagt, nicht rot' 0 `
                    (Format-Zahl 'wesengruppen' 1)) `
     -MustNotContain @('wesen-verweis-fehlt')
 
+# --- Der Erzeuger: 'purge-patch' nimmt gesperrte Wesen aus den Landschaftsgruppen
+#     (D149, Vertrag 04, Nachtrag WP5.4).
+
+# W7. Eine Zeile je Gruppe und Klasse, MIT dem Namen der Gruppe. 'pruefSchreiber' steht auch
+#     in der Stufengruppe 'pruefSeuchennacht' - dort bleibt er (P2-E12). Eine Zeile ohne das
+#     Praedikat an der Gruppe naehme ihn auch dort heraus.
+Test-Output 'purge-patch nimmt das Wesen aus der Landschaftsgruppe, nicht aus der Stufengruppe' 0 `
+    @('purge-patch', $wesen, '--trocken', '--zeigen', '--denylist', $wesenliste, '--aufschub', $ohneAufschub) `
+    -MustContain @(
+        "<remove xpath=""/entitygroups/entitygroup[@name='pruefTagWald']/e[@n='pruefSchreiber']"" />",
+        (Format-Zahl 'patchzeilen_entitygroups.xml' 1),
+        'gesperrte_wesen_noch_in_landschaftsgruppen 0',
+        (Format-Zahl 'landschaftsgruppen_leer_danach' 0)) `
+    -MustNotContain @("pruefSeuchennacht']", "e[@n='pruefSchreiberWild']", "<remove xpath=""/entity_classes")
+
+# W8. Der Nachweis, dass die Nachprobe etwas prueft: ohne die Entfernungen steht die Klasse
+#     noch in der Landschaftsgruppe.
+Test-Output 'ohne die Entfernungen bleibt das Wesen im Gelaende' 1 `
+    @('purge-patch', $wesen, '--trocken', '--ohne-entfernen', '--denylist', $wesenliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesen-trotz-patch: pruefSchreiber',
+                   'gesperrte_wesen_noch_in_landschaftsgruppen 1')
+
+# W9. Der stille Tippfehler: eine Wesenregel, die in keiner Landschaftsgruppe trifft. Die
+#     Klasse gibt es - sie steht nur dort, wo keine Wesenregel urteilt.
+Test-Output 'Wesenregel ohne Treffer im Gelaende ist ein Fehler' 1 `
+    @('purge-patch', $wesen, '--trocken', '--denylist', (Join-Path $data 'denylist-wesen-tippfehler.txt'), '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesenregel-trifft-nichts: pruefSchreiberWild')
+
+# W10. Eine Regel, die eine Landschaftsgruppe leert. Das Spiel bricht das Laden einer leeren
+#      Gruppe ab (Finding WP5.4) - der Erzeuger sagt es, bevor es eine Datei gibt.
+Test-Output 'Wesenregel, die eine Landschaftsgruppe leert, ist ein Fehler' 1 `
+    @('purge-patch', $wesen, '--trocken', '--denylist', (Join-Path $data 'denylist-wesen-leert.txt'), '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesengruppe-leer-durch-patch: pruefNachtWald',
+                   (Format-Zahl 'landschaftsgruppen_leer_danach' 1)) `
+    -MustNotContain @('wesengruppe-leer-durch-patch: pruefTagWald')
+
+# W11. Bleibt nur 'none', steht es vorn. Den ersten Eintrag liest das Spiel (Finding WP5.4).
+Test-Output 'Landschaftsgruppe, die danach mit none beginnt, ist ein Fehler' 1 `
+    @('purge-patch', $wesen, '--trocken', '--denylist', (Join-Path $data 'denylist-wesen-alles.txt'), '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  wesengruppe-beginnt-mit-none: pruefTagWald',
+                   '[ROT]  wesengruppe-leer-durch-patch: pruefNachtWald')
+
+# W12. Ohne Wesenregel entsteht KEIN Teil fuer entitygroups.xml - das Erzeugnis sieht aus wie
+#      vor dem Nachtrag.
+Test-Output 'ohne Wesenregel erzeugt purge-patch nichts fuer entitygroups.xml' 0 `
+    @('purge-patch', $wesen, '--trocken', '--zeigen', '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @((Format-Zahl 'wesenregeln' 0)) `
+    -MustNotContain @('entitygroups.xml', 'landschaftsgruppen')
+
+# W13. --vergleiche: fehlt die erzeugte Datei im Modlet, faellt das auf.
+Test-Output 'fehlende entitygroups.xml im Modlet faellt auf' 1 `
+    @('purge-patch', $wesen, '--vergleiche', '--out', (Join-Path $data 'gibtesnicht'), '--denylist', $wesenliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  patchdatei-fehlt: entitygroups.xml')
+
+# W14. Die Gegenrichtung: eine entitygroups.xml im Modlet, und die Sperrliste fuehrt keine
+#      Wesenregel mehr. Als "Modlet" dient hier der Pruefsatz selbst - er hat eine Datei
+#      dieses Namens; die uebrigen Befunde des Laufs gehoeren nicht zur Probe.
+Test-Output 'entitygroups.xml im Modlet ohne Wesenregel faellt auf' 1 `
+    @('purge-patch', $wesen, '--vergleiche', '--out', $wesen, '--denylist', $wesenlisteOhne, '--aufschub', $ohneAufschub) `
+    -MustContain @('[ROT]  patchdatei-ohne-regel: entitygroups.xml')
+
+# W15. Eine Quelle ohne entitygroups.xml kann ueber die Regel nichts sagen: gesagt, nicht rot.
+Test-Output 'purge-patch an einer Quelle ohne Gruppen: gesagt, nicht rot' 0 `
+    @('purge-patch', $purge, '--trocken', '--denylist', $wesenliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('Diese Quelle hat keine entitygroups.xml oder keine spawning.xml') `
+    -MustNotContain @('wesenregel-trifft-nichts')
+
 Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="
 Test-Case 'unbekannter Befehl' 2 @('gibtesnicht', $data)

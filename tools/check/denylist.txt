@@ -749,3 +749,28 @@ oldCash                         # Papiergeld; bleibt verboten - Silber ersetzt d
 # sonst wird 'purge-patch' rot.
 auftrag:tier*_restore_power   # "Strom wiederherstellen", Stufe 2 bis 4, bei allen fuenf Haendlern.
                               # Die Umdeutung als "Brunnen wiederherstellen" ist F-10 (WP8).
+
+# --- Wesen (D147, D149; Vertrag 04, Nachtrag Pruefungen der Phase 2 Teil 2 und WP5.4) ---
+# Eine Zeile mit 'wesen:' am Anfang urteilt ueber den Namen einer KLASSE in einer
+# LANDSCHAFTSGRUPPE - einer Gruppe, die spawning.xml ruft. 'purge-patch' nimmt den Eintrag
+# aus diesen Gruppen (mod/700_10_Purge/Config/entitygroups.xml); die Klasse bleibt stehen,
+# und in Schlaefer-Gruppen, Horden und der Seuchennacht bleibt sie auch (P2-E12). Eine
+# Freigabe gibt es nicht. Gegen Vanilla muss jede dieser Regeln treffen, und keine
+# Landschaftsgruppe darf leer werden - sonst wird 'purge-patch' rot.
+#
+# Vorschlag aus dem autonomen Lauf, nicht abgenommen (N-67, N-68): die neun dem Namen und
+# der Erscheinung nach neuzeitlichen Grundklassen aus F-06 §3.1. Die sechs Rollentraeger
+# (FatCop, Demolition, Soldier, MaleHazmat, Rancher, Lumberjack) bekommen KEINE Regel.
+wesen:zombiePartyGirl*        # Festkleid, Stoeckelschuhe
+wesen:zombieNurse*            # Kittel der Krankenschwester
+wesen:zombieBusinessMan*      # Anzug und Krawatte
+wesen:zombieJanitor*          # Hausmeister-Overall
+wesen:zombieUtilityWorker*    # Warnweste, Helm
+wesen:zombieBiker*            # Lederkutte, Motorradstiefel
+wesen:zombieFatHawaiian*      # Hawaiihemd
+wesen:zombieBowler*           # Bowlinghemd
+wesen:zombieSkateboarder*     # Kapuzenpulli, Turnschuhe
+# Zwei Tiere, die es um 700 in Mitteleuropa nicht gibt (F-06 §4). An ihrer Stelle setzt
+# 700_65_Wesen den Wolf in dieselben vier Gruppen.
+wesen:animalCoyote            # Kojote
+wesen:animalMountainLion      # Bergloewe (Puma)

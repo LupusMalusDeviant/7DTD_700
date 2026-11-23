@@ -176,9 +176,10 @@ internal static class CreatureCheck
             if (called)
             {
                 report.Error("wesengruppe-leer", group,
-                    "die Gruppe hat keinen Eintrag und wird gerufen. Was das Spiel mit einer "
-                    + "leeren Gruppe tut, ist nicht gelesen (Vertrag 03, Nachtrag Phase 2 C) - "
-                    + "jede Gruppe, der Eintraege genommen werden, behaelt mindestens einen.");
+                    "die Gruppe hat keinen Eintrag und wird gerufen. Das Spiel bricht das Laden "
+                    + "einer leeren Gruppe ab ('Empty entity groups not allowed', statisch "
+                    + "gelesen, Finding WP5.4) - jede Gruppe, der Eintraege genommen werden, "
+                    + "behaelt mindestens einen.");
             }
             else
             {

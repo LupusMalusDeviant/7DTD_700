@@ -275,6 +275,13 @@ Entwurf im autonomen Lauf (Plan-0002 WP2.3), nach Claudes Empfehlung; **zu prüf
 Nutzer** (N-35). **Noch nichts davon ist gebaut:** kein neuer Ordner liegt unter `mod/`. Der
 Nachtrag legt fest, wohin die Features der Phase 2 gehören, bevor das erste entsteht.
 
+**Stand 2026-11-23 (Plan-0002 WP5.4, D149):** das erste der vier ist gebaut — `mod/700_65_Wesen`
+mit `ModInfo.xml` und `Config/entitygroups.xml` (fünf Zeilen, nur Nachrücker). Es sind damit
+**neun** Modlets; `tools/build/smoke.ps1` erwartet neun. Die Sperrliste kennt seit demselben
+Schritt Wesen (elf Wesenregeln): das **Herausnehmen** steht darum, wie Teil B es verlangt, in
+`700_10_Purge/Config/entitygroups.xml` (erzeugt), nicht von Hand in `65_Wesen`. Die drei anderen
+Modlets gibt es weiter nicht.
+
 ### A. Vier neue Modlets, zwölf insgesamt
 
 | Ordner | Features | Inhalt | DLL |

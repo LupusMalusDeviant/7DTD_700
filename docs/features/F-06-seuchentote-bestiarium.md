@@ -5,8 +5,11 @@
 | P2 | X (+A) | S | optional |
 
 **Stand 2026-11-23:** ausgearbeitet im Loop (Plan-0002 WP5.1). **Jeder Name und jede Zuordnung in
-diesem Dokument ist ein Vorschlag — zu prüfen durch den Nutzer (N-67).** Gebaut ist von F-06 bisher
-nichts außer sieben Zahlen zur Lauthäufigkeit (`mod/700_60_Welt/Config/entityclasses.xml`, D74).
+diesem Dokument ist ein Vorschlag — zu prüfen durch den Nutzer (N-67).** Gebaut sind von F-06:
+sieben Zahlen zur Lauthäufigkeit (`mod/700_60_Welt/Config/entityclasses.xml`, D74), die Namen
+(176 Sprachzeilen, D148) und seit WP5.4 die **Gruppen der freien Landschaft** (D149, N-68): elf
+Wesenregeln in der Sperrliste, daraus erzeugt `mod/700_10_Purge/Config/entitygroups.xml` (72
+Zeilen), und das Modlet `mod/700_65_Wesen` mit den Nachrückern. Im Spiel gesehen ist nichts davon.
 
 ## Ziel
 Die Gegnerwelt erzählt das Setting: Bäuerinnen und Knechte, Mägde, Pilger, Krieger und Hirten als
@@ -158,6 +161,16 @@ eine Gruppe unter drei Einträge, rückt eine Klasse derselben Landschaft nach (
 Die Sperrliste bekommt dafür neun Wesenregeln (`wesen:zombiePartyGirl*` …); die Prüfung *wesen*
 macht jede dieser Klassen in einer Landschaftsgruppe rot (Vertrag 04, Nachtrag Teil 2).
 
+**Gebaut mit WP5.4 (D149):** die neun Regeln stehen in der Sperrliste, dazu zwei für Kojote und
+Berglöwe (§4). Aus ihnen **erzeugt** `purge-patch` die Entfernungen nach
+`mod/700_10_Purge/Config/entitygroups.xml` — 72 Zeilen, 17 Klassen, 14 Gruppen —, und rechnet vor
+dem Schreiben nach, dass keine Landschaftsgruppe leer wird (das wäre ein Ladefehler, Finding
+[`F-06-wesengruppen-laden`](../rea/findings/F-06-wesengruppen-laden.md)). Die Nachrücker stehen in
+`mod/700_65_Wesen/Config/entitygroups.xml`. Nachgemessen am Vorlauf: `ZombiesAll` 11,
+`ZombiesNight` 25, `ZombiesAllWasteland` 17, `ZombiesWastelandNight` 21, `ZombiesDesert` 3,
+`ZombiesDesertNight` 4 (Hirte, Verderbter Hirte, Köhler, Verderbter Köhler), die vier
+Stadt-Gruppen 31, 28, 28 und 39.
+
 **Die Schwäche dieser Trennung, offen gesagt:** sie geht nach dem **Namen**, nicht nach dem
 Aussehen. Ein „Knecht" in Jeans bleibt, eine „Siechenmagd" im Kittel geht. Solange keine Figur ein
 eigenes Aussehen hat, ist das die einzige Trennung, die sich prüfen lässt (N-67).
@@ -260,7 +273,7 @@ Alles XML (P5) — kein C#, kein Asset:
 | Schritt | Datei | Was |
 |---|---|---|
 | WP5.3 Namen | `mod/700_90_Sprache/Config/Localization.csv`; `tools/check/vanilla-keys.txt` | 155 + 21 Sprachzeilen unter Vanillas Schlüsseln (der Schlüssel ist die Klasse), DE und EN; jede Zeile mit Begründung in der Schlüsselliste |
-| WP5.4 Gruppen | `mod/700_65_Wesen/Config/entitygroups.xml` (neues Modlet nach Vertrag 01, Nachtrag Phase 2); `tools/check/denylist.txt` | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; neun Wesenregeln. Vanilla-Klassen werden nie entfernt, nur ihr Eintrag in einer Gruppe; keine Gruppe wird leer (Vertrag 03, Nachtrag Teil C) |
+| WP5.4 Gruppen — **gebaut** (D149) | `tools/check/denylist.txt` (elf Wesenregeln) → erzeugt `mod/700_10_Purge/Config/entitygroups.xml`; `mod/700_65_Wesen/Config/entitygroups.xml` (neues Modlet nach Vertrag 01, Nachtrag Phase 2: die Nachrücker) | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; elf Wesenregeln. Vanilla-Klassen werden nie entfernt, nur ihr Eintrag in einer Gruppe; keine Gruppe wird leer (Vertrag 03, Nachtrag Teil C) |
 | WP5.5 Sagengestalten | `mod/700_65_Wesen/Config/entityclasses.xml`, `entitygroups.xml`, Sprachzeilen | Spuk-Hund als eigene Klasse `ent700_…` auf Vanillas Modell; Texte |
 | WP5.6 Seuchennacht | `mod/700_65_Wesen/Config/entitygroups.xml` | Gruppen `eg700_…` für Brecher und Anführer, noch von niemandem gerufen |
 

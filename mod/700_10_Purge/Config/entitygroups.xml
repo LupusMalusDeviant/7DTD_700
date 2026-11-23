@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_10_Purge / entitygroups.xml
+	     F-01 Anachronismen-Purge, Plan-0001 WP3.2 bis WP3.4
+
+	     Wesen (D149): eine gesperrte Klasse faellt aus den LANDSCHAFTSGRUPPEN -
+	     den Gruppen, die spawning.xml ruft. Darum traegt jede Zeile den Namen
+	     der Gruppe. Getroffen wird der Eintrag; die Klasse bleibt stehen wie
+	     jede Definition (Vertrag 03, Nachtrag Phase 2 C), und in
+	     Schlaefer-Gruppen, Horden und der Seuchennacht bleibt sie auch (P2-E12).
+	     Was an ihrer Stelle erscheint, steht in 700_65_Wesen - dieses Modlet
+	     nimmt nur weg.
+
+	     ERZEUGT von 'mod700check purge-patch' aus denylist.txt und
+	     aufschub.txt. Nicht von Hand aendern: die naechste Erzeugung
+	     ueberschreibt die Aenderung lautlos, und check-all.ps1 meldet
+	     jede Handaenderung als 'patchdatei-veraltet'. Wer hier etwas
+	     anderes haben will, aendert die Denylist und laesst neu erzeugen.
+	     Quelle der Erzeugung: vanilla-config, Stand 2026-10-30 15:22:07Z.
+	     72 Zeilen. -->
+
+	<remove xpath="/entitygroups/entitygroup[@name='EnemyAnimalsBurntForestNight']/e[@n='animalCoyote']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='EnemyAnimalsDesert']/e[@n='animalCoyote']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='EnemyAnimalsDesertNight']/e[@n='animalMountainLion']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='EnemyAnimalsSnow']/e[@n='animalMountainLion']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieBiker']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieJanitor']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombiePartyGirl']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieSkateboarder']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAll']/e[@n='zombieUtilityWorker']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAllWasteland']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAllWasteland']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAllWasteland']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesAllWasteland']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDesert']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDesertNight']/e[@n='zombieBiker']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDesertNight']/e[@n='zombieBikerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombiePartyGirl']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesDowntown']/e[@n='zombiePartyGirlFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombiePartyGirl']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntown']/e[@n='zombiePartyGirlFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombiePartyGirl']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesForestDowntownNight']/e[@n='zombiePartyGirlFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesNight']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieBowler']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieBusinessMan']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieFatHawaiian']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieNurse']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombiePartyGirl']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandDowntown']/e[@n='zombiePartyGirlFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']/e[@n='zombieBowlerFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']/e[@n='zombieBusinessManFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']/e[@n='zombieFatHawaiianFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+	<remove xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']/e[@n='zombieNurseFeral']" />  <!-- gesperrtes Wesen in einer Landschaftsgruppe -->
+</config>

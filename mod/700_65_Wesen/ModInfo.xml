@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_65_Wesen — F-06 Seuchentote und Bestiarium, F-09 (XML-Teil).
+
+  Reines XML, keine DLL. Hier steht, was im Gelände ERSCHEINT: Gruppen, später eigene Klassen
+  (ent700_…), Spielstufen und die Wellen der Seuchennacht.
+
+  Was aus dem Gelände VERSCHWINDET, steht nicht hier, sondern in 700_10_Purge
+  (entitygroups.xml, erzeugt aus den Wesenregeln der Sperrliste). Die Regel aus Vertrag 01 §3
+  gilt in beide Richtungen: ohne dieses Modlet fehlen die Nachrücker, und keine Gruppe ist
+  leer; ohne 700_10_Purge stehen die Nachrücker neben den Vanilla-Klassen.
+
+  Die Namen der Wesen sind Sprachzeilen und liegen in 700_90_Sprache.
+-->
+<xml>
+	<Name value="700_65_Wesen" />
+	<DisplayName value="700 — Seuchentote und Getier" />
+	<Description value="Wer im Gelände erscheint: Nachrücker für die Klassen, die der Purge aus den Landschaften nimmt, und der Wolf an der Stelle von Kojote und Berglöwe." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

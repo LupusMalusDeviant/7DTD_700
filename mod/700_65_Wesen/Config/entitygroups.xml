@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_65_Wesen / entitygroups.xml
+	     F-06 Seuchentote und Bestiarium, Plan-0002 WP5.4, D149
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt.
+
+	     ===================================================================
+	     DIESE DATEI SETZT EIN, SIE NIMMT NICHTS WEG
+	     ===================================================================
+
+	     Die neun neuzeitlichen Grundklassen (F-06 Abschnitt 3.1) und zwei Tiere
+	     (Abschnitt 4) nimmt 700_10_Purge aus den Landschaftsgruppen - erzeugt
+	     aus den Wesenregeln der Sperrliste, 72 Zeilen. Hier steht, was an ihre
+	     Stelle rueckt. Drei Dinge, die das Spiel beim Laden verlangt (Finding
+	     WP5.4, statisch gelesen):
+
+	       - jede Klasse, die eine Gruppe nennt, muss es geben;
+	       - keine Gruppe darf leer sein;
+	       - jede Gruppe, die spawning.xml oder gamestages.xml ruft, muss es geben.
+
+	     Darum fasst diese Datei nur EINTRAEGE an und nennt nur Vanilla-Klassen.
+	     Eigene Klassen (ent700_...) und eigene Gruppen (eg700_...) kommen mit
+	     WP5.5 und WP5.6.
+
+	     Die Zahlen sind Vanillas Zahlen: der Nachruecker bekommt das Gewicht
+	     dessen, der geht. Ob das im Spiel traegt, ist nicht gespielt (N-68, S-27).
+	-->
+
+	<!-- Sandheide bei Nacht. Vanilla: Rancher 1, RancherFeral 0.1, Biker 0.4,
+	     BikerFeral 0.1. Ohne die beiden Biker blieben zwei Eintraege, beide
+	     derselbe Mann. F-06 Abschnitt 3.1: faellt eine Gruppe unter drei Eintraege,
+	     rueckt eine Klasse derselben Landschaft nach - zombieMoe steht in der
+	     Sandheide bei Tag (ZombiesDesert). -->
+	<append xpath="/entitygroups/entitygroup[@name='ZombiesDesertNight']">
+		<e n="zombieMoe" p="0.4" />
+		<e n="zombieMoeFeral" p="0.1" />
+	</append>
+
+	<!-- Der Wolf an der Stelle des Kojoten (F-06 Abschnitt 4). Beide Gruppen
+	     fuehren in Vanilla keinen Wolf; er bekommt das Gewicht des Kojoten. -->
+	<append xpath="/entitygroups/entitygroup[@name='EnemyAnimalsBurntForestNight']">
+		<e n="animalWolf" p="5" />
+	</append>
+	<append xpath="/entitygroups/entitygroup[@name='EnemyAnimalsDesert']">
+		<e n="animalWolf" p="20" />
+	</append>
+
+	<!-- Der Wolf an der Stelle des Bergloewen. Beide Gruppen fuehren den Wolf
+	     schon; sein Gewicht waechst um das des Bergloewen (10 + 5, 5 + 10). -->
+	<set xpath="/entitygroups/entitygroup[@name='EnemyAnimalsDesertNight']/e[@n='animalWolf']/@p">15</set>
+	<set xpath="/entitygroups/entitygroup[@name='EnemyAnimalsSnow']/e[@n='animalWolf']/@p">15</set>
+</config>

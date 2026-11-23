@@ -1,0 +1,15 @@
+# Soll-Signaturen für das Finding „Wesen-Gruppen: was das Laden verlangt" (Plan-0002 WP5.4), Build Steam 26309840.
+# Format: Typ<TAB>Member<TAB>Signatur  — genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp54.tsv
+# Exit 0 = alle Soll-Signaturen vorhanden, Exit 1 = mindestens eine fehlt oder weicht ab.
+# Kein Patch hängt daran: die Zeilen sichern nur, dass das Finding noch zum Build passt.
+EntityGroupsFromXml	LoadEntityGroups	static System.Collections.IEnumerator EntityGroupsFromXml::LoadEntityGroups(XmlFile)
+EntityGroupsFromXml	parseGroup	static void EntityGroupsFromXml::parseGroup(System.Xml.Linq.XElement, int&)
+EntityGroupsFromXml	parseElementBased	static void EntityGroupsFromXml::parseElementBased(System.Xml.Linq.XElement, string, System.Collections.Generic.List`1<SEntityClassAndProb>, float&, int&)
+EntityGroupsFromXml	parseTextBasedList	static void EntityGroupsFromXml::parseTextBasedList(string, System.Collections.Generic.List`1<SEntityClassAndProb>, float&, int&)
+EntityGroupsFromXml	addEntity	static void EntityGroupsFromXml::addEntity(string, float, System.Collections.Generic.List`1<SEntityClassAndProb>, float&, int&)
+EntityGroups	Normalize	static void EntityGroups::Normalize(string, float)
+EntityGroups	IsEnemyGroup	static bool EntityGroups::IsEnemyGroup(string)
+EntityGroups	GetRandomFromGroup	static int EntityGroups::GetRandomFromGroup(string, int&, GameRandom)
+EntityGroups	GetRandomEntityFromGroupMaxTier	static int EntityGroups::GetRandomEntityFromGroupMaxTier(string, EntityClass/EntityTierTypes, int&, bool, bool, GameRandom)
+GameStagesFromXml	ParseSpawn	static void GameStagesFromXml::ParseSpawn(GameStageDefinition, GameStageDefinition/Stage, System.Xml.Linq.XElement)
