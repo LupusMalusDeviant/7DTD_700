@@ -67,6 +67,22 @@ eine Abweichung.
 | `buffChickenFullStress_ZombieHordeName` | Rotte Seuchentoter | Pack of the Plague-dead | Zombiehorde / Zombie Horde | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `buffWasteland_StormName` | Fauler Wind | Foul Wind | Radioaktiver Sturm / Radiation Storm | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
 | — | Anfang, Höhe, Abklingen (die Stufen eines Sturms, hinter seinem Namen: „Fauler Wind: Anfang“; zwölf Zeilen `buff…_Storm_…Name`) | Onset, Height, Easing | Stadium 1, Stadium 2, Erholung / Stage 1, Stage 2, Recovery | Nachtlauf 2026-11-22 — Name zu prüfen (Konzept Biome §3.5) |
+| `biome_pine_forest` | Klosterland | Cloister Lands | Kiefernwald / Pine Forest | biome.md §2.2, P2-E13, D156 (Vorschlag, N-101) |
+| `biome_pineforest` | Klosterland | Cloister Lands | Kiefernwald / Pine Forest | zweiter Schlüssel desselben Biomes in Vanilla; D156 |
+| `biome_burnt_forest` | Brandland | Burnt Lands | Verbrannter Wald / Burnt Forest | biome.md §2.2, P2-E13, D156 (Vorschlag, N-101) |
+| `biome_desert` | Sandheide | Sand Heath | Wüste / Desert | biome.md §2.2, P2-E13, D156 (Vorschlag, N-101) |
+| `biome_snow` | Winterhöhen | Winter Fells | Schnee / Snow | biome.md §2.2, P2-E13, D156 (Vorschlag, N-101) |
+| `biome_wasteland` | Moorland | Mirelands | Ödland / Wasteland | biome.md §2.2, P2-E13, D156 (Vorschlag, N-101) |
+| `biomeWeatherItem1` | Rauchtuch | Smoke Cloth | Rauchausrüstung / Smoke Gear | biome.md §3.2, D155 (Vorschlag, N-100) |
+| `biomeWeatherItem2` | Sandschleier | Sand Veil | Wüstenausrüstung / Desert Gear | biome.md §3.2, D155 (Vorschlag, N-100) |
+| `biomeWeatherItem3` | Pelzkragen | Fur Collar | Schneeausrüstung / Snow Gear | biome.md §3.2, D155 (Vorschlag, N-100) |
+| `biomeWeatherItem4` | Riechbündel | Herb Bundle | Strahlungsausrüstung / Radiation Gear | biome.md §3.2, D155 (Vorschlag, N-100) |
+| `foodBurntSmoothie` | Hustensud | Cough Brew | Anthrakoseserum / Black Lung Serum | biome.md §3.3, D155 (Vorschlag, N-100) |
+| `foodOasisSmoothie` | Honigwasser | Honey Water | Sonnenstich-Tonikum / Sunstroke Tonic | biome.md §3.3, D155 (Vorschlag, N-100) |
+| `foodFrostbiteSmoothie` | Biersuppe | Ale Broth | Feuereintopf / Scorcher Stew | biome.md §3.3, D155 (Vorschlag, N-100) |
+| `foodAtomicSmoothie` | Bittersud | Bitter Brew | Fallout Flush | D154 statt „Wermutsud“ (Vorschlag, N-99) |
+| `foodCropBlueberries` | Heidelbeeren | Bilberries | Heidelbeeren / Blueberries | D154 (Freigabe, N-99) |
+| `foodCropMushroomsRadiated` | Moorpilze | Mire Mushrooms | Verstrahlte Pilze / Radiated Mushrooms | D154 (Freigabe, N-99) |
 
 ### Wesen — Vorschlag, nicht abgenommen (N-67)
 

@@ -1753,3 +1753,9 @@ challengeWastelandHarvestOreDesc
 challengeWastelandGatherGear
 challengeWastelandGatherGearShort
 challengeWastelandGatherGearDesc
+biome_pine_forest
+biome_pineforest
+biome_burnt_forest
+biome_desert
+biome_snow
+biome_wasteland

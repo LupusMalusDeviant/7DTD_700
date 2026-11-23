@@ -143,4 +143,50 @@
 	<remove xpath="/worldgeneration/biomes/biome[@name='burnt_forest']/subbiome/decorations/decoration[@blockname='cntTrashPile01']" />
 	<remove xpath="/worldgeneration/biomes/biome[@name='burnt_forest']/subbiome/decorations/decoration[@blockname='cntTrashPile08']" />
 
+	<!-- ===================================================================
+	     BEWUCHS: PFLANZEN DER NEUEN WELT GETAUSCHT
+	     (Plan-0002 WP6.4, 23. November 2026, D156 - ZU PRUEFEN)
+	     ===================================================================
+
+	     Kaktus, Yucca und Schneebeere wachsen in Europa um 700 nicht (Sperrliste,
+	     Abschnitt Nahrung). GEZAEHLT an biomes.xml von V 3.40 b10: 30 Zeilen -
+	     Kaktus 18 und Yucca 6 in der Sandheide (desert), Schneebeere 5 im
+	     Klosterland (pine_forest) und 2 in den Winterhoehen (snow).
+
+	     Anders als beim Dekor oben wird hier GETAUSCHT, nicht entfernt: die Heide
+	     soll nicht kahler werden, nur anders. Getauscht wird nur der Name des Blocks
+	     an der Zeile; Haeufigkeit und Drehung bleiben Vanillas. Jeder Ersatz waechst
+	     in Vanilla schon in derselben Landschaft:
+
+	       treeCactus01-03         -> treeDesertShrub       Heidestrauch
+	       treeCactus04-06         -> plantShrubDead        duerrer Busch
+	       plantedYucca3Harvest    -> plantedAloe3Harvest   Aloe (frei, D154)
+	       plantedSnowberry3Harvest, Klosterland -> plantedBlueberry3Harvest
+	                                                Heidelbeere (frei seit WP6.3)
+	       plantedSnowberry3Harvest, Winterhoehen -> plantShrubSnow
+	                                                verschneiter Busch; Heidelbeeren
+	                                                stehen dort schon
+
+	     Folge: die Yucca-Faser der Kakteen (Nesselfaser) faellt in der Sandheide
+	     weg; Gras und Heidestrauch geben sie weiter. Die Pfade sind absolut, ohne
+	     '//' (Vertrag 03 8.2); ein Pfad trifft mit Absicht mehrere Zeilen. -->
+
+	<!-- Sandheide: Kaktus -->
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/decorations/decoration[@blockname='treeCactus06']/@blockname">plantShrubDead</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus01']/@blockname">treeDesertShrub</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus02']/@blockname">treeDesertShrub</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus03']/@blockname">treeDesertShrub</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus04']/@blockname">plantShrubDead</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus05']/@blockname">plantShrubDead</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='treeCactus06']/@blockname">plantShrubDead</set>
+
+	<!-- Sandheide: Yucca -->
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/decorations/decoration[@blockname='plantedYucca3Harvest']/@blockname">plantedAloe3Harvest</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='desert']/subbiome/decorations/decoration[@blockname='plantedYucca3Harvest']/@blockname">plantedAloe3Harvest</set>
+
+	<!-- Klosterland und Winterhoehen: Schneebeere -->
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/decorations/decoration[@blockname='plantedSnowberry3Harvest']/@blockname">plantedBlueberry3Harvest</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='pine_forest']/subbiome/decorations/decoration[@blockname='plantedSnowberry3Harvest']/@blockname">plantedBlueberry3Harvest</set>
+	<set xpath="/worldgeneration/biomes/biome[@name='snow']/subbiome/decorations/decoration[@blockname='plantedSnowberry3Harvest']/@blockname">plantShrubSnow</set>
+
 </config>
