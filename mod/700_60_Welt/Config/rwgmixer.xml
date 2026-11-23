@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_60_Welt / rwgmixer.xml
+	     Plan-0002 WP6.5, Filter fuer die Zufallswelt, Weg B (F-07 Abschnitt D, D153, D157).
+	     Zu pruefen durch den Nutzer (N-102). Wirkt nur beim Erzeugen einer NEUEN Zufallswelt.
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     Drei Schritte:
+
+	     1. Siedlungsarten, die nur aus Neuzeit bestehen, entstehen nicht mehr: Stadt, Kleinstadt,
+	        Grossstadt, Stadt im Oedland, Kleinstadt im Brandwald, Westernort und die Raststaetten
+	        an der Strasse. Die Zahl steht in allen vier Weltgroessen auf 0, 0, 0. Vanilla nutzt
+	        die 0 selbst als unteren Wert (Westernort 0, 1, 2), die Zahl ist also gueltig.
+	        Es bleiben die Doerfer (countrytown und ihre Wald- und Brandwald-Arten) und die Wildnis.
+
+	     2. Orte, die nur modern sein koennen, werden selten: Gewicht 0.01 statt 1 (die Formel steht
+	        in Vanillas Kommentar ueber den prefab_spawn_adjust-Zeilen; Gewicht wirkt als Faktor).
+	        Nicht ueber max_count 0, denn ob 0 dort nie oder unbegrenzt heisst, ist statisch offen
+	        (Finding F-07-zufallswelt-und-orte, Abschnitt 2). Jeder Namensteil ist der ANFANG der
+	        gemeinten Ortsnamen, damit er gleich wirkt, ob das Spiel Anfang oder Enthaltensein prueft.
+	        Kein Namensteil ueberschneidet sich mit einer Vanilla-Zeile.
+
+	     3. Die Tankstellen-Pflicht (min_count 5) faellt weg, ihre Zeile bekommt dasselbe Gewicht.
+
+	     BEWUSST NICHT GEDAEMPFT (N-102): factory, base_military, installation_red_mesa und
+	     army_camp. Ohne Staedte sind sie die einzigen Auftragsorte der Stufe 5 und tragen Stufe 4
+	     mit; ohne sie scheitern Auftraege dieser Stufen. Sie bleiben, bis eigene Orte (WP6.6) die
+	     Stufen tragen; das Heerlager laesst sich nach Weg C umkleiden.
+
+	     Haendler bleiben unberuehrt: ihre Orte stehen auch in der Wildnis, ihre fuenf Zeilen
+	     verteilen sie (Finding, Abschnitt 1). -->
+
+	<!-- ==== 1. Siedlungsarten -->
+	<set xpath="/rwgmixer/world/property[@class='town']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='city']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='citybig']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='wasteland_city']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='bforest_town']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='oldwest']/property[@name='count']/@value">0, 0, 0</set>
+	<set xpath="/rwgmixer/world/property[@class='roadside']/property[@name='count']/@value">0, 0, 0</set>
+
+	<!-- ==== 3. Tankstellen -->
+	<removeattribute xpath="/rwgmixer/prefab_spawn_adjust[@partial_name='gas_station']" name="min_count"/>
+	<setattribute xpath="/rwgmixer/prefab_spawn_adjust[@partial_name='gas_station']" name="weight">0.01</setattribute>
+
+	<!-- ==== 2. Moderne Orte selten -->
+	<append xpath="/rwgmixer">
+		<prefab_spawn_adjust partial_name="fastfood" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="carlot" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="skyscraper" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="utility_" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="store_" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="bombshelter" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="trailer" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="industrial_business" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="warehouse" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="water_tower" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="school" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="theater_stage" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="house_construction" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="diner" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="funeral_home" weight="0.01"/>
+		<prefab_spawn_adjust partial_name="house_modern" weight="0.01"/>
+	</append>
+</config>

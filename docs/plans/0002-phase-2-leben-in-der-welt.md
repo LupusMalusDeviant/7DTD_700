@@ -63,6 +63,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP6.3 Biom-Fortschritt Weg B, Teil 1 (Mechanik) | **gebaut** (`700_60_Welt`: `items.xml`, `recipes.xml`, `challenges.xml`; Sperrliste: sechs Freigaben; Aufschub: vier Zeilen gestrichen, `=kein-aufschub`): Sude und Schutzstücke aus freien Zutaten, Ziele Erz und Zeug umgebogen. Am Vorlauf: 165 Herausforderungen, **0 unerfüllbar** (Ziel des Schritts: 0 gesperrte Kennungen in den Reihen); Gegenprobe ohne `challenges.xml`: 6 rot. **Offen:** Teil 2 Texte (§3.2–3.6), danach Vorlage auf „an" | D154, N-99, S-30 |
 | WP6.3 Teil 2 (Texte, Vorlage) | **gebaut:** 165 Sprachzeilen (Schutzstücke, Sude, Gefahr, Stürme, die vier Reihen); Vorlage „Jahr 700" ohne `CDA`, der Biom-Fortschritt ist an. **WP6.3 damit abgeschlossen** bis auf S-30 im Spiel | D155, N-100, S-30 |
 | WP6.4 Landschaften | **gebaut:** sechs Anzeigenamen `biome_*`; Bewuchs getauscht (30 Zeilen Kaktus, Yucca, Schneebeere → Heidestrauch, dürrer Busch, Aloe, Heidelbeere, verschneiter Busch; am Vorlauf 0 übrig, Vanilla 30). Wetter, Sturmtexte und Nebel brauchen nichts Neues (D97, WP6.3, D72). Glossar um 16 Zeilen ergänzt (Landschaften, Schutzstücke, Sude, Ernte). **Offen:** P2-E13 (N-101), S-30 | D156, N-101 |
+| WP6.5 Filter Zufallswelt | **gebaut:** `700_60_Welt/rwgmixer.xml` — 7 Siedlungsarten auf `0, 0, 0` in allen vier Größen (28 Zahlen), 17 Neuzeit-Namensteile mit `weight="0.01"` (nicht `max_count="0"`, D153), Tankstellen-Pflicht weg; Händlerzeilen unberührt. Fabrik, Militärbasis, Red Mesa, Heerlager bewusst ungedämpft (Stufe 5). Vorlauf 2920 Operationen, 0 ohne Treffer; Gegenprobe greift. **Offen:** N-102, S-29 (1)–(3); Prüfung *welt* gibt es noch nicht (WP2.6) | D157, N-102 |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
@@ -461,8 +462,9 @@ dokumentierter Spawn-Mix je Landschaft (F-06:47–48).
 4. **WP6.4** `[Claude-prüfbar]` **Landschaften:** Anzeigenamen, Bewuchs getauscht (Kakteen, Yucca;
    biome.md:619), Wetter und Sturmtexte (D97), Nebel, wo ein Ort dafür da ist. (M)
 5. **WP6.5** `[Claude-prüfbar]` **Filter für die Zufallswelt:** `rwgmixer.xml` im Welt-Modlet;
-   Städte, Straßen-Kacheln und Neuzeit-Stämme heraus. Der Vorlauf prüft die Datei; den Nachweis
-   liefert Prüfung *welt* an einer in T2 erzeugten Welt. (M)
+   Städte, ~~Straßen-Kacheln~~ und Neuzeit-Stämme heraus. Der Vorlauf prüft die Datei; den Nachweis
+   liefert Prüfung *welt* an einer in T2 erzeugten Welt. (M) *Straßen-Kacheln bleiben:* ohne sie
+   wachsen keine Dörfer (Finding F-07-zufallswelt-und-orte §3); ihr Belag ist WP4.7.
 6. **WP6.6** `[Claude-prüfbar]` oder `[braucht Nutzer]` — je nach WP6.2 — **eigene Orte:** die erste
    Reihe nach F-07:22 und :37 (Grubenhaus, Langhaus, Hofstelle, Weiler, Kloster, Ringwall,
    Römerruine, Köhlerei, Mühle, Steinkreis), Zahl nach der Bedarfsrechnung, mindestens zehn mit

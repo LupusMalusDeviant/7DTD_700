@@ -235,7 +235,7 @@ Vanillas Fertigkarten (Navezgane, PREGEN) werden **nicht unterstützt**; die Spi
 | WP6.2 | Finding: Händler und Siedlungen, Auftragsreichweite, Prefab-Format, **Weg C** (Modell-Tausch, `MultiBlockDim`) | — |
 | WP6.3 | Biom-Fortschritt Weg B (biome.md §3) | — |
 | WP6.4 | Landschaften: Namen, Bewuchs, Sturmtexte | P2-E13 |
-| WP6.5 | `rwgmixer.xml`: moderne Ortsarten heraus (Weg B) | WP6.2 |
+| WP6.5 | `rwgmixer.xml`: moderne Ortsarten heraus (Weg B) — **gebaut 2026-11-23** (D157, N-102): 7 Siedlungsarten auf 0, 17 Neuzeit-Orte selten, Stufe-5-Orte bleiben bis WP6.6 | WP6.2 |
 | WP6.5b | Umkleide-Tabelle (Weg C), erst nach S-29 | WP6.2, S-29 |
 | WP6.6 | eigene Orte nach Abschnitt C | WP6.2 (Bauweg) |
 
