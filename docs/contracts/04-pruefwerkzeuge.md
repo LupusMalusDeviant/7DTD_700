@@ -4265,3 +4265,31 @@ Am echten Modlet: `bladeSkil` am Krieger rot (Exit 1), danach grün.
 
 **Grenzen:** ob Vanilla die Marken an **getragener** Rüstung gegen die angreifende Waffe hält, prüft
 kein Werkzeug — das zeigt S-48.
+
+## Nachtrag WP12.3 — Stufen und Herstell-Zähler in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-138)
+
+Gebaut im autonomen Lauf (Plan-0002 WP12.3, D194).
+
+**Anlass.** Lernen durch Tun liest Vanillas Zähler `_craftCount_<Gegenstand>` und hebt eine
+Handwerks-Stufe per `AddProgressionLevel`, beides in `buffs.xml`. `kette-pruefen` las `progression_name`
+bisher nur in `progression.xml`. Ein vertippter Gegenstand liest still 0 (die Stufe steigt nie), eine
+vertippte Stufe hebt nichts — kein Ladefehler. Am echten Buff blieb `craftingBlade` vorher grün.
+
+**Die Regel.** In jeder Patch-Datei außer `progression.xml` wird jedes Attribut `progression_name`
+(Bedingung und Wirkung) im Fortschritts-Vorrat gesucht (Vanillas `progression.xml` und unsere Knoten),
+jedes `cvar="_craftCount_X"` im Rezept-Vorrat (Vanillas `recipes.xml` und unsere Rezepte). Andere
+Motorwerte mit `_` (`_coretemp`) zählen nicht. Ohne Vanillas `progression.xml` bleibt der Block aus und
+sagt das. Neue Zeile: `Lern-Verweise (Stufen, Zaehler): N` (am echten Stand 117).
+
+**Erzeuger mit eigener Prüfung:** `tools/gen/wp12-lernen.ps1` liest die Tabelle `wp12-lernen.tsv` und
+bricht mit Exit 1 ab, ohne zu schreiben, wenn ein Gegenstand kein Rezept hat, eine Stufe nicht im Build
+steht, ein gebundenes Rezept unter 36 (D70) in der Tabelle fehlt oder eine Stufe kein Lehrblatt hat.
+Gegenprobe beim Bau: vertippte Klinge, vertippte Stufe, fehlender Webstuhl → 4 Fehler, Exit 1, nichts
+geschrieben. Er gehört nicht zu `check-all` (er schreibt), er läuft beim Ändern der Tabelle.
+
+**Gegenprobe** (1 neu, 338 → **339**): `kette/lernen` — vertippte Stufe in einer Wirkung und Zähler ohne
+Rezept rot; Vanilla-Stufe, Vanilla-Perk, eigenes Rezept grün; `_coretemp` nicht gezählt. Am echten
+Modlet: `craftingBlade` und `_craftCount_itm700_stepbahn` rot (3 rot), danach grün.
+
+**Grenzen:** ob Vanilla den Zähler wirklich unter diesem Namen führt und ob er auch für Blöcke zählt
+(Webstuhl, Holzfeuer), prüft kein Werkzeug — das zeigt S-49.

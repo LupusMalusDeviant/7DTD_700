@@ -1,7 +1,7 @@
 # Drehbuch der Spieltests — alle S-Zeilen in fünf Sitzungen
 
 > **Stand:** 2026-11-23, Plan-0002 WP14.2 (Teil: T1 bis T3), D191. **Vorschlag, zu prüfen durch den
-> Nutzer (N-135).** Grundlage: die Spieltest-Zeilen S-01 bis S-47 in
+> Nutzer (N-135).** Grundlage: die Spieltest-Zeilen S-01 bis S-49 in
 > [`0000-entscheidungen-fuer-den-nutzer.md`](0000-entscheidungen-fuer-den-nutzer.md) §6 und die
 > Befehlstabelle in [`test/README.md`](../../test/README.md).
 > Nach deiner Vorgabe vom 22.11.: keine langen Wartetests, kurze Timer, alles gebündelt, **die Dauer steht
@@ -16,12 +16,12 @@ geschrieben, damit nichts auseinanderläuft.
 | Sitzung | Aufbau | Zeilen | Dauer |
 |---|---|---|---|
 | **A** Hauptmenü und neues Spiel | Einzelspieler, `build.ps1 -Install -MitTest` | S-22, S-11, S-01, S-17, (S-13) | **rund 15 min** (+10 mit S-13) |
-| **B** Kreativ und Konsole | dieselbe Installation, Test-Spielstand, Kreativmodus, Konsole (F1) | fünf Blöcke, unten | **rund 170 min**, in zwei Abenden (90 und 80) |
+| **B** Kreativ und Konsole | dieselbe Installation, Test-Spielstand, Kreativmodus, Konsole (F1) | sechs Blöcke, unten | **rund 185 min**, in zwei Abenden (90 und 95) |
 | **C** Dedicated + ein Client | Server und Client je mit `-MitTest` | Proben-Lauf S-32, S-33, S-34, S-35 (1)(2), dazu S-43 (6), S-45 (3)(4) | **rund 25 min** |
 | **D** Neue Welt | eine **kleine** Zufallswelt erzeugen, nicht laden | S-29, S-24, S-27 (2)–(4), S-31 (3)–(8), S-05, S-30, S-12 | **rund 60 min** |
 | **E** wartet | — | S-25 (Unity), S-29 (4) (WP6.5b), S-32 (4) und S-34 (4) (erster C#-Code), S-34 (3) (Himmel), S-23 (Mitspieler) | — |
 
-**Zusammen rund 4 ½ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 15, B 170, C 25, D 60), keine
+**Zusammen rund 4 ¾ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 15, B 185, C 25, D 60), keine
 neue Schätzung. Am Ende jeder Sitzung:
 `build.ps1 -Install` **ohne** `-MitTest`, damit die Überlagerung nicht liegen bleibt (`smoke.ps1` meldet
 sie sonst rot).
@@ -48,7 +48,7 @@ sie sonst rot).
    `entitygroups`). S-17 (6 min) gleich danach, solange das Spiel neu ist.
 4. *Wenn ein alter Spielstand da ist:* S-13 (10 min).
 
-## Sitzung B — Kreativ und Konsole (rund 170 min, zwei Abende)
+## Sitzung B — Kreativ und Konsole (rund 185 min, zwei Abende)
 
 Ein Test-Spielstand aus Sitzung A, Kreativmodus (`cm`), Konsole F1. Reihenfolge innerhalb der Blöcke so,
 dass ein Schritt den nächsten vorbereitet.
@@ -61,12 +61,13 @@ dass ein Schritt den nächsten vorbereitet.
 | B4 Wesen | S-26, S-46, S-48, S-28 | 28 min | `spawnentity`; S-46 und S-48 bei Tag, S-28 bei Nacht — S-28 ans Ende, `settime` auf 22 Uhr |
 | B5 Seuchennacht | S-44 | 10 min | `settime 7 21 50`; geht gleich nach S-28 in derselben Nacht |
 
-**Abend 2 (rund 80 min)**
+**Abend 2 (rund 95 min)**
 
 | Block | Zeilen, in dieser Reihenfolge | Dauer | Hinweis |
 |---|---|---|---|
 | B2 Magie | S-41, S-35 (3), S-36, S-37, S-38, S-39, S-40, S-42 | 43 min | S-41 zuerst, ohne Punkt in Runenkunde; dann `giveselfskillpoints 20` einmal für alles |
 | B3 Licht, Nacht, Grauen | S-06, S-19, S-18, S-20, S-43 (1)–(5), S-45 (1)(2) | 36 min | S-06 gleich am Anfang setzen (brennt 2 min, läuft nebenher); S-43 vor S-45, beide nachts draußen |
+| B6 Handwerk | S-49 | 15 min | *(seit WP12.3)* am Ende des Abends: S-49 (3) verlangt Speichern und Neuladen, das beendet die Sitzung ohnehin |
 
 ## Sitzung C — Dedicated Server + ein Client (rund 25 min)
 

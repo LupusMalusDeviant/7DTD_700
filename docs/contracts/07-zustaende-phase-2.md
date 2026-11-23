@@ -115,7 +115,7 @@ Buffs dann **nicht** mehr abziehen.~~ *Nach WP9.5:* ja, per XML — Bedingung in
 | Fortschritt je Handwerk | Vanillas Handwerks-Fertigkeit (`progression.xml`), **kein** eigener CVar | ~~**Server** (Werkstätten laufen dort; F-21 Nr. 4) — per XML-Auslöser oder Patch nach WP9.3~~ **Buff des Spielers** per `AddProgressionLevel` (WP9.3) | **bleibt** (Vanillas Speicherung) | Rezepte, Qualität |
 | `_craftCount_<Gegenstand>` | **Vanillas** Zähler je hergestelltem Stück | Vanilla, beim Spieler (`XUiC_RecipeStack::giveExp`, `EntityPlayerLocal::GiveExp`) | **bleibt** (Indiz: `_` wird gespeichert, S-33 (2)) | unser Lern-Buff per `CVarCompare` — nur lesen |
 
-Kein CVar: die Datenstruktur gibt es (D48), sie wird nur anders gefüttert. ~~Ein Zähler `cv700_…` käme
+*Geändert durch Nachtrag 5 (WP12.3): ein gespeicherter Merkwert je Gegenstand kommt dazu.* Kein CVar: die Datenstruktur gibt es (D48), sie wird nur anders gefüttert. ~~Ein Zähler `cv700_…` käme
 nur dazu, wenn WP9.3 zeigt, dass der Fortschritt nicht direkt erhöht werden kann.~~ *Berichtigt nach
 WP9.3 ([Finding](../rea/findings/WP9-herstellen-und-schaden.md)):* Vanilla zählt schon, beim Spieler,
 nicht auf dem Server. Wir lesen Vanillas Zähler und schreiben keinen eigenen.
@@ -311,3 +311,28 @@ Die Zahlen stehen in F-17 „B3 in Zahlen" und F-09 „Ausarbeitung" (§7 dieses
 **Ergänzt §3.1:** der Schreiber von `cv700_grauen` ist **ein** Buff. Treffer schreiben nicht selbst in den
 Wert, sondern zählen über einen Auslöser in demselben Buff — sonst hätte `cv700_grauen` zwei Schreiber
 derselben Art, und die Kappung wüsste nicht von beiden (§1 Nr. 2).
+
+## Nachtrag 5 — Lernen durch Tun gebaut (Plan-0002 WP12.3), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (D194); **zu prüfen durch den Nutzer** (N-138). **Ändert §3.5** („kein eigener
+CVar"): Vanillas Zähler `_craftCount_<Gegenstand>` zählt weiter, aber was davon **schon gezahlt** ist,
+muss ein eigener Wert merken — sonst hebt jeder Takt die Stufe von neuem. **Berichtigt F-21 §2 (D192):**
+dort hieß der Merkwert `.cv700_lernGezahlt…` mit Punkt; ein Punkt heißt „nicht gespeichert" (§2), und
+nach jedem Laden zahlte der Buff alles noch einmal aus. Der Merkwert trägt darum **keinen** Punkt; das
+Ziel wird jeden Takt aus ihm gerechnet und braucht keinen eigenen Speicher.
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `buff700_lernen` | Buff, dauernd, verborgen, Takt 10 s | je Gegenstand der Tabelle `tools/gen/wp12-lernen.tsv` (26) | gesetzt über Vanillas `buffStatusCheck01` wie die Odem-Buffs (Nachtrag 2); **erzeugt** von `tools/gen/wp12-lernen.ps1` | neu gesetzt | — |
+| `cv700_lernGezahlt<Kurzname>` | CVar je Spieler und Gegenstand, **gespeichert** | 0–10: so oft hat dieser Gegenstand die Stufe schon gehoben | **allein** `buff700_lernen` (+1 je Hebung) | **bleibt** (Indiz §2, S-49 (3)) | `buff700_lernen` |
+| `.cv700_lernZiel` | lokaler Rechenwert, **einer** für alle | Gezahlt × 3 + 3 des gerade gerechneten Gegenstands | **allein** `buff700_lernen`, je Gegenstand neu | abgeleitet | Vergleich mit `_craftCount_…` |
+| `.cv700_lernJetzt` | lokale Marke, **eine** für alle | 1 = dieser Gegenstand hebt jetzt | **allein** `buff700_lernen`, je Gegenstand zuerst 0 | abgeleitet | Hebung, Zähler, Meldung |
+| `_craftCount_<Gegenstand>` (§3.5) | Vanillas Zähler | — | Vanilla | bleibt | `buff700_lernen` — nur lesen; `kette-pruefen` prüft, dass der Name ein Rezept nennt |
+
+**Bedingung einer Hebung:** `_craftCount_` ≥ Ziel, Gezahlt < 10, Stufe ≥ 11 und < 35. Die Marke
+`.cv700_lernJetzt` wird **einmal** je Gegenstand entschieden; Hebung (`AddProgressionLevel`, +1), Zähler
+und Meldung fragen nur sie — sonst veränderte das Zählen die Bedingung des nächsten Effekts (Effekte
+laufen der Reihe nach, wie in `buff700_odemStufe`; **Indiz**, S-49 (1)).
+
+**Lehrblätter:** die Hefte der acht Stufen, die durch Tun lernen, heben um **3** (die erste
+`effect_group`; der Zufallspunkt der Gelehrten-Kleidung bleibt 1). Die übrigen sechs Stufen bleiben bei 1.

@@ -103,6 +103,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP14.2 Drehbücher, Teil | **geschrieben** (D191, N-135): `docs/pruefung/0004-drehbuch-spieltests.md` — alle 47 S-Zeilen in fünf Sitzungen (A 15, B 160, C 25, D 60 min, E wartet), T1–T3 abgebildet, T4 bleibt Playtest. Elfte Prüfung `drehbuch-pruefen` (Vertrag 04 Nachtrag WP14.2), Gegenproben 330 → **337**. | pruefung, tools/check |
 | WP12.1 F-02, F-21 nachgeschärft | **geschrieben** (D192, N-136): Schadensarten per XML über Vanillas Waffen-Marken, Schildwerte und zwei Wege, Wurfwaffen, Lernen durch Tun mit Zahlen. Nichts gebaut. Offen: Schild Phase 2 oder 3. | F-02, F-21 |
 | WP12.4 Schadensarten | **gebaut** (D193, N-137, S-48): Schutz je Schnitt/Stich/Wucht über Vanillas Waffen-Marken an zwölf Rüstungsteilen und sieben Wesenklassen; `kette-pruefen` liest Marken im Schutz, Gegenproben 337 → **338**. Im Spiel ungeprüft. | 30_Ausruestung, 65_Wesen, tools/check |
+| WP12.3 Lernen durch Tun | **gebaut** (D194, N-138, S-49): per XML statt Patch (Finding WP9.3) — `buff700_lernen` zählt 26 Gegenstände in acht Stufen über Vanillas `_craftCount_`, je 3 Stück +1, höchstens 10-mal, von 11 bis 35; Lehrblätter dieser Stufen +3; erzeugt von `tools/gen/wp12-lernen.ps1`; `kette-pruefen` prüft Stufen und Zähler außerhalb von `progression.xml`, Gegenproben 338 → **339**. Offen: Perk „Lehrzeit". Im Spiel ungeprüft. | 50_Fortschritt, 90_Sprache, tools/gen, tools/check |
 | WP11.9 Deutungs-Texte | **gebaut** (D190, N-134, S-47): sechs Fundschriften (Strafe, Fluch, Krankheit je zwei), 12 Sprachzeilen, 6 Glossarzeilen, Beute-Gruppe 12 → 18. Im Spiel ungelesen. | 70_Handel, 90_Sprache, glossar, lore |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
@@ -772,9 +773,9 @@ mit eigenem Gesicht und Vorboten.
    Schildwerte mit Weg A XML / Weg B Patch, Wurfwaffen, Maximal-Haltbarkeit streichen), F-21 §1–5
    (Umfang, Zahlen, Lehrblatt +3, Perk „Lehrzeit", Netz). **Offen:** Schild Phase 2 oder 3 (N-136 (1)).
 2. **WP12.2** `[Claude-prüfbar]` Vertragsbezug: Vertrag 06 und 07. (S)
-3. **WP12.3** `[Claude-prüfbar]` **Patch Learning by Doing:** Finding → Soll-Datei →
+3. **WP12.3** `[Claude-prüfbar]` ~~**Patch Learning by Doing:** Finding → Soll-Datei →
    Manifest-Zeile → Postfix auf dem Server; Zählung als reine Logik mit Unit-Tests; der Fortschritt
-   überlebt einen Neustart (F-21:52). (L)
+   überlebt einen Neustart (F-21:52). (L)~~ **Gebaut per XML** (D194): kein Patch, Vanilla zählt beim Spieler (N-113); gespeicherter Merkwert je Gegenstand, Neustart in S-49 (3).
 4. **WP12.4** `[Claude-prüfbar]` **Schadensarten:** zuerst mit dem, was da ist — vier Arten und
    ein Marken-Feld an der Schadensquelle (Kurz-Check:204–208). C# nur, wenn WP9.3 zeigt, dass
    Schutzwerte je Art nicht per XML gehen. (M)

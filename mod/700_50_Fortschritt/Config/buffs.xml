@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- ERZEUGT von tools/gen/wp12-lernen.ps1 aus tools/gen/wp12-lernen.tsv - nicht von Hand aendern.
+	     Lernen durch Tun (F-21, D192, D194; zu pruefen N-138). Alle 10 s je Gegenstand: hat der
+	     Spieler 3 Stueck mehr gemacht, als schon gezahlt ist, und steht die Stufe zwischen 11 und
+	     34, hebt sie sich um 1. Hoechstens 10-mal je Gegenstand. cv700_lernGezahlt* wird gespeichert,
+	     .cv700_lernZiel und .cv700_lernJetzt sind Rechenwerte (Vertrag 07 Nachtrag 5). -->
+	<append xpath="/buffs">
+		<buff name="buff700_lernen" hidden="true" remove_on_death="false">
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="10" />
+			<effect_group>
+				<!-- Sax: meleeWpnBladeT1HuntingKnife, craftingBlades, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSax" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnBladeT1HuntingKnife" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSax" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingBlades" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingBlades" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingBlades" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSax" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Klinge: itm700_klinge, craftingBlades, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltKlinge" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_klinge" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltKlinge" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingBlades" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingBlades" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingBlades" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltKlinge" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Breitaxt: meleeToolAxeT1IronFireaxe, craftingHarvestingTools, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltBreitaxt" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeToolAxeT1IronFireaxe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltBreitaxt" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingHarvestingTools" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingHarvestingTools" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingHarvestingTools" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltBreitaxt" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Bartaxt: meleeToolAxeT2SteelAxe, craftingHarvestingTools, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltBartaxt" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeToolAxeT2SteelAxe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltBartaxt" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingHarvestingTools" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingHarvestingTools" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingHarvestingTools" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltBartaxt" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Schlagring: meleeWpnKnucklesT1IronKnuckles, craftingKnuckles, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSchlagring" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnKnucklesT1IronKnuckles" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSchlagring" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingKnuckles" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingKnuckles" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingKnuckles" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSchlagring" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Lederring: meleeWpnKnucklesT0LeatherKnuckles, craftingKnuckles, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltLederring" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnKnucklesT0LeatherKnuckles" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltLederring" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingKnuckles" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingKnuckles" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingKnuckles" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltLederring" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Knueppel: meleeWpnClubT0WoodenClub, craftingClubs, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltKnueppel" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnClubT0WoodenClub" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltKnueppel" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingClubs" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingClubs" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingClubs" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltKnueppel" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Hammer: meleeWpnSledgeT1IronSledgehammer, craftingSledgehammers, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltHammer" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnSledgeT1IronSledgehammer" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltHammer" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingSledgehammers" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingSledgehammers" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingSledgehammers" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltHammer" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Steinhammer: meleeWpnSledgeT0StoneSledgehammer, craftingSledgehammers, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSteinhammer" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnSledgeT0StoneSledgehammer" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSteinhammer" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingSledgehammers" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingSledgehammers" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingSledgehammers" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSteinhammer" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Speer: meleeWpnSpearT1IronSpear, craftingSpears, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSpeer" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnSpearT1IronSpear" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSpeer" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingSpears" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingSpears" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingSpears" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSpeer" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Steinspeer: meleeWpnSpearT0StoneSpear, craftingSpears, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSteinspeer" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_meleeWpnSpearT0StoneSpear" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSteinspeer" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingSpears" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingSpears" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingSpears" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSteinspeer" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Lederwams: itm700_lederwams, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltLederwams" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_lederwams" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltLederwams" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltLederwams" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Lederkappe: itm700_lederkappe, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltLederkappe" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_lederkappe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltLederkappe" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltLederkappe" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Wollhandschuhe: itm700_wollhandschuhe, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltWollhandschuhe" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_wollhandschuhe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltWollhandschuhe" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltWollhandschuhe" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Wickelschuhe: itm700_wickelschuhe, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltWickelschuhe" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_wickelschuhe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltWickelschuhe" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltWickelschuhe" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Gambeson: itm700_gambeson, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltGambeson" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_gambeson" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltGambeson" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltGambeson" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Stepphaube: itm700_stepphaube, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltStepphaube" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_stepphaube" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltStepphaube" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltStepphaube" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Stepphandschuhe: itm700_stepphandschuhe, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltStepphandschuhe" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_stepphandschuhe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltStepphandschuhe" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltStepphandschuhe" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Steppschuhe: itm700_steppschuhe, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSteppschuhe" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_steppschuhe" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSteppschuhe" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSteppschuhe" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Kettenhemd: itm700_kettenhemd, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltKettenhemd" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_kettenhemd" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltKettenhemd" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltKettenhemd" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Spangenhelm: itm700_spangenhelm, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSpangenhelm" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_spangenhelm" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSpangenhelm" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSpangenhelm" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Armschienen: itm700_armschienen, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltArmschienen" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_armschienen" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltArmschienen" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltArmschienen" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Beinschienen: itm700_beinschienen, craftingArmor, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltBeinschienen" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_beinschienen" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltBeinschienen" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltBeinschienen" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Steppbahn: itm700_steppbahn, craftingArmor, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltSteppbahn" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_itm700_steppbahn" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltSteppbahn" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingArmor" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingArmor" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltSteppbahn" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Webstuhl: blk700_webstuhl, craftingWorkstations, gebunden -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltWebstuhl" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_blk700_webstuhl" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltWebstuhl" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingWorkstations" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingWorkstations" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingWorkstations" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltWebstuhl" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<!-- Holzfeuer: blk700_holzfeuer, craftingWorkstations, Vorstueck -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="0" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="set" value="@cv700_lernGezahltHolzfeuer" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="multiply" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernZiel" operation="add" value="3" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_lernJetzt" operation="set" value="1"><requirement name="CVarCompare" cvar="_craftCount_blk700_holzfeuer" operation="GTE" value="@.cv700_lernZiel" /><requirement name="CVarCompare" cvar="cv700_lernGezahltHolzfeuer" operation="LT" value="10" /><requirement name="ProgressionLevel" progression_name="craftingWorkstations" operation="GTE" value="11" /><requirement name="ProgressionLevel" progression_name="craftingWorkstations" operation="LT" value="35" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="craftingWorkstations" level="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_lernGezahltHolzfeuer" operation="add" value="1"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ShowToolbeltMessage" message_key="buff700_lernenGeuebt"><requirement name="CVarCompare" cvar=".cv700_lernJetzt" operation="EQ" value="1" /></triggered_effect>
+			</effect_group>
+		</buff>
+	</append>
+
+	<!-- Vanillas buffStatusCheck01 laeuft bei jedem Spieler immer; eine eigene effect_group setzt den
+	     Lern-Buff, wenn er fehlt (wie die Odem-Buffs, 700_75_Magie, D182). -->
+	<append xpath="/buffs/buff[@name='buffStatusCheck01']">
+		<effect_group>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_lernen"><requirement name="!HasBuff" buff="buff700_lernen" /></triggered_effect>
+		</effect_group>
+	</append>
+</config>

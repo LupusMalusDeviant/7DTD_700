@@ -1,0 +1,31 @@
+# wp12-lernen.tsv - was beim Herstellen zaehlt (Plan-0002 WP12.3, D194, zu pruefen N-138)
+# Kurzname	Gegenstand	Stufe	Art
+# Kurzname: Endung des gespeicherten Zaehlers cv700_lernGezahlt<Kurzname>, nur Buchstaben.
+# Art: gebunden = Rezept aus 700_50_Fortschritt/recipes.xml (D70); Vorstueck = offenes Rezept, eines je Stufe.
+# T3-Rezepte (ab 36) fehlen mit Absicht: Tun hebt nie ueber 35 (D194).
+Sax	meleeWpnBladeT1HuntingKnife	craftingBlades	gebunden
+Klinge	itm700_klinge	craftingBlades	Vorstueck
+Breitaxt	meleeToolAxeT1IronFireaxe	craftingHarvestingTools	gebunden
+Bartaxt	meleeToolAxeT2SteelAxe	craftingHarvestingTools	gebunden
+Schlagring	meleeWpnKnucklesT1IronKnuckles	craftingKnuckles	gebunden
+Lederring	meleeWpnKnucklesT0LeatherKnuckles	craftingKnuckles	Vorstueck
+Knueppel	meleeWpnClubT0WoodenClub	craftingClubs	Vorstueck
+Hammer	meleeWpnSledgeT1IronSledgehammer	craftingSledgehammers	gebunden
+Steinhammer	meleeWpnSledgeT0StoneSledgehammer	craftingSledgehammers	Vorstueck
+Speer	meleeWpnSpearT1IronSpear	craftingSpears	gebunden
+Steinspeer	meleeWpnSpearT0StoneSpear	craftingSpears	Vorstueck
+Lederwams	itm700_lederwams	craftingArmor	gebunden
+Lederkappe	itm700_lederkappe	craftingArmor	gebunden
+Wollhandschuhe	itm700_wollhandschuhe	craftingArmor	gebunden
+Wickelschuhe	itm700_wickelschuhe	craftingArmor	gebunden
+Gambeson	itm700_gambeson	craftingArmor	gebunden
+Stepphaube	itm700_stepphaube	craftingArmor	gebunden
+Stepphandschuhe	itm700_stepphandschuhe	craftingArmor	gebunden
+Steppschuhe	itm700_steppschuhe	craftingArmor	gebunden
+Kettenhemd	itm700_kettenhemd	craftingArmor	gebunden
+Spangenhelm	itm700_spangenhelm	craftingArmor	gebunden
+Armschienen	itm700_armschienen	craftingArmor	gebunden
+Beinschienen	itm700_beinschienen	craftingArmor	gebunden
+Steppbahn	itm700_steppbahn	craftingArmor	Vorstueck
+Webstuhl	blk700_webstuhl	craftingWorkstations	gebunden
+Holzfeuer	blk700_holzfeuer	craftingWorkstations	Vorstueck

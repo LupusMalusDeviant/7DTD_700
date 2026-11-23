@@ -1040,6 +1040,40 @@ if ($progPool.Count -gt 0) {
     }
 }
 
+# LERNEN DURCH TUN (ergaenzt 2026-11-23, Plan-0002 WP12.3). Der Lern-Buff liest Vanillas Zaehler
+# _craftCount_<Gegenstand> und hebt eine Handwerks-Stufe per AddProgressionLevel. Beides haengt an
+# EINEM Namen ausserhalb von progression.xml: ein vertippter Gegenstand liest still 0 (die Stufe
+# steigt nie), eine vertippte Stufe hebt nichts. Die Pruefung oben las progression_name nur in
+# progression.xml. Gefunden beim Bau des Lern-Buffs: 'craftingBlade' in buffs.xml blieb gruen.
+# Gelesen wird in jeder anderen Patch-Datei jedes @progression_name (Bedingung und Wirkung) gegen
+# den Fortschritts-Vorrat und jedes cvar="_craftCount_X" gegen den Rezept-Vorrat. Ohne Vanillas
+# progression.xml bleibt die Pruefung aus - gesagt in der Ausgabe.
+$lernRefs = 0
+$lernGeprueft = $progPool.Count -gt 0
+if ($lernGeprueft) {
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        if ($datei -eq 'progression.xml') { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        foreach ($n in $xml.SelectNodes('//*[@progression_name]')) {
+            $wert = $n.GetAttribute('progression_name')
+            $lernRefs++
+            if (-not $progPool.ContainsKey($wert)) {
+                $unresolved += "Stufe '$wert' (progression_name an $($n.LocalName)) ist kein Fortschritts-Knoten  ($datei)"
+            }
+        }
+        foreach ($n in $xml.SelectNodes('//*[starts-with(@cvar, "_craftCount_")]')) {
+            $wert = $n.GetAttribute('cvar').Substring(12)
+            $lernRefs++
+            if (-not $rezeptPool.ContainsKey($wert)) {
+                $unresolved += "Zaehler '_craftCount_$wert' nennt kein Rezept  ($datei)"
+            }
+        }
+    }
+}
+
 # BEUTE UND WARE (ergaenzt 2026-11-23, Plan-0002 WP10.5d). Ein Gegenstand, der nur als
 # Beute oder beim Haendler zu haben ist (Reliquienkapsel, Kreuzanhaenger, Bernstein), haengt
 # an EINEM Namen in loot.xml bzw. traders.xml. Vertippt, liegt er nirgends - ohne Meldung.
@@ -1335,6 +1369,7 @@ Write-Output ("  in Bedingungen genannte Mods: {0}" -f $(if ($modListe.Count -gt
 Write-Output ("  nicht von innen geprueft (include): {0}" -f $ungeprueftEbene)
 Write-Output ("  Fortschritts-Verweise: {0}" -f $progRefs)
 Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltungen: {1}" -f $angelegteRefs, $freischaltRefs)
+Write-Output ("  Lern-Verweise (Stufen, Zaehler): {0}" -f $(if ($lernGeprueft) { $lernRefs } else { 'nicht geprueft (keine progression.xml im Vanilla-Ordner)' }))
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))

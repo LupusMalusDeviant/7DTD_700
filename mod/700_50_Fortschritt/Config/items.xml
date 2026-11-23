@@ -43,4 +43,16 @@
 	<set xpath="/items/item[@name='bookWasteTreasuresDoors']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
 	<set xpath="/items/item[@name='bookWasteTreasuresCloth']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
 	<set xpath="/items/item[@name='bookWasteTreasuresSinks']/effect_group/triggered_effect/requirement[@name='PerksUnlocked']/@value">6</set>   <!-- Brachlandschätze: 6 lebende Baende -->
+
+	<!-- ===== WP12.3 Lehrblaetter +3 (D194) - ERZEUGT von tools/gen/wp12-lernen.ps1, nicht von Hand aendern =====
+	     Nur die acht Stufen, die durch Tun lernen; die uebrigen sechs heben weiter um 1.
+	     effect_group[1] ist das Heben; die dritte (Zufallspunkt der Gelehrten-Kleidung) bleibt bei 1. -->
+	<set xpath="/items/item[@name='armorSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingArmor -->
+	<set xpath="/items/item[@name='bladesSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingBlades -->
+	<set xpath="/items/item[@name='clubsSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingClubs -->
+	<set xpath="/items/item[@name='harvestingToolsSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingHarvestingTools -->
+	<set xpath="/items/item[@name='knucklesSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingKnuckles -->
+	<set xpath="/items/item[@name='sledgehammersSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingSledgehammers -->
+	<set xpath="/items/item[@name='spearsSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingSpears -->
+	<set xpath="/items/item[@name='workstationSkillMagazine']/effect_group[1]/triggered_effect[@action='AddProgressionLevel']/@level">3</set>   <!-- craftingWorkstations -->
 </config>

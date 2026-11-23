@@ -119,6 +119,34 @@ Gezählt und gehoben wird beim Spieler (N-113), gespeichert mit dem Spieler. Ein
 könnte schummeln — im Koop wiegt das leicht. Das Kriterium „nach **Server**-Neustart" heißt damit
 „nach Neustart des Spielstands"; S-33 (2) prüft den Zähler.
 
+### 6. Gebaut (WP12.3, 2026-11-23, D194, zu prüfen N-138)
+
+Erzeugt von `tools/gen/wp12-lernen.ps1` aus `tools/gen/wp12-lernen.tsv` nach
+`mod/700_50_Fortschritt/Config/buffs.xml`; die Lehrblätter in `items.xml` desselben Modlets.
+**Warum nicht C#?** Vanilla zählt schon (`_craftCount_`), und `AddProgressionLevel` hebt aus XML — es
+gibt nichts, was nur C# könnte.
+
+| Stufe | zählt (gebunden) | Vorstück |
+|---|---|---|
+| Klingenschmiede | Sax | Klinge |
+| Werkzeugschmiede | Breitaxt, Bartaxt | — (zwei Lehrblätter bringen die Bartaxt bei 26) |
+| Schlagringe | Eisen-T1 | Lederschlagring (T0) |
+| Keulenbau | — (nur der Streitkolben ab 36 ist gebunden) | Holzkeule (T0) |
+| Hammerbau | Eisen-T1 | Steinhammer (T0) |
+| Speerbau | Eisen-T1 | Steinspeer (T0) |
+| Rüstungsbau | die zwölf Teile | Steppbahn |
+| Werkstattbau | Webstuhl | Holzfeuer |
+
+**Geändert gegen §2 (D194):** Tun hebt **nie über 35** — darum zählen die fünf T3-Rezepte (ab 36) nicht;
+der Merkwert heißt `cv700_lernGezahlt<Kurzname>` **ohne** Punkt (gespeichert, Vertrag 07 Nachtrag 5).
+Das Lehrblatt hebt +3 **nur** in diesen acht Stufen. Die übrigen sechs (Flickwerk, Bogenbau,
+Wundversorgung, Küche, Kräutergarten, Sattlerei) haben keine gebundenen eigenen Rezepte; sie lernen in
+Phase 2 nicht durch Tun und behalten +1 — *Notiz:* Bogenbau und Küche wären die nächsten, mit
+Vanillas eigenen Rezepten.
+
+**Noch offen:** der Perk „Lehrzeit" (§4) — bis dahin kommt die Grundfähigkeit über vier Lehrblätter
+(1 + 4 × 3 = 13). Die drei [verifizieren]-Punkte aus §2 prüft S-49.
+
 ## Akzeptanzkriterien
 - [ ] **Fünf** Bäume vollständig, ~~keine Vanilla-Attribut- bzw. -Perknamen sichtbar~~ kein **moderner** Attribut- oder Perkname sichtbar (der sechste Baum in Phase 2, D66). *Geändert am 2026-11-22 (D90):* unter dem Zahnrad behalten „Leichte Rüstung", „Mittlere Rüstung", „Schwere Rüstung", „Vom Land leben" und „Schlösserknacken" Vanillas Namen; „Chefkoch" heißt Herdmeister, „Der glückliche Sammler" Finderglück.
 - [ ] Ohne Grundfähigkeit ist ein Rezept gesperrt; mit Grundfähigkeit steigt die Qualität durch wiederholtes Herstellen

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP12.3): Lernen durch Tun ausserhalb von progression.xml (hier an einem Gegenstand; im Mod ist es buffs.xml).
+     Erfundene Kennungen, kein Spielinhalt (Projektregel 1 und 7). Vanilla-Stand: kette\vanilla,
+     Rezepte: kette\eigen\recipes.xml.
+       gruen: Stufe aus Vanilla (pruefAttA), Perk aus Vanilla (pruefPerkA), Zaehler eines eigenen
+              Rezepts (pruefBlockEigen)
+       rot:   vertippte Stufe in einer Wirkung, Zaehler eines Rezepts, das es nicht gibt
+       zaehlt nicht: ein anderer Motorwert mit Unterstrich (_coretemp) -->
+<config>
+	<append xpath="/items/item[@name='pruefWerkzeug']">
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="pruefAttA" level="1"><requirement name="CVarCompare" cvar="_craftCount_pruefBlockEigen" operation="GTE" value="3" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="pruefStufeFehlt" level="1"><requirement name="ProgressionLevel" progression_name="pruefPerkA" operation="GTE" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddProgressionLevel" progression_name="pruefAttA" level="1"><requirement name="CVarCompare" cvar="_craftCount_pruefBlockFehlt" operation="GTE" value="3" /><requirement name="CVarCompare" cvar="_coretemp" operation="GT" value="0" /></triggered_effect>
+			</effect_group>
+	</append>
+</config>
