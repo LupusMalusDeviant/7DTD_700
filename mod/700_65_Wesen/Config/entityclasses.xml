@@ -72,4 +72,62 @@
 		<property name="SleeperSightToWakeMax" value="500,640" />
 	</append>
 	<set xpath="/entity_classes/entity_class[@name='zombieMaleHazmat']/property[@name='AINoiseSeekDist']/@value">12</set>
+
+	<!-- ===================================================================
+	     SCHUTZ JE SCHADENSART (F-02 Ausarbeitung Phase 2 Abschnitt 1, D193; Plan-0002 WP12.4)
+	     ===================================================================
+	     Vanilla hat keinen Schutz je Art (PiercingProtection ist in items.xml
+	     auskommentiert), aber Schutz je MARKE DER WAFFE: animalInsectSwarm traegt
+	     PhysicalDamageResist mit tags="ranged". Die Marken stehen schon an Vanillas Waffen:
+	       Schnitt  bladeSkill, axe, knife
+	       Stich    spearSkill, bowSkill, crossbow
+	       Wucht    clubSkill, sledgeSkill, blunt
+	     Eine EIGENE effect_group je Klasse, damit Vanillas "Base Effects" unberuehrt bleibt.
+	     Angehaengt nur an die Grundklassen. Ob Feral, Radiated und die Klassen, die von
+	     ihnen erben (Moorleiche von Buettel, Hirte-Speier von Hirte, Berstender von
+	     Krieger), die Gruppe mitbekommen, ist nicht gelesen [verifizieren S-48].
+	     Alle Zahlen sind Setzungen (N-137). -->
+
+	<!-- Seuchentoter Krieger: traegt Kette - Schnitt prallt ab, die Spitze findet die Ringe -->
+	<append xpath="/entity_classes/entity_class[@name='zombieSoldier']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="15" tags="bladeSkill,axe,knife" />
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="-5" tags="spearSkill,bowSkill,crossbow" />
+		</effect_group>
+	</append>
+
+	<!-- Brecher (WP5.6): schwer, die Keule prallt ab -->
+	<append xpath="/entity_classes/entity_class[@name='zombieFatCop']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
+	<append xpath="/entity_classes/entity_class[@name='zombieFemaleFat']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
+	<append xpath="/entity_classes/entity_class[@name='zombieRancher']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
+	<append xpath="/entity_classes/entity_class[@name='zombieChuck']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
+	<append xpath="/entity_classes/entity_class[@name='zombieFrostclaw']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
+
+	<!-- Kriecher: weich und am Boden - schneiden ja, schlagen kaum -->
+	<append xpath="/entity_classes/entity_class[@name='zombieSteveCrawler']">
+		<effect_group name="eff700_schadensarten">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="-10" tags="bladeSkill,axe,knife" />
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="10" tags="clubSkill,sledgeSkill,blunt" />
+		</effect_group>
+	</append>
 </config>

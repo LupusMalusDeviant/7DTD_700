@@ -197,6 +197,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (F-02 Ausarbeitung Phase 2 Abschnitt 1, D193, zu pruefen N-137):
+				     Schnitt +1, Wucht +1 je Teil. Die Marken sind die der ANGREIFENDEN Waffe. -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -225,6 +229,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (F-02 Ausarbeitung Phase 2 Abschnitt 1, D193, zu pruefen N-137):
+				     Schnitt +1, Wucht +1 je Teil. Die Marken sind die der ANGREIFENDEN Waffe. -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -255,6 +263,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (F-02 Ausarbeitung Phase 2 Abschnitt 1, D193, zu pruefen N-137):
+				     Schnitt +1, Wucht +1 je Teil. Die Marken sind die der ANGREIFENDEN Waffe. -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -283,6 +295,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="8,12.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (F-02 Ausarbeitung Phase 2 Abschnitt 1, D193, zu pruefen N-137):
+				     Schnitt +1, Wucht +1 je Teil. Die Marken sind die der ANGREIFENDEN Waffe. -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="8,12.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.041" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -313,6 +329,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +1, Stich +1, Wucht +3 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="3" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -345,6 +365,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +1, Stich +1, Wucht +3 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="3" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -379,6 +403,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +1, Stich +1, Wucht +3 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="3" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -411,6 +439,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="13,17.3" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +1, Stich +1, Wucht +3 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="3" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="13,17.3" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.043,0.053" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -451,6 +483,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +4, Stich -1, Wucht +1 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="4" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -485,6 +521,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +4, Stich -1, Wucht +1 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="4" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -521,6 +561,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +4, Stich -1, Wucht +1 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="4" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />
@@ -555,6 +599,10 @@
 				<passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="18,21" tier="1,6" />
 				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-.2,.2" />
+				<!-- Schutz je Schadensart (D193, N-137): Schnitt +4, Stich -1, Wucht +1 je Teil -->
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="4" tags="bladeSkill,axe,knife" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="-1" tags="spearSkill,bowSkill,crossbow" />
+				<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="clubSkill,sledgeSkill,blunt" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="18,21" tier="1,6" tags="heat,electrical" />
 				<passive_effect name="ElementalDamageResist" operation="base_add" value="-.2,.2" />
 				<passive_effect name="BuffResistance" operation="base_add" value="0.061,0.076" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffAbrasionCatch,buffLaceration,buffInfectionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingTwo,buffInjuryBleedingBarbedWire" />

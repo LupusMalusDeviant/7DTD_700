@@ -102,6 +102,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP11.8 Klang | **gelesen, nichts gebaut** (D189, N-133): Finding „Stille und Umgebungslaute", Soll-Datei `wp118.tsv` (11 Zeilen, `verify` Exit 0, Gegenprobe Exit 1); Triage-Zeile 21 entschieden: C# beim Client, Patch vielleicht. | rea/findings, tools/meta, triage |
 | WP14.2 Drehbücher, Teil | **geschrieben** (D191, N-135): `docs/pruefung/0004-drehbuch-spieltests.md` — alle 47 S-Zeilen in fünf Sitzungen (A 15, B 160, C 25, D 60 min, E wartet), T1–T3 abgebildet, T4 bleibt Playtest. Elfte Prüfung `drehbuch-pruefen` (Vertrag 04 Nachtrag WP14.2), Gegenproben 330 → **337**. | pruefung, tools/check |
 | WP12.1 F-02, F-21 nachgeschärft | **geschrieben** (D192, N-136): Schadensarten per XML über Vanillas Waffen-Marken, Schildwerte und zwei Wege, Wurfwaffen, Lernen durch Tun mit Zahlen. Nichts gebaut. Offen: Schild Phase 2 oder 3. | F-02, F-21 |
+| WP12.4 Schadensarten | **gebaut** (D193, N-137, S-48): Schutz je Schnitt/Stich/Wucht über Vanillas Waffen-Marken an zwölf Rüstungsteilen und sieben Wesenklassen; `kette-pruefen` liest Marken im Schutz, Gegenproben 337 → **338**. Im Spiel ungeprüft. | 30_Ausruestung, 65_Wesen, tools/check |
 | WP11.9 Deutungs-Texte | **gebaut** (D190, N-134, S-47): sechs Fundschriften (Strafe, Fluch, Krankheit je zwei), 12 Sprachzeilen, 6 Glossarzeilen, Beute-Gruppe 12 → 18. Im Spiel ungelesen. | 70_Handel, 90_Sprache, glossar, lore |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
@@ -777,6 +778,9 @@ mit eigenem Gesicht und Vorboten.
 4. **WP12.4** `[Claude-prüfbar]` **Schadensarten:** zuerst mit dem, was da ist — vier Arten und
    ein Marken-Feld an der Schadensquelle (Kurz-Check:204–208). C# nur, wenn WP9.3 zeigt, dass
    Schutzwerte je Art nicht per XML gehen. (M)
+   *Gebaut 2026-11-23 (D193, zu prüfen N-137, Spieltest S-48):* Schutz je Marke der angreifenden Waffe
+   an zwölf Rüstungsteilen und sieben Wesenklassen, kein C#; `kette-pruefen` prüft die Marken (338
+   Gegenproben).
 5. **WP12.5** `[Claude-prüfbar]` **Schild:** Gegenstand mit dem Modell aus WP4, Zustand „erhoben",
    Postfix auf dem Schadenseingang mit Richtungsprüfung (Kurz-Check:226–229), Ausdauer und
    Verschleiß. Netz-Klasse S+C (Spec 01:138) — der heikelste Patch der Phase. (L)

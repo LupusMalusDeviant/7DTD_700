@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP12.4): Schutz je Marke der angreifenden Waffe.
+     Erfundene Kennungen, kein Spielinhalt (Projektregel 1 und 7). Vanilla-Stand: kette\tag\vanilla.
+       gruen: Vanilla-Tag, eigener Tag (aus kette\tag\items.xml), zweiter Tag einer Liste
+       rot:   vertippte Marke in einer Liste
+       zaehlt nicht: DamageModifier und ElementalDamageResist (dort sind Tags Stoffe bzw. Elemente) -->
+<config>
+	<append xpath="/items/item[@name='pruefWerkzeug']">
+		<effect_group name="pruefSchutz">
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="5" tags="pruefTagVanilla" />
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="3" tags="pruefTagEigen,pruefSchutzFehlt" />
+			<passive_effect name="PhysicalDamageResist" operation="base_add" value="1" tags="pruefTagZweit" />
+			<passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="pruefStoffErde" />
+			<passive_effect name="ElementalDamageResist" operation="base_add" value="2" tags="pruefElementHitze" />
+		</effect_group>
+	</append>
+</config>

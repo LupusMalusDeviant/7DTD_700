@@ -201,9 +201,13 @@ Garnitur, auf die Teile verteilt wie Vanillas Grundwert):
 | Rüstung (F-03) | gegen Schnitt | gegen Stich | gegen Wucht | Gedanke |
 |---|---|---|---|---|
 | T0 Lumpen | 0 | 0 | 0 | — |
-| T1 Wolle und Leder | +3 | 0 | +3 | gibt T1 endlich mehr als einen Set-Bonus (F-03, Balancing 0001 §4) |
-| T2 Gambeson | +5 | +5 | **+12** | Stepparbeit fängt Schläge — gut gegen Seuchentote |
-| T3 Kettenzeug | **+15** | −5 | +3 | Ringe halten die Schneide, nicht die Spitze |
+| T1 Wolle und Leder | +4 | 0 | +4 | gibt T1 endlich mehr als einen Set-Bonus (F-03, Balancing 0001 §4) |
+| T2 Gambeson | +4 | +4 | **+12** | Stepparbeit fängt Schläge — gut gegen Seuchentote |
+| T3 Kettenzeug | **+16** | −4 | +4 | Ringe halten die Schneide, nicht die Spitze |
+
+*Gebaut mit WP12.4 je Teil als ein Viertel davon (T1 +1/0/+1, T2 +1/+1/+3, T3 +4/−1/+1), weil Vanillas
+Grundwert an allen vier Teilen einer Klasse gleich steht; die Werte oben sind darum durch vier teilbar
+(vorher 3, 5, 15 — D193).*
 
 | Gegner (F-06) | gegen Schnitt | gegen Stich | gegen Wucht | Gedanke |
 |---|---|---|---|---|
@@ -214,6 +218,10 @@ Garnitur, auf die Teile verteilt wie Vanillas Grundwert):
 
 **Bauweg (WP12.4):** je Zeile ein `<append>` mit `passive_effect name="PhysicalDamageResist"
 operation="base_add" tags="…"` an der Rüstungsklasse bzw. Wesenklasse. Kein C#.
+*Gebaut 2026-11-23 (D193, zu prüfen N-137, Spieltest S-48):* an den zwölf Rüstungsteilen in
+`700_30_Ausruestung/Config/items.xml` (32 Zeilen) und als eigene `effect_group eff700_schadensarten` an
+sieben Grundklassen in `700_65_Wesen/Config/entityclasses.xml` (Krieger; Büttel, Muhme, Hirte, zweimal
+Felswerfer; Kriecher). `kette-pruefen` prüft die Marken (Vertrag 04 Nachtrag WP12.4).
 **[verifizieren, Spieltest mit WP12.4]:** (1) ob Schutz an **getragener** Rüstung die Marken der
 **angreifenden** Waffe sieht wie Vanillas Schwarm — sonst geht die Hälfte (Rüstung) nur per Patch, die
 andere (Gegner) bleibt XML; (2) ob unsere Waffen die Marken über `Extends` erben.

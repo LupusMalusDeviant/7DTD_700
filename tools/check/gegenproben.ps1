@@ -1121,6 +1121,17 @@ Test-Script 'kette-pruefen: vertippte Tags in Bedingungen werden rot, bekannte n
     Vanilla      = (Join-Path $data 'kette\tag\vanilla')
 } -MustContain @("Tag 'pruefTagFehlt' in !HoldingItemHasTags steht an keinem Gegenstand", "Tag 'pruefTagGetragenFehlt' in WornItems steht an keinem Gegenstand", 'Tags in Bedingungen: 5', '2 rot') -MustNotContain @("'pruefTagEigen' in", "'pruefTagVanilla' in", "'pruefTagZweit' in", "'pruefWesenTag'")
 
+# WP12.4 (2026-11-23): Schutz je Schadensart haengt an der Marke der angreifenden Waffe
+# (PhysicalDamageResist tags). Vertippte Marke rot; Vanilla-, eigener und zweiter Tag gruen;
+# DamageModifier und ElementalDamageResist zaehlen nicht (Stoffe, Elemente).
+Test-Script 'kette-pruefen: vertippte Marke im Schutz wird rot, bekannte und andere Effekte nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\tag\items.xml'), (Join-Path $data 'kette\schutz\items.xml'))
+    Vanilla      = (Join-Path $data 'kette\tag\vanilla')
+} -MustContain @("Tag 'pruefSchutzFehlt' im Schutz (PhysicalDamageResist) steht an keinem Gegenstand", 'Tags im Schutz: 4', '1 rot') -MustNotContain @("'pruefTagVanilla' im Schutz", "'pruefTagEigen' im Schutz", "'pruefTagZweit' im Schutz", 'pruefStoffErde', 'pruefElementHitze')
+
 # WP11.3 (2026-11-23): CVar-Namen. Nur gelesen nur mit Schreiber ausserhalb der XML im Vertrag
 # (Server/C#), nur geschrieben nur, wenn der Vertrag den Namen nennt. Der Name mit "Server" im
 # Wort darf sich nicht selbst freisprechen; Fliesstext im Vertrag zaehlt nicht; t700_ und $ nicht.

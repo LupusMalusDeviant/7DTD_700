@@ -16,12 +16,12 @@ geschrieben, damit nichts auseinanderläuft.
 | Sitzung | Aufbau | Zeilen | Dauer |
 |---|---|---|---|
 | **A** Hauptmenü und neues Spiel | Einzelspieler, `build.ps1 -Install -MitTest` | S-22, S-11, S-01, S-17, (S-13) | **rund 15 min** (+10 mit S-13) |
-| **B** Kreativ und Konsole | dieselbe Installation, Test-Spielstand, Kreativmodus, Konsole (F1) | fünf Blöcke, unten | **rund 160 min**, in zwei Abenden à 80 |
+| **B** Kreativ und Konsole | dieselbe Installation, Test-Spielstand, Kreativmodus, Konsole (F1) | fünf Blöcke, unten | **rund 170 min**, in zwei Abenden (90 und 80) |
 | **C** Dedicated + ein Client | Server und Client je mit `-MitTest` | Proben-Lauf S-32, S-33, S-34, S-35 (1)(2), dazu S-43 (6), S-45 (3)(4) | **rund 25 min** |
 | **D** Neue Welt | eine **kleine** Zufallswelt erzeugen, nicht laden | S-29, S-24, S-27 (2)–(4), S-31 (3)–(8), S-05, S-30, S-12 | **rund 60 min** |
 | **E** wartet | — | S-25 (Unity), S-29 (4) (WP6.5b), S-32 (4) und S-34 (4) (erster C#-Code), S-34 (3) (Himmel), S-23 (Mitspieler) | — |
 
-**Zusammen rund 4 ½ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 15, B 160, C 25, D 60), keine
+**Zusammen rund 4 ½ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 15, B 170, C 25, D 60), keine
 neue Schätzung. Am Ende jeder Sitzung:
 `build.ps1 -Install` **ohne** `-MitTest`, damit die Überlagerung nicht liegen bleibt (`smoke.ps1` meldet
 sie sonst rot).
@@ -48,17 +48,17 @@ sie sonst rot).
    `entitygroups`). S-17 (6 min) gleich danach, solange das Spiel neu ist.
 4. *Wenn ein alter Spielstand da ist:* S-13 (10 min).
 
-## Sitzung B — Kreativ und Konsole (rund 160 min, zwei Abende)
+## Sitzung B — Kreativ und Konsole (rund 170 min, zwei Abende)
 
 Ein Test-Spielstand aus Sitzung A, Kreativmodus (`cm`), Konsole F1. Reihenfolge innerhalb der Blöcke so,
 dass ein Schritt den nächsten vorbereitet.
 
-**Abend 1 (rund 80 min)**
+**Abend 1 (rund 90 min)**
 
 | Block | Zeilen, in dieser Reihenfolge | Dauer | Hinweis |
 |---|---|---|---|
 | B1 Dinge und Texte | S-02, S-09, S-07, S-21, S-31 (1)(2), S-47, S-14, S-15, S-16, S-03, S-04, S-08, S-10 | 53 min | fast alles im Kreativmenü; S-08 braucht einen Auftrag der Stufe 1 |
-| B4 Wesen | S-26, S-28, S-46 | 18 min | `spawnentity`; S-46 bei Tag, S-28 bei Nacht — S-28 ans Ende, `settime` auf 22 Uhr |
+| B4 Wesen | S-26, S-46, S-48, S-28 | 28 min | `spawnentity`; S-46 und S-48 bei Tag, S-28 bei Nacht — S-28 ans Ende, `settime` auf 22 Uhr |
 | B5 Seuchennacht | S-44 | 10 min | `settime 7 21 50`; geht gleich nach S-28 in derselben Nacht |
 
 **Abend 2 (rund 80 min)**

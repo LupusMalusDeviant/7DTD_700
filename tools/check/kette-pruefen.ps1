@@ -1115,6 +1115,7 @@ if (Test-Path $buffVanillaPfad) {
 # item_modifiers.xml) und aus den Patch-Dateien. Ohne Vanillas items.xml bleibt die Pruefung
 # aus - gesagt in der Ausgabe.
 $tagRefs = 0
+$schutzRefs = 0
 $tagPool = @{}
 $tagGeprueft = $false
 $tagVanillaPfad = Join-Path $Vanilla 'items.xml'
@@ -1149,6 +1150,21 @@ if (Test-Path $tagVanillaPfad) {
                 $tagRefs++
                 if (-not $tagPool.ContainsKey($t)) {
                     $unresolved += "Tag '$t' in $($n.GetAttribute('name')) steht an keinem Gegenstand  ($datei)"
+                }
+            }
+        }
+        # TAGS IM SCHUTZ (ergaenzt 2026-11-23, Plan-0002 WP12.4, Vertrag 04 Nachtrag WP12.4).
+        # Schutz je Schadensart haengt an der MARKE DER ANGREIFENDEN WAFFE: PhysicalDamageResist
+        # mit tags="bladeSkill,..." (F-02 Ausarbeitung Abschnitt 1). Eine vertippte Marke gilt fuer
+        # keine Waffe, der Schutz faellt still weg. Gelesen wird tags="..." jedes <passive_effect>
+        # mit name="PhysicalDamageResist" in den Patch-Dateien, gesucht im selben Vorrat wie oben.
+        foreach ($n in $xml.SelectNodes("//passive_effect[@name='PhysicalDamageResist'][@tags]")) {
+            foreach ($t in ($n.GetAttribute('tags') -split '[,|]')) {
+                $t = $t.Trim()
+                if ($t.Length -eq 0) { continue }
+                $schutzRefs++
+                if (-not $tagPool.ContainsKey($t)) {
+                    $unresolved += "Tag '$t' im Schutz (PhysicalDamageResist) steht an keinem Gegenstand  ($datei)"
                 }
             }
         }
@@ -1322,6 +1338,7 @@ Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltunge
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
+Write-Output ("  Tags im Schutz: {0}" -f $(if ($tagGeprueft) { $schutzRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
 Write-Output ("  Laute: {0}" -f $(if ($lautGeprueft) { $lautRefs } else { 'nicht geprueft (keine sounds.xml im Vanilla-Ordner)' }))
 Write-Output ("  Wesen und Gruppen: {0}" -f $(if ($gruppenGeprueft) { $gruppenRefs } else { 'nicht geprueft (keine entitygroups.xml im Vanilla-Ordner)' }))
 Write-Output ("  CVar-Verweise: {0}" -f $(if ($cvarGeprueft) { $cvarRefs } else { 'nicht geprueft (kein Vertrag der Zustaende angegeben)' }))

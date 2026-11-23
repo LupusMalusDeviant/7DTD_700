@@ -4244,3 +4244,24 @@ Fließtext. Das ist gewollt (das Drehbuch nennt Zeilen auch in Sätzen); die Tes
 
 **Grenzen:** die Prüfung sieht nicht, ob ein Teilpunkt (S-31 (3)–(8)) seinen Platz hat — nur die Zeile.
 Ob die Minuten stimmen, prüft sie nicht.
+
+## Nachtrag WP12.4 — Marken im Schutz in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-137)
+
+Gebaut im autonomen Lauf (Plan-0002 WP12.4, D193).
+
+**Anlass.** Schutz je Schadensart hängt an den Marken der **angreifenden** Waffe
+(`PhysicalDamageResist` mit `tags="bladeSkill,…"`, F-02 Ausarbeitung §1). Eine vertippte Marke gilt für
+keine Waffe; der Schutz fällt still weg, kein Ladefehler.
+
+**Die Regel.** Im Block „Tags in Bedingungen" liest `kette-pruefen` zusätzlich `tags="…"` jedes
+`<passive_effect name="PhysicalDamageResist">` in den Patch-Dateien und sucht jede Marke im selben Vorrat
+(Tags der Gegenstände und Aufsätze aus Vanilla und aus unseren Dateien). `DamageModifier` und
+`ElementalDamageResist` zählen **nicht** — dort sind die Marken Stoffe (`earth`, `metal`) bzw. Elemente
+(`heat`), keine Gegenstände. Neue Zeile: `Tags im Schutz: N` (am echten Stand 123).
+
+**Gegenprobe** (1 neu, 337 → **338**): `kette/schutz` — vertippte Marke in einer Liste rot; Vanilla-Tag,
+eigener Tag, zweiter Tag einer Liste grün; `DamageModifier` und `ElementalDamageResist` nicht gezählt.
+Am echten Modlet: `bladeSkil` am Krieger rot (Exit 1), danach grün.
+
+**Grenzen:** ob Vanilla die Marken an **getragener** Rüstung gegen die angreifende Waffe hält, prüft
+kein Werkzeug — das zeigt S-48.
