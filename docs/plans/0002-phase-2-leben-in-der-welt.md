@@ -80,6 +80,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP9.3 Findings F-21, F-02 | **gemacht, mit Befund** (D169, N-113): Vanilla zählt fertige Stücke beim Spieler (`_craftCount_<Gegenstand>`, `XUiC_RecipeStack::giveExp`, nachgereicht über `TileEntityWorkstation::CheckForCraftComplete`); `onSelfItemCrafted` wird nicht ausgelöst → Lernen durch Herstellen wahrscheinlich **ohne Patch**. `DamageEntity` rechnet beim Besitzer; keine zweite Hand; `ItemActionThrownWeapon` vorhanden, ungenutzt; Qualität `ushort`. Soll-Datei `wp93.tsv` (11 Zeilen): `verify` Exit 0, Gegenprobe Exit 1. Im Spiel: S-33. | findings/WP9-herstellen-und-schaden.md, hook-hypothesen.md, patch-manifest.md, F-21, Vertrag 07 §3.5 |
 | WP9.4 Findings F-17, F-09 | **gemacht, mit Befund** (D170, N-114): 79 Buff-Bedingungen aus der DLL; `CompareLightLevel` (Licht am Spieler), `IsBloodMoon`, `IsAlly`, `IsLocalPlayer`, `IsDayNumber`, `GameStatInt` `BloodMoonDay`; Ziel-Arten `selfAOE`/`selfOtherPlayers` für „Mitspieler in der Nähe"; Wetter `bloodMoon` je Biom. Grauen damit XML, C# nur der Direktor (Planer `AIDirectorBloodMoonComponent`, `AIDirectorWanderingHordeComponent`). Nicht gelesen: Tierlaute, Vortag als XML-Differenz, ob ein Spektrum im Wetter das Rot ersetzt. Soll-Datei `wp94.tsv` (14 Zeilen): `verify` Exit 0, Gegenprobe Exit 1. Im Spiel: S-34. | findings/WP9-licht-und-seuchennacht.md, hook-hypothesen.md, F-17, F-09, Vertrag 07 |
 | WP9.5 Findings F-15, F-19 | **gemacht, mit Befund** (D171, N-115): Odem-Kosten per XML (`ItemAction.ExecutionRequirements` aus `<requirement>` in `<action>`, `CanExecute`); Projektil-Klassen da; keine Meide-Zone (31 `EAI*`) → Bannkreis als Aura; vier `BiomeBadge`-Plätze für Amulette; Fertigkeitsleiste 8 Felder → 9 per XUi; Verderb nach Zeit **nicht** in XML (Metadaten ja, Zeitwert nein). Soll-Datei `wp95.tsv` (8 Zeilen): `verify` Exit 0, Gegenprobe Exit 1. Im Spiel: S-35. | findings/WP9-odem-und-verderb.md, hook-hypothesen.md, F-15, F-19, Vertrag 07 §3.4 |
+| WP9.6 Triage | **gemacht** (D172, N-116): 21 Kandidaten. **Phase 2 braucht keinen Harmony-Patch.** 14× XML reicht (teils mit Asset), 1× XML vielleicht (Farbe der Seuchennacht), 3× **C# ohne Patch** über die Mod-API (Regler, Direktor, Vorboten — viertes Urteil, neu), 1× Patch in Phase 3 (Schild), 1× rutscht (Verderb mit Uhr; dazu rutscht die Meide-Zone als Teil des Bannkreises), 1× offen (Tierlaute). „Warum nicht XML?" in F-02, F-09, F-15, F-17, F-19, F-21. Zwei neue Punkte: WP9.9 (Feldprüfung in `verify`), WP9.10 (Test-Überlagerung für S-32 bis S-35). | rea/triage-phase-2.md, sechs Feature-Dokumente, patch-manifest.md |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
@@ -608,6 +609,13 @@ Zielpunkte — und für jeden Kandidaten die Antwort „Warum nicht XML?".
    ([interface-discovery.md](../rea/interface-discovery.md):106–108). (S)
 8. **WP9.8** `[braucht Nutzer]` Abnahme von Vertrag 06 und 07; die Entscheidungen P2-E16 bis
    P2-E24.
+9. **WP9.9** `[Claude-prüfbar]` *(neu 2026-11-23 aus WP9.6, D172)* **Feldprüfung in
+   `mod700meta verify`:** die Ereignisse der Mod-API (`ModEvents.GameUpdate`,
+   `PlayerSpawnedInWorld`) sind Felder, `verify` prüft nur Methoden. Vor dem ersten Code in
+   `Systeme/` (Regler, Direktor) eine Feldzeile in den Soll-Dateien, mit Gegenprobe. (S)
+10. **WP9.10** `[Claude-prüfbar]` *(neu 2026-11-23 aus WP9.6)* **Test-Überlagerung für S-32 bis S-35:**
+   Test-Buffs, Testanzeige, Test-Speer, Test-Zauberstab in `test/700_99_Test` (Vertrag 01 Teil 1),
+   damit die vier Spieltests in einem Lauf gehen. (M)
 
 **Ergebnis:** Zwei Verträge, Findings zu allen C#-Kandidaten, ein Patch-Manifest mit geplanten
 Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".

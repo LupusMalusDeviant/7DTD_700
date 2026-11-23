@@ -97,6 +97,9 @@ Amulett-Platz: einer der vier Abzeichen-Plätze. Sechstes Attribut: Fertigkeitsf
 - **Bannkreis** (Gegner meiden Bereich): Vanilla-KI hat nach unserem Kenntnisstand keine
   „Meide-Zone“ per XML → REA prüfen; Fallback: Bannkreis als Schadens- bzw. Verlangsamungs-Aura (XML)
 - Lichtfunke als schwebende Lichtquelle, falls eine gehaltene Lichtquelle nicht reicht
+- *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 12–16; zu prüfen N-116):* **kein C# in
+  Phase 2.** Odem-Kosten, Projektil, Amulett-Platz, sechstes Attribut: XML. Bannkreis: XML als Aura;
+  die echte Meide-Zone rutscht (keine KI-Grundlage, ein Patch an der Zielwahl wäre groß).
 ### Assets (D10, F-16)
 Runensteine (neu), Partikel-Effekte (Glimmen, Glutpfeil, Rauch), Icons für alle Runen,
 Tränke und Zauber.

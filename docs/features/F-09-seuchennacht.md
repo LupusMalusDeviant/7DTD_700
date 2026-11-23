@@ -28,6 +28,11 @@ einem Spektrum ohne XML; ob ein `<spectrum name="Foggy"/>` im Wetter sie ersetzt
 Den Vortag erkennen: Spieltag und Seuchennacht-Tag sind beide abfragbar, die Differenz in XML
 nicht belegt. C# bleibt sicher nur für den Direktor (F-17 B5).
 
+*Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 8–11; zu prüfen N-116):* Abfrage und
+Nebel **XML**; Farbe **XML vielleicht**, sonst Asset; **Vorboten: C# ohne Patch** als Teil des
+Direktors — warum nicht XML: „morgen ist Seuchennacht" ist aus Spieltag und Seuchennacht-Tag nicht
+als eine Bedingung belegt, der Direktor rechnet es ohnehin.
+
 ## Schnittstellen (REA)
 → [hook-hypothesen.md#f-09](../rea/hook-hypothesen.md#f-09)
 

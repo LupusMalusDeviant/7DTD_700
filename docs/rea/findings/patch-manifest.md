@@ -59,3 +59,7 @@ Soll-Datei unter `tools/meta/expect/` (Projektregel 2).
 
 Die acht übrigen geprüften Features (F-05, F-07, F-08, F-13-Teleport, F-15, F-17, F-18, F-20)
 brauchen **keinen** Patch.
+
+**Triage Phase 2 (WP9.6, 2026-11-23, zu prüfen N-116):** Phase 2 braucht **keinen** Patch. Regler und
+Direktor (F-17) werden C# **ohne** Patch über die Mod-API; der einzige Patch-Kandidat ist F-02
+(Schild, Phase 3). Tabelle: [triage-phase-2.md](../triage-phase-2.md).

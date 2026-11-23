@@ -49,6 +49,9 @@ Materialverbrauch.
    `AddProgressionLevel` heben — XML statt Patch (P5). Ein Spieler mit verändertem Client könnte den
    Zähler fälschen; bei einem Koop-Spiel ohne Wettbewerb wiegt das leicht.
 
+*Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 1, 2, 16; zu prüfen N-116):* **XML reicht**
+für Lernen durch Herstellen und Benutzen und für das sechste Attribut im Fenster. Kein C#.
+
 REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 
 ## Akzeptanzkriterien

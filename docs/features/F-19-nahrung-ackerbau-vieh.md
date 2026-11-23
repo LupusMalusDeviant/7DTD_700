@@ -24,6 +24,9 @@ Lebensmittel **verderben** (D32), und eine Siedlung lebt von Acker und Vieh (D33
   Verfallssystem. Werte am Gegenstand gibt es (`SetItemMetaFloat`, `CompareItemMetaFloat`), aber
   keinen Zeitwert und keinen Takt für Stapel im Rucksack. Verderb nach Zeit = C#; der XML-Rückfall ist
   ein Krankheitsrisiko beim Essen frischer Ware ohne Uhr.
+  *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 17; zu prüfen N-115, N-116):* Verderb
+  nach Zeit **rutscht** — warum nicht XML: XML kennt keinen Zeitwert am Stapel und keinen Takt für den
+  Rucksack. Phase 2 baut den Verderb ohne Uhr, wenn der Nutzer nichts anderes sagt.
 
 ### Ackerbau
 - Vanilla-Farming umgedeutet: Getreide (Gerste, Roggen, Emmer), Rüben, Kohl, Erbsen, Bohnen, Flachs, Hanf, Kräuter

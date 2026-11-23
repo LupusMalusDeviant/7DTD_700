@@ -176,6 +176,10 @@ Items, Rezepte, Qualitätsnamen, Haltbarkeit, Reparatur-Items, Perks (F-21 Krieg
 - **Blocken:** Eingabe-Zustand + Schadensberechnung abhängig von Richtung → REA am Schadenspfad. Erst prüfen, ob ein Buff/CVar-Check im Schadenspfad reicht (P5).
 - **Schadensarten:** Vanilla kennt Schadensklassen bzw. Tags [verifizieren]; falls die nicht frei erweiterbar sind, Postfix am Schadenspfad mit Tag-Tabelle.
 - **Werfen und Aufheben:** prüfen, ob die Vanilla-Speer-Wurfmechanik (falls vorhanden) übertragbar ist.
+- *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 18, 19; zu prüfen N-116):* **Werfen:
+  XML reicht** — `ItemActionThrownWeapon` ist da, Vanilla hat die Zeile am Steinspeer nur
+  auskommentiert (S-33 (4)). **Blocken: ein Patch, Phase 3** — Postfix auf `EntityAlive::DamageEntity`;
+  warum nicht XML: die Richtung des Treffers gegen die Blickrichtung ist keine Buff-Bedingung.
 ### Assets
 Phase 2 (D3, F-16): neue Modelle für Spatha, Sax, Rundschild, Langbogen, Armbrust, Wurfaxt; Retexturen für Keule, Beile, Speer.
 

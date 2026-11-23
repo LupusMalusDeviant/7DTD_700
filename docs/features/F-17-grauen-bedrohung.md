@@ -56,6 +56,10 @@ Wirkung in Stufen (alle dezent):
 
 - Mechanische Effekte sind gewollt (D14). Säule P3 bleibt aber: Nahkampf wird **nicht** unbrauchbar, vor allem Bogen und Zauber leiden
 - Umsetzung: Buffs und CVars per XML; Messung von Licht, Nähe zu Mitspielern und Sichtkontakt braucht wahrscheinlich C# → REA
+- *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 3–7; zu prüfen N-116):* B3 und B4 **XML**
+  (Licht, Gesellschaft, `IsLocalPlayer`). **C# ohne Patch** für Regler und Direktor (B5) — warum nicht
+  XML: der Regler ist eine Server-Einstellung, die XML nicht lesen kann; der Direktor rechnet
+  Phasen über Tage und alle Spieler, das kann kein Buff am einzelnen Spieler.
 
 ### B4 — Trugbilder (P2, H, nur Client)
 Ab Stufe „Verängstigt“, selten, immer mehrdeutig:
