@@ -21,6 +21,13 @@ Die Farbe und Ankündigung der Horde-Nacht sowie Vorboten-Ereignisse am Vortag l
 unserem Kenntnisstand im Code (Sky- bzw. Wetter-Manager, Horde-Night-Direktor). **[verifizieren]** per REA,
 welche Teile doch per XML (Weather, Biome-Spectrum) gehen.
 
+*Stand WP9.4 (2026-11-23, [Finding](../rea/findings/WP9-licht-und-seuchennacht.md), zu prüfen N-114):*
+mehr als gedacht ist XML. „Seuchennacht läuft" ist die Buff-Bedingung `IsBloodMoon`; Nebel, Wolken
+und Wind der Nacht stehen je Biom als Wetter `bloodMoon` in `biomes.xml`. Die rote Tönung hängt an
+einem Spektrum ohne XML; ob ein `<spectrum name="Foggy"/>` im Wetter sie ersetzt, zeigt S-34 (3).
+Den Vortag erkennen: Spieltag und Seuchennacht-Tag sind beide abfragbar, die Differenz in XML
+nicht belegt. C# bleibt sicher nur für den Direktor (F-17 B5).
+
 ## Schnittstellen (REA)
 → [hook-hypothesen.md#f-09](../rea/hook-hypothesen.md#f-09)
 

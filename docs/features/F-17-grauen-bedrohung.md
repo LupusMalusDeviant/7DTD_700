@@ -212,4 +212,9 @@ eine Abfrage der Lichtstärke am Spielerort und eine Abfrage „Mitspieler in de
 *Notiz für Phase 2 (Regel 6):* Entweder gröbere Definition (Nacht + kein Dach + Zufall, rein XML)
 oder C# für die Lichtabfrage. Gehört zu D18 und ist hier nicht entschieden.
 (**Widerspruch, offen** — siehe Prüfung 0003, W-33)
+*Stand WP9.4 (2026-11-23, zu prüfen N-114):* die Lichtabfrage **gibt es** als Buff-Bedingung
+`CompareLightLevel` — Vanilla benutzt sie nur nicht, darum fehlte sie hier. „Mitspieler in der Nähe"
+geht über einen Buff, den jeder Spieler im Umkreis auf Verbündete legt (`IsAlly`). W-33 löst sich
+damit zugunsten von XML, wenn S-34 (1) und (2) bestehen.
+[Finding](../rea/findings/WP9-licht-und-seuchennacht.md)
 Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-4--f-17-grauen-und-atmosphäre)

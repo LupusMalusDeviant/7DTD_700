@@ -60,9 +60,11 @@ Spalten: **Schreiber** = einzige Seite, die setzt. **Neustart** = was nach Serve
 | `buff700_grauenUnruhig` / `…Veraengstigt` / `…Grauen` | Buff | an/aus | aus `cv700_grauen` per `CVarCompare` | abgeleitet | Effekte, Trugbilder (F-17 B4, nur Client) |
 | `.cv700_grauenAnzeige` | lokaler CVar | 0–100 | Client | weg | HUD-Leiste |
 
-Steigt und sinkt nach F-17 B3. Die **Messung** von Licht und Nähe zu Mitspielern ist offen (WP9.4,
+Steigt und sinkt nach F-17 B3. ~~Die **Messung** von Licht und Nähe zu Mitspielern ist offen (WP9.4,
 Kurz-Check: keine XML-Bedingung dafür) — bis dahin die grobe XML-Fassung „Nacht + kein Dach + Zufall"
-(F-17, W-33).
+(F-17, W-33).~~ *Nach WP9.4 ([Finding](../rea/findings/WP9-licht-und-seuchennacht.md)):* Licht per
+Buff-Bedingung `CompareLightLevel`, Nähe per Gesellschafts-Buff `buff700_gesellschaft`, den jeder
+Spieler im Umkreis auf Verbündete legt (`selfAOE`/`selfOtherPlayers` + `IsAlly`). Beides XML, Indiz bis S-34.
 
 ### 3.2 Regler Grauen-Intensität (D13, F-17 Einstellbarkeit)
 
@@ -156,8 +158,10 @@ in §2 zeigt, dass dann nichts gesendet wird. Für ihn gilt der Netz-Weg.
 | F-21 Runenkundiger | F-15 Odem | Attributstufe → `cv700_odemMax` | abgeleitet |
 | F-17 B5 Direktor | F-06 Wesen, F-17 B4 | `cv700_direktorPhase` → Klang, Trugbilder, Ereignisse | Server → Client |
 
-Was „Mitspieler in der Nähe" (Gemeinschaft schützt) und „Licht am Spielerort" liefert, ist offen
-(WP9.4). Bis dahin senkt nur das Feuer das Grauen — und das wirkt auf dem Client (F-17:173).
+~~Was „Mitspieler in der Nähe" (Gemeinschaft schützt) und „Licht am Spielerort" liefert, ist offen
+(WP9.4). Bis dahin senkt nur das Feuer das Grauen — und das wirkt auf dem Client (F-17:173).~~
+*Nach WP9.4:* dazu kommen `CompareLightLevel` (Licht) und `buff700_gesellschaft` (Mitspieler in der
+Nähe, vom Nachbarn gelegt) als Senker — beide XML, Indiz bis S-34.
 
 ## 6. Neustart — Übersicht
 

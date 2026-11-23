@@ -1,0 +1,20 @@
+# Soll-Signaturen fuer das Finding WP9-licht-und-seuchennacht (Plan-0002 WP9.4).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran; die Datei meldet ein Spiel-Update, das die XML-Wege fuer Licht, Naehe,
+# Seuchennacht oder die Planer des Direktors ungueltig machen koennte.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp94.tsv
+CompareLightLevel	IsValid	bool CompareLightLevel::IsValid(MinEventParams)
+Entity	GetLightBrightness	float Entity::GetLightBrightness()
+IsBloodMoon	IsValid	bool IsBloodMoon::IsValid(MinEventParams)
+SkyManager	IsBloodMoonVisible	static bool SkyManager::IsBloodMoonVisible()
+IsAlly	IsValid	bool IsAlly::IsValid(MinEventParams)
+IsLocalPlayer	IsValid	bool IsLocalPlayer::IsValid(MinEventParams)
+IsDayNumber	IsValid	bool IsDayNumber::IsValid(MinEventParams)
+GameStatBool	IsValid	bool GameStatBool::IsValid(MinEventParams)
+AIDirectorBloodMoonComponent	CalcNextDay	void AIDirectorBloodMoonComponent::CalcNextDay(bool)
+AIDirectorBloodMoonComponent	StartBloodMoon	void AIDirectorBloodMoonComponent::StartBloodMoon()
+AIDirectorBloodMoonComponent	EndBloodMoon	void AIDirectorBloodMoonComponent::EndBloodMoon()
+AIDirectorBloodMoonComponent	Tick	void AIDirectorBloodMoonComponent::Tick(double)
+AIDirectorWanderingHordeComponent	ChooseNextTime	void AIDirectorWanderingHordeComponent::ChooseNextTime(AIWanderingHordeSpawner/SpawnType)
+AIDirectorWanderingHordeComponent	Tick	void AIDirectorWanderingHordeComponent::Tick(double)

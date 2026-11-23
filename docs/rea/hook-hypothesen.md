@@ -74,6 +74,7 @@ Kurz-Check: [02-10-schnittstellen-kurzcheck.md#prio-3--f-08-licht-und-feuer](fin
 | ? | `SkyManager` / `WeatherManager` | Blutmond-Farbe und Himmel: Code oder Config? |
 | ? | `AIDirector` + Horde-Night-Komponente | Wo wird die Horde-Nacht geplant (Vortags-Hook für Vorboten)? |
 | ? | `GameUtils.IsBloodMoonTime(...)` o. ä. | Zentrale Abfrage für Seuchennacht-Logik |
+| ◐ | **WP9.4 (2026-11-23)** Planer, Abfrage, Himmel | Planer: `AIDirectorBloodMoonComponent` (`Tick`, `CalcNextDay`, `StartBloodMoon`, `EndBloodMoon`). Abfrage **per XML:** Buff-Bedingung `IsBloodMoon` (→ `SkyManager::IsBloodMoonVisible`), dazu `GameStatInt` `BloodMoonDay`, `IsDayNumber`. Nebel je Biom: Wetter `bloodMoon` in `biomes.xml`. Rote Tönung: Spektrum `BloodMoon` (nicht in XML); ob ein Spektrum im Wetter sie ersetzt, zeigt S-34. [Finding](findings/WP9-licht-und-seuchennacht.md) |
 
 ## F-15
 Kurz-Check: [02-10-schnittstellen-kurzcheck.md#prio-8--f-15-wehr-und-volksmagie](findings/02-10-schnittstellen-kurzcheck.md#prio-8--f-15-wehr-und-volksmagie)
@@ -115,7 +116,7 @@ Kurz-Check: [02-10-schnittstellen-kurzcheck.md#prio-4--f-17-grauen-und-atmosphä
 | Status | Kandidat | Frage |
 |---|---|---|
 | ✓ | `SkyManager`, `WeatherManager`, Biome-Weather-Definitionen | **Per XML.** `worldglobal.xml` führt Tag-/Nacht-Paare: `ambientEquatorScale .7,.45`, `ambientGroundScale .3,.05`, `ambientSkyScale 1,.7`, `ambientMoon .8,.4`, `fogPower 1,1`. Nebel pro Biom (`<Fog range prob>`) ebenfalls XML. D16 ist eine Zahl, kein Patch. Ein **eigenes** `Spectrum` (`foggy`, `rainy` zeigen auf Assets) ist Phase 2. |
-| ✗ | Licht-Abfrage am Spielerort (z. B. `LightManager`, Block-Lichtwerte) | **Keine Buff-Bedingung für Lichtstärke gefunden.** Das Grauen-System kann „dunkel“ nicht als Bedingung prüfen, nur „Nacht“. |
+| ~~✗~~ ✓ | Licht-Abfrage am Spielerort (z. B. `LightManager`, Block-Lichtwerte) | ~~**Keine Buff-Bedingung für Lichtstärke gefunden.** Das Grauen-System kann „dunkel“ nicht als Bedingung prüfen, nur „Nacht“.~~ **Berichtigt WP9.4 (2026-11-23):** die Buff-Bedingung **`CompareLightLevel`** gibt es (liest `Entity::GetLightBrightness()`); Vanilla benutzt sie nur nicht, darum fehlte sie in der Sammlung aus `buffs.xml`. „Mitspieler in der Nähe" über einen Buff mit `target="selfAOE"`/`selfOtherPlayers` und `IsAlly`. Beides XML, im Spiel S-34. [Finding](findings/WP9-licht-und-seuchennacht.md) |
 | ◐ | Buff-Requirements (`Requirements`-Klassen) | **Teilweise.** Vorhanden: `TimeOfDay`, `IsSheltered`, `RandomRoll`, `CVarCompare`, `SandboxOptionBool`. Nicht gefunden: Lichtstärke, „Mitspieler in der Nähe“. „Im Dunkeln, allein, draußen“ geht damit **nicht** vollständig per XML — Entscheidung zu D18 gehört in Phase 2. |
 
 ## F-18 — abgeschlossen, reines XML
