@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_30_Ausruestung / item_modifiers.xml
+	     Plan-0002 WP3.9, 23. November 2026, D143 - ZU PRUEFEN
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53). Die erste Zeile dieses Modlets in
+	     item_modifiers.xml; die Aufsaetze selbst bleiben Vanillas, umgedeutet nur im
+	     Namen (700_90_Sprache, D129).
+
+	     GEMESSEN an Vanilla V 3.40: modArmorPlatingReinforced traegt selbst
+	     DescriptionKey 'modArmorPlatingBasicDesc' - unter "Lamellenbesatz" stand
+	     darum der Text des Schuppenbesatzes ("Plaettchen aus Horn oder Eisen").
+	     Die Eigenschaft steht da, also <set>. Der Text steht in 700_90_Sprache
+	     (docs/konzept/ruestung.md, Aufsatz-Tabelle; Vorschlag). -->
+	<set xpath="/item_modifiers/item_modifier[@name='modArmorPlatingReinforced']/property[@name='DescriptionKey']/@value">modArmorPlatingReinforcedDesc</set>
+</config>

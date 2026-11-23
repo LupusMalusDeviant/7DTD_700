@@ -1278,6 +1278,7 @@ modGunBowArrowRestDesc
 # Unterkleidung mit drei Beschreibungen (eine je Stufe, wie in Vanilla), 22 Aufsaetze
 # fuer Ruestung mit 21 Beschreibungen (Schuppen- und Lamellenbesatz teilen sich eine:
 # Vanilla setzt bei modArmorPlatingReinforced DescriptionKey=modArmorPlatingBasicDesc).
+# Seit dem 23. November 2026 (D143) hat der Lamellenbesatz seine eigene - siehe unten.
 clothingHeadT1                            # Zerschlissene Unterhaube
 clothingHeadT2                            # Leinene Unterhaube
 clothingHeadT3                            # Gewalkte Unterhaube
@@ -1387,3 +1388,19 @@ challengeHarvestElectricPartsDesc
 challengeFarmingChrysanthemum
 challengeFarmingChrysanthemumShort
 challengeFarmingChrysanthemumDesc
+
+# --- Plan-0002 WP3.9: Beschreibungen, die auf den falschen Text zeigten (D143) ---
+# Zu pruefen durch den Nutzer. Fuenf der sechs Schluessel fuehrt Vanilla NICHT: es sind die
+# Vorgabe-Schluessel '<Name>Desc' von Vanilla-Gegenstaenden, die in Vanilla auf einen
+# fremden Text zeigen (eigene oder geerbte Eigenschaft DescriptionKey). Unser Patch in
+# 700_30_Ausruestung haengt sie auf den eigenen Schluessel um - derselbe Fall wie die sechs
+# Bruchstuecke aus WP8.8 weiter oben. Der Name des Gegenstands bleibt Vanillas Kennung,
+# darum traegt der Schluessel kein '700_'.
+gunBowT3CompoundCrossbowDesc              # Schwere Armbrust las den Text der Armbrust
+ammoCrossbowBoltExplodingDesc             # Feuertopfbolzen las den Text des Pfeils
+gunBowT1WoodenBowPartsDesc                # Bogenteile lasen 'gunPartsGroupDesc'
+armorPartsDesc                            # Ruestungsteile lasen 'gunPartsGroupDesc'
+modArmorPlatingReinforcedDesc             # Lamellenbesatz las den Text des Schuppenbesatzes
+# Der sechste ist ein Vanilla-Schluessel: der leere Wasserkrug ist bei uns aus Ton, nicht
+# aus Glas (D98, N-42). Der Name "Leerer Wasserkrug" bleibt Vanillas.
+drinkJarEmptyDesc

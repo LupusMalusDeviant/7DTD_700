@@ -608,14 +608,47 @@
 
 	     'gunPartsGroupDesc' selbst bleibt Vanilla. GEZAEHLT: gunMGT1AK47Parts hat
 	     15 Erben; von den neun uebrigen sperrt der Purge sieben, armorParts und gunBowT1WoodenBowParts sind
-	     frei, tragen bei uns keinen eigenen Namen und lesen weiter Vanillas Satz
-	     (Plan-0001, Offene Punkte). -->
+	     frei und lasen bis zum 23. November 2026 weiter Vanillas Satz (Plan-0001, Offene
+	     Punkte) - seither tragen auch sie ihren eigenen Schluessel, siehe den Block
+	     "VIER BESCHREIBUNGEN, DIE AUF DEN FALSCHEN TEXT ZEIGTEN" weiter unten. -->
 	<append xpath="/items/item[@name='meleeWpnBladeT3MacheteParts']"><property name="DescriptionKey" value="meleeWpnBladeT3MachetePartsDesc" /></append>
 	<append xpath="/items/item[@name='meleeToolAllSteelParts']"><property name="DescriptionKey" value="meleeToolAllSteelPartsDesc" /></append>
 	<append xpath="/items/item[@name='meleeWpnClubT3SteelClubParts']"><property name="DescriptionKey" value="meleeWpnClubT3SteelClubPartsDesc" /></append>
 	<append xpath="/items/item[@name='meleeWpnSpearT3SteelSpearParts']"><property name="DescriptionKey" value="meleeWpnSpearT3SteelSpearPartsDesc" /></append>
 	<append xpath="/items/item[@name='meleeWpnSledgeT3SteelSledgehammerParts']"><property name="DescriptionKey" value="meleeWpnSledgeT3SteelSledgehammerPartsDesc" /></append>
 	<append xpath="/items/item[@name='meleeWpnKnucklesT3SteelKnucklesParts']"><property name="DescriptionKey" value="meleeWpnKnucklesT3SteelKnucklesPartsDesc" /></append>
+
+	<!-- ===========================================================================
+	     VIER BESCHREIBUNGEN, DIE AUF DEN FALSCHEN TEXT ZEIGTEN
+	     (Plan-0002 WP3.9, 23. November 2026, D143 - ZU PRUEFEN)
+	     ===========================================================================
+
+	     GEMESSEN an Vanilla V 3.40 und am Vorlauf mit unseren Modlets:
+
+	       gunBowT1WoodenBowParts     erbt 'gunPartsGroupDesc' (wie die sechs oben):
+	                                  unter "Bogenteile" stand Vanillas Satz ueber
+	                                  fortgeschrittene Waffen.
+	       armorParts                 derselbe Fall.
+	       gunBowT3CompoundCrossbow   traegt selbst DescriptionKey
+	                                  'gunBowT1IronCrossbowDesc': unter "Schwere Armbrust"
+	                                  stand unser Text zur einfachen Armbrust.
+	       ammoCrossbowBoltExploding  traegt selbst 'ammoArrowExplodingDesc': unter
+	                                  "Feuertopfbolzen" stand der Text des Pfeils
+	                                  ("an den Schaft gebunden").
+
+	     Darum zwei <append> (keine eigene Eigenschaft in Vanilla, ein <set> traefe
+	     nichts) und zwei <set> (die Eigenschaft steht da und zeigt woandershin).
+	     Die Texte stehen in 700_90_Sprache; sie stammen aus docs/konzept/waffen.md
+	     (S-31, S-32) und sind Vorschlag.
+
+	     armorParts: in Vanilla Zutat EINES Rezepts (resourceArmorCraftingKit, bei uns
+	     gesperrt); nach unseren Modlets verlangt KEIN Rezept sie mehr. Der Text
+	     verspricht darum keinen Zweck. Ob sie einen bekommen oder gesperrt werden,
+	     entscheidet der Nutzer (Entscheidungsliste N-59). -->
+	<append xpath="/items/item[@name='gunBowT1WoodenBowParts']"><property name="DescriptionKey" value="gunBowT1WoodenBowPartsDesc" /></append>
+	<append xpath="/items/item[@name='armorParts']"><property name="DescriptionKey" value="armorPartsDesc" /></append>
+	<set xpath="/items/item[@name='gunBowT3CompoundCrossbow']/property[@name='DescriptionKey']/@value">gunBowT3CompoundCrossbowDesc</set>
+	<set xpath="/items/item[@name='ammoCrossbowBoltExploding']/property[@name='DescriptionKey']/@value">ammoCrossbowBoltExplodingDesc</set>
 
 	<!-- ===========================================================================
 	     DAS NAEHZEUG FLICKT, WAS NICHT AUS EISEN IST (D62, 8. November 2026)

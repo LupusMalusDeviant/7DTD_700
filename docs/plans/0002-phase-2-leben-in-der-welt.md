@@ -47,6 +47,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP3.3 Lizenzlage Meshy | gelesen; **Meshy gesperrt** (HTTP 402 auf dem Gratis-Tarif) | Vertrag 05 §5.1, N-64 |
 | WP3.4 Symbol-Durchstich Silberpfennig | gebaut (Blender statt Meshy) | `f174d69`, D131, N-28, S-09 |
 | WP3.6 Eigene Symbole, Rang 0 | **begonnen:** Schmiedeeisen, Tiegelstahl, Klinge (3 von rund 40). Offen: Trinkglas, die umgedeuteten Waffen, zwölf Rüstungsteile — organische Formen warten auf Meshy (N-64) | D132, N-29 |
+| WP3.9 Texte, nächste Stapel | **begonnen:** sechs Beschreibungen, die auf einen fremden Text zeigten (Schwere Armbrust, Feuertopfbolzen, Lamellenbesatz, Bogenteile, Rüstungsteile, leerer Wasserkrug) — fünf Patchzeilen, sechs Sprachzeilen. Offen: Rangtitel mit altem Perk-Namen; Behälter | D143, N-37, N-59, S-07 |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
