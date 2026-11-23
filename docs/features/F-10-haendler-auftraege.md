@@ -99,6 +99,8 @@ wechselt die Landschaft — `rwgmixer.xml` bleibt, wie es ist.
 
 Namen nach Vertrag 02 §6 (germanisch, keine realen Heiligen, D108); sie kommen mit WP8.5 ins
 Glossar und in die Sprachdatei (`npcTrader…`). Der Fährhof weicht von D41 ab — **zu prüfen**.
+*Stand 2026-11-23:* Sortimente gebaut (WP8.3, D162, N-107), Namen und Postennamen in der Sprachdatei
+(WP8.5 Teil 1, D163, N-108); das Schild zeigt nur den Namen, das Amt steht in der Herausforderung.
 Alternative: der Moor-Händler wird ein zweiter Marktflecken.
 
 **Marktfrieden:** die Schutzzone heißt im Text so (lore.md §4). Die Posten bilden keinen Bund; aus

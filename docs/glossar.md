@@ -59,7 +59,7 @@ eine Abweichung.
 | — | Seuchennacht | Plague Night | Blood Moon, Horde Night | GDD 2.3; EN vom Nutzer am 2026-11-20 |
 | — | Verderbte | *offen* | Feral | GDD 2.3, F-06 (Phase 2) |
 | — | Moorleichen | *offen* | Radiated | GDD 2.3, F-06 (Phase 2) |
-| — | Wanderhändler, Klostermarkt, Fürstenhof | *offen* | Trader | GDD 2.3, F-10 (Phase 2) |
+| — | Wanderhändler, Klostermarkt, Fürstenhof | *offen* (Klostermarkt / Cloister Market und Fürstenhof / Lord's Hall stehen seit D163 unten unter „Die fünf Posten") | Trader | GDD 2.3, F-10 (Phase 2) |
 | — | das Grauen | *offen* | — | F-17 (B3, Phase 2) |
 | `casinoCoin` | Silberpfennig | Silver Penny | Jeton aus Dukes Kasino / Duke's Casino Token; als Währung: Dukes | D30, WP4.2 |
 | `quest_WhiteRiverCitizen` | Der Weg zum Händler | The Way to the Trader | Bürger von White River / White River Citizen | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
@@ -560,11 +560,34 @@ das ist mit dieser Zeile nachgeholt.
 | — | Swanhild | Swanhild | Sarah | Hortbrief, `treasure_sarah`, D160 |
 | — | Stephanus | Stephanus | Stephan | Hortbrief, `treasure_stephan`, D160 |
 | — | Theudo | Theudo | Taylor | Hortbrief, `treasure_taylor`, D160 |
-| — | Bruder Gerwin, Cellerar | Brother Gerwin, Cellarer | Trader Rekt | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
-| — | Reginhart, Kaufmann | Reginhart the Merchant | Trader Bob | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
-| — | Waldo, Kämmerer | Waldo the Chamberlain | Trader Hugh | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
-| — | Gisla, Köhlerin | Gisla the Charcoal-Burner | Trader Jen | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
-| — | Haduwin, Fährmann | Haduwin the Ferryman | Trader Joel | F-10 B, D159 — Vorschlag, noch nicht im Spiel |
+| `npcTraderRekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Cellerar am Klostermarkt; F-10 B, D159, D163 — zu prüfen (N-108) |
+| `npcTraderBob` | Reginhart | Reginhart | Trader Bob | Kaufmann im Marktflecken; F-10 B, D159, D163 — zu prüfen (N-108) |
+| `npcTraderHugh` | Waldo | Waldo | Trader Hugh | Kämmerer am Fürstenhof; F-10 B, D159, D163 — zu prüfen (N-108) |
+| `npcTraderJen` | Gisla | Gisla | Trader Jen | Köhlerin am Köhlerhof; F-10 B, D159, D163 — zu prüfen (N-108) |
+| `npcTraderJoel` | Haduwin | Haduwin | Trader Joel | Fährmann am Fährhof; F-10 B, D159, D163 — zu prüfen (N-108) |
+| `subtitleSpeaker_Trader_Rekt` | Bruder Gerwin | Brother Gerwin | Trader Rekt | Sprecher im Untertitel; D163 |
+| `subtitleSpeaker_Trader_Bob` | Reginhart | Reginhart | Trader Bob | Sprecher im Untertitel; D163 |
+| `subtitleSpeaker_Trader_Hugh` | Waldo | Waldo | Trader Hugh | Sprecher im Untertitel; D163 |
+| `subtitleSpeaker_Trader_Jen` | Gisla | Gisla | Trader Jen | Sprecher im Untertitel; D163 |
+| `subtitleSpeaker_Trader_Joel` | Haduwin | Haduwin | Trader Joel | Sprecher im Untertitel; D163 |
+
+**Die fünf Posten** (Name auf Karte und Kompass, `trader_*` und `trader_*2`; D163, zu prüfen N-108).
+Ein Ortsname im Sinne von Vertrag 02 §6 ist das nicht — es sind Gattungsnamen, wie man einen Hof
+nach seinem Gewerbe nennt; das Mischland bleibt ohne eigenen Ortsnamen.
+
+| Kennung | Deutsch | Englisch | Vanilla | Quelle |
+|---|---|---|---|---|
+| `trader_rekt` | Klostermarkt | Cloister Market | Trader Rekt | F-10 B, D41, D159, D163 |
+| `trader_rekt2` | Klostermarkt | Cloister Market | Trader Rekt | zweiter Ort desselben Händlers |
+| `trader_bob` | Marktflecken | Market Town | Trader Bob | F-10 B, D41, D159, D163 |
+| `trader_bob2` | Marktflecken | Market Town | Trader Bob | zweiter Ort desselben Händlers |
+| `trader_hugh` | Fürstenhof | Lord's Hall | Trader Hugh | F-10 B, D41, D159, D163 |
+| `trader_hugh2` | Fürstenhof | Lord's Hall | Trader Hugh | zweiter Ort desselben Händlers |
+| `trader_jen` | Köhlerhof | Charcoal-Burner's Croft | Trader Jen | F-10 B, D159, D163 |
+| `trader_jen2` | Köhlerhof | Charcoal-Burner's Croft | Trader Jen | zweiter Ort desselben Händlers |
+| `trader_joel` | Fährhof | Ferry Croft | Trader Joel | F-10 B, D159, D163 |
+| `trader_joel2` | Fährhof | Ferry Croft | Trader Joel | zweiter Ort desselben Händlers |
+| `challengeGroupTradersQuests` | Posten und Aufträge | Posts and Errands | Händler/Quests / Traders / Quests | D163 |
 
 **Erlaubt und in Gebrauch — Völker der Zeit als Herkunft, nie als Gegner:** „Römer" /
 „Romans" (`resourceConcreteMixDesc`, `meleeWpnBladeT3MacheteDesc`), „fränkisch" /
@@ -580,3 +603,10 @@ Rang-Texten lebender Fertigkeiten; die Muster halten sie draußen.
 | `pr.gel.peter` | DE | (keine Person; die Fertigkeit heißt Keulenschlag, ihr letzter Rang Keulenmeister) | D83 |
 | `johnny` | beide | mine hand / Bergknecht | D83 |
 | `wall.street` | beide | (kein realer Ort; der Rang heißt Merchant Prince / Handelsherr) | D83, Vertrag 02 §6 |
+| `\brekt\b` | beide | Bruder Gerwin (Händler) / Klostermarkt (Posten) | D163 |
+| `\bhugh\b` | beide | Waldo (Händler) / Fürstenhof (Posten) | D163 |
+| `\bjoel\b` | beide | Haduwin (Händler) / Fährhof (Posten) | D163 |
+| `trader.bob\b` | EN | Reginhart / Market Town | D163 |
+| `trader.jen\b` | EN | Gisla / Charcoal-Burner's Croft | D163 |
+| `ndler.bob\b` | DE | Reginhart / Marktflecken | D163 |
+| `ndlerin.jen\b` | DE | Gisla / Köhlerhof | D163 |
