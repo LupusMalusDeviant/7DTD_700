@@ -65,3 +65,168 @@ Mark, die Engine sieht `pine_forest`.
 
 Das weicht vom Wortlaut von D43 ab und ist **noch nicht entschieden**.
 Befund: [02-10-schnittstellen-kurzcheck.md](../rea/findings/02-10-schnittstellen-kurzcheck.md#prio-7--f-07-welt-und-kulturzonen--berührt-d43)
+
+---
+
+# Ausarbeitung für Phase 2 (Plan-0002 WP6.1, 2026-11-23)
+
+**Stand:** im Loop ausgearbeitet, **jede Setzung zu prüfen durch den Nutzer** (N-71, D152). Der Text
+oben bleibt stehen; wo die Ausarbeitung ihm widerspricht, steht es hier mit Grund. Gebaut ist von
+F-07 bisher: Nebel und dunklere Nächte (`700_60_Welt`, D72), die Purge-Zeilen für Händlerware und
+Aufträge, sonst nichts.
+
+## A. Messung (V 3.40 b10, `Data/Prefabs`, `Data/Config`)
+
+| Was | Zahl | Quelle |
+|---|---|---|
+| Orte mit Geometrie (`.tts`) | **1 105** | `Data/Prefabs/POIs` (dazu 470 `.xml` ohne `.tts`, 644 Teile, 68 Straßenkacheln) |
+| davon mit Auftragsmarke (`QuestTags`) | **487** | Stufe 0: 10 · 1: 145 · 2: 136 · 3: 106 · 4: 65 · 5: 25 |
+| Marken einzeln | clear 480 · infested 448 · fetch 439 · restore_power 117 · defense 4 · hidden_cache 1 | |
+| Händlerorte (`TraderArea=True`) | **5** | `trader_bob`, `_hugh`, `_jen`, `_joel`, `_rekt` |
+| Orte ohne jeden Neuzeit-Block | 61, **kein Haus, keine Hütte, keine Höhle mit Innenleben** | Prüfung 0002 §4.5 |
+| neuzeitliche Deko-Blöcke (Fahrzeuge, Geräte, Automaten, Tresore, Lampen …) | **552**, davon **551 Modell-Blöcke** (`Shape=ModelEntity`) mit 121 verschiedenen Modellen; 249 mehrfeldrig (`MultiBlockDim`); Klassen: 438 Behälter, 25 Licht, 7 Automaten | Muster aus Prüfung 0002 §4.5 auf `blocks.xml` |
+
+**Aufträge der Händler** (`quests.xml`, je Händler dieselbe Liste): vergraben (`*_buried_supplies`,
+braucht **keinen** Ort), räumen (`clear`, `clear_infested`), holen (`fetch`, `fetch_clear`),
+~~Strom wiederherstellen~~ (seit D103 gesperrt), „zum nächsten Händler" (`tierN_nexttrader`). Jede
+Ortsaufgabe wählt ihr Ziel mit `RandomPOIGoto` — einen Ort mit passender Marke und Stufe. **Wie weit
+vom Händler und wie oft derselbe Ort, ist nicht gelesen** — WP6.2.
+
+**Händler entstehen mit Ortschaften.** `rwgmixer.xml` führt je Siedlungsart eine Eigenschaft
+`spawn_trader`; abgeschaltet ist sie nur am Wegrand (`roadside`) und im Westernstädtchen
+(`oldwest`). Eine Welt ohne Ortschaften hat danach **keinen Händler** und damit keinen Auftrag —
+gelesen, nicht im Code nachgewiesen, **[verifizieren, WP6.2]**.
+
+## B. Die fünf Landschaften
+
+Nach [`biome.md` §2.2](../konzept/biome.md) (P2-E13, Vorschlag, weicht von D43 ab): Vanillas
+Kennungen bleiben, der Spieler liest neue Namen.
+
+| Kennung | Stufe | Name | Kulturkreis | Gesehen in F-06 |
+|---|---|---|---|---|
+| `pine_forest` | 1 | Klosterland | fränkisch-romanisch | Knecht, Magd, Bäuerin; Wolf, Hirsch |
+| `burnt_forest` | 2 | Brandland | germanisch | Verbrannter, Kriecher; nachts Wolf statt Kojote |
+| `desert` | 3 | Sandheide | slawisch (Burgwälle) | Hirte, Köhler; Wolf statt Kojote |
+| `snow` | 4 | Winterhöhen | nordisch | Wolf statt Berglöwe, Bär |
+| `wasteland` | 5 | Moorland | niemandes Land | Moorleiche, Nachzehrer |
+
+Die Tabelle „Kulturzonen" oben (D43) mit **Küste** auf `desert` und **Burgwall-Land** auf `snow`
+trägt gemessen nicht (biome.md §2.1: kein Meer, 35–41 °C; Dauerfrost). Sie bleibt stehen, bis der
+Nutzer P2-E13 entscheidet.
+
+## C. Bedarfsrechnung (D110)
+
+**Frage:** Wie viele eigene Orte braucht eine Zufallswelt, damit Aufträge, Händler und Erkundung
+tragen — ohne ein einziges Vanilla-Gebäude?
+
+**1. Aufträge.** Ein Händler bietet je Stufe Ortsaufgaben an. Damit sich eine Stufe nicht nach dem
+dritten Auftrag wiederholt, braucht sie **mehrere verschiedene Orte in Reichweite**. Vanilla hat je
+Stufe 25 bis 145 Ortsentwürfe, die die Weltgenerierung vielfach setzt. Ein Entwurf kann
+mehrfach in der Welt stehen; die Zahl der **Entwürfe** bestimmt die Abwechslung, die Zahl der
+**Platzierungen** die Reichweite.
+
+| Stufe | Vanilla-Entwürfe | Vorschlag Phase 2 (Entwürfe) | Begründung |
+|---|---|---|---|
+| 1 | 145 | **4** | die ersten Spielstunden; Grubenhaus, Köhlerei, Hofstelle, Mühle |
+| 2 | 136 | **3** | Weiler, Langhaus, Römerruine (Villa) |
+| 3 | 106 | **2** | Kloster, Ringwall |
+| 4 | 65 | **1** | Römerruine (Kastell) |
+| 5 | 25 | **1** | Pestgrube im Moor (Brandland/Moorland) |
+| — | — | **+1** | Steinkreis (Wegstein, F-13; keine Auftragsmarke) |
+
+Das sind **elf Entwürfe, zehn davon mit Auftragsmarke** — genau die Untergrenze aus den
+Akzeptanzkriterien unten und aus P2-E14. Jeder Entwurf trägt die Marken `clear` und `fetch`,
+ab Stufe 2 auch `infested`. **Ehrlich gesagt:** zehn Entwürfe sind wenig; ab dem fünften Auftrag
+derselben Stufe kennt der Spieler den Ort. Mehr Abwechslung kommt aus Weg C unten.
+
+**2. Händler.** Fünf Händlerorte, Händler entstehen mit Ortschaften. Ohne Ortschaften braucht es
+**einen eigenen Händlerort** (Handelsposten, F-10) und einen Weg, ihn zu setzen — entweder eine
+Siedlungsart, die nur aus eigenen Orten besteht, oder Vanillas Händlerorte umgekleidet (Weg C).
+**[verifizieren, WP6.2]**.
+
+**3. Ersatz für Ortschaften.** Eine Zufallswelt ohne Städte ist leer. Vorschlag: eine eigene
+Siedlungsart „Weiler" (drei bis sechs Hofstellen um einen Platz), die in `rwgmixer.xml` an die
+Stelle von `countrytown` tritt und den Händler trägt. Ob eine Siedlungsart ohne Straßen entstehen
+kann, ist **[verifizieren, WP6.2]**.
+
+## D. Die Welt von 2a — drei Wege (P2-E14)
+
+Kein Vanilla-Gebäude ist frei von Neuzeit (Messung A). Drei Wege:
+
+| Weg | Was | Folge | Aufwand |
+|---|---|---|---|
+| **A** Vanilla lassen | alle Orte, wie sie sind | moderne Welt mit Seuchentoten — verfehlt P1 | keiner |
+| **B** leere Landschaft | `rwgmixer.xml` lässt nur Füller, Felsen, Höhlen und eigene Orte zu | Welt alt und leer; **ohne eigene Orte keine Aufträge, ohne Siedlung kein Händler** | eigene Orte (WP6.6) |
+| **C** umkleiden | `blocks.xml` stellt das **Modell** der 551 neuzeitlichen Deko-Blöcke auf vorhandene, vormoderne Modelle um (Autowrack → Steinhaufen, Kühlschrank → Truhe, Waffenschrank → Kiste, Automat → Fass) | Vanillas Orte bleiben **als Grundriss**, ihr Inneres wird älter; Wände aus Beton und Asphalt bleiben modern | eine Tabelle von 121 Modellen; nur XML |
+
+**Empfehlung: B + C.** B für die Ortsarten, die nur modern sind (Stadt, Tankstelle, Hochhaus, Fabrik
+— `rwgmixer.xml` lässt sie weg), C für die, deren **Hülle** vormodern sein kann (Scheune, Blockhaus,
+Hof, Höhle, Friedhof mit Kirche). C ist der einzige Weg, der ohne Editor und ohne Unity in Phase 2
+Hunderte Orte bespielbar macht; seine Grenze sind Wände und Böden aus Neuzeit-Baustoff, die nur ein
+eigener Ort oder eine Retextur (WP4.7) behebt.
+
+**Was an C gelesen ist und was nicht:** gelesen ist, dass die Blöcke ihr Modell als Eigenschaft
+`Model` tragen (160 direkt, der Rest geerbt) und dass ein Patch diese Eigenschaft setzen kann. **Nicht
+gelesen:** ob ein Ersatzmodell in ein mehrfeldriges Feld (`MultiBlockDim`, 249 Blöcke) passt, ohne
+zu schweben oder in Wände zu ragen; ob Behälter ihre Beute behalten; ob die Kollision mitwandert.
+Das klärt das Finding WP6.2 und **ein Blick im Spiel (S-29)**. C braucht einen eigenen Vertrag
+(Nachtrag zu Vertrag 03: „umkleiden ist kein Sperren") — WP6.2.
+
+## E. Wege statt Straßen
+
+Straßen sind Kacheln (`rwg_tile_*`, 68) und Verbindungen zwischen Siedlungen. Vorschlag: die
+Kacheln bleiben (ohne sie keine Siedlung), ihr **Belag** wird über die Block-Retextur (WP4.7) zu
+festgefahrener Erde, bis dahin bleiben sie Asphalt. Ob die Verbindungsstraßen abschaltbar sind,
+ohne Händlerwege zu brechen, ist **[verifizieren, WP6.2]**. Bis dahin gilt: Asphalt ist die
+**sichtbarste Lücke** der Welt von 2a und steht so in der Prüfliste.
+
+## F. Nebel im Flusstal (D72)
+
+Ein Flusstal ist kein Biom; Nebel gibt es nur je Biom und Wetter. Gebaut ist Nebel im Klosterland
+und im Moor (D72). Mehr geht in Phase 2 nicht ohne Code; **Phase-3-Notiz** (D50): Nebel an
+Wassernähe bräuchte eine Abfrage am Spielerort.
+
+## G. Automaten und Tresore (D122)
+
+Automaten (7 Blöcke, Klasse `VendingMachine`) und Tresore/Waffenschränke (Behälter) gehören nach
+Weg C: das **Modell** wird umgekleidet (Fass, Kiste mit Schloss), die **Mechanik** bleibt (P5).
+Ein Automat, der verkauft, wird damit zu einem „Krämerfass" — ob das trägt, entscheidet der Nutzer
+(N-71); die Alternative ist, Automaten über Weg B mit ihren Orten wegfallen zu lassen.
+
+## H. Beute je Ort (D121)
+
+Vanillas Beutestufe bleibt. Was in welcher Kiste liegt, steht in `loot.xml` je **Behälter**, nicht je
+Ort; ein Ort bestimmt seine Beute über die Behälter, die in ihm stehen. Für eigene Orte heißt das:
+Kloster mit Truhen und Schreibpulten, Hof mit Kornkisten, Ruine mit verschütteten Kisten. Die
+Zuordnung kommt mit WP8.6 (F-05 „Beute in 700").
+
+## I. Fertigkarten (D110)
+
+Vanillas Fertigkarten (Navezgane, PREGEN) werden **nicht unterstützt**; die Spielvorlage „Jahr 700"
+(D136) verweist auf die Zufallswelt. Eine eigene Karte ist Phase 4 (D4).
+
+## J. Reihenfolge der Umsetzung
+
+| Schritt | Was | hängt an |
+|---|---|---|
+| WP6.2 | Finding: Händler und Siedlungen, Auftragsreichweite, Prefab-Format, **Weg C** (Modell-Tausch, `MultiBlockDim`) | — |
+| WP6.3 | Biom-Fortschritt Weg B (biome.md §3) | — |
+| WP6.4 | Landschaften: Namen, Bewuchs, Sturmtexte | P2-E13 |
+| WP6.5 | `rwgmixer.xml`: moderne Ortsarten heraus (Weg B) | WP6.2 |
+| WP6.5b | Umkleide-Tabelle (Weg C), erst nach S-29 | WP6.2, S-29 |
+| WP6.6 | eigene Orte nach Abschnitt C | WP6.2 (Bauweg) |
+
+## K. Offen für den Nutzer (N-71)
+
+1. **Weg B + C** für die Welt von 2a — oder nur B (leer, wenig Aufträge bis zu eigenen Orten)?
+2. **Elf Entwürfe** als erste Reihe (Abschnitt C) — reicht das, oder lieber mehr kleine Orte?
+3. **Asphalt** bleibt in Phase 2 sichtbar (bis zur Retextur) — hinnehmbar?
+4. **Automaten** umkleiden (Krämerfass) oder wegfallen lassen?
+5. P2-E13 (die fünf Landschaftsnamen) bleibt offen wie bisher.
+
+## Akzeptanzkriterien der Ausarbeitung
+
+- [x] Bedarfsrechnung (Aufträge, Händler, Ortschaften) — Abschnitt C, Zahlen gemessen
+- [x] die Welt von 2a mit Wegen und Empfehlung — Abschnitt D
+- [x] Wege, Nebel, Automaten, Beute, Fertigkarten — Abschnitte E bis I
+- [ ] die drei **[verifizieren]** aus A, C, E — WP6.2
