@@ -292,6 +292,11 @@ Amulett-Platz: einer der vier Abzeichen-Plätze. Sechstes Attribut: Fertigkeitsf
 - *Triage WP9.6 ([triage-phase-2.md](../rea/triage-phase-2.md) Nr. 12–16; zu prüfen N-116):* **kein C# in
   Phase 2.** Odem-Kosten, Projektil, Amulett-Platz, sechstes Attribut: XML. Bannkreis: XML als Aura;
   die echte Meide-Zone rutscht (keine KI-Grundlage, ein Patch an der Zielwahl wäre groß).
+- **Odem-Leiste (D199, 2026-11-23, zu prüfen):** XML zeigte nichts — die Bindung `{cvar(…)}` wird nur
+  aufgefrischt, wenn ein eigener Controller darüber seine Bindungen neu liest, und über dem Balken links
+  unten tut das keiner (Spieltest S-41, [Finding](../rea/findings/WP10-odem-leiste.md), Nachtrag). Darum
+  ein kleiner Controller in `Mod700.dll`, der nur liest. Kein Harmony-Patch. Ändert die Triage-Zeile
+  „kein C# in Phase 2" für genau diesen Punkt.
 ### Assets (D10, F-16)
 Runensteine (neu), Partikel-Effekte (Glimmen, Glutpfeil, Rauch), Icons für alle Runen,
 Tränke und Zauber.

@@ -368,3 +368,17 @@ Eingang `$buffInfectionAddCurePerc` wie jedes Vanilla-Mittel.
 
 **Zwei Schreiber je Zähler, verschiedener Art (§1 Nr. 2):** der Zähl-Buff zählt, das Mittel setzt
 auf 0. Das Mittel rechnet nicht mit, es löscht — beide wissen voneinander nicht mehr, als sie müssen.
+
+## Nachtrag 7 — die Odem-Leiste liest über einen eigenen Controller (D199), 2026-11-23, **Abnahme offen**
+
+Ändert Nachtrag 2, Spalte „Lesen": die Leiste liest `.cv700_odemAnteil` und `.cv700_odemZeigen` nicht mehr
+über `{cvar(…)}`, sondern über den Controller `XUiC_OdemLeiste` in `Mod700.dll` (Finding WP10-odem-leiste,
+Nachtrag D199). **Schreiber und Werte bleiben gleich** — gerechnet wird weiter allein in
+`buff700_odemRegen`; der Controller liest nur, viermal je Sekunde, auf dem Rechner des Spielers.
+
+| Bindung | Wert | Quelle |
+|---|---|---|
+| `{odemzeigen}` | `true`, wenn `.cv700_odemZeigen` > 0,5 | Sichtbarkeit der ganzen Leiste |
+| `{odemanteil}` | `.cv700_odemAnteil`, auf 0..1 begrenzt, drei Stellen mit Punkt | Füllung des Balkens |
+
+Fehlt `700_00_Core`, bleibt die Leiste unsichtbar; sonst bricht nichts (D70).

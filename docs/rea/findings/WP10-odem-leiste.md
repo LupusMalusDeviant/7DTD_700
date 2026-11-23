@@ -40,3 +40,25 @@ ein Komma als Dezimalzeichen (deutsche Spracheinstellung) die Füllung bricht.
 `tools/meta/expect/wp106.tsv` (4 Zeilen): `BindingItemCvar::.ctor`, `BindingItemCvar::GetValue`,
 `BindingsManager::ReplaceCVars`, `BindingInfoNcalc::nCalcEvaluateFunction`. `mod700meta verify`:
 4× ok; Gegenprobe mit falscher Rückgabe (`int` statt `string`): Exit 1.
+
+## Nachtrag D199 — warum die Leiste leer blieb, und der eigene Controller (2026-11-23)
+
+**Anlass:** Spieltest S-41 am 2026-11-23. Im Protokoll rechnet der Odem richtig (`cv700_odemMax` 60,
+`.cv700_odemAnteil` 0,87 nach einem Glutpfeil), die Leiste bleibt leer, auch nach Öffnen und Schließen
+des Inventars. **Methode:** `mod700meta members --il` (Aufruf- und Feldfolgen, kein Code übernommen).
+
+| Frage | Antwort |
+|---|---|
+| An wen hängt sich `{cvar(…)}`? | Der Konstruktor von `BindingItemCvar` geht vom Controller des Elements zu dessen Eltern, solange es nur der leere Grund-Controller ist, und trägt sich dort in die Bindungen ein. |
+| Wann wird sie neu gelesen? | Nur wenn **dieser** Controller seine Bindungen neu liest (`RefreshBindings`). Über dem Balken links unten tut das niemand laufend — die Leiste zeigt den Wert beim Öffnen und bleibt dann stehen. |
+| Zahlformat | `GetValue` ruft `Single.ToString(format)` ohne Kultur — mit deutscher Spracheinstellung also vermutlich mit Komma. |
+| Kann ein Mod einen eigenen Controller liefern? | **ja.** `XUiFromXml::parseController` holt den Typ über `ReflectionHelpers::GetTypeWithPrefix("XUiC_", name)`; steht ein Komma im Namen, wird `XUiC_` hinter den letzten Punkt gesetzt und der Typ über `Type.GetType` gesucht — `Mod700.OdemLeiste, Mod700` ergibt `Mod700.XUiC_OdemLeiste, Mod700`. Fehlt der Typ, nimmt das Spiel den Grund-Controller und schreibt eine Warnung. |
+
+**Folgerung (D199):** `src/Mod700/XUiC_OdemLeiste.cs` — liest `.cv700_odemAnteil` und `.cv700_odemZeigen`
+viermal je Sekunde, frischt nur bei sichtbarer Änderung auf, gibt `{odemanteil}` mit Punkt und
+`{odemzeigen}` als true/false. Netz: nur Client. **Im Spiel ungeprüft** (S-41 neu).
+
+**Soll-Signaturen** jetzt 12 Zeilen in `tools/meta/expect/wp106.tsv` (dazu `parseController`,
+`GetTypeWithPrefix`, `XUiController::Update`/`GetBindingValueInternal`/`RefreshBindings`, `XUi::get_playerUI`,
+`LocalPlayerUI::get_entityPlayer`, `EntityAlive::GetCVar`). `mod700meta verify`: 12× ok, Exit 0; Gegenprobe
+mit `RefreshBindings(bool)`: Exit 1.
