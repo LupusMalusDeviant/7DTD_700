@@ -5,17 +5,21 @@
 
 	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
 
-	     EINE Vorlage, EINE geaenderte Einstellung: der Biom-Fortschritt ist aus.
-	     Mit unserer Mod ist er nicht loesbar (D128): je Reihe nennen vier von sieben
-	     Aufgaben gesperrte Kennungen, alle Gegenmittel und Schutzstuecke sind gesperrt.
+	     EINE Vorlage. Seit 2026-11-23 (WP6.3, D155) OHNE geaenderte Einstellung: der
+	     Biom-Fortschritt ist mit Weg B loesbar (D154) und steht darum wieder auf Vanillas
+	     Vorgabe "an". Bis dahin stand hier die Gruppe CDA (BiomeProgression auf Index 0 =
+	     aus, Wert 55 = C,D), weil er mit unserer Mod nicht loesbar war (D128, D136). Wer ihn
+	     wieder aus haben will: CDA hinten an den Code haengen.
+
+	     Die Vorlage bleibt, weil die uebrigen Empfehlungen (Luftabwurf, Haendlerstimmen,
+	     Automaten; docs/konzept/voreinstellung-700.md) hier hinein sollen.
 
 	     Der Code ist GERECHNET, nicht aus dem Optionsfenster kopiert, und im Spiel
 	     nicht geprueft (Pruefliste S-11):
 	       A                     Kopf (Version des Formats in V 3.40 b10)
 	       AAJ ABJ ACJ ADJ ARF BNC   Vanillas Vorwahl "Adventurer", unveraendert
 	                             (derselbe Code steht in serverconfig.xml)
-	       CDA                   BiomeProgression (Wert 55 = C,D) auf Index 0 = aus
-	     Ohne die sechs Gruppen davor stuende die Vorlage auf den rohen Vorgaben und
+	     Ohne die sechs Gruppen stuende die Vorlage auf den rohen Vorgaben und
 	     waere nebenbei eine andere Schwierigkeit als Vanillas Vorwahl.
 
 	     default="true" WAEHLT NUR VOR, wenn "Neues Spiel" aufgeht. Es erzwingt nichts,
@@ -29,6 +33,6 @@
 	     Die Attribute stehen vollstaendig da wie in Vanillas Beispielzeile; eine
 	     Vorlage ohne Pflichtangabe faellt nach F-17 vermutlich ohne Meldung weg. -->
 	<append xpath="/sandbox_overrides">
-		<preset name="700" localized_name="700_vorlageName" description="Recommended for this mod: default difficulty, biome progression off." description_key="700_vorlageDesc" icon="" code="AAAJABJACJADJARFBNCCDA" default="true" />
+		<preset name="700" localized_name="700_vorlageName" description="Recommended for this mod: default difficulty." description_key="700_vorlageDesc" icon="" code="AAAJABJACJADJARFBNC" default="true" />
 	</append>
 </config>

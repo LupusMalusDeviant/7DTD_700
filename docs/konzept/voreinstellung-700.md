@@ -16,6 +16,13 @@ Option von Hand abstellt.
 Die Mod bringt darum **eine eigene Vorlage** mit. Sie ist beim Öffnen von „Neues Spiel"
 vorgewählt, steht in der Gruppe „Gemoddet" und heißt „Jahr 700" (englisch „Year 700").
 
+> **Stand 2026-11-23, später (WP6.3, D155, zu prüfen):** Der Biom-Fortschritt ist mit Weg B lösbar
+> (D154): Sude, Schutzstücke und die vier Reihen gehen mit Zutaten des Settings, die Texte stehen.
+> Die Vorlage schaltet ihn darum **nicht mehr ab**; ihr Code ist jetzt **`AAAJABJACJADJARFBNC`**
+> (Vanillas „Adventurer" ohne die Gruppe `CDA`). Sie bleibt als Ort für die übrigen Empfehlungen
+> aus Abschnitt 3. Wer den Fortschritt doch aus haben will, hängt `CDA` an. Der Text unten
+> beschreibt den Stand davor und bleibt als Beleg stehen.
+
 ## 2. Was gebaut ist — genau eine Einstellung
 
 Datei: `mod/700_60_Welt/Config/sandbox_overrides.xml`, eine Zeile `<preset … default="true" />`.
@@ -51,7 +58,7 @@ Empfehlung mit Begründung; in die Vorlage kommt es erst nach deinem Ja.
 
 | Option (Name im Spielcode) | Empfehlung | Warum | Lässt sich der Code rechnen? |
 |---|---|---|---|
-| Biom-Fortschritt (`BiomeProgression`) | **aus** | D128: nicht lösbar | ja — gebaut (`CDA`) |
+| Biom-Fortschritt (`BiomeProgression`) | ~~**aus**~~ **an** (seit D155) | ~~D128: nicht lösbar~~ mit Weg B lösbar (D154) | ja — ~~gebaut (`CDA`)~~ seit D155 nicht mehr im Code |
 | Luftabwurf (`AirDropFrequency`) | **nie** | D95: ein Flugzeug gibt es im Jahr 700 nicht | **nein** — Ganzzahl-Option, die Reihenfolge der Werte ist nicht lesbar. Code aus dem Optionsfenster kopieren (S-11) |
 | Markierung des Abwurfs (`AirDropMarker`) | entfällt mit dem Abwurf | — | ja (`CBA`), nur nötig, wenn der Abwurf bleibt |
 | Händlerstimmen (`TraderDialog`) | **aus** | D102: 1336 gesprochene Zeilen in modernem Englisch | Typ nicht gelesen; vermutlich Ja/Nein (Wert 126 → `EW`), dann `EWA` — **ungeprüft** |
@@ -71,10 +78,11 @@ Empfehlung mit Begründung; in die Vorlage kommt es erst nach deinem Ja.
 Im Hauptmenü, ohne eine Welt zu laden, wenige Minuten:
 
 1. „Neues Spiel" öffnen: steht „Jahr 700" in der Gruppe „Gemoddet", und ist es vorgewählt?
-2. In den Optionen der Vorlage: steht „Biomfortschritt" auf „Nein", alles andere wie bei
-   „Adventurer"?
+2. In den Optionen der Vorlage: steht ~~„Biomfortschritt" auf „Nein"~~ alles wie bei
+   „Adventurer"? (Seit D155 ist auch der Biom-Fortschritt wie dort „Ja".)
 3. Für die Erweiterung: Luftabwurf auf „nie", Händlerstimmen aus, Automaten aus stellen, „Code
    kopieren" — den Code hier eintragen. Damit sind die nicht rechenbaren Optionen erledigt.
 
-Mit geladener Welt (deckt sich mit S-05): im Protokoll steht `GameStat.BiomeProgression = False`,
-und im Brandwald läuft keine Frist.
+Mit geladener Welt (deckt sich mit S-05): im Protokoll steht ~~`GameStat.BiomeProgression = False`,
+und im Brandwald läuft keine Frist~~ seit D155 `GameStat.BiomeProgression = True`; was dann im
+Brandland geschieht, prüft S-30.
