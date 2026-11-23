@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP10.6). Erfundene Kennungen, kein Spielinhalt.
+     Dies ist der Vanilla-Stand der Buffs. -->
+<buffs>
+	<buff name="pruefBuffVanilla">
+		<duration value="1" />
+	</buff>
+</buffs>

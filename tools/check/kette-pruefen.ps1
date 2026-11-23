@@ -1155,6 +1155,56 @@ if (Test-Path $tagVanillaPfad) {
     }
 }
 
+# WESEN-GRUPPEN (ergaenzt 2026-11-23, Plan-0002 WP11.9). Die Seuchennacht ruft unsere Gruppen
+# aus gamestages.xml; eine vertippte Gruppe ruft nichts - nach dem Finding zu F-06 ein Ladefehler
+# oder still eine leere Welle. Gelesen wird group="..." und entitygroup="..." jeder <spawn> in den
+# Patch-Dateien, gesucht unter Vanillas entitygroups.xml und unseren <entitygroup name>; dazu n="..."
+# jedes <e> in unseren Gruppen gegen Vanillas entityclasses.xml und unsere <entity_class name>. Ohne
+# Vanillas entitygroups.xml bleibt die Regel aus - gesagt in der Ausgabe.
+$gruppenRefs = 0
+$gruppenGeprueft = $false
+$gruppenVanillaPfad = Join-Path $Vanilla 'entitygroups.xml'
+if (Test-Path $gruppenVanillaPfad) {
+    $gruppenGeprueft = $true
+    $gruppenPool = @{}
+    $klassenPool = @{}
+    $kennungen = Get-Kennungen $gruppenVanillaPfad '<entitygroup\s+name="([^"]+)"' 1
+    if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+    foreach ($n in $kennungen.Namen) { $gruppenPool[$n] = 'vanilla' }
+    $klassenPfad = Join-Path $Vanilla 'entityclasses.xml'
+    $klassenDa = Test-Path $klassenPfad
+    if ($klassenDa) {
+        $kennungen = Get-Kennungen $klassenPfad '<entity_class\s+name="([^"]+)"' 1
+        if ($kennungen.Unlesbar) { Stop-Unpruefbar $kennungen.Unlesbar }
+        foreach ($n in $kennungen.Namen) { $klassenPool[$n] = 'vanilla' }
+    }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        foreach ($n in $xml.SelectNodes('//entitygroup[@name]')) { $gruppenPool[$n.GetAttribute('name')] = 'unser' }
+        foreach ($n in $xml.SelectNodes('//entity_class[@name]')) { $klassenPool[$n.GetAttribute('name')] = 'unser' }
+    }
+    foreach ($path in $Patches) {
+        if (-not $path -or -not (Test-Path $path)) { continue }
+        $xml = (Read-XmlDatei $path).Doc
+        if ($null -eq $xml) { continue }
+        $datei = [IO.Path]::GetFileName($path)
+        foreach ($n in $xml.SelectNodes('//spawn[@group or @entitygroup]')) {
+            $g = if ($n.HasAttribute('group')) { $n.GetAttribute('group') } else { $n.GetAttribute('entitygroup') }
+            $gruppenRefs++
+            if (-not $gruppenPool.ContainsKey($g)) { $unresolved += "Wesen-Gruppe '$g' ist nirgends definiert  ($datei)" }
+        }
+        if ($klassenDa) {
+            foreach ($n in $xml.SelectNodes('//entitygroup/e[@n]')) {
+                $k = $n.GetAttribute('n')
+                $gruppenRefs++
+                if (-not $klassenPool.ContainsKey($k)) { $unresolved += "Wesen '$k' in einer Gruppe ist nirgends definiert  ($datei)" }
+            }
+        }
+    }
+}
+
 # CVAR-NAMEN (ergaenzt 2026-11-23, Plan-0002 WP11.3). Das Grauen rechnet in einem Buff mit
 # sieben CVars, liest drei, die C# schreiben soll, und den Schutz aus einem zweiten Modlet. Ein
 # vertippter Name liest still 0 - der Schutz wirkte nie, die Rechnung liefe weiter, keine Meldung.
@@ -1238,6 +1288,7 @@ Write-Output ("  Verweise in angelegten Fortschritts-Knoten: {0}, Freischaltunge
 Write-Output ("  Beute und Ware mit Namen: {0}" -f $wareRefs)
 Write-Output ("  Buff-Verweise: {0}" -f $(if ($buffGeprueft) { $buffRefs } else { 'nicht geprueft (keine buffs.xml im Vanilla-Ordner)' }))
 Write-Output ("  Tags in Bedingungen: {0}" -f $(if ($tagGeprueft) { $tagRefs } else { 'nicht geprueft (keine items.xml im Vanilla-Ordner)' }))
+Write-Output ("  Wesen und Gruppen: {0}" -f $(if ($gruppenGeprueft) { $gruppenRefs } else { 'nicht geprueft (keine entitygroups.xml im Vanilla-Ordner)' }))
 Write-Output ("  CVar-Verweise: {0}" -f $(if ($cvarGeprueft) { $cvarRefs } else { 'nicht geprueft (kein Vertrag der Zustaende angegeben)' }))
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 

@@ -720,6 +720,9 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    Trugbild (D74). (M)
 9. **WP11.9** `[Claude-prüfbar]` **Seuchennacht:** eigene Texte und Optik nach WP9.4, Wellen aus
    den Gruppen von WP5.6, Vorboten am Vortag, der stille Beginn (F-09:12–15). (L)
+   *Teil XML gebaut 2026-11-23 (D186, zu prüfen N-130, Spieltest S-44):* Wellen-Zeilen für Brecher
+   und Anführer, stiller Beginn mit Glocke; `kette-pruefen` prüft Wesen-Gruppen (329 Gegenproben).
+   Offen: Himmel (S-34 (3)), Vorboten (Direktor, WP11.6), Deutungs-Texte.
 10. **WP11.10** `[braucht Nutzer]` Testlauf T3 mit verkürzten Werten: Seuchennacht jeden Tag,
     kurze Tage, ein Test-Schalter setzt das Grauen auf jede Stufe.
 

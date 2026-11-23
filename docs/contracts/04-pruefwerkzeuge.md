@@ -4171,3 +4171,26 @@ in Prüfdaten „nicht geprüft", 0 rot. Am echten Modlet: `@.cv700_grauenSchtuz
 geschrieben und in derselben vertippt gelesen wird, fällt nur auf, wenn der Tippfehler nicht auch
 geschrieben wird. Die Test-Überlagerung (`test/`) gehört nicht zu den Patch-Dateien. Die Schreiber-Spalte
 wird als Text gelesen, nicht als Tabelle verstanden.
+
+## Nachtrag WP11.9 — Wesen-Gruppen in `kette-pruefen`, 2026-11-23, **Abnahme offen** (N-130)
+
+Gebaut im autonomen Lauf (Plan-0002 WP11.9, D186).
+
+**Anlass.** Die Seuchennacht ruft unsere Gruppen aus `gamestages.xml`. Die Gegenprobe
+`eg700_brecherFrue` blieb grün — `mod700check wesen` prüft nur gegen einen ConfigsDump, und der alte
+Dump kennt unsere Modlets nicht.
+
+**Die Regel.** `kette-pruefen` liest `group="…"` und `entitygroup="…"` jeder `<spawn>` in den Patch-Dateien
+und sucht sie unter Vanillas `entitygroups.xml` und unseren `<entitygroup name>`; dazu `n="…"` jedes `<e>`
+in unseren Gruppen gegen Vanillas `entityclasses.xml` und unsere `<entity_class name>`. Ohne Vanillas
+`entitygroups.xml` bleibt die Regel aus und die Ausgabe sagt es. Neue Zeile: `Wesen und Gruppen: N`
+(am echten Stand 36).
+
+**Gegenprobe** (1 neu, 328 → **329**): `kette/gruppe` — vertippte Gruppe in einer Wellen-Zeile und
+vertipptes Wesen in einer eigenen Gruppe rot, Vanilla-Gruppe, eigene Gruppe und Vanilla-Wesen nicht; der
+Zahlvergleich `gamestage[@stage >= 10]` trifft (2 rot). Am echten Modlet: `eg700_brecherFrue` rot,
+`ent700_spukhunt` rot, die Schwelle `@stage >= 9000` als „XPath trifft nichts" rot.
+
+**Grenzen:** Gruppen, die nur der Spielcode nennt (z. B. Vanillas Wanderhorden in `spawning.xml` über
+eigene Attribute), und die Gewichte `p` liest die Regel nicht. Ob eine Gruppe leer wird, weil die
+Säuberung Wesen entfernt, prüft weiter `mod700check wesen` am Dump.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.9): drei Zeilen vor dem Rest der Stufe ab 10 -
+     eine ruft die Vanilla-Gruppe, eine die eigene, eine eine vertippte. Erfundene Kennungen. -->
+<config>
+	<insertBefore xpath="/gamestages/spawner[@name='pruefHorde']/gamestage[@stage &gt;= 10]/spawn[last()]">
+		<spawn group="pruefGruppeVanilla" num="1" maxAlive="1" duration="1" />
+		<spawn group="pruefGruppeEigen" num="1" maxAlive="1" duration="1" />
+		<spawn group="pruefGruppeFehlt" num="1" maxAlive="1" duration="1" />
+	</insertBefore>
+</config>

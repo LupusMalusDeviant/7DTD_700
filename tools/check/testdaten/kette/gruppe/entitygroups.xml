@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.9): eine eigene Gruppe mit einem Vanilla-Wesen und
+     einem vertippten. Erfundene Kennungen, kein Spielinhalt. -->
+<config>
+	<append xpath="/entitygroups">
+		<entitygroup name="pruefGruppeEigen">
+			<e n="pruefWesenVanilla" />
+			<e n="pruefWesenFehlt" p="0.5" />
+		</entitygroup>
+	</append>
+</config>

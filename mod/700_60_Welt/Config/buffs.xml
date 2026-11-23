@@ -218,6 +218,34 @@
 			<duration value="3"/>
 		</buff>
 
+		<!-- DER STILLE BEGINN DER SEUCHENNACHT (F-09 Ausarbeitung 5, D12, D186; Vertrag 07
+		     Nachtrag 4). Wird IsBloodMoon wahr, setzt sich jeder Spieler selbst
+		     buff700_seuchennachtBeginn: 60 s nichts - dann EIN Glockenschlag (Vanillas
+		     churchbellhit, der Laut der Kirchenglocke, im Kopf: fern und fuer jeden gleich) und
+		     die Meldung "Die Glocke schlaegt.". buff700_seuchennachtGelaeutet sperrt ein zweites
+		     Laeuten in derselben Nacht und geht, sobald IsBloodMoon falsch wird - so haengt
+		     nichts an der Tageslaenge. Wer erst spaet in der Nacht ins Spiel kommt, hoert die
+		     Glocke 60 s nach dem Betreten (Grenze, N-130). -->
+		<buff name="buff700_seuchennachtBeginn" hidden="true">
+			<stack_type value="ignore"/>
+			<duration value="60"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffFinish" action="PlaySound" sound="churchbellhit" play_in_head="true"/>
+				<triggered_effect trigger="onSelfBuffFinish" action="ShowToolbeltMessage" message_key="buff700_seuchennachtGlocke"/>
+				<triggered_effect trigger="onSelfBuffFinish" action="AddBuff" buff="buff700_seuchennachtGelaeutet"/>
+			</effect_group>
+		</buff>
+		<buff name="buff700_seuchennachtGelaeutet" hidden="true">
+			<stack_type value="ignore"/>
+			<duration value="0"/>
+			<update_rate value="10"/>
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_seuchennachtGelaeutet">
+					<requirement name="!IsBloodMoon"/>
+				</triggered_effect>
+			</effect_group>
+		</buff>
+
 	</append>
 
 	<!-- Zaehler und Gesellschaft setzt Vanillas buffStatusCheck01 (laeuft bei jedem Spieler
@@ -226,6 +254,11 @@
 		<effect_group>
 			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_grauenZaehlen"><requirement name="!HasBuff" buff="buff700_grauenZaehlen"/></triggered_effect>
 			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_gesellschaftSender"><requirement name="!HasBuff" buff="buff700_gesellschaftSender"/></triggered_effect>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_seuchennachtBeginn">
+				<requirement name="IsBloodMoon"/>
+				<requirement name="!HasBuff" buff="buff700_seuchennachtBeginn"/>
+				<requirement name="!HasBuff" buff="buff700_seuchennachtGelaeutet"/>
+			</triggered_effect>
 		</effect_group>
 	</append>
 

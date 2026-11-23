@@ -1133,6 +1133,17 @@ Test-Script 'kette-pruefen: CVar ohne Schreiber oder ohne Leser wird rot, Vertra
     Zustaende    = (Join-Path $data 'kette\cvar\zustaende.md')
 } -MustContain @("CVar 'cv700_pruefVertragOhneServer' wird gelesen, aber nirgends geschrieben", "CVar 'cv700_pruefLeseFehlt' wird gelesen, aber nirgends geschrieben", "CVar 'cv700_pruefSchreibFehlt' wird geschrieben, aber nirgends gelesen", 'CVar-Verweise: 8', '3 rot') -MustNotContain @("'cv700_pruefIntern'", "'cv700_pruefServer'", "'.cv700_pruefAnzeige'", 't700_pruefFremd', 'pruefVanilla')
 
+# WP11.9 (2026-11-23): eine gerufene Wesen-Gruppe muss eine Gruppe sein, ein Wesen in unserer
+# Gruppe ein Wesen. Vanilla-Gruppe, eigene Gruppe und Vanilla-Wesen sind gruen; dazu trifft der
+# Zahlvergleich im XPath (gamestage[@stage >= 10]) die Stufe 50.
+Test-Script 'kette-pruefen: vertippte Wesen-Gruppe und vertipptes Wesen werden rot, bekannte nicht' 1 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @((Join-Path $data 'kette\gruppe\gamestages.xml'), (Join-Path $data 'kette\gruppe\entitygroups.xml'))
+    Vanilla      = (Join-Path $data 'kette\gruppe\vanilla')
+} -MustContain @("Wesen-Gruppe 'pruefGruppeFehlt' ist nirgends definiert", "Wesen 'pruefWesenFehlt' in einer Gruppe ist nirgends definiert", 'Wesen und Gruppen: 5', 'geprueefte XPaths: 2 (2 in Vanilla', '2 rot') -MustNotContain @("'pruefGruppeVanilla'", "'pruefGruppeEigen'", "'pruefWesenVanilla'", 'XPath trifft nichts')
+
 # Ohne Vertrag in Pruefdaten sagt die Regel, dass sie nicht prueft - und wird davon nicht rot.
 Test-Script 'kette-pruefen: ohne Vertrag der Zustaende sind CVars nicht geprueft, gesagt' 0 @{
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')

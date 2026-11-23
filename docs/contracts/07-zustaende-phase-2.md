@@ -302,8 +302,8 @@ Die Zahlen stehen in F-17 „B3 in Zahlen" und F-09 „Ausarbeitung" (§7 dieses
 | `buff700_grauenUnruhig` / `…Veraengstigt` / `…Grauen` (§3.1) | Buff | an ab 30/60/85, aus unter 25/55/80 | `buff700_grauenZaehlen` per `CVarCompare` | abgeleitet | Effekte nach `cv700_grauenDaempfung` (§3.2) |
 | `buff700_grauenPanik` | Buff, 3 s | Lauftempo +10 %, Ausdauer-Erholung −50 % | Treffer (`onOtherDamagedSelf`) bei Stufe Grauen und Dämpfung 0 | geht verloren | — |
 | `cv700_mitspielerDa` | CVar je Spieler | 1, wenn mehr als ein Spieler in der Welt ist, sonst 0 | **Server**, Direktor (C#, §3.3), bei Betreten und Verlassen eines Spielers | wird neu gesetzt | Zeile „allein" in `buff700_grauenZaehlen` (D118) |
-| `buff700_seuchennachtBeginn` | Buff, 70 s, verborgen | 60 s Stille, dann ein Glockenschlag und eine Meldung | jeder Spieler selbst, wenn `IsBloodMoon` wahr wird und `buff700_seuchennachtGelaeutet` fehlt | geht verloren | — |
-| `buff700_seuchennachtGelaeutet` | Buff, 12 h Spielzeit, verborgen | Marke „heute schon geläutet" | `buff700_seuchennachtBeginn` beim Ende | **bleibt** (Indiz, N1.2) | Sperre gegen ein zweites Läuten |
+| `buff700_seuchennachtBeginn` | Buff, ~~70 s~~ **60 s** *(berichtigt beim Bau, WP11.9: der Schlag kommt mit dem Ablauf, `onSelfBuffFinish`)*, verborgen | 60 s Stille, dann ein Glockenschlag und eine Meldung | jeder Spieler selbst (über Vanillas `buffStatusCheck01`), wenn `IsBloodMoon` wahr ist und `buff700_seuchennachtGelaeutet` fehlt | geht verloren | — |
+| `buff700_seuchennachtGelaeutet` | Buff, ~~12 h Spielzeit~~ **bis `IsBloodMoon` falsch wird** *(berichtigt beim Bau: so hängt nichts an der Tageslänge)*, verborgen | Marke „heute schon geläutet" | `buff700_seuchennachtBeginn` beim Ende | **bleibt** (Indiz, N1.2) | Sperre gegen ein zweites Läuten |
 
 **Rückfall ohne C#:** `cv700_mitspielerDa` liest 0, „allein" entfällt (Einzelspiel-Regel D118 gilt dann
 überall); `cv700_grauenDruck` liest 0, keine Vorboten. Das Grauen selbst läuft ganz in XML.

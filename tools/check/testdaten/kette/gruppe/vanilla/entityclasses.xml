@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.9). Erfundene Kennungen, kein Spielinhalt.
+     Vanilla-Stand: ein Wesen. -->
+<entity_classes>
+	<entity_class name="pruefWesenVanilla">
+		<property name="Class" value="EntityZombie" />
+	</entity_class>
+</entity_classes>

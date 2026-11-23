@@ -125,6 +125,17 @@ auf 0. Ohne C#-Teil: keine Vorboten, die Seuchennacht kommt wie in Vanilla — n
 „Seuchenleichen, die verbrannt werden müssen" (Umfang oben, „optional") ist **Phase 3** (Regel 6):
 es braucht F-11 (Ansteckung) und eigene Blöcke. Notiz, kein Bau.
 
+### Gebaut mit WP11.9 (D186, zu prüfen N-130, Spieltest S-44)
+
+**Warum nicht C#?** Wellen und Beginn sind XML (Säule P5): fünf `insertBefore` in
+`700_65_Wesen/Config/gamestages.xml` (Tabelle §4; die erste Stufe ab 30 ist Vanillas 31; Vanilla reicht
+bis Stufe 5778) und zwei Buffs in `700_60_Welt` für den stillen Beginn (§5), gesetzt über Vanillas
+`buffStatusCheck01`. Die Glocke ist Vanillas `churchbellhit`, die Meldung `buff700_seuchennachtGlocke`.
+**Noch nicht:** eigene Farbe des Himmels (S-34 (3)), Nebelabend und Vorboten (Direktor, C#), Texte der
+drei Deutungen in Fundschriften und Händlerrede (WP6.7/F-10 nachziehen). **Grenzen:** dass das Spiel die
+Zeilen einer Stufe der Reihe nach abarbeitet, ist nicht gelesen — S-44 zeigt, ob die Brecher kommen;
+wer erst spät in der Nacht ins Spiel kommt, hört die Glocke 60 s nach dem Betreten.
+
 ### 8. Netz
 
 Alles Sichtbare der Seuchennacht kommt vom Server (Wetter, Wellen) oder läuft als Buff bei jedem Spieler

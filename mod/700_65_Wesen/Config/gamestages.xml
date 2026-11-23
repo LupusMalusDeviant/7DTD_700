@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_65_Wesen / gamestages.xml
+	     F-09 "Ausarbeitung" Abschnitt 4 (D184, D186; Plan-0002 WP11.9)
+
+	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
+
+	     DIE GROESSE DER SEUCHENNACHT BLEIBT VANILLA. Vanillas Spawner BloodMoonHorde hat
+	     322 Stufen; jede fuehrt Zeilen mit num, maxAlive, duration, interval, und die
+	     LETZTE Zeile ist der Rest der Nacht (num 999). Wir fuegen je Stufe EINE Zeile VOR
+	     dieser letzten ein (insertBefore auf spawn[last()]): angehaengt hinter dem Rest kaeme
+	     sie nie dran - das Spiel arbeitet die Zeilen der Reihe nach ab [verifizieren S-44].
+
+	     Die Schwellen sind Spielstufen und schliessen einander aus (eine Zeile je Gruppe):
+	       Brecher frueh   30 bis unter 100    14 Stufen (die erste ist 31)
+	       Brecher mittel  100 bis unter 250   22 Stufen
+	       Brecher spaet   ab 250              276 Stufen
+	       Anfuehrer frueh 60 bis unter 200    22 Stufen
+	       Anfuehrer spaet ab 200              283 Stufen
+	     Bei Stufe 31 bringt Vanilla vor dem Rest 3 x 44 Tote; zwei Brecher sind darin
+	     weniger als ein Zehntel (F-09). Die Gruppen stehen in entitygroups.xml (WP5.6).
+	     Alle Zahlen sind Setzungen (N-130). -->
+
+	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 30 and @stage &lt; 100]/spawn[last()]">
+		<spawn group="eg700_brecherFrueh" num="2" maxAlive="1" duration="1" interval="90" />
+	</insertBefore>
+	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 100 and @stage &lt; 250]/spawn[last()]">
+		<spawn group="eg700_brecherMittel" num="4" maxAlive="2" duration="1" interval="60" />
+	</insertBefore>
+	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 250]/spawn[last()]">
+		<spawn group="eg700_brecherSpaet" num="6" maxAlive="2" duration="1" interval="45" />
+	</insertBefore>
+
+	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 60 and @stage &lt; 200]/spawn[last()]">
+		<spawn group="eg700_anfuehrerFrueh" num="1" maxAlive="1" duration="1" />
+	</insertBefore>
+	<insertBefore xpath="/gamestages/spawner[@name='BloodMoonHorde']/gamestage[@stage &gt;= 200]/spawn[last()]">
+		<spawn group="eg700_anfuehrerSpaet" num="2" maxAlive="1" duration="1" />
+	</insertBefore>
+</config>

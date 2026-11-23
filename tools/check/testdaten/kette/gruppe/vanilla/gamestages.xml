@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefdaten fuer kette-pruefen.ps1 (WP11.9). Erfundene Kennungen, kein Spielinhalt.
+     Vanilla-Stand: ein Spawner mit zwei Stufen. -->
+<gamestages>
+	<spawner name="pruefHorde">
+		<gamestage stage="1">
+			<spawn group="pruefGruppeVanilla" num="2" maxAlive="1" duration="1" />
+			<spawn group="pruefGruppeVanilla" num="999" maxAlive="1" />
+		</gamestage>
+		<gamestage stage="50">
+			<spawn group="pruefGruppeVanilla" num="999" maxAlive="2" />
+		</gamestage>
+	</spawner>
+</gamestages>
