@@ -267,9 +267,29 @@ Vanillas (D65). ~~Blockschaden reduziert, Spielerschaden erhöht (D29, siehe F-1
 ## 9. Seuchennacht (WP5.6, für F-09)
 
 F-06 stellt Gruppen bereit, F-09 hängt sie ein: **Brecher** (Kandidaten: Berstender, Büttel,
-Krieger — wer wirklich am stärksten auf Blöcke wirkt, misst WP5.6 an den Klassen), **Anführer**
+~~Krieger~~ — wer wirklich am stärksten auf Blöcke wirkt, misst WP5.6 an den Klassen), **Anführer**
 (Nachzehrer, Schreiende) und der **Spuk-Hund** als seltener Jäger. Nichts davon ändert in Phase 2 die Staffel
 aus `gamestages.xml`.
+
+**Gemessen mit WP5.6** (Schaden an Blöcken am Hand-Gegenstand, `DamageBlock`; alle Klassen der 322
+Gruppen `feralHordeStageGS*` von Vanillas Horde): Berstender 500 (und er birst); jede Klasse der
+Stufe `Infernal` 250; **Büttel und Muhme** 100, verderbt und schwärend 200; **Hirte** und
+**Felswerfer** 100 / 200; **Moorleiche** 100 / 140 / 180 / 200. Der **Krieger** schlägt nur 40 —
+er ist kein Brecher. Zum Vergleich: Knecht 8, Magd 7, Holzfäller 20.
+
+**Gebaut (D151), von niemandem gerufen:** fünf Gruppen in `mod/700_65_Wesen/Config/entitygroups.xml`:
+
+| Gruppe | Inhalt | für |
+|---|---|---|
+| `eg700_brecherFrueh` | Büttel, Muhme, Hirte, Moorleiche, Felswerfer (Grundfassung) | frühe Seuchennächte |
+| `eg700_brecherMittel` | dieselben verderbt und schwärend, selten der Berstende | mittlere |
+| `eg700_brecherSpaet` | dieselben verdammt, Moorleiche auch glutäugig, der Berstende häufiger | späte |
+| `eg700_anfuehrerFrueh` | Verderbter Nachzehrer, Spukhund, Schreiende | frühe |
+| `eg700_anfuehrerSpaet` | Nachzehrer schwärend, glutäugig, verdammt; Spukhund; Schreiende verderbt, schwärend | späte |
+
+Hawaiihemd und Bowler schlagen wie der Büttel, stehen aber nicht darin — sie sind aus der freien
+Landschaft genommen (D149). Die Gewichte sind Setzungen (N-70); **welche Gruppe ab welcher
+Spielstufe ruft, entscheidet F-09 beim Einbau (WP11).**
 
 ## 10. Grusel-Verhalten (D12, Details in F-17 B6)
 
@@ -285,7 +305,7 @@ Alles XML (P5) — kein C#, kein Asset:
 | WP5.3 Namen | `mod/700_90_Sprache/Config/Localization.csv`; `tools/check/vanilla-keys.txt` | 155 + 21 Sprachzeilen unter Vanillas Schlüsseln (der Schlüssel ist die Klasse), DE und EN; jede Zeile mit Begründung in der Schlüsselliste |
 | WP5.4 Gruppen — **gebaut** (D149) | `tools/check/denylist.txt` (elf Wesenregeln) → erzeugt `mod/700_10_Purge/Config/entitygroups.xml`; `mod/700_65_Wesen/Config/entitygroups.xml` (neues Modlet nach Vertrag 01, Nachtrag Phase 2: die Nachrücker) | die neun Klassen aus zehn Landschaftsgruppen; Kojote und Berglöwe durch den Wolf; elf Wesenregeln. Vanilla-Klassen werden nie entfernt, nur ihr Eintrag in einer Gruppe; keine Gruppe wird leer (Vertrag 03, Nachtrag Teil C) |
 | WP5.5 Sagengestalten — **gebaut** (D150) | `mod/700_65_Wesen/Config/entityclasses.xml`, `entitygroups.xml`, eine Sprachzeile, eine Glossarzeile | Spukhund als eigene Klasse `ent700_spukhund` auf Vanillas Modell. Nachzehrer, Schreiende und Moorleiche haben ihre Namen seit WP5.3; mehr als den Namen gibt XML für sie nicht her, ohne Verhalten zu erfinden. Stufen an den Klassen gemessen (§2) |
-| WP5.6 Seuchennacht | `mod/700_65_Wesen/Config/entitygroups.xml` | Gruppen `eg700_…` für Brecher und Anführer, noch von niemandem gerufen |
+| WP5.6 Seuchennacht — **gebaut** (D151) | `mod/700_65_Wesen/Config/entitygroups.xml` | fünf Gruppen `eg700_…` für Brecher und Anführer (§9), noch von niemandem gerufen |
 
 **Warum kein C#?** Namen, Gruppen und Varianten sind in Vanilla Daten. Was Code bräuchte — Leichen
 fressen, Hinterhalt aus dem Wasser, ein Licht, das lockt —, steht oben als offen und wird nicht in

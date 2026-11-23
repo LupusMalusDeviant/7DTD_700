@@ -64,4 +64,74 @@
 	<append xpath="/entitygroups/entitygroup[@name='ZombiesWastelandNight']">
 		<e n="ent700_spukhund" p="0.1" />
 	</append>
+
+	<!-- ===================================================================
+	     SEUCHENNACHT: BRECHER UND ANFUEHRER (WP5.6, D151)
+	     ===================================================================
+
+	     Fuenf eigene Gruppen, die HEUTE NIEMAND RUFT. F-09 (WP11) haengt sie in
+	     gamestages.xml ein; bis dahin aendern sie nichts im Spiel. Eine Gruppe,
+	     die niemand ruft, laedt trotzdem: jede Klasse muss es geben, und keine
+	     Gruppe darf leer sein (Finding F-06 Wesen-Gruppen).
+
+	     BRECHER sind gemessen, nicht geraten: der Schaden an Bloecken steht am
+	     Hand-Gegenstand der Klasse (items.xml, DamageBlock). In den 322 Gruppen
+	     der Vanilla-Horde (feralHordeStageGS*) schlagen am staerksten:
+	       Berstender (zombieDemolition)      500, und er birst
+	       Verdammte aller Art                250
+	       Buettel, Muhme (FatCop, FemaleFat) 100 / Verderbt 200 / Schwaerend 200
+	       Hirte, Felswerfer                  100 / 200
+	       Moorleiche                         100 / 140 / 180 / 200
+	     Zum Vergleich: Knecht 8, Magd 7, Holzfaeller 20.
+	     Hawaiihemd und Bowler schlagen wie der Buettel - sie sind aus der freien
+	     Landschaft genommen (D149) und stehen darum auch hier nicht.
+
+	     ANFUEHRER sind Sagengestalten (F-06 Abschnitt 5): Nachzehrer, Schreiende
+	     und der Spukhund. Die Schreiende ruft Tote herbei; in einer Welle heisst
+	     das MEHR Gegner - ob F-09 sie dort will, entscheidet der Einbau.
+
+	     Die Gewichte sind Setzungen (N-70). -->
+	<append xpath="/entitygroups">
+		<entitygroup name="eg700_brecherFrueh">
+			<e n="zombieFatCop" />
+			<e n="zombieFemaleFat" />
+			<e n="zombieRancher" p="0.5" />
+			<e n="zombieMutated" p="0.5" />
+			<e n="zombieChuck" p="0.3" />
+		</entitygroup>
+		<entitygroup name="eg700_brecherMittel">
+			<e n="zombieFatCopFeral" />
+			<e n="zombieFemaleFatFeral" />
+			<e n="zombieRancherFeral" p="0.5" />
+			<e n="zombieMutatedFeral" p="0.5" />
+			<e n="zombieChuckFeral" p="0.3" />
+			<e n="zombieFatCopRadiated" p="0.5" />
+			<e n="zombieFemaleFatRadiated" p="0.5" />
+			<e n="zombieRancherRadiated" p="0.3" />
+			<e n="zombieMutatedRadiated" p="0.3" />
+			<e n="zombieDemolition" p="0.05" />
+		</entitygroup>
+		<entitygroup name="eg700_brecherSpaet">
+			<e n="zombieFatCopInfernal" />
+			<e n="zombieFemaleFatInfernal" />
+			<e n="zombieRancherInfernal" p="0.5" />
+			<e n="zombieMutatedCharged" p="0.5" />
+			<e n="zombieMutatedInfernal" p="0.5" />
+			<e n="zombieChuckInfernal" p="0.3" />
+			<e n="zombieDemolition" p="0.3" />
+		</entitygroup>
+		<entitygroup name="eg700_anfuehrerFrueh">
+			<e n="zombieWightFeral" />
+			<e n="ent700_spukhund" p="0.5" />
+			<e n="zombieScreamer" p="0.3" />
+		</entitygroup>
+		<entitygroup name="eg700_anfuehrerSpaet">
+			<e n="zombieWightRadiated" />
+			<e n="zombieWightCharged" p="0.5" />
+			<e n="zombieWightInfernal" p="0.5" />
+			<e n="ent700_spukhund" p="0.5" />
+			<e n="zombieScreamerFeral" p="0.3" />
+			<e n="zombieScreamerRadiated" p="0.2" />
+		</entitygroup>
+	</append>
 </config>
