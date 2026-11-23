@@ -355,12 +355,24 @@ danach `mod700check recipes` über das Ergebnis):
 | vor dem Bau | 2392 | 0 | 278 | 198 | **80** |
 | ConfigsDump des Spiels, 2026-11-21 | — | — | 278 | 198 | **80** |
 | nach dem Bau | 2656 | 0 | 271 | 271 | **0** |
+| ConfigsDump des Spiels, 2026-11-22, 22:08 | — | — | 271 | 271 | **0** |
 
 Der Vorlauf zählt, weil er am Stand vor dem Bau genau die Zahlen des Dumps trifft (auch
 8100 bekannte Kennungen, 345 Wurzeln, 496 / 115 / 66 Belohnungen). Sieben Rezepte weniger:
 die sieben, die entfallen. **Ein Nachweis ist er nicht** — den gibt erst ein neuer
-ConfigsDump nach einem Spielstart mit der Mod. Bis dahin bleibt `recipes` in `check-all.ps1`
-mit 80 rot, weil es den alten Dump liest.
+ConfigsDump nach einem Spielstart mit der Mod. ~~Bis dahin bleibt `recipes` in `check-all.ps1`
+mit 80 rot, weil es den alten Dump liest.~~
+
+**Der Nachweis liegt seit dem 2026-11-22 vor** (nachgetragen am 2026-11-23; Plan-0001,
+Prüfliste 25 a): Spiellauf von 22:07 bis 22:40 ohne EAC am Stand `4ff2001`, Dump von 22:08.
+`mod700check recipes` meldet an diesem Dump 271 Rezepte, 271 erreichbar, **0 Sackgassen** —
+dieselben Zahlen wie der Vorlauf. Was damit belegt ist und was nicht:
+
+- **Belegt am Dump des Spiels:** der Rezeptgraph. Jedes der 271 Rezepte ist erreichbar.
+- **Weiter nur gerechnet:** die Belohnungen. Dass keine Belohnung mehr auf eine leere Gruppe
+  zeigt und was in den Bündeln liegt, stammt aus dem Vorlauf und der eigenen Zählung unter
+  „Stand des Baus"; am neuen Dump ist das nicht nachgezählt.
+- **Nicht gesehen:** Handwerksfenster und Belohnungen im Spiel (Prüfliste 25 b bis d).
 
 **Form der 271 Rezepte** (auch am Vorlauf gemessen): keine Zutat doppelt, keine Zutat hinter
 `<effect_group>`, jede Marke einer `CraftingIngredientCount`-Zeile nennt eine Zutat ihres

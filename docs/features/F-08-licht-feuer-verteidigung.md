@@ -151,9 +151,11 @@ Phase 1.
       keine Luft.** `CheckPlantAlive` ersetzt den Block bei Nichterfüllung durch
       `BlockValue::Air`, und Vanillas Beleg (`plantedMushroom1`) steht auf Boden, nicht an
       einer Wand. Eine Fackel im Freien beweist es nicht → Prüfliste 11
-- [ ] **Eine Öllampe leuchtet unmittelbar nach dem Setzen.** Sie hatte die *leere* Klasse, und
+- [x] **Eine Öllampe leuchtet unmittelbar nach dem Setzen.** Sie hatte die *leere* Klasse, und
       Vanillas Kommentar warnt vor einer nicht-leeren; `PlantGrowing` fasst Licht nicht an,
-      aber das ist ein Schluss und keine Messung
+      aber das ist ein Schluss und keine Messung. *Gesehen am 2026-11-22 (Lauf von 22:07,
+      Nutzer; Plan-0001, offene Punkte, „Lichtquellen im Spiel, erster Blick"): sie leuchtet
+      sofort. Abgehakt am 2026-11-23.*
 
 Die ersten drei folgen aus `Class="PlantGrowing"`, wenn der Befund trägt — Zustand und Netz
 erledigt das Spiel. Zu prüfen bleibt die Zahl (`GrowthRate` in Minuten gegen gewünschte

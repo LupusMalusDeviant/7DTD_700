@@ -99,6 +99,12 @@ erst dann beginnt WP3.
 6. **WP1.5b** `[braucht Nutzer]` **Rauchtest im Spiel:** lädt das Gerüst, bevor Inhalt drin ist?
    *(Im ersten Entwurf war dieser Schritt fälschlich als `[Claude-prüfbar]` markiert — ein
    Spielstart ist er nicht.)*
+   **Stand 2026-11-22: so, wie er hier steht, ist dieser Test übersprungen.** Das leere Gerüst
+   ist nie im Spiel gestartet worden — als der erste Start möglich wurde (R2), war der Inhalt
+   längst drin. Geprüft ist an seiner Stelle der **Stand mit Inhalt** (Lauf von 21:05,
+   Prüfliste 1): acht Modlets und der Kern laden. Die Frage „trägt das Gerüst?" ist damit
+   beantwortet. Die Absicht dahinter — einen Ladefehler finden, *bevor* Inhalt darauf gebaut
+   wird — ist verfehlt und lässt sich nicht nachholen.
 7. **WP1.6** `[braucht Nutzer]` **Abnahme der Verträge.** Ohne sie beginnt WP3 nicht.
 
 **Ergebnis:** Vier Verträge in `docs/contracts/`, ein ladendes leeres Modlet-Gerüst,
@@ -110,7 +116,7 @@ Nutzer-Abnahme.
 |---|---|
 | WP1.1–WP1.4 | Vier Verträge in [`docs/contracts/`](../contracts/README.md). **Acht Modlets statt sechs** (D53) — Bauen und Fortschritt bekamen eigene Schichten. |
 | WP1.5 | `mod/` in acht Modlet-Ordner umgebaut, `build.ps1` und `smoke.ps1` darauf umgestellt, eine Fassung für alle acht aus `Directory.Build.props`. **104 geprüft, 0 rot.** |
-| WP1.5b | ~~offen, braucht einen Spielstart~~ **erledigt am 2026-11-22, 21:05** — nicht am leeren Gerüst, sondern am Stand mit Inhalt: Start mit `-noeac`, acht Modlets und der Kern geladen, 0 `EXC`; `smoke.ps1` gegen das Protokoll 123 geprüft, 0 rot, Exit 0 (Prüfliste 1) |
+| WP1.5b | ~~offen, braucht einen Spielstart~~ **Am leeren Gerüst übersprungen; ersetzt am 2026-11-22, 21:05, durch den Lauf am Stand mit Inhalt:** Start mit `-noeac`, acht Modlets und der Kern geladen, 0 `EXC`; `smoke.ps1` gegen das Protokoll 123 geprüft, 0 rot, Exit 0 (Prüfliste 1) |
 | WP1.6 | ~~offen, braucht die Abnahme~~ **erledigt am 2026-11-22:** alle vier Verträge sind abgenommen (01 bis 03 einzeln, 04 als Block) |
 
 Dabei kamen vier Dinge heraus, die dieser Plan vorher nicht wusste — sie stehen im Finding
@@ -1109,8 +1115,12 @@ des Speer-Angriffsblocks dieselbe Strecke beschreiben.
    lassen. Deshalb bodenständige Lichtquellen zuerst; die Wandfackel ist eine Nutzer-Frage.
    Zu bestimmen bleibt die Zahl.
 6. **WP6.6** `[braucht Nutzer]` Lasttest: 200 Fackeln, keine messbaren Server-Frame-Einbrüche.
-   **Stand 2026-11-22:** (b) und (c) sind beantwortet — die Öllampe leuchtet sofort, und
-   `GrowthRate` zählt echte Minuten; (a) und der Lasttest stehen aus. Einzelheiten unter den
+   **Stand 2026-11-22:** ~~(b) und (c) sind beantwortet — die Öllampe leuchtet sofort, und
+   `GrowthRate` zählt echte Minuten;~~ (b) ist beantwortet — die Öllampe leuchtet sofort.
+   (c) ist **teilweise** beantwortet (berichtigt am 2026-11-23): ein Lauf spricht für echte
+   Minuten (Wandkerze mit 15: aus nach 11 bis 19 echten Minuten, die Setzzeit ist nicht
+   notiert); wie stark `CropGrowthModifier` eingreift, ist nicht gemessen, und solange bleibt
+   `GrowthDeviation` ungesetzt. (a) und der Lasttest stehen aus. Einzelheiten unter den
    offenen Punkten, „Lichtquellen im Spiel, erster Blick".
    **Dazu drei Dinge, die nur dieser Test beantworten kann:** (a) eine Wandfackel in einem
    **geschlossenen** Raum abbrennen lassen und nachsehen, ob ein Halter hängt oder Luft ist
@@ -1249,7 +1259,9 @@ Bäume** — Learning by Doing ist Phase 2, und der Runenkundige mit ihr.
    unseren Namen im Fertigkeitsfenster, und sind die zwanzig verborgenen Zweige wirklich
    weg (Prüfliste 13 und 14)?
 
-**Ergebnis:** ~~Sechs~~ **Fünf** Bäume, kein sichtbarer Vanilla-Attribut- oder Perkname.
+**Ergebnis:** ~~Sechs~~ **Fünf** Bäume, ~~kein sichtbarer Vanilla-Attribut- oder Perkname~~
+kein sichtbarer **moderner** Attribut- oder Perkname (D90, 2026-11-22 — dieselbe Regel wie Z6:
+unter dem Zahnrad behalten fünf Fertigkeiten Vanillas Namen, zwei heißen neu).
 
 ---
 
@@ -1873,7 +1885,13 @@ Nutzer korrigiert**, sie ist die wackeligste Zahl im Plan (R12).
   drei Prüfwerkzeuge je einmal nachweislich rot und dann grün (WP2). **Und:** die Mod ist
   einmal im Spiel gelaufen, mit Protokoll (löst R2). Messbar: `smoke.ps1` ohne `-SkipLog`
   endet mit Exit 0. *(Dieser Teil ist erfüllt seit dem 2026-11-22, Prüfliste 1; WP1.6 ebenso.
-  Ob M1 damit ganz steht, hängt an WP2.)*
+  ~~Ob M1 damit ganz steht, hängt an WP2.~~ Berichtigt am 2026-11-23: WP2 ist seit dem
+  2026-11-07 erledigt („Stand 2026-11-07: WP2 erledigt"; die roten und grünen Läufe der drei
+  Befehle stehen in `tools/check/README.md`). Damit sind alle vier Teile belegt: Verträge
+  abgenommen, Gerüst lädt — gesehen am Stand mit Inhalt, nicht am leeren Gerüst (WP1.5b) —,
+  drei Werkzeuge rot und grün, die Mod im Spiel gelaufen. Aus dieser Liste bleibt an M1
+  nichts offen. Nicht Teil von M1 und weiter offen: Dedicated Server und zweiter Client
+  (R3, Prüfliste 2).)*
 - **M2 (2027-02-13) — Die Welt ist von 700.** Purge durch (WP3), Ressourcen, Währung und
   Werkstätten stehen (WP4). Messbar: `check-anachronisms` 0 Treffer, `check-recipes` grün für
   T0→T4. **Hier wird der MVP-Schnitt überprüft** (R1) und die Schätzung neu gerechnet (R12).
@@ -2328,7 +2346,10 @@ werden:
   oder Patches). Der Nutzer hat den Test nach
   einer halben Stunde abgebrochen; was er gesehen hat:
   1. *Öllampe (WP6.6 b):* **leuchtet sofort nach dem Setzen.** Beantwortet.
-  2. *Einheit von `GrowthRate` (WP6.6 c):* **echte Minuten, nicht Spielminuten.** Die
+  2. *Einheit von `GrowthRate` (WP6.6 c):* ~~**echte Minuten, nicht Spielminuten.**~~
+     **Ein Lauf spricht für echte Minuten, nicht Spielminuten — teilweise beantwortet**
+     (berichtigt am 2026-11-23: eine Messung mit offener Setzzeit, der Multiplikator
+     ungemessen; WP6.6 c bleibt dafür offen). Die
      Wandkerze (15) ging gegen 22:28 aus; gesetzt wurde sie zwischen 22:09 und 22:17, der
      Zeitpunkt ist nicht notiert und steht nicht im Protokoll — also 11 bis 19 echte
      Minuten. Bei 60 Minuten Taglänge wären 15 Spielminuten keine 40 Sekunden gewesen. Wie
@@ -2768,7 +2789,11 @@ werden:
   sind", Vorgabe 60. Die Startwerte stehen (15/30/45/60 Minuten), **aber die Einheit von
   `GrowthRate` ist noch nicht belegt** — real oder ingame —, und `GetTickRate` multipliziert
   zusätzlich mit einem spielweiten `CropGrowthModifier`. **Bleibt offen bis WP6.6**, und
-  solange bleibt `GrowthDeviation` ungesetzt.
+  solange bleibt `GrowthDeviation` ungesetzt. **Stand 2026-11-22** (nachgetragen am
+  2026-11-23): ein Lauf spricht für echte Minuten — die Wandkerze mit 15 ging nach 11 bis 19
+  echten Minuten aus („Lichtquellen im Spiel, erster Blick"). Der Einfluss von
+  `CropGrowthModifier` ist nicht gemessen. WP6.6 (c) ist damit teilweise beantwortet,
+  `GrowthDeviation` bleibt ungesetzt.
 - **B2 Stille-Logik.** „Tierlaute verstummen, wenn Seuchentote nahe sind" braucht C#. In diesem
   Plan nach Phase 2 verschoben. Falls das den MVP-Grusel zu stark schwächt, wäre es der erste
   Kandidat, Phase 1 doch um einen Patch zu erweitern — **das wäre eine Entscheidung des Nutzers**,
