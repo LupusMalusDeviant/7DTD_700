@@ -378,7 +378,7 @@ Nachtrag D199). **Schreiber und Werte bleiben gleich** — gerechnet wird weiter
 
 | Bindung | Wert | Quelle |
 |---|---|---|
-| `{odemzeigen}` | `true`, wenn `.cv700_odemZeigen` > 0,5 | Sichtbarkeit der ganzen Leiste |
+| `{odemzeigen}` | `true`, wenn `.cv700_odemZeigen` > 0,5 **und** der Spieler nicht schleicht (dort steht dann Vanillas Schleich-Balken) | Sichtbarkeit der ganzen Leiste |
 | `{odemanteil}` | `.cv700_odemAnteil`, auf 0..1 begrenzt, drei Stellen mit Punkt | Füllung des Balkens |
 
-Fehlt `700_00_Core`, bleibt die Leiste unsichtbar; sonst bricht nichts (D70).
+Platz (Nutzer, 2026-11-23): direkt über dem Ausdauer-Balken; Vanillas Buff-Liste rückt dafür um 12 nach oben. Fehlt `700_00_Core`, bleibt die Leiste unsichtbar; sonst bricht nichts (D70).

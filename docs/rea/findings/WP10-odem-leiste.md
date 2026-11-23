@@ -58,7 +58,7 @@ des Inventars. **Methode:** `mod700meta members --il` (Aufruf- und Feldfolgen, k
 viermal je Sekunde, frischt nur bei sichtbarer Änderung auf, gibt `{odemanteil}` mit Punkt und
 `{odemzeigen}` als true/false. Netz: nur Client. **Im Spiel ungeprüft** (S-41 neu).
 
-**Soll-Signaturen** jetzt 12 Zeilen in `tools/meta/expect/wp106.tsv` (dazu `parseController`,
+**Soll-Signaturen** jetzt 13 Zeilen in `tools/meta/expect/wp106.tsv` (dazu `parseController`,
 `GetTypeWithPrefix`, `XUiController::Update`/`GetBindingValueInternal`/`RefreshBindings`, `XUi::get_playerUI`,
-`LocalPlayerUI::get_entityPlayer`, `EntityAlive::GetCVar`). `mod700meta verify`: 12× ok, Exit 0; Gegenprobe
+`LocalPlayerUI::get_entityPlayer`, `EntityAlive::GetCVar`, `EntityAlive::get_Crouching` — beim Schleichen bleibt die Leiste aus). `mod700meta verify`: 13× ok, Exit 0; Gegenprobe
 mit `RefreshBindings(bool)`: Exit 1.

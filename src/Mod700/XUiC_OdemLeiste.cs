@@ -50,7 +50,9 @@ namespace Mod700
                 return;
             }
 
-            bool neuZeigen = spieler.GetCVar(".cv700_odemZeigen") > 0.5f;
+            // Beim Schleichen steht an derselben Stelle Vanillas Schleich-Balken (Nutzer
+            // 2026-11-23: Leiste "ueber Ausdauer") - dann bleibt die Odem-Leiste aus.
+            bool neuZeigen = spieler.GetCVar(".cv700_odemZeigen") > 0.5f && !spieler.Crouching;
             float neuAnteil = neuZeigen ? Klemmen(spieler.GetCVar(".cv700_odemAnteil")) : 0f;
 
             if (!gelesen || neuZeigen != zeigen || System.Math.Abs(neuAnteil - anteil) > Schwelle)
