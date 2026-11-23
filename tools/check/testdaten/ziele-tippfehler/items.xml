@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Pruefsatz fuer die Zielpruefung (Vertrag 04, Nachtrag Ziele der Herausforderungen).
+     Erfundene Kennungen. 'pruefFeuerrohrTeil' ist gesperrt und liegt auf KEINEM Weg mehr -
+     der Stand nach dem Purge, in dem die Aufgabe den Gegenstand trotzdem noch verlangt. -->
+<items>
+	<item name="pruefHolz">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+	<item name="pruefSalbe">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+	<item name="pruefFackel">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+	<item name="pruefFeuerrohrTeil">
+		<property name="Tags" value="pruefmarke" />
+	</item>
+</items>

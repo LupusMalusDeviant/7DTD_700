@@ -289,6 +289,17 @@ internal sealed class Judgement
 
     public int UnlocksErlaubt { get; private set; }
 
+    /// <summary>
+    /// Ist diese Kennung gesperrt — auch wenn sie auf keinem Weg mehr erreichbar ist? Die
+    /// Zielpruefung braucht genau das: nach dem Purge hat ein gesperrter Gegenstand keinen
+    /// Weg mehr und darum kein Urteil in <see cref="Verdicts"/>, aber eine Herausforderung
+    /// verlangt ihn weiter. Eine aufgeschobene Kennung gilt hier als lebend, wie ueberall.
+    ///
+    /// <para>ACHTUNG: schreibt der Sperrliste Treffer zu. Erst aufrufen, wenn die Listen der
+    /// Regeln ohne Treffer schon gebildet sind.</para>
+    /// </summary>
+    public bool IsBlockedName(string name) => IsBlocked(name);
+
     private bool IsBlocked(string carrier)
     {
         if (_verdicts.TryGetValue(carrier, out Verdict? known))

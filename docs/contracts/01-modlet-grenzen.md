@@ -256,6 +256,9 @@ Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D137). Abnahme: N
    der Gegenstand selbst. Jede Zeile muss in Vanilla treffen (`kette-pruefen` rechnet jeden XPath
    einzeln gegen Vanilla) **und** nach den Zeilen davor.
 
-**Grenzen.** Keine Prüfung im Repository weiß, ob ein Ziel erfüllbar ist — weder die neun neuen
+**Grenzen.** ~~Keine Prüfung im Repository weiß, ob ein Ziel erfüllbar ist — weder die neun neuen
 noch die zehn, die stehen bleiben. Die Zahl „35" ist mit einem Skript außerhalb des Repositorys
-gemessen. Ob das Spiel die neuen Ziele zählt, ist nicht gesehen (S-12).
+gemessen.~~ *Seit demselben Tag prüft `anachronisms` die Ziele (Vertrag 04, Nachtrag Ziele der
+Herausforderungen); die zehn stehen in `aufschub.txt`.* Ob das Spiel die neuen Ziele zählt, ist
+nicht gesehen (S-12). Finding F-18 ist gelesen: Nr. 2 darf fallen, sobald das Entfernen der zehn
+abgenommen ist (D138).

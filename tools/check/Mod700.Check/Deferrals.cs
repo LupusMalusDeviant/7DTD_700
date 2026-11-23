@@ -21,7 +21,18 @@ internal sealed class Deferrals
 {
     private readonly List<(Regex Pattern, string Package, string Reason)> _rules = new();
 
+    // Aufgeschobene ZIELE (Vertrag 04, Nachtrag Ziele der Herausforderungen). Eigener
+    // Regelsatz: eine Herausforderung ist kein Gegenstand, und 'gatherer*' soll nie
+    // versehentlich eine Kennung gleichen Anfangs aufschieben.
+    private readonly List<(string Text, Regex Pattern, string Package, string Reason)> _targets = new();
+    private readonly HashSet<string> _targetUsed = new(StringComparer.Ordinal);
+
     public int Rules => _rules.Count;
+
+    public int TargetRules => _targets.Count;
+
+    /// <summary>Vorsatz einer Zeile, die eine Herausforderung aufschiebt.</summary>
+    public const string TargetPrefix = "ziel:";
 
     /// <summary>
     /// Die Zeile, die sagt: nichts ist aufgeschoben. Kein gueltiger Kennungsname (das
@@ -82,20 +93,38 @@ internal sealed class Deferrals
                     + "Loch, das beim naechsten Lauf wie eine Entscheidung aussieht.");
             }
 
+            if (rule.StartsWith(TargetPrefix, StringComparison.Ordinal))
+            {
+                string target = rule[TargetPrefix.Length..].Trim();
+                if (target.Length == 0)
+                {
+                    throw new UsageException(
+                        $"{path}:{i + 1}: '{TargetPrefix}' ohne Muster. Hinter den Vorsatz "
+                        + "gehoert die Kennung der Herausforderung, etwa 'ziel:farmingCorn'.");
+                }
+
+                string targetEscaped = Regex.Escape(target).Replace("\\*", ".*");
+                list._targets.Add((target,
+                    new Regex($"^{targetEscaped}$", RegexOptions.Compiled),
+                    package.Value, reason));
+                continue;
+            }
+
             string escaped = Regex.Escape(rule).Replace("\\*", ".*");
             list._rules.Add((new Regex($"^{escaped}$", RegexOptions.Compiled),
                 package.Value, reason));
         }
 
-        if (emptyMarkerLine > 0 && list._rules.Count > 0)
+        int all = list._rules.Count + list._targets.Count;
+        if (emptyMarkerLine > 0 && all > 0)
         {
             throw new UsageException(
-                $"{path}:{emptyMarkerLine}: '{EmptyMarker}' steht neben {list._rules.Count} "
+                $"{path}:{emptyMarkerLine}: '{EmptyMarker}' steht neben {all} "
                 + "Aufschub-Zeile(n). Entweder ist etwas aufgeschoben oder nichts - beides "
                 + "zugleich ist ein Widerspruch.");
         }
 
-        if (list._rules.Count == 0 && emptyMarkerLine == 0)
+        if (all == 0 && emptyMarkerLine == 0)
         {
             throw new UsageException(
                 $"{path} enthaelt keine einzige Zeile. Eine leere Aufschub-Datei ist kein "
@@ -119,4 +148,31 @@ internal sealed class Deferrals
 
         return null;
     }
+
+    /// <summary>
+    /// Die Begruendung, wenn diese HERAUSFORDERUNG aufgeschoben ist — sonst null. Gefragt
+    /// wird nur fuer eine Herausforderung, die unerfuellbar IST; eine Regel, die nie gefragt
+    /// wird oder nie passt, steht danach in <see cref="UnusedTargetRules"/>.
+    /// </summary>
+    public string? MatchTarget(string challenge)
+    {
+        foreach ((string text, Regex pattern, string _, string reason) in _targets)
+        {
+            if (pattern.IsMatch(challenge))
+            {
+                _targetUsed.Add(text);
+
+                // Die Begruendung nennt ihr Arbeitspaket schon selbst (ohne es waere die
+                // Zeile abgelehnt worden); es noch einmal davorzusetzen, verdoppelt es nur.
+                return reason;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>Zielaufschuebe, die keine unerfuellbare Herausforderung aufgeschoben haben.</summary>
+    public IEnumerable<string> UnusedTargetRules => _targets
+        .Where(t => !_targetUsed.Contains(t.Text))
+        .Select(t => TargetPrefix + t.Text);
 }

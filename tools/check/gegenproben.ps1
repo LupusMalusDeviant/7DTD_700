@@ -578,6 +578,108 @@ Test-Case 'Auftragsregel ohne Muster' 2 @(
     'anachronisms', $auftraege, '--denylist', (Join-Path $data 'denylist-auftrag-ohne-muster.txt'))
 
 Write-Output ""
+Write-Output "== Gegenproben: Ziele der Herausforderungen - ein Ziel ist kein Weg (D104, D137) =="
+# Vertrag 04, Nachtrag Ziele der Herausforderungen. 35 von 148 sichtbaren Herausforderungen
+# verlangten Gesperrtes, waehrend 'anachronisms' gruen war: eine Aufgabe gibt nichts in die
+# Hand. Im Pruefsatz 'ziele' liegt das gesperrte Teil auf KEINEM Weg mehr - der Stand nach
+# dem Purge. Ein Pruefer, der nur Erreichbares beurteilt, saehe hier nichts.
+$ziele = Join-Path $data 'ziele'
+$zielliste = Join-Path $data 'denylist-ziele.txt'
+$ohneAufschub = Join-Path $data 'aufschub-leermeldung.txt'
+function Format-Zahl([string]$Name, $Wert) { '  {0,-34} {1}' -f $Name, $Wert }
+
+# Z1. Die zwei unerfuellbaren MUESSEN rot werden - auch die, deren Gegenstand lebt und nur
+#     das verlangte Werkzeug gesperrt ist. Die fuenf erfuellbaren bleiben ungenannt; die
+#     Liste mit einem lebenden Wert ist ein Hinweis, kein Fehler.
+Test-Output 'Herausforderung mit gesperrtem Ziel faellt auf' 1 `
+    @('anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('unerfuellbares-ziel: zielGesperrt',
+                   'unerfuellbares-ziel: zielGehalten',
+                   'ziel-nennt-gesperrtes: zielListe',
+                   (Format-Zahl 'herausforderungen' 7),
+                   (Format-Zahl 'unerfuellbar_gesperrt' 2),
+                   (Format-Zahl 'unerfuellbar_ohne_weg' 0)) `
+    -MustNotContain @('unerfuellbares-ziel: zielLebt',
+                      'unerfuellbares-ziel: zielHandFrei',
+                      'unerfuellbares-ziel: zielListe',
+                      'unerfuellbares-ziel: zielLicht',
+                      'unerfuellbares-ziel: zielVariante')
+
+# Z2. Rot wird es durch die REGEL, nicht durch die Daten. Dafuer der Stand VOR dem Purge:
+#     das Teil hat ein Rezept. Mit der Regel faellt beides auf - der erreichbare Gegenstand
+#     und die Aufgaben, die ihn verlangen; ohne die Zeile ist dieselbe Quelle gruen, und
+#     auch der Hinweis an der Liste faellt weg.
+$zieleVorher = Join-Path $data 'ziele-vor-purge'
+Test-Output 'vor dem Purge: Gegenstand und Ziel fallen beide auf' 1 `
+    @('anachronisms', $zieleVorher, '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('erreichbarer-anachronismus: pruefFeuerrohrTeil',
+                   'unerfuellbares-ziel: zielGesperrt',
+                   (Format-Zahl 'unerfuellbar_gesperrt' 2))
+Test-Output 'ohne die Sperrregel ist dieselbe Quelle gruen' 0 `
+    @('anachronisms', $zieleVorher, '--denylist', (Join-Path $data 'denylist-ziele-ohne.txt'), '--aufschub', $ohneAufschub) `
+    -MustContain @((Format-Zahl 'unerfuellbare_herausforderungen' 0)) `
+    -MustNotContain @('unerfuellbares-ziel', 'ziel-nennt-gesperrtes')
+
+# Z3. Der Zielaufschub bucht um: aus den zwei Fehlern werden zwei Hinweise mit Adresse, und
+#     die Zahl steht daneben. Die Herausforderungen verschwinden nicht.
+Test-Output 'Zielaufschub bucht um, statt zu verschweigen' 0 `
+    @('anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel.txt')) `
+    -MustContain @('aufgeschobenes-ziel: zielGesperrt',
+                   'aufgeschobenes-ziel: zielGehalten',
+                   'WP9',
+                   (Format-Zahl 'unerfuellbare_herausforderungen' 2),
+                   (Format-Zahl 'davon_aufgeschoben' 2)) `
+    -MustNotContain @('unerfuellbares-ziel')
+
+# Z4. Und ohne Aufschub stehen sie wieder als Fehler da.
+Test-Output 'ohne Aufschub sind die Ziele wieder Fehler' 1 `
+    @('anachronisms', $ziele, '--denylist', $zielliste, '--ohne-aufschub') `
+    -MustContain @('unerfuellbares-ziel: zielGesperrt', 'unerfuellbares-ziel: zielGehalten')
+
+# Z5. Ein Zielaufschub ueber eine erfuellbare Herausforderung schiebt nichts auf und muss
+#     auffallen - sonst bliebe ein eingeloester Aufschub fuer immer stehen.
+Test-Output 'Zielaufschub ohne Treffer wird genannt' 0 `
+    @('anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-uebrig.txt')) `
+    -MustContain @('zielaufschub-trifft-nichts: ziel:zielLebt',
+                   (Format-Zahl 'zielaufschub_ohne_treffer' 1)) `
+    -MustNotContain @('zielaufschub-trifft-nichts: ziel:zielGesperrt')
+
+# Z6. Derselbe Name ohne den Vorsatz ist ein Aufschub fuer einen GEGENSTAND und schiebt
+#     keine Herausforderung auf. Die Regelsaetze sind getrennt.
+Test-Output 'ein Gegenstands-Aufschub schiebt keine Herausforderung auf' 1 `
+    @('anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-als-gegenstand.txt')) `
+    -MustContain @('unerfuellbares-ziel: zielGesperrt', (Format-Zahl 'zielaufschubregeln' 0))
+
+# Z7. Das zweite Signal: nichts ist gesperrt, aber es fuehrt nichts zum Ziel - der
+#     Tippfehler, das Herstellen ohne Rezept, der Block, den es nicht gibt. Das Spiel meldet
+#     keinen davon (Finding F-18).
+Test-Output 'Ziel ohne Weg, ohne Rezept, ohne Block faellt auf' 1 `
+    @('anachronisms', (Join-Path $data 'ziele-tippfehler'), '--denylist', $zielliste, '--aufschub', $ohneAufschub) `
+    -MustContain @('unerfuellbares-ziel: zielTippfehler',
+                   'pruefSalbee (ohne Weg)',
+                   'unerfuellbares-ziel: zielOhneRezept',
+                   'pruefHolz (ohne Rezept)',
+                   'unerfuellbares-ziel: zielBlockFehlt',
+                   'pruefGibtEsNicht (nicht definiert)',
+                   (Format-Zahl 'unerfuellbar_gesperrt' 0),
+                   (Format-Zahl 'unerfuellbar_ohne_weg' 3)) `
+    -MustNotContain @('unerfuellbares-ziel: zielLebt')
+
+# Z8. Eine Quelle ohne challenges.xml kann ueber Ziele nichts sagen. Kein Fehler (sonst
+#     waeren alle kleinen Pruefsaetze rot), aber gesagt.
+Test-Output 'Quelle ohne challenges.xml: gesagt, nicht rot' 0 `
+    @('anachronisms', $auftraege, '--denylist', (Join-Path $data 'denylist-auftrag-keine.txt')) `
+    -MustContain @('keine challenges.xml') `
+    -MustNotContain @('unerfuellbares-ziel')
+
+# Z9 und Z10. 'ziel:' ohne Kennung und die Leermeldung neben einem Zielaufschub sind
+#     Benutzungsfehler, keine Regeln, die alles oder nichts treffen.
+Test-Case 'Zielaufschub ohne Kennung' 2 @(
+    'anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-ohne-muster.txt'))
+Test-Case 'Leermeldung neben einem Zielaufschub ist ein Widerspruch' 2 @(
+    'anachronisms', $ziele, '--denylist', $zielliste, '--aufschub', (Join-Path $data 'aufschub-ziel-und-leermeldung.txt'))
+
+Write-Output ""
 Write-Output "== Gegenproben: Benutzungsfehler ist Exit 2, nicht rot und nicht gruen =="
 Test-Case 'unbekannter Befehl' 2 @('gibtesnicht', $data)
 Test-Case 'fehlender Pfad' 2 @('recipes')

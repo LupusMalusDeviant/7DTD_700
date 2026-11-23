@@ -82,10 +82,39 @@
 # Die Zeile lautete:
 #   resourceRepairKit     # WP5: F-02/F-03 bauen Qualitaet und Verschleiss neu; WP5.4 und WP5.5 haben 13 von 23, die Boegen fehlen (WP5.2)
 #
-# DAMIT IST NICHTS MEHR AUFGESCHOBEN. Die Zeile unten sagt das ausdruecklich; ohne sie
-# waere eine Datei ohne Regel ein Benutzungsfehler (sie koennte versehentlich geleert sein).
-# Wer wieder etwas aufschiebt, ersetzt diese Zeile durch die neue Regel.
-=kein-aufschub        # alle Aufschuebe eingeloest am 2026-11-22 (zuletzt resourceRepairKit, Nachtlauf)
+# DAMIT IST KEIN GEGENSTAND MEHR AUFGESCHOBEN (Stand 2026-11-22, zuletzt resourceRepairKit).
+# Bis zum 2026-11-23 stand hier darum die Leermeldung '=kein-aufschub'. Sie ist den
+# Zielaufschueben unten gewichen: die Leermeldung und eine Aufschub-Zeile schliessen sich aus.
+# Sind auch die Ziele eingeloest, kommt sie zurueck.
+
+# --- Ziele von Herausforderungen (D137, Vertrag 04, Nachtrag Ziele) --------------
+# Eine Zeile 'ziel:<Kennung der Herausforderung>' schiebt eine UNERFUELLBARE
+# Herausforderung auf: aus dem Fehler 'unerfuellbares-ziel' wird der Hinweis
+# 'aufgeschobenes-ziel', gezaehlt unter 'davon_aufgeschoben'. Ein Zielaufschub ueber
+# eine Herausforderung, die erfuellbar ist, tut nichts und faellt als
+# 'zielaufschub-trifft-nichts' auf.
+#
+# Die vier Biom-Reihen: je vier von sieben Aufgaben verlangen Gesperrtes (die Traenke,
+# Salpeter, Oelschiefer, Feldfruechte, den Ruestungs-Bausatz). Ihr Reiter ist verborgen,
+# solange der Biom-Fortschritt aus ist (D136); wer ihn anstellt, sieht sie. Was aus den
+# Reihen wird, entscheidet der Umbau des Biom-Fortschritts.
+ziel:burntSurvival*       # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
+ziel:desertSurvival*      # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
+ziel:snowSurvival*        # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
+ziel:wastelandSurvival*   # WP6.3: Biom-Fortschritt, Weg B (D94, D128, D136) - 4 von 7 unerfuellbar
+#
+# Zehn ohne lebendes Gegenstueck (D137). Sie stehen wie in Vanilla, bis entschieden ist,
+# ob sie verborgen, entfernt oder umgedeutet werden (Entscheidungsliste N-33, Finding F-18).
+ziel:gathererPotassium    # WP1.6: Salpeter ist gesperrt, kein Gegenstueck (D137, N-33)
+ziel:gathererOilShale     # WP1.6: Oelschiefer ist gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingCoffeeBeans   # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingYucca         # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingBlueberry     # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingPumpkin       # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingCorn          # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:farmingPotato        # WP1.6: Feldfrucht gesperrt, kein Gegenstueck (D137, N-33)
+ziel:healerConcussion     # WP1.6: Schmerzmittel gesperrt, kein lebendes Mittel (D137, N-33)
+ziel:healerFatigued       # WP1.6: Vitamine gesperrt, kein lebendes Mittel (D137, N-33)
 # resourceArmorCraftingKit ist mit WP5.5 EINGELOEST und steht darum nicht mehr hier.
 # Gemessen: nach dem Purge verlangen ihn nur noch vier Rezepte, die Biom-Abzeichen
 # biomeWeatherItem1 bis 4 - und die sind ueber resourceScrapPolymers ohnehin schon tot.

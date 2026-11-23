@@ -3589,3 +3589,120 @@ die erste Probe rot (so wie der echte Stand es war).
 Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **280 Gegenproben, 0
 fehlgeschlagen; 10 Prüfungen, 1 rot** (weiter `anachronisms` am Dump vom 22.11., vier Fehler).
 Sprachschlüssel: 76 genannte, 0 ohne Zeile. Eigene Kette: 774 XPaths, 0 ohne Treffer.
+
+## Nachtrag Ziele der Herausforderungen, 2026-11-23 — `unerfuellbares-ziel` und `ziel:` in `aufschub.txt`, **Abnahme offen**
+
+Gebaut auf Vertragsentwurf im autonomen Lauf (Plan-0002 WP1.6, D104 Frage 2, D137, D138).
+Abnahme: N-34 der Entscheidungsliste.
+
+### Anlass
+
+35 von 148 sichtbaren Herausforderungen verlangten etwas, das der Purge gesperrt hat („Sammle
+zehn Rohre"), und `anachronisms` war dabei grün: ein Ziel gibt nichts in die Hand und steht in
+keinem der sechs Wege aus Abschnitt 3. Gefunden hat es ein Skript außerhalb des Repositorys.
+Nach dem Purge ist der Fall für eine Erreichbarkeitsprüfung sogar unsichtbar: der gesperrte
+Gegenstand hat keinen Weg mehr und darum kein Urteil — die Aufgabe verlangt ihn weiter.
+
+### Die Regel
+
+1. `anachronisms` liest `challenges.xml` der Quelle. Fehlt die Datei, steht
+   `herausforderungen: keine challenges.xml - Ziele nicht geprueft` im Bericht; das ist kein
+   Fehler (die kleinen Prüfsätze haben keine).
+2. An jedem `<objective>` einer `<challenge>` werden **Kennungen** gelesen, in Gruppen:
+   `item` (Kommaliste); `block` zusammen mit `alternate_item`; `needed_resource`; `held` nur,
+   wenn `required_held="true"`. Der Zusatz `:VariantHelper` wird für das Urteil abgetrennt.
+3. Jeder Wert hat einen **Zustand**:
+   - *gesperrt* — eine Regel der Sperrliste oder eine Eigenschaftsregel trifft die Kennung.
+     Gefragt wird die **Regel, nicht die Erreichbarkeit**; eine Freigabe schlägt wie überall,
+     eine aufgeschobene Kennung gilt als lebend.
+   - *ohne Rezept* — Ziel der Art `Craft`, und kein Rezept trägt den Namen.
+   - *ohne Weg* — jede andere Art an `item`, `alternate_item`, `needed_resource`, `held`: keiner
+     der sechs Wege führt zu der Kennung.
+   - *nicht definiert* — ein Wert an `block`, den `blocks.xml` (und `items.xml`) nicht kennt.
+     Ein Block braucht **keinen** Weg: er wird gesetzt, nicht erworben (Vanillas
+     `wallTorchLightPlayer` hat keinen).
+   - sonst *lebt* er.
+4. Eine **Gruppe** ist tot, wenn kein Wert lebt — eine Liste ist ein Entweder-oder (für
+   `CureDebuff` in Finding F-18 gelesen). Ein Ziel ist tot, wenn eine seiner Gruppen tot ist;
+   eine Herausforderung ist **unerfüllbar**, wenn eines ihrer Ziele tot ist.
+5. Eine unerfüllbare Herausforderung ist ein Fehler **`unerfuellbares-ziel`** mit Zielart,
+   Attribut, Zeile und dem Zustand jedes Werts. Lebt in einer Liste ein Wert und andere nicht,
+   ist das der Hinweis `ziel-nennt-gesperrtes`.
+6. Zähler: `herausforderungen`, `ziele_mit_kennung`, `unerfuellbare_herausforderungen`,
+   `davon_aufgeschoben`, `unerfuellbar_gesperrt` (nur Gesperrtes), `unerfuellbar_ohne_weg`
+   (mindestens ein Wert ohne Weg, ohne Rezept oder nicht definiert),
+   `ziele_mit_gesperrtem_listenwert`, `zielaufschubregeln`, `zielaufschub_ohne_treffer`.
+
+### Der Zielaufschub
+
+7. Eine Zeile `ziel:<Muster>  # WP…: Grund` in `aufschub.txt` schiebt eine **unerfüllbare
+   Herausforderung** auf (Muster über die Kennung der Herausforderung, `*` wie überall). Aus dem
+   Fehler wird der Hinweis `aufgeschobenes-ziel`, gezählt unter `davon_aufgeschoben`. Wie jeder
+   Aufschub: eine Umbuchung mit Adresse, kein Bestanden; ohne Arbeitspaket Exit 2.
+8. Zielaufschübe und Aufschübe für Gegenstände sind **getrennte Regelsätze**: derselbe Name
+   ohne Vorsatz schiebt keine Herausforderung auf, und `ziel:` nie einen Gegenstand.
+   `--ohne-aufschub` schaltet beide ab.
+9. Ein Zielaufschub, der nichts aufgeschoben hat (die Herausforderung ist erfüllbar oder die
+   Kennung falsch geschrieben), ist der Hinweis `zielaufschub-trifft-nichts`.
+10. `ziel:` ohne Muster ist ein Benutzungsfehler (Exit 2). Die Leermeldung `=kein-aufschub`
+    neben einem Zielaufschub ist derselbe Widerspruch wie neben einem Aufschub für einen
+    Gegenstand (Exit 2). **Folge für `aufschub.txt`:** die Leermeldung vom 2026-11-22 ist den
+    14 Zielaufschüben gewichen; sie kommt zurück, wenn auch die eingelöst sind.
+
+`purge-patch` und `ungeprueft` lesen dieselbe Datei und beachten die `ziel:`-Zeilen nicht.
+`check-all.ps1` ändert sich nicht.
+
+### Kalibrierung
+
+Gegen das unveränderte `Data/Config` von V 3.40 b10 mit der heutigen Sperrliste:
+`herausforderungen 175`, `unerfuellbare_herausforderungen 35`, `unerfuellbar_gesperrt 35`,
+`unerfuellbar_ohne_weg 0`, `ziele_mit_gesperrtem_listenwert 6`. Die 35 und die 6 sind die Zahlen
+des Skripts (D80, D137), unabhängig gerechnet; das zweite Signal schweigt an Vanilla. Ein
+Prüfer, der schon am unveränderten Spiel rot meldet, taugte nicht als Signal — in der ersten
+Messung waren es fünf Ziele mit drei Kennungen (`frameShapes`, `woodShapes`,
+`wallTorchLightPlayer`), daher die Regeln zu `:VariantHelper` und zu Blöcken.
+
+### Grenzen
+
+- Gelesen werden nur Kennungen von Gegenständen und Blöcken. Ob es die verlangten **Wesen,
+  Biome, Händler, Aufträge, Zustände** noch gibt (`Kill`, `EnterBiome`, `MeetTrader`,
+  `QuestComplete`, `debuff`), sieht die Prüfung nicht; `item_tags` an `UseItem` auch nicht.
+- Sie weiß nicht, ob das Spiel ein Ziel **zählt**: `Harvest` zählt nur beim Zuschlagen und mit
+  `block_tag` nur an Blöcken mit dem Tag, an Kadavern nur mit `is_block="false"`; `CureDebuff`
+  und `UseItem` nur Gegenstände der Aktion „Essen" (alles Finding F-18). Ein Gegenstand, der
+  nur im Loot liegt, gilt bei `Harvest` als „mit Weg".
+- **Verweise ohne Vorprüfung im Spiel** (F-18 §6) sind nicht abgedeckt: `group="X"` ohne Gruppe,
+  `ChallengeComplete … is_group` auf eine fehlende Gruppe, die Liste `CompleteChallenge` in
+  `gameevents.xml`. Sie werden nötig, sobald eine Herausforderung oder Gruppe entfernt wird.
+- Was aus Wesen fällt (`entityclasses.xml`, `<drop>`), ist weiter **kein Weg** in Abschnitt 3.
+  Gemessen am 2026-11-23: sieben Kennungen, alle haben auch einen anderen Weg, keine ist
+  gesperrt — heute kein Loch, aber eines, sobald ein Wesen etwas fallen lässt, das sonst
+  nirgends liegt.
+- Der Dump vom 22.11. kennt unsere `challenges.xml` nicht: dort sind die neun umgebogenen Ziele
+  rot. Am Vorlauf des heutigen Standes ist keines rot.
+
+### Gegenproben (Projektregel 5)
+
+Elf neue Gegenproben in `gegenproben.ps1` (Abschnitt „Ziele der Herausforderungen"), Prüfsätze
+`testdaten/ziele` (Stand nach dem Purge: das gesperrte Teil liegt auf keinem Weg),
+`ziele-vor-purge`, `ziele-tippfehler`, zwei Prüflisten `denylist-ziele*.txt` und fünf
+`aufschub-ziel*.txt` (erfundene Kennungen):
+
+1. Gesperrtes Ziel und gesperrtes verlangtes Werkzeug sind rot; fünf erfüllbare (darunter
+   Block ohne Weg, Sammelblock mit Zusatz, Werkzeug ohne `required_held`) bleiben ungenannt;
+   die Liste mit lebendem Wert ist ein Hinweis.
+2. Vor dem Purge fallen Gegenstand **und** Ziel auf.
+3. Dieselbe Quelle ohne die Sperrregel: grün — rot macht die Regel, nicht die Daten.
+4. Zielaufschub: zwei Hinweise statt zwei Fehler, Exit 0, die Zahl steht da.
+5. `--ohne-aufschub`: wieder Fehler.
+6. Zielaufschub ohne Treffer wird genannt.
+7. Ein Aufschub ohne Vorsatz schiebt keine Herausforderung auf.
+8. Tippfehler, `Craft` ohne Rezept, unbekannter Block: drei Fehler des zweiten Signals.
+9. Quelle ohne `challenges.xml`: gesagt, nicht rot.
+10. `ziel:` ohne Kennung: Exit 2.
+11. Leermeldung neben Zielaufschub: Exit 2.
+
+Lauf vom 2026-11-23: `powershell -File tools/check/check-all.ps1` — **291 Gegenproben, 0
+fehlgeschlagen; 10 Prüfungen, 1 rot** (`anachronisms` am Dump vom 22.11., jetzt 13 Fehler: die
+vier alten und die neun Ziele, die der Dump noch in Vanillas Fassung zeigt). Am Vorlauf:
+`unerfuellbare_herausforderungen 26`, `davon_aufgeschoben 26`, 0 rot.

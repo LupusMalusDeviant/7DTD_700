@@ -87,6 +87,11 @@ internal static class Program
             noch am Gedaechtnis des Autors haengt, und soll fallen. Die Regeln heissen:
               schusswaffe, patronenmunition, entwicklergegenstand, strom, elektrikerhandwerk
 
+            anachronisms liest auch die Ziele der Herausforderungen (challenges.xml): eine
+            Aufgabe, die nur Gesperrtes verlangt oder etwas, zu dem kein Weg fuehrt, ist der
+            Fehler 'unerfuellbares-ziel'. 'ziel:<kennung>  # WP...' in aufschub.txt schiebt
+            eine solche Herausforderung auf - umgebucht und gezaehlt, nicht verschwiegen.
+
             --no-extends und --ohne-regel sind GEGENPROBEN, kein Nachweis: sie schalten die
             Vererbung bzw. eine Regel ab, damit sichtbar wird, dass sie wirklich etwas
             beitragen. Beide Laeufe sagen das in ihren Grenzen auch selbst.

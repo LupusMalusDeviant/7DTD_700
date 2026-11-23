@@ -1,0 +1,5 @@
+# Gegenprobe: dieselben Namen OHNE den Vorsatz 'ziel:'. Das sind Aufschuebe fuer
+# Gegenstaende dieses Namens, und die gibt es nicht. Eine Herausforderung schieben sie
+# nicht auf - die beiden Regelsaetze sind getrennt.
+zielGesperrt          # WP9: nur zur Gegenprobe
+zielGehalten          # WP9: nur zur Gegenprobe

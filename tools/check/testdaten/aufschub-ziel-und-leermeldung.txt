@@ -1,0 +1,4 @@
+# Gegenprobe: die Leermeldung neben einem Zielaufschub ist derselbe Widerspruch wie neben
+# einem Aufschub fuer einen Gegenstand.
+=kein-aufschub        # Gegenprobe: angeblich nichts aufgeschoben
+ziel:zielGesperrt     # WP9: und doch etwas

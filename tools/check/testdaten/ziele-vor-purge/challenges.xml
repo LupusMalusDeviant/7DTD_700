@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Sieben Herausforderungen: zwei verlangen Gesperrtes, eine nennt es nur in einer Liste,
+     vier sind erfuellbar. Mit der Sperrliste 'denylist-ziele.txt' muessen genau die ersten
+     zwei rot werden; ohne die Regel keine. -->
+<challenges>
+	<challenge_category name="pruefKategorie" title="pruef" icon="pruef" />
+	<challenge_group name="pruefGruppe" category="pruefKategorie" title_key="pruef" />
+
+	<!-- erfuellbar: Holz faellt aus dem Baum -->
+	<challenge name="zielLebt" group="pruefGruppe">
+		<objective type="Harvest" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- unerfuellbar: der einzige Gegenstand ist gesperrt -->
+	<challenge name="zielGesperrt" group="pruefGruppe">
+		<objective type="Gather" item="pruefFeuerrohrTeil" count="5" />
+	</challenge>
+
+	<!-- unerfuellbar: das Holz lebt, aber verlangt ist es mit dem gesperrten Werkzeug -->
+	<challenge name="zielGehalten" group="pruefGruppe">
+		<objective type="Harvest" held="pruefFeuerrohrTeil" required_held="true" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- erfuellbar: dasselbe ohne 'required_held' - das Werkzeug ist dann nur ein Vorschlag -->
+	<challenge name="zielHandFrei" group="pruefGruppe">
+		<objective type="Harvest" held="pruefFeuerrohrTeil" item="pruefHolz" count="10" />
+	</challenge>
+
+	<!-- erfuellbar, mit Hinweis: eine Liste ist ein Entweder-oder, die Salbe lebt -->
+	<challenge name="zielListe" group="pruefGruppe">
+		<objective type="CureDebuff" debuff="pruefWunde" item="pruefSalbe,pruefFeuerrohrTeil" count="5" />
+	</challenge>
+
+	<!-- erfuellbar: ein Block wird gesetzt, zu ihm fuehrt kein Weg, die Fackel setzt ihn -->
+	<challenge name="zielLicht" group="pruefGruppe">
+		<objective type="BlockPlace" block="pruefLicht" alternate_item="pruefFackel" count="1" />
+	</challenge>
+
+	<!-- erfuellbar: der Sammelblock mit Zusatz, das Rezept heisst genauso -->
+	<challenge name="zielVariante" group="pruefGruppe">
+		<objective type="Craft" item="pruefRahmen:VariantHelper" count="1" />
+		<objective type="BlockPlace" block="pruefRahmen:VariantHelper" count="1" />
+	</challenge>
+</challenges>

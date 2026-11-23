@@ -1,0 +1,5 @@
+# Gegenprobe zum Zielaufschub. Schiebt die beiden unerfuellbaren Herausforderungen des
+# Pruefsatzes 'ziele' auf. Erwartung: sie erscheinen als 'aufgeschobenes-ziel' und nicht
+# mehr als 'unerfuellbares-ziel' - aber sie verschwinden nicht.
+ziel:zielGesperrt     # WP9: nur zur Gegenprobe, kein echter Aufschub
+ziel:zielGehalten     # WP9: nur zur Gegenprobe, kein echter Aufschub

@@ -1,0 +1,6 @@
+# Gegenprobe: ein Zielaufschub ueber eine Herausforderung, die erfuellbar IST. Er schiebt
+# nichts auf und muss als 'zielaufschub-trifft-nichts' auffallen - sonst bliebe ein
+# eingeloester Aufschub fuer immer in der Datei stehen.
+ziel:zielGesperrt     # WP9: nur zur Gegenprobe
+ziel:zielGehalten     # WP9: nur zur Gegenprobe
+ziel:zielLebt         # WP9: nur zur Gegenprobe - diese Herausforderung ist erfuellbar

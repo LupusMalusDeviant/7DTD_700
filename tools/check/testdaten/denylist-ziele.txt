@@ -1,0 +1,3 @@
+# Pruefliste fuer die Zielpruefung. Sperrt das Feuerrohr-Teil, das im Pruefsatz 'ziele'
+# auf keinem Weg mehr liegt, aber von zwei Herausforderungen verlangt wird.
+pruefFeuerrohr*

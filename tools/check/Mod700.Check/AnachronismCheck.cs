@@ -243,6 +243,11 @@ internal static class AnachronismCheck
                 + "den Tippfehler meldet 'purge-patch' gegen Vanilla.");
         }
 
+        // Ziele der Herausforderungen (D104 Frage 2, D137; Vertrag 04, Nachtrag Ziele). Steht
+        // NACH den Listen der Regeln ohne Treffer oben: die Zielpruefung fragt die Sperrliste
+        // nach Kennungen, die auf keinem Weg mehr liegen, und schreibt ihr damit Treffer zu.
+        ChallengeTargets.Check(report, source, definitions, judgement, deferrals);
+
         foreach ((string name, string rule, string detail) in judgement.ModsUnjudged)
         {
             report.Hint(rule, name, detail);

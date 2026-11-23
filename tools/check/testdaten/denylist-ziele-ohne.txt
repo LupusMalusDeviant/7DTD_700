@@ -1,0 +1,4 @@
+# Wie denylist-ziele.txt, aber OHNE die Regel fuer das Feuerrohr-Teil. Gegen den Pruefsatz
+# 'ziele' muss 'anachronisms' damit gruen sein: rot wird es durch die Regel, nicht durch
+# die Daten. Eine Regel muss dastehen, sonst gilt die Datei als leer; sie trifft nichts.
+pruefGanzAnderes*

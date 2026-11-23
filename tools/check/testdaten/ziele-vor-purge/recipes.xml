@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Wie testdaten/ziele/recipes.xml, dazu ein Rezept fuer das Feuerrohr-Teil: der Stand VOR
+     dem Purge. Das Teil ist erreichbar; ob die Aufgaben, die es verlangen, erfuellbar sind,
+     entscheidet allein die Sperrliste. -->
+<recipes>
+	<recipe name="pruefSalbe" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+	<recipe name="pruefFackel" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+	<recipe name="pruefRahmen:VariantHelper" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+	<recipe name="pruefFeuerrohrTeil" count="1">
+		<ingredient name="pruefHolz" count="1" />
+	</recipe>
+</recipes>

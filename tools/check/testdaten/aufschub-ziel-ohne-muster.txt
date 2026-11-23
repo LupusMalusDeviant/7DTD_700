@@ -1,0 +1,2 @@
+# Gegenprobe: 'ziel:' ohne Kennung dahinter ist ein Benutzungsfehler.
+ziel:                 # WP9: hier fehlt die Herausforderung

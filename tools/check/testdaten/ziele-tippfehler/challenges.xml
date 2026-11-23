@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Das zweite Signal: nichts ist gesperrt, aber es fuehrt nichts zum Ziel. So sieht ein
+     Tippfehler in einem umgebogenen Ziel aus - und das Spiel meldet ihn nicht (F-18). -->
+<challenges>
+	<challenge_category name="pruefKategorie" title="pruef" icon="pruef" />
+	<challenge_group name="pruefGruppe" category="pruefKategorie" title_key="pruef" />
+
+	<!-- erfuellbar, zum Vergleich -->
+	<challenge name="zielLebt" group="pruefGruppe">
+		<objective type="Craft" item="pruefSalbe" count="1" />
+	</challenge>
+
+	<!-- ein Buchstabe zu viel: 'pruefSalbee' gibt es nicht -->
+	<challenge name="zielTippfehler" group="pruefGruppe">
+		<objective type="Gather" item="pruefSalbee" count="1" />
+	</challenge>
+
+	<!-- Holz gibt es, aber niemand stellt es her: 'Craft' verlangt ein Rezept -->
+	<challenge name="zielOhneRezept" group="pruefGruppe">
+		<objective type="Craft" item="pruefHolz" count="1" />
+	</challenge>
+
+	<!-- ein Block, den keine blocks.xml kennt -->
+	<challenge name="zielBlockFehlt" group="pruefGruppe">
+		<objective type="BlockPlace" block="pruefGibtEsNicht" count="1" />
+	</challenge>
+</challenges>
