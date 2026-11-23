@@ -1,0 +1,17 @@
+# Soll-Signaturen fuer das Finding WP9-herstellen-und-schaden (Plan-0002 WP9.3).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran (noch); die Datei meldet ein Spiel-Update, das die Lesart zum Herstell-Zaehler,
+# zum Schadenspfad, zum Wurf oder zur Qualitaet ungueltig machen koennte.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp93.tsv
+XUiC_RecipeStack	giveExp	void XUiC_RecipeStack::giveExp(ItemValue, ItemClass)
+XUiC_RecipeStack	outputStack	bool XUiC_RecipeStack::outputStack()
+TileEntityWorkstation	AddCraftComplete	void TileEntityWorkstation::AddCraftComplete(int, ItemValue, string, string, int, int)
+TileEntityWorkstation	CheckForCraftComplete	void TileEntityWorkstation::CheckForCraftComplete(EntityPlayerLocal)
+EntityPlayerLocal	GiveExp	void EntityPlayerLocal::GiveExp(CraftCompleteData)
+QuestEventManager	CraftedItem	void QuestEventManager::CraftedItem(ItemStack)
+EntityAlive	DamageEntity	int EntityAlive::DamageEntity(DamageSource, int, bool, float)
+EntityAlive	ProcessDamageResponse	void EntityAlive::ProcessDamageResponse(DamageResponse)
+EntityAlive	ProcessDamageResponseLocal	void EntityAlive::ProcessDamageResponseLocal(DamageResponse)
+ItemActionThrownWeapon	throwAway	void ItemActionThrownWeapon::throwAway(ItemActionThrowAway/MyInventoryData)
+QualityInfo	GetQualityLevelName	static string QualityInfo::GetQualityLevelName(int, bool)

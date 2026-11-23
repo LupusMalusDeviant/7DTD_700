@@ -32,6 +32,7 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 | Vertrag 06 Kern | `tools/meta/expect/v06-kern.tsv` | 3 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.1) |
 | Vertrag 06 HarmonyX | `tools/meta/expect/v06-harmony.tsv` | 5 | 2026-11-23, grün, gegen `Mods/0_TFP_Harmony/0Harmony.dll` (neu, WP9.1) |
 | Vertrag 07 Zustände | `tools/meta/expect/v07-zustaende.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.2) |
+| F-21 Herstellen, F-02 Schaden/Wurf, D60 Qualität | `tools/meta/expect/wp93.tsv` | 11 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.3) |
 
 Für alle Patches gilt ab Phase 2b [Vertrag 06](../../contracts/06-csharp-kern-und-patches.md) (Entwurf).
 
@@ -51,7 +52,7 @@ Soll-Datei unter `tools/meta/expect/` (Projektregel 2).
 
 | Feature | Grund | Vermutetes Ziel | Phase |
 |---|---|---|---|
-| F-21 Learning by Doing | Es gibt keinen XML-Auslöser „Gegenstand fertig hergestellt“ | Abschluss des Craft-Vorgangs, serverseitig — Stelle noch nicht gesucht | 2 |
+| ~~F-21 Learning by Doing~~ | ~~Es gibt keinen XML-Auslöser „Gegenstand fertig hergestellt“~~ | ~~Abschluss des Craft-Vorgangs, serverseitig — Stelle noch nicht gesucht~~ **Wahrscheinlich kein Patch (WP9.3):** Vanilla zählt jedes Stück in `_craftCount_<Gegenstand>` beim Spieler; ein Buff liest das und hebt die Fertigkeit per `AddProgressionLevel`. Entscheidung in WP9.6 nach S-33. [Finding](WP9-herstellen-und-schaden.md) | 2 |
 | F-02 Schild blockt von vorn | Richtungsprüfung ist keine XML-Bedingung | Postfix auf `int EntityAlive::DamageEntity(DamageSource, int, bool, float)`; `DamageSource` trägt `direction` und `ownerEntityId` | 3 |
 
 Die acht übrigen geprüften Features (F-05, F-07, F-08, F-13-Teleport, F-15, F-17, F-18, F-20)

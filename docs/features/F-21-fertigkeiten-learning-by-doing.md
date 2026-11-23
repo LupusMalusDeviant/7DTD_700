@@ -42,7 +42,12 @@ Materialverbrauch.
    Fortschritt. Bevorzugt per XML-Trigger (z. B. Buff-Event beim Herstellen, falls vorhanden),
    sonst per **Harmony-Postfix** am Abschluss eines Craft-Vorgangs bzw. am Treffer.
 3. **Abschriften** sind die Grundfähigkeit (Stufe 1) bzw. Sprünge, kein Fortschritt durch Masse.
-4. **Server-autoritativ:** Fortschritt wird auf dem Server gezählt (Werkstätten laufen serverseitig).
+4. ~~**Server-autoritativ:** Fortschritt wird auf dem Server gezählt (Werkstätten laufen serverseitig).~~
+   *Widerspricht Vanilla (WP9.3, [Finding](../rea/findings/WP9-herstellen-und-schaden.md), zu prüfen N-113):*
+   Vanilla zählt fertige Stücke **beim Spieler** in `_craftCount_<Gegenstand>`, auch für Werkstätten
+   (nachgereicht beim nächsten Besuch). Vorschlag: diesen Zähler per Buff lesen und die Fertigkeit per
+   `AddProgressionLevel` heben — XML statt Patch (P5). Ein Spieler mit verändertem Client könnte den
+   Zähler fälschen; bei einem Koop-Spiel ohne Wettbewerb wiegt das leicht.
 
 REA-Fragen → [hook-hypothesen.md#f-21](../rea/hook-hypothesen.md#f-21)
 

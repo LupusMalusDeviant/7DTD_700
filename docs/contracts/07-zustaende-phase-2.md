@@ -109,10 +109,13 @@ Buffs dann **nicht** mehr abziehen.
 
 | Name | Art | Schreiber | Neustart | Lesen |
 |---|---|---|---|---|
-| Fortschritt je Handwerk | Vanillas Handwerks-Fertigkeit (`progression.xml`), **kein** eigener CVar | **Server** (Werkstätten laufen dort; F-21 Nr. 4) — per XML-Auslöser oder Patch nach WP9.3 | **bleibt** (Vanillas Speicherung) | Rezepte, Qualität |
+| Fortschritt je Handwerk | Vanillas Handwerks-Fertigkeit (`progression.xml`), **kein** eigener CVar | ~~**Server** (Werkstätten laufen dort; F-21 Nr. 4) — per XML-Auslöser oder Patch nach WP9.3~~ **Buff des Spielers** per `AddProgressionLevel` (WP9.3) | **bleibt** (Vanillas Speicherung) | Rezepte, Qualität |
+| `_craftCount_<Gegenstand>` | **Vanillas** Zähler je hergestelltem Stück | Vanilla, beim Spieler (`XUiC_RecipeStack::giveExp`, `EntityPlayerLocal::GiveExp`) | **bleibt** (Indiz: `_` wird gespeichert, S-33 (2)) | unser Lern-Buff per `CVarCompare` — nur lesen |
 
-Kein CVar: die Datenstruktur gibt es (D48), sie wird nur anders gefüttert. Ein Zähler `cv700_…` käme
-nur dazu, wenn WP9.3 zeigt, dass der Fortschritt nicht direkt erhöht werden kann.
+Kein CVar: die Datenstruktur gibt es (D48), sie wird nur anders gefüttert. ~~Ein Zähler `cv700_…` käme
+nur dazu, wenn WP9.3 zeigt, dass der Fortschritt nicht direkt erhöht werden kann.~~ *Berichtigt nach
+WP9.3 ([Finding](../rea/findings/WP9-herstellen-und-schaden.md)):* Vanilla zählt schon, beim Spieler,
+nicht auf dem Server. Wir lesen Vanillas Zähler und schreiben keinen eigenen.
 
 ### 3.6 Schild erhoben (F-02, Phase 3 — hier nur der Name)
 
