@@ -87,6 +87,16 @@ Fassung — Signatur geändert (`signature-changed`, Exit 1), Member-Spalte pass
 (`member-mismatch`, Exit 1), Typ fehlt (`type-missing`, Exit 1), Member fehlt (`member-missing`,
 Exit 1). Die echten Soll-Dateien: 6 Dateien, 64 Zeilen, Exit 0.
 
+**Felder (seit 2026-11-23, Plan-0002 WP9.9).** Vorher prüfte `verify` nur Methoden — die Ereignisse
+der Mod-API (`ModEvents::GameUpdate`, `PlayerSpawnedInWorld`, `GameStartDone`, `PlayerLogin`) sind
+aber **Felder**, ihr Verschwinden fiele nicht auf. Eine Feldzeile hat keine Klammern:
+`[static ]Typ Deklarierer::Name`; `members` gibt sie je Feld als `signature` aus.
+`member-mismatch` gilt für Felder, wenn die Zeile nicht auf ` Typ::Member` endet.
+**Gegenprobe an `expect/v06-kern.tsv`:** Feldtyp geändert (`signature-changed`), `static` fehlt
+(`signature-changed`), Feld fehlt (`member-missing`), Spalte vertippt (`member-mismatch`) — je Exit 1;
+die drei Methoden-Gegenproben aus WP9.3–9.5 weiter Exit 1. Die echten Soll-Dateien: **12 Dateien,
+114 Zeilen, Exit 0** (davon 4 Feldzeilen).
+
 Das tritt an die Stelle von `tools/rea/discover.sh compare` nach einem Spiel-Update: Soll-Datei
 gegen die neue DLL laufen lassen, rot heißt Release blockiert.
 

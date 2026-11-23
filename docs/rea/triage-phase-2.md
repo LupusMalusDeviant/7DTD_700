@@ -51,7 +51,8 @@ ein viertes, das zwischen den ersten beiden liegt:
 - **C# kommt trotzdem**, als „C# ohne Patch": Regler und Direktor (Nr. 6, 7, 11). Vertrag 06 gilt
   für sie in allem außer §3/§4 (Patch-Kopf, Register); die Soll-Dateien sind `f00.tsv`
   (`RegisterHandler`), `v06-kern.tsv`, `v07-zustaende.tsv`.
-- **Lücke im Werkzeug:** `mod700meta verify` prüft nur Methoden, keine Felder. Die Ereignisse
+- ~~**Lücke im Werkzeug:**~~ *Geschlossen mit WP9.9 (2026-11-23): `verify` prüft jetzt auch Felder,
+  `GameUpdate` und `PlayerSpawnedInWorld` stehen in `v06-kern.tsv`.* ~~`mod700meta verify` prüft nur Methoden, keine Felder.~~ Die Ereignisse
   `ModEvents.GameUpdate` und `PlayerSpawnedInWorld` sind **Felder** — ihr Verschwinden nach einem
   Update fiele nicht auf. Vor dem ersten Code in `Systeme/` bekommt `verify` eine Feldprüfung (mit
   Gegenprobe, Projektregel 5). Plan-Punkt WP9.9.

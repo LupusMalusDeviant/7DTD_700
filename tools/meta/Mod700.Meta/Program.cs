@@ -267,10 +267,13 @@ internal static class Program
             foreach (var fh in td.GetFields())
             {
                 var fd = reader.GetFieldDefinition(fh);
+                string fieldName = reader.GetString(fd.Name);
+                string fieldType = fd.DecodeSignature(provider, null);
                 fields.Add(new
                 {
-                    name = reader.GetString(fd.Name),
-                    type = fd.DecodeSignature(provider, null),
+                    name = fieldName,
+                    type = fieldType,
+                    signature = Naming.FieldSignature(name, fieldName, fd.Attributes, fieldType),
                     token = $"0x{MetadataTokens.GetToken(fh):x8}",
                     attributes = fd.Attributes.ToString(),
                     is_static = (fd.Attributes & FieldAttributes.Static) != 0,
@@ -517,6 +520,13 @@ internal static class Program
                 set.Add(Naming.MethodSignature(full, reader.GetString(md.Name), md.Attributes,
                     md.DecodeSignature(provider, null)));
             }
+            // Felder gehoeren seit WP9.9 dazu (ModEvents::GameUpdate u. a. sind Felder).
+            foreach (var fh in reader.GetTypeDefinition(handle).GetFields())
+            {
+                var fd = reader.GetFieldDefinition(fh);
+                set.Add(Naming.FieldSignature(full, reader.GetString(fd.Name), fd.Attributes,
+                    fd.DecodeSignature(provider, null)));
+            }
             actual[full] = set;
         }
 
@@ -541,10 +551,12 @@ internal static class Program
             // Spalte und Signatur muessen dasselbe Member meinen (ergaenzt 2026-11-23, Plan-0002 WP9.7).
             // Vorher entschied allein die Signatur; eine Zeile "PlayWarnung<TAB>...::PlayWarning(...)"
             // lief gruen durch, und die Meldung bei einer Abweichung suchte nach dem falschen Namen.
-            if (!expected.Contains($"{type}::{member}(", StringComparison.Ordinal))
+            // Ein Feld (WP9.9) endet auf "Typ::Name", eine Methode enthaelt "Typ::Name(".
+            bool isField = !expected.Contains('(') && expected.EndsWith($" {type}::{member}", StringComparison.Ordinal);
+            if (!isField && !expected.Contains($"{type}::{member}(", StringComparison.Ordinal))
             {
                 failed++;
-                results.Add(new { type, member, expected, verdict = "member-mismatch", detail = $"Typ- oder Member-Spalte passt nicht zur Signatur: erwartet '{type}::{member}(' in der Signatur" });
+                results.Add(new { type, member, expected, verdict = "member-mismatch", detail = $"Typ- oder Member-Spalte passt nicht zur Signatur: erwartet '{type}::{member}(' (Methode) oder '... {type}::{member}' am Ende (Feld)" });
                 continue;
             }
 
@@ -562,7 +574,9 @@ internal static class Program
             }
 
             failed++;
-            var near = signatures.Where(s => s.Contains($"::{member}(", StringComparison.Ordinal)).OrderBy(s => s, StringComparer.Ordinal).ToArray();
+            var near = signatures.Where(s => s.Contains($"::{member}(", StringComparison.Ordinal)
+                    || (!s.Contains('(') && s.EndsWith($"::{member}", StringComparison.Ordinal)))
+                .OrderBy(s => s, StringComparer.Ordinal).ToArray();
             results.Add(new
             {
                 type,

@@ -14,3 +14,6 @@ VersionInformation	TryParseSerializedString	static bool VersionInformation::TryP
 ModEvents/ModEventAbs`1	RegisterHandler	void ModEvents/ModEventAbs`1::RegisterHandler(!0)
 ModEvents/ModEventAbs`1	UnregisterHandler	void ModEvents/ModEventAbs`1::UnregisterHandler(!0)
 ModEvents/ModEventInterruptible`1	Invoke	System.ValueTuple`2<ModEvents/EModEventResult, Mod> ModEvents/ModEventInterruptible`1::Invoke(!0&)
+# Felder (seit WP9.9, Plan-0002): die zwei Ereignisse, an die ModApi.cs und VersionHandshake.cs sich haengen.
+ModEvents	GameStartDone	static ModEvents/ModEvent`1<ModEvents/SGameStartDoneData> ModEvents::GameStartDone
+ModEvents	PlayerLogin	static ModEvents/ModEventInterruptible`1<ModEvents/SPlayerLoginData> ModEvents::PlayerLogin

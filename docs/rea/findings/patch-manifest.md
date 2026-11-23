@@ -23,13 +23,13 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 
 | Feature | Soll-Datei | Zeilen | Letzter Lauf |
 |---|---|---|---|
-| F-00 | `tools/meta/expect/f00.tsv` | 12 | 2026-11-07, grün (0 Abweichungen), Build Steam 26309840; 2026-11-23 grün an V 3.40 b10 |
+| F-00 | `tools/meta/expect/f00.tsv` | ~~12~~ 14 | 2026-11-07, grün (0 Abweichungen), Build Steam 26309840; 2026-11-23 grün an V 3.40 b10; seit WP9.9 mit den Feldern `ModEvents::GameStartDone`, `PlayerLogin` |
 | F-16 Assets | `tools/meta/expect/wp41.tsv` | 13 | 2026-11-23, grün, V 3.40 b10 |
 | F-06 Wesengruppen | `tools/meta/expect/wp54.tsv` | 10 | 2026-11-23, grün, V 3.40 b10 |
 | F-06 Wesen, Farbe | `tools/meta/expect/wp55.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 |
 | F-07 Zufallswelt | `tools/meta/expect/wp62.tsv` | 15 | 2026-11-23, grün, V 3.40 b10 |
 | F-10 Händlerstimmen | `tools/meta/expect/wp85.tsv` | 9 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.7) |
-| Vertrag 06 Kern | `tools/meta/expect/v06-kern.tsv` | 3 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.1) |
+| Vertrag 06 Kern | `tools/meta/expect/v06-kern.tsv` | ~~3~~ 5 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.1; seit WP9.9 mit den Feldern `ModEvents::GameUpdate`, `PlayerSpawnedInWorld`) |
 | Vertrag 06 HarmonyX | `tools/meta/expect/v06-harmony.tsv` | 5 | 2026-11-23, grün, gegen `Mods/0_TFP_Harmony/0Harmony.dll` (neu, WP9.1) |
 | Vertrag 07 Zustände | `tools/meta/expect/v07-zustaende.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.2) |
 | F-21 Herstellen, F-02 Schaden/Wurf, D60 Qualität | `tools/meta/expect/wp93.tsv` | 11 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.3) |

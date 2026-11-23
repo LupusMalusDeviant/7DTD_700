@@ -62,6 +62,21 @@ internal static class Naming
         return $"{prefix}{signature.ReturnType} {declaringType}::{methodName}{generics}({parameters})";
     }
 
+    /// <summary>
+    /// Kanonische Feldzeile, ohne Klammern: <c>[static ]Typ Deklarierer::Name</c>. Auch dieses
+    /// Format liest <c>verify</c> wieder ein (ergänzt 2026-11-23, Plan-0002 WP9.9 — die Ereignisse
+    /// der Mod-API wie <c>ModEvents::GameUpdate</c> sind Felder).
+    /// </summary>
+    public static string FieldSignature(
+        string declaringType,
+        string fieldName,
+        FieldAttributes attributes,
+        string fieldType)
+    {
+        string prefix = (attributes & FieldAttributes.Static) != 0 ? "static " : "";
+        return $"{prefix}{fieldType} {declaringType}::{fieldName}";
+    }
+
     /// <summary>Lesbarer Name für ein Aufruf- oder Feldzugriff-Token.</summary>
     public static string MemberTarget(MetadataReader reader, EntityHandle handle)
     {

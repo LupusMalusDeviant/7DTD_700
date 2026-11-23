@@ -5,3 +5,6 @@
 Mod	get_Path	string Mod::get_Path()
 ConnectionManager	get_IsServer	bool ConnectionManager::get_IsServer()
 GameManager	get_IsDedicatedServer	static bool GameManager::get_IsDedicatedServer()
+# Felder (seit WP9.9): die Ereignisse der Mod-API fuer "C# ohne Patch" (Triage Phase 2) - Regler und Direktor.
+ModEvents	GameUpdate	static ModEvents/ModEvent`1<ModEvents/SGameUpdateData> ModEvents::GameUpdate
+ModEvents	PlayerSpawnedInWorld	static ModEvents/ModEvent`1<ModEvents/SPlayerSpawnedInWorldData> ModEvents::PlayerSpawnedInWorld
