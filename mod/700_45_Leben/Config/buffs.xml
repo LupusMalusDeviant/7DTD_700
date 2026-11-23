@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_45_Leben / buffs.xml - Fieber und Wundbrand (F-11 §4 und §5, Plan-0002 WP13.3, D197;
+	     zu pruefen N-141). VON HAND GESCHRIEBEN. Vertrag 07 Nachtrag 6.
+
+	     EIN Zaehl-Buff, Takt 10 s, gesetzt ueber Vanillas buffStatusCheck01 wie Odem und Lernen.
+	     Die Zaehler tragen keinen Punkt: sie werden gespeichert, ein Fieber vergeht nicht durch
+	     Neuladen. Die Effekte laufen der Reihe nach (wie buff700_odemStufe): erst zaehlen, dann
+	     kappen, dann die Zustaende an- und ausschalten.
+
+	     Seuchenbrand und Ruhr bleiben Vanillas Ketten; hier steht nichts davon. -->
+	<append xpath="/buffs">
+		<buff name="buff700_krankZaehlen" hidden="true" remove_on_death="false">
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="10" />
+			<effect_group>
+				<!-- Fieber: Frost, oder Kaelte und Naesse zugleich -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="add" value="1"><requirement name="HasBuff" buff="buffElementFreezing" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="add" value="1"><requirement name="!HasBuff" buff="buffElementFreezing" /><requirement name="HasBuff" buff="buffElementCold" /><requirement name="HasBuff" buff="buffElementWet" /></triggered_effect>
+				<!-- am Feuer geht es schneller zurueck, sonst langsam (-1 je 30 s) -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="add" value="-1"><requirement name="HasBuff" buff="buff700_amfeuer" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="add" value="-.34"><requirement name="!HasBuff" buff="buff700_amfeuer" /><requirement name="!HasBuff" buff="buffElementFreezing" /><requirement name="!HasBuff" buff="buffElementCold" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="add" value="-.34"><requirement name="!HasBuff" buff="buff700_amfeuer" /><requirement name="!HasBuff" buff="buffElementFreezing" /><requirement name="HasBuff" buff="buffElementCold" /><requirement name="!HasBuff" buff="buffElementWet" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="set" value="0"><requirement name="CVarCompare" cvar="cv700_fieberZaehler" operation="LT" value="0" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="set" value="60"><requirement name="CVarCompare" cvar="cv700_fieberZaehler" operation="GT" value="60" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_fieber"><requirement name="!HasBuff" buff="buff700_fieber" /><requirement name="CVarCompare" cvar="cv700_fieberZaehler" operation="GTE" value="30" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_fieber"><requirement name="HasBuff" buff="buff700_fieber" /><requirement name="CVarCompare" cvar="cv700_fieberZaehler" operation="LT" value="10" /></triggered_effect>
+
+				<!-- Wundbrand: solange eine Blutung oder Platzwunde unverbunden anliegt -->
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="add" value="1"><requirement name="HasBuff" buff="buffInjuryBleeding" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="add" value="1"><requirement name="!HasBuff" buff="buffInjuryBleeding" /><requirement name="HasBuff" buff="buffLaceration" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="add" value="-.1"><requirement name="!HasBuff" buff="buffInjuryBleeding" /><requirement name="!HasBuff" buff="buffLaceration" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="set" value="0"><requirement name="CVarCompare" cvar="cv700_wundbrandZaehler" operation="LT" value="0" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="set" value="60"><requirement name="CVarCompare" cvar="cv700_wundbrandZaehler" operation="GT" value="60" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_wundbrand"><requirement name="!HasBuff" buff="buff700_wundbrand" /><requirement name="CVarCompare" cvar="cv700_wundbrandZaehler" operation="GTE" value="18" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buff700_wundbrand"><requirement name="HasBuff" buff="buff700_wundbrand" /><requirement name="CVarCompare" cvar="cv700_wundbrandZaehler" operation="LT" value="9" /></triggered_effect>
+			</effect_group>
+		</buff>
+
+		<!-- Fieber (F-11 §4): Ausdauer-Erholung -20 %, Laufen -10 %. -->
+		<buff name="buff700_fieber" name_key="buff700_fieberName" description_key="buff700_fieberDesc" tooltip_key="buff700_fieberTooltip" icon="ui_game_symbol_cold" icon_color="230,110,60">
+			<damage_type value="Disease" />
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<effect_group>
+				<passive_effect name="StaminaChangeOT" operation="perc_add" value="-.2" />
+				<passive_effect name="RunSpeed" operation="perc_add" value="-.1" />
+				<passive_effect name="WalkSpeed" operation="perc_add" value="-.1" />
+			</effect_group>
+		</buff>
+
+		<!-- Wundbrand (F-11 §5): je 10 s Leben 1, +1 je 6 Zaehler ueber 18, hoechstens 5. -->
+		<buff name="buff700_wundbrand" name_key="buff700_wundbrandName" description_key="buff700_wundbrandDesc" tooltip_key="buff700_wundbrandTooltip" icon="ui_game_symbol_infection" icon_color="120,160,60">
+			<damage_type value="Disease" />
+			<stack_type value="ignore" />
+			<duration value="0" />
+			<update_rate value="10" />
+			<effect_group>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="set" value="@cv700_wundbrandZaehler" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="add" value="-18" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="divide" value="6" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="add" value="1" />
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="set" value="1"><requirement name="CVarCompare" cvar=".cv700_wundbrandSchaden" operation="LT" value="1" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cv700_wundbrandSchaden" operation="set" value="5"><requirement name="CVarCompare" cvar=".cv700_wundbrandSchaden" operation="GT" value="5" /></triggered_effect>
+				<triggered_effect trigger="onSelfBuffUpdate" action="ModifyStats" stat="Health" operation="subtract" value="@.cv700_wundbrandSchaden" />
+			</effect_group>
+		</buff>
+	</append>
+
+	<!-- Vanillas buffStatusCheck01 laeuft bei jedem Spieler immer; eine eigene effect_group setzt den
+	     Zaehl-Buff, wenn er fehlt (wie die Odem-Buffs, 700_75_Magie, D182). -->
+	<append xpath="/buffs/buff[@name='buffStatusCheck01']">
+		<effect_group>
+			<triggered_effect trigger="onSelfBuffUpdate" action="AddBuff" buff="buff700_krankZaehlen"><requirement name="!HasBuff" buff="buff700_krankZaehlen" /></triggered_effect>
+		</effect_group>
+	</append>
+</config>

@@ -41,4 +41,5 @@
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT1IronSpear']">learnable,perkJavelinMaster,craftingSpears,packMuleCrafting</setattribute>   <!-- craftingSpears ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT3SteelSpear']">learnable,perkJavelinMaster,craftingSpears,workbenchCrafting</setattribute>   <!-- craftingSpears ab 36: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='blk700_webstuhl']">learnable,workbenchCrafting</setattribute>   <!-- craftingWorkstations ab 14: Platz und Marken von toolChickenCoopLamp, der Purge hat ihn freigemacht -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_theriak']">learnable</setattribute>   <!-- craftingMedical ab 30: neben Vanillas Kraeutersud, der Platz des gesperrten Antibiotikums (D197) -->
 </config>

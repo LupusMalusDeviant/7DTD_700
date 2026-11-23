@@ -84,6 +84,7 @@ foreach ($g in ($zeilen | Where-Object Art -eq 'Vorstueck' | Group-Object Stufe 
 $bindung = Join-Path $Repo 'mod\700_50_Fortschritt\Config\recipes.xml'
 $muster = "recipe\[@name='([^']+)'\]`">learnable[^<]*</setattribute>\s*<!--\s*(crafting\w+) ab (\d+)"
 $gebunden = 0
+$gebundenOhneTun = 0
 foreach ($m in [regex]::Matches((Get-Content $bindung -Raw -Encoding UTF8), $muster)) {
     $ding = $m.Groups[1].Value; $st = $m.Groups[2].Value; $ab = [int]$m.Groups[3].Value
     $gebunden++
@@ -92,6 +93,9 @@ foreach ($m in [regex]::Matches((Get-Content $bindung -Raw -Encoding UTF8), $mus
         if ($treffer.Count -gt 0) { $fehler += "'$ding' oeffnet erst bei $ab und kann nie zaehlen (Tun endet bei $schwelleEnde)" }
         continue
     }
+    # Nur Stufen, die durch Tun lernen (die der Tabelle), muessen jedes gebundene Rezept zaehlen.
+    # Eine Stufe ohne Tun (Wundversorgung mit dem Theriak, D197) darf binden, ohne zu lernen.
+    if ($treffer.Count -eq 0 -and -not @($zeilen | Where-Object Stufe -eq $st).Count) { $gebundenOhneTun++; continue }
     if ($treffer.Count -eq 0) { $fehler += "gebundenes Rezept '$ding' ($st ab $ab) fehlt in der Tabelle" }
     elseif ($treffer[0].Stufe -ne $st -or $treffer[0].Art -ne 'gebunden') { $fehler += "'$ding' steht als $($treffer[0].Stufe)/$($treffer[0].Art), gebunden ist es an $st" }
 }
@@ -274,8 +278,8 @@ Add-Zeile 'buff700_lehrzeitGelernt' 'What the old one showed you now sits in you
 $textePfad = Join-Path $AusOrdner 'wp12-lernen-texte.csv'
 [IO.File]::WriteAllText($textePfad, $csv.ToString(), (New-Object System.Text.UTF8Encoding $false))
 
-Write-Output ("wp12-lernen: {0} Gegenstaende ({1} gebunden, {2} Vorstuecke), {3} Stufen, {4} Lehrblaetter; Bindung gelesen: {5} Rezepte" -f `
-    $zeilen.Count, @($zeilen | Where-Object Art -eq 'gebunden').Count, @($zeilen | Where-Object Art -eq 'Vorstueck').Count, $hefte.Count, $hefte.Count, $gebunden)
+Write-Output ("wp12-lernen: {0} Gegenstaende ({1} gebunden, {2} Vorstuecke), {3} Stufen, {4} Lehrblaetter; Bindung gelesen: {5} Rezepte, davon {6} in Stufen ohne Tun" -f `
+    $zeilen.Count, @($zeilen | Where-Object Art -eq 'gebunden').Count, @($zeilen | Where-Object Art -eq 'Vorstueck').Count, $hefte.Count, $hefte.Count, $gebunden, $gebundenOhneTun)
 Write-Output ("wp12-lernen: Lehrzeit in {0} Baeumen, {1} Handwerks-Stufen, {2} Sprachzeilen" -f `
     $baeume.Count, ($baeume | ForEach-Object { $_.Stufen.Count } | Measure-Object -Sum).Sum, (($csv.ToString() -split "`r`n").Count - 1))
 exit 0

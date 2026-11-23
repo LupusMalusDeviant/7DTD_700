@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  700_45_Leben — F-11 Krankheit und Heilkunde, F-19 Nahrung, Verderb, Ackerbau
+  (Vertrag 01 Nachtrag Phase 2 Teil 2 A).
+
+  Angelegt mit Plan-0002 WP13.3 (D197): Arzneien der Heilkunde (Theriak, Eichenrinden-Sud,
+  Honigsalbe), die Eichenrinde von den Eichen, und zwei neue Krankheiten als Zaehler-Buffs
+  (Fieber aus Kaelte und Naesse, Wundbrand aus unverbundener Blutung). Seuchenbrand und Ruhr
+  bleiben Vanillas Ketten; hier steht nur, was sie heilt.
+
+  Reines XML, keine DLL. Die Bindung des Theriaks steht im Baum, in 700_50_Fortschritt.
+-->
+<xml>
+	<Name value="700_45_Leben" />
+	<DisplayName value="700 — Leben: Krankheit und Heilkunde" />
+	<Description value="Seuchenbrand, Ruhr, Fieber und Wundbrand, und was gegen sie hilft: Theriak, Eichenrinde, Honigsalbe." />
+	<Author value="Lupus Malus Deviant" />
+	<Version value="__VERSION__" />
+	<Website value="" />
+	<SkipWithAntiCheat value="false" />
+</xml>

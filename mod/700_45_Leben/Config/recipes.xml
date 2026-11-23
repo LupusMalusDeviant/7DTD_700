@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_45_Leben / recipes.xml - F-11 Heilkunde (Plan-0002 WP13.3, D197; zu pruefen N-141)
+	     Sud und Theriak am Kochtopf ueber dem Feuer, wie Vanillas Kraeutersud und Goldrutentee;
+	     die Salbe aus der Hand, wie Vanillas Aloe-Salbe. Der Theriak ist gebunden (tags in
+	     700_50_Fortschritt/recipes.xml, Freischaltung bei Wundversorgung 30) - fehlt das
+	     Fortschritts-Modlet, ist er offen und nichts bricht (D70). -->
+	<append xpath="/recipes">
+		<recipe name="itm700_eichenrindensud" count="1" craft_area="campfire" craft_tool="toolCookingPot" craft_time="20">
+			<ingredient name="itm700_eichenrinde" count="2" />
+			<ingredient name="drinkJarBoiledWater" count="1" />
+		</recipe>
+		<recipe name="itm700_honigsalbe" count="1" craft_time="10">
+			<ingredient name="foodHoney" count="1" />
+			<ingredient name="resourceAnimalFat" count="1" />
+		</recipe>
+		<recipe name="itm700_theriak" count="1" craft_area="campfire" craft_tool="toolCookingPot" craft_time="60">
+			<ingredient name="foodHoney" count="2" />
+			<ingredient name="drugHerbalAntibiotics" count="2" />
+			<ingredient name="resourceCropGoldenrodPlant" count="2" />
+		</recipe>
+	</append>
+</config>

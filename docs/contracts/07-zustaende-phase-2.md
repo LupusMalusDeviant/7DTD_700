@@ -349,3 +349,22 @@ Auslöser „Rang gekauft" kennt XML nicht sicher. **Folge:** wer seine Punkte z
 gezahlten Stufen, und ein neuer Kauf zahlt nichts mehr (Gezahlt bleibt stehen) — kein Doppeln, aber auch
 keine Rückgabe. Im Spiel geht Zurücksetzen nur über die Konsole: Vanillas Vergessenstrank
 (`drinkJarGrandpasForgettingElixir`) ist gesperrt (Purge, kein Rezept, keine Beute, keine Ware).
+
+## Nachtrag 6 — Fieber und Wundbrand (Plan-0002 WP13.3), 2026-11-23, **Abnahme offen**
+
+Entwurf im autonomen Lauf (D197); **zu prüfen durch den Nutzer** (N-141). Zahlen: F-11 „Ausarbeitung
+Phase 2" §4 und §5. Seuchenbrand und Ruhr bleiben Vanillas Ketten und ihre CVars (`infectionCounter`,
+`$dysenteryCounter` …) — wir **lesen und schreiben sie nicht**; der Theriak setzt nur Vanillas
+Eingang `$buffInfectionAddCurePerc` wie jedes Vanilla-Mittel.
+
+| Name | Art | Werte | Schreiber | Neustart | Lesen |
+|---|---|---|---|---|---|
+| `buff700_krankZaehlen` | Buff, dauernd, verborgen, Takt 10 s | — | gesetzt über Vanillas `buffStatusCheck01` (wie Nachtrag 2) | neu gesetzt | schreibt die zwei Zähler |
+| `cv700_fieberZaehler` | CVar je Spieler, **gespeichert** | 0–60; +1 je 10 s bei Frost oder bei Kälte **und** Nässe, −1 am Feuer, sonst −0,34 | `buff700_krankZaehlen`; **auf 0** setzt ihn nur der Eichenrinden-Sud | **bleibt** (Indiz §2) | `buff700_krankZaehlen` (Fieber an ab 30, aus unter 10) |
+| `buff700_fieber` | Buff, sichtbar | Ausdauer-Erholung −20 %, Laufen −10 % | `buff700_krankZaehlen` | geht verloren, wird aus dem Zähler neu gesetzt | — |
+| `cv700_wundbrandZaehler` | CVar je Spieler, **gespeichert** | 0–60; +1 je 10 s, solange eine Blutung oder Platzwunde anliegt, sonst −0,1 | `buff700_krankZaehlen`; **auf 0** setzen ihn Honigsalbe und Salbenverband | **bleibt** | `buff700_krankZaehlen` (an ab 18, aus unter 9), `buff700_wundbrand` |
+| `buff700_wundbrand` | Buff, sichtbar, Takt 10 s | −1 Leben je 10 s, +1 je 6 Zähler über 18, höchstens −5 | `buff700_krankZaehlen` | wie Fieber | — |
+| `.cv700_wundbrandSchaden` | lokaler Rechenwert | 1–5 | **allein** `buff700_wundbrand` | abgeleitet | `buff700_wundbrand` |
+
+**Zwei Schreiber je Zähler, verschiedener Art (§1 Nr. 2):** der Zähl-Buff zählt, das Mittel setzt
+auf 0. Das Mittel rechnet nicht mit, es löscht — beide wissen voneinander nicht mehr, als sie müssen.

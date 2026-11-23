@@ -319,7 +319,13 @@ gibt es weiter nicht.~~
 **Stand 2026-11-23 (Plan-0002 WP10.4, D177):** das dritte steht — `mod/700_75_Magie` mit
 `ModInfo.xml`, `Config/blocks.xml` (Runenritzer-Bank), `items.xml` (Runenkreide, Glutstein,
 Ritzmesser, Meißel), `recipes.xml` und `XUi_InGame/` (Fenstergruppe, Werkzeugfenster). Es sind **elf**
-Modlets; `smoke.ps1` erwartet elf. `45_Leben` gibt es weiter nicht.
+Modlets; `smoke.ps1` erwartet elf. ~~`45_Leben` gibt es weiter nicht.~~
+
+**Stand 2026-11-23 (Plan-0002 WP13.3, D197):** das vierte steht — `mod/700_45_Leben` mit `ModInfo.xml`,
+`Config/items.xml` (Theriak, Eichenrinde, Eichenrinden-Sud, Honigsalbe), `recipes.xml`, `blocks.xml`
+(Eichenrinde an den Eichen) und `buffs.xml` (Fieber, Wundbrand). Die Bindung des Theriaks steht in
+`50_Fortschritt` (Grenzfall „Perk, der eine Arznei freischaltet"). Es sind **zwölf** Modlets, wie
+Teil 2 A sie plant; `smoke.ps1` erwartet zwölf.
 
 ### A. Vier neue Modlets, zwölf insgesamt
 

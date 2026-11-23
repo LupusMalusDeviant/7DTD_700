@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_45_Leben / items.xml - F-11 Heilkunde (Plan-0002 WP13.3, D197; zu pruefen N-141)
+	     VON HAND GESCHRIEBEN. Zahlen: F-11 "Ausarbeitung Phase 2".
+
+	     Theriak setzt Vanillas Eingang $buffInfectionAddCurePerc wie Vanillas Mittel
+	     (drugHerbalAntibiotics: 10, das gesperrte drugAntibiotics: 25) - wir rechnen die
+	     Infektion nicht selbst, wir fuettern Vanillas Kette.
+	     Eichenrinden-Sud und Honigsalbe setzen unsere Zaehler auf 0 (Vertrag 07 Nachtrag 6). -->
+	<append xpath="/items">
+
+		<!-- Eichenrinde: faellt beim Faellen von Eichen (blocks.xml). Ein Rohstoff, kein Essen. -->
+		<item name="itm700_eichenrinde">
+			<property name="Tags" value="itm700_kraut" />
+			<property name="HoldType" value="45" />
+			<property name="Meshfile" value="@:Other/Items/Misc/sackPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mplants" />
+			<property name="Stacknumber" value="100" />
+			<property name="EconomicValue" value="8" />
+			<property name="Group" value="Resources" />
+			<property name="CustomIcon" value="resourceWood" />
+			<property name="CustomIconTint" value="7a5a3c" />
+			<property name="DescriptionKey" value="itm700_eichenrindeDesc" />
+			<property name="SoundPickup" value="wood_grab" />
+			<property name="SoundPlace" value="wood_place" />
+		</item>
+
+		<!-- Eichenrinden-Sud: gegen das Fieber. Setzt den Fieber-Zaehler auf 0 und nimmt den Zustand. -->
+		<item name="itm700_eichenrindensud">
+			<property name="Tags" value="medical,itm700_arznei" />
+			<property name="HoldType" value="16" />
+			<property name="Meshfile" value="@:Other/Items/Health/pillBottlePrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="40" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drugHerbalAntibiotics" />
+			<property name="CustomIconTint" value="a07850" />
+			<property name="DescriptionKey" value="itm700_eichenrindensudDesc" />
+			<property name="SoundPickup" value="drug_painkillers_grab" />
+			<property name="SoundPlace" value="drug_painkillers_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="1.0" />
+				<property name="Sound_start" value="player_painkillers" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_fieberZaehler" operation="set" value="0" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buff700_fieber" />
+			</effect_group>
+		</item>
+
+		<!-- Honigsalbe: gegen den Wundbrand. Setzt den Wundbrand-Zaehler auf 0 und nimmt den Zustand. -->
+		<item name="itm700_honigsalbe">
+			<property name="Tags" value="medical,itm700_arznei" />
+			<property name="HoldType" value="64" />
+			<property name="Meshfile" value="@:Other/Items/Health/bandage.FBX" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="10" />
+			<property name="EconomicValue" value="45" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="medicalAloeCream" />
+			<property name="CustomIconTint" value="e0b050" />
+			<property name="DescriptionKey" value="itm700_honigsalbeDesc" />
+			<property name="SoundPickup" value="aloe_grab" />
+			<property name="SoundPlace" value="aloe_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="1.5" />
+				<property name="Sound_start" value="player_ointment" />
+			</property>
+			<effect_group tiered="false">
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="set" value="0" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buff700_wundbrand" />
+			</effect_group>
+		</item>
+
+		<!-- Theriak: gegen das Seuchenfieber (Stufe 3). 25 % - der Platz des gesperrten Antibiotikums. -->
+		<item name="itm700_theriak">
+			<property name="Tags" value="medical,medicalSkill,itm700_arznei" />
+			<property name="HoldType" value="16" />
+			<property name="Meshfile" value="@:Other/Items/Health/pillBottlePrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Morganic" />
+			<property name="Stacknumber" value="5" />
+			<property name="EconomicValue" value="400" />
+			<property name="DisplayType" value="cureInfection" />
+			<property name="Group" value="Science,CFMedical,Medical,TCMedical" />
+			<property name="CustomIcon" value="drugHerbalAntibiotics" />
+			<property name="CustomIconTint" value="6a2c2c" />
+			<property name="DescriptionKey" value="itm700_theriakDesc" />
+			<property name="SoundPickup" value="drug_painkillers_grab" />
+			<property name="SoundPlace" value="drug_painkillers_place" />
+			<property class="Action0">
+				<property name="Class" value="Eat" />
+				<property name="Delay" value="1.0" />
+				<property name="Sound_start" value="player_painkillers" />
+			</property>
+			<effect_group tiered="false">
+				<display_value name="dCureInfection" value=".25" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="$buffInfectionAddCurePerc" operation="add" value="25" />
+				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buffInfectionAddCure" />
+			</effect_group>
+		</item>
+	</append>
+
+	<!-- Der Salbenverband (Vanilla) hilft auch gegen den Wundbrand (F-11 §5). -->
+	<append xpath="/items/item[@name='medicalFirstAidBandage']">
+		<effect_group tiered="false">
+			<triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="cv700_wundbrandZaehler" operation="set" value="0" />
+			<triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buff700_wundbrand" />
+		</effect_group>
+	</append>
+</config>

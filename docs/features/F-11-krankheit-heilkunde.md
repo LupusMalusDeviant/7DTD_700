@@ -91,9 +91,12 @@ Vanilla hat keine Erkältung. **Bau per XML (S):** ein verborgener Zähler-Buff 
 `buffElementFreezing` **oder** (`buffElementCold` **und** `buffElementWet`) anliegt, und **−1** am Feuer
 (`buff700_amfeuer`) oder sonst −1 je 30 s. Ab **30** (also 5 min durchnässt in der Kälte) kommt
 `buff700_fieber`: Ausdauer-Erholung −20 %, Lauftempo −10 %, ein Schüttelfrost-Laut. Unter **10**
-geht es. **Heilen:** `itm700_weidenrindensud` (Weidenrinde und abgekochtes Wasser, Kochtopf) setzt den
-Zähler auf 0. Die **Weidenrinde** (`itm700_weidenrinde`) fällt beim Fällen von Laubbäumen mit 10 %
-(S; welche Baum-Blöcke, liest WP13.3).
+geht es. **Heilen:** ~~`itm700_weidenrindensud`~~ **`itm700_eichenrindensud`** (Rinde und abgekochtes Wasser, Kochtopf) setzt den
+Zähler auf 0. ~~Die **Weidenrinde** (`itm700_weidenrinde`) fällt beim Fällen von Laubbäumen mit 10 %
+(S; welche Baum-Blöcke, liest WP13.3).~~ *Geändert beim Bau (WP13.3, D197):* Vanilla hat **keine Weide**
+— nur Eichen sind Laubbäume mit Holz. Die **Eichenrinde** (`itm700_eichenrinde`) war bis zur
+Chinarinde das Fiebermittel des Volkes („Fieberrinde"); sie fällt beim Fällen jeder Eiche mit 25 %,
+1–2 Stück.
 *Brücke zu WP13.6:* Unterkleidung und Futter senken die Kälte und damit das Fieber.
 
 ### 5. Wundbrand — neu, aus unbehandelter Blutung
@@ -117,13 +120,13 @@ wird beim Bau eine Prüfung in `kette-pruefen` — dann kann sie nicht still bre
 - **Leichen erhöhen das Risiko** (Umfang oben, F-09): XML sieht keine Leichen in der Siedlung;
   Notiz Phase 3 (mit dem Direktor, WP11.6).
 
-### 8. Neue Kennungen (für WP13.3)
+### 8. Neue Kennungen (für WP13.3 — gebaut, siehe §9)
 
 | Kennung | Deutsch | Englisch | Art |
 |---|---|---|---|
 | `itm700_theriak` | Theriak | Theriac | Mittel, gebunden Wundversorgung 30 |
-| `itm700_weidenrinde` | Weidenrinde | Willow bark | Rohstoff |
-| `itm700_weidenrindensud` | Weidenrinden-Sud | Willow-bark brew | Mittel |
+| ~~`itm700_weidenrinde`~~ `itm700_eichenrinde` | Eichenrinde | Oak Bark | Rohstoff (D197) |
+| ~~`itm700_weidenrindensud`~~ `itm700_eichenrindensud` | Eichenrinden-Sud | Oak-bark Brew | Mittel (D197) |
 | `itm700_honigsalbe` | Honigsalbe | Honey salve | Mittel |
 | `buff700_fieber` | Fieber | Fever | Zustand |
 | `buff700_wundbrand` | Wundbrand | Wound-rot | Zustand |
@@ -132,6 +135,18 @@ wird beim Bau eine Prüfung in `kette-pruefen` — dann kann sie nicht still bre
 **[verifizieren beim Bau, WP13.3]:** `_InfectionCureRate` (wie schnell heilt ein Mittel wirklich), ob
 `buffElementWet` neben `buffElementCold` gleichzeitig anliegen kann, welche Baum-Blöcke Laubbäume sind,
 ob `buffLaceration` ohne Behandlung bleibt.
+
+### 9. Gebaut (WP13.3, 2026-11-23, D197, zu prüfen N-141)
+
+Neues Modlet **`700_45_Leben`** (das zwölfte, Vertrag 01 Teil 2 A): `items.xml` (Theriak, Eichenrinde,
+Eichenrinden-Sud, Honigsalbe; der Salbenverband hilft zusätzlich gegen Wundbrand), `recipes.xml`,
+`blocks.xml` (Eichenrinde an sieben Eichen), `buffs.xml` (`buff700_krankZaehlen`, `buff700_fieber`,
+`buff700_wundbrand`). Theriak gebunden in `700_50_Fortschritt` (Wundversorgung 30, im Fenster neben dem
+Kräutersud). **Warum nicht C#?** Alles sind Zustände und Zähler an Vanillas Buffs (Kälte, Nässe,
+Blutung, Feuer) — XML trägt es ganz.
+
+**Texte nachgezogen:** die Beschreibungen der drei Stufen nennen jetzt die Leiter (Stufe 1 Honig oder
+Kräutersud, Stufe 2 Kräutersud, Stufe 3 nur Theriak). Ob die Zahlen tragen, zeigt S-52.
 
 ## Akzeptanzkriterien
 - [ ] Seuchenbrand ist heilbar, aber nur mit T2-Wissen (Abschrift Heilkunde) — *nach der Ausarbeitung

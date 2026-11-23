@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- 700_45_Leben / blocks.xml - die Eichenrinde (F-11 §4, D197; zu pruefen N-141)
+	     Vanilla hat keine Weide. Eichenrinde war bis zur Chinarinde das Fiebermittel des
+	     Volkes ("Fieberrinde"), darum faellt sie hier: beim Faellen jeder Eiche mit einer
+	     Chance von 25 %, ein bis zwei Stueck. Die gepflanzten Eichen tragen ihre eigenen
+	     Abwurfzeilen (treeMasterGrowing), darum stehen sie einzeln da; treePlantedOak41m erbt
+	     von treeOakLrg01. Ob die Chance je Baum oder je Schlag gilt, zeigt S-52. -->
+	<append xpath="/blocks/block[@name='treeOakSml01']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treeOakMed01']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treeOakMed02']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treeOakLrg01']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treePlantedOak08m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treePlantedOak16m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+	<append xpath="/blocks/block[@name='treePlantedOak27m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+</config>

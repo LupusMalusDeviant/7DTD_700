@@ -606,7 +606,11 @@
 		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="20,100" value="1" tags="itm700_eulenauge"/>
 		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="40,100" value="1" tags="itm700_baerenmut"/>
 		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="50,100" value="1" tags="itm700_quellsud"/>
+		<!-- WP13.3 (D197, zu pruefen N-141): der Theriak (700_45_Leben) bei 30, neben dem
+		     Kraeutersud - "T2-Wissen" (D35), und frueh genug, dass Stufe 3 heilbar bleibt. -->
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="30,100" value="1" tags="itm700_theriak"/>
 	</append>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/unlock_entry[@unlock_tier='2']/@item">drugHerbalAntibiotics,itm700_theriak</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT1-1,medicalT1-2']/@icon">medicalFirstAidBandage,medicalAloeCream</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT1-1,medicalT1-2']/unlock_entry[@unlock_tier='2']/@item">itm700_wolfsbalsam</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/@icon">drinkJarRedTea,drugHerbalAntibiotics,drinkJarRedTea</set>
