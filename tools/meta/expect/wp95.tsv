@@ -1,0 +1,14 @@
+# Soll-Signaturen fuer das Finding WP9-odem-und-verderb (Plan-0002 WP9.5).
+# Build V 3.40 b10, Assembly-CSharp SHA-256 cb54022ccc862aa673e0ee55dafe67d842b364c80df6916958d171e959656c58.
+# Kein Patch haengt daran; die Datei meldet ein Spiel-Update, das Bedingungen an Item-Aktionen
+# (Odem-Kosten), Werte am Gegenstand (Verderb) oder das Zauber-Projektil ungueltig machen koennte.
+# Format: Typ<TAB>Member<TAB>Signatur  - genau die Zeile, die `mod700meta members` ausgibt.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/meta/expect/wp95.tsv
+ItemAction	CanExecute	bool ItemAction::CanExecute(ItemActionData)
+ItemClassesFromXml	parseItem	static void ItemClassesFromXml::parseItem(System.Xml.Linq.XElement)
+RequirementBase	ParseRequirementGroup	static RequirementGroup RequirementBase::ParseRequirementGroup(System.Xml.Linq.XElement)
+MinEventActionSetItemMetaFloat	Execute	void MinEventActionSetItemMetaFloat::Execute(MinEventParams)
+CompareItemMetaFloat	IsValid	bool CompareItemMetaFloat::IsValid(MinEventParams)
+ItemValue	SetMetadata	void ItemValue::SetMetadata(string, float)
+ItemValue	TryGetMetadata	bool ItemValue::TryGetMetadata(string, float&)
+ItemActionProjectile	ExecuteAction	void ItemActionProjectile::ExecuteAction(ItemActionData, bool)

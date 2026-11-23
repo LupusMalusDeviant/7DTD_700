@@ -86,6 +86,7 @@ Kurz-Check: [02-10-schnittstellen-kurzcheck.md#prio-8--f-15-wehr-und-volksmagie]
 | ◐ | Turret-Munition / Projektil-Definition | Munition per Tag ist belegt (`AmmoItem` mit `+tags(…)`). Ein **eigenes** Projektil mit eigenem Partikel hängt an Assets — Phase 2, nicht geprüft. |
 | ? | `ItemActionLauncher` / `ItemActionProjectile` | Basis für Zauber-Items (Glutpfeil): Projektil, Partikel, Schaden per XML |
 | ? | KI-Zielwahl / Pfadfindung (`EAI*`) | Gibt es eine Möglichkeit, eine „Meide-Zone“ für Bannkreis zu setzen? Sonst Fallback-Aura |
+| ◐ | **WP9.5 (2026-11-23)** Odem-Kosten, Projektil, Meide-Zone, Plätze, Attribut | **Kosten per XML:** `<requirement>` in `<action>` → `ItemAction.ExecutionRequirements`, geprüft in `CanExecute`. Projektil-Klassen da (Partikel = Asset). **Keine Meide-Zone** (31 `EAI*`, nur `EAIRunawayFromEntity` vor Wesen) → Aura. Amulett: vier `BiomeBadge`-Plätze. Fenster: 8 Kategorie-Felder, 9. per XUi. [Finding](findings/WP9-odem-und-verderb.md) |
 | ? | Item-Modifier-Slots (`ItemClassModifier`) | Grenzen für Runen als Waffen- bzw. Rüstungs-Mods; Accessoire-Slot vorhanden? |
 
 ## F-07 — **berührt D43, Nutzerentscheidung offen**
@@ -133,6 +134,7 @@ Kurz-Check: [02-10-schnittstellen-kurzcheck.md#prio-6--f-18-belagerung](findings
 | Status | Kandidat | Frage |
 |---|---|---|
 | ? | Item-Verfall / Zeitstempel an `ItemValue` | Gibt es einen Verderb-Mechanismus, oder braucht es eigene Metadaten am Stack? |
+| ✓ | **WP9.5 (2026-11-23)** Verderb | **Kein** Verderb-Mechanismus. Metadaten am Stapel gibt es (`ItemValue::SetMetadata(string, float)`, XML `SetItemMetaFloat`/`CompareItemMetaFloat`), aber keinen Zeitwert in XML und keinen Takt für Stapel im Rucksack. Verderb nach Zeit braucht C#. [Finding](findings/WP9-odem-und-verderb.md) |
 | ? | Tier-KI friedlich + Bindung an Bereich | Grundlage für Pferch-Haltung |
 
 ## F-20

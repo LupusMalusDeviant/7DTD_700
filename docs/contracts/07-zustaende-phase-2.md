@@ -103,9 +103,10 @@ verloren, weil er aus dem Spieltag folgt.
 | `cv700_odemMax` | CVar je Spieler | Vorgabe aus Runenkundiger-Stufe | Buff aus Attribut (abgeleitet, jedes Mal neu) | abgeleitet | Regeneration |
 | `buff700_odemRegen` | Buff | dauernd | beim Betreten gesetzt | neu gesetzt | — |
 
-Ob eine Item-Aktion per XML einen CVar als Kosten prüfen und abziehen kann, klärt WP9.5. Fällt die
+~~Ob eine Item-Aktion per XML einen CVar als Kosten prüfen und abziehen kann, klärt WP9.5. Fällt die
 Antwort „nein", schreibt ein Patch — dann ist der Schreiber der Patch, und §1 Nr. 2 verlangt, dass die
-Buffs dann **nicht** mehr abziehen.
+Buffs dann **nicht** mehr abziehen.~~ *Nach WP9.5:* ja, per XML — Bedingung in der `<action>`
+(`ExecutionRequirements`), Abzug per `ModifyCVar`. Schreiber bleiben die Effekte des Spielers.
 
 ### 3.5 Lernen durch Tun (F-21, D48)
 

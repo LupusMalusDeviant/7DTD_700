@@ -19,7 +19,11 @@ Lebensmittel **verderben** (D32), und eine Siedlung lebt von Acker und Vieh (D33
   (Holz, Vanilla-Forge-Prinzip nach D26); das Muster liegt vor
   (`mod/700_40_Bauen/Config/XUi_InGame/`, WP4.5)
 - Kühle Lagerung (Erdkeller) verlangsamt den Verderb
-- [verifizieren] per REA: Hat V 3.40 ein Verfallssystem für Items, auf das man aufbauen kann? Sonst C# (Zeitstempel je Stack, Prüfung beim Öffnen bzw. Laden)
+- ~~[verifizieren] per REA: Hat V 3.40 ein Verfallssystem für Items, auf das man aufbauen kann? Sonst C# (Zeitstempel je Stack, Prüfung beim Öffnen bzw. Laden)~~
+  *Beantwortet WP9.5 ([Finding](../rea/findings/WP9-odem-und-verderb.md), zu prüfen N-115):* **kein**
+  Verfallssystem. Werte am Gegenstand gibt es (`SetItemMetaFloat`, `CompareItemMetaFloat`), aber
+  keinen Zeitwert und keinen Takt für Stapel im Rucksack. Verderb nach Zeit = C#; der XML-Rückfall ist
+  ein Krankheitsrisiko beim Essen frischer Ware ohne Uhr.
 
 ### Ackerbau
 - Vanilla-Farming umgedeutet: Getreide (Gerste, Roggen, Emmer), Rüben, Kohl, Erbsen, Bohnen, Flachs, Hanf, Kräuter

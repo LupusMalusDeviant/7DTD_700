@@ -86,8 +86,12 @@ Nachzehrer, Lichtfunke gegen Irrlicht-Täuschung usw.
 `buffs.xml`, `blocks.xml` (Runensteine, Kraftsteine, Schutzzeichen), `recipes.xml`,
 `progression.xml` (Baum Runenkundiger, F-21), `loot.xml`, `traders.xml`, Localization.
 **Odem:** CVar `700_odem` + `700_odemMax` (Regeneration per Buff), eigene HUD-Leiste per
-XUi (additiv, D5). [verifizieren], ob Item-Aktionen per XML einen CVar als Kosten prüfen und
-abziehen können; sonst kleiner Harmony-Hook.
+XUi (additiv, D5). ~~[verifizieren], ob Item-Aktionen per XML einen CVar als Kosten prüfen und
+abziehen können; sonst kleiner Harmony-Hook.~~ *Belegt WP9.5 ([Finding](../rea/findings/WP9-odem-und-verderb.md),
+zu prüfen N-115):* eine `<requirement>` **in** der `<action>` landet in `ItemAction.ExecutionRequirements`
+und wird vor dem Auslösen geprüft — `CVarCompare` auf `cv700_odem` als Sperre, `ModifyCVar` beim
+Auslösen als Abzug. Kein Hook. Bannkreis als Fläche geht nicht (keine Meide-Zone in der KI) → Aura.
+Amulett-Platz: einer der vier Abzeichen-Plätze. Sechstes Attribut: Fertigkeitsfenster von 8 auf 9 Felder (XUi).
 ### C# / Harmony — Warum nicht XML?
 - Variante B (selbstversorgende Runensteine), falls gewählt
 - **Bannkreis** (Gegner meiden Bereich): Vanilla-KI hat nach unserem Kenntnisstand keine

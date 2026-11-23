@@ -34,6 +34,7 @@ Signaturen, auf die sich Code der Mod verlässt, ohne sie zu patchen. Sie stehen
 | Vertrag 07 Zustände | `tools/meta/expect/v07-zustaende.tsv` | 5 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.2) |
 | F-21 Herstellen, F-02 Schaden/Wurf, D60 Qualität | `tools/meta/expect/wp93.tsv` | 11 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.3) |
 | F-17 Licht/Nähe, F-09 Seuchennacht, Direktor | `tools/meta/expect/wp94.tsv` | 14 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.4) |
+| F-15 Odem-Kosten, F-19 Verderb | `tools/meta/expect/wp95.tsv` | 8 | 2026-11-23, grün, V 3.40 b10 (neu, WP9.5) |
 
 Für alle Patches gilt ab Phase 2b [Vertrag 06](../../contracts/06-csharp-kern-und-patches.md) (Entwurf).
 
