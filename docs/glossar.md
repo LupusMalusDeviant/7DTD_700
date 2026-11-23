@@ -389,6 +389,16 @@ Je zwei Schriften sprechen aus einer Deutung der Seuchennacht (`docs/lore.md` §
 | — | Abschrift | transcript | Buchreihe | D24, D69 |
 | `challengeRedeemChallenge` | Erste Herausforderung | First Challenge | Tutorial-Herausforderung / Tutorial Challenge | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 | `buffInfectionCureDisplayName` | Heilmittel wirkt | Remedy at Work | Antibiotische Medizin / Antibiotic Medicine | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
+| `buffInfection01UntreatedName` | Schwärende Wunde | Festering Wound | Leichte Infektion / Mild Infection | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffInfection01GetBetterName` | Schwärende Wunde, versorgt | Festering Wound, Tended | Behandelte leichte Infektion | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffInfection02UntreatedName` | Seuchenbrand | Plague-burn | Infektion / Infection | F-11, D35, D196 — zu prüfen (N-140) |
+| `buffInfection02GetBetterName` | Seuchenbrand, versorgt | Plague-burn, Tended | Behandelte Infektion | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffInfection03UntreatedName` | Seuchenfieber | Plague-fever | Schwere Infektion / Severe infection | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffInfection03GetBetterName` | Seuchenfieber, versorgt | Plague-fever, Tended | Behandelte schwere Infektion | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffInfectionImmunityName` | Gefeites Blut | Hardened Blood | Infektionsimmunität / Infection Immunity | F-11 §2, D196 — zu prüfen (N-140) |
+| `buffDysentery01UntreatedName` | Ruhr | The Flux | Durchfall / Dysentery | F-11 §3, D196 — zu prüfen (N-140) |
+| `buffDysentery01GetBetterName` | Ruhr, versorgt | The Flux, Tended | Behandelter Durchfall | F-11 §3, D196 — zu prüfen (N-140) |
+| `buffDysenteryCureDisplayName` | Mittel gegen die Ruhr | Remedy for the Flux | Durchfall-Medizin / Dysentery Medicine | F-11 §3, D196 — zu prüfen (N-140) |
 | `buffPackMuleDisplayName` | Saumlast-Schutz | Pack-load Protection | Packesel-Schutz / Pack Mule Protection | Nachtlauf 2026-11-22 — Name zu prüfen (Prüfung 0001) |
 
 ### Wörter der Spielmechanik

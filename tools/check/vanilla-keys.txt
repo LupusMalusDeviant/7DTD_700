@@ -1974,3 +1974,21 @@ challengePurchaseItemsJoelDesc
 challengeSellItemsJoel
 challengeSellItemsJoelShort
 challengeSellItemsJoelDesc
+# WP13.1 (D196): Namen der Krankheiten - Seuchenbrand in drei Stufen, Ruhr
+buffInfection01UntreatedName
+buffInfection01GetBetterName
+buffInfection02UntreatedName
+buffInfection02GetBetterName
+buffInfection03UntreatedName
+buffInfection03GetBetterName
+buffInfection03GetBetterDesc
+buffInfection04Tooltip
+buffInfectionGettingWorseTooltip
+buffInfectionImmunityName
+buffDysentery01UntreatedName
+buffDysentery01GetBetterName
+buffDysentery01UntreatedDesc
+buffDysentery01GetBetterDesc
+buffDysentery01UntreatedTooltip
+buffDysenteryCureDisplayName
+buffDysenteryCureDisplayDesc
