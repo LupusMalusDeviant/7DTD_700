@@ -66,8 +66,9 @@ Ordner `Data\Config\XUi` gibt es in diesem Build nicht; die Fenster der Herausfo
 in `XUi_InGame`.
 
 **Vanillas Bestand** (XML ohne Kommentare gezählt): 4 Kategorien, 19 Gruppen, 175
-Herausforderungen, 202 Ziele. 16 Gruppen haben 10 Einträge, die vier Biom-Gruppen und `Silly`
-haben 7. Ohne die drei Twitch-Gruppen (27) bleiben die 148 sichtbaren.
+Herausforderungen, 202 Ziele. ~~16~~ **14** Gruppen haben 10 Einträge, die vier Biom-Gruppen und
+`Silly` haben 7 (14 × 10 + 5 × 7 = 175; berichtigt am 2026-11-23, nachgezählt an Vanillas
+`challenges.xml`). Ohne die drei Twitch-Gruppen (27) bleiben die 148 sichtbaren.
 
 **Was der Auszug zeigt und was nicht:** `--il` gibt je Methode Aufrufe, Feldzuweisungen und
 ganzzahlige Konstanten in ihrer Reihenfolge aus, dazu je eine entdoppelte Liste der gelesenen

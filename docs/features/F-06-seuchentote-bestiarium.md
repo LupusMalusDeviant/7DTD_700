@@ -45,7 +45,7 @@ Quelle: `entityclasses.xml`, `entitygroups.xml`, `spawning.xml`, `Localization.c
 | Gruppen | 1875, davon **29** in `spawning.xml` genannt („Landschaftsgruppen") |
 | `zombie*` in Landschaftsgruppen | 63 Klassen aus 31 Grundnamen |
 | Tiere `animal*` ohne die zwei Vorlagen | 21 Klassen (20 Grundnamen; der Geier hat eine Stufe `Radiated`), 15 davon in Landschaftsgruppen |
-| Von uns überschriebene Namen | 0 |
+| Von uns überschriebene Namen | ~~0~~ 0 bei der Messung; seit D148 (2026-11-23) **176** — 155 Seuchentote, 21 Tiere |
 
 **Zur Zahl „31 Familien" in D101:** gemeint waren die Modell-Familien. Gezählt sind es 36
 Grundnamen in 32 Modell-Ordnern; `zombieFrostclaw` und `zombiePlagueSpitter` tragen in Vanillas
