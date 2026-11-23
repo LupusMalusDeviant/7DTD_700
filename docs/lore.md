@@ -76,6 +76,7 @@ macht die Frage unbeantwortbar. Notizen und Händlerrede verteilen sich auf alle
 | Pergamentfetzen (Startnotiz) | `noteDuke01Desc`, D75 | „Strafe, Fluch — gleich, wie man es nennt" | ja, lässt offen |
 | Zwölf Fundschriften | `itm700_schrift…`, WP6.7 | Strafe (Klosterbuch), Krankheit (Brunnen, Karren), Fluch/Zeichen (Bleitäfelchen) | ja |
 | Biom-Gefahren „Moordunst" | WP6.3 | Krankheit (böse Luft) | ja |
+| Sechs Fundschriften der Deutungen | `itm700_schrift…`, WP11.9 (D190) | Strafe (Glockenseil, Beichte), Fluch (Grenzstein, Knoten), Krankheit (Kräuterfrau, weitgereister Händler) — der Händler spottet über die beiden anderen, die Kräuterfrau über die Brüder | ja, jede glaubt nur; zu prüfen N-134 |
 
 ## 8. Für Phase 3 (Notiz, D50)
 

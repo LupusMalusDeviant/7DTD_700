@@ -53,6 +53,14 @@ offen** — drei Deutungen stehen nebeneinander (Lore §3), jede hat in der Welt
 **Regel für jeden Text:** er spricht aus einer Deutung und darf sich irren; kein Text erklärt die
 Seuchennacht (Lore §1). Die Anzeige der Spielmechanik („Seuchennacht heute Nacht") bleibt nüchtern.
 
+*Gebaut mit WP11.9 (D190, zu prüfen N-134, Spieltest S-47):* **sechs Fundschriften**, je zwei je
+Deutung, in `700_70_Handel` und in der Beute-Gruppe `lg700_schriften` (dort jetzt 18): Strafe —
+*Zettel am Glockenseil* (der Satz aus der Tabelle, aus Mönchsmund), *Beichtzettel eines Knechts*;
+Fluch — *Ritzung am Grenzstein*, *Birkenrinde mit sieben Knoten*; Krankheit — *Wachstafel einer
+Kräuterfrau*, *Brief eines weitgereisten Händlers*. Durchsicht gegen das Kriterium unten: jede spricht
+als Glaube („die Alten haben es gesagt", „der Bruder sagt", „bislang"), zwei widersprechen den anderen
+Deutungen offen. **Noch nicht:** Händlerrede (F-10, eigene Sprachzeilen am Gespräch — Phase 2b mit N-106).
+
 ### 2. Was Phase 1 schon hat
 
 - Vanillas Blutmond **unverändert in der Mechanik**: Planer, Wellen, Zielsuche der Horde.

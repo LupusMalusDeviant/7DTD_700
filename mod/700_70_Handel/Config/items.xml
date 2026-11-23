@@ -5,7 +5,7 @@
 
 	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
 
-	     Zwoelf Fundschriften. Jede erbt von Vanillas blankNoteMaster (Buch-Modell in der Hand,
+	     Zwoelf Fundschriften (seit WP11.9 achtzehn, siehe unten). Jede erbt von Vanillas blankNoteMaster (Buch-Modell in der Hand,
 	     Gruppe Sondergegenstaende, nicht verkaeuflich) und traegt ihren Text als Beschreibung:
 	     gelesen wird im Info-Fenster des Gegenstands, die Schrift bleibt erhalten. Anders als
 	     der Pergamentfetzen (noteDuke01) hat sie keine Aktion, die sie verbraucht.
@@ -67,6 +67,37 @@
 		<item name="itm700_schriftKarren">
 			<property name="Extends" value="itm700_schriftMoench1" />
 			<property name="DescriptionKey" value="itm700_schriftKarrenDesc" />
+		</item>
+
+		<!-- Plan-0002 WP11.9 (F-09 Abschnitt 1, D190, zu pruefen N-134): sechs Schriften, je zwei
+		     aus einer der drei Deutungen der Seuchennacht (lore.md Abschnitt 3). Jede glaubt,
+		     keine weiss; zusammen widersprechen sie sich.
+		       Strafe     Glockenseil, Beichte
+		       Fluch      Grenzstein, Knoten
+		       Krankheit  Kraeuterfrau, Weitgereist -->
+		<item name="itm700_schriftGlockenseil">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftGlockenseilDesc" />
+		</item>
+		<item name="itm700_schriftBeichte">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftBeichteDesc" />
+		</item>
+		<item name="itm700_schriftGrenzstein">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftGrenzsteinDesc" />
+		</item>
+		<item name="itm700_schriftKnoten">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftKnotenDesc" />
+		</item>
+		<item name="itm700_schriftKraeuterfrau">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftKraeuterfrauDesc" />
+		</item>
+		<item name="itm700_schriftWeitgereist">
+			<property name="Extends" value="itm700_schriftMoench1" />
+			<property name="DescriptionKey" value="itm700_schriftWeitgereistDesc" />
 		</item>
 	</append>
 </config>

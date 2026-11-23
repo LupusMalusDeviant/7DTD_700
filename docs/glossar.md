@@ -162,6 +162,20 @@ Nutzer D100 abnimmt.
 | `zombieUtilityWorker` | Seuchentoter Erzgräber | Plague-dead Ore Digger | Utility Worker | F-06, D147 (Vorschlag) |
 | `zombieYo` | Seuchentoter Bursche | Plague-dead Lad | Yo | F-06, D147 (Vorschlag) |
 
+### Fundschriften der drei Deutungen — Vorschlag, nicht abgenommen (N-134)
+
+Je zwei Schriften sprechen aus einer Deutung der Seuchennacht (`docs/lore.md` §3, F-09 §1). Die zwölf
+älteren Fundschriften (WP6.7) haben keine Glossarzeilen; sie tragen keinen Namen, der woanders vorkommt.
+
+| Kennung | Deutsch | Englisch | Vanilla | Quelle |
+|---|---|---|---|---|
+| `itm700_schriftGlockenseil` | Zettel am Glockenseil | Note Tied to a Bell Rope | — | Strafe; F-09 §1, D190 |
+| `itm700_schriftBeichte` | Beichtzettel eines Knechts | A Farmhand's Confession | — | Strafe; F-09 §1, D190 |
+| `itm700_schriftGrenzstein` | Ritzung am Grenzstein | Marks on a Boundary Stone | — | Fluch; F-09 §1, D190 |
+| `itm700_schriftKnoten` | Birkenrinde mit sieben Knoten | Birch Bark with Seven Knots | — | Fluch; F-09 §1, D190 |
+| `itm700_schriftKraeuterfrau` | Wachstafel einer Kräuterfrau | A Herb-Wife's Wax Tablet | — | Krankheit; F-09 §1, D190 |
+| `itm700_schriftWeitgereist` | Brief eines weitgereisten Händlers | Letter from a Far-Travelled Trader | — | Krankheit; F-09 §1, D190 |
+
 ## 3. Stoffe
 
 | Kennung | Deutsch | Englisch | Vanilla | Quelle |

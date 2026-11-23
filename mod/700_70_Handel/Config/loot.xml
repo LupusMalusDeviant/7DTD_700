@@ -5,7 +5,7 @@
 
 	     VON HAND GESCHRIEBEN, nicht erzeugt (D53).
 
-	     Eine Beute-Gruppe lg700_schriften zieht genau EINE der zwoelf Fundschriften. Sie steht
+	     Eine Beute-Gruppe lg700_schriften zieht genau EINE der zwoelf (seit WP11.9 achtzehn) Fundschriften. Sie steht
 	     vor Vanillas erster Gruppe, damit jeder Verweis auf sie nach ihr kommt.
 
 	     Angehaengt wird sie an sieben Vanilla-Gruppen, alle mit count="all": dort ist jeder
@@ -38,6 +38,13 @@
 			<item name="itm700_schriftSiebteNacht" />
 			<item name="itm700_schriftBitte" />
 			<item name="itm700_schriftKarren" />
+			<!-- WP11.9 (D190): die drei Deutungen der Seuchennacht, je zwei -->
+			<item name="itm700_schriftGlockenseil" />
+			<item name="itm700_schriftBeichte" />
+			<item name="itm700_schriftGrenzstein" />
+			<item name="itm700_schriftKnoten" />
+			<item name="itm700_schriftKraeuterfrau" />
+			<item name="itm700_schriftWeitgereist" />
 		</lootgroup>
 	</insertBefore>
 

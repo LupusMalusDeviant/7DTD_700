@@ -72,6 +72,7 @@ Danach die Protokolle beider Seiten aufheben; Claude liest die Zeilen `CVarLogVa
 | S-44 *(seit WP11.9)* | `settime 7 21 50`, draußen warten; dann mit Spielstufe über 30 bzw. 60 (`gamestage`) | erst Stille, nach rund 1 min ein Glockenschlag und „Die Glocke schlägt.", kein zweiter; im Lauf der Nacht ein Brecher, ab 60 eine Sagengestalt; kein Fehler zu `gamestages` im Protokoll |
 | S-45 *(seit WP11.5)* | `buff t700_grauen90`, draußen fünf Minuten stehen, dann im Haus; Dedicated mit zweitem Spieler daneben | Schritte im Laub, Rascheln, drinnen eine Tür — ohne Quelle; der zweite Spieler hört nichts; kommen Seuchentote auf die Laute zu, sagen |
 | S-46 *(seit WP11.7)* | `spawnentity` Aussätziger in 20 m, still stehen; dann 10 m; Schuss in 20 m; schlafender Aussätziger im Ort | sieht dich erst unter rund 12 m, folgt dem Schuss, wacht beim Gehen früher auf als andere; kein Fehler zu `entityclasses` |
+| S-47 *(seit WP11.9)* | `giveself itm700_schriftGlockenseil` (und die fünf anderen Deutungs-Schriften), Info-Fenster | Name und Text DE/EN, Umlaute, Absätze, nicht abgeschnitten; kein Fehler zu `items`/`loot` |
 | S-35 (3) *(seit WP10.3)* | Fertigkeitsfenster öffnen (K), Reihe der Symbole oben | sechs Bäume, „Runenkunde" mit Stern als sechster; passt die Reihe neben das Suchfeld; steht irgendwo ein Rohschlüssel wie `att700_runenkundiger`; einen Punkt hineinsetzen und Perks ansehen |
 
 **Nicht in diesem Lauf** (kein Ersatz durch eine Probe): S-32 (4) „Server setzt einen Wert" braucht

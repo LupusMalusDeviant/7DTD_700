@@ -100,6 +100,7 @@ Fortgeschrieben bei jedem Arbeitsschritt. „Gebaut" heißt: lokal committet, Pr
 | WP11.5 Trugbilder, Teil | **gebaut** (D187, N-131, S-45): Schritte, Rascheln, Tür aus Vanilla-Lauten; `kette-pruefen` prüft Laute. Offen bis WP7.6: eigene Laute. | 60_Welt, tools/check |
 | WP11.7 Verhalten, Teil | **gebaut** (D188, N-132, S-46): der Lauscher als Werte am Aussätzigen. Offen: Pirscher (C#, WP11.6), Totsteller (WP6.6). | 65_Wesen |
 | WP11.8 Klang | **gelesen, nichts gebaut** (D189, N-133): Finding „Stille und Umgebungslaute", Soll-Datei `wp118.tsv` (11 Zeilen, `verify` Exit 0, Gegenprobe Exit 1); Triage-Zeile 21 entschieden: C# beim Client, Patch vielleicht. | rea/findings, tools/meta, triage |
+| WP11.9 Deutungs-Texte | **gebaut** (D190, N-134, S-47): sechs Fundschriften (Strafe, Fluch, Krankheit je zwei), 12 Sprachzeilen, 6 Glossarzeilen, Beute-Gruppe 12 → 18. Im Spiel ungelesen. | 70_Handel, 90_Sprache, glossar, lore |
 
 Offen aus WP2.6/WP2.7: *welt*, *textluecken*.
 
@@ -738,7 +739,9 @@ Zeilen, je Feature eine begründete Antwort auf „Warum nicht XML?".
    den Gruppen von WP5.6, Vorboten am Vortag, der stille Beginn (F-09:12–15). (L)
    *Teil XML gebaut 2026-11-23 (D186, zu prüfen N-130, Spieltest S-44):* Wellen-Zeilen für Brecher
    und Anführer, stiller Beginn mit Glocke; `kette-pruefen` prüft Wesen-Gruppen (329 Gegenproben).
-   Offen: Himmel (S-34 (3)), Vorboten (Direktor, WP11.6), Deutungs-Texte.
+   Offen: Himmel (S-34 (3)), Vorboten (Direktor, WP11.6), ~~Deutungs-Texte~~.
+   *Deutungs-Texte gebaut 2026-11-23 (D190, zu prüfen N-134, Spieltest S-47):* sechs Fundschriften, je
+   zwei je Deutung, in der Beute-Gruppe der Schriften. Händlerrede später (N-106).
 10. **WP11.10** `[braucht Nutzer]` Testlauf T3 mit verkürzten Werten: Seuchennacht jeden Tag,
     kurze Tage, ein Test-Schalter setzt das Grauen auf jede Stufe.
 
