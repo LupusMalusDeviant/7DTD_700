@@ -2719,7 +2719,8 @@ unten nimmt die Klasse.
   |---|---|---|
   | `set` | ja | ja |
   | `append`, `prepend` | ja (Kinder) | ja (Text anhängen, nachgebaut) |
-  | `setattribute`, `removeattribute`, `insertAfter`, `insertBefore` | ja | **rot** |
+  | `setattribute`, `insertAfter`, `insertBefore` | ja | **rot** |
+  | `removeattribute` *(geändert 2026-11-23, Nachtrag Spieltest)* | **rot** — das Spiel lehnt es ab („Can only remove Attributes") | ja — das Attribut kommt aus dem XPath; ein `name` an der Operation liest das Spiel nicht |
   | `remove` | ja | **rot** — das Spiel lehnt es ab |
   | `csv` | **rot** | ja (nachgebaut) |
 
