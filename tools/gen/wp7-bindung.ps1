@@ -140,6 +140,7 @@ $offen = [ordered]@{
     'doorWoodLargeGate'      = 'Bauteil'
     'itm700_eichenrindensud' = 'D197: frei, gegen Fieber braucht es keine Stufe'
     'itm700_honigsalbe'      = 'D197: frei wie Vanillas Salbenverband'
+    'itm700_mehl'            = 'D202: frei wie Vanillas Maismehl (nicht learnable)'
 }
 
 # ===========================================================================
@@ -151,6 +152,8 @@ $offen = [ordered]@{
 # ===========================================================================
 $eigeneLinie = [ordered]@{
     'itm700_theriak' = 'neben Vanillas Kraeutersud, der Platz des gesperrten Antibiotikums (D197)'
+    'itm700_fladenbrot' = 'der Platz des gesperrten Maisbrots (D202)'
+    'itm700_met'        = 'neben Vanillas Bier (D202)'
 }
 
 # ===========================================================================

@@ -67,6 +67,8 @@ Flachs gibt es nur als Material (der Baumwoll-Acker ist gesperrt); er kommt wild
 - **Rübe**: auf dem Kartoffel-Acker als Grundlage, eigenes Bild über Tönung. Die Erscheinung des Ackers
   bliebe Kartoffel — Empfehlung: auf ein Modell warten (N-142 (3)).
 
+**Gebaut (WP13.4, D202, zu prüfen N-143):** Wildkorn fällt mit 10 % beim Ernten von Gras; Mehl entsteht aus der Hand (kein Mahlstein — der braucht ein Modell), Fladenbrot im Kochtopf, Met in der Kräuterküche wie das Bier (nicht im Kochtopf). Mehl, Fladenbrot und Met erben Werte und Wirkung von Maismehl, Maisbrot und Bier und sind nach D70 wie diese gebunden (Fladenbrot Kochkunst 4, Met 27). Prüfung im Spiel: S-54.
+
 ### 3. Was ein Modell braucht (Unity, Aufgaben #8/#9)
 Gesätes Getreide (Gerste, Roggen, Emmer), Kohl, Erbsen, Bohnen, Flachs-Acker, Hanf. Meshy kann die
 Pflanzen liefern; ohne Asset-Bundle kommen sie nicht ins Spiel. Notiert für WP13.4b.

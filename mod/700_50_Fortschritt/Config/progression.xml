@@ -619,6 +619,17 @@
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/@icon">drinkJarBoiledWater,drugAntibiotics,drugSteroids</set>
 	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/unlock_entry[@unlock_tier='1']/@item">itm700_quellsud</set>
 
+	<!-- WP13.4 (D202, zu pruefen N-143): Fladenbrot und Met (700_45_Leben) stehen, wo ihre
+	     Vanilla-Vorlagen stehen - das Fladenbrot auf dem Platz des gesperrten Maisbrots (4),
+	     der Met neben dem Bier (27). Die Anzeige nennt sie an derselben Stelle; der Rest der
+	     Kochkunst-Anzeige (Mais, Kuerbis, Kaffee ...) bleibt, wie er ist. -->
+	<append xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/effect_group">
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="4,100" value="1" tags="itm700_fladenbrot"/>
+		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="27,100" value="1" tags="itm700_met"/>
+	</append>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/display_entry[@name_key='foodT1-1,foodT1-2,foodT1-3,foodT1-4,foodT1-5']/unlock_entry[@unlock_tier='2']/@item">itm700_fladenbrot,drinkJarGoldenRodTea</set>
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/display_entry[@name_key='foodT3-1,foodT3-2,foodT3-3,foodT3-4,foodT3-5']/unlock_entry[@unlock_tier='1']/@item">itm700_met,drinkJarBeer</set>
+
 	<!-- ===== WP12.3b Lehrzeit (F-21 §4, D195) - ERZEUGT von tools/gen/wp12-lernen.ps1, nicht von Hand aendern =====
 	     Je Baum ein Perk, drei Raenge an den Stufen 1/4/7 seines Attributs. Der Perk selbst wirkt nicht:
 	     buff700_lernen (700_50_Fortschritt/buffs.xml) zahlt jeden Rang einmal aus. -->

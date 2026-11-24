@@ -13,4 +13,12 @@
 	<append xpath="/blocks/block[@name='treePlantedOak08m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
 	<append xpath="/blocks/block[@name='treePlantedOak16m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
 	<append xpath="/blocks/block[@name='treePlantedOak27m']"><drop event="Harvest" name="itm700_eichenrinde" count="1,2" prob=".25" tag="oreWoodHarvest" /></append>
+
+	<!-- WILDKORN (F-19 "Ausarbeitung Phase 2" §2, Plan-0002 WP13.4, D202; zu pruefen N-143)
+	     Gesaetes Getreide braucht ein Feldmodell (Unity). Bis dahin liest man die Koerner
+	     wilder Graeser: wer Gras erntet, bekommt neben der Nesselfaser mit 10 % ein Wildkorn.
+	     Die Grasarten (treeShortGrass, treeTallGrassDiagonal ...) erben von treeGrassMaster und
+	     tragen keine eigenen Abwurfzeilen - sie erben diese [verifizieren S-54]. Das gesaete
+	     Gras (plantedtreeGrassSeed1) hat eigene Zeilen und bleibt ohne Korn. -->
+	<append xpath="/blocks/block[@name='treeGrassMaster']"><drop event="Harvest" name="itm700_wildkorn" count="1" prob=".1" tag="allHarvest" /></append>
 </config>

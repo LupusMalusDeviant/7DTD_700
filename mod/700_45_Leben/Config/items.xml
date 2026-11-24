@@ -105,6 +105,56 @@
 				<triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buffInfectionAddCure" />
 			</effect_group>
 		</item>
+
+		<!-- F-19 NAHRUNG (Plan-0002 WP13.4, D202; zu pruefen N-143). Mehl, Fladenbrot und Met
+		     erben Werte und Wirkung von Vanillas Maismehl, Maisbrot und Bier (Extends) - die
+		     Vanilla-Stuecke sind gesperrt (Mais kam erst aus Amerika), ihre Zahlen passen. Weil
+		     der Purge die Vorlagen aus dem Kreativmenue nimmt, setzen wir CreativeMode wieder.
+		     Bilder sind Platzhalter (Vanilla-Bilder, getoent), bis eigene kommen (F-16). -->
+
+		<!-- Wildkorn: faellt beim Ernten von Gras (blocks.xml). Roh kaum essbar - wird gemahlen. -->
+		<item name="itm700_wildkorn">
+			<property name="Tags" value="itm700_korn" />
+			<property name="HoldType" value="45" />
+			<property name="Meshfile" value="@:Other/Items/Misc/sackPrefab.prefab" />
+			<property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab" />
+			<property name="Material" value="Mplants" />
+			<property name="Stacknumber" value="500" />
+			<property name="EconomicValue" value="2" />
+			<property name="Group" value="Resources,Food/Cooking" />
+			<property name="CustomIcon" value="resourceYuccaFibers" />
+			<property name="CustomIconTint" value="d8b45a" />
+			<property name="DescriptionKey" value="itm700_wildkornDesc" />
+			<property name="SoundPickup" value="plantfibers_grab" />
+			<property name="SoundPlace" value="plantfibers_place" />
+		</item>
+
+		<!-- Mehl: Werte von Vanillas Maismehl (roh essbar, macht durstig). -->
+		<item name="itm700_mehl">
+			<property name="Extends" value="foodCornMeal" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="foodCornMeal" />
+			<property name="CustomIconTint" value="f0e6d2" />
+			<property name="DescriptionKey" value="itm700_mehlDesc" />
+		</item>
+
+		<!-- Fladenbrot: Werte von Vanillas Maisbrot. -->
+		<item name="itm700_fladenbrot">
+			<property name="Extends" value="foodCornBread" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="foodCornBread" />
+			<property name="CustomIconTint" value="e0c49a" />
+			<property name="DescriptionKey" value="itm700_fladenbrotDesc" />
+		</item>
+
+		<!-- Met: Wirkung von Vanillas Bier (Faust, Ausdauer, kein Betaeubtwerden). -->
+		<item name="itm700_met">
+			<property name="Extends" value="drinkJarBeer" />
+			<property name="CreativeMode" value="Player" />
+			<property name="CustomIcon" value="drinkJarBeer" />
+			<property name="CustomIconTint" value="e8b04a" />
+			<property name="DescriptionKey" value="itm700_metDesc" />
+		</item>
 	</append>
 
 	<!-- Der Salbenverband (Vanilla) hilft auch gegen den Wundbrand (F-11 §5). -->

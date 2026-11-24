@@ -19,5 +19,23 @@
 			<ingredient name="drugHerbalAntibiotics" count="2" />
 			<ingredient name="resourceCropGoldenrodPlant" count="2" />
 		</recipe>
+
+		<!-- F-19 Nahrung (Plan-0002 WP13.4, D202; zu pruefen N-143). Mehl aus der Hand wie
+		     Vanillas Maismehl (zwischen zwei Steinen gerieben; ein eigener Mahlstein braucht
+		     ein Modell), Fladenbrot im Kochtopf wie Vanillas Maisbrot, Met in der
+		     Kraeuterkueche wie Vanillas Bier. Mehl ist offen wie das Maismehl; Fladenbrot und
+		     Met sind gebunden wie ihre Vorlagen (Kochkunst 4 und 27, tags in
+		     700_50_Fortschritt/recipes.xml) - fehlt das Fortschritts-Modlet, sind sie offen (D70). -->
+		<recipe name="itm700_mehl" count="1" craft_time="10">
+			<ingredient name="itm700_wildkorn" count="4" />
+		</recipe>
+		<recipe name="itm700_fladenbrot" count="1" craft_area="campfire" craft_tool="toolCookingPot" craft_time="30">
+			<ingredient name="itm700_mehl" count="1" />
+			<ingredient name="drinkJarBoiledWater" count="1" />
+		</recipe>
+		<recipe name="itm700_met" count="1" craft_area="chemistryStation" craft_time="60">
+			<ingredient name="foodHoney" count="2" />
+			<ingredient name="drinkJarBoiledWater" count="1" />
+		</recipe>
 	</append>
 </config>

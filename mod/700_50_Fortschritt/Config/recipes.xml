@@ -15,7 +15,7 @@
 	     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind
 	     alle Rezepte offen - nichts bricht.
 
-	     25 gebunden, 21 bewusst offen (Liste und Gruende im Erzeuger). -->
+	     27 gebunden, 22 bewusst offen (Liste und Gruende im Erzeuger). -->
 
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_armschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_beinschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
@@ -32,6 +32,8 @@
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnBladeT1HuntingKnife']">learnable,perkDeepCuts,packMuleCrafting</setattribute>   <!-- craftingBlades ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnBladeT3Machete']">learnable,perkDeepCuts,workbenchCrafting</setattribute>   <!-- craftingBlades ab 36: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnClubT3SteelClub']">learnable,perkPummelPete,workbenchCrafting</setattribute>   <!-- craftingClubs ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_fladenbrot']">learnable</setattribute>   <!-- craftingFood ab 4: der Platz des gesperrten Maisbrots (D202) -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_met']">learnable</setattribute>   <!-- craftingFood ab 27: neben Vanillas Bier (D202) -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeToolAxeT1IronFireaxe']">learnable,perkMiner69r,craftingHarvestingTools,packMuleCrafting</setattribute>   <!-- craftingHarvestingTools ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeToolAxeT2SteelAxe']">learnable,perkMiner69r,craftingHarvestingTools,workbenchCrafting</setattribute>   <!-- craftingHarvestingTools ab 26: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnKnucklesT1IronKnuckles']">learnable,perkBrawler,packMuleCrafting</setattribute>   <!-- craftingKnuckles ab 11: Vanillas Rezept und Vanillas Stufe -->

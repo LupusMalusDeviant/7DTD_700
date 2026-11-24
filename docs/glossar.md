@@ -207,6 +207,10 @@ Je zwei Schriften sprechen aus einer Deutung der Seuchennacht (`docs/lore.md` §
 | `itm700_eichenrinde` | Eichenrinde | Oak Bark | — (Rohstoff, von Eichen) | F-11, D197 — zu prüfen (N-141) |
 | `itm700_eichenrindensud` | Eichenrinden-Sud | Oak-bark Brew | — (Arznei gegen das Fieber) | F-11, D197 — zu prüfen (N-141) |
 | `itm700_honigsalbe` | Honigsalbe | Honey Salve | — (Arznei gegen den Wundbrand) | F-11, D197 — zu prüfen (N-141) |
+| `itm700_wildkorn` | Wildkorn | Wild Grain | — (Rohstoff, aus Gras) | F-19, D202 — zu prüfen (N-143) |
+| `itm700_mehl` | Mehl | Flour | foodCornMeal (Vorlage, gesperrt) | F-19, D202 — zu prüfen (N-143) |
+| `itm700_fladenbrot` | Fladenbrot | Flatbread | foodCornBread (Vorlage, gesperrt) | F-19, D202 — zu prüfen (N-143) |
+| `itm700_met` | Met | Mead | drinkJarBeer (Vorlage) | F-19, D202 — zu prüfen (N-143) |
 | `buff700_fieberName` | Fieber | Fever | — (Zustand, Kälte und Nässe) | F-11, D197 — zu prüfen (N-141) |
 | `buff700_wundbrandName` | Wundbrand | Wound-rot | — (Zustand, unverbundene Blutung) | F-11, D197 — zu prüfen (N-141) |
 | `toolApiarySmoker` | Rauchtopf | Smoke Pot | Smoker | F-19, D198 — zu prüfen (N-142) |
