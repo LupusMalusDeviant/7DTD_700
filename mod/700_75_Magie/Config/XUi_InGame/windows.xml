@@ -32,8 +32,10 @@
 	     WP10-odem-leiste, Nachtrag). Der Controller liest .cv700_odemAnteil und
 	     .cv700_odemZeigen viermal je Sekunde (gerechnet wird weiter im Buff) und gibt
 	     {odemanteil} (Zahl mit Punkt) und {odemzeigen} (true/false). Ohne 700_00_Core fehlt
-	     der Controller; das Spiel nimmt dann den leeren Grund-Controller, und die Leiste bleibt
-	     unsichtbar (D70: nichts bricht).
+	     der Controller; das Spiel nimmt dann den leeren Grund-Controller und schreibt eine
+	     Warnung ins Protokoll (Finding). Was visible="{odemzeigen}" ohne Controller ergibt -
+	     unsichtbar, sichtbar und leer, oder der Text der Bindung -, ist nicht gemessen
+	     [verifizieren S-55]. Erwartet: nichts bricht (D70).
 	     Sichtbar nur mit Odem (Runenkunde ab Stufe 2). Keine Zahl im Balken (Vertrag 07
 	     Nachtrag 2). Alle Teile auf der obersten Ebene (foregroundlayer), wie das Zeichen.
 	     Nur der Bereich ohne Controller: HUDLeftStatBars hat ZWEI rect name="hud" (Statusbalken

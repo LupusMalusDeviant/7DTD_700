@@ -1,7 +1,7 @@
 # Drehbuch der Spieltests — alle S-Zeilen in fünf Sitzungen
 
 > **Stand:** 2026-11-23, Plan-0002 WP14.2 (Teil: T1 bis T3), D191. **Vorschlag, zu prüfen durch den
-> Nutzer (N-135).** Grundlage: die Spieltest-Zeilen S-01 bis S-54 in
+> Nutzer (N-135).** Grundlage: die Spieltest-Zeilen S-01 bis S-55 in
 > [`0000-entscheidungen-fuer-den-nutzer.md`](0000-entscheidungen-fuer-den-nutzer.md) §6 und die
 > Befehlstabelle in [`test/README.md`](../../test/README.md).
 > Nach deiner Vorgabe vom 22.11.: keine langen Wartetests, kurze Timer, alles gebündelt, **die Dauer steht
@@ -15,13 +15,13 @@ geschrieben, damit nichts auseinanderläuft.
 
 | Sitzung | Aufbau | Zeilen | Dauer |
 |---|---|---|---|
-| **A** Hauptmenü und neues Spiel | Einzelspieler, `build.ps1 -Install -MitTest` | S-22, S-11, S-01, S-17, (S-13) | **rund 15 min** (+10 mit S-13) |
+| **A** Hauptmenü und neues Spiel | Einzelspieler, `build.ps1 -Install -MitTest` | S-22, S-11, S-01, S-17, S-55, (S-13) | **rund 20 min** (+10 mit S-13) |
 | **B** Kreativ und Konsole | dieselbe Installation, Test-Spielstand, Kreativmodus, Konsole (F1) | sechs Blöcke, unten | **rund 225 min**, in zwei Abenden (95 und 130) |
 | **C** Dedicated + ein Client | Server und Client je mit `-MitTest` | Proben-Lauf S-32, S-33, S-34, S-35 (1)(2), dazu S-43 (6), S-45 (3)(4) | **rund 25 min** |
 | **D** Neue Welt | eine **kleine** Zufallswelt erzeugen, nicht laden | S-29, S-24, S-27 (2)–(4), S-31 (3)–(8), S-05, S-30, S-12 | **rund 60 min** |
 | **E** wartet | — | S-25 (Unity), S-29 (4) (WP6.5b), S-32 (4) und S-34 (4) (erster C#-Code), S-34 (3) (Himmel), S-23 (Mitspieler) | — |
 
-**Zusammen rund 5 ½ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 15, B 225, C 25, D 60), keine
+**Zusammen rund 5 ½ Stunden** — die Summe der Zeiten aus den S-Zeilen (A 20, B 225, C 25, D 60), keine
 neue Schätzung. Am Ende jeder Sitzung:
 `build.ps1 -Install` **ohne** `-MitTest`, damit die Überlagerung nicht liegen bleibt (`smoke.ps1` meldet
 sie sonst rot).
@@ -39,7 +39,7 @@ sie sonst rot).
 | S-47 (1) | Texte mit Umlauten und Absätzen im Fenster | 2 min |
 | Protokoll aufheben | Claude liest es | — |
 
-## Sitzung A — Hauptmenü und neues Spiel (rund 15 min)
+## Sitzung A — Hauptmenü und neues Spiel (rund 20 min)
 
 1. `tools\build\build.ps1 -Install -MitTest` (installiert Mod und Überlagerung).
 2. **Im Hauptmenü, ohne Welt:** S-22 (2 min), dann S-11 (3 min).
@@ -47,6 +47,8 @@ sie sonst rot).
    erst laden, dann das Protokoll aufheben — dasselbe Protokoll beantwortet S-27 (1) (kein `ERR` zu
    `entitygroups`). S-17 (6 min) gleich danach, solange das Spiel neu ist.
 4. *Wenn ein alter Spielstand da ist:* S-13 (10 min).
+5. *(seit Review 35)* **Einmal ohne Kern:** `Mods\700_00_Core` im Spielordner kurz wegschieben, neu
+   starten, den Test-Spielstand laden: S-55 (5 min). Danach den Ordner zurück.
 
 ## Sitzung B — Kreativ und Konsole (rund 225 min, zwei Abende)
 
