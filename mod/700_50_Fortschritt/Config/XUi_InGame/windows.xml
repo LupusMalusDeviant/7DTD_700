@@ -14,10 +14,17 @@
 	     rutscht, das bei x=394 beginnt: 18 + 9 x 40 = 378.
 
 	     Additiv (D5): nur zwei Attribute an einem Raster, kein Fenster ersetzt.
-	     Pruefung im Spiel: S-35 (3). -->
+	     Pruefung im Spiel: S-35 (3).
 
-	<setattribute name="cols"
-	              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">9</setattribute>
-	<setattribute name="cell_width"
-	              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">40</setattribute>
+	     BEDINGT (Vertrag 03, Nachtrag WP8.7; Review 34 vom 2026-11-24): beide Zeilen aendern
+	     ein Vanilla-Element und laufen nur, wenn das Raster noch da ist. -->
+
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;windowSkillList&quot;]/rect[@name=&quot;content&quot;]/rect[@name=&quot;categoryHeader&quot;]/rect/grid[@name=&quot;categories&quot;]') != null">
+			<setattribute name="cols"
+			              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">9</setattribute>
+			<setattribute name="cell_width"
+			              xpath="/windows/window[@name='windowSkillList']/rect[@name='content']/rect[@name='categoryHeader']/rect/grid[@name='categories']">40</setattribute>
+		</if>
+	</conditional>
 </config>

@@ -46,14 +46,25 @@
 	     ueber dem untersten Buff-Symbol. Die 12 sind am Bildschirmfoto des Spieltests geschaetzt
 	     (zu pruefen).
 	     PLATZHALTER (Nutzer, 2026-11-23): Lage und Aussehen gelten, bis die Oberflaeche ihre
-	     eigene Gestalt bekommt (F-16). -->
-	<set xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@controller='BuffPopoutList']/@pos">90,144</set>
-	<append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][not(@controller)]">
-		<rect name="700_odem" width="171" height="16" pos="0,-37" controller="Mod700.OdemLeiste, Mod700" visible="{odemzeigen}">
-			<sprite depth="1" name="700_odemRand" color="0,0,0,128" type="filled" fillspritepad="true" fill="1" foregroundlayer="true" />
-			<sprite depth="2" name="700_odemGrund" color="70,70,70,160" width="169" type="filled" fillspritepad="true" fill="1" foregroundlayer="true" />
-			<sprite depth="3" name="700_odemFuellung" color="214,150,50,200" width="169" type="filled" fillspritepad="true" fill="{odemanteil}" foregroundlayer="true" />
-			<sprite depth="4" name="700_odemZeichen" sprite="ui_game_symbol_wind" size="14,14" pos="10,-8" pivot="center" foregroundlayer="true" />
-		</rect>
-	</append>
+	     eigene Gestalt bekommt (F-16).
+	     BEDINGT (Vertrag 03, Nachtrag WP8.7; Review 34 vom 2026-11-24): beide Zeilen aendern
+	     ein Vanilla-Element und laufen nur, wenn ihr Ziel noch da ist - nimmt eine UI-Mod den
+	     Bereich weg, fehlt die Leiste still, statt eine Warnung ins Protokoll zu schreiben. -->
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;HUDLeftStatBars&quot;]/rect[@name=&quot;hud&quot;][@controller=&quot;BuffPopoutList&quot;]') != null">
+			<set xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@controller='BuffPopoutList']/@pos">90,144</set>
+		</if>
+	</conditional>
+	<conditional>
+		<if cond="xpath('/windows/window[@name=&quot;HUDLeftStatBars&quot;]/rect[@name=&quot;hud&quot;][not(@controller)]') != null">
+			<append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][not(@controller)]">
+				<rect name="700_odem" width="171" height="16" pos="0,-37" controller="Mod700.OdemLeiste, Mod700" visible="{odemzeigen}">
+					<sprite depth="1" name="700_odemRand" color="0,0,0,128" type="filled" fillspritepad="true" fill="1" foregroundlayer="true" />
+					<sprite depth="2" name="700_odemGrund" color="70,70,70,160" width="169" type="filled" fillspritepad="true" fill="1" foregroundlayer="true" />
+					<sprite depth="3" name="700_odemFuellung" color="214,150,50,200" width="169" type="filled" fillspritepad="true" fill="{odemanteil}" foregroundlayer="true" />
+					<sprite depth="4" name="700_odemZeichen" sprite="ui_game_symbol_wind" size="14,14" pos="10,-8" pivot="center" foregroundlayer="true" />
+				</rect>
+			</append>
+		</if>
+	</conditional>
 </config>

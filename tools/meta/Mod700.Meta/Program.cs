@@ -488,6 +488,41 @@ internal static class Program
 
     // ------------------------------------------------------------------ verify
 
+    /// <summary>
+    /// Nennt die Signaturzeile die Methode <paramref name="qualified"/>? Ja, wenn auf den Namen
+    /// sofort "(" folgt oder eine Generik-Angabe "`n(" wie in Naming.MethodSignature.
+    /// </summary>
+    private static bool NamesMethod(string signature, string qualified)
+    {
+        int at = 0;
+        while ((at = signature.IndexOf(qualified, at, StringComparison.Ordinal)) >= 0)
+        {
+            int next = at + qualified.Length;
+            if (next < signature.Length && signature[next] == '(')
+            {
+                return true;
+            }
+
+            if (next < signature.Length && signature[next] == '`')
+            {
+                int digits = next + 1;
+                while (digits < signature.Length && char.IsAsciiDigit(signature[digits]))
+                {
+                    digits++;
+                }
+
+                if (digits > next + 1 && digits < signature.Length && signature[digits] == '(')
+                {
+                    return true;
+                }
+            }
+
+            at = next;
+        }
+
+        return false;
+    }
+
     private static int CmdVerify(string path, string[] args)
     {
         string? expectPath = null;
@@ -552,8 +587,10 @@ internal static class Program
             // Vorher entschied allein die Signatur; eine Zeile "PlayWarnung<TAB>...::PlayWarning(...)"
             // lief gruen durch, und die Meldung bei einer Abweichung suchte nach dem falschen Namen.
             // Ein Feld (WP9.9) endet auf "Typ::Name", eine Methode enthaelt "Typ::Name(".
+            // Eine generische Methode schreibt Naming.MethodSignature als "Typ::Name`2(" (Review 34,
+            // 2026-11-24): vorher galt eine richtige Zeile dafuer als member-mismatch.
             bool isField = !expected.Contains('(') && expected.EndsWith($" {type}::{member}", StringComparison.Ordinal);
-            if (!isField && !expected.Contains($"{type}::{member}(", StringComparison.Ordinal))
+            if (!isField && !NamesMethod(expected, $"{type}::{member}"))
             {
                 failed++;
                 results.Add(new { type, member, expected, verdict = "member-mismatch", detail = $"Typ- oder Member-Spalte passt nicht zur Signatur: erwartet '{type}::{member}(' (Methode) oder '... {type}::{member}' am Ende (Feld)" });
@@ -574,7 +611,7 @@ internal static class Program
             }
 
             failed++;
-            var near = signatures.Where(s => s.Contains($"::{member}(", StringComparison.Ordinal)
+            var near = signatures.Where(s => NamesMethod(s, $"::{member}")
                     || (!s.Contains('(') && s.EndsWith($"::{member}", StringComparison.Ordinal)))
                 .OrderBy(s => s, StringComparer.Ordinal).ToArray();
             results.Add(new

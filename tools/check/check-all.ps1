@@ -311,7 +311,9 @@ if (Test-Path $ketteSkript) {
     # Ausgang 2 heisst seit dem 2026-11-20 "nicht geprueft" (kein SDTD_PATH). Vorher kam
     # dafuer 0 zurueck und wurde hier als gruen gezaehlt. Eine Ausnahme des Skripts wird
     # gefangen und zaehlt ebenso: sonst endet dieser Lauf ohne seine Ergebniszeile.
-    Invoke-Pruefskript $ketteSkript
+    # -Vollstaendig (Review 34, 2026-11-24): fehlt eine Vanilla-Datei, endet kette-pruefen mit
+    # 2 statt mit "nicht geprueft" bei Ausgang 0.
+    Invoke-Pruefskript $ketteSkript @{ Vollstaendig = $true }
     $kode = $script:pruefKode
     if ($kode -eq 0) { Write-Output "  -> gruen" }
     elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }

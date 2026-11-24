@@ -11,11 +11,11 @@
 	     die tags, sobald es ein tags-Attribut gibt. Erst dadurch treffen auch die
 	     Qualitaetszeilen (CraftingTier) unsere Rezepte.
 
-	     Die Rezepte selbst stehen in 700_20, 700_30 und 700_40 und tragen dort KEINE
+	     Die Rezepte selbst stehen in 700_20, 700_30, 700_40 und 700_45 und tragen dort KEINE
 	     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind
 	     alle Rezepte offen - nichts bricht.
 
-	     24 gebunden, 19 bewusst offen (Liste und Gruende im Erzeuger). -->
+	     25 gebunden, 21 bewusst offen (Liste und Gruende im Erzeuger). -->
 
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_armschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_beinschienen']">learnable</setattribute>   <!-- craftingArmor ab 11: Vanillas Zeile fuer armorHeavyMaster -->
@@ -36,10 +36,10 @@
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeToolAxeT2SteelAxe']">learnable,perkMiner69r,craftingHarvestingTools,workbenchCrafting</setattribute>   <!-- craftingHarvestingTools ab 26: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnKnucklesT1IronKnuckles']">learnable,perkBrawler,packMuleCrafting</setattribute>   <!-- craftingKnuckles ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnKnucklesT3SteelKnuckles']">learnable,perkBrawler,workbenchCrafting</setattribute>   <!-- craftingKnuckles ab 36: Vanillas Rezept und Vanillas Stufe -->
+	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_theriak']">learnable</setattribute>   <!-- craftingMedical ab 30: neben Vanillas Kraeutersud, der Platz des gesperrten Antibiotikums (D197) -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSledgeT1IronSledgehammer']">learnable,perkSkullCrusher,packMuleCrafting</setattribute>   <!-- craftingSledgehammers ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSledgeT3SteelSledgehammer']">learnable,perkSkullCrusher,workbenchCrafting</setattribute>   <!-- craftingSledgehammers ab 36: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT1IronSpear']">learnable,perkJavelinMaster,craftingSpears,packMuleCrafting</setattribute>   <!-- craftingSpears ab 11: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='meleeWpnSpearT3SteelSpear']">learnable,perkJavelinMaster,craftingSpears,workbenchCrafting</setattribute>   <!-- craftingSpears ab 36: Vanillas Rezept und Vanillas Stufe -->
 	<setattribute name="tags" xpath="/recipes/recipe[@name='blk700_webstuhl']">learnable,workbenchCrafting</setattribute>   <!-- craftingWorkstations ab 14: Platz und Marken von toolChickenCoopLamp, der Purge hat ihn freigemacht -->
-	<setattribute name="tags" xpath="/recipes/recipe[@name='itm700_theriak']">learnable</setattribute>   <!-- craftingMedical ab 30: neben Vanillas Kraeutersud, der Platz des gesperrten Antibiotikums (D197) -->
 </config>

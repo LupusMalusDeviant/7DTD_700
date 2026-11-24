@@ -925,6 +925,18 @@ Test-Script 'kette-pruefen: eigener Block wird aufgeloest' 0 @{
     Patches      = @()   # diese Gegenprobe prueft keine XPaths
     Vanilla      = (Join-Path $data 'kette\vanilla')
 } -MustContain @('unaufgeloeste Verweise: 0')
+# Review 34 (2026-11-24): derselbe saubere Satz MIT -Vollstaendig. Sein Vanilla-Ordner hat keine
+# sounds.xml, buffs.xml, entitygroups.xml und keinen Vertrag der Zustaende - der echte Lauf
+# darf daraus kein Gruen machen. Vorher gab es den Schalter nicht, und check-all zaehlte
+# "nicht geprueft" bei Ausgang 0 als gruen.
+Test-Script 'kette-pruefen: -Vollstaendig mit fehlenden Vanilla-Dateien ist nicht pruefbar' 2 @{
+    Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
+    Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
+    Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
+    Patches      = @()
+    Vanilla      = (Join-Path $data 'kette\vanilla')
+    Vollstaendig = $true
+} -MustContain @('-Vollstaendig, aber nicht geprueft:', 'Laute (sounds.xml)', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
 Test-Script 'kette-pruefen: vertippter Blockname bleibt rot' 1 @{
     Rezepte      = @(Join-Path $data 'kette\falsch\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')

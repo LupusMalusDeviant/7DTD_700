@@ -62,8 +62,12 @@ foreach ($f in $pfade.Values) { if (-not (Test-Path $f)) { throw "Nicht gefunden
 $unsereRezeptDateien = @(
     'mod\700_20_Material\Config\recipes.xml',
     'mod\700_30_Ausruestung\Config\recipes.xml',
-    'mod\700_40_Bauen\Config\recipes.xml'
+    'mod\700_40_Bauen\Config\recipes.xml',
+    'mod\700_45_Leben\Config\recipes.xml'   # seit D197 (2026-11-23); 45 laedt vor 50
 )
+# NICHT hier: 700_75_Magie. Es laedt NACH 700_50, ein setattribute aus dieser Datei traefe
+# seine Rezepte noch nicht. Die Magie-Rezepte tragen ihre Marken darum selbst (Review 34,
+# Befund 3 - siehe die D-Zeile dazu im GDD).
 
 # ===========================================================================
 # 1  Vanillas Linie: Rezepte mit Vanilla-Namen. Stufe, Level und Marken kommen aus
@@ -134,6 +138,19 @@ $offen = [ordered]@{
     'logWallPillar'          = 'Bauteil'
     'logWallPillarCap'       = 'Bauteil'
     'doorWoodLargeGate'      = 'Bauteil'
+    'itm700_eichenrindensud' = 'D197: frei, gegen Fieber braucht es keine Stufe'
+    'itm700_honigsalbe'      = 'D197: frei wie Vanillas Salbenverband'
+}
+
+# ===========================================================================
+# 4b Eigene Linie: Rezepte ohne Vanilla-Gegenstueck, die an einer Vanilla-Stufe haengen,
+#    weil WIR dort eine Zeile RecipeTagUnlocked anhaengen (700_50 progression.xml). Stufe
+#    und Level werden aus dieser Zeile GELESEN; hier steht nur, welches Rezept und warum.
+#    Seit Review 34 (2026-11-23): vorher stand der Theriak von Hand in der erzeugten Datei
+#    und waere beim naechsten Lauf verschwunden.
+# ===========================================================================
+$eigeneLinie = [ordered]@{
+    'itm700_theriak' = 'neben Vanillas Kraeutersud, der Platz des gesperrten Antibiotikums (D197)'
 }
 
 # ===========================================================================
@@ -211,6 +228,7 @@ foreach ($n in $vanillaLinie) { Ordne $n 'Vanillas Linie' }
 foreach ($r in $ruestung) { foreach ($n in $r.Teile) { Ordne $n 'Ruestung' } }
 Ordne $werkstatt.Rezept 'Werkstatt'
 foreach ($n in $offen.Keys) { Ordne $n 'offen' }
+foreach ($n in $eigeneLinie.Keys) { Ordne $n 'Eigene Linie' }
 foreach ($n in $unsereRezepte.Keys) { if (-not $zuordnung[$n]) { $fehler += "Rezept '$n' ($($unsereRezepte[$n].Datei)) hat keine Entscheidung: weder gebunden noch offen." } }
 foreach ($n in $zuordnung.Keys)     { if (-not $unsereRezepte.Contains($n)) { $fehler += "Rezept '$n' steht in der Tabelle '$($zuordnung[$n])', aber in keiner unserer Rezeptdateien." } }
 
@@ -233,6 +251,31 @@ foreach ($n in $vanillaLinie) {
     $fr = @($freischalter[$n])
     if ($fr.Count -ne 1) { $fehler += "$n`: $($fr.Count) Handwerks-Stufen schalten diese Marke frei, erwartet ist genau eine."; continue }
     $bindungen += @{ Rezept = $n; Marken = $tags; Stufe = $fr[0].Stufe; Level = $fr[0].Level; Max = $fr[0].Max; Quelle = 'Vanillas Rezept und Vanillas Stufe' }
+}
+
+# ===========================================================================
+# Pruefen und sammeln: Eigene Linie - genau EINE unserer Zeilen RecipeTagUnlocked nennt
+# das Rezept, und sie haengt an einer lebenden Vanilla-Stufe.
+# ===========================================================================
+$unserProgXml = [xml]$unserProgRoh
+foreach ($n in $eigeneLinie.Keys) {
+    $treffer = @()
+    foreach ($a in $unserProgXml.SelectNodes("//append[contains(@xpath, 'crafting_skill[@name=')]")) {
+        $m = [regex]::Match($a.GetAttribute('xpath'), "crafting_skill\[@name='([^']+)'\]")
+        if (-not $m.Success) { continue }
+        foreach ($p in $a.SelectNodes("passive_effect[@name='RecipeTagUnlocked']")) {
+            if ((($p.GetAttribute('tags') -split ',') | ForEach-Object { $_.Trim() }) -contains $n) {
+                $treffer += @{ Stufe = $m.Groups[1].Value; Level = [int](($p.GetAttribute('level') -split ',')[0]) }
+            }
+        }
+    }
+    if ($treffer.Count -ne 1) { $fehler += "$n`: $($treffer.Count) unserer Zeilen RecipeTagUnlocked nennen das Rezept (700_50 progression.xml), erwartet ist genau eine."; continue }
+    $sk = $prog.SelectSingleNode("//crafting_skill[@name='$($treffer[0].Stufe)']")
+    if (-not $sk) { $fehler += "$n`: die Stufe '$($treffer[0].Stufe)' gibt es in Vanilla nicht."; continue }
+    if ($stufeVerborgen[$treffer[0].Stufe]) { $fehler += "$n`: die Stufe '$($treffer[0].Stufe)' ist verborgen - das Rezept waere nie herstellbar."; continue }
+    $max = [int]$sk.GetAttribute('max_level')
+    if ($treffer[0].Level -gt $max) { $fehler += "$n`: Level $($treffer[0].Level) liegt ueber dem Hoechstwert $max der Stufe."; continue }
+    $bindungen += @{ Rezept = $n; Marken = 'learnable'; Stufe = $treffer[0].Stufe; Level = $treffer[0].Level; Max = $max; Quelle = $eigeneLinie[$n] }
 }
 
 # ===========================================================================
@@ -392,7 +435,7 @@ $rz += "`t     seine Marke freischaltet - und der Lader haengt den Rezeptnamen v
 $rz += "`t     die tags, sobald es ein tags-Attribut gibt. Erst dadurch treffen auch die"
 $rz += "`t     Qualitaetszeilen (CraftingTier) unsere Rezepte."
 $rz += ''
-$rz += "`t     Die Rezepte selbst stehen in 700_20, 700_30 und 700_40 und tragen dort KEINE"
+$rz += "`t     Die Rezepte selbst stehen in 700_20, 700_30, 700_40 und 700_45 und tragen dort KEINE"
 $rz += "`t     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind"
 $rz += "`t     alle Rezepte offen - nichts bricht."
 $rz += ''

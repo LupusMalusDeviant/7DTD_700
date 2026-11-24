@@ -49,7 +49,12 @@ param(
     # Der Vertrag der Zustaende (seit WP11.3): jeder unserer CVar-Namen, der nur gelesen oder nur
     # geschrieben wird, muss dort stehen. Ohne Angabe docs/contracts/07-zustaende-phase-2.md -
     # aber nur, wenn auch -Rezepte fehlt (echter Lauf); Pruefdaten nennen ihren eigenen.
-    [string]$Zustaende
+    [string]$Zustaende,
+    # Der echte Lauf (check-all.ps1, seit Review 34 vom 2026-11-24): jeder Teil MUSS pruefen.
+    # Fehlt dafuer eine Vanilla-Datei oder der Vertrag der Zustaende, ist das Ausgang 2 statt
+    # einer Zeile "nicht geprueft" bei Ausgang 0. Die kleinen Pruefsaetze der Gegenproben
+    # haben nicht jede Datei und laufen darum ohne den Schalter.
+    [switch]$Vollstaendig
 )
 
 $ErrorActionPreference = 'Stop'
@@ -1441,6 +1446,19 @@ Write-Output ("  CVar-Verweise: {0}" -f $(if ($cvarGeprueft) { $cvarRefs } else 
 Write-Output ("  unaufgeloeste Verweise: {0}" -f $unresolved.Count)
 
 foreach ($problem in $unresolved) { Write-Output "  [ROT]  $problem" }
+
+if ($Vollstaendig) {
+    $ausgelassen = @()
+    if (-not $lernGeprueft)    { $ausgelassen += 'Lern-Verweise (progression.xml)' }
+    if (-not $buffGeprueft)    { $ausgelassen += 'Buff-Verweise (buffs.xml)' }
+    if (-not $tagGeprueft)     { $ausgelassen += 'Tags (items.xml)' }
+    if (-not $lautGeprueft)    { $ausgelassen += 'Laute (sounds.xml)' }
+    if (-not $gruppenGeprueft) { $ausgelassen += 'Wesen und Gruppen (entitygroups.xml)' }
+    if (-not $cvarGeprueft)    { $ausgelassen += 'CVar-Verweise (Vertrag der Zustaende)' }
+    if ($ausgelassen.Count -gt 0) {
+        Stop-Unpruefbar ("-Vollstaendig, aber nicht geprueft: " + ($ausgelassen -join ', '))
+    }
+}
 
 Write-Output ''
 Write-Output '  Grenzen dieser Pruefung:'

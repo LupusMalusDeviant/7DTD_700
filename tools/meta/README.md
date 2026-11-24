@@ -97,6 +97,14 @@ aber **Felder**, ihr Verschwinden fiele nicht auf. Eine Feldzeile hat keine Klam
 die drei Methoden-Gegenproben aus WP9.3–9.5 weiter Exit 1. Die echten Soll-Dateien: **12 Dateien,
 114 Zeilen, Exit 0** (davon 4 Feldzeilen).
 
+**Generische Methoden (Review 34, 2026-11-24).** `members` schreibt sie als ``Typ::Name`1(…)``;
+`member-mismatch` verlangte aber `Typ::Member(` und meldete eine richtige Zeile darum als
+Abweichung. Seither gilt auch ``Typ::Member`n(``. **Gegenprobe** an
+``!!0 XUiController::GetChildByType`1()`` (V 3.40 b10): vorher Exit 1 (`member-mismatch`),
+jetzt Exit 0; dieselbe Zeile mit vertippter Member-Spalte (`GetChildByTyp`) vorher und jetzt
+Exit 1. Die echten Soll-Dateien am 2026-11-24: **14 Dateien, Exit 0** (13 gegen
+`Assembly-CSharp.dll`, `v06-harmony.tsv` gegen `0Harmony.dll`).
+
 Das tritt an die Stelle von `tools/rea/discover.sh compare` nach einem Spiel-Update: Soll-Datei
 gegen die neue DLL laufen lassen, rot heißt Release blockiert.
 
