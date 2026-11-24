@@ -621,8 +621,13 @@
 
 	<!-- WP13.4 (D202, zu pruefen N-143): Fladenbrot und Met (700_45_Leben) stehen, wo ihre
 	     Vanilla-Vorlagen stehen - das Fladenbrot auf dem Platz des gesperrten Maisbrots (4),
-	     der Met neben dem Bier (27). Die Anzeige nennt sie an derselben Stelle; der Rest der
-	     Kochkunst-Anzeige (Mais, Kuerbis, Kaffee ...) bleibt, wie er ist. -->
+	     der Met neben dem Bier (27). Die Anzeige der Kueche nennt sie an derselben Stelle:
+	     Eintrag, Name der Zeile (foodT1-2, foodT3-1 in 700_90_Sprache) und Bild. Das Bild ist
+	     ein Name aus Vanillas Bilderatlas, kein Gegenstand: das Fladenbrot behaelt darum
+	     foodCornBread (sein eigenes Platzhalter-Bild, nur ungetoent), der Met zeigt drinkJarBeer
+	     statt des gesperrten Yucca-Smoothies. Der Rest der Kuechen-Anzeige (Mais, Kuerbis,
+	     Kaffee ...) bleibt, wie er ist. -->
+	<set xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/display_entry[@name_key='foodT3-1,foodT3-2,foodT3-3,foodT3-4,foodT3-5']/@icon">drinkJarBeer,foodHoboStew,foodFishTacos,foodChiliDog,foodShamChowder</set>
 	<append xpath="/progression/crafting_skills/crafting_skill[@name='craftingFood']/effect_group">
 		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="4,100" value="1" tags="itm700_fladenbrot"/>
 		<passive_effect name="RecipeTagUnlocked" operation="base_set" level="27,100" value="1" tags="itm700_met"/>

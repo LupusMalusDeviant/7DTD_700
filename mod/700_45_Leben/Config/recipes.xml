@@ -24,7 +24,7 @@
 		     Vanillas Maismehl (zwischen zwei Steinen gerieben; ein eigener Mahlstein braucht
 		     ein Modell), Fladenbrot im Kochtopf wie Vanillas Maisbrot, Met in der
 		     Kraeuterkueche wie Vanillas Bier. Mehl ist offen wie das Maismehl; Fladenbrot und
-		     Met sind gebunden wie ihre Vorlagen (Kochkunst 4 und 27, tags in
+		     Met sind gebunden wie ihre Vorlagen (Kueche 4 und 27, tags in
 		     700_50_Fortschritt/recipes.xml) - fehlt das Fortschritts-Modlet, sind sie offen (D70). -->
 		<recipe name="itm700_mehl" count="1" craft_time="10">
 			<ingredient name="itm700_wildkorn" count="4" />

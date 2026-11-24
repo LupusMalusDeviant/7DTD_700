@@ -17,8 +17,13 @@
 	<!-- WILDKORN (F-19 "Ausarbeitung Phase 2" §2, Plan-0002 WP13.4, D202; zu pruefen N-143)
 	     Gesaetes Getreide braucht ein Feldmodell (Unity). Bis dahin liest man die Koerner
 	     wilder Graeser: wer Gras erntet, bekommt neben der Nesselfaser mit 10 % ein Wildkorn.
-	     Die Grasarten (treeShortGrass, treeTallGrassDiagonal ...) erben von treeGrassMaster und
-	     tragen keine eigenen Abwurfzeilen - sie erben diese [verifizieren S-54]. Das gesaete
-	     Gras (plantedtreeGrassSeed1) hat eigene Zeilen und bleibt ohne Korn. -->
+	     Neun Bloecke erben von treeGrassMaster: die Grasarten (treeShortGrass,
+	     treeTallGrassDiagonal, treeSnowyGrassDiagonal ...), aber auch der Wuestenstrauch
+	     (treeDesertShrub), die Waldblume (forestFlower) und die Schneebeeren-Straeucher
+	     (plantedSnowberry3Harvest, ...HarvestPlayer). Die Grasarten, Strauch und Blume tragen
+	     keine eigenen Abwurfzeilen und erben diese - auch Strauch und Blume geben also
+	     Wildkorn [verifizieren S-54]. Die Schneebeeren-Straeucher haben eine eigene
+	     Harvest-Zeile; ob sie die geerbte ersetzt, ist offen [verifizieren S-54]. Das gesaete
+	     Gras (plantedtreeGrassSeed1) erbt nicht (kein Extends) und bleibt ohne Korn. -->
 	<append xpath="/blocks/block[@name='treeGrassMaster']"><drop event="Harvest" name="itm700_wildkorn" count="1" prob=".1" tag="allHarvest" /></append>
 </config>
