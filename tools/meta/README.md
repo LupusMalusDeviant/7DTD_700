@@ -108,6 +108,13 @@ Exit 1. Die echten Soll-Dateien am 2026-11-24: **14 Dateien, Exit 0** (13 gegen
 Das tritt an die Stelle von `tools/rea/discover.sh compare` nach einem Spiel-Update: Soll-Datei
 gegen die neue DLL laufen lassen, rot heißt Release blockiert.
 
+**Alle auf einmal, im Prüfbefehl (seit Review 35, 2026-11-24).** `tools/meta/verify-alle.ps1` prüft
+jede `expect/*.tsv` gegen die DLL aus ihrer Zeile `# Aufruf:` (`"<Assembly-CSharp.dll>"` oder
+`"<SDTD_PATH>/…"`); `check-all.ps1` führt es als eigene Prüfung. Exit 0 grün, 1 Abweichung, 2 nicht
+prüfbar (kein Spielpfad, DLL fehlt, Datei ohne `# Aufruf:`). Eine neue Soll-Datei braucht darum diese
+Zeile. Am 2026-11-24: 14 Dateien, 138 Zeilen, Exit 0. Gegenproben und Regeln: Vertrag 04, Nachtrag
+Review 34/35.
+
 Die Signaturen in der Soll-Datei sind wörtlich die Zeilen, die `members` ausgibt — kopieren,
 nicht abschreiben.
 

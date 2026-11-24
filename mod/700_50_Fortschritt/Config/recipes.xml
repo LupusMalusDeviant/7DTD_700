@@ -12,8 +12,12 @@
 	     Qualitaetszeilen (CraftingTier) unsere Rezepte.
 
 	     Die Rezepte selbst stehen in 700_20, 700_30, 700_40 und 700_45 und tragen dort KEINE
-	     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind
-	     alle Rezepte offen - nichts bricht.
+	     tags: fuer sie hat die Bindung eine Quelle, diese Datei. Fehlt dieses Modlet,
+	     sind sie offen - nichts bricht.
+
+	     Ausnahme (D201): 700_75_Magie laedt NACH diesem Modlet, ein setattribute
+	     von hier traefe seine Rezepte noch nicht. Es bindet sie darum selbst
+	     (tags="learnable" im Rezept); fehlt dieses Modlet, bleiben sie gesperrt.
 
 	     27 gebunden, 22 bewusst offen (Liste und Gruende im Erzeuger). -->
 

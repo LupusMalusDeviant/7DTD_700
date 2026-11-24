@@ -860,8 +860,14 @@ function Test-MehrfachVermerk {
                                    $vorher.get_NodeType() -eq [System.Xml.XmlNodeType]::SignificantWhitespace)) {
         $vorher = $vorher.get_PreviousSibling()
     }
-    if ($null -eq $vorher -or $vorher.get_NodeType() -ne [System.Xml.XmlNodeType]::Comment) { return $false }
-    return $vorher.get_Value().TrimStart().StartsWith('mehrere Ziele:', [System.StringComparison]::Ordinal)
+    # Ergebnis: 'ja' (Vermerk mit Grund), 'ohne-grund' (nur "mehrere Ziele:"), 'nein'.
+    # Review 35: der Vertrag verlangt den Grund; ein leerer Vermerk sprach vorher frei.
+    if ($null -eq $vorher -or $vorher.get_NodeType() -ne [System.Xml.XmlNodeType]::Comment) { return 'nein' }
+    $text = $vorher.get_Value().TrimStart()
+    $praefix = 'mehrere Ziele:'
+    if (-not $text.StartsWith($praefix, [System.StringComparison]::Ordinal)) { return 'nein' }
+    if ([string]::IsNullOrWhiteSpace($text.Substring($praefix.Length))) { return 'ohne-grund' }
+    return 'ja'
 }
 
 function Test-PatchForm {
@@ -888,7 +894,12 @@ function Test-PatchForm {
         return
     }
     if ($einfuegenVerben -ccontains $Verb -and $Treffer.Count -gt 1) {
-        if (Test-MehrfachVermerk $Node) { $script:mehrfachVermerkt++; return }
+        $vermerk = Test-MehrfachVermerk $Node
+        if ($vermerk -ceq 'ja') { $script:mehrfachVermerkt++; return }
+        if ($vermerk -ceq 'ohne-grund') {
+            $script:unresolved += "<$Verb> trifft $($Treffer.Count) Stellen; der Vermerk 'mehrere Ziele:' nennt keinen Grund: $XPath  ($Datei)"
+            return
+        }
         $script:unresolved += "<$Verb> trifft $($Treffer.Count) Stellen und fuegt an jeder ein; ist das gewollt, steht unmittelbar davor ein Kommentar 'mehrere Ziele: <Grund>': $XPath  ($Datei)"
     }
 }

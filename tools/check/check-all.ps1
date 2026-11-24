@@ -412,6 +412,29 @@ else {
     Write-Output "  -> nicht geprueft, zaehlt als rot"
 }
 
+# ---------------------------------------------------- Soll-Signaturen (mod700meta verify)
+# Review 35 (2026-11-24): die Soll-Dateien unter tools\meta\expect liefen nur von Hand. Ein
+# Spiel-Update, das eine Methode aendert, an der unser C# haengt, machte nichts rot.
+# verify-alle.ps1 nimmt je Datei die DLL aus ihrer Zeile "# Aufruf:"; ohne Spielpfad oder
+# ohne DLL ist es nicht pruefbar (Exit 2) und zaehlt als rot.
+$metaSkript = Join-Path $repoRoot 'tools\meta\verify-alle.ps1'
+$ran++
+Write-Output ""
+Write-Output "---- Soll-Signaturen (mod700meta verify) ----"
+if (Test-Path $metaSkript) {
+    $metaSpiel = if ($spielConfig) { $env:SDTD_PATH } else { '' }
+    Invoke-Pruefskript $metaSkript @{ Spiel = $metaSpiel }
+    $kode = $script:pruefKode
+    if ($kode -eq 0) { Write-Output "  -> gruen" }
+    elseif ($kode -eq 2) { $red++; Write-Output "  -> nicht geprueft, zaehlt als rot" }
+    else { $red++; Write-Output "  -> rot" }
+}
+else {
+    $red++
+    Write-Output "  tools\meta\verify-alle.ps1 fehlt: $metaSkript"
+    Write-Output "  -> nicht geprueft, zaehlt als rot"
+}
+
 # ---------------------------------------------------- Asset-Register
 # Jedes ausgelieferte Stueck hat eine Zeile in assets/ASSETS.md, und jedes fertige Bild ist
 # das, was aus seinem Quellbild entsteht (Vertrag 05 Abschnitte 4 und 5). Das Werkzeug, das

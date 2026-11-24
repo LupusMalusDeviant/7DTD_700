@@ -409,3 +409,17 @@ Punkt 1 und Punkt 3 sind belegt und werden schärfer:
 
 `purge-patch` rechnet Punkt 3 und Punkt 6 für die Landschaftsgruppen nach, bevor es eine Datei
 schreibt (Vertrag 04, Nachtrag WP5.4).
+
+## Nachtrag Review 35 — eine Ausnahme zu §8.3, 2026-11-24
+
+Entscheidung des Nutzers: **D203** („Ausnahme als D-Zeile").
+
+§8.3 verbietet einen Umbau des XUi-Layouts (D5). Es gibt **genau eine** Ausnahme:
+`mod/700_75_Magie/Config/XUi_InGame/windows.xml` setzt in `HUDLeftStatBars` das Attribut `pos` des
+Vanilla-`rect name="hud"` mit `controller="BuffPopoutList"` von `90,132` auf `90,144`, damit die
+Odem-Leiste (D199) das unterste Buff-Symbol nicht verdeckt.
+
+- Die Zeile steht in einem bedingten Block (Nachtrag WP8.7): fehlt das Ziel, läuft sie nicht.
+- Setzt eine UI-Mod dieselbe `pos` selbst, entscheidet die Ladereihenfolge. Das prüft kein Werkzeug.
+- Jede weitere Änderung an Lage oder Größe eines Vanilla-Elements braucht eine eigene D-Zeile und
+  einen Eintrag in diesem Abschnitt.

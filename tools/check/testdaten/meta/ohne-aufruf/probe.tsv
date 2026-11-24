@@ -1,0 +1,3 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 35, 2026-11-24): diese Datei nennt keine
+# DLL (keine Zeile "Aufruf:"). Sie ist nicht pruefbar - nicht gruen, obwohl die Zeile stimmt.
+System.Linq.Enumerable	Empty	static System.Collections.Generic.IEnumerable`1<!!0> System.Linq.Enumerable::Empty`1()

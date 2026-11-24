@@ -1,0 +1,5 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 35, 2026-11-24), Ziel wie in ../gruen.
+# Rot: eine geaenderte Signatur (long statt int) und eine vertippte Member-Spalte.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/check/testdaten/meta/rot/probe.tsv
+System.Linq.Enumerable	Count	static long System.Linq.Enumerable::Count`1(System.Collections.Generic.IEnumerable`1<!!0>)
+System.Linq.Enumerable	Emty	static System.Collections.Generic.IEnumerable`1<!!0> System.Linq.Enumerable::Empty`1()

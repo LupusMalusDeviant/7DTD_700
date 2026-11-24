@@ -439,8 +439,12 @@ $rz += "`t     die tags, sobald es ein tags-Attribut gibt. Erst dadurch treffen 
 $rz += "`t     Qualitaetszeilen (CraftingTier) unsere Rezepte."
 $rz += ''
 $rz += "`t     Die Rezepte selbst stehen in 700_20, 700_30, 700_40 und 700_45 und tragen dort KEINE"
-$rz += "`t     tags: die Bindung hat eine Quelle, diese Datei. Fehlt dieses Modlet, sind"
-$rz += "`t     alle Rezepte offen - nichts bricht."
+$rz += "`t     tags: fuer sie hat die Bindung eine Quelle, diese Datei. Fehlt dieses Modlet,"
+$rz += "`t     sind sie offen - nichts bricht."
+$rz += ''
+$rz += "`t     Ausnahme (D201): 700_75_Magie laedt NACH diesem Modlet, ein setattribute"
+$rz += "`t     von hier traefe seine Rezepte noch nicht. Es bindet sie darum selbst"
+$rz += "`t     (tags=`"learnable`" im Rezept); fehlt dieses Modlet, bleiben sie gesperrt."
 $rz += ''
 $rz += "`t     $($bindungen.Count) gebunden, $($offen.Count) bewusst offen (Liste und Gruende im Erzeuger). -->"
 $rz += ''

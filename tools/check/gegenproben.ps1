@@ -1191,14 +1191,14 @@ Test-Script 'kette-pruefen: vertippte Stufe und Zaehler ohne Rezept im Lern-Buff
 # Element (rwgmixer.xml, challenges.xml) und ein <append>, das zwei rect name="hud" traf (doppelte
 # Odem-Leiste). Rot: name=, Element, <remove> auf Attribut, Einfuegen an zwei Stellen ohne Vermerk
 # und mit einem Vermerk, der nicht mit "mehrere Ziele:" beginnt. Gruen: XPath auf das Attribut,
-# Einfuegen mit Vermerk.
+# Einfuegen mit Vermerk. Seit Review 35 auch rot: "mehrere Ziele:" ohne Grund dahinter.
 Test-Script 'kette-pruefen: removeattribute in falscher Form und Einfuegen an mehreren Stellen ohne Vermerk werden rot' 1 @{
     Rezepte      = @(Join-Path $data 'kette\eigen\recipes.xml')
     Gegenstaende = @(Join-Path $data 'kette\eigen\items.xml')
     Bloecke      = @(Join-Path $data 'kette\eigen\blocks.xml')
     Patches      = @(Join-Path $data 'kette\patchform\items.xml')
     Vanilla      = (Join-Path $data 'kette\patchform\vanilla')
-} -MustContain @("<removeattribute> mit name=""value""", '<removeattribute> trifft ein Element', '<remove> trifft ein Attribut', "/items/item  (items.xml)", 'Patch-Form: 3 removeattribute geprueft, 1 Einfuegen an mehreren Stellen vermerkt', '5 rot') -MustNotContain @("pruefFormA']/property/@value")
+} -MustContain @("<removeattribute> mit name=""value""", '<removeattribute> trifft ein Element', '<remove> trifft ein Attribut', "/items/item  (items.xml)", "der Vermerk 'mehrere Ziele:' nennt keinen Grund", 'Patch-Form: 3 removeattribute geprueft, 1 Einfuegen an mehreren Stellen vermerkt', '6 rot') -MustNotContain @("pruefFormA']/property/@value")
 
 # WP11.3 (2026-11-23): CVar-Namen. Nur gelesen nur mit Schreiber ausserhalb der XML im Vertrag
 # (Server/C#), nur geschrieben nur, wenn der Vertrag den Namen nennt. Der Name mit "Server" im
@@ -1367,7 +1367,7 @@ Test-Script 'check-all: ohne Spielpfad zaehlen purge-patch und Kette als rot' 1 
     'kette-pruefen: SDTD_PATH ist nicht gesetzt',
     'sprachverweise-pruefen: SDTD_PATH ist nicht gesetzt',
     '-> nicht geprueft, zaehlt als rot',
-    '11 Pruefungen, 6 rot')
+    '12 Pruefungen, 7 rot')
 
 # Der Nachbarfall aus dem zweiten Review (2026-11-20): SDTD_PATH ist GESETZT, zeigt aber auf
 # einen Ordner ohne Data\Config. kette-pruefen warf dann eine Ausnahme, und check-all.ps1
@@ -1382,7 +1382,7 @@ Test-Script 'check-all: falscher Spielpfad endet mit Ergebniszeile, nicht mit Ab
 } -Skript 'check-all.ps1' -Spielpfad $glossarDaten -MustContain @(
     'den Vanilla-Ordner',
     '-> nicht geprueft, zaehlt als rot',
-    '11 Pruefungen, 6 rot')
+    '12 Pruefungen, 7 rot')
 
 # Und der Fall, der seit WP8.1 nur aufgeschrieben war (Vertrag 04): ein GENANNTER Pfad,
 # den es nicht gibt, meldete "0 XPaths, GREEN".
@@ -1487,7 +1487,7 @@ else {
         'purge-patch (sind die Patches aktuell?)',
         'den Vanilla-Ordner',
         '-> nicht geprueft, zaehlt als rot',
-        '11 Pruefungen, 6 rot')
+        '12 Pruefungen, 7 rot')
 }
 
 # ------------------------------------------------- Viertes Review (2026-11-21)
@@ -2021,7 +2021,7 @@ Test-Script 'check-all: Spielpfad in Anfuehrungszeichen endet mit Ergebniszeile'
     Configuration   = $Configuration
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -MustContain @(
     '-> nicht geprueft, zaehlt als rot',
-    '11 Pruefungen, 6 rot')
+    '12 Pruefungen, 7 rot')
 
 # (6) Dasselbe OHNE -Source und ohne ConfigsDump: %APPDATA% zeigt fuer diesen Lauf auf einen
 #     Testordner, in dem kein Spielstand liegt. Vorher: 'throw', keine Ergebniszeile.
@@ -2038,7 +2038,7 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
 } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $glossarDaten -MustContain @(
     'Quelle: KEINE',
     'NICHT GEPRUEFT: keine Quelle',
-    '11 Pruefungen, 7 rot')
+    '12 Pruefungen, 8 rot')
 
 # ------------------------------------------------- Dump-Suche kennt -UserDataFolder (2026-11-22)
 # Mit '-UserDataFolder=<Ordner>' legt das Spiel Spielstaende unter <Ordner>\Saves ab, nicht
@@ -2046,7 +2046,9 @@ Test-Script 'check-all: ohne jede Quelle zaehlen anachronisms und recipes als ro
 # Start mit dem neuen Stand weiter den Dump vom Vortag: 80 Sackgassen, obwohl der neue 0
 # hatte. Vier Gegenproben, alle in einem nachgebauten Baum und mit kaputtem Spielpfad - der
 # macht vier Pruefungen rot (wie Fall 5 oben), die fuenfte Zahl haengt allein an der Quelle:
-# "4 rot" heisst Dump gefunden, "5 rot" heisst keiner.
+# "4 rot" heisst Dump gefunden, "5 rot" heisst keiner. (Stand 2026-11-24, Review 35: seither
+# kamen Pruefungen dazu, die ohne Spielpfad ebenfalls rot sind - heute "7 rot" und "8 rot" bei
+# 12 Pruefungen; der Unterschied von eins haengt weiter allein an der Quelle.)
 $dumpBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-dumpsuche-' + [Guid]::NewGuid().ToString('N'))
 try {
     function New-ProbeDump {
@@ -2083,7 +2085,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $aAppdata -MustContain @(
         "Quelle: $aDump",
-        '11 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
+        '12 Pruefungen, 7 rot') -MustNotContain @('Quelle: KEINE')
 
     # (b) Zwei Dumps, der unter %APPDATA% ist JUENGER: er gewinnt, nicht der Ort.
     $bAppdata = Join-Path $dumpBaum 'b\appdata'
@@ -2096,7 +2098,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $bAppdata -MustContain @(
         "Quelle: $bDumpAppdata",
-        '11 Pruefungen, 6 rot') -MustNotContain @("Quelle: $bDumpNutzer")
+        '12 Pruefungen, 7 rot') -MustNotContain @("Quelle: $bDumpNutzer")
 
     # (c) launchersettings.json ist kaputt: Hinweis, kein Abbruch, und ohne anderen Dump
     #     bleibt es bei "keine Quelle" mit Ergebniszeile.
@@ -2108,7 +2110,7 @@ try {
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $cAppdata -MustContain @(
         'launchersettings.json ist nicht lesbar',
         'Quelle: KEINE',
-        '11 Pruefungen, 7 rot')
+        '12 Pruefungen, 8 rot')
 
     # (d) Kein Startprogramm, aber SDTD_USERDATA zeigt auf den Ordner.
     $dAppdata = Join-Path $dumpBaum 'd\appdata'
@@ -2121,7 +2123,7 @@ try {
         Configuration   = $Configuration
     } -Skript 'check-all.ps1' -Spielpfad $inAnfuehrung -Appdata $dAppdata -MustContain @(
         "Quelle: $dDump",
-        '11 Pruefungen, 6 rot') -MustNotContain @('Quelle: KEINE')
+        '12 Pruefungen, 7 rot') -MustNotContain @('Quelle: KEINE')
 }
 finally {
     if ($userdataVorher) { $env:SDTD_USERDATA = $userdataVorher }
@@ -3622,6 +3624,42 @@ Test-Script 'drehbuch-pruefen: fehlendes Drehbuch ist nicht pruefbar' 2 @{
     -Skript 'drehbuch-pruefen.ps1' -MustContain @('Datei fehlt')
 Test-Script 'drehbuch-pruefen ohne Parameter: echte Liste und echtes Drehbuch sind gruen' 0 @{} `
     -Skript 'drehbuch-pruefen.ps1' -MustContain @('0 ohne Platz, 0 unbekannt')
+
+# ------------------------------------------------- Soll-Signaturen (Review 35, 2026-11-24)
+# tools/meta/verify-alle.ps1 prueft jede Soll-Datei gegen die DLL aus ihrer Zeile "# Aufruf:".
+# Eine Spiel-DLL gehoert nicht ins Repo; der Probeordner bekommt zur Laufzeit System.Core.dll
+# des .NET Framework als 7DaysToDie_Data\Managed\Assembly-CSharp.dll. Gruen braucht die
+# generische Methode (Review 34): die Fassung vor 7be0a0c meldete Empty`1 als member-mismatch.
+$metaSkript = Join-Path $repoRoot 'tools\meta\verify-alle.ps1'
+$metaDaten = Join-Path $data 'meta'
+$metaBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-metaprobe-' + [Guid]::NewGuid().ToString('N'))
+try {
+    $metaManaged = Join-Path $metaBaum 'spiel\7DaysToDie_Data\Managed'
+    New-Item -ItemType Directory -Force -Path $metaManaged | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $metaBaum 'leer') | Out-Null
+    $systemCore = Join-Path ([Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory()) 'System.Core.dll'
+    if (Test-Path -LiteralPath $systemCore) { Copy-Item -LiteralPath $systemCore -Destination (Join-Path $metaManaged 'Assembly-CSharp.dll') }
+    $metaSpiel = Join-Path $metaBaum 'spiel'
+
+    Test-Script 'verify-alle: richtige Zeilen, auch eine generische Methode, sind gruen' 0 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'gruen') } -FremdesSkript $metaSkript `
+        -MustContain @('1 Soll-Dateien, 1 gruen, 2 Zeilen gelesen, 0 Abweichungen', '-> GREEN') -MustNotContain @('member-mismatch')
+    Test-Script 'verify-alle: geaenderte Signatur und vertippte Member-Spalte werden rot' 1 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'rot') } -FremdesSkript $metaSkript `
+        -MustContain @('signature-changed static long System.Linq.Enumerable::Count`1', 'member-mismatch', '2 Abweichungen', '-> RED')
+    Test-Script 'verify-alle: Soll-Datei ohne Zeile "Aufruf:" ist nicht pruefbar' 2 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'ohne-aufruf') } -FremdesSkript $metaSkript `
+        -MustContain @("keine Zeile '# Aufruf:", 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+    Test-Script 'verify-alle: Spiel ohne die DLL ist nicht pruefbar' 2 @{
+        Spiel = (Join-Path $metaBaum 'leer'); Soll = (Join-Path $metaDaten 'gruen') } -FremdesSkript $metaSkript `
+        -MustContain @('DLL fehlt', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+    Test-Script 'verify-alle: ohne Spielpfad ist es nicht pruefbar' 2 @{
+        Soll = (Join-Path $metaDaten 'gruen') } -FremdesSkript $metaSkript -OhneSpielpfad `
+        -MustContain @('SDTD_PATH ist nicht gesetzt', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+}
+finally {
+    if (Test-Path -LiteralPath $metaBaum) { Remove-Item -LiteralPath $metaBaum -Recurse -Force }
+}
 
 Write-Output ""
 Write-Output ("== Ergebnis: $checked Gegenproben, $failed fehlgeschlagen ==")

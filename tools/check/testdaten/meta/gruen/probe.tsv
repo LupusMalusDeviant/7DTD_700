@@ -1,0 +1,7 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 35, 2026-11-24). Ziel ist KEINE Spiel-DLL:
+# gegenproben.ps1 kopiert zur Laufzeit System.Core.dll aus dem .NET Framework in einen
+# Probeordner als 7DaysToDie_Data\Managed\Assembly-CSharp.dll. Nichts davon liegt im Repo.
+# Gruen: eine generische Methode (``Name`1(``, Review 34) und eine gewoehnliche.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/check/testdaten/meta/gruen/probe.tsv
+System.Linq.Enumerable	Empty	static System.Collections.Generic.IEnumerable`1<!!0> System.Linq.Enumerable::Empty`1()
+System.Linq.Enumerable	Count	static int System.Linq.Enumerable::Count`1(System.Collections.Generic.IEnumerable`1<!!0>)

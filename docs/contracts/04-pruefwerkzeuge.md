@@ -4374,3 +4374,64 @@ der alten Form und sind nachgezogen (`sprache/knotenart`, `sprache/gruppe-leer/e
 `vertraeglich/fremd-arten`); die Erwartung der Knotenart-Gegenprobe nennt jetzt das Element. Gegen die
 alte Fassung von `patch-operationen.ps1` zählt dieselbe Gegenprobe die falsche Form als angewandt
 (6 rot statt 7) und schlägt fehl.
+
+## Nachtrag Review 34/35 — `-Vollstaendig`, Grund im Vermerk, Soll-Signaturen im Prüfbefehl, 2026-11-24, **Abnahme offen**
+
+Die Reviews 34 und 35 fanden drei Stellen, an denen der Prüfbefehl grün blieb, obwohl er nichts oder zu
+wenig geprüft hatte. Der Schalter aus Review 34 war schon gebaut (7be0a0c), stand aber nicht in diesem
+Vertrag (Review 35, Befund 2).
+
+**1. `kette-pruefen -Vollstaendig`** (Review 34, Befund 5). `check-all` ruft `kette-pruefen` mit dem
+Schalter. Mit ihm muss jeder dieser Teile wirklich geprüft haben:
+- Lern-Verweise (`progression.xml`),
+- Buff-Verweise (`buffs.xml`),
+- Tags (`items.xml`),
+- Laute (`sounds.xml`),
+- Wesen und Gruppen (`entitygroups.xml`),
+- CVar-Verweise (Vertrag der Zustände).
+
+Fehlt dafür eine Vanilla-Datei oder der Vertrag, ist das **Ausgang 2** („nicht prüfbar") mit der Zeile
+`-Vollstaendig, aber nicht geprueft: <Teile>`. Das gilt auch, wenn zuvor schon `[ROT]`-Zeilen kamen.
+Ohne den Schalter bleibt es wie bisher: der Teil sagt „nicht geprueft", Ausgang 0. So laufen die kleinen
+Prüfsätze der Gegenproben, die nicht jede Datei haben.
+- **Gegenprobe** (1 neu, 345 → **346**; die Zahl stand hier noch nicht): der saubere Satz mit
+  `-Vollstaendig` → Exit 2, ohne den Schalter weiter Exit 0.
+
+**2. Der Vermerk `mehrere Ziele:` braucht einen Grund** (Review 35, Befund 7). Regel 4 des Nachtrags
+„Spieltest" verlangt ihn; geprüft wurde nur der Anfang. Jetzt gilt:
+- Steht nach dem Doppelpunkt nur Leerraum, ist das Einfügen an mehreren Stellen rot, mit der Meldung
+  `der Vermerk 'mehrere Ziele:' nennt keinen Grund`.
+- Ein Vermerk mit Grund zählt wie bisher unter „Einfuegen an mehreren Stellen vermerkt".
+- **Gegenprobe** (geändert, keine neue): `kette/patchform` hat einen sechsten roten Fall, den leeren
+  Vermerk; die Erwartung ist **6 rot**. Die Fassung von `kette-pruefen.ps1` vor diesem Nachtrag gibt auf
+  denselben Daten 5 rot und zählt den leeren Vermerk als vermerkt — die Gegenprobe schlägt dort fehl.
+
+**3. Soll-Signaturen im Prüfbefehl** (Review 35, Befund 9). Die Dateien unter `tools/meta/expect` liefen
+nur von Hand. Ein Spiel-Update, das eine Methode ändert, an der unser C# hängt, machte keine Prüfung rot.
+- **Neues Skript** `tools/meta/verify-alle.ps1`. Es ruft für jede `*.tsv` `mod700meta verify` gegen die
+  DLL aus ihrer Zeile `# Aufruf:`:
+  - `"<Assembly-CSharp.dll>"` steht für `<Spiel>\7DaysToDie_Data\Managed\Assembly-CSharp.dll`,
+  - `"<SDTD_PATH>/…"` steht für den Pfad unter dem Spiel.
+- **Ausgang:**
+  - 0, wenn alles grün ist;
+  - 1 bei mindestens einer Abweichung (`[ROT] <Datei>: <verdict> <Signatur> - <Grund>`);
+  - 2, wenn nicht prüfbar und sonst nichts rot ist. Nicht prüfbar heißt: kein Spielpfad, die DLL fehlt,
+    `mod700meta.exe` fehlt, keine Soll-Datei, eine Datei ohne Zeile `# Aufruf:` oder mit einem anderen
+    Ziel.
+- **Zeile:** `Signaturen: N Soll-Dateien, G gruen, Z Zeilen gelesen, A Abweichungen, U nicht pruefbar`.
+  Am echten Stand (V 3.40 b10): **14 Dateien, 14 grün, 138 Zeilen**.
+- **`check-all`** führt es als eigene Prüfung „Soll-Signaturen (mod700meta verify)". Ausgang 2 zählt
+  rot, wie bei den anderen Prüfskripten. Damit sind es **12 Prüfungen** statt 11.
+- **Gegenproben** (5 neu, 346 → **351**). Eine Spiel-DLL gehört nicht ins Repo. Darum kopiert
+  `gegenproben.ps1` zur Laufzeit `System.Core.dll` des .NET Framework in einen Probeordner, als
+  `7DaysToDie_Data\Managed\Assembly-CSharp.dll`. Die Fälle:
+  - Testdaten `meta/gruen`: zwei richtige Zeilen, darunter die generische Methode ``Enumerable::Empty`1()`` → Exit 0;
+  - `meta/rot`: geänderte Signatur und vertippte Member-Spalte → Exit 1;
+  - `meta/ohne-aufruf` → Exit 2;
+  - Spiel ohne DLL → Exit 2;
+  - ohne `SDTD_PATH` → Exit 2.
+
+  Mit der `mod700meta`-Fassung vor 7be0a0c gibt `meta/gruen` **Exit 1** (zweimal `member-mismatch` an
+  der generischen Methode); die Gegenprobe schlägt dort fehl.
+- **Grenze:** geprüft wird, dass die Signaturen da sind, nicht, dass das Spiel sie noch so aufruft wie
+  im Finding beschrieben.

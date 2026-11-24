@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
-	<!-- Testdaten fuer kette-pruefen, Patch-Form (2026-11-23). Fuenf Formen sind rot, zwei gruen. -->
+	<!-- Testdaten fuer kette-pruefen, Patch-Form (2026-11-23). Fuenf Formen sind rot, zwei gruen;
+	     seit Review 35 (2026-11-24) als sechste rot: der Vermerk ohne Grund. -->
 
 	<!-- rot: name= statt Attribut im XPath (so stand es in rwgmixer.xml und challenges.xml) -->
 	<removeattribute xpath="/items/item[@name='pruefFormA']/property" name="value" />
@@ -23,5 +24,11 @@
 	<!-- Hinweis: mehrere Ziele, aber nicht am Anfang - zaehlt nicht -->
 	<append xpath="/items/item">
 		<property name="pruefFormFalscherVermerk" value="1" />
+	</append>
+
+	<!-- rot seit Review 35: der Vermerk nennt keinen Grund -->
+	<!-- mehrere Ziele:   -->
+	<append xpath="/items/item">
+		<property name="pruefFormLeererVermerk" value="1" />
 	</append>
 </config>
