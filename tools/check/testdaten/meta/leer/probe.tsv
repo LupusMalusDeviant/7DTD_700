@@ -1,0 +1,4 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 36, 2026-11-24): die Aufruf-Zeile steht,
+# aber keine Datenzeile - die Datei prueft nichts und darf nicht gruen sein.
+# Aufruf:  mod700meta verify "<Assembly-CSharp.dll>" --expect tools/check/testdaten/meta/leer/probe.tsv
+# System.Linq.Enumerable	Empty	static System.Collections.Generic.IEnumerable`1<!!0> System.Linq.Enumerable::Empty`1()

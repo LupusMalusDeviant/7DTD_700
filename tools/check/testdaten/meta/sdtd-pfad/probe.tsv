@@ -1,0 +1,5 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 36, 2026-11-24): der Zweig "<SDTD_PATH>/..."
+# (so nennt v06-harmony.tsv das 0Harmony.dll des Spiels). gegenproben.ps1 legt System.Core.dll
+# zur Laufzeit unter <Probe-Spiel>\Mods\0_Probe\probe.dll ab.
+# Aufruf:  mod700meta verify "<SDTD_PATH>/Mods/0_Probe/probe.dll" --expect tools/check/testdaten/meta/sdtd-pfad/probe.tsv
+System.Linq.Enumerable	Range	static System.Collections.Generic.IEnumerable`1<int> System.Linq.Enumerable::Range(int, int)

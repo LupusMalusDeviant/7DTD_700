@@ -4435,3 +4435,22 @@ nur von Hand. Ein Spiel-Update, das eine Methode ändert, an der unser C# hängt
   der generischen Methode); die Gegenprobe schlägt dort fehl.
 - **Grenze:** geprüft wird, dass die Signaturen da sind, nicht, dass das Spiel sie noch so aufruft wie
   im Finding beschrieben.
+
+**Berichtigung nach Review 36, 2026-11-24** (gehört zu diesem Nachtrag, Abnahme mit N-146):
+- **Eine Soll-Datei ohne Datenzeile ist nicht prüfbar** (Ausgang 2, `keine Datenzeile - die Datei
+  prueft nichts`). Vorher meldete `mod700meta verify` dafür `checked_rows = 0` mit Exit 0, und die Datei
+  zählte grün. Die Fassung vor dieser Berichtigung gibt auf `meta/leer` **Exit 0, grün**.
+- **`meta/gruen`** hat eine generische (``Empty`1()``) und eine gewöhnliche Zeile (`Range(int, int)`).
+  Vorher waren beide generisch, und der Kommentar sagte etwas anderes. Mit der `mod700meta`-Fassung vor
+  7be0a0c meldet sie jetzt **ein** `member-mismatch` (an ``Empty`1``), Exit 1.
+- **Die Probe-DLL** kommt aus `%WINDIR%\Microsoft.NET\Framework64\v4.0.30319` (sonst `Framework`), nicht
+  mehr aus `RuntimeEnvironment::GetRuntimeDirectory()`. Unter PowerShell 7 lieferte das den .NET-Ordner,
+  dessen `System.Core.dll` nur weiterleitet, und die grüne Probe wurde rot. Unter PowerShell 7 ist das
+  nicht gelaufen (auf dem Rechner des Nutzers ist keines installiert). Fehlt die DLL, scheitern die grünen
+  Proben laut.
+- **Gegenproben** (5 neu, 351 → **356**):
+  - `meta/sdtd-pfad`: Ziel `<SDTD_PATH>/Mods/0_Probe/probe.dll` → Exit 0;
+  - `meta/leer` → Exit 2;
+  - `meta/fremdes-ziel` (`<Irgendwo.dll>`) → Exit 2;
+  - fehlende `mod700meta.exe` → Exit 2;
+  - `where.exe` statt `mod700meta` (kein JSON) → Exit 2.

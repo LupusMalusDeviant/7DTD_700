@@ -1,0 +1,4 @@
+# Gegenprobe fuer tools/meta/verify-alle.ps1 (Review 36, 2026-11-24): ein Ziel, das weder
+# "<Assembly-CSharp.dll>" noch "<SDTD_PATH>/..." ist - nicht pruefbar, nicht gruen.
+# Aufruf:  mod700meta verify "<Irgendwo.dll>" --expect tools/check/testdaten/meta/fremdes-ziel/probe.tsv
+System.Linq.Enumerable	Empty	static System.Collections.Generic.IEnumerable`1<!!0> System.Linq.Enumerable::Empty`1()

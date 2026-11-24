@@ -15,8 +15,8 @@
     Eine Datei ohne diese Zeile oder mit einem anderen Ziel ist nicht pruefbar, nicht gruen.
 
     Ausgang: 0 alles gruen; 1 mindestens eine Zeile weicht ab; 2 nicht pruefbar (kein
-    Spielpfad, DLL fehlt, Werkzeug fehlt, keine Soll-Datei, Datei ohne Aufruf-Zeile) und
-    sonst nichts rot.
+    Spielpfad, DLL fehlt, Werkzeug fehlt, keine Soll-Datei, Datei ohne Aufruf-Zeile, Datei
+    ohne Datenzeile, Ergebnis des Werkzeugs nicht lesbar) und sonst nichts rot.
 
     Pfade mit [IO.Path]::Combine und [IO.File]::Exists, nicht Join-Path/Test-Path: ein
     Spielpfad auf einem nicht eingehaengten Laufwerk liess Join-Path werfen (check-all,
@@ -91,7 +91,11 @@ foreach ($datei in $dateien) {
         $offen += "${name}: mod700meta endete mit Exit $kode ohne lesbares Ergebnis"
         continue
     }
-    $zeilen += [int]$json.summary.checked_rows
+    $gelesen = [int]$json.summary.checked_rows
+    $zeilen += $gelesen
+    # Review 36: eine Datei ohne Datenzeile (nur Kommentare) endete mit Exit 0 und zaehlte gruen,
+    # obwohl sie nichts prueft.
+    if ($gelesen -eq 0) { $offen += "${name}: keine Datenzeile - die Datei prueft nichts"; continue }
     if ($kode -eq 0) { $gruen++; continue }
     foreach ($r in @($json.results | Where-Object { $_.verdict -ne 'ok' })) {
         $was = if ($r.expected) { $r.expected } else { $r.line }

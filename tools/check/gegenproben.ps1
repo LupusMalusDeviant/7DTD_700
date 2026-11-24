@@ -3630,6 +3630,8 @@ Test-Script 'drehbuch-pruefen ohne Parameter: echte Liste und echtes Drehbuch si
 # Eine Spiel-DLL gehoert nicht ins Repo; der Probeordner bekommt zur Laufzeit System.Core.dll
 # des .NET Framework als 7DaysToDie_Data\Managed\Assembly-CSharp.dll. Gruen braucht die
 # generische Methode (Review 34): die Fassung vor 7be0a0c meldete Empty`1 als member-mismatch.
+# Review 36: dazu der Zweig <SDTD_PATH>/..., eine Datei ohne Datenzeile (vorher gruen), ein
+# unbekanntes Ziel, eine fehlende exe und ein Werkzeug ohne lesbares Ergebnis.
 $metaSkript = Join-Path $repoRoot 'tools\meta\verify-alle.ps1'
 $metaDaten = Join-Path $data 'meta'
 $metaBaum = Join-Path ([IO.Path]::GetTempPath()) ('mod700-metaprobe-' + [Guid]::NewGuid().ToString('N'))
@@ -3637,13 +3639,42 @@ try {
     $metaManaged = Join-Path $metaBaum 'spiel\7DaysToDie_Data\Managed'
     New-Item -ItemType Directory -Force -Path $metaManaged | Out-Null
     New-Item -ItemType Directory -Force -Path (Join-Path $metaBaum 'leer') | Out-Null
-    $systemCore = Join-Path ([Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory()) 'System.Core.dll'
-    if (Test-Path -LiteralPath $systemCore) { Copy-Item -LiteralPath $systemCore -Destination (Join-Path $metaManaged 'Assembly-CSharp.dll') }
+    # Review 36: vorher kam der Ordner aus RuntimeEnvironment::GetRuntimeDirectory() - unter
+    # PowerShell 7 ist das .NET, dessen System.Core.dll nur weiterleitet (kein Enumerable), und
+    # die gruene Probe wurde rot. Der Ordner des .NET Framework 4 ist unter 5.1 und 7 derselbe.
+    # Fehlt er, scheitern die gruenen Proben - laut, nicht still.
+    $systemCore = $null
+    foreach ($fw in 'Framework64', 'Framework') {
+        $kandidat = Join-Path $env:WINDIR "Microsoft.NET\$fw\v4.0.30319\System.Core.dll"
+        if (-not $systemCore -and (Test-Path -LiteralPath $kandidat)) { $systemCore = $kandidat }
+    }
+    if ($systemCore) {
+        Copy-Item -LiteralPath $systemCore -Destination (Join-Path $metaManaged 'Assembly-CSharp.dll')
+        New-Item -ItemType Directory -Force -Path (Join-Path $metaBaum 'spiel\Mods\0_Probe') | Out-Null
+        Copy-Item -LiteralPath $systemCore -Destination (Join-Path $metaBaum 'spiel\Mods\0_Probe\probe.dll')
+    }
+    else { Write-Output "  [!!]   System.Core.dll des .NET Framework 4 fehlt - die gruenen verify-alle-Proben scheitern" }
     $metaSpiel = Join-Path $metaBaum 'spiel'
 
-    Test-Script 'verify-alle: richtige Zeilen, auch eine generische Methode, sind gruen' 0 @{
+    Test-Script 'verify-alle: richtige Zeilen, eine generische und eine gewoehnliche Methode, sind gruen' 0 @{
         Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'gruen') } -FremdesSkript $metaSkript `
         -MustContain @('1 Soll-Dateien, 1 gruen, 2 Zeilen gelesen, 0 Abweichungen', '-> GREEN') -MustNotContain @('member-mismatch')
+    Test-Script 'verify-alle: Ziel "<SDTD_PATH>/..." wird unter dem Spiel gefunden' 0 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'sdtd-pfad') } -FremdesSkript $metaSkript `
+        -MustContain @('1 Soll-Dateien, 1 gruen, 1 Zeilen gelesen', '-> GREEN')
+    Test-Script 'verify-alle: Soll-Datei ohne Datenzeile ist nicht pruefbar, nicht gruen' 2 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'leer') } -FremdesSkript $metaSkript `
+        -MustContain @('keine Datenzeile', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+    Test-Script 'verify-alle: unbekanntes Ziel in der Aufruf-Zeile ist nicht pruefbar' 2 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'fremdes-ziel') } -FremdesSkript $metaSkript `
+        -MustContain @("unbekanntes Ziel '<Irgendwo.dll>'", 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+    Test-Script 'verify-alle: ohne mod700meta.exe ist es nicht pruefbar' 2 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'gruen'); Exe = (Join-Path $metaBaum 'gibt-es-nicht.exe') } `
+        -FremdesSkript $metaSkript -MustContain @('mod700meta fehlt', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
+    # where.exe statt mod700meta: endet mit Exit 2 und schreibt kein JSON.
+    Test-Script 'verify-alle: Werkzeug ohne lesbares Ergebnis ist nicht pruefbar' 2 @{
+        Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'gruen'); Exe = (Join-Path $env:WINDIR 'System32\where.exe') } `
+        -FremdesSkript $metaSkript -MustContain @('ohne lesbares Ergebnis', 'nicht pruefbar -> RED') -MustNotContain @('-> GREEN')
     Test-Script 'verify-alle: geaenderte Signatur und vertippte Member-Spalte werden rot' 1 @{
         Spiel = $metaSpiel; Soll = (Join-Path $metaDaten 'rot') } -FremdesSkript $metaSkript `
         -MustContain @('signature-changed static long System.Linq.Enumerable::Count`1', 'member-mismatch', '2 Abweichungen', '-> RED')
