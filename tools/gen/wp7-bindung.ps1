@@ -155,6 +155,16 @@ $eigeneLinie = [ordered]@{
     'itm700_fladenbrot' = 'der Platz des gesperrten Maisbrots (D202)'
     'itm700_met'        = 'neben Vanillas Bier (D202)'
 }
+# Vorbild (Review 36, 2026-11-24): ein Rezept, das ein Vanilla-Rezept nachbildet, traegt dessen
+# GANZE tags - mit 'learnable' auch die Marken fuer Perks und Werkbank (perkMasterChef,
+# cookingPotFood, chemStationCrafting). Vorher bekam es nur 'learnable', und Meisterkoch und
+# die Boni von Kochtopf und Kraeuterkueche griffen nicht (D202: "wie Vanilla sein Gegenstueck
+# behandelt"). Geprueft wird: das Vorbild hat genau EIN Rezept, dieselbe Werkbank und dasselbe
+# Werkzeug wie unseres, und seine tags enthalten 'learnable'. Ohne Vorbild: nur 'learnable'.
+$eigeneLinieVorbild = @{
+    'itm700_fladenbrot' = 'foodCornBread'
+    'itm700_met'        = 'drinkJarBeer'
+}
 
 # ===========================================================================
 # 5  Hefte und Papier
@@ -278,8 +288,24 @@ foreach ($n in $eigeneLinie.Keys) {
     if ($stufeVerborgen[$treffer[0].Stufe]) { $fehler += "$n`: die Stufe '$($treffer[0].Stufe)' ist verborgen - das Rezept waere nie herstellbar."; continue }
     $max = [int]$sk.GetAttribute('max_level')
     if ($treffer[0].Level -gt $max) { $fehler += "$n`: Level $($treffer[0].Level) liegt ueber dem Hoechstwert $max der Stufe."; continue }
-    $bindungen += @{ Rezept = $n; Marken = 'learnable'; Stufe = $treffer[0].Stufe; Level = $treffer[0].Level; Max = $max; Quelle = $eigeneLinie[$n] }
+    $marken = 'learnable'
+    $vorbild = $eigeneLinieVorbild[$n]
+    if ($vorbild) {
+        $vr = @($vrec.SelectNodes("/recipes/recipe[@name='$vorbild']"))
+        if ($vr.Count -ne 1) { $fehler += "$n`: das Vorbild '$vorbild' hat $($vr.Count) Rezepte in Vanilla, erwartet ist genau eines."; continue }
+        $unser = $unsereRezepte[$n].Knoten
+        foreach ($attr in 'craft_area', 'craft_tool') {
+            if ($vr[0].GetAttribute($attr) -cne $unser.GetAttribute($attr)) {
+                $fehler += "$n`: $attr '$($unser.GetAttribute($attr))' passt nicht zum Vorbild '$vorbild' ('$($vr[0].GetAttribute($attr))') - seine Werkbank-Marken gaelten nicht."
+            }
+        }
+        $marken = $vr[0].GetAttribute('tags')
+        if ((($marken -split ',') | ForEach-Object { $_.Trim() }) -notcontains 'learnable') { $fehler += "$n`: die tags des Vorbilds '$vorbild' ('$marken') enthalten kein 'learnable'."; continue }
+    }
+    $quelle = if ($vorbild) { "$($eigeneLinie[$n]); tags wie $vorbild" } else { $eigeneLinie[$n] }
+    $bindungen += @{ Rezept = $n; Marken = $marken; Stufe = $treffer[0].Stufe; Level = $treffer[0].Level; Max = $max; Quelle = $quelle }
 }
+foreach ($n in $eigeneLinieVorbild.Keys) { if (-not $eigeneLinie.Contains($n)) { $fehler += "Vorbild fuer '$n', aber '$n' steht nicht in der Eigenen Linie." } }
 
 # ===========================================================================
 # Pruefen und sammeln: Ruestung
